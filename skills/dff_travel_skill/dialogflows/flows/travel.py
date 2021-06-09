@@ -22,10 +22,10 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
     QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST, TRAVEL_LOCATION_QUESTION, \
-    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, EXTRA_WORDS_IN_FACTS_PATTERN
+    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
-    get_all_not_used_templates
+    get_all_not_used_templates, COBOTQA_EXTRA_WORDS
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -694,7 +694,7 @@ def collect_and_save_facts_about_location(location, vars):
 
     used_facts = shared_memory.get("used_facts", [])
     facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
-    facts_about_location = [EXTRA_WORDS_IN_FACTS_PATTERN.sub("", fact).strip()
+    facts_about_location = [COBOTQA_EXTRA_WORDS.sub("", fact).strip()
                             for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
 

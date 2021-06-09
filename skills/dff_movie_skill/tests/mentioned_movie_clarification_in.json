@@ -36,18 +36,35 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
+                        "cobot_nounphrases": [],
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "hi.",
                             "segments": [
                                 "hi."
                             ]
                         },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -138,22 +155,10 @@
                                 "detected": 0
                             }
                         },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.003737201215699315,
-                                "command": 0.014534037560224533,
-                                "comment": 0.007815582677721977,
-                                "complaint": 0.01387196034193039,
-                                "dev_command": 0.011961274780333042,
-                                "neg_answer": 0.0012791294138878584,
-                                "open_question_factual": 0.007067359518259764,
-                                "open_question_opinion": 0.0020942059345543385,
-                                "opinion": 0.02820507064461708,
-                                "other_answers": 0.002917045960202813,
-                                "pos_answer": 0.003618009854108095,
-                                "statement": 0.8965854644775391,
-                                "yes_no_question": 0.006313652731478214
-                            }
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_movie_skill",
+                            "dff_animals_skill"
                         ],
                         "ner": [
                             []
@@ -161,6 +166,11 @@
                         "cobot_entities": {
                             "entities": [],
                             "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
                         },
                         "cobot_dialogact": {
                             "intents": [
@@ -170,33 +180,28 @@
                                 "Other"
                             ]
                         },
-                        "cobot_topics": {
-                            "text": [
-                                "Phatic"
-                            ]
-                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
                                 "hi."
                             ]
                         },
-                        "entity_linking": [],
                         "conceptnet": {},
+                        "entity_linking": [],
                         "news_api_annotator": [
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nThat\u2019s what friends are for.\nAn emotional Matthew Perry was comforted by \u201cFriends\u201d co-star Jennifer... [2153 chars]",
-                                    "description": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nThat\u2019s what friends are for.",
-                                    "image": "https://pagesix.com/wp-content/uploads/sites/3/2021/05/friends-matthew-perry-jennifer-aniston-75-1.jpg?quality=90&strip=all&w=1200",
-                                    "publishedAt": "2021-05-20T12:51:00Z",
+                                    "content": "WASHINGTON \u2014 U.S. Capitol Police leaders learned that Trump supporters were discussing ways to infiltrate tunnels around the complex and target Democratic members of Congress on Jan. 6 but failed to act on the threats, according to a new Senate repor... [10840 chars]",
+                                    "description": "Capitol Police learned Trump backers had discussed entering Capitol tunnels and targeting Democrats on Jan. 6 but didn't act on threats, new Senate report says.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_23/3480997/210607-washington-capitol-mob-riot-ac-529p_0.jpg",
+                                    "publishedAt": "2021-06-08T09:00:16Z",
                                     "source": {
-                                        "name": "Page Six",
-                                        "url": "https://pagesix.com"
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
                                     },
-                                    "title": "Emotional Matthew Perry on the verge of tears in \u2018Friends\u2019 trailer",
-                                    "url": "https://pagesix.com/2021/05/20/matthew-perry-comforted-by-jennifer-aniston-in-new-friends-trailer/"
+                                    "title": "Capitol Police didn't act on warnings Trump backers would breach Capitol, target Democrats, report says",
+                                    "url": "https://www.nbcnews.com/politics/congress/capitol-police-didn-t-act-warnings-trump-backers-would-breach-n1269888"
                                 },
                                 "which": "all"
                             }
@@ -206,8 +211,12 @@
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "fact_retrieval": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
                         "wiki_parser": {
+                            "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
                             "utt_num": 1,
@@ -260,11 +269,46 @@
                             "dans",
                             "paris"
                         ],
+                        "cobot_entities": {
+                            "entities": [
+                                "dans paris"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "dans paris"
+                                }
+                            ]
+                        },
                         "sentseg": {
                             "punct_sent": "i was watching dans paris.",
                             "segments": [
                                 "i was watching dans paris."
                             ]
+                        },
+                        "conceptnet": {
+                            "dans paris": {
+                                "Causes": [
+                                    "terrorism",
+                                    "revolution",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "go to paris",
+                                    "see art",
+                                    "see paris"
+                                ],
+                                "HasProperty": [
+                                    "famous for it chocolate",
+                                    "famous for their chocolate",
+                                    "very popular"
+                                ],
+                                "SymbolOf": [
+                                    "paris",
+                                    "terrorism",
+                                    "france"
+                                ]
+                            }
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -356,17 +400,11 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_entities": {
-                            "entities": [
-                                "dans paris"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "videoname",
-                                    "text": "dans paris"
-                                }
-                            ]
-                        },
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_animals_skill",
+                            "game_cooperative_skill"
+                        ],
                         "ner": [
                             [
                                 {
@@ -383,70 +421,46 @@
                                 "Movies_TV"
                             ]
                         },
-                        "cobot_dialogact": {
-                            "intents": [
-                                "General_ChatIntent"
-                            ],
-                            "topics": [
-                                "Phatic"
-                            ]
-                        },
-                        "conceptnet": {
-                            "dans paris": {
-                                "Causes": [
-                                    "terrorism",
-                                    "revolution",
-                                    "death"
-                                ],
-                                "CausesDesire": [
-                                    "go to paris",
-                                    "see art",
-                                    "see paris"
-                                ],
-                                "HasProperty": [
-                                    "famous for it chocolate",
-                                    "famous for their chocolate",
-                                    "very popular"
-                                ],
-                                "SymbolOf": [
-                                    "paris",
-                                    "terrorism",
-                                    "france"
-                                ]
-                            }
-                        },
                         "midas_classification": [
                             {
-                                "appreciation": 0.000534859427716583,
-                                "command": 0.0015844732988625765,
-                                "comment": 0.0017900775419548154,
-                                "complaint": 0.0014856165507808328,
-                                "dev_command": 0.001150240539573133,
-                                "neg_answer": 0.0006977489101700485,
-                                "open_question_factual": 0.0009051082888618112,
-                                "open_question_opinion": 0.00042836341890506446,
-                                "opinion": 0.008521582931280136,
-                                "other_answers": 0.0010040879715234041,
-                                "pos_answer": 0.0007783295004628599,
-                                "statement": 0.9799756407737732,
-                                "yes_no_question": 0.001143883098848164
+                                "appreciation": 0.0005127692711539567,
+                                "command": 0.0015165883814916015,
+                                "comment": 0.001698482083156705,
+                                "complaint": 0.0012633264996111393,
+                                "dev_command": 0.0010672719217836857,
+                                "neg_answer": 0.0006587874959222972,
+                                "open_question_factual": 0.0010480128694325686,
+                                "open_question_opinion": 0.00047303797327913344,
+                                "opinion": 0.008343856781721115,
+                                "other_answers": 0.0010388100054115057,
+                                "pos_answer": 0.0007642338750883937,
+                                "statement": 0.9804127812385559,
+                                "yes_no_question": 0.0012019630521535873
                             }
                         ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! How are you?",
+                                "i was watching dans paris."
+                            ]
+                        },
                         "entity_linking": [
                             {
                                 "confidences": [
                                     0.04390682280063629,
                                     0.8388468623161316,
                                     0.991741418838501,
-                                    0.9008011221885681,
-                                    0.8377069234848022
+                                    0.8377069234848022,
+                                    0.9008011221885681
                                 ],
                                 "entity_ids": [
                                     "Q2016952",
                                     "Q514741",
                                     "Q90",
-                                    "Q3181341",
-                                    "Q167646"
+                                    "Q167646",
+                                    "Q3181341"
                                 ],
                                 "entity_pages": [
                                     "Dans Paris (English: Inside Paris) is a 2006 French romantic drama film written and directed by Christophe Honor\u00e9 and starring Romain Duris, Louis Garrel, Guy Marchand, Joana Preiss, Alice Butaud, and Marie-France Pisier.",
@@ -456,8 +470,8 @@
                                     "Dans Paris",
                                     "Gaston Paris",
                                     "Paris",
-                                    "Paris, Kentucky",
-                                    "Paris (mythology)"
+                                    "Paris (mythology)",
+                                    "Paris, Kentucky"
                                 ],
                                 "entity_substr": "dans paris",
                                 "tokens_match_conf": [
@@ -469,20 +483,16 @@
                                 ]
                             }
                         ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
-                                "i was watching dans paris."
-                            ]
+                        "fact_retrieval": {
+                            "facts": [
+                                "Dans Paris (English: Inside Paris) is a 2006 French romantic drama film written and directed by Christophe Honor\u00e9 and starring Romain Duris, Louis Garrel, Guy Marchand, Joana Preiss, Alice Butaud, and Marie-France Pisier.",
+                                "Bruno Paulin Gaston Paris (9 August 1839 \u2013 5 March 1903) was a French writer and scholar.",
+                                "He was nominated for the Nobel Prize in Literature in 1901, 1902 and 1903."
+                            ],
+                            "topic_facts": []
                         },
-                        "fact_retrieval": [
-                            "Dans Paris (English: Inside Paris) is a 2006 French romantic drama film written and directed by Christophe Honor\u00e9 and starring Romain Duris, Louis Garrel, Guy Marchand, Joana Preiss, Alice Butaud, and Marie-France Pisier.",
-                            "Bruno Paulin Gaston Paris (9 August 1839 \u2013 5 March 1903) was a French writer and scholar.",
-                            "He was nominated for the Nobel Prize in Literature in 1901, 1902 and 1903."
-                        ],
                         "wiki_parser": {
+                            "animals_skill_entities_info": {},
                             "entities_info": {
                                 "dans paris": {
                                     "conf": 0.04390682280063629,
@@ -526,6 +536,10 @@
                                     "token_conf": 1.0,
                                     "types_2hop": [
                                         [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
                                             "Q20937557",
                                             "series"
                                         ],
@@ -534,16 +548,12 @@
                                             "moving image"
                                         ],
                                         [
-                                            "Q4502142",
-                                            "visual artwork"
-                                        ],
-                                        [
                                             "Q2431196",
                                             "audiovisual work"
                                         ],
                                         [
-                                            "Q11424",
-                                            "film"
+                                            "Q4502142",
+                                            "visual artwork"
                                         ]
                                     ]
                                 }
@@ -591,6 +601,10 @@
                                     "token_conf": 1.0,
                                     "types_2hop": [
                                         [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
                                             "Q20937557",
                                             "series"
                                         ],
@@ -599,16 +613,12 @@
                                             "moving image"
                                         ],
                                         [
-                                            "Q4502142",
-                                            "visual artwork"
-                                        ],
-                                        [
                                             "Q2431196",
                                             "audiovisual work"
                                         ],
                                         [
-                                            "Q11424",
-                                            "film"
+                                            "Q4502142",
+                                            "visual artwork"
                                         ]
                                     ]
                                 }
@@ -625,16 +635,16 @@
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "A massive explosion in Northern California on Wednesday that destroyed a home and several vehicles was caused by three kids playing with fire in a backyard, officials said.\nVideo shows plumes of smoke and flames billowing into the sky in Martinez, no... [893 chars]",
-                                    "description": "A massive explosion in Northern California on Wednesday that destroyed a home and several vehicles was caused by three kids playing with fire in a backyard, officials said.",
-                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_20/3476308/210520-martinez-fire-mb-1352.jpg",
-                                    "publishedAt": "2021-05-20T13:41:11Z",
+                                    "content": "MELBOURNE, Australia \u2014 The devices, procured on the black market, performed only a single function hidden behind a calculator app: sending encrypted messages and photos.\nFor years, organized crime figures around the globe relied on the devices to orc... [858 chars]",
+                                    "description": "MELBOURNE, Australia \u2014 The devices, procured on the black market, performed only a single function hidden behind a calculator app: sending encrypted messages and photos.",
+                                    "image": "https://static01.nyt.com/images/2021/06/08/world/08STING1/08STING1-facebookJumbo.jpg",
+                                    "publishedAt": "2021-06-08T11:14:10Z",
                                     "source": {
-                                        "name": "NBC News",
-                                        "url": "https://www.nbcnews.com"
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
                                     },
-                                    "title": "Massive Northern California explosion caught on video caused by three kids playing with fire, officials say",
-                                    "url": "https://www.nbcnews.com/news/us-news/massive-northern-california-explosion-caught-video-caused-three-kids-playing-n1268005"
+                                    "title": "Hundreds Arrested in Global Sting Using App Run by F.B.I.",
+                                    "url": "https://www.nytimes.com/2021/06/08/world/australia/operation-trojan-horse-anom.html"
                                 },
                                 "which": "all"
                             },
@@ -659,28 +669,19 @@
                                 },
                                 "which": "bot"
                             }
-                        ],
-                        "cobotqa_annotator": {
-                            "facts": [
-                                {
-                                    "entity": "dans paris",
-                                    "fact": "Here's a fact about Dans Paris. In one scene of the film, where Jonathan walks in front of the cinema, two movie posters are shown. One is for A History of Violence (2005), a film which was also released in cinemas in France via the same distributor as this film. The other is for Last Days (2005) starring Michael Pitt, who co-starred with Louis Garrel in The Dreamers (2003)."
-                                }
-                            ],
-                            "response": ""
-                        }
+                        ]
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you?",
                             "segments": [
                                 "Hi, this is an Alexa Prize Socialbot!",
-                                "How are you doing today?"
+                                "How are you?"
                             ]
                         },
                         "ner": [
@@ -699,7 +700,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! How are you doing today?"
+                                "Hi, this is an Alexa Prize Socialbot! How are you?"
                             ]
                         }
                     },
@@ -724,7 +725,7 @@
         {}
     ],
     "age_group_batch": [
-        ""
+        "unknown"
     ],
     "disliked_skills_batch": [
         []

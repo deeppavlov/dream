@@ -5,6 +5,12 @@
         {
             "dff_movie_skill_state": {
                 "shared_memory": {
+                    "facts_about_movies": {
+                        "movie_title": "Dans Paris",
+                        "facts": [
+                            "Dans Paris (English: Inside Paris) is a 2006 French romantic drama film written and directed by Christophe Honor\u00e9 and starring Romain Duris, Louis Garrel, Guy Marchand, Joana Preiss, Alice Butaud, and Marie-France Pisier."
+                        ]
+                    },
                     "current_movie_id": "0769508",
                     "current_movie_title": "Dans Paris",
                     "discussed_movie_ids": [
@@ -27,7 +33,7 @@
                 "cross_states": {}
             },
             "used_links": {},
-            "age_group": "",
+            "age_group": "unknown",
             "disliked_skills": []
         },
         {},
