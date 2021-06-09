@@ -16,7 +16,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     fact_about_book, fav_genre_request_detected, is_side_intent, is_stop, genre_of_book, get_published_year, \
     parse_author_best_book, GENRE_PHRASES, was_question_about_book, favorite_book_template, exit_skill, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, \
-    best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, \
+    best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, if_loves_reading, \
     my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -359,7 +359,7 @@ class BookSkillScenario:
                     if is_no(annotated_user_phrase):
                         logger.debug('Detected answer NO')
                         reply, confidence = IF_NOT_LOVE_READING, self.super_conf
-                    elif is_yes(annotated_user_phrase):
+                    elif is_yes(annotated_user_phrase) or if_loves_reading(annotated_user_phrase):
                         logger.debug('Detected asnswer YES')
                         reply, confidence = f"{ASK_WHY}", self.super_conf
                     else:
