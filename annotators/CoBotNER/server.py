@@ -31,7 +31,7 @@ if COBOT_NER_SERVICE_URL is None:
     raise RuntimeError('COBOT_NER_SERVICE_URL environment variable is not set')
 
 headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
-EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-]")
+EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-&*+]")
 DOUBLE_SPACES = re.compile(r"\s+")
 
 

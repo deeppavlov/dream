@@ -46,7 +46,7 @@ WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES = [
 
 
 ABOUT_MOVIE_TITLES_PHRASES = [
-    "What is the name of the last movie you watched?",
+    # "What is the name of the last movie you watched?",
     "What is the best movie you have seen recently?",
     # "What is the funniest movie you have ever seen?",
     "What movie you could watch over and over again?",
