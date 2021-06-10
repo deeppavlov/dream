@@ -22,7 +22,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
     QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST, TRAVEL_LOCATION_QUESTION, \
-    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, NOWHERE_TEMPLATE
+    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, NOWHERE_TEMPLATE, TOO_SIMPLE_TRAVEL_FACTS
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
     get_all_not_used_templates, COBOTQA_EXTRA_WORDS
@@ -698,8 +698,11 @@ def not_confident_ask_question_about_travelling_response(vars):
 ##################################################################################################################
 # offering fact about loc
 ##################################################################################################################
+LOCATION_FACTS_BUFFER = {}
+
 
 def collect_and_save_facts_about_location(location, vars):
+    global LOCATION_FACTS_BUFFER
     shared_memory = state_utils.get_shared_memory(vars)
     facts_about_location = shared_memory.get("facts_about_discussed_location", {})
 
@@ -713,8 +716,14 @@ def collect_and_save_facts_about_location(location, vars):
         facts_about_location = [fact for fact in facts_about_location if "is a city" not in fact.lower()]
 
     if len(location) > 0 and len(facts_about_location) == 0 and location != "there":
-        facts_about_location = [send_cobotqa(f"fact about {location}")]
-        facts_about_location = [fact for fact in facts_about_location if "is a city" not in fact.lower()]
+        if location in LOCATION_FACTS_BUFFER:
+            facts_about_location = deepcopy(LOCATION_FACTS_BUFFER[location])
+        else:
+            facts_about_location = [send_cobotqa(f"fact about {location}")]
+            facts_about_location = [fact for fact in facts_about_location if not TOO_SIMPLE_TRAVEL_FACTS.search(fact)]
+            if len(LOCATION_FACTS_BUFFER) == 100:
+                LOCATION_FACTS_BUFFER = {}
+            LOCATION_FACTS_BUFFER[location] = {location: facts_about_location}
 
     used_facts = shared_memory.get("used_facts", [])
     facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
@@ -732,7 +741,7 @@ def is_fact_about_loc_available_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     location = shared_memory.get("discussed_location", "")
     facts_about_location = collect_and_save_facts_about_location(location, vars)
-    if len(location) and len(facts_about_location) > 0:
+    if len(location) and location != "there" and len(facts_about_location) > 0:
         logger.info(f"Bot has available facts about LOC: {location}.")
         return True
     return False
@@ -901,7 +910,8 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_USR_HAVE_BEEN: yes_request,
         State.SYS_USR_HAVE_NOT_BEEN: no_request,
-        State.SYS_BEST_MENTIONED_BY_USER_LOC: no_requests_request,  # offer_fact_about_loc_response
+        State.SYS_BEST_MENTIONED_BY_USER_LOC: is_fact_about_loc_available_request,  # offer_fact_about_loc_response
+        State.SYS_GET_FACT_ABOUT_LOC: no_requests_request,  # not_confident_ask_question_about_travelling_response
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_HAVE_BEEN, State.SYS_ERR)
@@ -916,7 +926,8 @@ simplified_dialogflow.add_system_transition(State.SYS_USR_HAVE_BEEN, State.USR_W
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_BEST_MENTIONED_BY_USER_LOC,
     {
-        State.SYS_BEST_MENTIONED_BY_USER_LOC: no_requests_request,  # offer_fact_about_loc_response
+        State.SYS_BEST_MENTIONED_BY_USER_LOC: is_fact_about_loc_available_request,  # offer_fact_about_loc_response
+        State.SYS_GET_FACT_ABOUT_LOC: no_requests_request,  # not_confident_ask_question_about_travelling_response
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WHAT_BEST_MENTIONED_BY_USER_LOC, State.SYS_ERR)
@@ -960,7 +971,8 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_WOULD_VISIT_LOC: yes_request,
         State.SYS_WOULD_NOT_VISIT_LOC: no_request,
-        State.SYS_BEST_MENTIONED_BY_USER_LOC: no_requests_request,  # offer_fact_about_loc_response
+        State.SYS_BEST_MENTIONED_BY_USER_LOC: is_fact_about_loc_available_request,  # offer_fact_about_loc_response
+        State.SYS_GET_FACT_ABOUT_LOC: no_requests_request,  # not_confident_ask_question_about_travelling_response
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WOULD_LIKE_VISIT_LOC, State.SYS_ERR)
@@ -973,7 +985,8 @@ simplified_dialogflow.add_system_transition(State.SYS_WOULD_VISIT_LOC, State.USR
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WISH_WOULD_VISIT_LOC,
     {
-        State.SYS_USR_RESP_ABOUT_WISHES: no_requests_request,
+        State.SYS_USR_RESP_ABOUT_WISHES: is_fact_about_loc_available_request,  # offer_fact_about_loc_response
+        State.SYS_GET_FACT_ABOUT_LOC: no_requests_request,  # not_confident_ask_question_about_travelling_response
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WISH_WOULD_VISIT_LOC, State.SYS_ERR)
