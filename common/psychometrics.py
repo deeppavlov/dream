@@ -18,15 +18,15 @@ def is_introvert(dialog):
         user_uttr_annotations = human_utterance["annotations"]
 
         # Extraversion (outgoing/energetic vs. solitary/reserved)
-        is_extravert = -1
+        # is_extravert = -1
         # Neuroticism (sensitive/nervous vs. secure/confident)
-        is_neu = -1
+        # is_neu = -1
         # Extraversion (outgoing/energetic vs. solitary/reserved)
-        is_agr = -1
+        # is_agr = -1
         # Conscientiousness (efficient/organized vs. easy-going/careless)
-        is_con = -1
+        # is_con = -1
         # Openness to experience (inventive/curious vs. consistent/cautious)
-        is_opn = -1
+        # is_opn = -1
 
         personality_detection = user_uttr_annotations.get("personality_detection", {})
 
