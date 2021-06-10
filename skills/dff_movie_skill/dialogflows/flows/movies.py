@@ -74,8 +74,6 @@ class State(Enum):
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED = auto()
-    SYS_SHARE_INTERESTING_MOMENT = auto()
-    USR_SHARE_INTERESTING_MOMENT = auto()
 
     SYS_OFFER_CONTINUE_MOVIE_TALK = auto()
     USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK = auto()
@@ -1593,7 +1591,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_WAS_ASKED_DO_YOU_KNOW_QUESTION,
     {
         State.SYS_CHECK_ANSWER_TO_DO_YOU_KNOW: do_you_know_question_need_to_be_checked_request,
-        State.SYS_SHARE_INTERESTING_MOMENT: no_requests_request,
+        State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
 
     },
 )
