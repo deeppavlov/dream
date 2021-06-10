@@ -762,7 +762,8 @@ def speech_function_bot_formatter(dialog: Dict):
     try:
         human_sentseg = dialog["human_utterances"][-2].get('annotations', {}).get('sentseg', {})
         resp["prev_phrase"] = human_sentseg.get('segments', [dialog["human_utterances"][-2]['text']])[-1]
-        human_function = dialog["human_utterances"][-2].get('annotations', {}).get('speech_function_classifier', [''])[-1]
+        human_function = dialog["human_utterances"][-2].get('annotations', {}).get('speech_function_classifier',
+                                                                                   [''])[-1]
         resp['prev_speech_function'] = human_function
     except IndexError:
         resp['prev_phrase'] = None
@@ -788,7 +789,7 @@ def speech_function_hypotheses_predictor_formatter(dialog: Dict):
     hypotheses = dialog["utterances"][-1]["hypotheses"]
     ans = [h["annotations"].get("speech_function_classifier", ['']) for h in hypotheses]
     return ans
-    
+
 
 def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
     hypotheses = []

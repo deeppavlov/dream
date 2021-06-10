@@ -1,18 +1,13 @@
 # %%
-import os
 import logging
+import os
 import re
 
-import requests
-
-import common.dialogflow_framework.utils.state as state_utils
-import common.custom_requests as custom_requests
-
-import common.utils as common_utils
+import dialogflows.scenarios.generic_responses_templates as current_templates
 import sentry_sdk
 
-import dialogflows.scenarios.generic_responses_templates as current_templates
-
+import common.dialogflow_framework.utils.state as state_utils
+import common.utils as common_utils
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -44,9 +39,9 @@ def get_speech_function_for_human_utterance(human_utterance):
     sfunctions = {}
     i = 0
     for phrase in phrases:
-        if len(sfs)>i:
+        if len(sfs) > i:
             sfunctions[phrase] = sfs[i]
-        i = i+1
+        i = i + 1
 
     return sfunctions
 
@@ -170,7 +165,8 @@ def get_not_used_and_save_generic_response(proposed_sf, vars):
     last_responses = shared_memory.get(proposed_sf + "_last_responses", [])
 
     resp = common_utils.get_not_used_template(
-        used_templates=last_responses, all_templates=current_templates.GENERIC_REACTION_TO_USER_SPEECH_FUNCTION[proposed_sf]
+        used_templates=last_responses,
+        all_templates=current_templates.GENERIC_REACTION_TO_USER_SPEECH_FUNCTION[proposed_sf]
     )
 
     used_resp = last_responses + [resp]

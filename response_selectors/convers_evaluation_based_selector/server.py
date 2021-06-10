@@ -323,11 +323,11 @@ def get_non_generic_responses(candidates):
     non_generic_candidates = []
     for candidate in candidates:
         skill_name = candidate["skill_name"]
-        if skill_name is "dff_generic_responses_skill":
+        if skill_name == "dff_generic_responses_skill":
             continue
-        else: 
+        else:
             non_generic_candidates.append(candidate)
-    
+
     return non_generic_candidates
 
 
@@ -335,7 +335,7 @@ def get_generic_responses(candidates):
     generic_candidates = []
     for candidate in candidates:
         skill_name = candidate["skill_name"]
-        if skill_name is "dff_generic_responses_skill":
+        if skill_name == "dff_generic_responses_skill":
             generic_candidates.append(candidate)
 
     return generic_candidates
@@ -358,7 +358,6 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     bot_utterances = sum(bot_utterances, [])
     bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
 
-
     if TAG_BASED_SELECTION:
         logger.info(f"Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(
@@ -366,7 +365,6 @@ def select_response(candidates, scores, confidences, toxicities, has_blacklisted
     else:
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
             dialog, candidates, scores, confidences, toxicities, bot_utterances)
-
 
     logger.info(f"Best candidate: {best_candidate}")
     best_text = best_candidate["text"]

@@ -35,7 +35,8 @@ for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
         {
-            (scopes.GENERIC_RESPONSES, generic_responses_flow.State.USR_START): generic_responses_flow.sys_response_to_speech_function_request,
+            (scopes.GENERIC_RESPONSES,
+             generic_responses_flow.State.USR_START): generic_responses_flow.sys_response_to_speech_function_request,
         },
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)

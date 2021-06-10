@@ -11,16 +11,12 @@ from collections import defaultdict
 import spacy
 import json
 
-import nltk 
+import nltk
 from nltk import wordpunct_tokenize
 from nltk import word_tokenize
 
-import os
-
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
-import common.dialogflow_framework.utils.condition as condition_utils
-import common.utils as common_utils
 import common.constants as common_constants
 # from common.gossip import talk_about_gossip, skill_trigger_phrases
 
@@ -42,7 +38,7 @@ file = None
 with open('common/speech_functions/res_cor.json') as data:
     file = json.load(data)
 
-#region Sample Data
+# region Sample Data
 
 dialogues = []
 if file:
@@ -59,7 +55,7 @@ if file:
                 samples[sample['id']]['paragraphlabels'] = sample['value']['paragraphlabels'][0]
             if 'choices' in sample['value']:
                 samples[sample['id']]['choices'] = sample['value']['choices'][0]
-        
+
         sorted_samples = sorted([(samples[sample_id]['start'], sample_id) for sample_id in samples])
         texts = []
         labels = []
@@ -86,14 +82,13 @@ if file:
     for i in zip(all_data, all_labels):
         if 'Register' in i[1]:
             if len(wordpunct_tokenize(i[0])) < 3:
-                if not 'Leah' in i[0]:
-                    if not 'shit' in i[0]:
+                if 'Leah' not in i[0]:
+                    if 'shit' not in i[0]:
                         registers.append(i[0].strip('.'))
 
-registers=list(set(registers))
+registers = list(set(registers))
 
-#endregion
-
+# endregion
 
 
 class State(Enum):
@@ -158,7 +153,8 @@ patterns_supported_speech_functions = [
     "Clarify"
 ]
 
-supported_speech_functions_patterns_re = re.compile("(" + "|".join(patterns_supported_speech_functions) + ")", re.IGNORECASE)
+supported_speech_functions_patterns_re = re.compile("(" + "|".join(patterns_supported_speech_functions) + ")",
+                                                    re.IGNORECASE)
 
 
 def is_supported_speech_function(human_utterance, bot_utterance):
@@ -169,13 +165,14 @@ def is_supported_speech_function(human_utterance, bot_utterance):
     if sf_predictions:
         sf_predictions_list = list(sf_predictions)
         sf_predictions_for_last_phrase = sf_predictions_list[-1]
-    
+
         for sf_predicted in sf_predictions_for_last_phrase:
             prediction = sf_predicted["prediction"]
             logger.info(f"prediction: {prediction}")
             supported = bool(re.search(supported_speech_functions_patterns_re, prediction))
             if supported:
-                logger.info(f"At least one of the proposed speech functions is supported for generic response: {sf_predicted}")
+                logger.info(f"At least one of the proposed speech functions is supported "
+                            f"for generic response: {sf_predicted}")
                 return True
 
     # Temporary Override
@@ -189,13 +186,16 @@ def is_supported_speech_function(human_utterance, bot_utterance):
 
 # sustain_monitor=['You know?', 'Alright?','Yeah?','See?','Right?']
 # reply_agree=["Oh that's right. That's right.", "Yep.", "Right.", 'Sure', 'Indeed', 'I agree with you']
-# reply_disagree=['No', 'Hunhunh.', "I don't agree with you", "I disagree", "I do not think so", "I hardly think so", "I can't agree with you"]
+# reply_disagree=['No', 'Hunhunh.', "I don't agree with you", "I disagree", "I do not think so", "I hardly think so",
+# "I can't agree with you"]
 # reply_disawow=['I doubt it. I really do.', "I don't know.", "I'm not sure", 'Probably.', "I don't know if it's true"]
 # reply_acknowledge=['I knew that.','I know.', 'No doubts', 'I know what you meant.', 'Oh yeah.','I see']
-reply_affirm = ['Oh definitely.', 'Yeah.', 'Kind of.', 'Unhunh', 'Yeah I think so', 'Really.','Right.', "That's what it was."]
+reply_affirm = ['Oh definitely.', 'Yeah.', 'Kind of.', 'Unhunh', 'Yeah I think so', 'Really.', 'Right.',
+                "That's what it was."]
 # reply_contradict=['Oh definitely no', 'No', 'No way', 'Absolutely not', 'Not at all', 'Nope', 'Not really', 'Hardly']
 # # track_confirm=[' Oh really ?','Right ?', ' Okay ?']
 # track_check=['Pardon?', 'I beg your pardon?', 'Mhm ?','Hm?','What do you mean?']
+
 
 def clarify_response(previous_phrase):
     doc = nlp(previous_phrase)
@@ -209,7 +209,7 @@ def clarify_response(previous_phrase):
             next_sent = 'What ' + clarify_noun + '?'
         elif token.dep_ == 'prep':
             prep = token.text
-            next_sent = str(prep).capitalize() + ' what?' 
+            next_sent = str(prep).capitalize() + ' what?'
         elif poses[0] == 'PROPN' or poses[0] == 'PRON':
             if word_tokenize(previous_phrase)[0] == 'I' or word_tokenize(previous_phrase)[0] == 'We':
                 first_pron = 'You'
@@ -222,24 +222,24 @@ def clarify_response(previous_phrase):
 
 
 def confirm_response(previous_phrase):
-    track_confirm = ['Oh really?', ' Oh yeah?', 'Sure?', 'Are you sure?', 'Are you serious?','Yeah']
+    track_confirm = ['Oh really?', ' Oh yeah?', 'Sure?', 'Are you sure?', 'Are you serious?', 'Yeah']
     if len(word_tokenize(previous_phrase)) > 5:
-        next_sent = (word_tokenize(previous_phrase))[-1].capitalize()+'?'
+        next_sent = (word_tokenize(previous_phrase))[-1].capitalize() + '?'
     elif len(word_tokenize(previous_phrase)) < 4:
         if 'I' in previous_phrase:
-            previous_phrase = re.sub('I','you', previous_phrase)
-        next_sent = previous_phrase+'?'
+            previous_phrase = re.sub('I', 'you', previous_phrase)
+        next_sent = previous_phrase + '?'
     else:
         next_sent = random.choice(track_confirm)
     return next_sent
 
 
-def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_register = False, user_name = ''):
+def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_register=False, user_name=''):
     response = None
     if 'Register' in predicted_sf:
         response = random.choice(registers)
-        if enable_repeats_register == True:
-            response = word_tokenize(previous_phrase)[-1].capitalize()+'.'
+        if enable_repeats_register is True:
+            response = word_tokenize(previous_phrase)[-1].capitalize() + '.'
     if 'Check' in predicted_sf:
         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response=random.choice(track_check)
@@ -249,7 +249,7 @@ def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_regist
         response = user_name + current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response = user_name+random.choice(sustain_monitor)  #можно добавить имя пользователя
     if 'Affirm' in predicted_sf:
-        response = random.choice(reply_affirm+"Yeah,"+word_tokenize(previous_phrase)[-1])
+        response = random.choice(reply_affirm + "Yeah," + word_tokenize(previous_phrase)[-1])
     if 'Disawow' in predicted_sf:
         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response=random.choice(reply_disawow)
@@ -263,7 +263,7 @@ def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_regist
         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response=random.choice(reply_contradict)
     if 'Clarify' in predicted_sf:
-        response=clarify_response(previous_phrase)        
+        response = clarify_response(previous_phrase)
     return response
 
 
@@ -300,7 +300,7 @@ def usr_response_to_speech_function_response(vars):
     logger.debug("exec usr_response_to_speech_function_response")
     try:
         human_utterance = state_utils.get_last_human_utterance(vars)
-        
+
         sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
         logger.info(f"Found Speech Function: {sf_functions}")
 
@@ -320,7 +320,7 @@ def usr_response_to_speech_function_response(vars):
 
         sf_predictions_list = list(sf_predictions)
         sf_predictions_for_last_phrase = sf_predictions_list[-1]
-    
+
         for sf_prediction in sf_predictions_for_last_phrase:
             prediction = sf_prediction["prediction"]
             generic_response = generate_response(vars, prediction, last_phrase, False, "")
@@ -330,14 +330,14 @@ def usr_response_to_speech_function_response(vars):
         # get ack, body
         # ack = ""
         # ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
-        
+
         # generating response
         questions = [
             "Hi",
             "Hello",
             "Well hello there!",
             "Look what the cat dragged in!"
-        ] # common_gossip.TOPIC_TO_EVENT_QUESTIONS
+        ]  # common_gossip.TOPIC_TO_EVENT_QUESTIONS
 
         if not generic_responses:
             body = random.choice(questions)
@@ -378,7 +378,9 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 # SYS_TOPIC_TO_EVENT
 
 simplified_dialogflow.add_system_transition(
-    State.SYS_RESPONSE_TO_SPEECH_FUNCTION, State.USR_RESPONSE_TO_SPEECH_FUNCTION, usr_response_to_speech_function_response
+    State.SYS_RESPONSE_TO_SPEECH_FUNCTION,
+    State.USR_RESPONSE_TO_SPEECH_FUNCTION,
+    usr_response_to_speech_function_response
 )
 
 simplified_dialogflow.add_user_serial_transitions(

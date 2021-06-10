@@ -52,7 +52,9 @@ class RuleBasedSkillSelectorConnector:
             is_factoid = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.) > 0.9
 
             # ADDING SPEECH FUNCTION CLASSIFIER & PREDICTOR DATA
-            # speech_functions_from_user_phrase = get_speech_function_for_human_utterance_annotations(user_uttr_annotations)
+            # speech_functions_from_user_phrase = get_speech_function_for_human_utterance_annotations(
+            #     user_uttr_annotations
+            # )
             sf_predictions = get_speech_function_predictions_for_human_utterance_annotations(user_uttr_annotations)
             if sf_predictions:
                 skills_for_uttr.append("dff_generic_responses_skill")
