@@ -575,13 +575,13 @@ def get_movie_answer(annotated_user_phrase, human_attributes):
 
 
 def exit_skill(reply, human_attr, SKILLS_TO_LINK=SKILLS_TO_LINK):
-    link = link_to(SKILLS_TO_LINK, human_attr)['phrase']
+    # link = link_to(SKILLS_TO_LINK, human_attr)['phrase']
     exit_phrase = "We have been talking about books for a fair amount of time. " \
                   f"Let's talk about something else."
     if not any([exit_phrase in phrase for phrase in human_attr['book_skill']['used_phrases']]):
-        reply = f"{reply} {exit_phrase} {link}"
+        reply = f"{reply} {exit_phrase}"
     else:
-        reply = f"{link}"
+        reply = ""
     return reply
 
 
