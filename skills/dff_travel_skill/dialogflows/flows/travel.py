@@ -720,7 +720,6 @@ def collect_and_save_facts_about_location(location, vars):
             facts_about_location = deepcopy(LOCATION_FACTS_BUFFER[location])
         else:
             facts_about_location = [send_cobotqa(f"fact about {location}")]
-            facts_about_location = [fact for fact in facts_about_location if not TOO_SIMPLE_TRAVEL_FACTS.search(fact)]
             if len(LOCATION_FACTS_BUFFER) == 100:
                 LOCATION_FACTS_BUFFER = {}
             LOCATION_FACTS_BUFFER[location] = {location: facts_about_location}
@@ -730,6 +729,9 @@ def collect_and_save_facts_about_location(location, vars):
     facts_about_location = [COBOTQA_EXTRA_WORDS.sub("", fact).strip()
                             for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
+    facts_about_location = [fact for fact in facts_about_location if not TOO_SIMPLE_TRAVEL_FACTS.search(fact)]
+    facts_about_location = random.choices(
+        facts_about_location, k=5) if len(facts_about_location) > 5 else facts_about_location
 
     if len(facts_about_location):
         state_utils.save_to_shared_memory(
