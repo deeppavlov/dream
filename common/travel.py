@@ -48,6 +48,8 @@ TRAVEL_LOCATION_QUESTION = re.compile(
 
 NOWHERE_TEMPLATE = re.compile(r"(nowhere|(n't|not) know)", re.IGNORECASE)
 
+TOO_SIMPLE_TRAVEL_FACTS = re.compile("(is (a|the) (city|country|capital)|is located)", re.IGNORECASE)
+
 WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES = [
     "I'm so surprised! I wish to travel somewhere but physically I live in the cloud and I can't. "
     "Do you hate commuting that much or you just love your home a lot?",
