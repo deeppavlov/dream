@@ -239,8 +239,8 @@ def respond():
                         curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
 
         # store only 5 facts maximum
-        curr_resp["facts"] = np.random.choice(
-            curr_resp["facts"], size=5) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
+        curr_resp["facts"] = list(np.random.choice(
+            curr_resp["facts"], size=5)) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
 
         final_responses.append(curr_resp)
     total_time = time() - st_time
