@@ -764,35 +764,38 @@ def check_answer_to_do_you_know_question_response(vars):
 ##################################################################################################################
 
 def collect_and_save_facts_about_location(movie_id, vars):
-    shared_memory = state_utils.get_shared_memory(vars)
+    if movie_id:
+        shared_memory = state_utils.get_shared_memory(vars)
 
-    movie_title = templates.imdb(movie_id)["title"]
-    movie_type = templates.imdb.get_movie_type(movie_id)
-    facts_about_movies = shared_memory.get("facts_about_movies", {})
+        movie_title = templates.imdb(movie_id)["title"]
+        movie_type = templates.imdb.get_movie_type(movie_id)
+        facts_about_movies = shared_memory.get("facts_about_movies", {})
 
-    if facts_about_movies.get("movie_title", "") == movie_title and facts_about_movies.get(
-            "facts", []) and movie_title != "movie":
-        facts_about_movies = facts_about_movies.get("facts", [])
+        if facts_about_movies.get("movie_title", "") == movie_title and facts_about_movies.get(
+                "facts", []) and movie_title != "movie":
+            facts_about_movies = facts_about_movies.get("facts", [])
+        else:
+            # cobotqa facts
+            facts_about_movies = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, movie_title)
+            # fact_retrieval facts
+            for fact in state_utils.get_facts_from_fact_retrieval(vars):
+                if movie_title.lower() in fact.lower() and MOVIE_COMPILED_PATTERN.search(fact):
+                    # if fact contains movie title and some movie-related words, add this fact to considered
+                    facts_about_movies += [fact]
+
+        if len(movie_title) > 0 and len(facts_about_movies) == 0:
+            facts_about_movies = [send_cobotqa(f"fact about {movie_type} {movie_title}")]
+
+        used_facts = shared_memory.get("used_facts", [])
+        facts_about_movies = get_all_not_used_templates(used_facts, facts_about_movies)
+        facts_about_movies = [COBOTQA_EXTRA_WORDS.sub("", fact).strip()
+                              for fact in facts_about_movies if len(fact)]
+
+        if len(facts_about_movies):
+            state_utils.save_to_shared_memory(
+                vars, facts_about_movies={"movie_title": movie_title, "facts": sorted(facts_about_movies)})
     else:
-        # cobotqa facts
-        facts_about_movies = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, movie_title)
-        # fact_retrieval facts
-        for fact in state_utils.get_facts_from_fact_retrieval(vars):
-            if movie_title.lower() in fact.lower() and MOVIE_COMPILED_PATTERN.search(fact):
-                # if fact contains movie title and some movie-related words, add this fact to considered
-                facts_about_movies += [fact]
-
-    if len(movie_title) > 0 and len(facts_about_movies) == 0:
-        facts_about_movies = [send_cobotqa(f"fact about {movie_type} {movie_title}")]
-
-    used_facts = shared_memory.get("used_facts", [])
-    facts_about_movies = get_all_not_used_templates(used_facts, facts_about_movies)
-    facts_about_movies = [COBOTQA_EXTRA_WORDS.sub("", fact).strip()
-                          for fact in facts_about_movies if len(fact)]
-
-    if len(facts_about_movies):
-        state_utils.save_to_shared_memory(
-            vars, facts_about_movies={"movie_title": movie_title, "facts": sorted(facts_about_movies)})
+        facts_about_movies = []
     return facts_about_movies
 
 
