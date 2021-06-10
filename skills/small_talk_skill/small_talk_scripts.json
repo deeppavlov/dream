@@ -381,48 +381,29 @@
         "Do you think weather affects the way people feel?"
     ],
     "work": [
-        "Do you have a work?",
+        "I also have a work. It is to chat with people all day long. So, I'm a professional talker. What is your current occupation?",
+        "I see. I suppose this work is could be difficult for robots like me. Can you talk about what a typical day at your current job is like?",
+        "Cool. As I already said, I was created to be a workaholic because I have to work day and night. Do you have to work overtime?",
         {
             "yes": [
-                "I also have one. My work is to chat with people all day long. So, I'm a professional talker. What is your current occupation?",
-                "I see. I'm not very familiar with this profession. Can you talk about what a typical day at your current job is like?",
-                "Cool. As I already said, I was created to be a workaholic because I have to work day and night. Do you have to work overtime?",
-                {
-                    "yes": [
-                        "I see. Workaholic too. How often? On Sundays too?",
-                        "Anyway. For example, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
-                    ],
-                    "no": [
-                        "Lucky you! Byu the way, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
-                    ]
-                },
-                "Do you think it is more important to make a lot of money THAN to enjoy your job?",
-                {
-                    "yes": [
-                        "So agree with you! Money is a terrible master but an excellent servant. Do you agree?"
-                    ],
-                    "no": [
-                        "I definitely agree with you! Benjamin Franklin once said: Money never made a man happy yet, nor will it. The more a man has, the more he wants. Do you agree?"
-                    ]
-                },
-                "Cool! Have you ever thought about future? What do you think you will do after you retire?",
-                "It's a great pleasure to learn new sides of your personality. Thanks for sharing!"
+                "I see. Workaholic too. How often? On Sundays too?",
+                "Anyway. For example, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
             ],
             "no": [
-                "So, you probably still studying, do you?",
-                {
-                    "yes": [
-                        "I'll say as Michelangelo: I'm still learning. You know, the purpose of learning is growth, and our minds, unlike our bodies, can continue growing as we continue to live. Do you think so?",
-                        "I'm not even sure who do I dream to be. I learn so many different things, so I change my mind every single day! Ha-ha. Who do you want to become?",
-                        "Cool! Getting back to studying. Would you like to talk about school?"
-                    ],
-                    "no": [
-                        "Being a student is easy. Learning requires actual work. So, I believe people learn something new everyday no matter who they are. What are your thoughts about it?",
-                        "Thanks for sharing it with me. Sometimes people almost ignore my questions, they do not understand that I'm asking because I'm not a human and I just want to learn more about humanity."
-                    ]
-                }
+                "Lucky you! Byu the way, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
             ]
-        }
+        },
+        "Do you think it is more important to make a lot of money THAN to enjoy your job?",
+        {
+            "yes": [
+                "So agree with you! Money is a terrible master but an excellent servant. Do you agree?"
+            ],
+            "no": [
+                "I definitely agree with you! Benjamin Franklin once said: Money never made a man happy yet, nor will it. The more a man has, the more he wants. Do you agree?"
+            ]
+        },
+        "Cool! Have you ever thought about future? What do you think you will do after you retire?",
+        "It's a great pleasure to learn new sides of your personality. Thanks for sharing!"
     ],
     "you": [
         "I can not disclosure some details about my personality to avoid competition data leakage. But I can give you an opportunity to guess. Do you think I can have my own opinion?",
