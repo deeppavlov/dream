@@ -283,7 +283,6 @@ def what_cuisine_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -341,7 +340,6 @@ def cuisine_fact_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -365,7 +363,6 @@ def country_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -436,7 +433,6 @@ def what_fav_food_response(vars):
             if unused_food:
                 food_type = random.choice(unused_food)
             else:
-                state_utils.set_confidence(vars, 0)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return error_response(vars)
         else:
@@ -486,13 +482,11 @@ def what_fav_food_response(vars):
             else:
                 return f"I like to drink {fav_item[0]}. {fav_item[1]} What {food_type} do you prefer?"
         else:
-            state_utils.set_confidence(vars, 0)
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -522,7 +516,7 @@ def fav_food_request(ngrams, vars):
 
 def food_fact_response(vars):
     acknowledgements = [
-        "I like it too.", "I'm not fond of it.", "It's awesome.",
+        "I like it too.", "Okay.", "It's awesome.",
         "Fantastic.", "Loving it.", "Yummy!"
     ]
     human_utt = state_utils.get_last_human_utterance(vars)
@@ -536,6 +530,7 @@ def food_fact_response(vars):
     berry_name = ""
 
     linkto_check = any([linkto in bot_utt_text for linkto in link_to_skill2i_like_to_talk["dff_food_skill"]])
+    black_list_check = any(list(annotations.get("blacklisted_words", {}).values()))
 
     entities_facts = annotations.get("fact_retrieval", {}).get("topic_facts", [])
     for entity_facts in entities_facts:
@@ -549,7 +544,10 @@ def food_fact_response(vars):
     if not facts:
         facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
 
-    if check_conceptnet(vars) and ("shower" not in human_utt_text):
+    if black_list_check:
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+        return error_response(vars)
+    elif check_conceptnet(vars) and ("shower" not in human_utt_text):
         if "berry" in bot_utt_text.lower():
             berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
             if berry_names:
@@ -589,14 +587,12 @@ def food_fact_response(vars):
                 ]
             ):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                state_utils.set_confidence(vars, confidence=0.)
                 return error_response(vars)
             elif (not fact) and check_conceptnet(vars):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 return "Why do you like it?"
             elif not fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                state_utils.set_confidence(vars, confidence=0.)
                 return error_response(vars)
             elif (fact and entity):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -609,20 +605,17 @@ def food_fact_response(vars):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 return "Sorry. I didn't get what kind of food you have mentioned. Could you repeat it please?"
             else:
-                state_utils.set_confidence(vars, 0)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return error_response(vars)
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
-            state_utils.set_confidence(vars, 0)
             return error_response(vars)
     elif linkto_check:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
         return "Sorry. I didn't get what kind of food you have mentioned. Could you repeat it please?"
     else:
-        state_utils.set_confidence(vars, 0)
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return error_response(vars)
 
@@ -635,7 +628,6 @@ def are_you_gourmet_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -667,7 +659,6 @@ def how_about_meal_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -686,7 +677,6 @@ def recipe_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -698,7 +688,6 @@ def gourmet_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -723,7 +712,6 @@ def where_are_you_from_response(vars):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 
@@ -745,17 +733,14 @@ def suggest_cook_response(vars):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             else:
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                state_utils.set_confidence(vars, 0)
                 return error_response(vars)
             return "May I recommend you a meal to try to practice cooking?"
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            state_utils.set_confidence(vars, 0)
             return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        state_utils.set_confidence(vars, 0)
         return error_response(vars)
 
 

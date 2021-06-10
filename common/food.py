@@ -9,7 +9,7 @@ OPINION_REQUESTS_ABOUT_FOOD = ["Do you like cooking?",
 FOOD_WORDS = r"(food|cook|cooking|\bbake\b|baking|cuisine|daily bread|meals|foodstuffs" \
     r"|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|\beat\b|\bate\b" \
     r"|\beating\b|\beats\b|dinner|breakfast|\bpasta\b|burger|cheese|tasty|" \
-    r"waffles|banana|\bfries\b)"
+    r"waffles|banana|\bfries\b|\bdairy\b)"
 
 FOOD_UTTERANCES = r"(do you know .* most (favorite|favourite) food" \
     r"|.*what is your (favorite|favourite) food" \
@@ -44,14 +44,14 @@ FAST_FOOD_QUESTIONS = [
 ]
 FAST_FOOD_WHAT_QUESTIONS = [
     "What do you usually eat?",
-    "What type of fast food do you prefer?",
+    "What type of fast food you have not tried yet?",
     "If you had to choose one fast food meal what it would be?"
 ]
 CONCEPTNET_SYMBOLOF_FOOD = [
     "food", "coffee", "sweetness", "hunger",
     "breakfast", "dinner", "pizza", "potato",
     "meal", "japanese cuisine", "sushi",
-    "italian cuisine"
+    "italian cuisine", "dairy"
 ]
 CONCEPTNET_HASPROPERTY_FOOD = [
     "delicious", "tasty", "sweet", "good with potato", "edible"

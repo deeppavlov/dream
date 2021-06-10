@@ -45,6 +45,8 @@ class State(Enum):
     SYS_FOOD_CHECK = auto()
     USR_FAST_FOOD_FACT = auto()
     SYS_SMTH = auto()
+    SYS_SMTH_ELSE = auto()
+    USR_LINKTO = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -282,6 +284,17 @@ def food_fact_response(vars):
         return error_response(vars)
 
 
+def where_are_you_from_response(vars):
+    try:
+        state_utils.set_confidence(vars, confidence=CONF_LOW)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+        return "Where are you from?"
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
+
+
 ##################################################################################################################
 ##################################################################################################################
 # linking
@@ -291,9 +304,9 @@ def food_fact_response(vars):
 
 ##################################################################################################################
 #  START
-
 simplified_dialogflow.add_user_transition(State.USR_START, State.SYS_SAID_FAV_FOOD, fast_food_request)
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+
 
 ##################################################################################################################
 
@@ -309,7 +322,13 @@ simplified_dialogflow.add_system_transition(State.SYS_HOW_OFTEN, State.USR_WHAT_
 simplified_dialogflow.set_error_successor(State.SYS_HOW_OFTEN, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_WHAT_EAT, State.SYS_FOOD_CHECK, fav_food_request)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_WHAT_EAT,
+    {
+        State.SYS_FOOD_CHECK: fav_food_request,
+        State.SYS_SMTH_ELSE: smth_request,
+    },
+)
 simplified_dialogflow.set_error_successor(State.USR_WHAT_EAT, State.SYS_ERR)
 
 
@@ -323,6 +342,10 @@ simplified_dialogflow.set_error_successor(State.USR_FAST_FOOD_FACT, State.SYS_ER
 
 simplified_dialogflow.add_system_transition(State.SYS_SMTH, State.USR_HOW_OFTEN, fast_food_response)
 simplified_dialogflow.set_error_successor(State.SYS_SMTH, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_SMTH_ELSE, State.USR_LINKTO, where_are_you_from_response)
+simplified_dialogflow.set_error_successor(State.SYS_SMTH_ELSE, State.SYS_ERR)
 
 
 #################################################################################################################
