@@ -86,11 +86,12 @@ def handler(requested_data, random_seed=None):
                 dff_shared_state,
                 entities,
                 used_links,
+                age_group,
                 disliked_skills,
                 clarification_request_flag,
             )
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, dff_shared_state, used_links, disliked_skills = dialogflow_utils.get_dialog_state(DF)
+            state, dff_shared_state, used_links, age_group, disliked_skills = dialogflow_utils.get_dialog_state(DF)
 
             human_attr = {
                 f"{SERVICE_NAME}_state": state,
