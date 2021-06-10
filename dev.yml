@@ -504,7 +504,7 @@ services:
       - "./skills/dff_generic_responses_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8115:8115
+      - 8116:8116
   personality-detection:
     env_file: [ .env.dev ]
     volumes:
