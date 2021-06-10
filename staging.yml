@@ -278,6 +278,10 @@ services:
     image: ${DOCKER_REGISTRY}/user-persona-extractor:${VERSION}
     env_file:
       - ${ENV_FILE}
+  speech-function-predictor:
+    image: ${DOCKER_REGISTRY}/speech-function-predictor:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   dff-generic-responses-skill:
     image: ${DOCKER_REGISTRY}/dff-generic-responses-skill:${VERSION}
     env_file:

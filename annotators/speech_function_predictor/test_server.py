@@ -20,9 +20,9 @@ def run_test(handler):
                                    'confidence': 0.13793103448275862},
                                   {'prediction': 'Sustain.Continue.Prolong.Enhance',
                                    'confidence': 0.10344827586206896},
-                                  {'prediction': 'Sustain.Continue.Prolong.Extend',
-                                   'confidence': 0.08620689655172414},
                                   {'prediction': 'React.Rejoinder.Track.Confirm',
+                                   'confidence': 0.08620689655172414},
+                                  {'prediction': 'Sustain.Continue.Prolong.Extend',
                                    'confidence': 0.08620689655172414}]]]
     print("Success")
 
