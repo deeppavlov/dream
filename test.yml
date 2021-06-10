@@ -192,6 +192,8 @@ services:
       - CUDA_VISIBLE_DEVICES=1
   user-persona-extractor:
     env_file: [ .env.dev ]
+  speech-function-classifier:
+    env_file: [ .env.dev ]
   speech-function-predictor:
     env_file: [ .env.dev ]
   dff-generic-responses-skill:
