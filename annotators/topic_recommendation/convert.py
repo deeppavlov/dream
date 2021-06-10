@@ -7,7 +7,6 @@
 import logging
 import os
 
-import numpy as np
 import sentry_sdk
 import tensorflow_hub as tfhub
 import tensorflow as tf
@@ -16,6 +15,7 @@ import tensorflow_text
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 tensorflow_text.__name__
@@ -71,13 +71,3 @@ def encode_contexts(dialog_history_batch):
 
 def encode_responses(texts):
     return sess.run(response_encoding_tensor, feed_dict={responce_text_placeholder: texts})
-
-
-def get_ranked_list(context, responses):
-    # logger.warning(context)
-    # logger.warning(responses)
-    context_encoding = encode_contexts(context)
-    response_encodings = encode_responses(responses)  # 79, 512
-    scores = context_encoding.dot(response_encodings.T)
-    top_indices = np.argsort(scores)[::-1]
-    return top_indices[0]

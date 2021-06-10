@@ -32,12 +32,12 @@ def main():
         }
     ]
 
-    gold_results = [['dff_travel_skill', 'book_skill', 'dff_movie_skill']]
+    gold_results = [sorted(['dff_animals_skill', 'book_skill'])]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()[0]
-        if result == gold_result:
+        if sorted(result) == gold_result:
             count += 1
         else:
             print(f"Got {result}, but expected: {gold_result}")

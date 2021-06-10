@@ -22,10 +22,10 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC, OFFER_FACT_RESPONSES, OPINION_REQUESTS, HAVE_YOU_BEEN_TEMPLATE, \
     ACKNOWLEDGE_USER_DISLIKE_LOC, OFFER_MORE_FACT_RESPONSES, HAVE_YOU_BEEN_IN_PHRASES, \
     QUESTIONS_ABOUT_BOT_LOCATIONS, WHY_BOT_LIKES_TO_TRAVEL, I_HAVE_BEEN_IN_AND_LIKED_MOST, TRAVEL_LOCATION_QUESTION, \
-    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, EXTRA_WORDS_IN_FACTS_PATTERN
+    COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, NOWHERE_TEMPLATE
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
-    get_all_not_used_templates
+    get_all_not_used_templates, COBOTQA_EXTRA_WORDS
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -92,6 +92,7 @@ class State(Enum):
     SYS_MENTIONED_TRAVELLING = auto()
 
     SYS_LOC_NOT_DETECTED = auto()
+    SYS_REFUSED_TO_GIVE_LOC = auto()
 
     SYS_ERR = auto()
 
@@ -256,10 +257,14 @@ def not_like_travelling_response(vars):
     # USR_NOT_TRAVELLING_PREF
     logger.info(f"Bot asks why user does not like travelling.")
     try:
-        confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
-        state_utils.set_confidence(vars, confidence)
+        if user_was_asked_for_location(vars):
+            state_utils.set_confidence(vars, SUPER_CONFIDENCE)
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
+        else:
+            confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
+            state_utils.set_confidence(vars, confidence)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
-        state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
         return random.choice(WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES)
     except Exception as exc:
         logger.exception(exc)
@@ -333,6 +338,25 @@ def user_not_mention_named_entity_loc_request(ngrams, vars):
         return False
 
     if asked_for_loc and len(user_mentioned_locations) == 0:
+        logger.info(f"Not found mentioned named locations in user utterances")
+        return True
+    return False
+
+
+def user_refused_to_mention_named_entity_loc_request(ngrams, vars):
+    # SYS_REFUSED_TO_GIVE_LOC
+    asked_for_loc = user_was_asked_for_location(vars)
+    user_mentioned_locations = get_mentioned_locations(vars)
+    nowhere_found = NOWHERE_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"])
+    is_no = condition_utils.is_no_vars(vars)
+    weather_forecast = "weather_forecast_intent" in get_intents(state_utils.get_last_human_utterance(vars),
+                                                                which="intent_catcher")
+    prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
+    if weather_forecast or prev_active_skill == "weather_skill":
+        logger.info(f"Not found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
+        return False
+
+    if asked_for_loc and (len(user_mentioned_locations) == 0 or is_no or nowhere_found):
         logger.info(f"Not found mentioned named locations in user utterances")
         return True
     return False
@@ -694,7 +718,7 @@ def collect_and_save_facts_about_location(location, vars):
 
     used_facts = shared_memory.get("used_facts", [])
     facts_about_location = get_all_not_used_templates(used_facts, facts_about_location)
-    facts_about_location = [EXTRA_WORDS_IN_FACTS_PATTERN.sub("", fact).strip()
+    facts_about_location = [COBOTQA_EXTRA_WORDS.sub("", fact).strip()
                             for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
 
@@ -856,6 +880,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_HAVE_BOT_BEEN: have_bot_been_in_request,
         State.SYS_USR_HAVE_NOT_BEEN: user_have_not_been_in_request,
         State.SYS_USR_HAVE_BEEN: user_have_been_in_request,
+        State.SYS_REFUSED_TO_GIVE_LOC: user_refused_to_mention_named_entity_loc_request,
         State.SYS_LOC_DETECTED: user_mention_named_entity_loc_request,
         State.SYS_LIKE_TRAVELLING: like_about_travelling_request,
         State.SYS_LETS_CHAT_ABOUT_TRAVELLING: lets_chat_about_travelling_request,
@@ -906,6 +931,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_DISLIKE_AND_WHAT_LOC_NOT_CONF,
     {
         State.SYS_USR_HAVE_BEEN: user_have_been_in_request,
+        State.SYS_REFUSED_TO_GIVE_LOC: user_refused_to_mention_named_entity_loc_request,
         State.SYS_LOC_DETECTED: user_mention_named_entity_loc_request,
         State.SYS_LOC_NOT_DETECTED: user_not_mention_named_entity_loc_request  # requested_but_not_found_loc_response
     },
@@ -917,6 +943,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_LOC_NOT_CONF,
     {
         State.SYS_USR_HAVE_BEEN: user_have_been_in_request,
+        State.SYS_REFUSED_TO_GIVE_LOC: user_refused_to_mention_named_entity_loc_request,
         State.SYS_LOC_DETECTED: user_mention_named_entity_loc_request,
         State.SYS_LOC_NOT_DETECTED: user_not_mention_named_entity_loc_request  # requested_but_not_found_loc_response
     },
@@ -1040,6 +1067,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_LOC_CONF,
     {
         State.SYS_USR_HAVE_BEEN: user_have_been_in_request,
+        State.SYS_REFUSED_TO_GIVE_LOC: user_refused_to_mention_named_entity_loc_request,
         State.SYS_LOC_DETECTED: user_mention_named_entity_loc_request,
         State.SYS_LOC_NOT_DETECTED: user_not_mention_named_entity_loc_request  # requested_but_not_found_loc_response
     },
@@ -1070,6 +1098,11 @@ simplified_dialogflow.add_system_transition(State.SYS_WHY_NOT_LIKE_TRAVELLING, S
 simplified_dialogflow.add_system_transition(State.SYS_LOC_NOT_DETECTED, State.USR_HAVE_BEEN,
                                             requested_but_not_found_loc_response)
 # there are no serial transitions because we have USR_WHAT_LOC_NOT_CONF in another thread
+
+##################################################################################################################
+#  SYS_REFUSED_TO_GIVE_LOC
+simplified_dialogflow.add_system_transition(State.SYS_REFUSED_TO_GIVE_LOC, State.USR_NOT_TRAVELLING_PREF,
+                                            not_like_travelling_response)
 
 ##################################################################################################################
 #  SYS_ERR

@@ -14,8 +14,7 @@ from common.dialogflow_framework.utils.condition import get_last_state
 from common.universal_templates import if_chat_about_particular_topic, if_lets_chat, NOT_LIKE_PATTERN
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, PETS_TEMPLATE_EXT, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, \
-    WILD_ANIMALS, WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, NOT_SWITCH_TEMPLATE, \
-    DO_YOU_HAVE_TEMPLATE
+    WILD_ANIMALS, WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, NOT_SWITCH_TEMPLATE, DO_YOU_HAVE_TEMPLATE
 from common.wiki_skill import if_linked_to_wiki_skill
 from common.animals import stop_about_animals, find_entity_by_types, find_entity_conceptnet
 
@@ -81,9 +80,14 @@ def make_my_pets_info(vars, rnd=True):
 def stop_animals_request(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_human_utterance(vars)
+    found_prompt = any([phrase.lower() in bot_uttr["text"].lower() for phrase in TRIGGER_PHRASES])
+    isno = is_no(user_uttr)
     shared_memory = state_utils.get_shared_memory(vars)
     if stop_about_animals(user_uttr, shared_memory):
         flag = True
+    if found_prompt and not isno:
+        flag = False
     logger.info(f"stop_animals_request={flag}")
     return flag
 
@@ -95,6 +99,7 @@ def lets_talk_about_request(vars):
     have_pets = re.search(HAVE_LIKE_PETS_TEMPLATE, user_uttr["text"])
     found_prompt = any([phrase.lower() in bot_uttr["text"].lower() for phrase in TRIGGER_PHRASES])
     isno = is_no(user_uttr)
+    is_stop = re.findall(r"(stop|shut|something else|change|don't want)", user_uttr["text"])
     chat_about = if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ANIMALS_FIND_TEMPLATE)
     find_pattern = re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"])
     dont_like = re.findall(NOT_LIKE_PATTERN, user_uttr["text"])
@@ -102,7 +107,7 @@ def lets_talk_about_request(vars):
     if chat_about and find_pattern:
         flag = True
     if not dont_like and (have_pets or (find_pattern and (not is_last_state(vars, "SYS_WHAT_ANIMALS")
-                                        or not was_prev_active)) or (found_prompt and not isno)):
+                                        or not was_prev_active)) or (found_prompt and not isno and not is_stop)):
         flag = True
     if re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"]):
         flag = False
@@ -243,14 +248,6 @@ def is_wild_request(ngrams, vars):
             and not if_linked_to_wiki_skill(annotations, "dff_animals_skill"):
         flag = True
     logger.info(f"is_wild_request={flag}")
-    return flag
-
-
-def restore_request(ngrams, vars):
-    flag = False
-    if activate_after_wiki_skill(vars):
-        flag = True
-    logger.info(f"restore_request={flag}")
     return flag
 
 
@@ -443,7 +440,6 @@ simplified_dialog_flow.add_user_serial_transitions(
         AS.SYS_ERR: stop_animals_request,
         AS.SYS_DO_YOU_HAVE: do_you_have_pets_request,
         (scopes.MY_PETS, MyPetsState.USR_START): user_asked_have_pets_request,
-        (scopes.WILD_ANIMALS, WildAnimalsState.USR_START): restore_request,
         (scopes.USER_PETS, UserPetsState.USR_START): user_mentioned_his_pet_request,
         AS.SYS_WHAT_ANIMALS: sys_what_animals_request,
         (scopes.WILD_ANIMALS, WildAnimalsState.SYS_ANIMAL_Q): user_likes_animal_request,

@@ -1,14 +1,16 @@
 [
     [
-        "Her is my favorite pic! Joaquin Phoenix's acting was so subtle! What do you think about it?",
-        1.0,
+        "Her is my favorite pic! Scarlett Johansson's acting was so subtle! What do you think about this movie?",
+        0.98,
         {
             "dff_movie_skill_state": {
                 "shared_memory": {
-                    "current_status": "opinion_request",
-                    "used_movies_questions": [
-                        "What is your all-time favorite movie?"
-                    ],
+                    "facts_about_movies": {
+                        "movie_title": "Her",
+                        "facts": [
+                            "Movies, or films, are a type of visual communication which uses moving pictures and sound to tell stories or teach people something. Most people watch movies as a type of entertainment or a way to have fun. For some people, fun movies can mean movies that make them laugh, while for others it can mean movies that make them cry, or feel afraid."
+                        ]
+                    },
                     "current_movie_id": "1798709",
                     "current_movie_title": "Her",
                     "discussed_movie_ids": [
@@ -16,31 +18,27 @@
                     ],
                     "discussed_movie_titles": [
                         "Her"
-                    ]
+                    ],
+                    "current_status": "opinion_request"
                 },
-                "previous_human_utter_index": 3,
+                "previous_human_utter_index": 1,
                 "history": {
-                    "1": "State.SYS_MENTIONED_MOVIES",
-                    "3": "State.SYS_EXTRACTED_MOVIE_TITLE"
+                    "1": "State.SYS_EXTRACTED_MOVIE_TITLE"
                 },
                 "current_turn_dff_suspended": false,
-                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"i watched movie her\", \"__system_state__\": \"State.SYS_EXTRACTED_MOVIE_TITLE\", \"__state__\": \"State.USR_WAS_REQUESTED_MOVIE_OPINION\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Her is my favorite pic! Joaquin Phoenix's acting was so subtle! What do you think about it?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MOVIES\\\"<__tuple__>\\\"State.USR_WAS_REQUESTED_MOVIE_OPINION\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"i watched movie her\", \"__system_state__\": \"State.SYS_EXTRACTED_MOVIE_TITLE\", \"__state__\": \"State.USR_WAS_REQUESTED_MOVIE_OPINION\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Her is my favorite pic! Scarlett Johansson's acting was so subtle! What do you think about this movie?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MOVIES\\\"<__tuple__>\\\"State.USR_WAS_REQUESTED_MOVIE_OPINION\\\"\"}"
             },
             "dff_shared_state": {
                 "cross_links": {},
                 "cross_states": {}
             },
-            "used_links": {
-                "dff_travel_skill": [
-                    "Do you think travel is a great thing?"
-                ]
-            },
-            "age_group": "",
+            "used_links": {},
+            "age_group": "unknown",
             "disliked_skills": []
         },
         {},
         {
-            "can_continue": "must"
+            "can_continue": "can_prompt"
         }
     ]
 ]

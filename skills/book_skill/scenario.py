@@ -163,7 +163,7 @@ class BookSkillScenario:
                 if not human_attr['book_skill'].get('we_asked_genre', False):
                     reply, confidence = f'{reply} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
                     human_attr['book_skill']['we_asked_genre'] = True
-            elif BOOK_ACKNOWLEDGEMENT_PHRASE != bot_phrases[-1]:
+            elif BOOK_ACKNOWLEDGEMENT_PHRASE not in bot_phrases[-1]:
                 reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
             elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
                 reply, confidence = f'OK, {WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf

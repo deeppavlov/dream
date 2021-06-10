@@ -24,7 +24,7 @@ from common.movies import get_movie_template, praise_actor, praise_director_or_w
     WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES, WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template, \
-    find_first_complete_sentence
+    find_first_complete_sentence, get_all_not_used_templates, COBOTQA_EXTRA_WORDS
 from nltk.tokenize import sent_tokenize
 from dialogflows.flows.utils import is_movie_title_question, LETTERS, NOT_WATCHED_TEMPLATE, \
     NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE, recommend_movie_of_genre
@@ -291,10 +291,17 @@ def extract_mentions(vars, check_full_utterance=False):
     harry_potter_part_name = get_harry_potter_part_name_if_special_link_was_used(
         curr_human_uttr, state_utils.get_last_bot_utterance(vars))
     if harry_potter_part_name is not None:
+        new_cobot_entities = {
+            "entities": [harry_potter_part_name],
+            "labelled_entities": [{"label": "videoname", "text": harry_potter_part_name}]
+        }
+        if "annotations" not in curr_human_uttr:
+            curr_human_uttr["annotations"] = {}
         logger.info(
-            f"replacing phrase '{curr_human_uttr_text}' for '{harry_potter_part_name}' for mentions extraction")
-        curr_human_uttr_text = harry_potter_part_name.lower()
-        curr_human_uttr["text"] = harry_potter_part_name.lower()
+            f"For mentions extraction cobot_entities annotation "
+            f"'{curr_human_uttr['annotations'].get('cobot_entities')}' is replaced with '{new_cobot_entities}'"
+        )
+        curr_human_uttr["annotations"]["cobot_entities"] = new_cobot_entities
     if curr_human_uttr_text in EXTRACTED_MENTIONS_BUFFER:
         movies_ids, unique_persons, mentioned_genres = EXTRACTED_MENTIONS_BUFFER[curr_human_uttr_text]
     else:
@@ -361,6 +368,7 @@ def movie_title_clarification_response(vars):
     try:
         movies_ids, unique_persons, mentioned_genres = extract_mentions(vars, check_full_utterance=True)
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
+        collect_and_save_facts_about_location(movie_id, vars)
         user_was_asked_for_movie_title_or_clarification = user_was_asked_about_movie_title(vars)
         user_was_asked_for_movie_title_or_clarification |= state_utils.get_shared_memory(vars).get(
             "current_status", "") in ["movie_prompt", "clarification"]
@@ -546,6 +554,7 @@ def movie_request_opinion_response(vars):
         movies_ids, unique_persons, mentioned_genres = extract_mentions(
             vars, check_full_utterance=user_was_asked_for_movie_title_or_clarification)
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
+        collect_and_save_facts_about_location(movie_id, vars)
         is_popular_movie_found = is_popular_movie(movie_id) == "popular"
 
         if user_was_asked_for_movie_title_or_clarification or is_popular_movie_found:
@@ -598,6 +607,7 @@ def ask_do_you_know_question_response(vars):
         movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
         movie_title = state_utils.get_shared_memory(vars).get("current_movie_title", "")
         movie_type = templates.imdb.get_movie_type(movie_id)
+        collect_and_save_facts_about_location(movie_id, vars)
         discussed_movie_ids = state_utils.get_shared_memory(vars).get("discussed_movie_ids", [])
 
         quest_types = ["like_genres", "like_actor", "genre", "cast"]
@@ -753,6 +763,42 @@ def check_answer_to_do_you_know_question_response(vars):
 # fact about movie
 ##################################################################################################################
 
+def collect_and_save_facts_about_location(movie_id, vars):
+    if movie_id:
+        shared_memory = state_utils.get_shared_memory(vars)
+
+        movie_title = templates.imdb(movie_id)["title"]
+        movie_type = templates.imdb.get_movie_type(movie_id)
+        facts_about_movies = shared_memory.get("facts_about_movies", {})
+
+        if facts_about_movies.get("movie_title", "") == movie_title and facts_about_movies.get(
+                "facts", []) and movie_title != "movie":
+            facts_about_movies = facts_about_movies.get("facts", [])
+        else:
+            # cobotqa facts
+            facts_about_movies = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, movie_title)
+            # fact_retrieval facts
+            for fact in state_utils.get_facts_from_fact_retrieval(vars):
+                if movie_title.lower() in fact.lower() and MOVIE_COMPILED_PATTERN.search(fact):
+                    # if fact contains movie title and some movie-related words, add this fact to considered
+                    facts_about_movies += [fact]
+
+        if len(movie_title) > 0 and len(facts_about_movies) == 0:
+            facts_about_movies = [send_cobotqa(f"fact about {movie_type} {movie_title}")]
+
+        used_facts = shared_memory.get("used_facts", [])
+        facts_about_movies = get_all_not_used_templates(used_facts, facts_about_movies)
+        facts_about_movies = [COBOTQA_EXTRA_WORDS.sub("", fact).strip()
+                              for fact in facts_about_movies if len(fact)]
+
+        if len(facts_about_movies):
+            state_utils.save_to_shared_memory(
+                vars, facts_about_movies={"movie_title": movie_title, "facts": sorted(facts_about_movies)})
+    else:
+        facts_about_movies = []
+    return facts_about_movies
+
+
 def give_more_fact_request(ngrams, vars):
     # SYS_GIVE_FACT_ABOUT_MOVIE
     prev_status = state_utils.get_shared_memory(vars).get("current_status", "")
@@ -775,14 +821,12 @@ def generate_fact_from_cobotqa_response(vars):
         movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
         movie_title = state_utils.get_shared_memory(vars).get("current_movie_title", "")
         movie_type = templates.imdb.get_movie_type(movie_id)
-        request_about = "fact about"
-
+        facts_about_movies = collect_and_save_facts_about_location(movie_id, vars)
         used_facts = state_utils.get_shared_memory(vars).get("used_facts", [])
 
-        fact = send_cobotqa(f"{request_about} {movie_type} {movie_title}?")
+        fact = random.choice(facts_about_movies) if len(facts_about_movies) else ""
         logger.info(f"Generated fact about {movie_type} `{movie_title}`: {fact}.")
-        if len(fact) > 0 and "Sorry, I don't know" not in fact and "This might answer your question" not in fact and \
-                fact not in used_facts:
+        if len(fact) > 0:
             # save original version of used fact
             state_utils.save_to_shared_memory(vars, used_facts=used_facts + [fact])
             sentences = sent_tokenize(fact.replace(".,", "."))
@@ -956,6 +1000,8 @@ def bot_express_opinion_and_ask_user_response(vars):
         movies_ids, unique_persons, mentioned_genres = extract_mentions(
             vars, check_full_utterance=user_was_asked_about_movie_title(vars))
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
+        collect_and_save_facts_about_location(movie_id, vars)
+
         # express opinion and request opinion about last mentioned movie in user uttr
         response = movie_request_opinion_response(vars)
 
