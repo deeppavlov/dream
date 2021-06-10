@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import random
@@ -7,8 +8,6 @@ import en_core_web_sm
 import nltk
 import sentry_sdk
 
-from deeppavlov import build_model
-
 import common.constants as common_constants
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
@@ -16,11 +15,14 @@ from common.dialogflow_framework.utils.condition import if_was_prev_active
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK, \
     is_any_question_sentence_in_utterance
 from common.utils import is_no, is_yes
-from common.wiki_skill import used_types_dict
 from common.wiki_skill import choose_title, find_all_titles, find_paragraph, find_all_paragraphs, delete_hyperlinks
 from common.wiki_skill import find_entity_wp, find_entity_nounphr, if_switch_wiki_skill, continue_after_topic_skill
 from common.wiki_skill import switch_wiki_skill_on_news, preprocess_news, if_must_switch
-from common.wiki_skill import QUESTION_TEMPLATES, WIKI_BLACKLIST, CONF_DICT, NEWS_MORE
+from common.wiki_skill import QUESTION_TEMPLATES, CONF_DICT, NEWS_MORE
+from common.insert_scenario import get_page_content, get_wikihow_content, get_page_title, make_facts_str, get_titles, \
+    titles_by_type, titles_by_entity_substr, questions_by_entity_substr, wikihowq_by_substr
+from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
+    facts_response
 from common.news import get_news_about_topic
 
 import dialogflows.scopes as scopes
@@ -40,46 +42,13 @@ ANSWER_CONF_THRES = 0.95
 GO_TO_MAIN_PAGE = True
 ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
 
-page_extractor = build_model(config_name, download=True)
-whow_page_extractor = build_model("whow_page_extractor.json", download=True)
-
-
-titles_by_type = {}
-for elem in used_types_dict:
-    types = elem.get("types", [])
-    titles = elem["titles"]
-    for tp in types:
-        titles_by_type[tp] = titles
-
-titles_by_entity_substr = {}
-page_titles_by_entity_substr = {}
-for elem in used_types_dict:
-    entity_substrings = elem.get("entity_substr", [])
-    titles = elem["titles"]
-    page_title = elem.get("page_title", "")
-    for substr in entity_substrings:
-        titles_by_entity_substr[substr] = titles
-        if page_title:
-            page_titles_by_entity_substr[substr] = page_title
-
-questions_by_entity_substr = {}
-for elem in used_types_dict:
-    entity_substrings = elem.get("entity_substr", [])
-    question = elem.get("intro_question", "")
-    if question:
-        for substr in entity_substrings:
-            questions_by_entity_substr[substr] = question
-
-wikihowq_by_substr = {}
-for elem in used_types_dict:
-    entity_substrings = elem.get("entity_substr", [])
-    wikihow_info = elem.get("wikihow_info", {})
-    if wikihow_info:
-        for substr in entity_substrings:
-            wikihowq_by_substr[substr] = wikihow_info
-
+with open("dff_wiki_topics.json", 'r') as fl:
+    topic_config = json.load(fl)
 
 found_pages_dict = {}
+
+with open("page_dict.json", 'r') as fl:
+    cache_page_dict = json.load(fl)
 
 
 def another_topic_question(vars, all_titles):
@@ -142,52 +111,6 @@ def find_entity(vars, where_to_find="current"):
     return found_entity_substr, found_entity_id, found_entity_types
 
 
-def get_page_title(vars, entity_substr):
-    found_page = ""
-    if entity_substr in page_titles_by_entity_substr:
-        found_page = page_titles_by_entity_substr[entity_substr]
-    else:
-        annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-        el = annotations.get("entity_linking", [])
-        for entity in el:
-            if isinstance(entity, dict) and entity["entity_substr"] == entity_substr:
-                found_pages_titles = entity["entity_pages_titles"]
-                if found_pages_titles:
-                    found_page = found_pages_titles[0]
-    logger.info(f"found_page {found_page}")
-    return found_page
-
-
-def get_page_content(page_title):
-    page_content = {}
-    main_pages = {}
-    try:
-        if page_title:
-            page_content_batch, main_pages_batch = page_extractor([[page_title]])
-            if page_content_batch and page_content_batch[0]:
-                page_content = page_content_batch[0][0]
-                main_pages = main_pages_batch[0][0]
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
-
-    return page_content, main_pages
-
-
-def get_wikihow_content(page_title):
-    page_content = {}
-    try:
-        if page_title:
-            page_content_batch = whow_page_extractor([[page_title]])
-            if page_content_batch and page_content_batch[0]:
-                page_content = page_content_batch[0][0]
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
-
-    return page_content
-
-
 def get_page_info(vars, function_type, where_to_find="current"):
     shared_memory = state_utils.get_shared_memory(vars)
     curr_pages = shared_memory.get("curr_pages", [])
@@ -200,7 +123,7 @@ def get_page_info(vars, function_type, where_to_find="current"):
     was_prev_active = if_was_prev_active(vars)
     logger.info(f"started {started}")
     if function_type == "response" and curr_pages and found_entity_substr_list and found_entity_types_list:
-        page_content, _ = get_page_content(curr_pages[-1])
+        page_content, _ = get_page_content(curr_pages[-1], cache_page_dict)
         all_titles = find_all_titles([], page_content)
         wants_more = if_wants_more(vars, all_titles)
         logger.info(f"deleting, function_type {function_type} wants_more {wants_more}")
@@ -218,7 +141,7 @@ def get_page_info(vars, function_type, where_to_find="current"):
     main_pages_list = []
     if curr_pages:
         for page in curr_pages[-2:]:
-            page_content, main_pages = get_page_content(page)
+            page_content, main_pages = get_page_content(page, cache_page_dict)
             page_content_list.append(page_content)
             main_pages_list.append(main_pages)
     else:
@@ -229,25 +152,11 @@ def get_page_info(vars, function_type, where_to_find="current"):
             found_entity_substr_list.append(found_entity_substr)
             found_entity_types_list.append(list(found_entity_types))
         for page in curr_pages[-2:]:
-            page_content, main_pages = get_page_content(page)
+            page_content, main_pages = get_page_content(page, cache_page_dict)
             page_content_list.append(page_content)
             main_pages_list.append(main_pages)
     return found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, curr_pages, \
         page_content_list, main_pages_list, new_page
-
-
-def get_titles(found_entity_substr, found_entity_types, page_content):
-    all_titles = find_all_titles([], page_content)
-    titles_we_use = []
-    titles_q = {}
-    for tp in found_entity_types:
-        tp_titles = titles_by_type.get(tp, {})
-        titles_we_use += list(tp_titles.keys())
-        titles_q = {**titles_q, **tp_titles}
-    substr_titles = titles_by_entity_substr.get(found_entity_substr, {})
-    titles_we_use += list(substr_titles.keys())
-    titles_q = {**titles_q, **substr_titles}
-    return titles_q, titles_we_use, all_titles
 
 
 def get_title_info(vars, found_entity_substr, found_entity_types, prev_title, used_titles, page_content):
@@ -262,47 +171,6 @@ def get_title_info(vars, found_entity_substr, found_entity_types, prev_title, us
     logger.info(f"all_titles {all_titles}")
     chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_pages)
     return chosen_title, chosen_page_title
-
-
-def make_facts_str(paragraphs):
-    facts_str = ""
-    mentions_list = []
-    mention_pages_list = []
-    paragraph = ""
-    logger.info(f"paragraphs {paragraphs}")
-    if paragraphs:
-        paragraph = paragraphs[0]
-    sentences = nltk.sent_tokenize(paragraph)
-    sentences_list = []
-    cur_len = 0
-    max_len = 50
-    for sentence in sentences:
-        sanitized_sentence, mentions, mention_pages = delete_hyperlinks(sentence)
-        words = nltk.word_tokenize(sanitized_sentence)
-        if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, sanitized_sentence):
-            sentences_list.append(sanitized_sentence)
-            cur_len += len(words)
-            mentions_list += mentions
-            mention_pages_list += mention_pages
-    if sentences_list:
-        facts_str = " ".join(sentences_list)
-    cur_len = 0
-    if sentences and not sentences_list:
-        sentence = sentences[0]
-        sanitized_sentence, mentions, mention_pages = delete_hyperlinks(sentence)
-        sentence_parts = sanitized_sentence.split(", ")
-        mentions_list += mentions
-        mention_pages_list += mention_pages
-        for part in sentence_parts:
-            words = nltk.word_tokenize(part)
-            if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, part):
-                sentences_list.append(part)
-                cur_len += len(words)
-            facts_str = ", ".join(sentences_list)
-            if facts_str and not facts_str.endswith("."):
-                facts_str = f"{facts_str}."
-    logger.info(f"mentions {mentions_list} mention_pages {mention_pages_list}")
-    return facts_str, mentions_list, mention_pages_list
 
 
 def make_question(chosen_title, titles_q, found_entity_substr, used_titles):
@@ -347,6 +215,28 @@ def save_wiki_vars(vars, found_entity_substr_list, curr_pages, prev_title, prev_
     state_utils.save_to_shared_memory(vars, used_titles=used_titles)
     state_utils.save_to_shared_memory(vars, found_entity_types=list(found_entity_types_list))
     state_utils.save_to_shared_memory(vars, new_page=new_page)
+
+
+def special_topic_request(ngrams, vars):
+    flag = start_or_continue_scenario(vars, topic_config)
+    logger.info(f"special_topic_request={flag}")
+    return flag
+
+
+def special_topic_response(vars):
+    response = smalltalk_response(vars, topic_config)
+    return response
+
+
+def special_topic_facts_request(ngrams, vars):
+    flag = start_or_continue_facts(vars, topic_config)
+    logger.info(f"special_topic_facts_request={flag}")
+    return flag
+
+
+def special_topic_facts_response(vars):
+    response = facts_response(vars, topic_config)
+    return response
 
 
 def news_step_request(ngrams, vars):
@@ -980,12 +870,29 @@ simplified_dialog_flow = dialogflow_extention.DFEasyFilling(State.USR_START)
 simplified_dialog_flow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
         State.SYS_NEWS_STEP: news_step_request,
         State.SYS_WIKIHOW_Q: wikihow_question_request,
         State.SYS_INTRO_Q: intro_question_request,
         State.SYS_FACTOID_Q: factoid_q_request,
         State.SYS_TELL_FACT: tell_fact_request,
         State.SYS_START_TALK: start_talk_request,
+    },
+)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    State.USR_TOPIC_SMALLTALK,
+    {
+        State.SYS_TOPIC_FACT: special_topic_facts_request,
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
+    },
+)
+
+simplified_dialog_flow.add_user_serial_transitions(
+    State.USR_TOPIC_FACT,
+    {
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
+        State.SYS_TOPIC_FACT: special_topic_facts_request,
     },
 )
 
@@ -1043,6 +950,10 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
+simplified_dialog_flow.add_system_transition(State.SYS_TOPIC_SMALLTALK, State.USR_TOPIC_SMALLTALK,
+                                             special_topic_response, )
+simplified_dialog_flow.add_system_transition(State.SYS_TOPIC_FACT, State.USR_TOPIC_FACT,
+                                             special_topic_facts_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_WIKIHOW_Q, State.USR_WIKIHOW_Q,
                                              wikihow_question_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_WIKIHOW_STEP, State.USR_WIKIHOW_STEP,
@@ -1057,6 +968,10 @@ simplified_dialog_flow.add_system_transition(State.SYS_NEWS_STEP, State.USR_NEWS
 simplified_dialog_flow.add_system_transition(State.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
 
 simplified_dialog_flow.set_error_successor(State.USR_START, State.SYS_ERR)
+simplified_dialog_flow.set_error_successor(State.SYS_TOPIC_SMALLTALK, State.SYS_ERR)
+simplified_dialog_flow.set_error_successor(State.USR_TOPIC_SMALLTALK, State.SYS_ERR)
+simplified_dialog_flow.set_error_successor(State.SYS_TOPIC_FACT, State.SYS_ERR)
+simplified_dialog_flow.set_error_successor(State.USR_TOPIC_FACT, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_TELL_FACT, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_TELL_FACT, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_INTRO_Q, State.SYS_ERR)
