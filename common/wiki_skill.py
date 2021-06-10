@@ -162,7 +162,9 @@ used_types_dict = [{"types": ["Q11253473"  # smart device
                                "culture": "Would you like to know about {} in popular culture?"}},
                    {"types": ["Q2066131"],  # athlete
                     "titles": {"club career": "", "international career": "", "player profile": "",
-                               "personal life": ""}}
+                               "personal life": ""}},
+                   {"types": ["Q1028181"],  # painter
+                    "titles": {"style": "", "technique": "", "career": ""}}
                    ]
 
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
@@ -248,6 +250,11 @@ transfer_from_skills = {
     },
 }
 
+special_topics = {"art":
+                  {"linkto": ["Would you like to talk about art?"],
+                   "pattern": re.compile(r"(\bart\b|drawing|painting)", re.IGNORECASE)}
+                  }
+
 
 def find_entity_wp(annotations, bot_uttr, specific_types=None):
     conf_type = "UNDEFINED"
@@ -332,6 +339,29 @@ def find_entity_types(query_entity, annotations):
     return type_ids
 
 
+def find_entity_by_types(annotations, types_to_find):
+    found_entity_wp = ""
+    found_types = []
+    wp_output = annotations.get("wiki_parser", {})
+    types_to_find = set(types_to_find)
+    if isinstance(wp_output, dict):
+        all_entities_info = wp_output.get("entities_info", {})
+        wiki_skill_entities_info = wp_output.get("wiki_skill_entities_info", {})
+        topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
+        for entities_info in [all_entities_info, wiki_skill_entities_info, topic_skill_entities_info]:
+            for entity, triplets in entities_info.items():
+                types = triplets.get("types", []) + triplets.get("instance of", []) + \
+                    triplets.get("subclass of", []) + triplets.get("types_2_hop", []) + \
+                    triplets.get("occupation", [])
+                type_ids = [elem for elem, label in types]
+                inters = set(type_ids).intersection(types_to_find)
+                if inters:
+                    found_entity_wp = entity
+                    found_types = list(inters)
+                    break
+    return found_entity_wp, found_types
+
+
 def find_entity_nounphr(annotations):
     found_entity_substr = ""
     conf_type = "UNDEFINED"
@@ -364,6 +394,16 @@ def find_entity_nounphr(annotations):
     return found_entity_substr, conf_type
 
 
+def check_nounphr(annotations, nounphr_to_find):
+    nounphrases = annotations.get("cobot_entities", {}).get("labelled_entities", [])
+    for nounphr in nounphrases:
+        nounphr_text = nounphr.get("text", "")
+        nounphr_label = nounphr.get("label", "")
+        if nounphr_text in nounphr_to_find and nounphr_label != "number":
+            return nounphr_text
+    return ""
+
+
 def if_user_dont_know_topic(user_uttr, bot_uttr):
     flag = False
     what_to_talk_about = re.findall(COMPILE_WHAT_TO_TALK_ABOUT, bot_uttr.get("text", ""))
@@ -383,6 +423,10 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
     asked_name = "what is your name" in bot_uttr.get("text", "").lower()
     asked_news = "news" in user_uttr["text"]
+    for topic, topic_info in special_topics.items():
+        pattern = topic_info["pattern"]
+        if if_chat_about_particular_topic(user_uttr, compiled_pattern=pattern):
+            flag = True
     if (found_entity_id or found_entity_substr or user_dont_know) and not asked_name and not asked_news:
         flag = True
     all_confs = [(conf_type, CONF_DICT[conf_type]) for conf_type in [conf_type_wp, conf_type_nounphr]]
@@ -532,6 +576,22 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_
                     found_title = title.lower()
                     found_page_title = title
     return found_title, found_page_title
+
+
+def find_page_title(all_titles, title):
+    found_page_title = ""
+    for page_title in all_titles:
+        if page_title.lower() == title.lower():
+            found_page_title = page_title
+            break
+    if not found_page_title:
+        title_tokens = set(re.findall(re_tokenizer, title.lower()))
+        for page_title in all_titles:
+            page_title_tokens = set(re.findall(re_tokenizer, page_title.lower()))
+            if title_tokens.intersection(page_title_tokens):
+                found_page_title = page_title
+                break
+    return found_page_title
 
 
 def find_all_titles(all_titles, topic_facts):

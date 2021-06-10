@@ -74,6 +74,7 @@ def mentioned_animal(annotations):
 def find_entity_by_types(annotations, types_to_find):
     found_entity_wp = ""
     wp_output = annotations.get("wiki_parser", {})
+    types_to_find = set(types_to_find)
     if isinstance(wp_output, dict):
         entities_info = wp_output.get("animals_skill_entities_info", {})
         for entity, triplets in entities_info.items():
