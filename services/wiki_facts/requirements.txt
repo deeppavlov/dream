@@ -1,0 +1,6 @@
+sentry-sdk[flask]==0.14.1
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+inflect==5.3.0
+spacy==3.0.6

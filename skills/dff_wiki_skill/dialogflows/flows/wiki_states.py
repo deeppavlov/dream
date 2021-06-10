@@ -7,6 +7,12 @@ class State(Enum):
     SYS_TELL_FACT = auto()
     USR_TELL_FACT = auto()
     #
+    SYS_TOPIC_SMALLTALK = auto()
+    USR_TOPIC_SMALLTALK = auto()
+    #
+    SYS_TOPIC_FACT = auto()
+    USR_TOPIC_FACT = auto()
+    #
     SYS_INTRO_Q = auto()
     USR_INTRO_Q = auto()
     #

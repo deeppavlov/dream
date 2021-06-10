@@ -5,6 +5,7 @@ import random
 import re
 from copy import deepcopy
 from enum import Enum, auto
+from pathlib import Path
 
 import sentry_sdk
 
@@ -35,6 +36,9 @@ from dialogflows.flows.movie_plots import MoviePlots
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
 logger = logging.getLogger(__name__)
+
+
+TOP_1k_FREQUENT_WORDS = Path("common/google-10000-english-no-swears.txt").open().read().splitlines()[:1000]
 
 
 class State(Enum):
@@ -70,8 +74,6 @@ class State(Enum):
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED = auto()
-    SYS_SHARE_INTERESTING_MOMENT = auto()
-    USR_SHARE_INTERESTING_MOMENT = auto()
 
     SYS_OFFER_CONTINUE_MOVIE_TALK = auto()
     USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK = auto()
@@ -337,6 +339,13 @@ def is_popular_movie(movie_id):
     return "unknown"
 
 
+def is_rare_movie_title(movie_id):
+    movie_title = templates.imdb(movie_id).get("title", "").lower()
+    if len(movie_title.split()) > 2 or any([word not in TOP_1k_FREQUENT_WORDS for word in movie_title.split()]):
+        return True
+    return False
+
+
 def popular_movie_title_extracted_request(ngrams, vars):
     # SYS_POPULAR_MOVIE_TITLE_EXTRACTED
     movies_ids, unique_persons, mentioned_genres = extract_mentions(vars)
@@ -551,11 +560,14 @@ def movie_request_opinion_response(vars):
         user_was_asked_for_movie_title_or_clarification = user_was_asked_about_movie_title(vars)
         user_was_asked_for_movie_title_or_clarification |= state_utils.get_shared_memory(vars).get(
             "current_status", "") in ["movie_prompt", "clarification", "movie_recommendation"]
+        user_was_asked_for_movie_title_or_clarification |= bool(MOVIE_COMPILED_PATTERN.search(
+            state_utils.get_last_human_utterance(vars).get("text", "")))
+
         movies_ids, unique_persons, mentioned_genres = extract_mentions(
             vars, check_full_utterance=user_was_asked_for_movie_title_or_clarification)
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
         collect_and_save_facts_about_location(movie_id, vars)
-        is_popular_movie_found = is_popular_movie(movie_id) == "popular"
+        is_popular_movie_found = is_popular_movie(movie_id) == "popular" and is_rare_movie_title(movie_id)
 
         if user_was_asked_for_movie_title_or_clarification or is_popular_movie_found:
             prev_status = state_utils.get_shared_memory(vars).get("current_status", "")
@@ -572,7 +584,7 @@ def movie_request_opinion_response(vars):
                 response = f"{reply} {actor_compliment} "\
                            f"{get_movie_template('opinion_request_about_movie', movie_type=movie_type)}"
                 if user_was_asked_for_movie_title_or_clarification:
-                    # super conf only if user was asked of movie
+                    # super conf only if user was asked of movie OR mentioned special movie words
                     state_utils.set_confidence(vars, SUPER_CONFIDENCE)
                     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
                 else:
@@ -1579,7 +1591,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_WAS_ASKED_DO_YOU_KNOW_QUESTION,
     {
         State.SYS_CHECK_ANSWER_TO_DO_YOU_KNOW: do_you_know_question_need_to_be_checked_request,
-        State.SYS_SHARE_INTERESTING_MOMENT: no_requests_request,
+        State.SYS_GIVE_FACT_ABOUT_MOVIE: no_requests_request,
 
     },
 )

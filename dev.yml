@@ -468,7 +468,6 @@ services:
       - "./skills/dff_wiki_skill:/src"
       - "./common:/src/common"
       - "./annotators/CoBotQA:/src/CoBotQA"
-      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8111:8111
   topic-recommendation:
@@ -485,6 +484,14 @@ services:
       - "./common:/src/common"
     ports:
       - 8114:8114
+  wiki-facts:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./services/wiki_facts:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8116:8116
   speech-function-classifier:
     env_file: [.env.dev]
     volumes:
@@ -505,7 +512,7 @@ services:
       - "./skills/dff_generic_responses_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8116:8116
+      - 8117:8117
   personality-detection:
     env_file: [ .env.dev ]
     volumes:

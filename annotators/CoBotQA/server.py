@@ -14,6 +14,7 @@ from os import getenv
 import sentry_sdk
 from cobotqa_service import send_cobotqa, TRAVEL_FACTS, FOOD_FACTS, ANIMALS_FACTS
 
+from common.travel import TOO_SIMPLE_TRAVEL_FACTS
 from common.utils import get_entities
 
 
@@ -225,7 +226,8 @@ def respond():
                     fact.replace("ºF", " Fahrenheit")
                     fact.replace("°C", " Celsius")
                     fact.replace("°F", " Fahrenheit")
-                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
+                    is_not_too_simple = not TOO_SIMPLE_TRAVEL_FACTS.search(fact)
+                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"] and is_not_too_simple:
                         curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
             if resp_subj and resp_subj.lower() in FOOD_FACTS:
                 for fact in FOOD_FACTS[resp_subj.lower()]:
@@ -235,6 +237,10 @@ def respond():
                 for fact in ANIMALS_FACTS[resp_subj.lower()]:
                     if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
                         curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
+
+        # store only 5 facts maximum
+        curr_resp["facts"] = np.random.choice(
+            curr_resp["facts"], size=5) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
 
         final_responses.append(curr_resp)
     total_time = time() - st_time

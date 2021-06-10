@@ -278,6 +278,10 @@ services:
     image: ${DOCKER_REGISTRY}/user-persona-extractor:${VERSION}
     env_file:
       - ${ENV_FILE}
+  wiki-facts:
+    image: ${DOCKER_REGISTRY}/wiki-facts:${VERSION}
+    env_file:
+      - ${ENV_FILE}
   speech-function-classifier:
     image: ${DOCKER_REGISTRY}/speech-function-classifier:${VERSION}
     env_file:

@@ -22,7 +22,10 @@ logger.info("ner model is loaded.")
 
 nltk_stopwords_file = "nltk_stopwords.txt"
 nltk_stopwords = ([line.strip() for line in open(nltk_stopwords_file, 'r').readlines()])
-BANNED_ENTITIES = ["okay", "oh", "name", "ocean", "hey", "cool", "corona", "pop", "rap"]
+BANNED_ENTITIES = ["okay", "ok", "oh", "name", "ocean", "hey", "cool", "corona", "pop", "rap",
+                   "aha", "aah", "ahh", "aww", "boo", "eh", "eww", "hmph", "oops", "ouch",
+                   "shh", "hush", "whew", "whoa", "hmm", "uhu", "huh", "wow", "yay", "yaay",
+                   "yippee", "yahoo", "hurray", "uh", "er", "um"]
 BANNED_ENTITIES = set(BANNED_ENTITIES + nltk_stopwords)
 
 EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-]")
