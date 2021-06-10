@@ -29,7 +29,7 @@ def predict(label_name):
         class_id = class_dict[label_name]
     except KeyError:
         return [{}]
-    sorted_lbls = sorted(enumerate(A[class_id]), reverse=True,key=lambda x: x[1])[:5]
+    sorted_lbls = sorted(enumerate(A[class_id]), reverse=True, key=lambda x: x[1])[:5]
     return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_lbls]
 
 

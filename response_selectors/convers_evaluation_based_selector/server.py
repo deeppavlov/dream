@@ -20,7 +20,6 @@ from utils import add_question_to_statement, lower_duplicates_score, \
     downscore_toxic_blacklisted_responses, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, psycho_help_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec
-from tag_based_selection import get_main_info_annotations
 from common.discourse import dm_based_response_selection
 from common.psychometrics import is_introvert
 
@@ -75,14 +74,13 @@ def respond():
             if len(dialog["bot_utterances"]) > 5:
                 # EXPERIMENT
                 if PSYCHOTYPE_BASED_DIALOG_SUPPORT:
-                    # if user is Extravert, we can expect user to be talkative 
-                    # and therefore we can enable DFF Generic Responses Skill to 
-                    # passively support conversation 
-                    if is_introvert(dialog) == False:
+                    # if user is Extravert, we can expect user to be talkative
+                    # and therefore we can enable DFF Generic Responses Skill to
+                    # passively support conversation
+                    if is_introvert(dialog) is False:
                         logger.info(f"Our user seems to be extravert. Using DM-based pre-filtering")
                         # exp_best_candidate, exp_best_id, exp_curr_single_scores
-                        filtered_candidates = dm_based_response_selection(
-                    dialog, curr_candidates)
+                        filtered_candidates = dm_based_response_selection(dialog, curr_candidates)
                         if len(filtered_candidates) > 0:
                             non_generic_responses = get_non_generic_responses(filtered_candidates)
                             if len(non_generic_responses) > 0:
@@ -319,9 +317,6 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
         link_to_question, link_to_human_attrs, not_sure_factoid)
 
     return best_candidate, best_id, curr_single_scores
-
-
-
 
 
 def get_non_generic_responses(candidates):

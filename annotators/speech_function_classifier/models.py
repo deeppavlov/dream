@@ -81,12 +81,12 @@ sustains = []
 sus_tags = []
 for i in range(len(train_data)):
     if 'Sustain' in train_labels[i]:
-        previous_lines_sust.append(train_data[i-1])
+        previous_lines_sust.append(train_data[i - 1])
         sustains.append(train_data[i])
         sus_tags.append(train_labels[i])
 for i in range(len(test_data)):
     if 'Sustain' in test_labels[i]:
-        previous_lines_sust.append(test_data[i-1])
+        previous_lines_sust.append(test_data[i - 1])
         sustains.append(test_data[i])
         sus_tags.append(test_labels[i])
 
@@ -106,7 +106,7 @@ for i in range(len(train_data)):
         continue
     elif 'Respond' in train_labels[i]:
         responds.append(train_data[i])
-        previous_responds.append(train_data[i-1])
+        previous_responds.append(train_data[i - 1])
         respond_tags.append(train_labels[i])
 
 for i in range(len(test_data)):
@@ -116,7 +116,7 @@ for i in range(len(test_data)):
         continue
     elif 'Respond' in test_labels[i]:
         responds.append(test_data[i])
-        previous_responds.append(test_data[i-1])
+        previous_responds.append(test_data[i - 1])
         respond_tags.append(test_labels[i])
 
 
@@ -139,14 +139,14 @@ tags = []
 for i in range(len(train_data)):
     if 'Reply' in train_labels[i]:
         if '?' not in train_labels[i]:
-            previous_lines.append(train_data[i-1])
+            previous_lines.append(train_data[i - 1])
             replies.append(train_data[i])
             tags.append(train_labels[i])
 
 for i in range(len(test_data)):
     if 'Reply' in test_labels[i]:
         if '?' not in test_labels[i]:
-            previous_lines.append(test_data[i-1])
+            previous_lines.append(test_data[i - 1])
             replies.append(test_data[i])
             tags.append(test_labels[i])
 
@@ -384,7 +384,7 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
                 else:
                     y_pred = 'React.Rejoinder.Re-challenge'
         if y_pred == 'Sustain.Continue.':
-            y_pred = 'React.Rejoinder.'+tag_for_track
+            y_pred = 'React.Rejoinder.' + tag_for_track
         if y_pred == 'Open.':
             pass
     if current_speaker == previous_speaker:
@@ -489,10 +489,12 @@ def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker='John
         if '?' in phrases[i]:
             y_pred = get_label_for_question(phrase, y_pred, speaker, previous_speaker)
         if y_pred == 'React.Respond.':
-            y_pred = get_label_for_responds(phrase, prev_phrase, y_pred, prev_speech_function, speaker, previous_speaker)
+            y_pred = get_label_for_responds(phrase, prev_phrase, y_pred, prev_speech_function, speaker,
+                                            previous_speaker)
         if y_pred == 'React.Rejoinder.':
             y_pred = get_labels_for_rejoinder(phrase, prev_phrase, speaker, previous_speaker)
     return y_pred
+
 
 if __name__ == '__main__':
     import nltk

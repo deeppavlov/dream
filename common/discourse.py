@@ -4,6 +4,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 def get_speech_function_for_human_utterance_annotations(annotations):
     sfs = annotations.get("speech_function_classifier", {})
     phrases = annotations.get("sentseg", {}).get("segments", {})
@@ -11,9 +12,9 @@ def get_speech_function_for_human_utterance_annotations(annotations):
     sfunctions = {}
     i = 0
     for phrase in phrases:
-        if len(sfs)>i:
+        if len(sfs) > i:
             sfunctions[phrase] = sfs[i]
-        i = i+1
+        i = i + 1
 
     return sfunctions
 
@@ -26,13 +27,13 @@ def get_speech_function_predictions_for_human_utterance_annotations(annotations)
 def get_speech_function_for_bot_utterance_annotations(text, annotations):
     sfs = annotations.get("speech_function_classifier", {})
 
-    if len(sfs)>0:
+    if len(sfs) > 0:
         return sfs[0].rstrip('.')
 
     return None
 
 
-# Discourse Management-Based Response Selection 
+# Discourse Management-Based Response Selection
 def dm_based_response_selection(dialog, candidates):
     annotated_uttr = dialog["human_utterances"][-1]
     # all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
@@ -41,7 +42,7 @@ def dm_based_response_selection(dialog, candidates):
 
     # obtaining speech functions for all segments of the human's utterance
     # speech_functions_from_user_phrase = get_speech_function_for_human_utterance_annotations(user_uttr_annotations)
-    
+
     filtered_candidates = []
     proposed_speech_functions = []
 
@@ -69,5 +70,5 @@ def dm_based_response_selection(dialog, candidates):
             if candidate_sfc in proposed_speech_functions:
                 logger.info(f"Speech Function proposed for candidate {candidate_text}: {candidate_sfc}")
                 filtered_candidates.append(candidate)
-    
+
     return filtered_candidates

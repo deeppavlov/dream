@@ -91,18 +91,18 @@ def init_model():
     class_dict = {}
     label_to_name = []
     i = 0
-    for el in set(cut_labels(train_labels)+cut_labels(test_labels)):
+    for el in set(cut_labels(train_labels) + cut_labels(test_labels)):
         class_dict[el] = i
-        i = i+1
+        i = i + 1
         label_to_name.append(el)
 
-    A = [[0]*len(class_dict) for _ in range(len(class_dict))]
+    A = [[0] * len(class_dict) for _ in range(len(class_dict))]
 
-    for label_sequence in (train_labels,test_labels):
+    for label_sequence in (train_labels, test_labels):
         for i, lbl in enumerate(label_sequence):
-            if i+1 < len(label_sequence):
+            if i + 1 < len(label_sequence):
                 num_class = class_dict[label_sequence[i]]
-                num_class2 = class_dict[label_sequence[i+1]]
+                num_class2 = class_dict[label_sequence[i + 1]]
                 A[num_class][num_class2] += 1
 
     for i in range(len(A)):

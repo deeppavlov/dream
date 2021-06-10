@@ -5,6 +5,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 def is_introvert(dialog):
     is_extravert_across_five_turns = []
 
@@ -15,7 +16,7 @@ def is_introvert(dialog):
 
     for human_utterance in first_5:
         user_uttr_annotations = human_utterance["annotations"]
-    
+
         # Extraversion (outgoing/energetic vs. solitary/reserved)
         is_extravert = -1
         # Neuroticism (sensitive/nervous vs. secure/confident)
@@ -33,10 +34,6 @@ def is_introvert(dialog):
 
         if len(personality_detection) == 5:
             is_extravert = personality_detection[0]
-            is_neu = personality_detection[1]
-            is_agr = personality_detection[2]
-            is_con = personality_detection[3]
-            is_opn = personality_detection[4]
 
             is_extravert_across_five_turns.append(is_extravert)
 
