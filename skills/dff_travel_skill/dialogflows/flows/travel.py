@@ -999,9 +999,8 @@ simplified_dialogflow.add_system_transition(State.SYS_USR_RESP_ABOUT_WISHES, Sta
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_OFFER_FACT_ABOUT_LOC,
     {
-        State.SYS_WANT_FACT_ABOUT_LOC: yes_request,
         State.SYS_NOT_WANT_FACT_ABOUT_LOC: no_request,
-        State.SYS_GET_FACT_ABOUT_LOC: no_requests_request,  # not_confident_ask_question_about_travelling_response
+        State.SYS_WANT_FACT_ABOUT_LOC: no_requests_request,  # not_confident_ask_question_about_travelling_response
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_OFFER_FACT_ABOUT_LOC, State.SYS_ERR)
