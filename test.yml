@@ -192,6 +192,8 @@ services:
       - CUDA_VISIBLE_DEVICES=1
   user-persona-extractor:
     env_file: [ .env.dev ]
+  dff-generic-responses-skill:
+    env_file: [ .env.dev ]
   personality-detection:
     env_file: [ .env.dev ]
 version: '3.7'

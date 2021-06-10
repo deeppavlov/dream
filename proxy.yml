@@ -535,6 +535,14 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/user-persona-extractor
       - PORT=8114
     command: ["nginx", "-g", "daemon off;"]
+  dff-generic-responses-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-generic-responses-skill
+      - PORT=8115
+    command: [ "nginx", "-g", "daemon off;" ]
   personality-detection:
     build:
       context: dp/proxy/
