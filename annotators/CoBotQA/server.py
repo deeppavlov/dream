@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 import string
 from time import time
 
@@ -15,7 +16,7 @@ import sentry_sdk
 from cobotqa_service import send_cobotqa, TRAVEL_FACTS, FOOD_FACTS, ANIMALS_FACTS
 
 from common.travel import TOO_SIMPLE_TRAVEL_FACTS
-from common.utils import get_entities
+from common.utils import get_entities, COBOTQA_EXTRA_WORDS
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -241,6 +242,8 @@ def respond():
         # store only 5 facts maximum
         curr_resp["facts"] = list(np.random.choice(
             curr_resp["facts"], size=5)) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
+        for curr_resp_item in curr_resp["facts"]:
+            curr_resp_item["fact"] = re.sub(COBOTQA_EXTRA_WORDS, "", curr_resp_item["fact"]).strip()
 
         final_responses.append(curr_resp)
     total_time = time() - st_time
