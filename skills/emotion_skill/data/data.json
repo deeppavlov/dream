@@ -109,7 +109,7 @@
     },
     "anger":{
       "answers": [
-        "Please calm down. Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. "
+        "Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. "
       ],
       "next_step":["anger_2"],
       "link": ""
