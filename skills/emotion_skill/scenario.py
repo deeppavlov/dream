@@ -120,7 +120,7 @@ class EmotionSkillScenario:
                 else:
                     state = ""
                 confidence = 1.0
-            elif is_yes:
+            else:
                 # provide advices and offer another one
                 reply = self._random_choice(self.advices[emotion], prev_jokes_advices)
                 state = 'offer_another_advice'
@@ -130,7 +130,7 @@ class EmotionSkillScenario:
                     reply = random.choice(step['answers'])
                 else:
                     prev_jokes_advices.append(reply)
-                confidence = 1.0
+                confidence = 1.0 if is_yes else 0.95
         else:
             step = self.steps[state]
             reply = random.choice(step['answers'])
