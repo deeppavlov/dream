@@ -37,6 +37,7 @@ SPECIAL_SKILLS = {
         "dff_food_skill",
         "weather_skill",
         "dff_bot_persona_skill",
+        "dff_generic_responses_skill"
     ],
 }
 
