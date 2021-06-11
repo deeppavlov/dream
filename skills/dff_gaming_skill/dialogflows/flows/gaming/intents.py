@@ -28,8 +28,11 @@ def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
     logger.info(f"user_maybe_wants_to_talk_about_particular_game_request")
     if common_intents.switch_to_particular_game_discussion(vars):
         user_uttr = state_utils.get_last_human_utterance(vars)
+        bot_uttr = state_utils.get_last_bot_utterance(vars)
         game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
-            user_uttr.get("text", ""))
+            user_uttr.get("text", "")) \
+            + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
+            bot_uttr.get("text", ""))
         logger.info(
             f"(user_maybe_wants_to_talk_about_particular_game_request)game_names_from_local_list_of_games: "
             f"{game_names_from_local_list_of_games}"
@@ -51,8 +54,11 @@ def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
 def user_definitely_wants_to_talk_about_particular_game_request(ngrams, vars, additional_check=None):
     logger.info(f"user_definitely_wants_to_talk_about_particular_game_request")
     user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
-        user_uttr.get("text", ""))
+        user_uttr.get("text", ""))\
+        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
+        bot_uttr.get("text", ""))
     if common_intents.switch_to_particular_game_discussion(vars):
         assert game_names_from_local_list_of_games,\
             "At least one game should have been found in function `switch_to_particular_game_discussion()`"

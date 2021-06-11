@@ -78,6 +78,7 @@ def handler(requested_data, random_seed=None):
 
             text = dialog["human_utterances"][-1]["text"]
             text = text_utils.clean_text(text)
+            logger.info(f"(handler)input text: {text}")
 
             dialogflow_utils.load_into_dialogflow(
                 DF,
