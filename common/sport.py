@@ -42,7 +42,7 @@ SPORTS_NO_ING = r"\b(aerobics|archery|badminton|baseball|basketball|beach volley
                 r"|long jump|martial arts|motorbike sports|mountaineer|orienteer" \
                 r"|parachute|pole-vault|polo|ride|rowing|rugby|ski|snooker" \
                 r"|track-and-field|triathlon|tug of war|volleyball|water polo|waterski" \
-                r"|weight lift|work out|wrestle|run|swim|tennis|fitness|lacrosse|ballet|soccer)"
+                r"|weight lift|work out|wrestle|run|swim|tennis|fitness|lacrosse|ballet|soccer)\b"
 # curling in SPORTS_NO_ING is not a mistake - there is not word to curl
 ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'diving', 'box': 'boxing',
              'canoe': 'canoeing', 'climb': 'climbing', 'cycle': 'cycling', 'fence': 'fencing',
