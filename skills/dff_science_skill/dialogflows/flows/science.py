@@ -196,6 +196,13 @@ def request_science_topic_response(vars):
     try:
         # get_unused_topics
         science_topics_names = local_utils.get_unused_topics(vars)
+        if not science_topics_names:
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
+            state_utils.set_confidence(vars, confidence=CONF_100)
+            return (
+                f"Okay, There are many scientific topics that could be discussed, "
+                "when I learn something new I will be ready to talk to you about it."
+            )
         science_topics_names = science_topics_names if science_topics_names else list(science_topics.keys())
         current_topic = random.sample(science_topics_names, 1)[0]
         local_utils.add_unused_topics(vars, current_topic)
