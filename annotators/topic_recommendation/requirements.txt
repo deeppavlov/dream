@@ -2,6 +2,5 @@ flask==1.1.1
 gunicorn==19.9.0
 requests==2.22.0
 sentry-sdk==0.14.2
-scikit-learn==0.24.1
-tensorflow_text==0.1.0
-tensorflow-hub==0.7.0
+numpy==1.19.1
+

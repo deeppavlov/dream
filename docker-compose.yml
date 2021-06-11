@@ -1167,8 +1167,7 @@ services:
 
   topic-recommendation:
     build:
-      context: .
-      dockerfile: ./annotators/topic_recommendation/Dockerfile
+      context: ./annotators/topic_recommendation/
     command: flask run -h 0.0.0.0 -p 8113
     environment:
       - FLASK_APP=server
@@ -1177,9 +1176,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 2048M
+          memory: 256M
         reservations:
-          memory: 2048M
+          memory: 256M
 
   user-persona-extractor:
     build:

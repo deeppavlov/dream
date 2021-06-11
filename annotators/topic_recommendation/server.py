@@ -1,13 +1,11 @@
 import logging
 import time
 import os
+import pickle
 
 import numpy as np
 from flask import Flask, request, jsonify
 import sentry_sdk
-
-from convert import encode_contexts, encode_responses
-from common.link import LIST_OF_SCRIPTED_TOPICS, skills_phrases_map
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -17,33 +15,61 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+DATABASE_PATH = os.getenv("DATABASE_PATH")
+
+TOP_V = 3
 TOP_K = 3
 
-skills2responses = {topic: skills_phrases_map[topic] for topic in LIST_OF_SCRIPTED_TOPICS}
+scenario_skills = ['dff_animals_skill', 'news_api_skill', 'dff_food_skill', 'dff_travel_skill', 'dff_sport_skill',
+                   'dff_science_skill', 'dff_music_skill', 'game_cooperative_skill', 'book_skill', 'dff_movie_skill',
+                   'dff_gossip_skill']
 
-responses2skills = {response: skill for skill, responses in skills2responses.items() for response in responses}
-responses = list(responses2skills.keys())
+topic2skill = {"Movies_TV": 'dff_movie_skill', "Music": 'dff_music_skill', "SciTech": 'dff_science_skill',
+               "Literature": 'book_skill', "Travel_Geo": 'dff_travel_skill', "Celebrities": 'dff_gossip_skill',
+               "Games": 'game_cooperative_skill', "Pets_Animals": 'dff_animals_skill', "Sports": 'dff_sport_skill',
+               "Food_Drink": 'dff_food_skill', "News": "news_api_skill", "Entertainment": 'dff_gaming_skill'}
 
-response_encodings = encode_responses(responses)
+
+with open(DATABASE_PATH, 'rb') as f:
+    database = pickle.load(f)
 
 
-def get_ranked_list(context):
-    logger.warning(context)
-    context_encoding = encode_contexts(context)
-    scores = context_encoding.dot(response_encodings.T)
+def get_candidate_topics(embedding):
+    scores = np.array(embedding).dot(np.array(database).T)
     top_indices = np.argsort(scores)[::-1]
-    return top_indices[0]
+    similarity_vector = np.sum(np.array([database[top_idx] for top_idx in top_indices[:TOP_V]]), 0)
+    candidate_topics_idx = np.argsort(similarity_vector)[::-1][:TOP_K]
+    candidate_topics = [scenario_skills[idx] for idx in candidate_topics_idx]
+    return candidate_topics
 
 
 def handler(requested_data):
     st_time = time.time()
+    logger.warning(requested_data)
 
-    utter_sentences_batch = requested_data["utterances_histories"]
+    active_skills_batch = requested_data["active_skills"]
+    cobot_topics_batch = requested_data["cobot_topics"]
+
     candidate_topics_batch = []
-    for utter_sentences in utter_sentences_batch:
+
+    for active_skills, cobot_topics in zip(active_skills_batch, cobot_topics_batch):
         try:
-            topic_ranked_list = get_ranked_list(utter_sentences)
-            candidate_topics = list(set([responses2skills[responses[i]] for i in topic_ranked_list[:TOP_K]]))
+            skills_dict = {skill: 0 for skill in scenario_skills}
+
+            for skill in active_skills:
+                if skill in scenario_skills:
+                    skills_dict[skill] += 1
+
+            for topic in cobot_topics:
+                if topic in topic2skill.keys():
+                    skill = topic2skill[topic]
+                    skills_dict[skill] += 1
+
+            total_skill = sum(skills_dict.values())
+            embedding = [skills_dict[skill] / total_skill if total_skill > 0 else 0 for skill in scenario_skills]
+            used_topics = [skill for skill in scenario_skills if skills_dict[skill] > 0]
+            candidate_topics = get_candidate_topics(embedding)
+            candidate_topics = [skill for skill in candidate_topics if skill not in used_topics]
             candidate_topics_batch.append(candidate_topics)
         except Exception as exc:
             logger.exception(exc)
