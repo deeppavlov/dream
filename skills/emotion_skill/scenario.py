@@ -5,7 +5,7 @@ from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.link import link_to
 from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
-    skill_trigger_phrases, talk_about_emotion, is_pain
+    skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -81,6 +81,10 @@ class EmotionSkillScenario:
             "surprise": 'surprise',
             "love": 'love'
         }
+        if 'emotion_skill' not in human_attr:
+            human_attr['emotion_skill'] = {}
+        if emotion != "neutral":
+            human_attr['emotion_skill']['last_emotion'] = emotion
         state = emotion_skill_attributes.get("state", "")
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
         is_yes = intent.get("yes", {}).get("detected", 0)
@@ -163,6 +167,7 @@ class EmotionSkillScenario:
                 emotion_skill_attributes = human_attributes["emotion_skill_attributes"]
                 state = emotion_skill_attributes.get("state", "")
                 emotion = emotion_skill_attributes.get("emotion", "")
+                last_emotion = emotion_skill_attributes.get("last_emotion", "neutral")
                 bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE_SCENARIO}
                 annotated_user_phrase = dialog['utterances'][-1]
@@ -191,6 +196,13 @@ class EmotionSkillScenario:
                 elif is_pain(annotated_user_phrase['text']):
                     state = "pain_i_feel"
                     emotion_skill_attributes['state'] = state
+                elif emo_advice_requested(annotated_user_phrase['text']):
+                    if emotion == 'neutral' and last_emotion != 'neutral':
+                        emotion = last_emotion
+                    if emotion == 'neutral':
+                        state = 'offer_advice'
+                    else:
+                        reply, confidence, state = "How do you feel?", 0.95, ""
                 logger.info(f"user sent: {annotated_user_phrase['text']} state: {state} emotion: {emotion}")
                 if talk_about_emotion(annotated_user_phrase, prev_annotated_bot_phrase):
                     reply = f'OK. {random.choice(skill_trigger_phrases())}'
