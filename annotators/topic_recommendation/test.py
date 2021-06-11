@@ -8,31 +8,26 @@ def main():
 
     request_data = [
         {
-            "utterances_histories": [
+            "active_skills": [
                 [
-                    "i like to have conversation",
-                    "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like "
-                    "me to call you?",
-                    "boss bitch",
-                    "I'm so clever that sometimes I don't understand a single word of what i'm saying.",
-                    "how is that",
-                    "Hmm. If you would like to talk about something else just say, 'lets talk about something else'.",
-                    "you pick the topic of conversation"
+                    "dff_friendship_skill",
+                    "dff_friendship_skill"
+                    "dff_music_skill"
                 ]
             ],
-            "personality": [
-                {}
-            ],
-            "num_ongoing_utt": [
-                0
-            ],
-            "human_attributes": [
-                {"age_group": "unknown"}
+            "cobot_topics": [
+                [
+                    "Phatic",
+                    "Phatic"
+                    "Phatic",
+                    "Music",
+                    "Phatic"
+                ]
             ]
         }
     ]
 
-    gold_results = [sorted(['dff_animals_skill', 'book_skill'])]
+    gold_results = [sorted(['dff_gossip_skill', 'dff_movie_skill'])]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

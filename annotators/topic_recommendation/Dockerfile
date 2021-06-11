@@ -1,26 +1,18 @@
-FROM tensorflow/tensorflow:1.14.0-gpu-py3
+FROM python:3.7.4
 
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.punct.tar.gz
+ RUN mkdir /src
 
-ADD $DATA_URL /root/convert_data/
+ COPY ./requirements.txt /src/requirements.txt
+ RUN pip install -r /src/requirements.txt
 
-RUN tar -xvzf /root/convert_data/*.tar.gz -C /root/convert_data/
+ COPY . /src/
+ WORKDIR /src
 
-RUN mkdir /src
-RUN mkdir /src/common
+ ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/reddit_embeddings.pickle
 
-COPY ./annotators/topic_recommendation/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt && pip uninstall -y tensorflow-gpu==1.14.0 tensorflow==1.14.0 && \
-     pip install tensorflow-gpu==1.14.0
+ RUN mkdir /data
+ RUN curl -L $DATA_URL --output /data/reddit_embeddings.pickle
 
-COPY ./annotators/topic_recommendation/ /src/
-COPY ./common/ /src/common/
+ ENV DATABASE_PATH /data/reddit_embeddings.pickle
 
-WORKDIR /src
-
-ENV MODEL_PATH /root/convert_data/convert
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8
-ENV PYTHONPATH /usr/local/bin/python
-
-CMD gunicorn --workers=2 server:app
+ CMD gunicorn --workers=2 server:app

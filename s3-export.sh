@@ -67,6 +67,7 @@ files=(
   kbqa/wikidata/entity_types_sets.pickle
   datasets/wikipedia/enwiki_latest_topic.db
   alexaprize_data/movie_plots_v0.tar.gz
+  alexaprize_data/reddit_embeddings.pickle
 )
 
 for file in ${files[@]}; do
