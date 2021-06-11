@@ -60,10 +60,7 @@ BOOK_WIKI_TYPES = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q4746134
 MOVIE_WIKI_TYPES = ["Q11424", "Q24856", "Q202866"]
 
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
-WIKIDATA_URL = getenv("WIKIDATA_URL")
-ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
 API_KEY = getenv('COBOT_API_KEY')
-assert ENTITY_LINKING_URL and WIKIDATA_URL
 kbqa_files = ['inverted_index_eng.pickle',
               'entities_list.pickle',
               'wiki_eng_q_to_name.pickle',
