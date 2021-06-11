@@ -55,13 +55,13 @@ class BearerAuth(requests.auth.AuthBase):
 
 CLIENT_TOKEN = get_igdb_client_token()
 if CLIENT_TOKEN is None:
+    IGDB_POST_KWARGS = None
+else:
     IGDB_POST_KWARGS = {
         "auth": BearerAuth(CLIENT_TOKEN),
         "headers": {"Client-ID": CLIENT_ID, "Accept": "application/json", "Content-Type": "text/plain"},
         "timeout": 1.0,
     }
-else:
-    IGDB_POST_KWARGS = None
 
 
 def get_game_description_for_first_igdb_candidate(name, results_sort_key):
