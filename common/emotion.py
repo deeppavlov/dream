@@ -31,6 +31,7 @@ LONELINESS_TEMPLATE = re.compile(r"(i am alone|lonely|loneliness|do you love me)
 SAD_TEMPLATE = re.compile(rf"({SAD_PATTERN}|{POOR_ASR_PATTERN})", re.IGNORECASE)
 BORING_TEMPLATE = re.compile(r"(boring|bored)", re.IGNORECASE)  # The template is used to EXCLUDE answers on this intent
 JOKE_REQUEST_TEMPLATE = re.compile(r"(((tell me|tell|hear)( [a-z]+){0,3} jokes?)|^joke)", re.IGNORECASE)
+ADVICE_REQUEST_TEMPLATE = re.compile(r"((can|could) you )?give (me )?(a |an |some )?advice", re.IGNORECASE)
 TALK_ABOUT_EMO_TEMPLATE = re.compile(r'\b(emotion|feeling|i feel\b|depress)', re.IGNORECASE)
 
 
@@ -56,6 +57,10 @@ def is_alone(uttr):
 
 def is_joke_requested(uttr):
     return bool(re.search(JOKE_REQUEST_TEMPLATE, uttr))
+
+
+def emo_advice_requested(uttr):
+    return bool(re.search(ADVICE_REQUEST_TEMPLATE, uttr))
 
 
 def skill_trigger_phrases():
@@ -89,6 +94,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     joke_request_detected = is_joke_requested(user_utt.get("text", ""))
     talk_about_regexp = talk_about_emotion(user_utt, bot_uttr)
     pain_detected_by_regexp = is_pain(user_utt.get("text", ""))
+    advice_request_detected_by_regexp = emo_advice_requested(user_utt.get("text", ""))
     sadness_detected_by_regexp = is_sad(user_utt.get("text", ""))
     loneliness_detected_by_regexp = is_alone(user_utt.get("text", ""))
     detected_from_feel_answer = emotion_from_feel_answer(bot_uttr.get("text", ""),
@@ -98,6 +104,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
                               sadness_detected_by_regexp,
                               loneliness_detected_by_regexp,
                               pain_detected_by_regexp,
+                              advice_request_detected_by_regexp,
                               talk_about_regexp,
                               detected_from_feel_answer,
                               how_are_you]) and not_strange_emotion_prob
