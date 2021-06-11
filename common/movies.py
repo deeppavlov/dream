@@ -25,6 +25,13 @@ RECOMMEND_OFFER_PATTERN = re.compile(
     r"(\bi\b|\bme\b)( to)? (recommend|advice) you[a-z0-9 ]+"
     r"(movie|series|\bshow\b|\btv\b|\bcomed|\bthriller|animation|cartoon|drama|\bfantas|\bwatch)",
     re.IGNORECASE)
+NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE = re.compile(
+    r"(don't|do not|not) (watch|watching|like) (movie|film|picture|series|"
+    r"tv[ -]?show|reality[ -]?show|netflix|\btv\b|comedy|comedies|thriller|"
+    r"animation|anime|talk[ -]?show|cartoon)", re.IGNORECASE)
+
+NOT_WATCHED_TEMPLATE = re.compile(r"(have|'ve|did|was|had|were)? ?(never|not|n't) (seen|watch)", re.IGNORECASE)
+
 RECOMMEND_OFFER_RESPONSE = [
     "Would you like me to recommend you a MOVIE?",
     "May I recommend you a MOVIE?",
