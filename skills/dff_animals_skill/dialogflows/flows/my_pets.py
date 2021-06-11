@@ -42,6 +42,8 @@ def answer_users_question(vars):
         my_pet_breed = my_pets_info[my_pet]["breed"]
 
     answer = ""
+    conf = CONF_1
+    continue_flag = common_constants.MUST_CONTINUE
     logger.info(f"answer_users_question {user_text} {my_pet_name}")
     if "?" in user_text and ("your" in user_text or (my_pet_name and my_pet_name in user_text)):
         if "name" in user_text and my_pet and my_pet_name:
@@ -73,6 +75,8 @@ def answer_users_question(vars):
         elif re.findall(r"you have (a )?(tablet|pc)", user_text) or re.findall(r"about (your )?(tablet|pc)", user_text):
             answer = "I have a Samsung tablet PC."
         else:
+            conf = 0.99
+            continue_flag = common_constants.CAN_CONTINUE_SCENARIO
             found_num = -1
             found_fallback = ""
             for f_num, fallback in enumerate(fallbacks):
@@ -84,7 +88,7 @@ def answer_users_question(vars):
                 answer = found_fallback
                 used_fallbacks.append(found_num)
                 state_utils.save_to_shared_memory(vars, used_fallbacks=used_fallbacks)
-    return answer, my_pet
+    return answer, my_pet, conf, continue_flag
 
 
 def stop_animals_request(ngrams, vars):
@@ -148,7 +152,7 @@ def about_pet_request(ngrams, vars):
             flag = True
 
     if my_pet:
-        ans, pet = answer_users_question(vars)
+        ans, pet, *_ = answer_users_question(vars)
         if ans and ((pet != "cat" and told_about_dog) or (pet != "dog" and told_about_cat)):
             flag = False
     cat_intro = shared_memory.get("cat_intro", False)
@@ -229,14 +233,14 @@ def tell_about_pet_response(vars):
         state_utils.save_to_shared_memory(vars, cat_intro=True)
     if my_pet == "dog":
         state_utils.save_to_shared_memory(vars, dog_intro=True)
-    answer, _ = answer_users_question(vars)
+    answer, _, conf, continue_flag = answer_users_question(vars)
     if (name in answer and name in sentence) or (breed in answer and breed in sentence):
         response = f"{sentence} Would you like to learn more about my {my_pet}?".strip()
     else:
         response = f"{answer} {sentence} Would you like to learn more about my {my_pet}?".strip()
     state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    state_utils.set_confidence(vars, confidence=conf)
+    state_utils.set_can_continue(vars, continue_flag=continue_flag)
     return response
 
 
@@ -260,11 +264,12 @@ def my_pet_response(vars):
     my_pet = shared_memory.get("my_pet", "")
     make_my_pets_info(vars)
     response = ""
+    continue_flag = common_constants.MUST_CONTINUE
     if my_pet:
         fact_dict = find_fact(vars, MY_PET_FACTS, my_pet)
         fact = fact_dict.get("statement", "")
         question = fact_dict.get("question", "")
-        answer, _ = answer_users_question(vars)
+        answer, *_, continue_flag = answer_users_question(vars)
         response = f"{answer} {fact} {question}".strip().replace("  ", " ")
     if my_pet == "cat":
         state_utils.save_to_shared_memory(vars, told_about_cat=True)
@@ -277,7 +282,7 @@ def my_pet_response(vars):
     state_utils.save_to_shared_memory(vars, start=True)
     if response:
         state_utils.set_confidence(vars, confidence=CONF_2)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=continue_flag)
     else:
         state_utils.set_confidence(vars, confidence=CONF_4)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
