@@ -557,7 +557,7 @@ def tell_about_genre_book(bookname, bookreads_data):
             if book_.get('title', '') == bookname:
                 logger.debug(f'Returning phrase for book of genre {genre}')
                 reply = book_.get('description', '')
-            return reply
+                return reply
     return reply
 
 
@@ -611,3 +611,10 @@ LOVE_READING_TEMPLATE = re.compile(r"i (do )?(like|love|prefer) (book|read)", re
 
 def if_loves_reading(annotated_user_phrase):
     return re.search(LOVE_READING_TEMPLATE, annotated_user_phrase['text'])
+
+
+BY_TEMPLATE = re.compile(r"\bby ([a-zA-Z ]+)", re.IGNORECASE)
+
+
+def find_by(annotated_user_phrase):
+    return re.search(BY_TEMPLATE, annotated_user_phrase['text'])
