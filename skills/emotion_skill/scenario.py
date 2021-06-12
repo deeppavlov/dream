@@ -28,9 +28,9 @@ class EmotionSkillScenario:
         self.regexp_sad = False
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
-        if any([is_sad(annotated_user_phrase['text']),
-                is_alone(annotated_user_phrase['text']),
-                is_boring(annotated_user_phrase['text'])]):
+        if any([is_sad(annotated_user_phrase),
+                is_alone(annotated_user_phrase),
+                is_boring(annotated_user_phrase)]):
             self.regexp_sad = True
             return 'sadness'
         most_likely_emotion = None
@@ -73,8 +73,10 @@ class EmotionSkillScenario:
                             emotion_skill_attributes, intent, human_attr):
 
         start_states = {
-            "joy": 'joy_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
-            else 'joy_feeling_towards_smth',
+            "joy": "",  # Emo skill has false positives while reacting on joy
+            # other skills can react on joy better
+            # "'joy_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
+            # else 'joy_feeling_towards_smth',
             "sadness": 'sad_and_lonely',
             "fear": 'fear',
             "anger": 'anger',
@@ -130,12 +132,17 @@ class EmotionSkillScenario:
                     reply = random.choice(step['answers'])
                 else:
                     prev_jokes_advices.append(reply)
+                    if len(prev_jokes_advices) == len(self.advices[emotion]):
+                        state = "sad_and_lonely_end"
                 confidence = 1.0 if is_yes else 0.95
         else:
             step = self.steps[state]
             reply = random.choice(step['answers'])
             if len(step['next_step']):
                 state = random.choice(step['next_step'])
+            if state == "offer_advice" and sorted(self.advices[emotion]) == sorted(prev_jokes_advices):
+                logger.warning("Asked for advice, but we have already done them")
+                reply, confidence = "", 0
             link = step['link']
             if link:
                 link = link_to([link], human_attributes=human_attr)
@@ -171,14 +178,14 @@ class EmotionSkillScenario:
                 bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE_SCENARIO}
                 annotated_user_phrase = dialog['utterances'][-1]
-                user_phrase = annotated_user_phrase['text']
+                # user_phrase = annotated_user_phrase['text']
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
                 prev_bot_phrase, prev_annotated_bot_phrase = '', {}
                 if dialog['bot_utterances']:
                     prev_annotated_bot_phrase = dialog['bot_utterances'][-1]
                     prev_bot_phrase = prev_annotated_bot_phrase['text']
-                very_confident = any([function(user_phrase)
+                very_confident = any([function(annotated_user_phrase)
                                       for function in [is_sad, is_boring, is_alone, is_joke_requested, is_pain]])
                 # Confident if regezp
                 link = ''
@@ -190,10 +197,10 @@ class EmotionSkillScenario:
                         emotion_skill_attributes['state'] = ""
                 if emotion == "" or state == "":
                     emotion = most_likely_emotion
-                if is_joke_requested(user_phrase):
+                if is_joke_requested(annotated_user_phrase):
                     state = "joke_requested"
                     emotion_skill_attributes['state'] = state
-                elif is_pain(annotated_user_phrase['text']):
+                elif is_pain(annotated_user_phrase):
                     state = "pain_i_feel"
                     emotion_skill_attributes['state'] = state
                 elif emo_advice_requested(annotated_user_phrase['text']):
@@ -236,7 +243,7 @@ class EmotionSkillScenario:
                 if (was_trigger or was_active or self.regexp_sad) and not was_book_or_movie:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
-                elif was_book_or_movie:
+                elif was_book_or_movie or reply == dialog['bot_utterances'][-1]:
                     confidence = 0.5 * confidence
                 if not very_confident and not was_active:
                     confidence = min(confidence, 0.99)

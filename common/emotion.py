@@ -22,7 +22,7 @@ NEGATIVE_EMOTION = 'negative_emotion'
 HOW_DO_YOU_FEEL = 'How do you feel?'
 
 # templates
-PAIN_PATTERN = r"(\bpain\b|backache|earache|headache|stomachache|toothache)"
+PAIN_PATTERN = r"(\bpain\b|backache|earache|headache|stomachache|toothache|heart attack)"
 SAD_PATTERN = r"\b(sad|horrible|depressed|awful|dire|upset|trash|^(\w{0,15} )?bad[?.!]?$)\b"
 POOR_ASR_PATTERN = r'^say$'
 
@@ -39,24 +39,27 @@ def talk_about_emotion(user_utt, bot_uttr):
     return if_chat_about_particular_topic(user_utt, bot_uttr, compiled_pattern=TALK_ABOUT_EMO_TEMPLATE)
 
 
-def is_sad(uttr):
-    return re.search(SAD_TEMPLATE, uttr)
+def is_sad(annotated_uttr):
+    return re.search(SAD_TEMPLATE, annotated_uttr['text'])
 
 
-def is_boring(uttr):
-    return re.search(BORING_TEMPLATE, uttr)
+def is_boring(annotated_uttr):
+    return re.search(BORING_TEMPLATE, annotated_uttr['text'])
 
 
-def is_pain(uttr):
-    return re.search(PAIN_TEMPLATE, uttr)
+def is_pain(annotated_uttr):
+    for entity in annotated_uttr.get('conceptnet', {}):
+        if 'pain' in entity.get('isSymbolOf', []):
+            return True
+    return re.search(PAIN_TEMPLATE, annotated_uttr['text'])
 
 
-def is_alone(uttr):
-    return re.search(LONELINESS_TEMPLATE, uttr)
+def is_alone(annotated_uttr):
+    return re.search(LONELINESS_TEMPLATE, annotated_uttr['text'])
 
 
-def is_joke_requested(uttr):
-    return bool(re.search(JOKE_REQUEST_TEMPLATE, uttr))
+def is_joke_requested(annotated_uttr):
+    return bool(re.search(JOKE_REQUEST_TEMPLATE, annotated_uttr['text']))
 
 
 def emo_advice_requested(uttr):
@@ -91,12 +94,12 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     not_strange_emotion_prob = not (good_emotion_prob > 0.6 and bad_emotion_prob > 0.5)
     how_are_you = any([how_are_you_response.lower() in bot_uttr.get("text", "").lower()
                        for how_are_you_response in HOW_ARE_YOU_RESPONSES])
-    joke_request_detected = is_joke_requested(user_utt.get("text", ""))
+    joke_request_detected = is_joke_requested(user_utt)
     talk_about_regexp = talk_about_emotion(user_utt, bot_uttr)
-    pain_detected_by_regexp = is_pain(user_utt.get("text", ""))
+    pain_detected_by_regexp = is_pain(user_utt)
+    sadness_detected_by_regexp = is_sad(user_utt)
+    loneliness_detected_by_regexp = is_alone(user_utt)
     advice_request_detected_by_regexp = emo_advice_requested(user_utt.get("text", ""))
-    sadness_detected_by_regexp = is_sad(user_utt.get("text", ""))
-    loneliness_detected_by_regexp = is_alone(user_utt.get("text", ""))
     detected_from_feel_answer = emotion_from_feel_answer(bot_uttr.get("text", ""),
                                                          user_utt.get("text", ""))
     should_run_emotion = any([emo_found_emotion,

@@ -8,7 +8,7 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
-from common.emotion import is_joke_requested, if_turn_on_emotion
+from common.emotion import if_turn_on_emotion
 from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
@@ -188,9 +188,6 @@ class RuleBasedSkillSelectorConnector:
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
                     skills_for_uttr.append("weather_skill")
-
-                if is_joke_requested(user_uttr_text):
-                    skills_for_uttr.append("joke")
 
                 if if_turn_on_emotion(user_uttr, bot_uttr):
                     skills_for_uttr.append('emotion_skill')

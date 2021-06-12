@@ -5,7 +5,9 @@
   "steps":{
     "offer_advice":{
       "answers":[
-        "Although I am a socialbot, I know what humans can do to become happier, when they feel like you feel now. May I tell you about it?"
+        "Although I am a socialbot, I know what humans can do to become happier, when they feel like you feel now. May I tell you about it?",
+        "Although I am a socialbot, I know how humans can become happier, when they feel like you feel now. May I tell you about it?",
+        "Although I am a socialbot, I know how humans can cheer themselves up, when they feel like you feel now. May I tell you about it?"
       ],
       "next_step":["offered_advice"],
       "link": ""
@@ -67,8 +69,8 @@
     },
     "pain_i_feel":{
       "answers":[
-         "I wish I can take this pain away from you faster than even the doctors would. I can't do it, but I can suggest calling up your family doctor.",
-         "I hope you will feel better. You can see your family doctor if you need help."
+         "I am sorry to hear that. I wish I can take this pain away from you faster than even the doctors would. I can't do it, but I can suggest calling up your family doctor.",
+         "I am sorry to hear that. II hope you will feel better. You can see your family doctor if you need help."
       ],
       "next_step":[""],
       "link": ""
@@ -121,7 +123,9 @@
       "Several studies have shown that exercise releases endorphins and other chemicals that can help fight sadness. One study showed that participants who did moderate exercise over a 10-week period felt more energetic, positive, and calm than those who did not. In addition, the benefits of exercise were greater for people experiencing depressed mood. You don’t have to run a marathon or be a gym rat to see the benefits of exercise. Even light activities such as gardening and walking show a positive effect.",
       "If sadness has you feeling stressed out, the British Academy of Sound Therapy has put together a playlist of the “world’s most relaxing music” according to science. These songs include music by Enya, Airstream, Marconi Union, and Coldplay.",
       "Research has shown that physical warmth has a comforting effect. Taking a warm bath or a hot shower will help you relax. It may also help you soothe your feelings of sadness.",
-      "A common mindfulness technique is mindfulness meditation. Several studies have shown that mindfulness meditation can reduce your brain’s responses to negative emotional stimuli."
+      "A common mindfulness technique is mindfulness meditation. Several studies have shown that mindfulness meditation can reduce your brain’s responses to negative emotional stimuli.",
+      "Studies have shown that rumination, or the process of going over and over your feelings of sadness, hinders recovery. Distracting yourself from ruminating on your sadness may help you overcome it.",
+      "Several studies have shown that smiling, even when you are sad, can help you feel better. Duchenne smiles, or smiles that engage your eye muscles as well as those near your mouth, have the strongest positive effect on your mood."
     ],
     "fear":[
       "By starting to breathe slowly, you will signal your brain to relax, as you slow down the release of adrenalin and cortisol, and increase the release of endorphins. You will also fully oxygenate your brain and body, allowing your heartbeat to slow and your blood pressure to stabilize.",
@@ -130,7 +134,7 @@
     "anger":[
       "Exercise may also have a preventive effect. A Yale study suggested that prolonged bouts of running before an upsetting experience may dampen the extremity of your emotional reaction. Even if you can't take time for a full exercise routine when you're angry, try take a few moments.",
       "Breathing deeply from your diaphragm (the large muscle at the base of your lungs that assists with breathing) can help soothe feelings of anger. Deep, controlled breathing slows your heartbeat, stabilizes blood pressure, and relaxes your body. Combine your breathing exercise with a mantra, or calming word or phrase, for added benefit.",
-      "Focused activities may help channel your angry energy into a productive expression so that you can move past your immediate feelings of anger. Research has shown that anger can even temporarily enhance brainstorming and creative thinking. Engage your imagination and mindfully release your anger in a controlled, creative way"
+      "Focused activities may help channel your angry energy into a productive expression so that you can move past your immediate feelings of anger. Research has shown that anger can even temporarily enhance brainstorming and creative thinking. Engage your imagination and mindfully release your anger in a controlled, creative way."
     ],
     "surprise":[
       "Breathe from your diaphragm, not your upper chest. If you place your hand on your belly just below your ribs, you should be able to feel your abdomen rise when you inhale and fall when you exhale."

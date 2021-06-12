@@ -75,17 +75,6 @@
     "results":{"state":[""], "emotion":"sadness"}
   },
   {
-    "curr_sent": "i feel wonderful",
-    "bot_sent":"lalala",
-    "intents":{
-      "no": {"confidence": 0.0, "detected": 0},
-      "yes": {"confidence": 0.0, "detected": 0}
-    },
-    "human_attributes":{"emotion_skill_attributes":{}},
-    "emotion": {"anger": 0, "fear": 0, "joy": 1, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
-    "results":{"states":["joy_link_to_joke", "joy_link_to_story"], "emotion":"joy"}
-  },
-  {
     "curr_sent": "All right",
     "bot_sent":"",
     "intents":{
