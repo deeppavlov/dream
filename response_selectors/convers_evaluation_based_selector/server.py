@@ -114,7 +114,8 @@ def respond():
                 best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
             else:
                 best_cand = {"text": random.choice(MOST_DUMMY_RESPONSES), "confidence": 0.1,
-                             "human_attributes": {}, "bot_attributes": {}, "skill_name": "dummy_skill"}
+                             "human_attributes": {}, "bot_attributes": {}, "skill_name": "dummy_skill",
+                             "active_skill": "dummy_skill"}
             best_skill_name = best_cand["skill_name"]
             best_text = best_cand["text"]
             best_confidence = best_cand["confidence"]
