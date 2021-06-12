@@ -417,6 +417,8 @@ def what_fav_food_response(vars):
         ]
     }
     user_utt = state_utils.get_last_human_utterance(vars)
+    bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
+    question = ""
     shared_memory = state_utils.get_shared_memory(vars)
     used_food = shared_memory.get("used_food", [])
     unused_food = []
@@ -478,9 +480,17 @@ def what_fav_food_response(vars):
         fav_item = food_types.get(food_type, [])
         if fav_item:
             if food_type != "drink":
-                return f"I like to eat {fav_item[0]}. {fav_item[1]} What {food_type} do you like?"
+                if "what is your favorite food" in bot_utt:
+                    question = f" What {food_type} do you like?"
+                else:
+                    question = " What is a typical meal from your country?"
+                return f"I like to eat {fav_item[0]}. {fav_item[1]}" + question
             else:
-                return f"I like to drink {fav_item[0]}. {fav_item[1]} What {food_type} do you prefer?"
+                if "what is your favorite food" in bot_utt:
+                    question = f" What {food_type} do you prefer?"
+                else:
+                    question = " What do you usually like to drink when you go out?"
+                return f"I like to drink {fav_item[0]}. {fav_item[1]}" + question
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return error_response(vars)
@@ -653,7 +663,7 @@ def how_about_meal_response(vars):
         # first attempt to suggest a meal
         state_utils.save_to_shared_memory(vars, used_meals=meal)
         if not used_meals:
-            return f"How about cooking {meal}?"
+            return f"I've recently found a couple easy and healthy meals. How about cooking {meal}?"
         else:
             return f"Okay. Give me one more chance. I recommend {meal}."
     except Exception as exc:
