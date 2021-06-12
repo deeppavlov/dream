@@ -73,10 +73,8 @@ class EmotionSkillScenario:
                             emotion_skill_attributes, intent, human_attr):
 
         start_states = {
-            "joy": "",  # Emo skill has false positives while reacting on joy
-            # other skills can react on joy better
-            # "'joy_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
-            # else 'joy_feeling_towards_smth',
+            "joy": "joy_i_feel" if self._check_i_feel(user_phrase, bot_phrase)
+            else 'joy_feeling_towards_smth',
             "sadness": 'sad_and_lonely',
             "fear": 'fear',
             "anger": 'anger',
@@ -155,7 +153,8 @@ class EmotionSkillScenario:
             "emotion": emotion,
             "prev_jokes_advices": prev_jokes_advices
         }
-
+        if "joy" in state:
+            confidence = confidence * 0.5
         return reply, confidence, link, emotion_skill_attributes
 
     def __call__(self, dialogs):
