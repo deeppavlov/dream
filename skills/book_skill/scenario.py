@@ -487,7 +487,7 @@ class BookSkillScenario:
                             #  запускаем в сценарий дальше
                         else:
                             warning_message = 'Either plain_bookname or genre book should be. Check the code'
-                            sentry_sdk.capture_exception(warning_message)
+                            sentry_sdk.capture_exception(Exception(warning_message))
                             logger.exception(warning_message)
                             if not human_attr['book_skill'].get('named_favourite', False):
                                 reply = f'{PROPOSE_FAVOURITE_BOOK}'
