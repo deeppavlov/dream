@@ -137,13 +137,16 @@ def my_fav_story_response(vars):
                 story = FAV_STORIES_TOPICS.get(topic, "").get("story", "")
                 question = FAV_STORIES_TOPICS.get(topic, "").get("question", "")
                 if name and (topic not in used_topics):
-                    response = f"My favorite {topic} is {name}. {story} {question}?"
+                    response = f"My favorite {topic} is {name}. {story} {question}"
                     if topic == "book":
                         state_utils.set_confidence(vars, confidence=CONF_LOW)
                         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                     elif topic == "music":
                         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                    elif (topic == "game") and ("to play with" in utt):
+                        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                        return error_response(vars)
                     else:
                         state_utils.set_confidence(vars, confidence=CONF_HIGH)
                         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
@@ -151,7 +154,6 @@ def my_fav_story_response(vars):
                     return response
                 else:
                     state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                    state_utils.set_confidence(vars, 0)
                     return error_response(vars)
         if not name and any(
             [
