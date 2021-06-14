@@ -26,6 +26,10 @@ services:
       args:
         DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/elmo2.tar.gz
         NER_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/ner.tar.xz
+  book-skill:
+    build:
+      args:
+        QUERY_DICT: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_query_dict.pkl
   text-qa:
     build:
       args:

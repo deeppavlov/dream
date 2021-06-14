@@ -23,6 +23,7 @@ files=(
   alexaprize_data/convert_reddit_v2.8.tar.gz
   alexaprize_data/convert_reddit_v2.3.tar.gz
   alexaprize_data/convert_reddit_v2.3.punct.tar.gz
+  alexaprize_data/book_query_dict.pkl
   alexaprize_data/emo_bert3_v1.tar.gz
   alexaprize_data/elmo2.tar.gz
   alexaprize_data/midas_conv_bert_v2.tar.gz
