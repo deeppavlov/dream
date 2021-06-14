@@ -411,34 +411,37 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     return entity, attribute
 
 
-def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
-    logger.debug(f'Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}')
-    # best books
+def get_booklist(plain_author_name):
     book_list = request_triples_wikidata("find_object", [(plain_author_name, "P800", "forw"),
                                                          (plain_author_name, "P50", "backw")],
                                          query_dict=book_query_dict)
     book_list = list(itertools.chain.from_iterable(book_list))
     book_list = list(set(book_list))
+    book_list = [x[x.find('Q'):] for x in book_list if x]  # to unify representations
+    book_list = sorted(book_list, key=lambda x: int(x[1:]))
+    return book_list
+
+
+def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
+    logger.debug(f'Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}')
+    # best books
     last_bookname = 'NO_BOOK'
     try:
-        logger.debug('List of returned books')
-        logger.debug(book_list)
+        book_list = get_booklist(plain_author_name)
         if plain_last_bookname is not None:
             book_list = [j for j in book_list if plain_last_bookname not in j]
             last_bookname = entity_to_label(plain_last_bookname)
-        book_list = [x[x.find('Q'):] for x in book_list if x]  # to unify representations
         logger.debug('List of returned books - processed')
         logger.debug(book_list)
         best_bookname = default_phrase  # default value
         if book_list:
-            sorted_bookname_list = sorted(book_list, key=lambda x: int(x[1:]))
             filtered_bookname_list = []
-            for book in sorted_bookname_list:
+            for book in book_list:
                 logger.debug(f'{last_bookname.lower()} {entity_to_label(book).lower()}')
                 if len(filtered_bookname_list) < top_n_best_books:
                     if last_bookname.lower() not in entity_to_label(book).lower():
                         filtered_bookname_list.append(book)
-            if len(sorted_bookname_list) > 0:
+            if len(book_list) > 0:
                 best_bookname = random.choice(filtered_bookname_list)
         logger.debug(f'Answer for best_plain_book_by_author {best_bookname}')
         return best_bookname
@@ -448,8 +451,17 @@ def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_book
         return default_phrase
 
 
-def genre_of_book(plain_bookname):
-    logger.info(f'Call genre_of_book for {plain_bookname}')
+def entities_to_labels(entities_list):
+    return [entity_to_label(k) for k in entities_list]
+
+
+def author_genres(plain_author_name):
+    plain_genres = request_triples_wikidata("find_object", [(plain_author_name, "P136", "forw")],
+                                            query_dict=book_query_dict)
+    return entities_to_labels(plain_genres)
+
+
+def get_plain_genres(plain_bookname):
     plain_genres = request_triples_wikidata("find_object", [(plain_bookname, "P136", "forw")],
                                             query_dict=book_query_dict)
     MAX_DEPTH = 5
@@ -457,6 +469,12 @@ def genre_of_book(plain_bookname):
         if plain_genres and isinstance(plain_genres[0], list):
             plain_genres = plain_genres[0]
     logger.debug(f'Plain_genres {plain_genres}')
+    return plain_genres
+
+
+def genre_of_book(plain_bookname):
+    logger.info(f'Call genre_of_book for {plain_bookname}')
+    plain_genres = get_plain_genres(plain_bookname)
     if plain_genres:
         plain_genres = sorted(plain_genres, key=lambda x: int(x[1:]))
         genre = entity_to_label(plain_genres[0])

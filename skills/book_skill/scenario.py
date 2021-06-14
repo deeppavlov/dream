@@ -40,7 +40,6 @@ WHAT_BOOK_IMPRESSED_MOST = "what book did impress you the most?"
 AMAZING_READ_BOOK = "I've read it. It's an amazing book!"
 AMAZING_READ_BOOK_EXPANDED = "I've read it. It's truly a masterpiece of AUTHOR!"
 ACKNOWLEDGE_AUTHOR = "AUTHOR is a wonderful writer."
-ASK_GENRE_ABOUT_AUTHOR = "Do you know in what genre this author wrote?"
 WHEN_IT_WAS_PUBLISHED = "Do you know when it was first published?"
 OFFER_FACT_ABOUT_BOOK = "Would you like to know some facts about it?"
 OFFER_FACT_DID_NOT_FIND_IT = "Sorry, I suggested the fact but can not find it now."
@@ -69,8 +68,8 @@ OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
 BOOK_ACKNOWLEDGEMENT_PHRASE = 'Never heard about it. Is it a book, an author or a genre?'
 WILL_CHECK = 'I will check it out later.'
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
-QUESTIONS_ABOUT_BOOK = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE] \
-    + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
+BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE]
+QUESTIONS_ABOUT_BOOK = BOOK_SKILL_QUESTIONS + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
 CURRENT_YEAR = datetime.datetime.today().year
 
 
@@ -84,6 +83,19 @@ class BookSkillScenario:
         self.bookreads_dir = 'bookreads_data.json'
         self.bookreads_data = json.load(open(self.bookreads_dir, 'r'))[0]
         self.bookreads_books = [book['title'] for books in self.bookreads_data.values() for book in books]
+
+    def book_linkto_reply(self, reply, human_attr, default_phrases=[]):
+        not_asked_genre = not human_attr['book_skill'].get('we_asked_genre', False)
+        not_named_fav = not human_attr['book_skill'].get('named_favourite', False)
+        not_met_reply = reply not in default_phrases
+        if not_asked_genre and not_met_reply:
+            reply = f"{reply} {WHAT_IS_FAV_GENRE}"
+            human_attr['book_skill']['we_asked_genre'] = True
+        elif not_named_fav and not_met_reply:
+            reply = f'{reply} {PROPOSE_FAVOURITE_BOOK}'
+        elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
+            reply = f'{reply} {WHAT_BOOK_IMPRESSED_MOST}'
+        return reply
 
     def get_genre_book(self, annotated_user_phrase, human_attr):
         '''
@@ -115,17 +127,18 @@ class BookSkillScenario:
         return user_asked_favourite_book or (bot_proposed_favourite_book and user_agreed) and not_finished
 
     def genrebook_request_detected(self, annotated_user_phrase, bot_phrases):
-        was_bot_phrase = any([j in bot_phrases[-1] for j in [ASK_GENRE_ABOUT_AUTHOR, WHAT_IS_FAV_GENRE]])
+        was_bot_phrase = WHAT_IS_FAV_GENRE in bot_phrases[-1]
+        logger.info(f'Genrebook request detected cond1: {was_bot_phrase}')
         we_suggested_genre = GENRE_ADVICE_PHRASE in bot_phrases[-1]
         phrase = annotated_user_phrase['text'].lower()
         is_genre_in_phrase = any([j in phrase for j in self.bookreads_data.keys()])
-        user_asked_to_recommend_book = (
-            re.search(suggest_template, annotated_user_phrase['text']) and is_genre_in_phrase)
+        user_asked_to_recommend_book = all([re.search(suggest_template, annotated_user_phrase['text']),
+                                            is_genre_in_phrase])
         user_agreed_to_recommend_book = is_yes(annotated_user_phrase) and we_suggested_genre
         return was_bot_phrase or is_genre_in_phrase or user_asked_to_recommend_book or user_agreed_to_recommend_book
 
     def reply_about_book(self, annotated_user_phrase, human_attr, yes_function=is_yes,
-                         no_function=is_no, default_phrases=['']):
+                         no_function=is_no, default_phrases=[]):
         if yes_function(annotated_user_phrase):
             reply, confidence = USER_LIKED_BOOK_PHRASE, self.super_conf
         elif no_function(annotated_user_phrase):
@@ -133,13 +146,7 @@ class BookSkillScenario:
         else:
             logger.debug('Detected neither YES nor NO intent. Returning nothing')
             reply, confidence = random.choice(default_phrases), self.default_conf
-        if all([human_attr['book_skill'].get('named_favourite', False),
-                reply not in default_phrases]):
-            reply = f'{reply} {PROPOSE_FAVOURITE_BOOK}'
-        elif all([human_attr['book_skill'].get('we_asked_genre', False),
-                  reply not in default_phrases]):
-            reply = f"{reply} {WHAT_IS_FAV_GENRE}"
-            human_attr['book_skill']['we_asked_genre'] = True
+        reply = self.book_linkto_reply(reply, human_attr, default_phrases)
         return reply, confidence
 
     def get_author_book_genre_movie_reply(self, annotated_user_phrase,
@@ -163,21 +170,18 @@ class BookSkillScenario:
                 reply = f'I have never heard about such writer as {regexp_found_author}. {WILL_CHECK}'
                 confidence = self.default_conf
                 if not human_attr['book_skill'].get('we_asked_genre', False):
-                    reply, confidence = f'{reply} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
-                    human_attr['book_skill']['we_asked_genre'] = True
+                    reply = self.book_linkto_reply(reply, human_attr)
+                    confidence = self.default_conf
             elif BOOK_ACKNOWLEDGEMENT_PHRASE not in bot_phrases[-1]:
                 reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
-            elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
-                reply, confidence = f'OK, {WILL_CHECK} By the way, {WHAT_BOOK_IMPRESSED_MOST}', self.default_conf
-            elif not human_attr['book_skill'].get('we_asked_genre', False):
-                reply, confidence = f'OK, {WILL_CHECK} By the way, {WHAT_IS_FAV_GENRE}', self.default_conf
-                human_attr['book_skill']['we_asked_genre'] = True
             else:
-                reply, confidence = '', 0
+                reply = self.book_linkto_reply(f'OK, {WILL_CHECK}', human_attr)
+                confidence = self.default_conf
         elif is_wikidata_entity(plain_author_name):
             author_name = entity_to_label(plain_author_name)
             logger.debug('Authorname found')
             plain_book, _ = parse_author_best_book(annotated_user_phrase)
+            reply, confidence = '', 0
             if is_wikidata_entity(plain_book):
                 book = entity_to_label(plain_book)
                 year = get_published_year(plain_book)
@@ -190,14 +194,11 @@ class BookSkillScenario:
                     human_attr['book_skill']['author'] = author_name
                     reply = f'{reply} {ASK_ABOUT_OFFERED_BOOK}'
                     confidence = self.super_conf
-                else:
-                    reply = f'{ACKNOWLEDGE_AUTHOR} {ASK_GENRE_ABOUT_AUTHOR}'
-                    reply = reply.replace('AUTHOR', author_name)
-                    confidence = self.default_conf if author_name else 0
-            else:
-                reply = f'{ACKNOWLEDGE_AUTHOR} {ASK_GENRE_ABOUT_AUTHOR}'
+            if not reply:
+                reply = f'{ACKNOWLEDGE_AUTHOR}. By the way,'
                 reply = reply.replace('AUTHOR', author_name)
-                confidence = self.default_conf if author_name else 0
+                reply = self.book_linkto_reply(reply, human_attr)
+                confidence = self.default_conf
         elif is_wikidata_entity(plain_bookname) and n_years_ago:
             # if we found book name in user reply
             bookname = entity_to_label(plain_bookname)
@@ -397,11 +398,8 @@ class BookSkillScenario:
                             reply = f"{reply} {ASK_GENRE_OF_BOOK}"
                             reply = reply.replace('BOOK', bookname)
                             human_attr['book_skill']['genre'] = book_genre
-                        elif not human_attr['book_skill'].get('we_asked_genre', False):
-                            reply = f"{reply} {WHAT_IS_FAV_GENRE}"
-                            human_attr['book_skill']['we_asked_genre'] = True
                         else:
-                            reply = exit_skill(reply, human_attr)
+                            reply = self.book_linkto_reply(reply, human_attr)
                         confidence = self.default_conf
                     else:
                         reply, confidence = ASK_TO_REPEAT_BOOK, self.low_conf
@@ -409,17 +407,11 @@ class BookSkillScenario:
                     # if we previously asked about user's opinion on book
                     logger.debug('Last phrase was OPINION_REQUEST_ON_BOOK_PHRASES')
                     reply, confidence = self.reply_about_book(annotated_user_phrase, human_attr,
-                                                              is_yes, is_no, [''])
+                                                              is_yes, is_no, [])
                 elif ASK_GENRE_OF_BOOK in bot_phrases[-1] and 'genre' in human_attr['book_skill']:
                     book, genre = human_attr['book_skill']['book'], human_attr['book_skill']['genre']
                     reply, confidence = f"{book} is {genre}. ", self.default_conf
-                    if not human_attr['book_skill'].get('we_asked_genre', False):
-                        reply = f"{reply} {WHAT_IS_FAV_GENRE}"
-                        human_attr['book_skill']['we_asked_genre'] = True
-                    elif not human_attr['book_skill'].get('named_favourite', False):
-                        reply = f"{reply} {PROPOSE_FAVOURITE_BOOK}"
-                    else:
-                        reply = exit_skill(reply, human_attr)
+                    reply = self.book_linkto_reply(reply, human_attr)
                 elif self.genrebook_request_detected(annotated_user_phrase,
                                                      bot_phrases):
                     # push it to the end to move forward variants where we the topic is known
@@ -509,14 +501,12 @@ class BookSkillScenario:
                         if movie_name:
                             logger.debug('Moviename detected')
                             reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
-                        elif not human_attr['book_skill'].get('we_asked_genre', False):
-                            logger.debug('WHAT_IS_FAV_GENRE not in bot phrases: returning it')
-                            reply, confidence = WHAT_IS_FAV_GENRE, self.default_conf
-                            human_attr['book_skill']['we_asked_genre'] = True
                         else:
-                            logger.debug('We are over - finish')
-                            reply = exit_skill(reply, human_attr)
-                            confidence = self.default_conf
+                            reply = self.book_linkto_reply(self, '', human_attr)
+                            if not reply:
+                                logger.debug('We are over - finish')
+                                reply = exit_skill(reply, human_attr)
+                                confidence = self.default_conf
                     else:
                         bookname = entity_to_label(plain_bookname)
                         human_attr['book_skill']['book'] = bookname
@@ -541,12 +531,10 @@ class BookSkillScenario:
                     logger.debug('Final branch')
                     logger.debug(book_just_active)
                     if book_just_active:
-                        if not any([PROPOSE_FAVOURITE_BOOK in phrase
-                                    for phrase in human_attr['book_skill']['used_phrases']]):
-                            reply, confidence = PROPOSE_FAVOURITE_BOOK, self.default_conf
-                        else:
+                        reply = self.book_linkto_reply(reply, human_attr)
+                        if not reply:
                             reply = exit_skill(reply, human_attr)
-                            confidence = self.default_conf
+                        confidence = self.default_conf
                     else:
                         reply, confidence = self.default_reply, 0
                 if confidence == self.super_conf:
