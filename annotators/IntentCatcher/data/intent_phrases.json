@@ -148,7 +148,8 @@
                 "cancel simulation",
                 ".*can i get the normal alexa back.*",
                 ".* gotta go",
-                "hang up"
+                "hang up",
+                "alexa buy"
             ],
             "min_precision": 0.99,
             "punctuation": [
@@ -1351,6 +1352,7 @@
             "did you even hear what i said",
             "well i don't live anywhere near where ice fishing occurs so i don't really wanna go",
             "talk about j. f. k.",
+            "play cars",
             "what would you name if i were a child",
             "is your name alexa",
             "i were conversation is over",
