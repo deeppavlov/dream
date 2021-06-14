@@ -36,6 +36,8 @@ ENV LINKTOS_BASED_ON_GAME_THEMES_AND_GENRES /data/linktos_based_on_game_themes_a
 ENV LINKTOS_SPECIAL /data/linktos_special.json
 COPY skills/book_skill/bookreads_data.json ${BOOKREADS_DATA}
 
+ENV MINECRAFT_HOW_TOS /data/minecraft_how_tos.json
+
 ENV GAMES_IGDB_SEARCH_RESULTS /data/games_igdb_search_results.json
 ARG GAMES_IGDB_SEARCH_RESULTS_URL
 RUN wget ${GAMES_IGDB_SEARCH_RESULTS_URL} -q -O ${GAMES_IGDB_SEARCH_RESULTS}

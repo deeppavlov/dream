@@ -169,3 +169,10 @@ def are_there_2_or_more_turns_left_in_game_description(ngrams, vars):
     else:
         res = False
     return res
+
+
+def add_how_to_index_to_used_how_to_indices(vars, i):
+    shared_memory = state_utils.get_shared_memory(vars)
+    indices = shared_memory.get("used_how_to_indices", [])
+    indices.append(i)
+    state_utils.save_to_shared_memory(vars, used_how_to_indices=indices)
