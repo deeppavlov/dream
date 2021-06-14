@@ -138,7 +138,7 @@ class EmotionSkillScenario:
             reply = random.choice(step['answers'])
             if len(step['next_step']):
                 state = random.choice(step['next_step'])
-            if state == "offer_advice" and sorted(self.advices[emotion]) == sorted(prev_jokes_advices):
+            if state == "offer_advice" and sorted(self.advices.get(emotion, [])) == sorted(prev_jokes_advices):
                 logger.warning("Asked for advice, but we have already done them")
                 reply, confidence = "", 0
             link = step['link']
