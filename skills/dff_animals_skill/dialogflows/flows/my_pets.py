@@ -50,13 +50,18 @@ def answer_users_question(vars):
             answer = f"My {my_pet}'s name is {my_pet_name}."
         elif "breed" in user_text and my_pet and my_pet_breed:
             answer = f"My {my_pet}'s breed is {my_pet_breed}."
-        elif "play" in user_text and my_pet:
-            games = " and ".join(pet_games[my_pet])
-            answer = f"I like to play with my {my_pet} different games, such as {games}."
+        elif "play" in user_text:
+            if my_pet:
+                games = " and ".join(pet_games[my_pet])
+                answer = f"I like to play with my {my_pet} different games, such as {games}."
+            else:
+                answer = "I like to play with my pet different games, such as run and fetch."
         elif "walk" in user_text and my_pet:
             answer = f"I walk with my {my_pet} every morning."
         elif "like" in user_text or "love" in user_text and my_pet:
             answer = f"Yes, I love my {my_pet}."
+        elif re.findall(r"you (like|love) dogs or cats", user_text):
+            answer = "I like dogs and cats."
         elif "tricks" in user_text and my_pet:
             answer = f"Yes, my {my_pet} knows many tricks, for example high five."
         elif "meow" in user_text:
