@@ -76,6 +76,11 @@ class RuleBasedSkillSelectorConnector:
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
+            if "cant_do" in intent_catcher_intents and "What do you do on weekdays?" in bot_uttr.get("text", ""):
+                high_priority_intent_detected = False
+                not_detected = {"detected": 0, "confidence": 0.0}
+                dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["cant_do"] = not_detected
+                dialog["utterances"][-1]["annotations"]["intent_catcher"]["cant_do"] = not_detected
 
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
