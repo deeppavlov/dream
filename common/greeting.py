@@ -15,7 +15,8 @@ FREE_TIME_RESPONSES = [
     "When you have 30 minutes of free time, how do you pass the time?"
 ]
 
-FALSE_POSITIVE_TURN_ON_RE = re.compile(r"talk like .*|how .* can you talk|can (we|i) talk to yoda", re.IGNORECASE)
+FALSE_POSITIVE_TURN_ON_RE = re.compile(r"talk like .*|how .* can you talk|can (we|i) talk to yoda|"
+                                       r"hung up on .*|in the middle of the conversation", re.IGNORECASE)
 
 HOW_ARE_YOU_RESPONSES = [
     "How are you?",
