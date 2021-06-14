@@ -354,6 +354,8 @@ def get_genre(vars):
         return "80s"
     elif re.search(seventies_re, human_utt):
         return "70s"
+    elif human_utt in genres:
+        return True, human_utt
     wp_output = state_utils.get_last_human_utterance(vars)["annotations"].get("wiki_parser", {})
     all_entities_info = wp_output.get("entities_info", {})
     topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
