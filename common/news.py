@@ -30,6 +30,7 @@ WHAT_TYPE_OF_NEWS = ["What other kinds of news would you want to discuss?",
 
 NEWS_DUPLICATES = WHAT_TYPE_OF_NEWS
 NEWS_COMPILED_PATTERN = re.compile(r"(news|(what is|what ?'s)( the)? new|something new)", re.IGNORECASE)
+EXTRACT_OFFERED_NEWS_TOPIC_TEMPLATE = re.compile(r"news? about ([a-z\- ]+)", re.IGNORECASE)
 
 
 def skill_trigger_phrases():
