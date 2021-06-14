@@ -7,7 +7,7 @@ import sentry_sdk
 import common.dialogflow_framework.utils.state as state_utils
 from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
-from common.utils import is_yes
+from common.utils import is_no, is_yes
 
 
 logger = logging.getLogger(__name__)
@@ -69,33 +69,39 @@ def get_additional_check_description(additional_check_func):
     return res
 
 
+def perform_additional_check(additional_check, ngrams, vars):
+    return additional_check is None or additional_check is not None and additional_check(ngrams, vars)
+
+
+def user_says_no_request(ngrams, vars, additional_check=None):
+    uttr = state_utils.get_last_human_utterance(vars)
+    flag = is_no(uttr) and perform_additional_check(additional_check, ngrams, vars)
+    logger.info(f"user_says_yes_request {get_additional_check_description(additional_check)}: {flag}")
+    return flag
+
+
+def user_doesnt_say_no_request(ngrams, vars, additional_check=None):
+    uttr = state_utils.get_last_human_utterance(vars)
+    flag = not is_no(uttr) and perform_additional_check(additional_check, ngrams, vars)
+    logger.info(f"user_doesnt_say_yes_request {get_additional_check_description(additional_check)}: {flag}")
+    return flag
+
+
 def user_says_yes_request(ngrams, vars, additional_check=None):
-    flag = False
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    isyes = is_yes(user_uttr)
-    additional_check_result = additional_check is None \
-        or additional_check is not None and additional_check(ngrams, vars)
-    if isyes and additional_check_result:
-        flag = True
+    uttr = state_utils.get_last_human_utterance(vars)
+    flag = is_yes(uttr) and perform_additional_check(additional_check, ngrams, vars)
     logger.info(f"user_says_yes_request {get_additional_check_description(additional_check)}: {flag}")
     return flag
 
 
 def user_doesnt_say_yes_request(ngrams, vars, additional_check=None):
-    flag = False
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    isyes = is_yes(user_uttr)
-    additional_check_result = additional_check is None \
-        or additional_check is not None and additional_check(ngrams, vars)
-    if not isyes and additional_check_result:
-        flag = True
+    uttr = state_utils.get_last_human_utterance(vars)
+    flag = not is_yes(uttr) and perform_additional_check(additional_check, ngrams, vars)
     logger.info(f"user_doesnt_say_yes_request {get_additional_check_description(additional_check)}: {flag}")
     return flag
 
 
 def user_says_anything_request(ngrams, vars, additional_check=None):
-    flag = True
-    if additional_check is not None:
-        flag = additional_check(ngrams, vars)
+    flag = perform_additional_check(additional_check, ngrams, vars)
     logger.info(f"user_says_anything {get_additional_check_description(additional_check)}: {flag}")
     return flag
