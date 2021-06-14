@@ -20,7 +20,7 @@ from common.metrics import setup_metrics
 from common.news import OFFER_BREAKING_NEWS, OFFERED_BREAKING_NEWS_STATUS, \
     OFFERED_NEWS_DETAILS_STATUS, OPINION_REQUEST_STATUS, WHAT_TYPE_OF_NEWS, SAY_TOPIC_SPECIFIC_NEWS, \
     OFFER_TOPIC_SPECIFIC_NEWS_STATUS, OFFERED_NEWS_TOPIC_CATEGORIES_STATUS, was_offer_news_about_topic, \
-    get_news_about_topic, extract_topics
+    get_news_about_topic, extract_topics, EXTRACT_OFFERED_NEWS_TOPIC_TEMPLATE
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_SWITCH_TOPIC, \
     if_chat_about_particular_topic
 from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics
@@ -189,6 +189,7 @@ def collect_topics_and_statuses(dialogs):
             lets_chat_about_particular_topic = if_chat_about_particular_topic(curr_uttr, prev_uttr)
             lets_chat_about_news = if_chat_about_particular_topic(curr_uttr, prev_uttr, compiled_pattern=NEWS_TEMPLATES)
             _was_offer_news = was_offer_news_about_topic(prev_bot_uttr_lower)
+            _offered_by_bot_entities = EXTRACT_OFFERED_NEWS_TOPIC_TEMPLATE.findall(prev_bot_uttr_lower)
 
             if about_news:
                 # the request contains something about news
@@ -233,16 +234,16 @@ def collect_topics_and_statuses(dialogs):
                     logger.info("Detected topic for news: all. Refused to get latest news")
                     statuses.append("declined")
                 curr_news_samples.append(get_news_for_current_entity("all", curr_uttr, discussed_news))
-            elif _was_offer_news:
-                entities = extract_topics(prev_bot_uttr)
-                topics.append(entities[-1])
+            elif _was_offer_news and _offered_by_bot_entities:
+                topics.append(_offered_by_bot_entities[-1])
                 if is_yes(curr_uttr):
-                    logger.info(f"Bot offered news on entities: `{entities}`")
+                    logger.info(f"Bot offered news on entities: `{_offered_by_bot_entities}`")
                     statuses.append("headline")
                 else:
-                    logger.info(f"Bot offered news on entities: `{entities}`. User refused.")
+                    logger.info(f"Bot offered news on entities: `{_offered_by_bot_entities}`. User refused.")
                     statuses.append("declined")
-                curr_news_samples.append(get_news_for_current_entity(entities[-1], curr_uttr, discussed_news))
+                curr_news_samples.append(get_news_for_current_entity(_offered_by_bot_entities[-1],
+                                                                     curr_uttr, discussed_news))
             elif lets_chat_about_particular_topic:
                 # the request contains something about news
                 entities = extract_topics(curr_uttr)
