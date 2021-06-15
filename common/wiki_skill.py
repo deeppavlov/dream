@@ -1,9 +1,13 @@
 import itertools
+import logging
 import random
 import re
 from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
 from common.animals import ANIMALS_FIND_TEMPLATE
 from common.universal_templates import if_chat_about_particular_topic
+from common.utils import is_no, is_yes
+
+logger = logging.getLogger(__name__)
 
 used_types_dict = [{"types": ["Q11253473"  # smart device
                               ],
@@ -171,11 +175,11 @@ re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
 used_substr = set(itertools.chain.from_iterable([elem.get("entity_substr", []) for elem in used_types_dict]))
-blacklist_words = {"yup", "true", "false", "boy", "boys"}
+blacklist_words = {"yup", "true", "false", "boy", "boys", "meow", "people", "alexa", "alexa alexa"}
 blacklist_titles = {"ethymology", "terminology"}
 
 prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pet", "pets", "coronavirus",
-                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs"}
+                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs", "pop", "rock", "rap"}
 prohibited_types = {"Q571",  # book
                     "Q277759",  # book series
                     "Q8261",  # novel
@@ -204,10 +208,11 @@ QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
                       ]
 
 NEWS_MORE = ["Do you want more details?", "Should I continue?", "What is your opinion?"]
+dff_wiki_phrases = ["Are you listening to music or playing games"]
 
 CONF_DICT = {"UNDEFINED": 0.0, "USER_QUESTION_IN_BEGIN": 0.8, "ENTITY_IN_HISTORY": 0.9, "WIKI_TYPE_DOUBT": 0.9,
              "OTHER_DFF_SKILLS": 0.9, "WIKI_TYPE": 0.94, "IN_SCENARIO": 0.95, "SURE_WIKI_TYPE": 0.98,
-             "WIKI_TOPIC": 0.99}
+             "WIKI_TOPIC": 0.99, "HIGH_CONF": 1.0}
 WIKI_BLACKLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable| url )", re.IGNORECASE)
 
 transfer_from_skills = {
@@ -252,7 +257,30 @@ transfer_from_skills = {
 
 special_topics = {"art":
                   {"linkto": ["Would you like to talk about art?"],
-                   "pattern": re.compile(r"(\bart\b|drawing|painting)", re.IGNORECASE)}
+                   "pattern": "(\\bart\\b|drawing|painting)"},
+                  "chill":
+                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "\\bchill"}, "user", True]]], "can_continue": "must"}]},
+                  "sleep":
+                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "\\b(sleep|bedtime|go to bed)"}, "user", True]]],
+                                  "can_continue": "must"}]},
+                  "play_with_friends":
+                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "play with (my )?friends"}, "user", True]]],
+                                  "can_continue": "must"}]},
+                  "school":
+                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "(school|home work|homework|study)"}, "user", True]]],
+                                  "can_continue": "must"}]},
+                  "work":
+                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "(ok|yes|ok|yeah|yup) work"}, "user", True]],
+                                           [[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "^work$"}, "user", True]],
+                                           [[{"pattern": "what do you do on weekdays"}, "bot", True],
+                                            [{"pattern": "i ('m|was) working"}, "user", True]]],
+                                  "can_continue": "must"}]}
                   }
 
 
@@ -339,9 +367,10 @@ def find_entity_types(query_entity, annotations):
     return type_ids
 
 
-def find_entity_by_types(annotations, types_to_find):
+def find_entity_by_types(annotations, types_to_find, relations=None):
     found_entity_wp = ""
     found_types = []
+    found_entity_triplets = {}
     wp_output = annotations.get("wiki_parser", {})
     types_to_find = set(types_to_find)
     if isinstance(wp_output, dict):
@@ -354,12 +383,22 @@ def find_entity_by_types(annotations, types_to_find):
                     triplets.get("subclass of", []) + triplets.get("types_2_hop", []) + \
                     triplets.get("occupation", [])
                 type_ids = [elem for elem, label in types]
+                logger.info(f"types_to_find {types_to_find} type_ids {type_ids}")
                 inters = set(type_ids).intersection(types_to_find)
                 if inters:
                     found_entity_wp = entity
                     found_types = list(inters)
+                    entity_triplets = {}
+                    if relations:
+                        for relation in relations:
+                            objects_info = triplets.get(relation, [])
+                            if objects_info:
+                                objects = [obj[1] for obj in objects_info]
+                                entity_triplets[relation] = objects
+                    if entity_triplets:
+                        found_entity_triplets[entity] = entity_triplets
                     break
-    return found_entity_wp, found_types
+    return found_entity_wp, found_types, found_entity_triplets
 
 
 def find_entity_nounphr(annotations):
@@ -414,6 +453,72 @@ def if_user_dont_know_topic(user_uttr, bot_uttr):
     return flag
 
 
+def check_condition_element(elem, user_uttr, bot_uttr, shared_memory={}):
+    flag = False
+    annotations = user_uttr["annotations"]
+    isyes = is_yes(user_uttr)
+    isno = is_no(user_uttr)
+    user_info = shared_memory.get("user_info", {})
+    entity_triplets = shared_memory.get("entity_triplets", {})
+    if elem[0] == "is_yes" and isyes:
+        flag = True
+    elif elem[0] == "is_no" and isno:
+        flag = True
+    elif "pattern" in elem[0]:
+        pattern = elem[0]["pattern"]
+        if elem[1] == "user" and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
+            flag = True
+        if elem[1] == "bot" and re.findall(pattern, bot_uttr.get("text", ""), re.IGNORECASE):
+            flag = True
+    elif "cobot_entities_type" in elem[0]:
+        cobot_entities_type = elem[0]["cobot_entities_type"]
+        nounphrases = annotations.get("cobot_entities", {}).get("labelled_entities", [])
+        for nounphr in nounphrases:
+            nounphr_label = nounphr.get("label", "")
+            if nounphr_label == cobot_entities_type:
+                flag = True
+    elif "wiki_parser_types" in elem[0]:
+        wp_types = elem[0]["wiki_parser_types"]
+        found_entity, *_ = find_entity_by_types(annotations, wp_types)
+        if found_entity:
+            flag = True
+    elif "user_info" in elem[0]:
+        info_to_check = elem[0]["user_info"]
+        for key, value in info_to_check.items():
+            if key in user_info and user_info[key] == value:
+                flag = True
+                break
+    elif "entity_triplets" in elem[0]:
+        checked_entity_triplets = elem[0]["entity_triplets"]
+        objects = set(checked_entity_triplets[-1])
+        mem_objects = entity_triplets
+        for key in checked_entity_triplets[:-1]:
+            if key in user_info:
+                key = user_info[key]
+            mem_objects = mem_objects.get(key, {})
+        if set(mem_objects).intersection(objects):
+            flag = True
+    elif elem[0] == "any":
+        flag = True
+    if len(elem) == 3 and not elem[2]:
+        flag = not flag
+    return flag
+
+
+def check_condition(condition, user_uttr, bot_uttr, shared_memory):
+    flag = False
+    checked_elements = []
+    for elem in condition:
+        if isinstance(elem[0], str) or isinstance(elem[0], dict):
+            flag = check_condition_element(elem, user_uttr, bot_uttr, shared_memory)
+        elif isinstance(elem[0], list):
+            flag = all([check_condition_element(sub_elem, user_uttr, bot_uttr, shared_memory) for sub_elem in elem])
+        checked_elements.append(flag)
+    if any(checked_elements):
+        flag = True
+    return flag
+
+
 def if_switch_wiki_skill(user_uttr, bot_uttr):
     flag = False
     user_uttr_annotations = user_uttr["annotations"]
@@ -424,9 +529,17 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     asked_name = "what is your name" in bot_uttr.get("text", "").lower()
     asked_news = "news" in user_uttr["text"]
     for topic, topic_info in special_topics.items():
-        pattern = topic_info["pattern"]
-        if if_chat_about_particular_topic(user_uttr, compiled_pattern=pattern):
+        pattern = topic_info.get("pattern", "")
+        if pattern and if_chat_about_particular_topic(user_uttr, compiled_pattern=pattern):
             flag = True
+        switch_on = topic_info.get("switch_on", [])
+        for switch_elem in switch_on:
+            condition = switch_elem["cond"]
+            checked_condition = check_condition(condition, user_uttr, bot_uttr, {})
+            if checked_condition:
+                flag = True
+                break
+
     if (found_entity_id or found_entity_substr or user_dont_know) and not asked_name and not asked_news:
         flag = True
     all_confs = [(conf_type, CONF_DICT[conf_type]) for conf_type in [conf_type_wp, conf_type_nounphr]]
@@ -456,7 +569,8 @@ def switch_wiki_skill_on_news(user_uttr, bot_uttr):
             for nounphr in nounphrases:
                 for elem in news:
                     if elem["entity"] == nounphr["text"] \
-                            and "Q5" in find_entity_types(elem["entity"], user_uttr_annotations):
+                            and "Q5" in find_entity_types(elem["entity"], user_uttr_annotations) \
+                            and nounphr["text"] not in blacklist_words and nounphr["text"] not in prohibited_topics:
                         return True
     return False
 
@@ -607,12 +721,14 @@ def find_par(topic_facts):
     if isinstance(topic_facts, list):
         return topic_facts
     else:
+        facts_list = []
         titles = list(topic_facts.keys())
         if "first_par" in titles:
-            chosen_title = "first_par"
-        else:
-            chosen_title = random.choice(titles)
-        return find_par(topic_facts[chosen_title])
+            facts_list += topic_facts["first_par"]
+        for title in titles:
+            if title != "first_par":
+                facts_list += find_par(topic_facts[title])
+        return facts_list
 
 
 def find_paragraph(topic_facts, chosen_title):

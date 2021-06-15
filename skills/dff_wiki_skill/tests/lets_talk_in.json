@@ -25,7 +25,7 @@
                                         }],
                      "wiki_parser": {"entities_info": {"smartphone": {"entity_label": "smartphone",
                                                                       "plain_entity": "Q22645",
-                                                                      "conf": 1.0, "token_conf": 1.0,
+                                                                      "conf": 1.0, "token_conf": 1.0, "pos": 0,
                                                                       "types": [["Q1067263", "information appliance"],
                                                                                 ["Q11253473", "smart device"],
                                                                                 ["Q16917685", "mobile computer"],
@@ -42,7 +42,7 @@
         {}
     ],
     "dff_shared_state_batch": [
-        {"cross_links": {}}
+        {}
     ],
     "entities_batch": [
         {

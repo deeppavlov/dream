@@ -22,7 +22,7 @@
                      "subtopic": "drawing"},
                     {"utt": ["I like Shishkin paintings.", "Pictures of what painters do you like?"],
                      "subtopic": "drawing",
-                     "expected_entity": {"name": "user_fav_painter", "wiki_parser_types": ["Q1028181"]}},
+                     "expected_entities": [{"name": "user_fav_painter", "wiki_parser_types": ["Q1028181"]}]},
                     {"utt": ["I also like paintings of {user_fav_painter}!",
                              "Last weekend I was in National Gallery.", "Do you like to visit art museums?"],
                      "subtopic": "drawing"},
@@ -36,12 +36,12 @@
                      "subtopic": "photo"},
                     {"utt": ["Do you take photos on an SLR camera or on your cell phone?"],
                      "subtopic": "photo"},
-                    {"utt": ["Do you share your photos in Istagram or Flickr?"],
+                    {"utt": ["Do you share your photos in Instagram or Flickr?"],
                      "subtopic": "photo"},
                     {"utt": ["Using Photoshop or Adobe Lightroom can help to increase the quality of pictures.",
                              "Do you use any tools for photo processing?"],
                      "subtopic": "photo"},
-                    {"utt": ["Do you think that memes are a seperate kind of art, the same as painting?"],
+                    {"utt": ["Do you think that memes are a separate kind of art, the same as painting?"],
                      "subtopic": "memes"},
                     {"utt": ["I draw some memes with cats.", "Have you tried to draw a meme?"],
                      "subtopic": "memes"},
@@ -54,5 +54,86 @@
                     ],
       "triggers": {"entity_substr": [{"substr": [], "wikipedia_page": "", "wikihow_page": ""}],
                    "entity_types": ["Q1028181"]}
+     },
+ "chill":
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "\\bchill"}, "user", true]]],
+                     "can_continue": "must", "conf": 1.0}],
+      "smalltalk": [{"utt": ["Cool! I'm happy that you are having a great day! Are you listening to music or playing games?"],
+                     "expected_subtopic_info": [{"subtopic": "music", "cond": [[{"pattern": "\\bmusic"}, "user", true]]},
+                                                {"subtopic": "play_with_friends", "cond": [[{"pattern": "play with (my )?friends"}, "user", true]]}]},
+                    {"utt": ["Music is a good way to relax.", "Do you listen music in headphones or on a portable speaker?"],
+                     "subtopic": "music",
+                     "can_continue": "must", "conf": 1.0},
+                    {"utt": ["I like Peter Helland music, it's very relaxing. What music do you like?"],
+                     "subtopic": "music"},
+                    {"utt": ["Yesterday my friend had a great fun jumping on a trampoline.", "Do you like to jump on a trampoline?"],
+                     "subtopic": "play_with_friends"},
+                    {"utt": ["Do you play sports or games on your PC or console?"],
+                     "subtopic": "play_with_friends"}
+                   ]
+     },
+ "sleep":
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "\\b(sleep|bedtime|go to bed)"}, "user", true]]],
+                     "can_continue": "must", "conf": 1.0}],
+      "smalltalk": [{"utt": ["Yes, it's time to relax after a hard day.",
+                             "I can tell you what music you can listen to have a good sleep, shall I continue?"],
+                     "expected_subtopic_info": [{"subtopic": "tell_about_music",
+                                                 "cond": [["is_yes", "user", true], [{"pattern": "(ok|tell me|yup)"}, "user", true]]}]},
+                    {"utt": ["You can listen to sound of nature, for example birdsong or the sounds of sea. Do you like sounds of the rain?"],
+                     "subtopic": "tell_about_music"},
+                    {"utt": ["There are a lot of compilations of relaxing music on Youtube. I like Peter Helland music, it is very chilling. What music do you like?"],
+                     "subtopic": "tell_about_music"}
+                   ]
+     },
+ "play_with_friends":
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "play with (my )?friends"}, "user", true]]],
+                     "can_continue": "must", "conf": 1.0}],
+      "smalltalk": [{"utt": ["Yesterday my friend had a great fun jumping on a trampoline.", "Do you like to jump on a trampoline?"]},
+                    {"utt": ["Do you play sports or games on your PC or console?"]}]
+     },
+ "school":
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "(school|home work|homework|study)"}, "user", true]]],
+                     "can_continue": "must", "conf": 1.0}],
+      "smalltalk": [{"utt": ["My favourite subject is English, this language helps me to talk to a lot of people.",
+                             "What is your favourite subject at school?"]},
+                    {"utt": ["Yes, it's a very interesting subject.", "I believe you are a smart person.",
+                             "I can tell you about some funny school pranks on teacher and classmates, should I continue?"],
+                     "expected_subtopic_info": [{"subtopic": "pranks", "cond": [["is_yes", "user", true]]}]
+                    },
+                    {"utt": ["Put chewing gum under the teachers coffee cup.", "Have you tried this trick?"],
+                     "subtopic": "pranks"},
+                    {"utt": ["One more prank: hide pieces of chalk inside the blackboard eraser so that it draws lines when the teacher is trying to rub them out.",
+                             "Have you played any jokes on your classmates?"],
+                     "subtopic": "pranks"},
+                    {"utt": ["Recently I have seen a cool movie You Goehte about adventures of children during school year.", "Have you seen this film?"]},
+                    {"utt": ["Sport is a good way to relax after school. Do you play on any of the school's sports teams?"],
+                     "expected_subtopic_info": [{"subtopic": "sport_yes", "cond": [["is_yes", "user", true], [{"pattern": "used to"}, "user", true]]},
+                                                {"subtopic": "sport_no", "cond": [["any"]]}
+                                               ]},
+                    {"utt": ["What kind of sport do you play?"],
+                     "subtopic": "sport_yes"},
+                    {"utt": ["Anyway, I'd love to but I can't.", "I believe you put all your resources to study well!"],
+                     "subtopic": "sport_no"}
+                   ]
+     },
+ "work":
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "(ok|yes|yeah|yup|i) work"}, "user", true]],
+                              [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "^work$"}, "user", true]],
+                              [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "i ('m|was) working"}, "user", true]]],
+                     "can_continue": "must", "conf": 1.0}],
+      "smalltalk": [{"utt": ["I also have a work. It is to chat with people all day long.", "So, I'm a professional talker.",
+                             "What is your current occupation?"]},
+                    {"utt": ["I think you do a very important and useful work!",
+                             "I'm very curious what a typical day at your current job is like?"]},
+                    {"utt": ["Ok, that's very interesting.", "Do you think it is more important to make a lot of money than to enjoy your job?"],
+                     "expected_subtopic_info": [{"subtopic": "money_yes", "cond": [["is_yes", "user", true]]},
+                                                {"subtopic": "money_no", "cond": [["any"]]}]},
+                    {"utt": ["So agree with you!", "Money is a terrible master but an excellent servant.", "Do you agree?"],
+                     "subtopic": "money_yes"},
+                    {"utt": ["I definitely agree with you!", "Benjamin Franklin once said: Money never made a man happy yet, nor will it.", "Do you agree?"],
+                     "subtopic": "money_no"},
+                    {"utt": ["What is your favourite way to relax after work? Do you have a hobby that you really enjoy?"]},
+                    {"utt": ["It's a great pleasure to learn new sides of your personality. Thanks for sharing!"]}
+                   ]
      }
 }

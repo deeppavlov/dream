@@ -1,0 +1,58 @@
+{    
+    "school": [
+        "Are you a school student now?",
+        {
+            "yes": [
+                "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
+                "Do you go to a public school or a private one?",
+                "Oh cool! I've heard that some schools utilize uniform. Do you have to wear a uniform in your school?",
+                "I see. Good preparation makes study significantly easier. You do a lot of homework every day, do you?",
+                {
+                    "yes": [
+                        "Cool! I believe you are a good pupil! What subjects are you good at?"
+                    ],
+                    "no": [
+                        "Anyway, I believe you are smart person! What subjects are you good at?"
+                    ]
+                },
+                "That's interesting! I am so proud of you. Do you play on any of the school's sports teams?",
+                {
+                    "yes": [
+                        "What kind of sport do you play?"
+                    ],
+                    "no": [
+                        "Anyway, I'd love to but I can't. I believe you put all your resources to study well!"
+                    ]
+                }
+            ],
+            "no": [
+                "You've mentioned something related to education, so I suggested you are a school student."
+            ]
+        }
+    ],
+    "work": [
+        "I also have a work. It is to chat with people all day long. So, I'm a professional talker. What is your current occupation?",
+        "I see. I suppose this work is could be difficult for robots like me. Can you talk about what a typical day at your current job is like?",
+        "Cool. As I already said, I was created to be a workaholic because I have to work day and night. Do you have to work overtime?",
+        {
+            "yes": [
+                "I see. Workaholic too. How often? On Sundays too?",
+                "Anyway. For example, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
+            ],
+            "no": [
+                "Lucky you! Byu the way, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
+            ]
+        },
+        "Do you think it is more important to make a lot of money THAN to enjoy your job?",
+        {
+            "yes": [
+                "So agree with you! Money is a terrible master but an excellent servant. Do you agree?"
+            ],
+            "no": [
+                "I definitely agree with you! Benjamin Franklin once said: Money never made a man happy yet, nor will it. The more a man has, the more he wants. Do you agree?"
+            ]
+        },
+        "Cool! Have you ever thought about future? What do you think you will do after you retire?",
+        "It's a great pleasure to learn new sides of your personality. Thanks for sharing!"
+    ]
+}
