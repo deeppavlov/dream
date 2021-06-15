@@ -502,7 +502,7 @@ class BookSkillScenario:
                             logger.debug('Moviename detected')
                             reply, confidence = get_movie_answer(annotated_user_phrase, human_attr), self.default_conf
                         else:
-                            reply = self.book_linkto_reply(self, '', human_attr)
+                            reply = self.book_linkto_reply('', human_attr)
                             if not reply:
                                 logger.debug('We are over - finish')
                                 reply = exit_skill(reply, human_attr)
