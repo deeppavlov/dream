@@ -81,11 +81,7 @@ def what_do_you_mean_response(dialog):
             "intent_catcher", {}).get(
             "what_are_you_talking_about", {}).get(
             "detected", False)
-        if not (what_we_talk_about(dialog['human_utterances'][-1]) or what_do_you_mean_intent):
-            reply, confidence = '', 0
-        elif len(dialog.get('human_utterances', [])) < 2:
-            reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
-        elif detect_interrupt(dialog['human_utterances'][-1]['text']):
+        if detect_interrupt(dialog['human_utterances'][-1]['text']):
             reply, confidence = REPEAT_PHRASE, SUPER_CONF
         elif detect_end_but(dialog['human_utterances'][-1]['text']):
             reply, confidence = BUT_PHRASE, SUPER_CONF
@@ -93,6 +89,10 @@ def what_do_you_mean_response(dialog):
             reply, confidence = BECAUSE_PHRASE, SUPER_CONF
         elif detect_end_when(dialog['human_utterances'][-1]['text']):
             reply, confidence = WHEN_PHRASE, SUPER_CONF
+        elif not (what_we_talk_about(dialog['human_utterances'][-1]) or what_do_you_mean_intent):
+            reply, confidence = '', 0
+        elif len(dialog.get('human_utterances', [])) < 2:
+            reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
         else:
             # collect prev current intents, topics
             intent_list, da_topic_list, cobot_topic_list = collect_topics_entities_intents(dialog)
