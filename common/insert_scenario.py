@@ -8,7 +8,7 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
 
-from common.wiki_skill import find_entity_by_types, check_nounphr, find_page_title, find_paragraph, \
+from common.wiki_skill import check_condition, find_entity_by_types, check_nounphr, find_page_title, find_paragraph, \
     delete_hyperlinks, find_all_titles, used_types_dict, NEWS_MORE, WIKI_BLACKLIST, QUESTION_TEMPLATES, \
     CONF_DICT
 from common.utils import is_no, is_yes
@@ -158,61 +158,16 @@ def make_facts_str(paragraphs):
     return facts_str, mentions_list, mention_pages_list
 
 
-def check_condition_element(vars, elem, user_uttr, bot_uttr):
-    flag = False
-    annotations = user_uttr["annotations"]
-    isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    isno = is_no(state_utils.get_last_human_utterance(vars))
-    if elem[0] == "is_yes" and isyes:
-        flag = True
-    elif elem[0] == "is_no" and isno:
-        flag = True
-    elif "pattern" in elem[0]:
-        pattern = elem[0]["pattern"]
-        if elem[1] == "user" and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
-            flag = True
-        if elem[1] == "bot" and re.findall(pattern, bot_uttr["text"], re.IGNORECASE):
-            flag = True
-    elif "cobot_entities_type" in elem[0]:
-        cobot_entities_type = elem[0]["cobot_entities_type"]
-        nounphrases = annotations.get("cobot_entities", {}).get("labelled_entities", [])
-        for nounphr in nounphrases:
-            nounphr_label = nounphr.get("label", "")
-            if nounphr_label == cobot_entities_type:
-                flag = True
-    elif "wiki_parser_types" in elem[0]:
-        wp_types = elem[0]["wp_types"]
-        found_entity, found_types = find_entity_by_types(annotations, wp_types)
-        if found_entity:
-            flag = True
-    if not elem[2]:
-        flag = not flag
-    return flag
-
-
-def check_condition(vars, condition, user_uttr, bot_uttr):
-    flag = False
-    checked_elements = []
-    for elem in condition:
-        if isinstance(elem[0], str) or isinstance(elem[0], dict):
-            flag = check_condition_element(vars, elem, user_uttr, bot_uttr)
-        elif isinstance(elem[0], list):
-            flag = all([check_condition_element(vars, sub_elem, user_uttr, bot_uttr) for sub_elem in elem])
-        checked_elements.append(flag)
-    if any(checked_elements):
-        flag = True
-    return flag
-
-
 def check_utt_cases(vars, utt_info):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
     utt_cases = utt_info.get("utt_cases", [])
     if utt_cases:
         for utt_case in utt_cases:
             condition = utt_case["cond"]
-            if check_condition(vars, condition, user_uttr, bot_uttr):
+            if check_condition(condition, user_uttr, bot_uttr, shared_memory):
                 flag = True
     else:
         flag = True
@@ -228,7 +183,8 @@ def extract_and_save_subtopic(vars):
     for expected_subtopic_info in expected_subtopic_info_list:
         subtopic = expected_subtopic_info["subtopic"]
         condition = expected_subtopic_info["cond"]
-        flag = check_condition(vars, condition, user_uttr, bot_uttr)
+        flag = check_condition(condition, user_uttr, bot_uttr, shared_memory)
+        logger.info(f"expected_subtopic_info {expected_subtopic_info} flag {flag}")
         if subtopic not in subtopics:
             subtopics.append(subtopic)
         if flag:
@@ -241,7 +197,7 @@ def find_trigger(vars, triggers):
     user_uttr = state_utils.get_last_human_utterance(vars)
     annotations = user_uttr["annotations"]
     if "entity_types" in triggers:
-        found_entity_substr, found_entity_types = find_entity_by_types(annotations, triggers["entity_types"])
+        found_entity_substr, found_entity_types, _ = find_entity_by_types(annotations, triggers["entity_types"])
         curr_page = get_page_title(vars, found_entity_substr)
         if curr_page:
             return found_entity_substr, found_entity_types, curr_page, ""
@@ -291,9 +247,10 @@ def preprocess_wikihow_page(article_content):
                     question = f"Would you like to know about {next_title.lower()}?"
                 elif n != len(paragraphs) - 1:
                     question = random.choice(NEWS_MORE)
+                response_dict = {"facts_str": facts_str, "question": question}
                 response = f"{facts_str} {question}".strip().replace("  ", " ")
                 if response:
-                    page_content_list.append(response)
+                    page_content_list.append(response_dict)
     return page_content_list
 
 
@@ -305,32 +262,39 @@ def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_c
     for n, title in enumerate(titles_we_use):
         page_title = find_page_title(all_titles, title)
         paragraphs = find_paragraph(article_content, page_title)
-        logger.info(f"page_title {page_title} paragraphs {paragraphs}")
-        facts_str, _, _ = make_facts_str(paragraphs)
-        logger.info(f"facts_str {facts_str}")
-        if facts_str:
-            facts_list.append((title, facts_str))
+        logger.info(f"page_title {page_title} paragraphs {paragraphs[:2]}")
+        count_par = 0
+        for num, paragraph in enumerate(paragraphs):
+            facts_str, *_ = make_facts_str([paragraph])
+            logger.info(f"facts_str {facts_str}")
+            if facts_str and facts_str.endswith(".") and len(facts_str.split()) > 4:
+                facts_list.append((title, facts_str))
+                count_par += 1
+            if count_par == 2:
+                break
     logger.info(f"facts_list {facts_list}")
     page_content_list = []
     for n, (title, facts_str) in enumerate(facts_list):
         if n != len(facts_list) - 1:
             next_title = facts_list[n + 1][0]
-            question_template = random.choice(QUESTION_TEMPLATES)
-            question = question_template.format(next_title, found_entity_substr)
+            if next_title != title:
+                question_template = random.choice(QUESTION_TEMPLATES)
+                question = question_template.format(next_title, found_entity_substr)
+            else:
+                question = random.choice(NEWS_MORE)
+            response_dict = {"facts_str": facts_str, "question": question}
             response = f"{facts_str} {question}".strip().replace("  ", " ")
             if response:
-                page_content_list.append(response)
+                page_content_list.append(response_dict)
         else:
-            page_content_list.append(facts_str)
+            page_content_list.append({"facts_str": facts_str,
+                                      "question": f"I was very happy to tell you more about {found_entity_substr}."})
     logger.info(f"page_content_list {page_content_list}")
     return page_content_list
 
 
-def extract_entity(vars):
-    user_uttr = state_utils.get_last_human_utterance(vars)
+def extract_entity(vars, user_uttr, expected_entity):
     annotations = user_uttr["annotations"]
-    shared_memory = state_utils.get_shared_memory(vars)
-    expected_entity = shared_memory.get("expected_entity", {})
     if expected_entity:
         logger.info(f"expected_entity {expected_entity}")
         if "cobot_entities_type" in expected_entity:
@@ -341,28 +305,46 @@ def extract_entity(vars):
                 nounphr_label = nounphr.get("label", "")
                 if nounphr_label == cobot_entities_type:
                     found_entity = nounphr_text
-                    return found_entity
+                    return found_entity, {}
         if "wiki_parser_types" in expected_entity:
-            found_entity, found_types = find_entity_by_types(annotations, expected_entity["wiki_parser_types"])
-            return found_entity
+            types = expected_entity["wiki_parser_types"]
+            relations = expected_entity.get("relations", [])
+            found_entity, found_types, entity_triplets = find_entity_by_types(annotations, types, relations)
+            if found_entity:
+                return found_entity, entity_triplets
+        if "entity_substr" in expected_entity:
+            substr_info_list = expected_entity["entity_substr"]
+            for entity, pattern in substr_info_list:
+                if re.findall(pattern, user_uttr["text"]):
+                    return entity, {}
         if expected_entity.get("any_entity", False):
             cobot_entities = annotations.get("cobot_entities", {}).get("entities", [])
             if cobot_entities:
-                return cobot_entities[0]
-    return ""
+                return cobot_entities[0], {}
+    return "", {}
 
 
 def extract_and_save_entity(vars):
+    user_uttr = state_utils.get_last_human_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
-    expected_entity = shared_memory.get("expected_entity", {})
-    if expected_entity:
-        found_entity = extract_entity(vars)
+    expected_entities = shared_memory.get("expected_entities", {})
+    found = False
+    for expected_entity in expected_entities:
+        found_entity, entity_triplets = extract_entity(vars, user_uttr, expected_entity)
+        logger.info(f"expected_entity {expected_entity} found_entity {found_entity} entity_triplets {entity_triplets}")
         if found_entity:
             entity_name = expected_entity["name"]
             user_info = shared_memory.get("user_info", {})
+            new_entity_triplets = shared_memory.get("entity_triplets", {})
             user_info[entity_name] = found_entity
+            logger.info(f"extracting entity, user_info {user_info}")
             state_utils.save_to_shared_memory(vars, user_info=user_info)
-            state_utils.save_to_shared_memory(vars, expected_entity={})
+            if entity_triplets:
+                new_entity_triplets = {**new_entity_triplets, **entity_triplets}
+                state_utils.save_to_shared_memory(vars, entity_triplets=new_entity_triplets)
+            found = True
+    if found:
+        state_utils.save_to_shared_memory(vars, expected_entities={})
 
 
 def if_facts_agree(vars):
@@ -373,7 +355,7 @@ def if_facts_agree(vars):
     cur_facts = shared_memory.get("cur_facts", {})
     for fact in cur_facts:
         condition = fact["cond"]
-        flag = check_condition(vars, condition, user_uttr, bot_uttr)
+        flag = check_condition(condition, user_uttr, bot_uttr, shared_memory)
         if flag:
             break
     return flag
@@ -387,7 +369,7 @@ def extract_and_save_wikipage(vars):
     for fact in cur_facts:
         wikihow_page = fact.get("wikihow_page", "")
         condition = fact["cond"]
-        flag = check_condition(vars, condition, user_uttr, bot_uttr)
+        flag = check_condition(condition, user_uttr, bot_uttr, shared_memory)
         if flag and wikihow_page:
             state_utils.save_to_shared_memory(vars, cur_wikihow_page=wikihow_page)
             state_utils.save_to_shared_memory(vars, cur_facts={})
@@ -421,8 +403,8 @@ def answer_users_question(vars, topic_config):
     answer = ""
     user_uttr = state_utils.get_last_human_utterance(vars)
     if found_topic:
-        questions = topic_config[found_topic]["questions"]
-        logger.info(f"user_uttr {user_uttr} questions {questions}")
+        questions = topic_config[found_topic].get("questions", [])
+        logger.info(f"user_uttr {user_uttr.get('text', '')} questions {questions}")
         for question in questions:
             pattern = question["pattern"]
             if re.findall(pattern, user_uttr["text"]):
@@ -440,18 +422,27 @@ def start_or_continue_scenario(vars, topic_config):
     cur_mode = shared_memory.get("cur_mode", "smalltalk")
     found_topic = shared_memory.get("special_topic", "")
     logger.info(f"special_topic_request, found_topic {found_topic}")
+    user_info = shared_memory.get("user_info", {})
+    entity_triplets = shared_memory.get("entity_triplets", {})
+    logger.info(f"start_or_continue_scenario, user_info {user_info}, entity_triplets {entity_triplets}")
     if cur_mode == "facts" and isno:
         cur_mode = "smalltalk"
     if not found_topic:
         for topic in topic_config:
             linkto = topic_config[topic].get("linkto", [])
-            pattern = topic_config[topic]["pattern"]
             for phrase in linkto:
                 if phrase.lower() in bot_uttr["text"].lower():
                     found_topic = topic
                     break
-            if re.findall(pattern, user_uttr["text"]):
+            pattern = topic_config[topic].get("pattern", "")
+            if pattern and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
                 found_topic = topic
+            switch_on = topic_config[topic].get("switch_on", [])
+            for switch_elem in switch_on:
+                condition = switch_elem["cond"]
+                if check_condition(condition, user_uttr, bot_uttr, shared_memory):
+                    found_topic = topic
+                    break
             if found_topic:
                 break
     if found_topic:
@@ -463,32 +454,59 @@ def start_or_continue_scenario(vars, topic_config):
     return flag
 
 
-def make_smalltalk_response(vars, shared_memory, utt_info, used_utt_nums, num):
+def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_utt_nums, num):
+    found_topic = shared_memory.get("special_topic", "")
     response = ""
     utt_list = utt_info["utt"]
     resp_list = []
+    user_info = shared_memory.get("user_info", {})
+    logger.info(f"make_smalltalk_response, user_info {user_info}")
     for utt in utt_list:
         utt_slots = re.findall(r"{(.*?)}", utt)
         logger.info(f"utt_slots {utt_slots}")
-        if utt_slots and any([not shared_memory.get("user_info", {}).get(slot, "")
-                              for slot in utt_slots]):
-            pass
-        elif not utt_slots:
+        if not utt_slots:
             resp_list.append(utt)
         else:
+            entity_triplets = shared_memory.get("entity_triplets", {})
             for slot in utt_slots:
-                slot_value = shared_memory.get("user_info", {}).get(slot, "")
-                slot_repl = "{" + slot + "}"
-                utt = utt.replace(slot_repl, slot_value)
-            resp_list.append(utt)
+                slot_value = ""
+                if slot.startswith("["):
+                    slot_strip = slot.strip("[]")
+                    slot_keys = slot_strip.split(", ")
+                    bot_data = topic_config.get(found_topic, {}).get("bot_data", {})
+                    if slot_keys and slot_keys[0] == "bot_data" and bot_data:
+                        slot_value = bot_data
+                        for key in slot_keys[1:]:
+                            if key in user_info:
+                                key = user_info[key]
+                            slot_value = slot_value[key]
+                    elif slot_keys and slot_keys[0] != "bot_data" and slot_keys[0] in user_info:
+                        user_var_name = slot_keys[0]
+                        user_var_val = user_info[user_var_name]
+                        relation = slot_keys[1]
+                        objects = entity_triplets.get(user_var_val, {}).get(relation, "")
+                        if len(objects) == 1:
+                            slot_value = objects[0]
+                        elif len(objects) == 2:
+                            slot_value = f"{objects[0]} and {objects[1]}"
+                        elif len(objects) > 2:
+                            slot_value = ", ".join(objects[:2]) + " and " + objects[2]
+                        slot_value = slot_value.strip().replace("  ", " ")
+                else:
+                    slot_value = user_info.get(slot, "")
+                if slot_value:
+                    slot_repl = "{" + slot + "}"
+                    utt = utt.replace(slot_repl, slot_value)
+            if "{" not in utt:
+                resp_list.append(utt)
     if resp_list:
         response = " ".join(resp_list).strip().replace("  ", " ")
         used_utt_nums.append(num)
         cur_facts = utt_info.get("facts", {})
         state_utils.save_to_shared_memory(vars, cur_facts=cur_facts)
-        expected_entity = utt_info.get("expected_entity", {})
-        if expected_entity:
-            state_utils.save_to_shared_memory(vars, expected_entity=expected_entity)
+        expected_entities = utt_info.get("expected_entities", {})
+        if expected_entities:
+            state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
         expected_subtopic_info = utt_info.get("expected_subtopic_info", {})
         if expected_subtopic_info:
             state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
@@ -504,6 +522,8 @@ def smalltalk_response(vars, topic_config):
     found_topic = shared_memory.get("special_topic", "")
     cur_mode = shared_memory.get("cur_mode", "smalltalk")
     isno = is_no(state_utils.get_last_human_utterance(vars))
+    utt_can_continue = "can"
+    utt_conf = 0.0
     if cur_mode == "facts" and isno:
         state_utils.save_to_shared_memory(vars, cur_wikihow_page="")
         state_utils.save_to_shared_memory(vars, cur_wikipedia_page="")
@@ -512,16 +532,31 @@ def smalltalk_response(vars, topic_config):
     if not found_topic:
         for topic in topic_config:
             linkto = topic_config[topic].get("linkto", [])
-            pattern = topic_config[topic]["pattern"]
             for phrase in linkto:
                 if phrase.lower() in bot_uttr["text"].lower():
                     found_topic = topic
                     first_utt = True
                     break
-            if re.findall(pattern, user_uttr["text"]):
+            pattern = topic_config[topic].get("pattern", "")
+            if pattern and re.findall(pattern, user_uttr["text"]):
                 found_topic = topic
                 first_utt = True
+            switch_on = topic_config[topic].get("switch_on", [])
+            for switch_elem in switch_on:
+                condition = switch_elem["cond"]
+                if check_condition(condition, user_uttr, bot_uttr, shared_memory):
+                    found_topic = topic
+                    utt_can_continue = switch_elem.get("can_continue", "can")
+                    utt_conf = switch_elem.get("conf", utt_conf)
+                    first_utt = True
+                    break
             if found_topic:
+                expected_entities = topic_config[found_topic].get("expected_entities", {})
+                if expected_entities:
+                    state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
+                expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", {})
+                if expected_subtopic_info:
+                    state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
                 break
 
     extract_and_save_entity(vars)
@@ -538,9 +573,11 @@ def smalltalk_response(vars, topic_config):
                 for num, utt_info in enumerate(topic_config[found_topic]["smalltalk"]):
                     if num not in used_utt_nums:
                         if utt_info.get("subtopic", "") == cur_subtopic and check_utt_cases(vars, utt_info):
-                            response, used_utt_nums = make_smalltalk_response(vars, shared_memory, utt_info,
-                                                                              used_utt_nums, num)
+                            response, used_utt_nums = make_smalltalk_response(vars, topic_config, shared_memory,
+                                                                              utt_info, used_utt_nums, num)
                             if response:
+                                utt_can_continue = utt_info.get("can_continue", "can")
+                                utt_conf = utt_info.get("conf", utt_conf)
                                 break
                 if response:
                     used_utt_nums_dict[found_topic] = used_utt_nums
@@ -552,9 +589,12 @@ def smalltalk_response(vars, topic_config):
                     subtopics_to_delete += 1
         if not subtopics or not response:
             for num, utt_info in enumerate(topic_config[found_topic]["smalltalk"]):
-                if num not in used_utt_nums and check_utt_cases(vars, utt_info):
-                    response, used_utt_nums = make_smalltalk_response(vars, shared_memory, utt_info, used_utt_nums, num)
+                if num not in used_utt_nums and check_utt_cases(vars, utt_info) and not utt_info.get("subtopic", ""):
+                    response, used_utt_nums = make_smalltalk_response(vars, topic_config, shared_memory, utt_info,
+                                                                      used_utt_nums, num)
                     if response:
+                        utt_can_continue = utt_info.get("can_continue", "can")
+                        utt_conf = utt_info.get("conf", utt_conf)
                         used_utt_nums_dict[found_topic] = used_utt_nums
                         state_utils.save_to_shared_memory(vars, used_utt_nums=used_utt_nums_dict)
                         break
@@ -566,10 +606,14 @@ def smalltalk_response(vars, topic_config):
         logger.info(f"used_utt_nums_dict {used_utt_nums_dict} used_utt_nums {used_utt_nums}")
     answer = answer_users_question(vars, topic_config)
     response = f"{answer} {response}".strip().replace("  ", " ")
+    logger.info(f"response {response}")
     if response:
         state_utils.save_to_shared_memory(vars, cur_mode="smalltalk")
-        state_utils.set_confidence(vars, confidence=CONF_DICT["WIKI_TOPIC"])
-        if first_utt:
+        if utt_conf > 0.0:
+            state_utils.set_confidence(vars, confidence=utt_conf)
+        else:
+            state_utils.set_confidence(vars, confidence=CONF_DICT["WIKI_TOPIC"])
+        if first_utt or utt_can_continue == "must":
             state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
         else:
             state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
@@ -652,7 +696,9 @@ def facts_response(vars, topic_config):
         if wikihow_page_content_list:
             for num, fact in enumerate(wikihow_page_content_list):
                 if num not in used_wikihow_nums:
-                    response = fact
+                    facts_str = fact.get("facts_str", "")
+                    question = fact.get("question", "")
+                    response = f"{facts_str} {question}".strip().replace("  ", " ")
                     used_wikihow_nums.append(num)
                     used_wikihow_nums_dict[wikihow_page] = used_wikihow_nums
                     state_utils.save_to_shared_memory(vars, used_wikihow_nums=used_wikihow_nums_dict)
@@ -660,7 +706,9 @@ def facts_response(vars, topic_config):
         if not response and wikipedia_page_content_list:
             for num, fact in enumerate(wikipedia_page_content_list):
                 if num not in used_wikipedia_nums:
-                    response = fact
+                    facts_str = fact.get("facts_str", "")
+                    question = fact.get("question", "")
+                    response = f"{facts_str} {question}".strip().replace("  ", " ")
                     used_wikipedia_nums.append(num)
                     used_wikipedia_nums_dict[wikipedia_page] = used_wikipedia_nums
                     state_utils.save_to_shared_memory(vars, used_wikipedia_nums=used_wikipedia_nums_dict)
