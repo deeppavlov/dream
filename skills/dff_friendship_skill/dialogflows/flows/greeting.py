@@ -9,6 +9,7 @@ import requests
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.emotion import is_positive_regexp_based, is_negative_regexp_based
 import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
@@ -286,23 +287,12 @@ def how_are_you_response(vars):
 # user answers how is he/she doing and asks what do you do on weekdays
 ##################################################################################################################
 
-POSITIVE_WORDS = \
-    r"(happy|good|okay|great|yeah|cool|awesome|perfect|nice|well|ok|fine|neat|swell|peachy|excellent|splendid" \
-    r"|super|classy|tops|famous|superb|incredible|tremendous|class|crackajack|crackerjack)"
-NEGATIVE_WORDS = \
-    r"(sad|pity|bad|tired|poor|ill|low|inferior|miserable|naughty|nasty|foul|ugly|grisly|harmful|sick|sore" \
-    r"|diseased|ailing|spoiled|depraved|tained|damaged|awry|badly|sadly|wretched|awful|terrible|depressed)"
-POSITIVE_RESPONSE = re.compile(rf"({POSITIVE_WORDS}|(not|n't|\bno\b)( too| really| that| so)? {NEGATIVE_WORDS})",
-                               re.IGNORECASE)
-NEGATIVE_RESPONSE = re.compile(rf"({NEGATIVE_WORDS}|(not|n't|\bno\b)( too| really| that| so)? {POSITIVE_WORDS})",
-                               re.IGNORECASE)
-
 
 def positive_or_negative_request(ngrams, vars):
     # SYS_USR_ANSWERS_HOW_IS_HE_DOING
     usr_sentiment = state_utils.get_human_sentiment(vars)
-    pos_temp = POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"])
-    neg_temp = NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"])
+    pos_temp = is_positive_regexp_based(state_utils.get_last_human_utterance(vars))
+    neg_temp = is_negative_regexp_based(state_utils.get_last_human_utterance(vars))
 
     bot_asked_how_are_you = any([resp in state_utils.get_last_bot_utterance(vars)["text"]
                                  for resp in common_greeting.HOW_ARE_YOU_RESPONSES])
@@ -321,11 +311,11 @@ def how_human_is_doing_response(vars):
         usr_sentiment = state_utils.get_human_sentiment(vars)
         _no_entities = len(state_utils.get_nounphrases_from_human_utterance(vars)) == 0
         _no_requests = condition_utils.no_requests(vars)
-        if POSITIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"]):
+        if is_positive_regexp_based(state_utils.get_last_human_utterance(vars)):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
-        elif NEGATIVE_RESPONSE.search(state_utils.get_last_human_utterance(vars)["text"]):
+        elif is_negative_regexp_based(state_utils.get_last_human_utterance(vars)):
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             user_mood_acknowledgement = (
