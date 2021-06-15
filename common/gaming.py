@@ -3,7 +3,9 @@ import re
 from pathlib import Path
 
 
-VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(r"(?:(?:the |a )?(?:video )?game )")
+VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
+    r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b)",
+    re.IGNORECASE)
 
 
 def compile_re_pattern_for_list_of_strings(strings):

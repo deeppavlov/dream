@@ -21,7 +21,7 @@ WORDS_THAT_ARE_DEFINITELY_GAME_NAMES = ["minecraft"]
 
 def does_text_contain_video_game_words(text):
     logger.info(f"(is_found_text_definitely_game)text: {text}")
-    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.match(text))
+    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text))
 
 
 def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
@@ -75,7 +75,8 @@ def user_definitely_wants_to_talk_about_particular_game_request(ngrams, vars, ad
             flag = False
     else:
         flag = False
-    logger.info(f"user_definitely_wants_to_talk_about_particular_game_request={flag}")
+    logger.info(f"user_definitely_wants_to_talk_about_particular_game_request with additional check "
+                f"{common_intents.get_additional_check_description(additional_check)}: {flag}")
     return flag
 
 

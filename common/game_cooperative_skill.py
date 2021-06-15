@@ -1,6 +1,7 @@
 import re
 
-GAMES_COMPILED_PATTERN = re.compile(r"(\bgame\b|\bgames|videogame|\bgaming)", re.IGNORECASE)
+GAMES_COMPILED_PATTERN = re.compile(r"(\bvideo ?game|\bgam(e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b)",
+                                    re.IGNORECASE)
 TRIGGER_PHRASES = ["do you love video games?"]
 
 
