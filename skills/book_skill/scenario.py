@@ -537,7 +537,10 @@ class BookSkillScenario:
                         confidence = self.default_conf
                     else:
                         reply, confidence = self.default_reply, 0
-                if confidence == self.super_conf:
+                if "talk about something else" in reply:
+                    # Exit skill was active
+                    attr = {"can_continue": CAN_NOT_CONTINUE}
+                elif confidence == self.super_conf:
                     attr = {"can_continue": MUST_CONTINUE}
                 elif confidence == self.default_conf:
                     attr = {"can_continue": CAN_CONTINUE_SCENARIO}

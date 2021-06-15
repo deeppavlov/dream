@@ -597,7 +597,7 @@ def exit_skill(reply, human_attr, SKILLS_TO_LINK=SKILLS_TO_LINK):
     if not any([exit_phrase in phrase for phrase in human_attr['book_skill']['used_phrases']]):
         reply = f"{reply} {exit_phrase}"
     else:
-        reply = ""
+        reply = f""
     return reply
 
 
