@@ -636,4 +636,9 @@ BY_TEMPLATE = re.compile(r"\bby ([a-zA-Z ]+)", re.IGNORECASE)
 
 
 def find_by(annotated_user_phrase):
-    return re.search(BY_TEMPLATE, annotated_user_phrase['text'])
+    found_by = re.search(BY_TEMPLATE, annotated_user_phrase['text'])
+    if found_by:
+        answer = found_by.group()[3:]
+        return answer
+    else:
+        return ''
