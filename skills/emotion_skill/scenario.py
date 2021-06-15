@@ -3,9 +3,9 @@ import random
 import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.link import link_to
+from common.link import link_to, LIST_OF_SCRIPTED_TOPICS, skills_phrases_map
 from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
-    skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested
+    skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested, is_positive_regexp_based
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -15,6 +15,10 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+SCRIPTED_TRIGGER_PHRASES = []
+for skill in LIST_OF_SCRIPTED_TOPICS:
+    SCRIPTED_TRIGGER_PHRASES.extend(list(skills_phrases_map[skill]))
 
 
 class EmotionSkillScenario:
@@ -32,6 +36,7 @@ class EmotionSkillScenario:
                 is_alone(annotated_user_phrase),
                 is_boring(annotated_user_phrase)]):
             self.regexp_sad = True
+            logger.info(f"Sadness detected by regexp in {annotated_user_phrase['text']}")
             return 'sadness'
         most_likely_emotion = None
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
@@ -111,7 +116,7 @@ class EmotionSkillScenario:
             state = ''
         elif state == 'offered_advice':
             # we offered an advice
-            if is_no:
+            if is_no or is_positive_regexp_based({'text': user_phrase}):
                 state = 'no'
                 step = self.steps[state]
                 reply = random.choice(step['answers'])
@@ -233,20 +238,21 @@ class EmotionSkillScenario:
                 was_trigger = any([trigger_question in prev_bot_phrase
                                    for trigger_question in skill_trigger_phrases()])
                 if dialog['bot_utterances']:
-                    was_active = dialog['bot_utterances'][-1].get('active_skill', {}) == 'emotion_skill'
-                    was_book_or_movie = dialog['bot_utterances'][-1].get('active_skill', {}) in ['book_skill',
-                                                                                                 'dff_movie_skill']
+                    was_active = dialog['bot_utterances'][-1].get('active_skill', '') == 'emotion_skill'
+                    was_scripted = dialog['bot_utterances'][-1].get('active_skill', '') in LIST_OF_SCRIPTED_TOPICS
                 else:
                     was_active = False
-                    was_book_or_movie = False
-                if (was_trigger or was_active or self.regexp_sad) and not was_book_or_movie:
+                    was_scripted = False
+                if (was_trigger or was_active or self.regexp_sad) and not was_scripted:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
-                elif was_book_or_movie or reply == dialog['bot_utterances'][-1]:
+                elif was_scripted or reply == dialog['bot_utterances'][-1]:
                     confidence = 0.5 * confidence
                 if not very_confident and not was_active:
                     confidence = min(confidence, 0.99)
                     attr['can_continue'] = CAN_CONTINUE_SCENARIO
+                if any([trigger_phrase in prev_bot_phrase for trigger_phrase in SCRIPTED_TRIGGER_PHRASES]):
+                    confidence = 0.5 * confidence
             except Exception as e:
                 self.logger.exception("exception in emotion skill")
                 sentry_sdk.capture_exception(e)
@@ -257,7 +263,7 @@ class EmotionSkillScenario:
                 link = ""
                 annotated_user_phrase = {'text': ""}
 
-            if link:
+            if link and "skill" in link:
                 if link["skill"] not in human_attributes["used_links"]:
                     human_attributes["used_links"][link["skill"]] = []
                 human_attributes["used_links"][link["skill"]].append(link['phrase'])
