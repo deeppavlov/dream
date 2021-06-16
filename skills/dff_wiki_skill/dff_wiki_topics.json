@@ -118,7 +118,7 @@
      },
  "work":
      {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "(ok|yes|yeah|yup|i) work"}, "user", true]],
-                              [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "^work$"}, "user", true]],
+                              [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "^work[\\.!]?$"}, "user", true]],
                               [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "i ('m|was) working"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
       "smalltalk": [{"utt": ["I also have a work. It is to chat with people all day long.", "So, I'm a professional talker.",
