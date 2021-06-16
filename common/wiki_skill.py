@@ -277,7 +277,7 @@ special_topics = {"art":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "(ok|yes|ok|yeah|yup) work"}, "user", True]],
                                            [[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "^work$"}, "user", True]],
+                                            [{"pattern": "^work[\\.!]?$"}, "user", True]],
                                            [[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "i ('m|was) working"}, "user", True]]],
                                   "can_continue": "must"}]}
