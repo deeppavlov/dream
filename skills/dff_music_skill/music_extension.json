@@ -1,19 +1,19 @@
 {
  "music":
-     {"switch_on": [{"cond": [[[{"pattern": "(\\bpop\\b|popular music|\\brock\\b|\\brap\\b|hip hop|\\bpunk\\b)"}, "user", true],
+     {"switch_on": [{"cond": [[[{"pattern": "(\\bpop|popular music|\\brock|\\brap|hip hop|\\bpunk)"}, "user", true],
                                [{"pattern": "(what|which) music do you like"}, "bot", true]],
                               [[{"wiki_parser_types": ["Q488205", "Q36834", "Q177220", "Q753110", "Q105756498", "Q215380", "Q207628"]}, "user", true],
                                [{"pattern": "(what|which) music do you like"}, "bot", true]]
                              ],
                      "can_continue": "must"}],
-      "pattern": "(\\bpop\\b|popular music|\\brock\\b|\\brap\\b|hip hop|\\bpunk\\b)",
-      "expected_entities": [{"name": "user_genre", "entity_substr": [["pop", "(\\bpop\\b|popular music)"], ["rock", "(\\brock\\b|\\bpunk\\b)"],
-                                                                     ["rap", "(\\brap\\b|hip hop)"]]},
+      "pattern": "(\\bpop\\b|\\bpop[\\.!]|popular music|\\brock\\b|\\brock[\\.!]|\\brap\\b|\\brap[\\.!]|hip hop|\\bpunk\\b|\\bpunk[\\.!])",
+      "expected_entities": [{"name": "user_genre", "entity_substr": [["pop", "(\\bpop|popular music)"], ["rock", "(\\brock|\\bpunk)"],
+                                                                     ["rap", "(\\brap|hip hop)"]]},
                             {"name": "user_singer", "wiki_parser_types": ["Q488205", "Q36834", "Q177220", "Q753110"], "relations": ["genre", "songs", "albums", "part of"]},
                             {"name": "user_group", "wiki_parser_types": ["Q105756498", "Q215380"], "relations": ["genre", "songs", "albums", "has part"]},
                             {"name": "user_song", "wiki_parser_types": ["Q207628"], "relations": ["genre", "performer", "part of"]}
                            ],
-      "expected_subtopic_info": [{"subtopic": "discuss_genre", "cond": [[{"pattern": "(\\bpop\\b|popular music|\\brock\\b|\\brap\\b|\\btechno\\b|\\bpunk\\b)"}, "user", true]]},
+      "expected_subtopic_info": [{"subtopic": "discuss_genre", "cond": [[{"pattern": "(\\bpop|popular music|\\brock|\\brap|\\btechno|\\bpunk)"}, "user", true]]},
                                  {"subtopic": "discuss_singer", "cond": [[{"wiki_parser_types": ["Q488205", "Q36834", "Q177220", "Q753110"]}, "user", true]]},
                                  {"subtopic": "discuss_group", "cond": [[{"wiki_parser_types": ["Q105756498", "Q215380"]}, "user", true]]},
                                  {"subtopic": "discuss_song", "cond": [[{"wiki_parser_types": ["Q207628"]}, "user", true]]}],
@@ -82,7 +82,7 @@
                     {"utt": ["I think that live performance of your favourite singer is a cool event.", "Have you been to any live shows lately?"]}
                    ],
       "bot_data": {"rock": {"singer": "Deep Purple", "song": "Smoke on the Water"},
-                   "pop": {"singer": "Drake", "song": "Hotline Bling",
-                   "rap": {"singer": "Travis Scott", "song": "Goosebumps"}}}
+                   "pop": {"singer": "Drake", "song": "Hotline Bling"},
+                   "rap": {"singer": "Travis Scott", "song": "Goosebumps"}}
      }
 }
