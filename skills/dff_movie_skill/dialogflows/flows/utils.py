@@ -85,7 +85,7 @@ MOVIE_WORDS = r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|
 MOVIE_PATTERN = re.compile(MOVIE_WORDS, re.IGNORECASE)
 YEAR_TEMPLATE = re.compile(r"([0-9][0-9][0-9][0-9])", re.IGNORECASE)
 
-MOVIE_TITLE_QUESTION = re.compile(r"(what|which|do you)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
+MOVIE_TITLE_QUESTION = re.compile(r"(what|which)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
                                   re.IGNORECASE)
 
 EXTRA_SPACE_TEMPLATE = re.compile(r"\s\s+")
