@@ -1415,8 +1415,8 @@ simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_
 #  SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED
 
 simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED,
-                                            State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK,
-                                            bot_asks_to_continue_movie_talk_response)
+                                            State.USR_WAS_OFFERED_RECOMMENDATIONS,
+                                            bot_offers_movie_recommendation_response)
 
 ##################################################################################################################
 #  SYS_NOT_LIKE_MOVIES
