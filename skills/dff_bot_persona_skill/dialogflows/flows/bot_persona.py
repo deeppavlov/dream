@@ -112,7 +112,7 @@ def fav_or_lets_chat_request(ngrams, vars):
     # )
     flag = any(
         [
-            any(["favorite" in utt, "favourite" in utt]),
+            any(["favorite" in utt, "favourite" in utt, "do you do on weekdays" in utt]),
             re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt)
         ]
     )
@@ -137,7 +137,10 @@ def my_fav_story_response(vars):
                 story = FAV_STORIES_TOPICS.get(topic, "").get("story", "")
                 question = FAV_STORIES_TOPICS.get(topic, "").get("question", "")
                 if name and (topic not in used_topics):
-                    response = f"My favorite {topic} is {name}. {story} {question}"
+                    if topic == "weekdays":
+                        response = f"{story} {question}"
+                    else:
+                        response = f"My favorite {topic} is {name}. {story} {question}"
                     if topic == "book":
                         state_utils.set_confidence(vars, confidence=CONF_LOW)
                         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
