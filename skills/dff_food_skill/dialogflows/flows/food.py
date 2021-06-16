@@ -42,7 +42,7 @@ WHAT_COOK_RE = re.compile(WHAT_COOK, re.IGNORECASE)
 DONOTKNOW_LIKE_RE = re.compile(join_words_in_or_pattern(DONOTKNOW_LIKE), re.IGNORECASE)
 NO_WORDS_RE = re.compile(r"(\bnot\b|n't|\bno\b) ", re.IGNORECASE)
 # FAV_RE = re.compile(r"favou?rite|like", re.IGNORECASE)
-LIKE_RE = re.compile(r"i (like|love|adore)", re.IGNORECASE)
+LIKE_RE = re.compile(r"\bi (like|love|adore)( to (bake|cook|eat)|)", re.IGNORECASE)
 
 MEALS = [
     "lazagna",
@@ -541,6 +541,7 @@ def food_fact_response(vars):
 
     linkto_check = any([linkto in bot_utt_text for linkto in link_to_skill2i_like_to_talk["dff_food_skill"]])
     black_list_check = any(list(annotations.get("blacklisted_words", {}).values()))
+    conceptnet_flag, food_item = check_conceptnet(vars)
 
     entities_facts = annotations.get("fact_retrieval", {}).get("topic_facts", [])
     for entity_facts in entities_facts:
@@ -557,7 +558,7 @@ def food_fact_response(vars):
     if black_list_check:
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return error_response(vars)
-    elif check_conceptnet(vars) and ("shower" not in human_utt_text):
+    elif conceptnet_flag and ("shower" not in human_utt_text):
         if "berry" in bot_utt_text.lower():
             berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
             if berry_names:
@@ -571,14 +572,26 @@ def food_fact_response(vars):
                 if facts and entity:
                     fact = facts[0]
                 elif facts:
-                    fact = facts[0].get("fact", "")
-                    entity = facts[0].get("entity", "")
+                    for facts_item in facts:
+                        if facts_item.get("entity", "xxx") in food_item:
+                            fact = facts_item.get("fact", "")
+                            entity = facts_item.get("entity", "")
+                            break
+                        else:
+                            fact = ""
+                            entity = ""
         else:
-            if facts and entity:
+            if all([facts, entity, entity in food_item]):
                 fact = facts[0]
             elif facts:
-                fact = facts[0].get("fact", "")
-                entity = facts[0].get("entity", "")
+                for facts_item in facts:
+                    if facts_item.get("entity", "xxx") in food_item:
+                        fact = facts_item.get("fact", "")
+                        entity = facts_item.get("entity", "")
+                        break
+                    else:
+                        fact = ""
+                        entity = ""
         try:
             if bot_persona_fav_food_check(vars) or len(
                 state_utils.get_last_human_utterance(vars)['text'].split()
@@ -598,7 +611,7 @@ def food_fact_response(vars):
             ):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return error_response(vars)
-            elif (not fact) and check_conceptnet(vars):
+            elif (not fact) and conceptnet_flag:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 return "Why do you like it?"
             elif not fact:
