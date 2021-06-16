@@ -19,7 +19,7 @@ from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_TO_BE_LINKED_EXCEPT_LOW_
     compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import opinion_request_question, is_switch_topic
-from common.utils import get_topics, get_entities, is_no
+from common.utils import get_topics, get_entities, is_no, get_intents
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -232,9 +232,10 @@ class DummySkillConnector:
 
                 _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
                 _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
+                _is_cant_do = "cant_do" in get_intents(dialog["human_utterances"][-1]) and len(curr_nounphrases) == 0
 
                 cands += [link_to_question]
-                if _is_ask_me_something or _no_to_first_linkto or _if_switch_topic:
+                if _is_ask_me_something or _no_to_first_linkto or _if_switch_topic or _is_cant_do:
                     confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
