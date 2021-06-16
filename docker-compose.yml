@@ -21,7 +21,7 @@ services:
         midas-classification:8090, fact-retrieval:8100, cobot-entities:8102,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106, news-api-annotator:8112,
         dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
-        user-persona-extractor:8114, wiki-facts:8116"
+        user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
