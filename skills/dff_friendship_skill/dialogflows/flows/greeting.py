@@ -274,7 +274,11 @@ def how_are_you_response(vars):
         state_utils.set_can_continue(vars, MUST_CONTINUE)
         how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES)
 
-        ask_what_do_you_do = random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)
+        which_questions = random.choice(["what_do_you_do_on_weekdays",
+                                         "what_are_your_interests",
+                                         "what_are_your_hobbies"])
+        question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[which_questions])
+        ask_what_do_you_do = f"{random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} {question_about_activities}"
         return f"{how_bot_is_doing_resp} {ask_what_do_you_do}"
 
     except Exception as exc:
@@ -341,7 +345,11 @@ def how_human_is_doing_response(vars):
             else:
                 user_mood_acknowledgement = "Okay."
 
-        ask_what_do_you_do = random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)
+        which_questions = random.choice(["what_do_you_do_on_weekdays",
+                                         "what_are_your_interests",
+                                         "what_are_your_hobbies"])
+        question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[which_questions])
+        ask_what_do_you_do = f"{random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} {question_about_activities}"
         return f"{user_mood_acknowledgement} {ask_what_do_you_do}"
 
     except Exception as exc:

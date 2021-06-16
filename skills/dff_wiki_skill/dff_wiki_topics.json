@@ -1,6 +1,8 @@
 {"art":
      {"linkto": ["Would you like to talk about art?"],
-      "pattern": "(\\bart\\b|drawing|painting)",
+      "pattern": "(\\bart[\\.!\\?,]?\\b|drawing|painting)",
+      "expected_subtopic_info": [{"subtopic": "drawing", "cond": [[{"pattern": "draw|paint"}, "user", true]]},
+                                 {"subtopic": "photo", "cond": [[{"pattern": "photo"}, "user", true]]}],
       "smalltalk": [{"utt": ["Drawing gives you a mean to self-reflect and externalize your emotions.",
                              "Do you like drawing?"],
                      "expected_subtopic_info": [{"subtopic": "drawing", "cond": [["is_yes", "user", true]]}]},
@@ -56,8 +58,9 @@
                    "entity_types": ["Q1028181"]}
      },
  "chill":
-     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "\\bchill"}, "user", true]]],
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "\\b(chill|rest|relax)"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
+      "pattern": "\\b(chill|rest|relax)",
       "smalltalk": [{"utt": ["Cool! I'm happy that you are having a great day! Are you listening to music or playing games?"],
                      "expected_subtopic_info": [{"subtopic": "music", "cond": [[{"pattern": "\\bmusic"}, "user", true]]},
                                                 {"subtopic": "play_with_friends", "cond": [[{"pattern": "play with (my )?friends"}, "user", true]]}]},
@@ -75,6 +78,7 @@
  "sleep":
      {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "\\b(sleep|bedtime|go to bed)"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
+      "pattern": "\\b(sleep|bedtime|go to bed)",
       "smalltalk": [{"utt": ["Yes, it's time to relax after a hard day.",
                              "I can tell you what music you can listen to have a good sleep, shall I continue?"],
                      "expected_subtopic_info": [{"subtopic": "tell_about_music",
@@ -88,12 +92,14 @@
  "play_with_friends":
      {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "play with (my )?friends"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
+      "pattern": "play with (my )?friends",
       "smalltalk": [{"utt": ["Yesterday my friend had a great fun jumping on a trampoline.", "Do you like to jump on a trampoline?"]},
                     {"utt": ["Do you play sports or games on your PC or console?"]}]
      },
  "school":
      {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "(school|home work|homework|study)"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
+      "pattern": "(school|home work|homework|study)",
       "smalltalk": [{"utt": ["My favourite subject is English, this language helps me to talk to a lot of people.",
                              "What is your favourite subject at school?"]},
                     {"utt": ["Yes, it's a very interesting subject.", "I believe you are a smart person.",
@@ -121,6 +127,7 @@
                               [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "^work[\\.!]?$"}, "user", true]],
                               [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "i ('m|was) working"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
+      "pattern": "\\bwork",
       "smalltalk": [{"utt": ["I also have a work. It is to chat with people all day long.", "So, I'm a professional talker.",
                              "What is your current occupation?"]},
                     {"utt": ["I think you do a very important and useful work!",

@@ -257,22 +257,27 @@ transfer_from_skills = {
 
 special_topics = {"art":
                   {"linkto": ["Would you like to talk about art?"],
-                   "pattern": "(\\bart\\b|drawing|painting)"},
+                   "pattern": "(\\bart[\\.!\\?,]?\\b|drawing|painting)"},
                   "chill":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "\\bchill"}, "user", True]]], "can_continue": "must"}]},
+                                            [{"pattern": "\\b(chill|rest|relax)"}, "user", True]]],
+                                  "can_continue": "must"}],
+                   "pattern": "\\b(chill|rest|relax)"},
                   "sleep":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "\\b(sleep|bedtime|go to bed)"}, "user", True]]],
-                                  "can_continue": "must"}]},
+                                  "can_continue": "must"}],
+                   "pattern": "\\b(sleep|bedtime|go to bed)"},
                   "play_with_friends":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "play with (my )?friends"}, "user", True]]],
-                                  "can_continue": "must"}]},
+                                  "can_continue": "must"}],
+                   "pattern": "play with (my )?friends"},
                   "school":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "(school|home work|homework|study)"}, "user", True]]],
-                                  "can_continue": "must"}]},
+                                  "can_continue": "must"}],
+                   "pattern": "(school|home work|homework|study)"},
                   "work":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "(ok|yes|ok|yeah|yup|i) work"}, "user", True]],
@@ -280,7 +285,8 @@ special_topics = {"art":
                                             [{"pattern": "^work[\\.!]?$"}, "user", True]],
                                            [[{"pattern": "what do you do on weekdays"}, "bot", True],
                                             [{"pattern": "i ('m|was) working"}, "user", True]]],
-                                  "can_continue": "must"}]}
+                                  "can_continue": "must"}],
+                   "pattern": "\\bwork"}
                   }
 
 
@@ -530,7 +536,7 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     asked_news = "news" in user_uttr["text"]
     for topic, topic_info in special_topics.items():
         pattern = topic_info.get("pattern", "")
-        if pattern and if_chat_about_particular_topic(user_uttr, compiled_pattern=pattern):
+        if pattern and if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
             flag = True
         switch_on = topic_info.get("switch_on", [])
         for switch_elem in switch_on:

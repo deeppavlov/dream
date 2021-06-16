@@ -7,6 +7,7 @@ import requests
 import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
+from common.universal_templates import if_chat_about_particular_topic
 
 from common.wiki_skill import check_condition, find_entity_by_types, check_nounphr, find_page_title, find_paragraph, \
     delete_hyperlinks, find_all_titles, used_types_dict, NEWS_MORE, WIKI_BLACKLIST, QUESTION_TEMPLATES, \
@@ -538,7 +539,10 @@ def smalltalk_response(vars, topic_config):
                     first_utt = True
                     break
             pattern = topic_config[topic].get("pattern", "")
-            if pattern and re.findall(pattern, user_uttr["text"]):
+            if pattern and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
+                if if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
+                    utt_can_continue = "must"
+                    utt_conf = 1.0
                 found_topic = topic
                 first_utt = True
             switch_on = topic_config[topic].get("switch_on", [])

@@ -4,11 +4,11 @@ HI_THIS_IS_ALEXA = "Hi, this is an Alexa Prize Socialbot!"
 
 WHAT_DO_YOU_DO_RESPONSES = [
     "You know, yesterday was a great day for me! I've had a lot of fun conversations and managed to play my "
-    "favorite video game a bit. What do you do on weekdays?",
-    "I've already had a number of cool conversations today and even played a bit. What do you do on weekdays?",
+    "favorite video game a bit.",
+    "I've already had a number of cool conversations today and even played a bit.",
     "I've heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and "
-    "talking day and night not getting tired! What do you do on weekdays?",
-    "I listened to my favorite music all day. Such a great thing you know! What do you do on weekdays?",
+    "talking day and night not getting tired!",
+    "I listened to my favorite music all day. Such a great thing you know!",
 ]
 
 FREE_TIME_RESPONSES = [
@@ -59,7 +59,8 @@ GREETING_QUESTIONS = {
                                "What's happening?",
                                "What's going on?",
                                "What's up?"
-                               ]
+                               ],
+    "what_do_you_do_on_weekdays": ["What do you do on weekdays?"]
 }
 
 dont_tell_you_templates = re.compile(
