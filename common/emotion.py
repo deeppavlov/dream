@@ -48,7 +48,9 @@ BORING_TEMPLATE = re.compile(rf"(boring|bored)", re.IGNORECASE)
 NOT_BORING_TEMPLATE = re.compile(rf'{NOT_PATTERN} (boring|bored)', re.IGNORECASE)
 JOKE_REQUEST_TEMPLATE = re.compile(rf"{JOKE_PATTERN}", re.IGNORECASE)
 NOT_JOKE_REQUEST_TEMPLATE = re.compile(rf"{NOT_PATTERN} {JOKE_PATTERN}", re.IGNORECASE)
-ADVICE_REQUEST_TEMPLATE = re.compile(r"((can|could) you )?give (me )?(a |an |some )?advice", re.IGNORECASE)
+ADVICE_PATTERN = r"((((can|could) you )?(give|suggest|tell) (me )?(a |an |some )?advice)|" \
+                 r"(advice me (something|anything)))"
+ADVICE_REQUEST_TEMPLATE = re.compile(ADVICE_PATTERN, re.IGNORECASE)
 
 TALK_ABOUT_EMO_TEMPLATE = re.compile(r'\b(emotion|feeling|i feel\b|depress)', re.IGNORECASE)
 
