@@ -790,7 +790,7 @@ services:
         GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v1.json
       context: .
       dockerfile: ./skills/dff_gaming_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115 --reload --timeout 500 --graceful-timeout 500
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115
     # command:  flask run -h 0.0.0.0 -p 8115
     # environment:
     #   - FLASK_APP=server
