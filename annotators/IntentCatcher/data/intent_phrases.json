@@ -144,12 +144,14 @@
                 "alexa i don't wanna talk about anything right now go home",
                 "stop making that( song| noise)",
                 "stop talking",
+                "buy-buy",
+                "bye-bye",        
                 "i am done talking now",
                 "cancel simulation",
                 ".*can i get the normal alexa back.*",
                 ".* gotta go",
                 "hang up",
-                "alexa buy"
+                "(alexa )?(buy|bye)"
             ],
             "min_precision": 0.99,
             "punctuation": [
@@ -1452,6 +1454,9 @@
             "wokring is very exhausting",
             "i need to go to my job",
             "i live in a town",
+            "go to the cinema", 
+            "maybe go to the cinema", 
+            "it's covid time nope live shows happening",
             "i am from US",
             "running is my favorite activity",
             "my surname is Chavez",
