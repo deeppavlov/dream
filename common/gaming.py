@@ -99,14 +99,6 @@ special_links_to_books = {
 }
 
 
-links_from_small_talk = [
-    "Other bots told me that during the pandemic video games became more popular. "
-    "What video game do you play these days?",
-    "One person I talked told me that working in game dev is very hard. They toil at nights and weekends until their "
-    "product  becomes  a masterpiece. What was the last game that impressed you?",
-]
-
-
 harry_potter_part_names = [
     "Harry Potter and the Sorcerer's Stone",
     "Harry Potter and the Chamber of Secrets",
@@ -158,3 +150,7 @@ def compose_list_of_special_links(link_dict):
 
 
 ALL_LINKS_TO_BOOKS = compose_list_of_links(links_to_books) + compose_list_of_special_links(special_links_to_books)
+
+
+def skill_trigger_phrases():
+    return ["What video game are you playing in recent days?", "What is your favorite video game?"]
