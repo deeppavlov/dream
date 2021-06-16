@@ -27,7 +27,7 @@ CONF_2 = 0.99
 CONF_3 = 0.95
 
 breeds_dict = {}
-CATS_DOGS = {"cat", "dog", "puppy", "kitten", "kitty"}
+CATS_DOGS = {"cat", "dog", "puppy", "kitten", "kitty", "cats", "dogs", "kitties", "kittens", "puppies"}
 
 try:
     with open("/root/.deeppavlov/downloads/wikidata/breed_facts.json", 'r') as fl:
@@ -168,9 +168,9 @@ def extract_breed(vars):
 
 
 def replace_pet(pet):
-    if pet == "puppy":
+    if pet in {"dogs", "puppy", "puppies"}:
         return "dog"
-    elif pet in {"kitty", "kitten"}:
+    elif pet in {"cats", "kitty", "kitties", "kitten", "kittens"}:
         return "cat"
     else:
         return pet
@@ -335,7 +335,7 @@ def ask_about_pet_request(ngrams, vars):
     found_question = {}
     logger.info(f"ask_about_pet_request, my_pets {my_pets} user_has_not {user_has_not} users_pet {users_pet} "
                 f"bot_asked_pet {bot_asked_pet} isyes {isyes} user_has {user_has} user_told_pet {user_told_pet} "
-                f"user_mentioned_pet {user_mentioned_pet} user_has_pet {user_has_pet}")
+                f"user_mentioned_pet {user_mentioned_pet} user_has_pet {user_has_pet} found_pet {found_pet}")
     if not my_pets and not user_has_not and (users_pet or (bot_asked_pet and (isyes or user_has)) or user_told_pet
                                              or user_mentioned_pet or user_has_pet):
         for elem in USER_PETS_Q:
@@ -351,8 +351,8 @@ def ask_about_pet_request(ngrams, vars):
                     found_keywords = any([keyword in user_uttr["text"] for keyword in keywords])
                 if not found_attr and not found_keywords:
                     flag = True
-                if found_question.get("what", "") == "breed" and (users_pet and users_pet not in CATS_DOGS) \
-                        or (found_pet and found_pet[0] not in CATS_DOGS):
+                if found_question.get("what", "") == "breed" and ((users_pet and users_pet not in CATS_DOGS)
+                                                                  or (found_pet and found_pet[0] not in CATS_DOGS)):
                     flag = False
                 logger.info(f"ask_about_pet, what {found_question.get('what', '')} found_attr {found_attr} "
                             f"found_keywords {found_keywords}")

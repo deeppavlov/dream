@@ -39,6 +39,7 @@ DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE
 DO_YOU_HAVE_TEMPLATE = re.compile(r"do you have (a |an |the |any |some )?(cat|dog|puppy|kitty|kitten|rat|fish|parrot"
                                   r"|hamster|\bpet|\bpets)", re.IGNORECASE)
 NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog)", re.IGNORECASE)
+ANIMAL_BLACKLIST = {"animal", "animals"}
 
 breed_replace_dict = {"lab": "labrador"}
 pet_games = {"dog": ["frisbee", "hide and seek"], "cat": ["run and fetch"]}
@@ -245,3 +246,9 @@ ANIMALS_WIKI_Q = {"distribution": "Would you like to know where {} live?",
                   "cultural": "Do you want to hear about {} in popular culture?",
                   "culture": "Do you want to hear about {} in popular culture?",
                   "relationship with humans": "Would you like to hear about relationship of {} with humans?"}
+
+ANIMALS_COBOT_Q = ["Would you like to know more about {}?",
+                   "Do you want to hear more about {}?",
+                   "Should I continue?",
+                   "Do you want more details?",
+                   "What is your opinion?"]

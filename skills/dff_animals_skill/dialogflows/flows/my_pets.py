@@ -270,11 +270,12 @@ def my_pet_response(vars):
     make_my_pets_info(vars)
     response = ""
     continue_flag = common_constants.MUST_CONTINUE
+    conf = CONF_1
     if my_pet:
         fact_dict = find_fact(vars, MY_PET_FACTS, my_pet)
         fact = fact_dict.get("statement", "")
         question = fact_dict.get("question", "")
-        answer, *_, continue_flag = answer_users_question(vars)
+        answer, _, conf, continue_flag = answer_users_question(vars)
         response = f"{answer} {fact} {question}".strip().replace("  ", " ")
     if my_pet == "cat":
         state_utils.save_to_shared_memory(vars, told_about_cat=True)
@@ -286,7 +287,7 @@ def my_pet_response(vars):
         state_utils.save_to_shared_memory(vars, start_about_dog=False)
     state_utils.save_to_shared_memory(vars, start=True)
     if response:
-        state_utils.set_confidence(vars, confidence=CONF_2)
+        state_utils.set_confidence(vars, confidence=conf)
         state_utils.set_can_continue(vars, continue_flag=continue_flag)
     else:
         state_utils.set_confidence(vars, confidence=CONF_4)

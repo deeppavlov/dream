@@ -14,7 +14,8 @@ from common.dialogflow_framework.utils.condition import get_last_state
 from common.universal_templates import if_chat_about_particular_topic, if_lets_chat, NOT_LIKE_PATTERN
 from common.utils import is_yes, is_no
 from common.animals import PETS_TEMPLATE, PETS_TEMPLATE_EXT, ANIMALS_FIND_TEMPLATE, LIKE_ANIMALS_REQUESTS, \
-    WILD_ANIMALS, WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, NOT_SWITCH_TEMPLATE, DO_YOU_HAVE_TEMPLATE
+    WILD_ANIMALS, WHAT_PETS_I_HAVE, HAVE_LIKE_PETS_TEMPLATE, TRIGGER_PHRASES, NOT_SWITCH_TEMPLATE, \
+    DO_YOU_HAVE_TEMPLATE, ANIMAL_BLACKLIST
 from common.wiki_skill import if_linked_to_wiki_skill
 from common.animals import stop_about_animals, find_entity_by_types, find_entity_conceptnet
 
@@ -23,6 +24,7 @@ from dialogflows.flows.my_pets_states import State as MyPetsState
 from dialogflows.flows.user_pets_states import State as UserPetsState
 from dialogflows.flows.wild_animals_states import State as WildAnimalsState
 from dialogflows.flows.animals_states import State as AS
+from dialogflows.flows.animals_utils import find_in_animals_list
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -150,9 +152,11 @@ def user_likes_animal_request(ngrams, vars):
     annotations = user_uttr["annotations"]
     found_animal_cnet = find_entity_conceptnet(annotations, ["animal"])
     found_animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
+    found_animal_in_list = find_in_animals_list(annotations)
     found_pet = re.search(PETS_TEMPLATE, user_uttr["text"])
     found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
-    if not found_pet and (found_animal_cnet or found_animal_wp) and not is_last_state(vars, "SYS_WHAT_ANIMALS") \
+    if not found_pet and (found_animal_cnet or (found_animal_wp and found_animal_wp not in ANIMAL_BLACKLIST)
+                          or found_animal_in_list) and not is_last_state(vars, "SYS_WHAT_ANIMALS") \
             and not found_blacklist:
         flag = True
     logger.info(f"user_likes_animal_request={flag}")
@@ -169,22 +173,6 @@ def mention_pets_request(ngrams, vars):
     if re.search(PETS_TEMPLATE, text) and not started and not dont_like and not found_blacklist:
         flag = True
     logger.info(f"mention_pets_request={flag}")
-    return flag
-
-
-def mention_animals_request(ngrams, vars):
-    flag = False
-    text = state_utils.get_last_human_utterance(vars)["text"]
-    shared_memory = state_utils.get_shared_memory(vars)
-    started = shared_memory.get("start", False)
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    if find_entity_conceptnet(annotations, ["animal"]) and not started:
-        flag = True
-    dont_like = re.findall(NOT_LIKE_PATTERN, text)
-    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, text)
-    if dont_like or if_link_from_wiki_skill(vars) or found_blacklist:
-        flag = False
-    logger.info(f"mention_animals_request={flag}")
     return flag
 
 
@@ -398,23 +386,6 @@ def mention_pets_response(vars):
     return response
 
 
-def mention_animals_response(vars):
-    make_my_pets_info(vars)
-    annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    animal = ""
-    conceptnet = annotations.get("conceptnet", {})
-    for elem, triplets in conceptnet.items():
-        if "SymbolOf" in triplets:
-            objects = triplets["SymbolOf"]
-            if "animal" in objects:
-                animal = elem
-    response = f"Awesome! Do you like {animal}?"
-    state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.set_confidence(vars, confidence=CONF_4)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
-    return response
-
-
 def what_wild_response(vars):
     make_my_pets_info(vars)
     what_i_like = random.choice(WILD_ANIMALS)
@@ -444,8 +415,7 @@ simplified_dialog_flow.add_user_serial_transitions(
         AS.SYS_WHAT_ANIMALS: sys_what_animals_request,
         (scopes.WILD_ANIMALS, WildAnimalsState.SYS_ANIMAL_Q): user_likes_animal_request,
         AS.SYS_WHAT_WILD_ANIMALS: what_wild_request,
-        AS.SYS_MENTION_PETS: mention_pets_request,
-        AS.SYS_MENTION_ANIMALS: mention_animals_request,
+        AS.SYS_MENTION_PETS: mention_pets_request
     },
 )
 
@@ -482,19 +452,10 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
-simplified_dialog_flow.add_user_serial_transitions(
-    AS.USR_MENTION_ANIMALS,
-    {
-        (scopes.WILD_ANIMALS, WildAnimalsState.USR_START): user_likes_request,
-        (scopes.ANIMALS, AS.USR_START): user_not_likes_request,
-    },
-)
-
 simplified_dialog_flow.add_system_transition(AS.SYS_WHAT_ANIMALS, AS.USR_WHAT_ANIMALS, what_animals_response, )
 simplified_dialog_flow.add_system_transition(AS.SYS_DO_YOU_HAVE, AS.USR_HAVE_PETS, do_you_have_pets_response, )
 simplified_dialog_flow.add_system_transition(AS.SYS_WHAT_WILD_ANIMALS, AS.USR_WHAT_WILD_ANIMALS, what_wild_response, )
 simplified_dialog_flow.add_system_transition(AS.SYS_MENTION_PETS, AS.USR_MENTION_PETS, mention_pets_response, )
-simplified_dialog_flow.add_system_transition(AS.SYS_MENTION_ANIMALS, AS.USR_MENTION_ANIMALS, mention_animals_response, )
 simplified_dialog_flow.add_system_transition(AS.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
 
 simplified_dialog_flow.set_error_successor(AS.USR_START, AS.SYS_ERR)
@@ -504,7 +465,5 @@ simplified_dialog_flow.set_error_successor(AS.SYS_WHAT_WILD_ANIMALS, AS.SYS_ERR)
 simplified_dialog_flow.set_error_successor(AS.USR_WHAT_WILD_ANIMALS, AS.SYS_ERR)
 simplified_dialog_flow.set_error_successor(AS.SYS_MENTION_PETS, AS.SYS_ERR)
 simplified_dialog_flow.set_error_successor(AS.USR_MENTION_PETS, AS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(AS.SYS_MENTION_ANIMALS, AS.SYS_ERR)
-simplified_dialog_flow.set_error_successor(AS.USR_MENTION_ANIMALS, AS.SYS_ERR)
 
 dialogflow = simplified_dialog_flow.get_dialogflow()

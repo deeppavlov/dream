@@ -61,9 +61,9 @@ services:
       replicas: 8
       resources:
         limits:
-          memory: 256M
+          memory: 356M
         reservations:
-          memory: 256M
+          memory: 356M
 
   cobot-topics:
     build:
