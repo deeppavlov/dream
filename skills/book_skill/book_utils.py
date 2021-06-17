@@ -642,3 +642,10 @@ def find_by(annotated_user_phrase):
         return answer
     else:
         return ''
+
+
+WHAT_TEMPLATE = re.compile(r"what (is|it)", re.IGNORECASE)
+
+
+def what(annotated_user_phrase):
+    return re.search(WHAT_TEMPLATE, annotated_user_phrase['text'])

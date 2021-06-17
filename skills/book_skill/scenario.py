@@ -17,7 +17,8 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     parse_author_best_book, GENRE_PHRASES, was_question_about_book, favorite_book_template, exit_skill, \
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, find_by, \
     best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, if_loves_reading, \
-    my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request
+    my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request, \
+    what
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -65,10 +66,9 @@ USER_DISLIKED_BOOK_PHRASE = "It's OK. Maybe some other books will fit you better
 OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
                                    "Did you find this book interesting?",
                                    "Was this book exciting for you?"]
-BOOK_ACKNOWLEDGEMENT_PHRASE = 'Never heard about it. Is it a book, an author or a genre?'
-WILL_CHECK = 'I will check it out later.'
+WILL_CHECK = 'Never heard about it. I will check it out later.'
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
-BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE]
+BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST]
 QUESTIONS_ABOUT_BOOK = BOOK_SKILL_QUESTIONS + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
 CURRENT_YEAR = datetime.datetime.today().year
 
@@ -124,7 +124,10 @@ class BookSkillScenario:
                                            for k in [PROPOSE_FAVOURITE_BOOK, FAVOURITE_BOOK_ANSWERS[0]]])
         not_finished = FAVOURITE_BOOK_ANSWERS[1] not in human_attr['book_skill']['used_phrases']
         user_agreed = is_yes(annotated_user_phrase)
-        return user_asked_favourite_book or (bot_proposed_favourite_book and user_agreed) and not_finished
+        asked_what = what(annotated_user_phrase)
+        return any([user_asked_favourite_book,
+                    asked_what,
+                    bot_proposed_favourite_book and user_agreed]) and not_finished
 
     def genrebook_request_detected(self, annotated_user_phrase, bot_phrases):
         was_bot_phrase = WHAT_IS_FAV_GENRE in bot_phrases[-1]
@@ -161,8 +164,11 @@ class BookSkillScenario:
         we_asked_about_book = any([phrase in bot_phrases[-1]
                                    for phrase in QUESTIONS_ABOUT_BOOK])
         regexp_found_author = find_by(annotated_user_phrase)
+        we_repeated = '#+#repeat' in bot_phrases[-1]
         if we_asked_about_book and nothing_found:
-            if is_yes(annotated_user_phrase):
+            if we_repeated:
+                reply = self.book_linkto_reply('', human_attr)
+            elif is_yes(annotated_user_phrase) or annotated_user_phrase['annotations']['ner'] == [[]]:
                 reply, confidence = f'{bot_phrases[-1]} #+#repeat', self.default_conf
             elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
                 reply, confidence = BOOK_ANY_PHRASE, self.default_conf
@@ -172,10 +178,8 @@ class BookSkillScenario:
                 if not human_attr['book_skill'].get('we_asked_genre', False):
                     reply = self.book_linkto_reply(reply, human_attr)
                     confidence = self.default_conf
-            elif BOOK_ACKNOWLEDGEMENT_PHRASE not in bot_phrases[-1]:
-                reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
             else:
-                reply = self.book_linkto_reply(f'OK, {WILL_CHECK}', human_attr)
+                reply = self.book_linkto_reply(f'{WILL_CHECK}', human_attr)
                 confidence = self.default_conf
         elif is_wikidata_entity(plain_author_name):
             author_name = entity_to_label(plain_author_name)
@@ -224,8 +228,8 @@ class BookSkillScenario:
             else:
                 reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
 
-            if len(bookname.split()) > 1 and bookname.lower() in annotated_user_phrase['text'].lower():
-                # if book title is long enough and is in user reply,we set super conf
+            if len(bookname.split()) > 1 and we_asked_about_book:
+                # if book title is long enough, we set super conf
                 confidence = self.super_conf
             else:
                 confidence = self.default_conf
@@ -420,6 +424,8 @@ class BookSkillScenario:
                     if book and not is_no(annotated_user_phrase):
                         logger.debug(f'Making genre request')
                         reply, confidence = f'{HAVE_YOU_READ_BOOK}{book}?', self.default_conf
+                        if get_genre(annotated_user_phrase['text']):
+                            confidence = self.super_conf
                         human_attr['book_skill']['book'] = book
                     else:
                         reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,

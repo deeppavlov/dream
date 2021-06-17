@@ -23,7 +23,7 @@ TOPIC_PATTERNS = {
     "school": re.compile(r"(\bschool|\bstudy|\beducation|\bexams?\b|\bexamination|\blearning|\bhomework)",
                          re.IGNORECASE),
     "sex": re.compile(r"(\bsex|\bporn\b|\bporno|\bdicks?\b|\bvagina|\bpuss(y|ies)\b|\bcocks?\b"
-                      r"|\bmasturbat|\bpoop)", re.IGNORECASE),
+                      r"|\bmasturbat|\bpoop|\bfart(ing|ed|s)?\b|\bpenis|\bdrugs?\b|\bfucking\b)", re.IGNORECASE),
     "sports": re.compile(r"(\bsport|\bfootball|\bbaseball|\bbasketball|\bhockey|\bsoccer)", re.IGNORECASE),
     "star wars": re.compile(r"(\bstar war\b|\bstar wars\b|\bsky walker|\bskywalker|\byoda)", re.IGNORECASE),
     "superheroes": re.compile(r"(\bsuperhero|\bsuper hero|\bhero(es|ism)?\b|\bmarvel|\bnemesis|\bvigilante|\bvillain"
