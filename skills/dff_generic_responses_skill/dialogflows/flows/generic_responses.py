@@ -249,7 +249,7 @@ def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_regist
         response = user_name + current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response = user_name+random.choice(sustain_monitor)  #можно добавить имя пользователя
     if 'Affirm' in predicted_sf:
-        response = random.choice(reply_affirm + "Yeah," + word_tokenize(previous_phrase)[-1])
+        response = random.choice(reply_affirm)
     if 'Disawow' in predicted_sf:
         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response=random.choice(reply_disawow)
@@ -308,7 +308,6 @@ def usr_response_to_speech_function_response(vars):
             return error_response(vars)
 
         last_phrase_function = list(sf_functions)[-1]
-        last_phrase = last_phrase_function[0]
 
         sf_predictions = current_utils.get_speech_function_predictions_for_human_utterance(human_utterance)
         logger.info(f"Proposed Speech Functions: {sf_predictions}")
@@ -323,7 +322,7 @@ def usr_response_to_speech_function_response(vars):
 
         for sf_prediction in sf_predictions_for_last_phrase:
             prediction = sf_prediction["prediction"]
-            generic_response = generate_response(vars, prediction, last_phrase, False, "")
+            generic_response = generate_response(vars, prediction, last_phrase_function, False, "")
             if generic_response is not None:
                 generic_responses.append(generic_response)
 
