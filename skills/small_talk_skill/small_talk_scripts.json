@@ -14,13 +14,13 @@
         "Have you ever felt just totally gripped by a book, where you're on the edge of your seat with every page you turn?",
         {
             "yes": [
-                "Oh, some books have so many details and interesting ideas that I need to read it again. What's your favorite book?"
+                "Oh, some books have so many details and interesting ideas that I need to read it again. What is your favorite book?"
             ],
             "no": [
                 "Huh. Interesting. Does it mean you prefer non-fiction literature?",
                 {
-                    "yes": "Aha, I thought so! What's your favorite book?",
-                    "no": "Hmm, now I'm puzzled. Let me think... What's your favorite book I wonder?"
+                    "yes": "Aha, I thought so! What is your favorite book?",
+                    "no": "Hmm, now I'm puzzled. Let me think... What's a book you would recommend to your friend?"
                 }
             ]
         }
