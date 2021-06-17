@@ -280,13 +280,9 @@ special_topics = {"art":
                    "pattern": "(school|home work|homework|study)"},
                   "work":
                   {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "(ok|yes|ok|yeah|yup|i) work"}, "user", True]],
-                                           [[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "^work[\\.!]?$"}, "user", True]],
-                                           [[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "i ('m|was) working"}, "user", True]]],
+                                            [{"pattern": r"^work(ed|s|ing)?\b"}, "user", True]]],
                                   "can_continue": "must"}],
-                   "pattern": "\\bwork"}
+                   "pattern": r"\bwork(ed|s|ing)?\b"}
                   }
 
 
@@ -391,7 +387,9 @@ def find_entity_by_types(annotations, types_to_find, relations=None):
                 type_ids = [elem for elem, label in types]
                 logger.info(f"types_to_find {types_to_find} type_ids {type_ids}")
                 inters = set(type_ids).intersection(types_to_find)
-                if inters:
+                conf = triplets["conf"]
+                pos = triplets.get("pos", 5)
+                if inters and conf > 0.6 and pos < 2:
                     found_entity_wp = entity
                     found_types = list(inters)
                     entity_triplets = {}

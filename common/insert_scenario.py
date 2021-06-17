@@ -186,7 +186,7 @@ def extract_and_save_subtopic(vars):
         condition = expected_subtopic_info["cond"]
         flag = check_condition(condition, user_uttr, bot_uttr, shared_memory)
         logger.info(f"expected_subtopic_info {expected_subtopic_info} flag {flag}")
-        if subtopic not in subtopics:
+        if flag and subtopic not in subtopics:
             subtopics.append(subtopic)
         if flag:
             state_utils.save_to_shared_memory(vars, subtopics=subtopics)
@@ -398,6 +398,70 @@ def check_used_subtopic_utt(vars, topic_config, subtopic):
     return flag
 
 
+def make_resp_list(vars, utt_list, topic_config, shared_memory):
+    resp_list = []
+    found_topic = shared_memory.get("special_topic", "")
+    user_info = shared_memory.get("user_info", {})
+    logger.info(f"make_smalltalk_response, user_info {user_info}")
+    for utt in utt_list:
+        utt_slots = re.findall(r"{(.*?)}", utt)
+        if not utt_slots:
+            resp_list.append(utt)
+        else:
+            entity_triplets = shared_memory.get("entity_triplets", {})
+            for slot in utt_slots:
+                slot_value = ""
+                if slot.startswith("["):
+                    slot_strip = slot.strip("[]")
+                    slot_keys = slot_strip.split(", ")
+                    bot_data = topic_config.get(found_topic, {}).get("bot_data", {})
+                    if slot_keys and slot_keys[0] == "bot_data" and bot_data:
+                        slot_value = bot_data
+                        for key in slot_keys[1:]:
+                            if key in user_info:
+                                key = user_info[key]
+                            slot_value = slot_value[key]
+                    elif slot_keys and slot_keys[0] != "bot_data" and slot_keys[0] in user_info:
+                        user_var_name = slot_keys[0]
+                        user_var_val = user_info[user_var_name]
+                        relation = slot_keys[1]
+                        objects = entity_triplets.get(user_var_val, {}).get(relation, "")
+                        if len(objects) == 1:
+                            slot_value = objects[0]
+                        elif len(objects) == 2:
+                            slot_value = f"{objects[0]} and {objects[1]}"
+                        elif len(objects) > 2:
+                            slot_value = ", ".join(objects[:2]) + " and " + objects[2]
+                        slot_value = slot_value.strip().replace("  ", " ")
+                else:
+                    slot_value = user_info.get(slot, "")
+                if slot_value:
+                    slot_repl = "{" + slot + "}"
+                    utt = utt.replace(slot_repl, slot_value)
+            if "{" not in utt:
+                resp_list.append(utt)
+    return resp_list
+
+
+def check_acknowledgements(vars, topic_config):
+    response = ""
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    found_topic = shared_memory.get("special_topic", "")
+    if found_topic:
+        ackns = topic_config[found_topic].get("ackn", [])
+        for ackn in ackns:
+            condition = ackn["cond"]
+            if check_condition(condition, user_uttr, bot_uttr, shared_memory):
+                answer = ackn["answer"]
+                resp_list = make_resp_list(vars, answer, topic_config, shared_memory)
+                if resp_list:
+                    response = " ".join(resp_list).strip().replace("  ", " ")
+                    break
+    return response
+
+
 def answer_users_question(vars, topic_config):
     shared_memory = state_utils.get_shared_memory(vars)
     found_topic = shared_memory.get("special_topic", "")
@@ -456,50 +520,18 @@ def start_or_continue_scenario(vars, topic_config):
 
 
 def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_utt_nums, num):
-    found_topic = shared_memory.get("special_topic", "")
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
     response = ""
     utt_list = utt_info["utt"]
-    resp_list = []
-    user_info = shared_memory.get("user_info", {})
-    logger.info(f"make_smalltalk_response, user_info {user_info}")
-    for utt in utt_list:
-        utt_slots = re.findall(r"{(.*?)}", utt)
-        logger.info(f"utt_slots {utt_slots}")
-        if not utt_slots:
-            resp_list.append(utt)
-        else:
-            entity_triplets = shared_memory.get("entity_triplets", {})
-            for slot in utt_slots:
-                slot_value = ""
-                if slot.startswith("["):
-                    slot_strip = slot.strip("[]")
-                    slot_keys = slot_strip.split(", ")
-                    bot_data = topic_config.get(found_topic, {}).get("bot_data", {})
-                    if slot_keys and slot_keys[0] == "bot_data" and bot_data:
-                        slot_value = bot_data
-                        for key in slot_keys[1:]:
-                            if key in user_info:
-                                key = user_info[key]
-                            slot_value = slot_value[key]
-                    elif slot_keys and slot_keys[0] != "bot_data" and slot_keys[0] in user_info:
-                        user_var_name = slot_keys[0]
-                        user_var_val = user_info[user_var_name]
-                        relation = slot_keys[1]
-                        objects = entity_triplets.get(user_var_val, {}).get(relation, "")
-                        if len(objects) == 1:
-                            slot_value = objects[0]
-                        elif len(objects) == 2:
-                            slot_value = f"{objects[0]} and {objects[1]}"
-                        elif len(objects) > 2:
-                            slot_value = ", ".join(objects[:2]) + " and " + objects[2]
-                        slot_value = slot_value.strip().replace("  ", " ")
-                else:
-                    slot_value = user_info.get(slot, "")
-                if slot_value:
-                    slot_repl = "{" + slot + "}"
-                    utt = utt.replace(slot_repl, slot_value)
-            if "{" not in utt:
-                resp_list.append(utt)
+    found_ackn = ""
+    ackns = utt_info.get("ackn", [])
+    for ackn in ackns:
+        condition = ackn["cond"]
+        if check_condition(condition, user_uttr, bot_uttr, shared_memory):
+            found_ackn = ackn["answer"]
+            break
+    resp_list = make_resp_list(vars, utt_list, topic_config, shared_memory)
     if resp_list:
         response = " ".join(resp_list).strip().replace("  ", " ")
         used_utt_nums.append(num)
@@ -509,8 +541,8 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
         expected_subtopic_info = utt_info.get("expected_subtopic_info", {})
-        if expected_subtopic_info:
-            state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
+        state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
+        response = f"{found_ackn} {response}".strip().replace("  ", " ")
     return response, used_utt_nums
 
 
@@ -565,6 +597,7 @@ def smalltalk_response(vars, topic_config):
 
     extract_and_save_entity(vars)
     extract_and_save_subtopic(vars)
+    logger.info(f"subtopics {shared_memory.get('subtopics', [])}")
     subtopics_to_delete = 0
     if found_topic:
         used_utt_nums_dict = shared_memory.get("used_utt_nums", {})
@@ -608,7 +641,8 @@ def smalltalk_response(vars, topic_config):
             state_utils.save_to_shared_memory(vars, subtopics=subtopics)
 
         logger.info(f"used_utt_nums_dict {used_utt_nums_dict} used_utt_nums {used_utt_nums}")
-    answer = answer_users_question(vars, topic_config)
+    acknowledgement = check_acknowledgements(vars, topic_config)
+    answer = answer_users_question(vars, topic_config) or acknowledgement
     response = f"{answer} {response}".strip().replace("  ", " ")
     logger.info(f"response {response}")
     if response:
