@@ -228,8 +228,8 @@ class BookSkillScenario:
             else:
                 reply = f"{AMAZING_READ_BOOK} {WHEN_IT_WAS_PUBLISHED}"
 
-            if len(bookname.split()) > 1 and bookname.lower() in annotated_user_phrase['text'].lower():
-                # if book title is long enough and is in user reply,we set super conf
+            if len(bookname.split()) > 1 and we_asked_about_book:
+                # if book title is long enough, we set super conf
                 confidence = self.super_conf
             else:
                 confidence = self.default_conf
@@ -424,6 +424,8 @@ class BookSkillScenario:
                     if book and not is_no(annotated_user_phrase):
                         logger.debug(f'Making genre request')
                         reply, confidence = f'{HAVE_YOU_READ_BOOK}{book}?', self.default_conf
+                        if get_genre(annotated_user_phrase['text']):
+                            confidence = self.super_conf
                         human_attr['book_skill']['book'] = book
                     else:
                         reply, confidence, human_attr = self.get_author_book_genre_movie_reply(annotated_user_phrase,
