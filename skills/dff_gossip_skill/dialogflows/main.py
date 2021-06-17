@@ -31,13 +31,17 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow
 ##################################################################################################################
 ##################################################################################################################
 
+
+def true_request(ngrams, vars):
+    return gossip_flow.sys_topic_to_event_request(ngrams, vars) or gossip_flow.sys_celebrity_found_request(
+        ngrams, vars)
+
+
 for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
         {
-            (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_flow.sys_topic_to_event_request,
-            # (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_flow.sys_mentions_another_person_request,
-            (scopes.GOSSIP, gossip_flow.State.USR_START): gossip_flow.sys_celebrity_found_request,
+            (scopes.GOSSIP, gossip_flow.State.USR_START): true_request
         },
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)
