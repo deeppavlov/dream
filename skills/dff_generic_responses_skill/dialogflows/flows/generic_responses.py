@@ -184,7 +184,7 @@ def is_supported_speech_function(human_utterance, bot_utterance):
 # Author: Lida Ostyakova
 ##################################################################################################################
 
-# sustain_monitor=['You know?', 'Alright?','Yeah?','See?','Right?']
+sustain_monitor=['You know?', 'Alright?','Yeah?','See?','Right?']
 # reply_agree=["Oh that's right. That's right.", "Yep.", "Right.", 'Sure', 'Indeed', 'I agree with you']
 # reply_disagree=['No', 'Hunhunh.', "I don't agree with you", "I disagree", "I do not think so", "I hardly think so",
 # "I can't agree with you"]
@@ -225,12 +225,14 @@ def clarify_response(previous_phrase):
 
 
 def confirm_response(previous_phrase):
-    track_confirm = ['Oh really?', ' Oh yeah?', 'Sure?', 'Are you sure?', 'Are you serious?', 'Yeah']
+    track_confirm = ['Oh really?', ' Oh yeah?', 'Sure?', 'Are you sure?', 'Are you serious?', 'Yeah?']
     if len(word_tokenize(previous_phrase)) > 5:
         next_sent = (word_tokenize(previous_phrase))[-1].capitalize() + '?'
     elif len(word_tokenize(previous_phrase)) < 4:
-        if 'I' in previous_phrase:
-            previous_phrase = re.sub('I', 'you', previous_phrase)
+        if 'you' in word_tokenize(previous_phrase):
+            previous_phrase =re.sub('you','me', previous_phrase)
+        if "I " in previous_phrase:
+            previous_phrase =re.sub('I','you', previous_phrase)
         next_sent = previous_phrase + '?'
     else:
         next_sent = random.choice(track_confirm)
@@ -249,7 +251,10 @@ def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_regist
     if 'Confirm' in predicted_sf:
         response = confirm_response(previous_phrase)
     if 'Monitor' in predicted_sf:
-        response = user_name + current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
+        if user_name!='':
+            response=user_name+', '+random.choice(sustain_monitor)
+        else:
+            response=current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response = user_name+random.choice(sustain_monitor)  #можно добавить имя пользователя
     if 'Affirm' in predicted_sf:
         response = random.choice(reply_affirm)
@@ -326,7 +331,7 @@ def usr_response_to_speech_function_response(vars):
         for sf_prediction in sf_predictions_for_last_phrase:
             prediction = sf_prediction["prediction"]
             generic_response = generate_response(vars, prediction, last_phrase_function, False, "")
-            if generic_response is not None:
+            if generic_response is not None and generic_response!='??':
                 generic_responses.append(generic_response)
 
         # get ack, body
