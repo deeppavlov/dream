@@ -215,7 +215,10 @@ def clarify_response(previous_phrase):
                 first_pron = 'You'
                 next_sent = first_pron + ' what?'
             else:
-                next_sent = word_tokenize(previous_phrase)[0] + ' what?'
+                if word_tokenize(previous_phrase)[0].lower()!='what': 
+                    next_sent=word_tokenize(previous_phrase)[0] + ' what?'
+                else: 
+                    next_sent='What?'  
         else:
             next_sent = 'What?'
     return next_sent
