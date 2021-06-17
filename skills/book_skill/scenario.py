@@ -65,10 +65,9 @@ USER_DISLIKED_BOOK_PHRASE = "It's OK. Maybe some other books will fit you better
 OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
                                    "Did you find this book interesting?",
                                    "Was this book exciting for you?"]
-BOOK_ACKNOWLEDGEMENT_PHRASE = 'Never heard about it. Is it a book, an author or a genre?'
-WILL_CHECK = 'I will check it out later.'
+WILL_CHECK = 'Never heard about it. I will check it out later.'
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
-BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST, BOOK_ACKNOWLEDGEMENT_PHRASE]
+BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST]
 QUESTIONS_ABOUT_BOOK = BOOK_SKILL_QUESTIONS + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
 CURRENT_YEAR = datetime.datetime.today().year
 
@@ -161,8 +160,11 @@ class BookSkillScenario:
         we_asked_about_book = any([phrase in bot_phrases[-1]
                                    for phrase in QUESTIONS_ABOUT_BOOK])
         regexp_found_author = find_by(annotated_user_phrase)
+        we_repeated = '#+#repeat' in bot_phrases[-1]
         if we_asked_about_book and nothing_found:
-            if is_yes(annotated_user_phrase):
+            if we_repeated:
+                reply = self.book_linkto_reply('', human_attr)
+            elif is_yes(annotated_user_phrase) or annotated_user_phrase['annotations']['ner'] == [[]]:
                 reply, confidence = f'{bot_phrases[-1]} #+#repeat', self.default_conf
             elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
                 reply, confidence = BOOK_ANY_PHRASE, self.default_conf
@@ -172,10 +174,8 @@ class BookSkillScenario:
                 if not human_attr['book_skill'].get('we_asked_genre', False):
                     reply = self.book_linkto_reply(reply, human_attr)
                     confidence = self.default_conf
-            elif BOOK_ACKNOWLEDGEMENT_PHRASE not in bot_phrases[-1]:
-                reply, confidence = BOOK_ACKNOWLEDGEMENT_PHRASE, self.default_conf
             else:
-                reply = self.book_linkto_reply(f'OK, {WILL_CHECK}', human_attr)
+                reply = self.book_linkto_reply(f'{WILL_CHECK}', human_attr)
                 confidence = self.default_conf
         elif is_wikidata_entity(plain_author_name):
             author_name = entity_to_label(plain_author_name)
