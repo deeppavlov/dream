@@ -483,11 +483,12 @@
                     "timeout": 2,
                     "url": "http://topic-recommendation:8113/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:topic_recommendation_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
+                    "annotators.sentseg",
+		    "annotators.cobot_topics"
                 ],
                 "state_manager_method": "add_annotation"
             },

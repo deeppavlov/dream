@@ -16,6 +16,7 @@ import common.personal_info as personal_info
 import common.game_cooperative_skill as game_cooperative_skill
 import common.travel as dff_travel_skill
 # import common.celebrities as dff_celebrity_skill
+import common.gaming as dff_gaming_skill
 import common.gossip as dff_gossip_skill
 import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
@@ -46,22 +47,24 @@ skills_phrases_map = {
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
     'dff_science_skill': set(dff_science_skill.skill_trigger_phrases()),
     'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
-    'dff_music_skill': set(dff_music_skill.skill_trigger_phrases())
+    'dff_music_skill': set(dff_music_skill.skill_trigger_phrases()),
+    'dff_gaming_skill': set(dff_gaming_skill.skill_trigger_phrases())
 }
 # TODO: adding new skill above, add here a conversational topic to the list, it will be used to offer topic in greeting
 LIST_OF_SCRIPTED_TOPICS = {
-    "news_api_skill": "news",
-    "dff_movie_skill": "movies",
     "book_skill": "books",
-    "game_cooperative_skill": "games",
-    "dff_travel_skill": "travel",
+    "news_api_skill": "news",
     "dff_animals_skill": "pets",
-    "dff_sport_skill": "sport",
-    "dff_food_skill": "food",
-    "dff_science_skill": "science",
-    "dff_music_skill": "music",
     # "dff_celebrity_skill": "celebrities"
-    "dff_gossip_skill": "gossips"
+    "dff_food_skill": "food",
+    "dff_gaming_skill": "games",
+    "dff_gossip_skill": "gossips",
+    "dff_movie_skill": "movies",
+    "dff_music_skill": "music",
+    "dff_science_skill": "science",
+    "dff_sport_skill": "sport",
+    "dff_travel_skill": "travel",
+    "game_cooperative_skill": "games",
 }
 
 SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
@@ -80,47 +83,39 @@ skills_link_to_weights = {
 }
 
 link_to_skill2key_words = {
-    "dff_movie_skill": ["movie"],
+    # "dff_movie_skill": ["movie"],
     "book_skill": ["book"],
     "game_cooperative_skill": ["game"],
     # 'dff_gaming_skill': ["game"], TODO: add when will be merged
     "dff_travel_skill": ["travel"],
-    "dff_animals_skill": ["animal"],
-    "dff_food_skill": ["food"],
+    # "dff_animals_skill": ["animal"],
+    # "dff_food_skill": ["food"],
     "dff_sport_skill": ["sport"],
-    "dff_gossip_skill": ["gossips"],
+    # "dff_gossip_skill": ["gossips"],
     "dff_science_skill": ["science"],
-    "dff_music_skill": ["music"],
+    # "dff_music_skill": ["music"],
 }
 
 link_to_skill2i_like_to_talk = {
-    "dff_movie_skill": [
-        "I felt so bored last days, so I've just finished to watch one more series. What TV series you watch?",
-        "I feel so sleepy because I watched movies all night. What is the last movie you watched?"
-    ],
     "book_skill": [
         "I'm choosing what book should I read next. What is the last book you have ever read?",
         "I have just read once again my favourite book. What is the last book you have ever read?",
     ],
-    "game_cooperative_skill": [
-        "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud. "
-        "do you love video games?",
-        "With this lockdown video games are my way to escape and thrive. do you love video games?",
+    "dff_animals_skill": [
+        "I think that pets are a great source of entertainment. Do you have pets at home?",
+        "We all know that pets are remarkable for their capacity to love. Do you have pets at home?",
     ],
     "dff_gaming_skill": [
         "Other bots told me that during the pandemic video games became more popular. "
         "What video game do you play these days?",
-        "One person I talked told me that working in game dev is very hard. They toil at nights and weekends until "
-        "their product  becomes  a masterpiece. What was the last game that impressed you?",
+        "One person I talked to told me that working in game dev is very hard. They toil at nights and weekends until "
+        "their product becomes a masterpiece. What was the last game that impressed you?",
     ],
-    "dff_travel_skill": [
-        "I'm choosing the direction for my next digital trip. What country would you like to travel next time?",
-        "I've recently stuck on travel web-site. And I’ve read so many interesting travel stories. "
-        "What city did you travel last time?",
-    ],
-    "dff_animals_skill": [
-        "I think that pets are a great source of entertainment. Do you have pets at home?",
-        "We all know that pets are remarkable for their capacity to love. Do you have pets at home?",
+    "dff_gossip_skill": [
+        "What really puzzles me about people is this habit of discussing interpersonal relations, be that about "
+        "friends or famous people. Speaking of famous people, is there someone whom you're interested in?",
+        "I don't usually talk about other people but famous ones often highlight the best and the worst about "
+        "humanity. I wonder if there's someone famous you're interested in?",
     ],
     "dff_food_skill": [
         "It is said that the best food in the world comes from your own country. "
@@ -130,22 +125,9 @@ link_to_skill2i_like_to_talk = {
         "The world's first breakfast cereal was created in 1863 and needed soaking overnight to be chewable. "
         "What is your typical breakfast?",
     ],
-    "dff_sport_skill": [
-        "I think that sports are great for toning up the body. What kind of sport do you like to do?",
-        "I think that in order for the body to always be healthy, we need to go in for sports. What sport do you do?",
-        "I often thought about what kind of sport I would play, so I want to ask you. What kind of sport do you enjoy?",
-    ],
-    "dff_gossip_skill": [
-        "What really puzzles me about people is this habit of discussing interpersonal relations, be that about "
-        "friends or famous people. Speaking of famous people, is there someone whom you're interested in?",
-        "I don't usually talk about other people but famous ones often highlight the best and the worst about "
-        "humanity. I wonder if there's someone famous you're interested in?",
-    ],
-    "dff_science_skill": [
-        "When I start to feel sad, I think about what humanity has achieved and it inspires me. "
-        "Do you often think about achievements in science?",
-        "Scientists find such beautiful solutions in science. "
-        "Are you inspired by the speed with which science is developing?",
+    "dff_movie_skill": [
+        "I felt so bored last days, so I've just finished to watch one more series. What TV series you watch?",
+        "I feel so sleepy because I watched movies all night. What is the last movie you watched?"
     ],
     "dff_music_skill": [
         "There are so many new songs released every day. I've listened music for all night. So cool! "
@@ -155,12 +137,33 @@ link_to_skill2i_like_to_talk = {
         "I listen music every day either to calm down or to cheer up myself. "
         "What music do you listen to calm down?",
     ],
-    "superheroes": [
-        "Yesterday I was watching several movies about superheroes. It captured all my imagination. "
-        "Would you like to talk about superheroes?",
+    "dff_science_skill": [
+        "When I start to feel sad, I think about what humanity has achieved and it inspires me. "
+        "Do you often think about achievements in science?",
+        "Scientists find such beautiful solutions in science. "
+        "Are you inspired by the speed with which science is developing?",
+    ],
+    "dff_sport_skill": [
+        "I think that sports are great for toning up the body. What kind of sport do you like to do?",
+        "I think that in order for the body to always be healthy, we need to go in for sports. What sport do you do?",
+        "I often thought about what kind of sport I would play, so I want to ask you. What kind of sport do you enjoy?",
+    ],
+    "dff_travel_skill": [
+        "I'm choosing the direction for my next digital trip. What country would you like to travel next time?",
+        "I've recently stuck on travel web-site. And I’ve read so many interesting travel stories. "
+        "What city did you travel last time?",
+    ],
+    "game_cooperative_skill": [
+        "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud. "
+        "do you love video games?",
+        "With this lockdown video games are my way to escape and thrive. do you love video games?",
     ],
     "school": [
         "I've never been to school, I've learned everything online. Do you want to talk about school?",
+    ],
+    "superheroes": [
+        "Yesterday I was watching several movies about superheroes. It captured all my imagination. "
+        "Would you like to talk about superheroes?",
     ],
 }
 

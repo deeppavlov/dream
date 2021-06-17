@@ -30,7 +30,7 @@ def get_igdb_client_token():
     try:
         token_data = requests.post(url, params=payload, timeout=timeout)
     except RequestException as e:
-        logger.warning(f"Request to {url} failed. `dff_gaming_skill` failed to build. {e}")
+        logger.warning(f"Request to {url} failed. `dff_gaming_skill` failed to get access to igdb.com. {e}")
         access_token = None
     else:
         token_data_json = token_data.json()
@@ -38,7 +38,7 @@ def get_igdb_client_token():
         if access_token is None:
             logger.warning(
                 f"Could not get access token for CLIENT_ID={CLIENT_ID} and CLIENT_SECRET={CLIENT_SECRET}. "
-                f"`dff_gaming_skill` failed to build\n"
+                f"`dff_gaming_skill` failed to get access to igdb.com\n"
                 f"payload={payload}\nurl={url}\ntimeout={timeout}\nresponse status code: {token_data.status_code}"
             )
     return access_token
@@ -54,14 +54,15 @@ class BearerAuth(requests.auth.AuthBase):
 
 
 CLIENT_TOKEN = get_igdb_client_token()
+logger.info(f"CLIENT_TOKEN={CLIENT_TOKEN}")
 if CLIENT_TOKEN is None:
+    IGDB_POST_KWARGS = None
+else:
     IGDB_POST_KWARGS = {
         "auth": BearerAuth(CLIENT_TOKEN),
         "headers": {"Client-ID": CLIENT_ID, "Accept": "application/json", "Content-Type": "text/plain"},
         "timeout": 1.0,
     }
-else:
-    IGDB_POST_KWARGS = None
 
 
 def get_game_description_for_first_igdb_candidate(name, results_sort_key):

@@ -809,8 +809,13 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
 def topic_recommendation_formatter(dialog: Dict):
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    utter_entities = [get_entities(utt, only_named=False, with_labels=True) for utt in dialog["human_utterances"]]
-    return [{"utter_entities_batch": [utter_entities]}]
+    active_skills, topics = [], []
+    for utt in dialog["utterances"]:
+        active_skills.append(utt.get("active_skill", ""))
+        topics += utt.get("annotations", {}).get('cobot_topics', {}).get("text", [])
+    active_skills = [skill for skill in active_skills if skill]
+    return [{"active_skills": [active_skills],
+             "cobot_topics": [topics]}]
 
 
 def personality_detection_formatter(dialog: Dict) -> List[List[str]]:

@@ -22,13 +22,13 @@ from common.movies import get_movie_template, praise_actor, praise_director_or_w
     WHAT_OTHER_MOVIE_TO_DISCUSS, CLARIFY_WHAT_MOVIE_TO_DISCUSS, MOVIE_COMPILED_PATTERN, ABOUT_MOVIE_TITLES_PHRASES, \
     DIFFERENT_SCRIPT_TEMPLATES, RECOMMEND_REQUEST_PATTERN, RECOMMEND_OFFER_PATTERN, RECOMMEND_OFFER_RESPONSE, \
     RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES, WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES, \
-    WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES, WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES
+    WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES, WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES, NOT_WATCHED_TEMPLATE, \
+    NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template, \
     find_first_complete_sentence, get_all_not_used_templates, COBOTQA_EXTRA_WORDS
 from nltk.tokenize import sent_tokenize
-from dialogflows.flows.utils import is_movie_title_question, LETTERS, NOT_WATCHED_TEMPLATE, \
-    NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE, recommend_movie_of_genre
+from dialogflows.flows.utils import is_movie_title_question, LETTERS, recommend_movie_of_genre
 from dialogflows.flows.templates import MovieSkillTemplates
 from dialogflows.flows.movie_plots import MoviePlots
 
@@ -68,7 +68,6 @@ class State(Enum):
     SYS_MENTIONED_MOVIES = auto()
 
     SYS_USER_REQUESTS_MOVIE_RECOMMENDATION = auto()
-    SYS_BOT_OFFERS_MOVIE_RECOMMENDATION = auto()
     SYS_REPEAT_RECOMMENDATION = auto()
     USR_WAS_OFFERED_RECOMMENDATIONS = auto()
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
@@ -208,6 +207,14 @@ def user_was_asked_about_movie_title_request(ngrams, vars):
 
 def user_refused_movie_title_question_request(ngrams, vars):
     if user_was_asked_about_movie_title(vars) and condition_utils.is_no_vars(vars):
+        return True
+    return False
+
+
+def user_was_asked_about_movie_title_and_declined_recommendations_request(ngrams, vars):
+    declined_recommendations_previously = state_utils.get_shared_memory(vars).get("recommendations_declined", False)
+    was_asked_movie_title_question = user_was_asked_about_movie_title_request(ngrams, vars)
+    if was_asked_movie_title_question and declined_recommendations_previously:
         return True
     return False
 
@@ -1125,12 +1132,18 @@ def recommendations_request(ngrams, vars):
     return recommendations_requested(vars)
 
 
-def recommendations_declined_request(ngrams, vars):
+def recommendations_declined(vars):
     recom_offer = RECOMMEND_OFFER_PATTERN.search(state_utils.get_last_bot_utterance(vars).get("text", ""))
     user_disagrees = condition_utils.is_no_vars(vars)
 
     if recom_offer and user_disagrees:
         logger.info(f"User doesn't want to get movies recommendations.")
+        return True
+    return False
+
+
+def recommendations_declined_request(ngrams, vars):
+    if recommendations_declined(vars):
         return True
     return False
 
@@ -1322,6 +1335,8 @@ def bot_asks_to_continue_movie_talk_response(vars):
             state_utils.set_confidence(vars, HIGH_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
 
+        if recommendations_declined(vars):
+            state_utils.save_to_shared_memory(vars, recommendations_declined=True)
         return response
 
     except Exception as exc:
@@ -1375,7 +1390,8 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LETS_CHAT_ABOUT_MOVIES: lets_chat_about_movies_request,
         State.SYS_FAQ: faq_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
-        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED:
+            user_was_asked_about_movie_title_and_declined_recommendations_request,
         State.SYS_MENTIONED_MOVIES: mentioned_movies_request,
     },
 )
@@ -1399,8 +1415,8 @@ simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_
 #  SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED
 
 simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED,
-                                            State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK,
-                                            bot_asks_to_continue_movie_talk_response)
+                                            State.USR_WAS_OFFERED_RECOMMENDATIONS,
+                                            bot_offers_movie_recommendation_response)
 
 ##################################################################################################################
 #  SYS_NOT_LIKE_MOVIES
@@ -1408,13 +1424,6 @@ simplified_dialogflow.add_system_transition(State.SYS_USR_WAS_ASKED_MOVIE_TITLE_
 simplified_dialogflow.add_system_transition(State.SYS_NOT_LIKE_MOVIES,
                                             State.USR_START,
                                             user_not_like_movies_response)
-
-##################################################################################################################
-#  SYS_BOT_OFFERS_MOVIE_RECOMMENDATION
-
-simplified_dialogflow.add_system_transition(State.SYS_BOT_OFFERS_MOVIE_RECOMMENDATION,
-                                            State.USR_WAS_OFFERED_RECOMMENDATIONS,
-                                            bot_offers_movie_recommendation_response)
 
 ##################################################################################################################
 #  SYS_USER_REQUESTS_MOVIE_RECOMMENDATION
@@ -1450,9 +1459,8 @@ simplified_dialogflow.add_system_transition(State.SYS_REPEAT_RECOMMENDATION,
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WAS_OFFERED_RECOMMENDATIONS,
     {
-        State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: is_yes_request,
         State.SYS_OFFER_CONTINUE_MOVIE_TALK: is_no_request,  # user declined recommendations, offer continue movie talk
-        State.SYS_MENTIONED_MOVIES: no_requests_request,  # not_confident_lets_chat_about_movies_response
+        State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WAS_OFFERED_RECOMMENDATIONS, State.SYS_ERR)
@@ -1519,7 +1527,9 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_EXTRACTED_MOVIE_TITLE: popular_movie_title_extracted_request,
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
-        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: no_requests_request
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED:
+            user_was_asked_about_movie_title_and_declined_recommendations_request,
+        State.SYS_OFFER_CONTINUE_MOVIE_TALK: no_requests_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_WAS_ASKED_MOVIE_TITLE_QUESTION, State.SYS_ERR)
@@ -1630,7 +1640,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HAVE_YOU_HEARD_FACT,
     {
         State.SYS_USER_REQUESTS_MOVIE_RECOMMENDATION: recommendations_request,  # if not fact & offered recommendations
-        State.SYS_MENTIONED_MOVIES: recommendations_declined_request,  # not_confident_lets_chat_about_movies_response
+        State.SYS_OFFER_CONTINUE_MOVIE_TALK: recommendations_declined_request,  # offer continue movie talk
         State.SYS_GIVE_FACT_ABOUT_MOVIE: give_more_fact_request,
         State.USR_WAS_OFFERED_RECOMMENDATIONS: no_requests_request,
     },

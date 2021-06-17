@@ -84,14 +84,8 @@ MOVIE_WORDS = r"(movie|film|picture|series|tv[ -]?show|reality[ -]?show|netflix|
               r"comedy|comedies|thriller|animation|anime|talk[ -]?show|cartoon|watch)"
 MOVIE_PATTERN = re.compile(MOVIE_WORDS, re.IGNORECASE)
 YEAR_TEMPLATE = re.compile(r"([0-9][0-9][0-9][0-9])", re.IGNORECASE)
-NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE = re.compile(
-    r"(don't|do not|not) (watch|watching|like) (movie|film|picture|series|"
-    r"tv[ -]?show|reality[ -]?show|netflix|\btv\b|comedy|comedies|thriller|"
-    r"animation|anime|talk[ -]?show|cartoon)", re.IGNORECASE)
 
-NOT_WATCHED_TEMPLATE = re.compile(r"(have|'ve|did|was|had|were)( never| not|n't) (seen|watch)", re.IGNORECASE)
-
-MOVIE_TITLE_QUESTION = re.compile(r"(what|which|do you)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
+MOVIE_TITLE_QUESTION = re.compile(r"(what|which)[a-zA-Z\- ']+" + MOVIE_WORDS + r"[a-zA-Z\- ']*\?",
                                   re.IGNORECASE)
 
 EXTRA_SPACE_TEMPLATE = re.compile(r"\s\s+")
@@ -117,7 +111,7 @@ def donot_chat_about_movies(uttr):
 
 def is_movie_title_question(uttr):
     curr_uttr_is_about_movies = re.search(MOVIE_TITLE_QUESTION, uttr.get("text", ""))
-    if curr_uttr_is_about_movies:
+    if curr_uttr_is_about_movies and "do you usually watch movies at home" not in uttr.get("text", ""):
         return True
     else:
         return False

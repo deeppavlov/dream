@@ -1,7 +1,9 @@
 import logging
 import os
+from datetime import datetime, timedelta
 
 import sentry_sdk
+from dateparser import parse
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
@@ -19,6 +21,14 @@ CONF_1 = 1.0
 CONF_092_CAN_CONTINUE = 0.92
 CONF_09_DONT_UNDERSTAND_DONE = 0.9
 CONF_0 = 0.0
+
+
+EXPERIENCE = {
+    "negative": timedelta(0),
+    "low": timedelta(180),
+    "moderate": timedelta(730),
+    "large": timedelta(2400),
+}
 
 
 def error_response(vars):
@@ -96,3 +106,41 @@ def link_to_other_skills_response(vars, prefix="Okay.", shared_memory_actions=No
             action(vars)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
+
+
+def extract_time_from_text(text):
+    result = []
+    tokens = text.split()
+    for num_tokens in range(len(tokens), 0, -1):
+        for start in range(0, len(tokens) - num_tokens + 1):
+            substr = ' '.join(tokens[start:start + num_tokens])
+            if substr in ["ago"]:
+                continue
+            parsed = parse(substr)
+            if parsed is not None:
+                result.append((substr, parsed))
+    return result
+
+
+def compose_experience_comment(user_text):
+    extracted = extract_time_from_text(user_text)
+    if extracted:
+        time = extracted[0][1]
+    else:
+        time = None
+    now = datetime.now() + timedelta(1)  # correction for possible effect of time zone
+    if time is None:
+        experience_comment = "Interesting."
+    else:
+        experience = now - time
+        if experience < EXPERIENCE["negative"]:
+            experience_comment = "It seems you came from the future. You probably know what will say next."
+        elif experience < EXPERIENCE["low"]:
+            experience_comment = "Oh, you are a beginner like me!"
+        elif experience < EXPERIENCE["moderate"]:
+            experience_comment = "So you are more experienced than me!."
+        elif experience < EXPERIENCE["large"]:
+            experience_comment = "It looks like you have a lot of experience with the game."
+        else:
+            experience_comment = "Wow! You have probably seen everything in the game."
+    return experience_comment, time is not None

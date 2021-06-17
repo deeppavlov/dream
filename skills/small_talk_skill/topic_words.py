@@ -23,14 +23,15 @@ TOPIC_PATTERNS = {
     "school": re.compile(r"(\bschool|\bstudy|\beducation|\bexams?\b|\bexamination|\blearning|\bhomework)",
                          re.IGNORECASE),
     "sex": re.compile(r"(\bsex|\bporn\b|\bporno|\bdicks?\b|\bvagina|\bpuss(y|ies)\b|\bcocks?\b"
-                      r"|\bmasturbat)", re.IGNORECASE),
+                      r"|\bmasturbat|\bpoop)", re.IGNORECASE),
     "sports": re.compile(r"(\bsport|\bfootball|\bbaseball|\bbasketball|\bhockey|\bsoccer)", re.IGNORECASE),
     "star wars": re.compile(r"(\bstar war\b|\bstar wars\b|\bsky walker|\bskywalker|\byoda)", re.IGNORECASE),
     "superheroes": re.compile(r"(\bsuperhero|\bsuper hero|\bhero(es|ism)?\b|\bmarvel|\bnemesis|\bvigilante|\bvillain"
                               r"|\bsidekick|\bcomics)", re.IGNORECASE),
     "travel": re.compile(r"(\btravel|\bjourney|\btour(ism|ists?|s)?\b|\btrips?\b|\bvoyage)", re.IGNORECASE),
     "donald trump": re.compile(r"(\btrump|\bdonald trump|\bamerican president|\bthe president)", re.IGNORECASE),
-    "video games": re.compile(r"(\bvideo ?game|\bgam(e|es|ing)\b|\bplay ?station|\bminecraft|\bgta\b)", re.IGNORECASE),
+    "video games": re.compile(r"(\bvideo ?game|\bgam(e|es|ing)\b|\bplay ?station|\bplaying\b"
+                              r"|\bminecraft|\bgta\b|\broblox\b|\bfortnite\b|\bx ?box\b)", re.IGNORECASE),
     "weather": re.compile(r"(\bweather|\bforecast)", re.IGNORECASE),
     "work": re.compile(r"(\bwork(ed|ing|s)?|\bjob\b|\boccupation|\bprofession)", re.IGNORECASE),
     "you": re.compile(r"(\babout you\b|\byourself|\bsocialbot|\babout alexa\b|\byou alexa\b"

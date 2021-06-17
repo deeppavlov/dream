@@ -2,9 +2,12 @@
 
 import logging
 import os
+import re
 import string
 from time import time
 
+import en_core_web_sm
+import inflect
 import numpy as np
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import WordNetLemmatizer
@@ -15,7 +18,7 @@ import sentry_sdk
 from cobotqa_service import send_cobotqa, TRAVEL_FACTS, FOOD_FACTS, ANIMALS_FACTS
 
 from common.travel import TOO_SIMPLE_TRAVEL_FACTS
-from common.utils import get_entities
+from common.utils import get_entities, COBOTQA_EXTRA_WORDS
 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
@@ -24,6 +27,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+nlp = en_core_web_sm.load()
+inflect_engine = inflect.engine()
 
 N_FACTS_TO_CHOSE = 1
 ASK_QUESTION_PROB = 0.5
@@ -75,6 +81,20 @@ def get_common_words(a: str, b: str, lemmatize: bool = True) -> set:
         tokens_a = {lemmatizer.lemmatize(t) for t in tokens_a}
         tokens_b = {lemmatizer.lemmatize(t) for t in tokens_b}
     return tokens_a & tokens_b
+
+
+def lemmatize_substr(text):
+    lemm_text = ""
+    if text:
+        pr_text = nlp(text)
+        processed_tokens = []
+        for token in pr_text:
+            if token.tag_ in ["NNS", "NNP"] and inflect_engine.singular_noun(token.text):
+                processed_tokens.append(inflect_engine.singular_noun(token.text))
+            else:
+                processed_tokens.append(token.text)
+        lemm_text = " ".join(processed_tokens)
+    return lemm_text
 
 
 bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
@@ -233,14 +253,23 @@ def respond():
                 for fact in FOOD_FACTS[resp_subj.lower()]:
                     if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
                         curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
-            if resp_subj and resp_subj.lower() in ANIMALS_FACTS:
-                for fact in ANIMALS_FACTS[resp_subj.lower()]:
-                    if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
-                        curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
+            if resp_subj:
+                if resp_subj.lower() in ANIMALS_FACTS:
+                    for fact in ANIMALS_FACTS[resp_subj.lower()]:
+                        if {"entity": resp_subj, "fact": fact} not in curr_resp["facts"]:
+                            curr_resp["facts"].append({"entity": resp_subj, "fact": fact})
+                lemm_resp_subj = lemmatize_substr(resp_subj.lower())
+                logger.info(f"cobot_qa, lemm_resp_subj {lemm_resp_subj}")
+                if lemm_resp_subj in ANIMALS_FACTS:
+                    for fact in ANIMALS_FACTS[lemm_resp_subj]:
+                        if {"entity": lemm_resp_subj, "fact": fact} not in curr_resp["facts"]:
+                            curr_resp["facts"].append({"entity": lemm_resp_subj, "fact": fact})
 
         # store only 5 facts maximum
-        curr_resp["facts"] = np.random.choice(
-            curr_resp["facts"], size=5) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
+        curr_resp["facts"] = list(np.random.choice(
+            curr_resp["facts"], size=5)) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
+        for curr_resp_item in curr_resp["facts"]:
+            curr_resp_item["fact"] = re.sub(COBOTQA_EXTRA_WORDS, "", curr_resp_item["fact"]).strip()
 
         final_responses.append(curr_resp)
     total_time = time() - st_time

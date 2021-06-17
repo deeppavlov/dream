@@ -17,6 +17,10 @@ from common.universal_templates import if_chat_about_particular_topic
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no
 
+from common.wiki_skill import dff_wiki_phrases
+from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
+    facts_response
+
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -27,6 +31,9 @@ logger = logging.getLogger(__name__)
 MUST_CONTINUE_CONFIDENCE = 1.0
 CAN_CONTINUE_CONFIDENCE = 0.98
 CANNOT_CONTINUE_CONFIDENCE = 0.0
+
+with open("./music_extension.json", 'r') as fl:
+    topic_config = json.load(fl)
 
 with open("./music_data.json", "r") as f:
     MUSIC_DATA = json.load(f)
@@ -120,6 +127,12 @@ class State(Enum):
     SYS_GOT_ADVICE = auto()
     USR_THANKS = auto()
     #
+    SYS_TOPIC_SMALLTALK = auto()
+    USR_TOPIC_SMALLTALK = auto()
+    #
+    SYS_TOPIC_FACT = auto()
+    USR_TOPIC_FACT = auto()
+    #
     SYS_ERR = auto()
     USR_ERR = auto()
     SYS_END = auto()
@@ -191,8 +204,11 @@ def lets_talk_about_request(ngrams, vars):
 def music_mention_request(ngrams, vars):
     # has any nounphrases in phrase -> music mention
     flag = False
-    flag = bool(re.search(music_words_re, state_utils.get_last_human_utterance(vars)["text"]))
-    flag = flag or get_genre(vars)[0]
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    found_dff_wiki_phrase = any([phrase in bot_uttr.get("text", "") for phrase in dff_wiki_phrases])
+    flag = bool(re.search(music_words_re, user_uttr["text"]))
+    flag = (flag or get_genre(vars)[0]) and not found_dff_wiki_phrase
     logger.info(f"music_mention_request {flag}")
     return flag
 
@@ -354,6 +370,8 @@ def get_genre(vars):
         return "80s"
     elif re.search(seventies_re, human_utt):
         return "70s"
+    elif human_utt in genres:
+        return True, human_utt
     wp_output = state_utils.get_last_human_utterance(vars)["annotations"].get("wiki_parser", {})
     all_entities_info = wp_output.get("entities_info", {})
     topic_skill_entities_info = wp_output.get("topic_skill_entities_info", {})
@@ -827,6 +845,32 @@ def what_listen_request(ngrams, vars):
     logger.info(f"what_listen_request {flag}")
     return flag
 
+##################################################################################################################
+# extension
+##################################################################################################################
+
+
+def special_topic_request(ngrams, vars):
+    flag = start_or_continue_scenario(vars, topic_config)
+    logger.info(f"special_topic_request={flag}")
+    return flag
+
+
+def special_topic_response(vars):
+    response = smalltalk_response(vars, topic_config)
+    return response
+
+
+def special_topic_facts_request(ngrams, vars):
+    flag = start_or_continue_facts(vars, topic_config)
+    logger.info(f"special_topic_facts_request={flag}")
+    return flag
+
+
+def special_topic_facts_response(vars):
+    response = facts_response(vars, topic_config)
+    return response
+
 
 ##################################################################################################################
 ##################################################################################################################
@@ -840,6 +884,7 @@ def what_listen_request(ngrams, vars):
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
         State.SYS_LETS_TALK_ABOUT: lets_talk_about_request,
         State.SYS_MENTION: music_mention_request,
         State.SYS_MUSIC: music_request,
@@ -848,6 +893,22 @@ simplified_dialogflow.add_user_serial_transitions(
     }
 
 
+)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_TOPIC_SMALLTALK,
+    {
+        State.SYS_TOPIC_FACT: special_topic_facts_request,
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
+    },
+)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_TOPIC_FACT,
+    {
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
+        State.SYS_TOPIC_FACT: special_topic_facts_request,
+    },
 )
 
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
@@ -972,6 +1033,7 @@ simplified_dialogflow.set_error_successor(State.USR_CHECK_OUT, State.SYS_ERR)
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_MUSIC,
     {
+        State.SYS_TOPIC_SMALLTALK: special_topic_request,
         State.SYS_KNOWN: known_request,
         State.SYS_UNKNOWN: unknown_request
     }
@@ -1151,6 +1213,18 @@ simplified_dialogflow.add_user_transition(
     end_request
 )
 simplified_dialogflow.set_error_successor(State.USR_THANKS, State.SYS_ERR)
+
+##################################################################################################################
+#  EXTENSION
+
+simplified_dialogflow.add_system_transition(State.SYS_TOPIC_SMALLTALK, State.USR_TOPIC_SMALLTALK,
+                                            special_topic_response, )
+simplified_dialogflow.add_system_transition(State.SYS_TOPIC_FACT, State.USR_TOPIC_FACT, special_topic_facts_response, )
+
+simplified_dialogflow.set_error_successor(State.SYS_TOPIC_SMALLTALK, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_TOPIC_SMALLTALK, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.SYS_TOPIC_FACT, State.SYS_ERR)
+simplified_dialogflow.set_error_successor(State.USR_TOPIC_FACT, State.SYS_ERR)
 
 ##################################################################################################################
 #  SYS_ERR

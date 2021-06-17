@@ -4,7 +4,7 @@ import os
 import sentry_sdk
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN
+from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, load_json
 from common.utils import is_yes
 
 import dialogflows.common.intents as common_intents
@@ -15,6 +15,9 @@ from dialogflows.common import game_info
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
 logger = logging.getLogger(__name__)
+
+
+MINECRAFT_HOW_TOS = load_json(os.getenv("MINECRAFT_HOW_TOS"))
 
 
 def is_game_candidate_minecraft(ngrams, vars):
@@ -54,4 +57,17 @@ def user_wants_to_talk_about_minecraft_request(ngrams, vars):
     else:
         flag = False
     logger.info(f"user_wants_to_talk_about_minecraft_request={flag}")
+    return flag
+
+
+def bot_will_give_another_how_to_request(ngrams, vars):
+    flag = common_intents.user_says_yes_request(ngrams, vars) \
+        and len(MINECRAFT_HOW_TOS) - len(state_utils.get_shared_memory(vars).get("used_how_to_indices", [])) >= 1
+    logger.info(f"bot_will_give_another_how_to={flag}")
+    return flag
+
+
+def bot_cannot_give_more_how_tos_request(ngrams, vars):
+    flag = not bot_will_give_another_how_to_request(ngrams, vars)
+    logger.info(f"bot_cannot_give_more_how_tos={flag}")
     return flag

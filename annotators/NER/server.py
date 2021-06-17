@@ -21,12 +21,10 @@ ner = ner_model.load_model()
 logger.info("ner model is loaded.")
 
 nltk_stopwords_file = "nltk_stopwords.txt"
-nltk_stopwords = ([line.strip() for line in open(nltk_stopwords_file, 'r').readlines()])
-BANNED_ENTITIES = ["okay", "ok", "oh", "name", "ocean", "hey", "cool", "corona", "pop", "rap",
-                   "aha", "aah", "ahh", "aww", "boo", "eh", "eww", "hmph", "oops", "ouch",
-                   "shh", "hush", "whew", "whoa", "hmm", "uhu", "huh", "wow", "yay", "yaay",
-                   "yippee", "yahoo", "hurray", "uh", "er", "um"]
-BANNED_ENTITIES = set(BANNED_ENTITIES + nltk_stopwords)
+NLTK_STOPWORDS = set([line.strip() for line in open(nltk_stopwords_file, 'r').readlines()])
+BANNED_ENTITIES = re.compile(r"\b(okay|ok|name|ocean|hey|cool|corona|pop|rap|bo+"
+                             r"|hmph|oops|ouch|sh+|hush|whew|whoa|uhu|huh|wow|ya+y|yip+e+|yahoo|hurray"
+                             r"|[aeou]+[mhrw]+[aeou]*|[mhrw]+[aeou]+[mhrw]+|[mhrw]+)\b", re.IGNORECASE)
 
 EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-]")
 DOUBLE_SPACES = re.compile(r"\s+")
@@ -36,9 +34,9 @@ with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines()[:500])
 
 
-def extract_good_entities(preds):
+def extract_good_entities(preds, sentences):
     good_preds = []
-    for entities_for_sent in preds:
+    for sent, entities_for_sent in zip(sentences, preds):
         good_entities_for_sent = []
 
         for ent in entities_for_sent:
@@ -46,7 +44,15 @@ def extract_good_entities(preds):
             # remove everything except of letters, digitals, spaces and -
             ent_text = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", ent_text)
             ent_text = DOUBLE_SPACES.sub(" ", ent_text).strip()
-            if ent_text not in BANNED_ENTITIES and ent_text not in UNIGRAMS and len(ent_text) > 2:
+
+            if ent_text == "alexa" and re.match("^alexa .+", sent):
+                # skip alexa if alexa is a first word of uttr
+                continue
+
+            is_not_stopword = ent_text not in NLTK_STOPWORDS and ent_text not in UNIGRAMS
+            is_long_enough = len(ent_text) > 2
+            is_not_banned = not re.match(BANNED_ENTITIES, ent_text)
+            if is_not_stopword and is_not_banned and is_long_enough:
                 good_entities_for_sent.append(deepcopy(ent))
 
         good_preds.append(good_entities_for_sent)
@@ -66,7 +72,7 @@ def get_predictions_for_list_sentences(sentences):
     #          [{'confidence': 1, 'end_pos': 4, 'start_pos': 3, 'text': 'valentine', 'type': 'PER'},
     #           {'confidence': 1, 'end_pos': 6, 'start_pos': 5, 'text': 'beatrice', 'type': 'PER'}]]
 
-    good_preds = extract_good_entities(preds)
+    good_preds = extract_good_entities(preds, sentences)
     return good_preds
 
 

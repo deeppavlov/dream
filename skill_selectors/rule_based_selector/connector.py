@@ -9,7 +9,7 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
-from common.emotion import is_joke_requested, if_turn_on_emotion
+from common.emotion import if_turn_on_emotion
 from common.gossip import check_is_celebrity_mentioned
 from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
 from common.movies import extract_movies_names_from_annotations
@@ -84,6 +84,11 @@ class RuleBasedSkillSelectorConnector:
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
+            if "cant_do" in intent_catcher_intents and "What do you do on weekdays?" in bot_uttr.get("text", ""):
+                high_priority_intent_detected = False
+                not_detected = {"detected": 0, "confidence": 0.0}
+                dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["cant_do"] = not_detected
+                dialog["utterances"][-1]["annotations"]["intent_catcher"]["cant_do"] = not_detected
 
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
@@ -196,9 +201,6 @@ class RuleBasedSkillSelectorConnector:
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
                     skills_for_uttr.append("weather_skill")
-
-                if is_joke_requested(user_uttr_text):
-                    skills_for_uttr.append("joke")
 
                 if if_turn_on_emotion(user_uttr, bot_uttr):
                     skills_for_uttr.append('emotion_skill')

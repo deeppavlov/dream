@@ -25,7 +25,7 @@ from common.travel import OPINION_REQUESTS_ABOUT_TRAVELLING, TRAVELLING_TEMPLATE
     COUNTERS_HAVE_YOU_BEEN_TEMPLATE, OKAY_ACKNOWLEDGEMENT_PHRASES, NOWHERE_TEMPLATE, TOO_SIMPLE_TRAVEL_FACTS
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_not_used_template, get_named_locations, \
-    get_all_not_used_templates, COBOTQA_EXTRA_WORDS
+    get_all_not_used_templates, COBOTQA_EXTRA_WORDS, get_entities
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -130,10 +130,15 @@ def choose_conf_decreasing_if_requests_in_human_uttr(vars, CONF_1, CONF_2):
         return CONF_2
 
 
-def get_mentioned_locations(vars):
-    user_mentioned_locations = get_named_locations(vars["agent"]["dialog"]["human_utterances"][-1])
-
-    return user_mentioned_locations
+def get_mentioned_locations(annotated_uttr):
+    mentioned_locations = get_named_locations(annotated_uttr)
+    if len(mentioned_locations) == 0:
+        named_entities = get_entities(annotated_uttr, only_named=True, with_labels=True)
+        if named_entities:
+            for ent in named_entities:
+                if ent["type"] == "ORG" and ent["text"] != "alexa":
+                    mentioned_locations.append(ent["text"])
+    return mentioned_locations
 
 
 def yes_request(ngrams, vars):
@@ -298,7 +303,7 @@ def linkto_personal_info_response(vars):
 
 def user_mention_named_entity_loc_request(ngrams, vars):
     # SYS_LOC_DETECTED
-    user_mentioned_locations = get_mentioned_locations(vars)
+    user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
     weather_forecast = "weather_forecast_intent" in get_intents(state_utils.get_last_human_utterance(vars),
                                                                 which="intent_catcher")
     prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
@@ -329,7 +334,7 @@ def user_was_asked_for_location_request(ngrams, vars):
 def user_not_mention_named_entity_loc_request(ngrams, vars):
     # SYS_LOC_NOT_DETECTED
     asked_for_loc = user_was_asked_for_location(vars)
-    user_mentioned_locations = get_mentioned_locations(vars)
+    user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
     weather_forecast = "weather_forecast_intent" in get_intents(state_utils.get_last_human_utterance(vars),
                                                                 which="intent_catcher")
     prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
@@ -346,7 +351,7 @@ def user_not_mention_named_entity_loc_request(ngrams, vars):
 def user_refused_to_mention_named_entity_loc_request(ngrams, vars):
     # SYS_REFUSED_TO_GIVE_LOC
     asked_for_loc = user_was_asked_for_location(vars)
-    user_mentioned_locations = get_mentioned_locations(vars)
+    user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
     nowhere_found = NOWHERE_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"])
     is_no = condition_utils.is_no_vars(vars)
     weather_forecast = "weather_forecast_intent" in get_intents(state_utils.get_last_human_utterance(vars),
@@ -371,7 +376,7 @@ def have_bot_been_in(vars):
                                         state_utils.get_last_human_utterance(vars)["text"])
     not_counter = not re.search(COUNTERS_HAVE_YOU_BEEN_TEMPLATE,
                                 state_utils.get_last_human_utterance(vars)["text"])
-    user_mentioned_locations = get_mentioned_locations(vars)
+    user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
 
     if user_asks_have_you_been and not_counter and len(user_mentioned_locations) > 0:
         return True
@@ -389,7 +394,7 @@ def have_bot_been_in_request(ngrams, vars):
 def have_bot_been_in_response(vars):
     # USR_HAVE_BEEN
     try:
-        user_mentioned_locations = get_mentioned_locations(vars)
+        user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
 
         if len(user_mentioned_locations):
             location = f"in {user_mentioned_locations[-1]}"
@@ -432,17 +437,18 @@ def _user_have_been_in_request(vars):
     bot_asks_have_you_been_and_user_agrees = re.search(
         HAVE_YOU_BEEN_TEMPLATE,
         state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_yes_vars(vars) and not_counter
+    bot_mentioned_locations = get_mentioned_locations(state_utils.get_last_bot_utterance(vars))
 
     user_says_been_in = re.search(
         I_HAVE_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars).get("text", ""))
 
-    user_mentioned_locations = get_mentioned_locations(vars)
+    user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
     bot_asked_about_location = any([req.lower() in state_utils.get_last_bot_utterance(vars).get("text", "").lower()
                                     for req in QUESTIONS_ABOUT_LOCATION]) or TRAVEL_LOCATION_QUESTION.search(
         state_utils.get_last_bot_utterance(vars).get("text", "").lower())
 
-    if bot_asks_have_you_been_and_user_agrees or user_says_been_in or (
-            bot_asked_about_location and len(user_mentioned_locations) > 0):
+    if (bot_asks_have_you_been_and_user_agrees and len(bot_mentioned_locations) > 0) or (
+            (user_says_been_in or bot_asked_about_location) and len(user_mentioned_locations) > 0):
         return True
     return False
 
@@ -458,9 +464,13 @@ def user_have_been_in_request(ngrams, vars):
 def user_have_been_in_response(vars):
     # USR_WHAT_BEST_MENTIONED_BY_USER_LOC
     try:
-        user_mentioned_locations = get_mentioned_locations(vars)
+        user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
+        bot_mentioned_locations = get_mentioned_locations(state_utils.get_last_bot_utterance(vars))
         if len(user_mentioned_locations) > 0:
             location = user_mentioned_locations[-1]
+            collect_and_save_facts_about_location(location, vars)
+        elif len(bot_mentioned_locations) > 0:
+            location = bot_mentioned_locations[-1]
             collect_and_save_facts_about_location(location, vars)
         else:
             location = "there"
@@ -546,10 +556,14 @@ def user_have_not_been_in_request(ngrams, vars):
     bot_asks_have_you_been_and_user_disagrees = re.search(
         HAVE_YOU_BEEN_TEMPLATE,
         state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_no_vars(vars) and not_counter
+    bot_mentioned_locations = get_mentioned_locations(state_utils.get_last_bot_utterance(vars))
+
     user_says_not_been_in = re.search(
         I_HAVE_NOT_BEEN_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"])
+    user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
 
-    if bot_asks_have_you_been_and_user_disagrees or user_says_not_been_in:
+    if (bot_asks_have_you_been_and_user_disagrees and len(bot_mentioned_locations) > 0) or (
+            user_says_not_been_in and len(user_mentioned_locations) > 0):
         logger.info(f"User says he/she has not been in LOC in user utterances")
         return True
     return False
@@ -558,8 +572,18 @@ def user_have_not_been_in_request(ngrams, vars):
 def user_have_not_been_in_response(vars):
     # USR_WOULD_LIKE_VISIT_LOC
     try:
+        bot_mentioned_locations = get_mentioned_locations(state_utils.get_last_bot_utterance(vars))
+        user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
         shared_memory = state_utils.get_shared_memory(vars)
-        location = shared_memory.get("discussed_location", "")
+
+        if re.search(HAVE_YOU_BEEN_TEMPLATE,
+                     state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_no_vars(vars):
+            location = bot_mentioned_locations[-1]
+        elif len(user_mentioned_locations) > 0:
+            location = user_mentioned_locations[-1]
+        else:
+            location = shared_memory.get("discussed_location", "")
+
         collect_and_save_facts_about_location(location, vars)
         logger.info(f"Bot asks if user wants to visit non-visited LOC: {location}.")
 

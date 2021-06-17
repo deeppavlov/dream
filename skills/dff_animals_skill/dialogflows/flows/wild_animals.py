@@ -1,8 +1,8 @@
 import logging
 import os
+import random
 import re
-import en_core_web_sm
-import inflect
+import nltk
 import sentry_sdk
 
 import common.constants as common_constants
@@ -12,8 +12,9 @@ from common.utils import is_no
 import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
+from dialogflows.flows.animals_utils import plural_nouns, find_in_animals_list, preprocess_cobotqa_facts
 from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, find_entity_conceptnet, \
-    WILD_ANIMALS_Q, ANIMALS_WIKI_Q, ANIMAL_MENTION_TEMPLATE
+    WILD_ANIMALS_Q, ANIMALS_WIKI_Q, ANIMALS_COBOT_Q, ANIMAL_MENTION_TEMPLATE, ANIMAL_BLACKLIST
 from common.fact_retrieval import get_all_facts
 from common.universal_templates import if_chat_about_particular_topic
 
@@ -22,30 +23,13 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-nlp = en_core_web_sm.load()
-p = inflect.engine()
+nltk.download('punkt')
+
 
 CONF_1 = 1.0
 CONF_2 = 0.99
 CONF_3 = 0.95
 CONF_4 = 0.0
-
-
-def plural_nouns(text):
-    plural_text = text
-    try:
-        processed_text = nlp(text)
-        processed_tokens = []
-        for token in processed_text:
-            if token.tag_ == "NNP":
-                processed_tokens.append(p.plural_noun(token.text))
-            else:
-                processed_tokens.append(token.text)
-        plural_text = " ".join(processed_tokens)
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
-    return plural_text
 
 
 def activate_after_wiki_skill(vars):
@@ -75,13 +59,15 @@ def animal_questions_request(ngrams, vars):
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     found_animal = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
     found_animal_cnet = find_entity_conceptnet(annotations, ["animal"])
+    found_animal_in_list = find_in_animals_list(annotations)
     shared_memory = state_utils.get_shared_memory(vars)
     users_wild_animal = shared_memory.get("users_wild_animal", "")
     found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
     found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
     used_wild_q = shared_memory.get("used_wild_q", [])
     all_facts_used = len(used_wild_q) == len(WILD_ANIMALS_Q)
-    if not found_pet and (found_bird or users_wild_animal or found_animal or found_animal_cnet) and not all_facts_used:
+    if not found_pet and (found_bird or users_wild_animal or (found_animal and found_animal not in ANIMAL_BLACKLIST)
+                          or found_animal_in_list or found_animal_cnet) and not all_facts_used:
         flag = True
     logger.info(f"animal_questions_request, found_animal {found_animal} users_wild_animal {users_wild_animal}")
     logger.info(f"animal_questions_request={flag}")
@@ -97,19 +83,27 @@ def animal_questions_response(vars):
     users_wild_animal = shared_memory.get("users_wild_animal", "")
     animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
     animal_cnet = find_entity_conceptnet(annotations, ["animal"])
+    animal_in_list = find_in_animals_list(annotations)
     found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
-    if animal_wp:
+    facts = []
+    if animal_wp and animal_wp not in ANIMAL_BLACKLIST:
         facts = get_all_facts(annotations, "animal")
+        if facts:
+            state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
+    if animal_in_list and not facts:
+        facts = preprocess_cobotqa_facts(annotations, animal_in_list)
         if facts:
             state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
 
     cur_animal = ""
-    if animal_wp:
+    if animal_wp and animal_wp not in ANIMAL_BLACKLIST:
         cur_animal = plural_nouns(animal_wp)
     elif animal_cnet:
         cur_animal = plural_nouns(animal_cnet)
     elif users_wild_animal:
         cur_animal = users_wild_animal
+    elif animal_in_list:
+        cur_animal = animal_in_list
     elif found_bird:
         cur_animal = found_bird[0]
     if cur_animal:
@@ -152,9 +146,9 @@ def animal_facts_request(ngrams, vars):
     isno = is_no(state_utils.get_last_human_utterance(vars))
     facts = shared_memory.get("wild_animal_facts", [])
     used_wild_animal_facts = shared_memory.get("used_wild_animal_facts", [])
-    if facts and len(facts) > len(used_wild_animal_facts):
+    if facts and len(facts) > len(used_wild_animal_facts) and not isno:
         flag = True
-    if len(facts) == len(used_wild_animal_facts) + 1 and isno:
+    if len(used_wild_animal_facts) > 0 and isno:
         flag = False
     logger.info(f"animal_facts_request={flag}")
     return flag
@@ -182,8 +176,12 @@ def animal_facts_response(vars):
         facts_str = f"I know a lot about {users_wild_animal}. {facts_str}".strip().replace("  ", " ")
     if found_num != len(facts) - 1:
         next_fact = facts[found_num + 1]
-        next_title = next_fact["title"]
-        question = ANIMALS_WIKI_Q.get(next_title, "").format(users_wild_animal)
+        next_title = next_fact.get("title", "")
+        if next_title:
+            question = ANIMALS_WIKI_Q.get(next_title, "").format(users_wild_animal)
+        else:
+            question = random.choice(ANIMALS_COBOT_Q)
+            question = question.format(users_wild_animal)
         if isno and found_num != 0:
             facts_str = ""
         response = f"{facts_str} {question}".strip().replace("  ", " ")

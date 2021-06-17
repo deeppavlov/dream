@@ -199,8 +199,14 @@ def what_eat_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
         used_questions = shared_memory.get("fast_food_what_questions", [])
         question = random.choice([i for i in FAST_FOOD_WHAT_QUESTIONS if i not in used_questions])
+        user_utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+        bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
         state_utils.save_to_shared_memory(vars, fast_food_what_questions=used_questions + [question])
-
+        if ("how often" in bot_utt):
+            if any([i in user_utt for i in ["times", "every"]]):
+                question = "Not so often as some people do! " + question
+            else:
+                question = "Okay. " + question
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return question
@@ -265,7 +271,7 @@ def food_fact_response(vars):
         # "I have never heard about it. Could you tell me more about that please."
         elif (not fact) and check_conceptnet(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return "Why do you like it?"
+            return "I haven't tried yet. Why do you like it?"
         elif not fact:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return error_response(vars)

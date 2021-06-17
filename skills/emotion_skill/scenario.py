@@ -3,9 +3,9 @@ import random
 import logging
 from os import getenv
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.link import link_to
+from common.link import link_to, LIST_OF_SCRIPTED_TOPICS, skills_phrases_map
 from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
-    skill_trigger_phrases, talk_about_emotion, is_pain
+    skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested, is_positive_regexp_based
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
 from collections import defaultdict
@@ -15,6 +15,10 @@ sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+SCRIPTED_TRIGGER_PHRASES = []
+for skill in LIST_OF_SCRIPTED_TOPICS:
+    SCRIPTED_TRIGGER_PHRASES.extend(list(skills_phrases_map[skill]))
 
 
 class EmotionSkillScenario:
@@ -28,10 +32,11 @@ class EmotionSkillScenario:
         self.regexp_sad = False
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
-        if any([is_sad(annotated_user_phrase['text']),
-                is_alone(annotated_user_phrase['text']),
-                is_boring(annotated_user_phrase['text'])]):
+        if any([is_sad(annotated_user_phrase),
+                is_alone(annotated_user_phrase),
+                is_boring(annotated_user_phrase)]):
             self.regexp_sad = True
+            logger.info(f"Sadness detected by regexp in {annotated_user_phrase['text']}")
             return 'sadness'
         most_likely_emotion = None
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
@@ -73,7 +78,7 @@ class EmotionSkillScenario:
                             emotion_skill_attributes, intent, human_attr):
 
         start_states = {
-            "joy": 'joy_i_feel' if self._check_i_feel(user_phrase, bot_phrase)
+            "joy": "joy_i_feel" if self._check_i_feel(user_phrase, bot_phrase)
             else 'joy_feeling_towards_smth',
             "sadness": 'sad_and_lonely',
             "fear": 'fear',
@@ -81,6 +86,10 @@ class EmotionSkillScenario:
             "surprise": 'surprise',
             "love": 'love'
         }
+        if 'emotion_skill' not in human_attr:
+            human_attr['emotion_skill'] = {}
+        if emotion != "neutral":
+            human_attr['emotion_skill']['last_emotion'] = emotion
         state = emotion_skill_attributes.get("state", "")
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
         is_yes = intent.get("yes", {}).get("detected", 0)
@@ -107,7 +116,7 @@ class EmotionSkillScenario:
             state = ''
         elif state == 'offered_advice':
             # we offered an advice
-            if is_no:
+            if is_no or is_positive_regexp_based({'text': user_phrase}):
                 state = 'no'
                 step = self.steps[state]
                 reply = random.choice(step['answers'])
@@ -116,7 +125,7 @@ class EmotionSkillScenario:
                 else:
                     state = ""
                 confidence = 1.0
-            elif is_yes:
+            else:
                 # provide advices and offer another one
                 reply = self._random_choice(self.advices[emotion], prev_jokes_advices)
                 state = 'offer_another_advice'
@@ -126,12 +135,17 @@ class EmotionSkillScenario:
                     reply = random.choice(step['answers'])
                 else:
                     prev_jokes_advices.append(reply)
-                confidence = 1.0
+                    if len(prev_jokes_advices) == len(self.advices[emotion]):
+                        state = "sad_and_lonely_end"
+                confidence = 1.0 if is_yes else 0.95
         else:
             step = self.steps[state]
             reply = random.choice(step['answers'])
             if len(step['next_step']):
                 state = random.choice(step['next_step'])
+            if state == "offer_advice" and sorted(self.advices.get(emotion, [])) == sorted(prev_jokes_advices):
+                logger.warning("Asked for advice, but we have already done them")
+                reply, confidence = "", 0
             link = step['link']
             if link:
                 link = link_to([link], human_attributes=human_attr)
@@ -144,7 +158,8 @@ class EmotionSkillScenario:
             "emotion": emotion,
             "prev_jokes_advices": prev_jokes_advices
         }
-
+        if "joy" in state:
+            confidence = confidence * 0.5
         return reply, confidence, link, emotion_skill_attributes
 
     def __call__(self, dialogs):
@@ -163,17 +178,18 @@ class EmotionSkillScenario:
                 emotion_skill_attributes = human_attributes["emotion_skill_attributes"]
                 state = emotion_skill_attributes.get("state", "")
                 emotion = emotion_skill_attributes.get("emotion", "")
+                last_emotion = emotion_skill_attributes.get("last_emotion", "neutral")
                 bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE_SCENARIO}
                 annotated_user_phrase = dialog['utterances'][-1]
-                user_phrase = annotated_user_phrase['text']
+                # user_phrase = annotated_user_phrase['text']
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
                 prev_bot_phrase, prev_annotated_bot_phrase = '', {}
                 if dialog['bot_utterances']:
                     prev_annotated_bot_phrase = dialog['bot_utterances'][-1]
                     prev_bot_phrase = prev_annotated_bot_phrase['text']
-                very_confident = any([function(user_phrase)
+                very_confident = any([function(annotated_user_phrase)
                                       for function in [is_sad, is_boring, is_alone, is_joke_requested, is_pain]])
                 # Confident if regezp
                 link = ''
@@ -185,12 +201,19 @@ class EmotionSkillScenario:
                         emotion_skill_attributes['state'] = ""
                 if emotion == "" or state == "":
                     emotion = most_likely_emotion
-                if is_joke_requested(user_phrase):
+                if is_joke_requested(annotated_user_phrase):
                     state = "joke_requested"
                     emotion_skill_attributes['state'] = state
-                elif is_pain(annotated_user_phrase['text']):
+                elif is_pain(annotated_user_phrase):
                     state = "pain_i_feel"
                     emotion_skill_attributes['state'] = state
+                elif emo_advice_requested(annotated_user_phrase['text']):
+                    if emotion == 'neutral' and last_emotion != 'neutral':
+                        emotion = last_emotion
+                    if emotion == 'neutral':
+                        state = 'offer_advice'
+                    else:
+                        reply, confidence, state = "How do you feel?", 0.95, ""
                 logger.info(f"user sent: {annotated_user_phrase['text']} state: {state} emotion: {emotion}")
                 if talk_about_emotion(annotated_user_phrase, prev_annotated_bot_phrase):
                     reply = f'OK. {random.choice(skill_trigger_phrases())}'
@@ -215,20 +238,21 @@ class EmotionSkillScenario:
                 was_trigger = any([trigger_question in prev_bot_phrase
                                    for trigger_question in skill_trigger_phrases()])
                 if dialog['bot_utterances']:
-                    was_active = dialog['bot_utterances'][-1].get('active_skill', {}) == 'emotion_skill'
-                    was_book_or_movie = dialog['bot_utterances'][-1].get('active_skill', {}) in ['book_skill',
-                                                                                                 'dff_movie_skill']
+                    was_active = dialog['bot_utterances'][-1].get('active_skill', '') == 'emotion_skill'
+                    was_scripted = dialog['bot_utterances'][-1].get('active_skill', '') in LIST_OF_SCRIPTED_TOPICS
                 else:
                     was_active = False
-                    was_book_or_movie = False
-                if (was_trigger or was_active or self.regexp_sad) and not was_book_or_movie:
+                    was_scripted = False
+                if (was_trigger or was_active or self.regexp_sad) and not was_scripted:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
-                elif was_book_or_movie:
+                elif was_scripted or reply == dialog['bot_utterances'][-1]:
                     confidence = 0.5 * confidence
                 if not very_confident and not was_active:
                     confidence = min(confidence, 0.99)
                     attr['can_continue'] = CAN_CONTINUE_SCENARIO
+                if any([trigger_phrase in prev_bot_phrase for trigger_phrase in SCRIPTED_TRIGGER_PHRASES]):
+                    confidence = 0.5 * confidence
             except Exception as e:
                 self.logger.exception("exception in emotion skill")
                 sentry_sdk.capture_exception(e)
@@ -239,7 +263,7 @@ class EmotionSkillScenario:
                 link = ""
                 annotated_user_phrase = {'text': ""}
 
-            if link:
+            if link and "skill" in link:
                 if link["skill"] not in human_attributes["used_links"]:
                     human_attributes["used_links"][link["skill"]] = []
                 human_attributes["used_links"][link["skill"]].append(link['phrase'])

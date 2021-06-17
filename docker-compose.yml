@@ -21,8 +21,8 @@ services:
         midas-classification:8090, fact-retrieval:8100, cobot-entities:8102,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, cobotqa-annotator:8106, news-api-annotator:8112,
         dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
-        user-persona-extractor:8114, wiki-facts:8116, speech-function-classifier:8108, speech-function-predictor:8107,
-        dff-generic-responses-skill:8117, personality-detection:8120"
+        user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, speech-function-classifier:8108,
+        speech-function-predictor:8107, dff-generic-responses-skill:8117, personality-detection:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       mode: replicated
@@ -62,9 +62,9 @@ services:
       replicas: 8
       resources:
         limits:
-          memory: 256M
+          memory: 356M
         reservations:
-          memory: 256M
+          memory: 356M
 
   cobot-topics:
     build:
@@ -370,6 +370,8 @@ services:
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
+      args:
+        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
     command: python -m flask run -h 0.0.0.0 -p 8032
     environment:
       - FLASK_APP=server
@@ -789,7 +791,7 @@ services:
         GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v1.json
       context: .
       dockerfile: ./skills/dff_gaming_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115 --reload --timeout 500 --graceful-timeout 500
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115
     # command:  flask run -h 0.0.0.0 -p 8115
     # environment:
     #   - FLASK_APP=server
@@ -1153,7 +1155,7 @@ services:
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8111 --timeout 800
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8111
     # command:  flask run -h 0.0.0.0 -p 8111 
     # environment:
     #   - FLASK_APP=server
@@ -1168,8 +1170,7 @@ services:
 
   topic-recommendation:
     build:
-      context: .
-      dockerfile: ./annotators/topic_recommendation/Dockerfile
+      context: ./annotators/topic_recommendation/
     command: flask run -h 0.0.0.0 -p 8113
     environment:
       - FLASK_APP=server
@@ -1178,9 +1179,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 2048M
+          memory: 256M
         reservations:
-          memory: 2048M
+          memory: 256M
 
   user-persona-extractor:
     build:

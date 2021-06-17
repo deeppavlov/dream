@@ -6,6 +6,7 @@ import re
 import sentry_sdk
 from datetime import datetime
 from os import getenv
+import _pickle as cPickle
 import pathlib
 
 from common.books import QUESTIONS_ABOUT_BOOKS, about_book
@@ -53,17 +54,14 @@ SKILLS_TO_LINK = ["news_api_skill", "dff_movie_skill", "game_cooperative_skill",
 
 book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
-book_query_dict = {}
+book_query_dict = cPickle.load(open('/global_data/book_query_dict.pkl', 'rb'))
 
 AUTHOR_WIKI_TYPES = ['Q36180', 'Q18814623', 'Q482980', 'Q4853732', 'Q6625963']
 BOOK_WIKI_TYPES = ['Q571', "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
 MOVIE_WIKI_TYPES = ["Q11424", "Q24856", "Q202866"]
 
 QA_SERVICE_URL = getenv('COBOT_QA_SERVICE_URL')
-WIKIDATA_URL = getenv("WIKIDATA_URL")
-ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
 API_KEY = getenv('COBOT_API_KEY')
-assert ENTITY_LINKING_URL and WIKIDATA_URL
 kbqa_files = ['inverted_index_eng.pickle',
               'entities_list.pickle',
               'wiki_eng_q_to_name.pickle',
@@ -414,34 +412,37 @@ def get_name(annotated_phrase, mode='author', bookyear=False,
     return entity, attribute
 
 
-def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
-    logger.debug(f'Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}')
-    # best books
+def get_booklist(plain_author_name):
     book_list = request_triples_wikidata("find_object", [(plain_author_name, "P800", "forw"),
                                                          (plain_author_name, "P50", "backw")],
                                          query_dict=book_query_dict)
     book_list = list(itertools.chain.from_iterable(book_list))
     book_list = list(set(book_list))
+    book_list = [x[x.find('Q'):] for x in book_list if x]  # to unify representations
+    book_list = sorted(book_list, key=lambda x: int(x[1:]))
+    return book_list
+
+
+def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_bookname=None, top_n_best_books=1):
+    logger.debug(f'Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}')
+    # best books
     last_bookname = 'NO_BOOK'
     try:
-        logger.debug('List of returned books')
-        logger.debug(book_list)
+        book_list = get_booklist(plain_author_name)
         if plain_last_bookname is not None:
             book_list = [j for j in book_list if plain_last_bookname not in j]
             last_bookname = entity_to_label(plain_last_bookname)
-        book_list = [x[x.find('Q'):] for x in book_list if x]  # to unify representations
         logger.debug('List of returned books - processed')
         logger.debug(book_list)
         best_bookname = default_phrase  # default value
         if book_list:
-            sorted_bookname_list = sorted(book_list, key=lambda x: int(x[1:]))
             filtered_bookname_list = []
-            for book in sorted_bookname_list:
+            for book in book_list:
                 logger.debug(f'{last_bookname.lower()} {entity_to_label(book).lower()}')
                 if len(filtered_bookname_list) < top_n_best_books:
                     if last_bookname.lower() not in entity_to_label(book).lower():
                         filtered_bookname_list.append(book)
-            if len(sorted_bookname_list) > 0:
+            if len(book_list) > 0:
                 best_bookname = random.choice(filtered_bookname_list)
         logger.debug(f'Answer for best_plain_book_by_author {best_bookname}')
         return best_bookname
@@ -451,8 +452,17 @@ def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_book
         return default_phrase
 
 
-def genre_of_book(plain_bookname):
-    logger.info(f'Call genre_of_book for {plain_bookname}')
+def entities_to_labels(entities_list):
+    return [entity_to_label(k) for k in entities_list]
+
+
+def author_genres(plain_author_name):
+    plain_genres = request_triples_wikidata("find_object", [(plain_author_name, "P136", "forw")],
+                                            query_dict=book_query_dict)
+    return entities_to_labels(plain_genres)
+
+
+def get_plain_genres(plain_bookname):
     plain_genres = request_triples_wikidata("find_object", [(plain_bookname, "P136", "forw")],
                                             query_dict=book_query_dict)
     MAX_DEPTH = 5
@@ -460,6 +470,12 @@ def genre_of_book(plain_bookname):
         if plain_genres and isinstance(plain_genres[0], list):
             plain_genres = plain_genres[0]
     logger.debug(f'Plain_genres {plain_genres}')
+    return plain_genres
+
+
+def genre_of_book(plain_bookname):
+    logger.info(f'Call genre_of_book for {plain_bookname}')
+    plain_genres = get_plain_genres(plain_bookname)
     if plain_genres:
         plain_genres = sorted(plain_genres, key=lambda x: int(x[1:]))
         genre = entity_to_label(plain_genres[0])
@@ -560,7 +576,7 @@ def tell_about_genre_book(bookname, bookreads_data):
             if book_.get('title', '') == bookname:
                 logger.debug(f'Returning phrase for book of genre {genre}')
                 reply = book_.get('description', '')
-            return reply
+                return reply
     return reply
 
 
@@ -581,7 +597,7 @@ def exit_skill(reply, human_attr, SKILLS_TO_LINK=SKILLS_TO_LINK):
     if not any([exit_phrase in phrase for phrase in human_attr['book_skill']['used_phrases']]):
         reply = f"{reply} {exit_phrase}"
     else:
-        reply = ""
+        reply = f""
     return reply
 
 
@@ -614,3 +630,15 @@ LOVE_READING_TEMPLATE = re.compile(r"i (do )?(like|love|prefer) (book|read)", re
 
 def if_loves_reading(annotated_user_phrase):
     return re.search(LOVE_READING_TEMPLATE, annotated_user_phrase['text'])
+
+
+BY_TEMPLATE = re.compile(r"\bby ([a-zA-Z ]+)", re.IGNORECASE)
+
+
+def find_by(annotated_user_phrase):
+    found_by = re.search(BY_TEMPLATE, annotated_user_phrase['text'])
+    if found_by:
+        answer = found_by.group()[3:]
+        return answer
+    else:
+        return ''

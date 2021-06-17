@@ -186,8 +186,6 @@ services:
     env_file: [ .env.dev ]
   topic-recommendation:
     env_file: [ .env.dev ]
-    environment:
-      - CUDA_VISIBLE_DEVICES=1
   user-persona-extractor:
     env_file: [ .env.dev ]
   wiki-facts:
