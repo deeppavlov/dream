@@ -114,8 +114,12 @@
                     {"utt": ["Recently I have seen a cool movie You Goehte about adventures of children during school year.", "Have you seen this film?"]},
                     {"utt": ["Sport is a good way to relax after school. Do you play on any of the school's sports teams?"],
                      "expected_subtopic_info": [{"subtopic": "sport_yes", "cond": [["is_yes", "user", true], [{"pattern": "used to"}, "user", true]]},
-                                                {"subtopic": "sport_no", "cond": [["any"]]}
-                                               ]},
+                                                {"subtopic": "sport_no", "cond": [["any"]]}],
+                     "ackn": [{"cond": [[[{"pattern": "have you seen this film"}, "bot", true], ["is_yes", "user", true]]],
+                               "answer": "Cool, i like this film too!"},
+                              {"cond": [[[{"pattern": "have you seen this film"}, "bot", true], ["is_no", "user", true]]],
+                               "answer": "I suggest you see, there are many funny moments in the film."}]
+                    },
                     {"utt": ["What kind of sport do you play?"],
                      "subtopic": "sport_yes"},
                     {"utt": ["Anyway, I'd love to but I can't.", "I believe you put all your resources to study well!"],
@@ -123,11 +127,9 @@
                    ]
      },
  "work":
-     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "(ok|yes|yeah|yup|i) work"}, "user", true]],
-                              [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "^work[\\.!]?$"}, "user", true]],
-                              [[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "i ('m|was) working"}, "user", true]]],
+     {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", true], [{"pattern": "\\bwork(ed|s|ing)?\\b"}, "user", true]]],
                      "can_continue": "must", "conf": 1.0}],
-      "pattern": "\\bwork",
+      "pattern": "\\bwork(ed|s|ing)?\\b",
       "smalltalk": [{"utt": ["I also have a work. It is to chat with people all day long.", "So, I'm a professional talker.",
                              "What is your current occupation?"]},
                     {"utt": ["I think you do a very important and useful work!",
