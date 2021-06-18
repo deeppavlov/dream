@@ -311,7 +311,7 @@ def usr_response_to_speech_function_response(vars):
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
                 logger.info(f"Found Speech Function: {sf_functions}")
         else:
-            if word_tokenize(human_utterance)[0] in interrogative_words:
+            if word_tokenize(human_utterance)[0] not in interrogative_words:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
                 logger.info(f"Found Speech Function: {sf_functions}")
 
