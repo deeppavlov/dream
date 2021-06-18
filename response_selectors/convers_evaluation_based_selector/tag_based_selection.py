@@ -481,6 +481,16 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     best_candidate["human_attributes"]["disliked_skills"] = disliked_skills
     logger.info(f"Best candidate: {best_candidate}")
     n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
+    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+
+    no_question_by_user = "?" not in dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get(
+        "punct_sent", dialog["human_utterances"][-1]["text"])
+    if _no_script_two_times_in_a_row and _is_best_not_script and no_question_by_user and "?" in best_candidate["text"]:
+        # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
+        # and user utterance does not contain "?", replace utterance with dummy!
+        best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
+        best_candidate = deepcopy(candidates[best_prompt_id])
+        best_cand_id = best_prompt_id
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
@@ -489,7 +499,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         pass
     elif sum(categorized_prompts.values(), []):
         # best cand is 3d times in a row not scripted skill, let's append linkto
-        _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
 
         # need to add some prompt, and have a prompt
         _add_prompt_forcibly = best_candidate["skill_name"] == _prev_active_skill and _is_active_skill_can_not_continue

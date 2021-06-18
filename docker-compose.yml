@@ -800,9 +800,9 @@ services:
       replicas: 4
       resources:
         limits:
-          memory: 100M
+          memory: 512M
         reservations:
-          memory: 100M
+          memory: 512M
 
   dff-friendship-skill:
     build:

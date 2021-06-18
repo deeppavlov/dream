@@ -65,6 +65,11 @@ else:
     }
 
 
+def does_text_contain_video_game_words(text):
+    logger.info(f"(is_found_text_definitely_game)text: {text}")
+    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text))
+
+
 def get_game_description_for_first_igdb_candidate(name, results_sort_key):
     name_lower = name.lower()
     if isinstance(results_sort_key, str):
@@ -142,18 +147,13 @@ def search_igdb_for_game(
 
 
 def search_igdb_game_description_by_user_and_bot_phrases(vars):
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
-    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
-        user_uttr.get("text", "")) \
-        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(prev_bot_uttr.get("text", ""))
+    user_text = state_utils.get_last_human_utterance(vars).get("text", "").lower()
+    prev_bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
+    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
+        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(prev_bot_text)
     assert game_names_from_local_list_of_games, \
         "At least one game should have been found in function `switch_to_particular_game_discussion()`"
     first_name = game_names_from_local_list_of_games[0]
-    match = VIDEO_GAME_WORDS_COMPILED_PATTERN.match(first_name)
-    if match:
-        game_word_mentioned = True
-        first_name = first_name[match.span()[1]:]
-    else:
-        game_word_mentioned = False
+    game_word_mentioned = does_text_contain_video_game_words(user_text) \
+        or does_text_contain_video_game_words(prev_bot_text)
     return search_igdb_for_game(first_name), game_word_mentioned

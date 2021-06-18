@@ -18,6 +18,12 @@
             <srai>NEXT</srai>
         </template>
     </category>
+    <category>
+        <pattern> ^ ALEXA NEXT ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
    <category>
         <pattern> ^ CONTINUE ^ </pattern>
         <template>
