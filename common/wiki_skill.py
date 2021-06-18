@@ -470,9 +470,13 @@ def check_condition_element(elem, user_uttr, bot_uttr, shared_memory={}):
         flag = True
     elif "pattern" in elem[0]:
         pattern = elem[0]["pattern"]
-        if elem[1] == "user" and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
+        if elem[1] == "user" and ((isinstance(pattern, str) and re.findall(pattern, user_uttr["text"], re.IGNORECASE))
+                                  or (isinstance(pattern, re.Pattern) and re.findall(pattern, user_uttr["text"]))):
             flag = True
-        if elem[1] == "bot" and re.findall(pattern, bot_uttr.get("text", ""), re.IGNORECASE):
+        if elem[1] == "bot" and ((isinstance(pattern, str)
+                                  and re.findall(pattern, bot_uttr.get("text", ""), re.IGNORECASE))
+                                 or (isinstance(pattern, re.Pattern)
+                                     and re.findall(pattern, bot_uttr.get("text", "")))):
             flag = True
     elif "cobot_entities_type" in elem[0]:
         cobot_entities_type = elem[0]["cobot_entities_type"]

@@ -467,3 +467,10 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
     entities_with_attitudes["like"] = [el for el in entities_with_attitudes["like"] if el]
     entities_with_attitudes["dislike"] = [el for el in entities_with_attitudes["dislike"] if el]
     return entities_with_attitudes
+
+
+ART_TEMPLATE = re.compile(r"(\\bart[\.!\?,]?\b|drawing|painting)", re.IGNORECASE)
+CHILL_TEMPLATE = re.compile(r"\b(chill|rest|relax)", re.IGNORECASE)
+SLEEP_TEMPLATE = re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE)
+SCHOOL_TEMPLATE = re.compile(r"(school|home work|homework|study)", re.IGNORECASE)
+WORK_TEMPLATE = re.compile(r"\bwork(ed|s|ing)?\b", re.IGNORECASE)
