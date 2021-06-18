@@ -212,10 +212,10 @@ def clarify_response(previous_phrase):
                 first_pron = 'You'
                 next_sent = first_pron + ' what?'
             else:
-                if word_tokenize(previous_phrase)[0].lower()!='what': 
-                    next_sent=word_tokenize(previous_phrase)[0] + ' what?'
-                else: 
-                    next_sent='What?'  
+                if word_tokenize(previous_phrase)[0].lower() != 'what':
+                    next_sent = word_tokenize(previous_phrase)[0] + ' what?'
+                else:
+                    next_sent = 'What?'
         else:
             next_sent = 'What?'
     return next_sent
@@ -227,9 +227,9 @@ def confirm_response(previous_phrase):
         next_sent = (word_tokenize(previous_phrase))[-1].capitalize() + '?'
     elif len(word_tokenize(previous_phrase)) < 4:
         if 'you' in word_tokenize(previous_phrase):
-            previous_phrase =re.sub('you','me', previous_phrase)
+            previous_phrase = re.sub('you','me', previous_phrase)
         if "I " in previous_phrase:
-            previous_phrase =re.sub('I','you', previous_phrase)
+            previous_phrase = re.sub('I','you', previous_phrase)
         next_sent = previous_phrase + '?'
     else:
         next_sent = random.choice(track_confirm)
@@ -303,15 +303,15 @@ def sys_response_to_speech_function_request(ngrams, vars):
 
 def usr_response_to_speech_function_response(vars):
     logger.debug("exec usr_response_to_speech_function_response")
-    interrogative_words = ['whose', 'what', 'which', 'who', 'whom', 'what', 'which','why', 'where', 'when', 'how']
+    interrogative_words = ['whose', 'what', 'which', 'who', 'whom', 'what', 'which', 'why', 'where', 'when', 'how']
     try:
         human_utterance = state_utils.get_last_human_utterance(vars)
-        if '?' not in human_utterance:
-            if len(word_tokenize(human_utterance))>10:
+        if '?' not in human_utterance["text"]:
+            if len(word_tokenize(human_utterance["text"])) > 10:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
                 logger.info(f"Found Speech Function: {sf_functions}")
         else:
-            if word_tokenize(human_utterance)[0] not in interrogative_words:
+            if word_tokenize(human_utterance["text"])[0] not in interrogative_words:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
                 logger.info(f"Found Speech Function: {sf_functions}")
 
@@ -334,7 +334,7 @@ def usr_response_to_speech_function_response(vars):
         for sf_prediction in sf_predictions_for_last_phrase:
             prediction = sf_prediction["prediction"]
             generic_response = generate_response(vars, prediction, last_phrase_function, False, "")
-            if generic_response is not None and generic_response!='??':
+            if generic_response is not None and generic_response != '??':
                 generic_responses.append(generic_response)
 
         # get ack, body
