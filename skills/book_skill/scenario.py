@@ -18,7 +18,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, find_by, \
     best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, if_loves_reading, \
     my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request, \
-    what
+    asked_what
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -124,9 +124,9 @@ class BookSkillScenario:
                                            for k in [PROPOSE_FAVOURITE_BOOK, FAVOURITE_BOOK_ANSWERS[0]]])
         not_finished = FAVOURITE_BOOK_ANSWERS[1] not in human_attr['book_skill']['used_phrases']
         user_agreed = is_yes(annotated_user_phrase)
-        asked_what = what(annotated_user_phrase)
+        user_asked_what = asked_what(annotated_user_phrase)
         return any([user_asked_favourite_book,
-                    asked_what,
+                    user_asked_what,
                     bot_proposed_favourite_book and user_agreed]) and not_finished
 
     def genrebook_request_detected(self, annotated_user_phrase, bot_phrases):
