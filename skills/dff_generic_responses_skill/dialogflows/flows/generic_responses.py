@@ -227,9 +227,9 @@ def confirm_response(previous_phrase):
         next_sent = (word_tokenize(previous_phrase))[-1].capitalize() + '?'
     elif len(word_tokenize(previous_phrase)) < 4:
         if 'you' in word_tokenize(previous_phrase):
-            previous_phrase = re.sub('you','me', previous_phrase)
+            previous_phrase = re.sub('you', 'me', previous_phrase)
         if "I " in previous_phrase:
-            previous_phrase = re.sub('I','you', previous_phrase)
+            previous_phrase = re.sub('I', 'you', previous_phrase)
         next_sent = previous_phrase + '?'
     else:
         next_sent = random.choice(track_confirm)
