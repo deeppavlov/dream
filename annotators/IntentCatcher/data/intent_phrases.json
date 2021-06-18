@@ -37,7 +37,7 @@
                 "i (do not|don't|dont) (want|like) to (continue|talk about) (this|that|current)( boring){0,1} topic( any more| anymore){0,1}",
                 "i (do not|don't|dont) (want|like) to talk about (this|that|it) (topic|subject|talk){0,1} (anymore|any more){0,1}",
                 "(i'm|i am) fed up with this (topic|talk|subject)",
-                "((would)|(can)) ((you)|(we))( please ){0,1}((talk)|(chat)) about ((something else)|(anything else)|(another thing)|(another topic)|(other topic)|(something other)|(something else)|(other things))"
+                "((would)|(can)) ((you)|(we))( please ){0,1}((talk)|(chat)) about ((something (else|different))|(anything (else|different))|(another thing)|(another topic)|(other topic)|(something other)|(something else)|(other things))"
             ],
             "reg_phrases": [
                 "tell me something else",
@@ -140,16 +140,17 @@
                 "cancel siri",
                 "(alexa ){0,1}let's stop our chat now",
                 "thank.* for the chat",
-                ".*go away",
+                "(.* )?go away",
                 "alexa i don't wanna talk about anything right now go home",
                 "stop making that( song| noise)",
                 "stop talking",
+                "i am sleeping",
                 "buy-buy",
                 "bye-bye",        
                 "i am done talking now",
                 "cancel simulation",
-                ".*can i get the normal alexa back.*",
-                ".* gotta go",
+                "(.* )?can i get the normal alexa back.*",
+                "(.* )?gotta go",
                 "hang up",
                 "(alexa )?(buy|bye)"
             ],
@@ -1561,6 +1562,7 @@
             "did",
             "you got different games you said",
             "did i ask",
+            "call of duty",
             "thank you i won't leave you too",
             "thank you",
             "i won't leave you too",
