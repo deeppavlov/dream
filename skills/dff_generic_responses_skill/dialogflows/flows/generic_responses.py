@@ -146,10 +146,7 @@ patterns_supported_speech_functions = [
     "Confirm",
     "Monitor",
     "Affirm",
-    "Disawow",
-    "Disagree",
     "Agree",
-    "Contradict",
     "Clarify"
 ]
 
@@ -184,7 +181,7 @@ def is_supported_speech_function(human_utterance, bot_utterance):
 # Author: Lida Ostyakova
 ##################################################################################################################
 
-sustain_monitor=['You know?', 'Alright?','Yeah?','See?','Right?']
+# sustain_monitor=['You know?', 'Alright?','Yeah?','See?','Right?']
 # reply_agree=["Oh that's right. That's right.", "Yep.", "Right.", 'Sure', 'Indeed', 'I agree with you']
 # reply_disagree=['No', 'Hunhunh.', "I don't agree with you", "I disagree", "I do not think so", "I hardly think so",
 # "I can't agree with you"]
@@ -250,25 +247,25 @@ def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_regist
         # response=random.choice(track_check)
     if 'Confirm' in predicted_sf:
         response = confirm_response(previous_phrase)
-    if 'Monitor' in predicted_sf:
-        if user_name!='':
-            response=user_name+', '+random.choice(sustain_monitor)
-        else:
-            response=current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
+#     if 'Monitor' in predicted_sf:
+#         if user_name!='':
+#             response=user_name+', '+random.choice(sustain_monitor)
+#         else:
+#             response=current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response = user_name+random.choice(sustain_monitor)  #можно добавить имя пользователя
     if 'Affirm' in predicted_sf:
         response = random.choice(reply_affirm)
-    if 'Disawow' in predicted_sf:
-        response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
-        # response=random.choice(reply_disawow)
-    if 'Disagree' in predicted_sf:
-        response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
-        # response=random.choice(reply_disagree)
+#     if 'Disawow' in predicted_sf:
+#         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
+#         # response=random.choice(reply_disawow)
+#     if 'Disagree' in predicted_sf:
+#         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
+#         # response=random.choice(reply_disagree)
     if 'Agree' in predicted_sf:
         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response=random.choice(reply_agree)
-    if 'Contradict' in predicted_sf:
-        response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
+#     if 'Contradict' in predicted_sf:
+#         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response=random.choice(reply_contradict)
     if 'Clarify' in predicted_sf:
         response = clarify_response(previous_phrase)
@@ -306,11 +303,17 @@ def sys_response_to_speech_function_request(ngrams, vars):
 
 def usr_response_to_speech_function_response(vars):
     logger.debug("exec usr_response_to_speech_function_response")
+    interrogative_words = ['whose', 'what', 'which', 'who', 'whom', 'what', 'which','why', 'where', 'when', 'how']
     try:
         human_utterance = state_utils.get_last_human_utterance(vars)
-
-        sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
-        logger.info(f"Found Speech Function: {sf_functions}")
+        if '?' not in human_utterance:
+            if len(word_tokenize(human_utterance))>10:
+                sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
+                logger.info(f"Found Speech Function: {sf_functions}")
+        else:
+            if word_tokenize(human_utterance)[0] in interrogative_words:
+                sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
+                logger.info(f"Found Speech Function: {sf_functions}")
 
         if not sf_functions:
             return error_response(vars)
