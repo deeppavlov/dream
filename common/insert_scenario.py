@@ -500,7 +500,7 @@ def start_or_continue_scenario(vars, topic_config):
                     found_topic = topic
                     break
             pattern = topic_config[topic].get("pattern", "")
-            if pattern and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
+            if pattern and re.findall(pattern, user_uttr["text"]):
                 found_topic = topic
             switch_on = topic_config[topic].get("switch_on", [])
             for switch_elem in switch_on:
@@ -571,7 +571,7 @@ def smalltalk_response(vars, topic_config):
                     first_utt = True
                     break
             pattern = topic_config[topic].get("pattern", "")
-            if pattern and re.findall(pattern, user_uttr["text"], re.IGNORECASE):
+            if pattern and re.findall(pattern, user_uttr["text"]):
                 if if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
                     utt_can_continue = "must"
                     utt_conf = 1.0
