@@ -20,6 +20,7 @@ from common.utils import is_yes, is_no
 from common.wiki_skill import dff_wiki_phrases
 from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
     facts_response
+from common.music_skill_scenarios import topic_config
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -31,9 +32,6 @@ logger = logging.getLogger(__name__)
 MUST_CONTINUE_CONFIDENCE = 1.0
 CAN_CONTINUE_CONFIDENCE = 0.98
 CANNOT_CONTINUE_CONFIDENCE = 0.0
-
-with open("./music_extension.json", 'r') as fl:
-    topic_config = json.load(fl)
 
 with open("./music_data.json", "r") as f:
     MUSIC_DATA = json.load(f)

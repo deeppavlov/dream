@@ -208,7 +208,7 @@ def clarify_response(previous_phrase):
             prep = token.text
             next_sent = str(prep).capitalize() + ' what?'
         elif poses[0] == 'PROPN' or poses[0] == 'PRON':
-            if word_tokenize(previous_phrase)[0] == 'I' or word_tokenize(previous_phrase)[0] == 'We':
+            if word_tokenize(previous_phrase)[0].lower() == 'i' or word_tokenize(previous_phrase)[0].lower() == 'we':
                 first_pron = 'You'
                 next_sent = first_pron + ' what?'
             else:
@@ -254,7 +254,7 @@ def generate_response(vars, predicted_sf, previous_phrase, enable_repeats_regist
 #             response=current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
         # response = user_name+random.choice(sustain_monitor)  #можно добавить имя пользователя
     if 'Affirm' in predicted_sf:
-        response = random.choice(reply_affirm)
+        response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
 #     if 'Disawow' in predicted_sf:
 #         response = current_utils.get_not_used_and_save_generic_response(predicted_sf, vars)
 #         # response=random.choice(reply_disawow)
@@ -304,6 +304,7 @@ def sys_response_to_speech_function_request(ngrams, vars):
 def usr_response_to_speech_function_response(vars):
     logger.debug("exec usr_response_to_speech_function_response")
     interrogative_words = ['whose', 'what', 'which', 'who', 'whom', 'what', 'which', 'why', 'where', 'when', 'how']
+    aux_verbs = ['do', 'did', 'have', 'can', 'may', 'am', 'is', 'are', 'was', 'were']
     try:
         human_utterance = state_utils.get_last_human_utterance(vars)
 

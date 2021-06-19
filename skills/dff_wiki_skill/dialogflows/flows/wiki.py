@@ -22,6 +22,7 @@ from common.insert_scenario import get_page_content, get_wikihow_content, get_pa
 from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
     facts_response
 from common.news import get_news_about_topic
+from common.wiki_skill_scenarios import topic_config
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.wiki_states import State
@@ -41,9 +42,6 @@ text_qa_url = os.getenv("TEXT_QA_URL")
 ANSWER_CONF_THRES = 0.95
 GO_TO_MAIN_PAGE = True
 ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
-
-with open("dff_wiki_topics.json", 'r') as fl:
-    topic_config = json.load(fl)
 
 found_pages_dict = {}
 facts_memory = {}

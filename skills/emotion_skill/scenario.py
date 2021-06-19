@@ -124,7 +124,7 @@ class EmotionSkillScenario:
                     state = random.choice(step['next_step'])
                 else:
                     state = ""
-                confidence = 1.0
+                confidence = 0.95
             else:
                 # provide advices and offer another one
                 reply = self._random_choice(self.advices[emotion], prev_jokes_advices)
@@ -151,7 +151,7 @@ class EmotionSkillScenario:
                 link = link_to([link], human_attributes=human_attr)
                 link['phrase'] = reply
                 # reply += link['phrase']
-            confidence = 1.0
+            confidence = 0.95
 
         emotion_skill_attributes = {
             "state": state,

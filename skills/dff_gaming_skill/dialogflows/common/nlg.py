@@ -1,6 +1,8 @@
 import logging
 import os
+import string
 from datetime import datetime, timedelta
+from itertools import product
 
 import sentry_sdk
 from dateparser import parse
@@ -108,15 +110,46 @@ def link_to_other_skills_response(vars, prefix="Okay.", shared_memory_actions=No
     return response
 
 
+def compose_strings_that_are_not_time():
+    result = {
+        "me", "time", "on", "most", "more", "to", "an", "or", "be", "ago", "a", "to get", "fan", "i", "sit",
+        "too", "day", "week", "month", "year", "days", "weeks", "months", "years"
+    }
+    digits = list(string.digits)
+    digit_words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    ordinals = ["zeroth", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"]
+    two_digit_number_words = [
+        "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+    multiples_of_ten = ["twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+    ordinals += ["tenth", "eleventh", "twelfth"] + [td + 'th' for td in two_digit_number_words[3:]]
+    two_digit_number_words += [' '.join([mt, dw]) for mt in multiples_of_ten for dw in digit_words]
+    number_words = digit_words + two_digit_number_words
+    ordinals += [' '.join([mt, dw]) for mt in multiples_of_ten for dw in ordinals[1:10]]
+    ordinals += [mt[:-1] + "ieth" for mt in multiples_of_ten]
+    numbers = digits + [''.join(sd) for r in range(1, 4) for sd in product(digits, repeat=r)]
+    all_number_strings = number_words + ordinals + numbers
+    result.update(all_number_strings)
+    additional_strings = [
+        " month", " months", " week", " weeks", " year", " years", " hour", " hours", " minute", " minutes",
+        " second", " seconds", ",", " of the", " of", ", and the", ")"
+    ]
+    result.update([ns + ad_s for ns in all_number_strings for ad_s in additional_strings])
+    result.update([s + ',' for s in result])
+    return result
+
+
+NOT_TIME_STRINGS = compose_strings_that_are_not_time()
+
+
 def extract_time_from_text(text):
     result = []
     tokens = text.split()
-    for num_tokens in range(len(tokens), 0, -1):
+    for num_tokens in range(6, 0, -1):
         for start in range(0, len(tokens) - num_tokens + 1):
             substr = ' '.join(tokens[start:start + num_tokens])
-            if substr in ["ago"]:
+            if substr.lower() in NOT_TIME_STRINGS:
                 continue
-            parsed = parse(substr)
+            parsed = parse(substr, languages=["en"])
             if parsed is not None:
                 result.append((substr, parsed))
     return result

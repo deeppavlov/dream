@@ -33,9 +33,10 @@ def lets_talk_about_game(vars):
 
 def switch_to_particular_game_discussion(vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
+    user_text = user_uttr.get("text", "").lower()
     prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
-    found_video_game_in_user_uttr = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(
-        user_uttr.get("text", "").lower())
+    prev_bot_text = prev_bot_uttr.get("text", "")
+    found_video_game_in_user_uttr = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(user_text)
     logger.info(
         f"(switch_to_particular_game_discussion)found_video_game_in_user_uttr: {found_video_game_in_user_uttr}")
     found_video_game_in_user_uttr = bool(found_video_game_in_user_uttr)
@@ -45,12 +46,10 @@ def switch_to_particular_game_discussion(vars):
         f"(switch_to_particular_game_discussion)found_video_game_in_bot_uttr: {found_video_game_in_bot_uttr}")
     found_video_game_in_bot_uttr = bool(found_video_game_in_bot_uttr)
     choose_particular_game = if_choose_topic(user_uttr, prev_bot_uttr) and found_video_game_in_user_uttr
-    question_answer_contains_video_game = "?" not in user_uttr.get("text", "") \
-        and "?" in prev_bot_uttr.get("text", "") \
-        and found_video_game_in_user_uttr
-    bot_asked_about_game_and_user_answered_yes = found_video_game_in_bot_uttr \
-        and "?" in prev_bot_uttr.get("text", "") \
-        and is_yes(user_uttr)
+    question_answer_contains_video_game = (
+        "?" not in user_text and "?" in prev_bot_text and found_video_game_in_user_uttr)
+    bot_asked_about_game_and_user_answered_yes = (
+        found_video_game_in_bot_uttr and "?" in prev_bot_text and is_yes(user_uttr))
     return lets_talk_about_game(vars) or choose_particular_game or question_answer_contains_video_game \
         or bot_asked_about_game_and_user_answered_yes
 
