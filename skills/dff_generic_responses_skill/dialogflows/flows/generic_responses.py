@@ -176,6 +176,25 @@ def is_supported_speech_function(human_utterance, bot_utterance):
     return True
 
 
+def get_pre_last_human_utterance(vars):
+    return vars["agent"]["dialog"]["human_utterances"][-2]
+
+
+def get_pre_last_bot_utterance(vars):
+    return vars["agent"]["dialog"]["bot_utterances"][-2]
+
+
+def is_last_bot_utterance_by_us(vars):
+    last_bot_utterance = state_utils.get_last_bot_utterance(vars)
+
+    active_skill = last_bot_utterance["active_skill"]
+
+    if active_skill == "dff_generic_responses_skill":
+        return True
+
+    return False
+
+
 ##################################################################################################################
 # Generic Response Function: Generates response based on the predicted Speech Function to a given user's phrase
 # Author: Lida Ostyakova
@@ -310,6 +329,8 @@ def usr_response_to_speech_function_response(vars):
 
         phrases = human_utterance["annotations"].get("sentseg", {}).get("segments", {})
 
+        sf_functions = None
+
         cont = False
 
         # check for "?" symbol in the standalone segments of the original user's utterance
@@ -319,7 +340,7 @@ def usr_response_to_speech_function_response(vars):
             else:
                 cont = False
         if cont:
-            if len(word_tokenize(human_utterance["text"])) > 10:
+            if is_last_bot_utterance_by_us(vars) or len(word_tokenize(human_utterance["text"])) > 10:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
                 logger.info(f"Found Speech Function: {sf_functions}")
         else:
