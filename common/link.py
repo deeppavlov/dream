@@ -156,7 +156,7 @@ link_to_skill2i_like_to_talk = {
     "game_cooperative_skill": [
         "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud. "
         "do you love video games?",
-        "With this lockdown video games are my way to escape and thrive. do you love video games?",
+        "Video games are my way to escape and thrive. do you love video games?",
     ],
     "school": [
         "I've never been to school, I've learned everything online. Do you want to talk about school?",
