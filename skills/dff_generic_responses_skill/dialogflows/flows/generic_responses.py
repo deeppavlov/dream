@@ -304,11 +304,11 @@ def sys_response_to_speech_function_request(ngrams, vars):
 def usr_response_to_speech_function_response(vars):
     logger.debug("exec usr_response_to_speech_function_response")
     interrogative_words = ['whose', 'what', 'which', 'who', 'whom', 'what', 'which', 'why', 'where', 'when', 'how']
-    aux_verbs=['do', 'did', 'have', 'can', 'may', 'am', 'is', 'are', 'was', 'were']
+    aux_verbs = ['do', 'did', 'have', 'can', 'may', 'am', 'is', 'are', 'was', 'were']
     try:
         human_utterance = state_utils.get_last_human_utterance(vars)
         if word_tokenize(human_utterance["text"])[0] in aux_verbs:
-            human_utterance["text"]=human_utterance["text"]+'?'
+            human_utterance["text"] = human_utterance["text"] + '?'
         if '?' not in human_utterance["text"]:
             if len(word_tokenize(human_utterance["text"])) > 10:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
