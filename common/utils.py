@@ -315,14 +315,14 @@ def get_user_replies_to_particular_skill(utterances, skill_name):
 
 
 yes_templates = re.compile(
-    r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|"
+    r"(\byes\b|\byup\b|\byep\b|\bsure\b|go ahead|\byeah\b|\bok\b|okay|^(kind of|kinda)\.?$|"
     r"^why not\.?$|^tell me\.?$|^i (agree|do|did|like|have|had|think so)\.?$)"
 )
 
 
 def is_yes(annotated_phrase):
     yes_detected = "yes" in get_intents(annotated_phrase, which="intent_catcher", probs=False)
-    midas_yes_detected = False  # "pos_answer" in get_intents(annotated_phrase, which='midas', probs=False)
+    midas_yes_detected = "pos_answer" in get_intents(annotated_phrase, which='midas', probs=False)
     # TODO: intent catcher not catches 'yes thanks!'
     if yes_detected or midas_yes_detected or re.search(yes_templates, annotated_phrase.get("text", "").lower()):
         return True
