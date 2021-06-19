@@ -316,9 +316,9 @@ def usr_response_to_speech_function_response(vars):
             if '?' not in phrase:
                 cont = True
         if cont:
-                if len(word_tokenize(human_utterance["text"])) > 10:
-                    sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
-                    logger.info(f"Found Speech Function: {sf_functions}")
+            if len(word_tokenize(human_utterance["text"])) > 10:
+                sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
+                logger.info(f"Found Speech Function: {sf_functions}")
         else:
             if word_tokenize(human_utterance["text"])[0] not in interrogative_words:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
