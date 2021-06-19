@@ -12,8 +12,9 @@ from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
-    is_any_question_sentence_in_utterance
-from common.utils import get_intent_name, get_intents, get_topics, get_entities
+    is_any_question_sentence_in_utterance, if_not_want_to_chat_about_particular_topic, if_choose_topic
+from common.utils import get_intent_name, get_intents, get_topics, get_entities, \
+    get_common_tokens_in_lists_of_strings
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, psycho_help_spec, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
@@ -280,6 +281,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _contains_entities = len(get_entities(annotated_uttr, only_named=False, with_labels=False)) > 0
     _is_active_skill_can_not_continue = False
 
+    _prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
     _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
     _prev_prev_active_skill = dialog["bot_utterances"][-2]["active_skill"] if len(dialog["bot_utterances"]) > 1 else ""
     _no_script_two_times_in_a_row = False
@@ -288,6 +290,11 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 for skill in [_prev_active_skill, _prev_prev_active_skill]]):
             _no_script_two_times_in_a_row = True
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
+
+    _is_dummy_linkto_available = any([
+        cand_uttr["skill_name"] == "dummy_skill" and cand_uttr.get("type", "") == "link_to_for_response_selector"
+        for cand_uttr in candidates
+    ])
 
     categorized_hyps = {}
     categorized_prompts = {}
@@ -319,6 +326,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
         _user_wants_to_chat_about_topic = if_chat_about_particular_topic(
             annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
+        _user_does_not_want_to_chat_about_topic = if_not_want_to_chat_about_particular_topic(annotated_uttr)
+        _user_wants_bot_to_choose_topic = if_choose_topic(annotated_uttr, _prev_bot_uttr)
+
         if any([phrase.lower() in cand_uttr["text"].lower() for phrase in LINK_TO_PHRASES]):
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
@@ -355,14 +365,23 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                     _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
                     _is_required_da=False)
 
-        elif _is_switch_topic_request:
+        elif _is_switch_topic_request or _user_does_not_want_to_chat_about_topic or _user_wants_bot_to_choose_topic:
             # =====direct request by user to switch the topic of current conversation=====
-            # priority to MUST CONTINUE and prompts (dummy linkto, kg-skill, small talk, meta-script)
-            _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE or _is_just_prompt
+            # give priority to dummy linkto hypothesis if available, else other prompts if available.
+            _is_active_skill = cand_uttr.get("type", "") == "link_to_for_response_selector" \
+                if _is_dummy_linkto_available else _is_just_prompt
+            # no priority to must_continue to skip incorrect continuation of script
+            _can_continue = CAN_CONTINUE_SCENARIO if _can_continue == MUST_CONTINUE else _can_continue
 
             CASE = "Switch topic intent."
             if len(all_user_named_entities) > 0 or len(all_user_nounphrases) > 0:
                 # -----user defines new topic/entity-----
+
+                _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
+                                                                                 all_user_named_entities)) > 0
+                _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
+                                                                              all_user_nounphrases)) > 0
+                _same_topic_entity = _same_named_entities or _same_nounphrases
 
                 categorized_hyps, categorized_prompts = categorize_candidate(
                     cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
@@ -383,6 +402,12 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # in this case we do not give priority to previously active skill (but give to must continue skill!)
             # because now user wants to talk about something particular
             _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE
+            _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
+                                                                             all_user_named_entities)) > 0
+            _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
+                                                                          all_user_nounphrases)) > 0
+            _same_topic_entity = _same_named_entities or _same_nounphrases
+
             categorized_hyps, categorized_prompts = categorize_candidate(
                 cand_id, skill_name, categorized_hyps, categorized_prompts, _is_just_prompt,
                 _is_active_skill, _can_continue, _same_topic_entity, _is_dialog_abandon,
