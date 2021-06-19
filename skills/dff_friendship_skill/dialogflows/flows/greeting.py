@@ -118,12 +118,13 @@ def offer_topic_response_part(vars, excluded_skills=None):
     if excluded_skills is None:
         excluded_skills = state_utils.get_disliked_skills(vars)
 
-    if condition_utils.is_passive_user(vars, history_len=2):
-        # what do you want to talk about? movies or books?
-        offer_topic_choose = compose_topic_offering(vars, excluded_skills=excluded_skills)
-    else:
-        # what do you want to talk about?
-        offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+    offer_topic_choose = compose_topic_offering(vars, excluded_skills=excluded_skills)
+    # if condition_utils.is_passive_user(vars, history_len=2):
+    #     # linkto to particular skill
+    #     offer_topic_choose = compose_topic_offering(vars, excluded_skills=excluded_skills)
+    # else:
+    #     # what do you want to talk about?
+    #     offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
     state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
     return offer_topic_choose
 
