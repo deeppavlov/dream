@@ -144,7 +144,7 @@ def get_link_to_question(dialog, all_prev_active_skills):
         # if we still have skill to link to, try to generate linking question
         # {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
         link = compose_linkto_with_connection_phrase(
-            SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, human_attributes=human_attr,
+            available_links, human_attributes=human_attr,
             recent_active_skills=all_prev_active_skills, from_skill=from_skill)
         human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
         human_attr["prelinkto_connections"] = human_attr["prelinkto_connections"] + [link.get("connection_phrase", "")]
