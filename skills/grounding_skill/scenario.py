@@ -8,7 +8,8 @@ from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map
 from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
-    detect_end_because, detect_end_when, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE, WHEN_PHRASE
+    detect_end_because, detect_end_when, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE, WHEN_PHRASE, \
+    MANY_INTERESTING_QUESTIONS
 from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_topics, get_intents, get_entities, is_toxic_or_blacklisted_utterance, is_no
@@ -176,6 +177,9 @@ def generate_acknowledgement(dialog):
             curr_reformulated_question = reformulate_question_to_statement(last_human_sent)
             ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1],
                                                              curr_reformulated_question)
+        attr = {"response_parts": ["acknowledgement"]}
+    elif contains_question:
+        ackn_response = random.choice(MANY_INTERESTING_QUESTIONS)
         attr = {"response_parts": ["acknowledgement"]}
     return ackn_response, ACKNOWLEDGEMENT_CONF, human_attr, bot_attr, attr
 
