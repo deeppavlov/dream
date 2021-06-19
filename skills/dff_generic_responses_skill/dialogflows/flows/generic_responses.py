@@ -312,6 +312,7 @@ def usr_response_to_speech_function_response(vars):
 
         cont = False
 
+        # check for "?" symbol in the standalone segments of the original user's utterance
         for phrase in phrases:
             if '?' not in phrase:
                 cont = True
