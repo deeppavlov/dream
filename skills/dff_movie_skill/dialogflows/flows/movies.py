@@ -28,7 +28,8 @@ from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template, \
     find_first_complete_sentence, get_all_not_used_templates, COBOTQA_EXTRA_WORDS
 from nltk.tokenize import sent_tokenize
-from dialogflows.flows.utils import is_movie_title_question, LETTERS, recommend_movie_of_genre
+from dialogflows.flows.utils import is_movie_title_question, LETTERS, recommend_movie_of_genre, is_book_question, \
+    is_game_question
 from dialogflows.flows.templates import MovieSkillTemplates
 from dialogflows.flows.movie_plots import MoviePlots
 
@@ -600,6 +601,12 @@ def movie_request_opinion_response(vars):
 
                 save_and_update_movie_titles(vars, movie_id, movie_title)
                 state_utils.save_to_shared_memory(vars, current_status="opinion_request")
+
+                if is_book_question(state_utils.get_last_human_utterance(vars)):
+                    response = f"I've not read that book but I saw the movie. {response}"
+                elif is_game_question(state_utils.get_last_human_utterance(vars)):
+                    response = f"I've not played that game but I saw the movie. {response}"
+
             else:
                 response = f"{get_movie_template('dont_know_movie_title_at_all', movie_type=movie_type)} " \
                            f"{WHAT_OTHER_MOVIE_TO_DISCUSS}"
