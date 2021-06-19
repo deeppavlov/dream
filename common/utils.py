@@ -1165,7 +1165,7 @@ def is_special_factoid_question(annotated_utterance):
     found = FACTOID_PATTERNS.search(uttr_text)
     if found and not COUNTER_FACTOID_PATTERNS.search(uttr_text):
         # remove first question like part
-        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]) :].strip()
+        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]):].strip()
         if PERSONAL_PRONOUNS.search(rest_string):
             # if any personal pronouns - not our case
             return False
@@ -1176,7 +1176,7 @@ def is_special_factoid_question(annotated_utterance):
 COBOTQA_EXTRA_WORDS = re.compile(
     r"(this might answer your question[:\,]? "
     r"|(according to|from) (wikipedia|wikihow)[:\,]? "
-    r"|here's (something|what) I found (from|on) [a-zA-Z0-9\-\.]:"
-    r"|here's a fact about [a-zA-Z0-9\- ]\.)",
+    r"|here's (something|what) I found (from|on) [a-zA-Z0-9\-\.]+:"
+    r"|here's a fact about [a-zA-Z0-9\- ]+\.)",
     re.IGNORECASE,
 )
