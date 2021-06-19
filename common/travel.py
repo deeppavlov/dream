@@ -68,8 +68,8 @@ OPINION_REQUEST_ABOUT_VISITED_LOC = [
 
 USER_IMPRESSIONS_REQUEST = [
     "I'm even a bit jealous! WHAT_DO_I_LOVE What do you like most about LOCATION?",
-    "That's cool that you like it! WHAT_DO_I_LOVE What is the best thing you know about LOCATION?",
-    "I'm glad you liked it! WHAT_DO_I_LOVE What does impress you most about LOCATION?"
+    "That sounds great! WHAT_DO_I_LOVE What is the best thing you know about LOCATION?",
+    "Oh that's sounds amazing! WHAT_DO_I_LOVE What does impress you most about LOCATION?"
 ]
 
 WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS = [
