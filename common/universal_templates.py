@@ -469,8 +469,29 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
     return entities_with_attitudes
 
 
-ART_TEMPLATE = re.compile(r"(\\bart[\.!\?,]?\b|drawing|painting)", re.IGNORECASE)
-CHILL_TEMPLATE = re.compile(r"\b(chill|rest|relax)", re.IGNORECASE)
-SLEEP_TEMPLATE = re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE)
-SCHOOL_TEMPLATE = re.compile(r"(school|home work|homework|study)", re.IGNORECASE)
-WORK_TEMPLATE = re.compile(r"\bwork(ed|s|ing)?\b", re.IGNORECASE)
+DFF_WIKI_TEMPLATES = {"art": re.compile(r"(\bart[\.!\?,]?\b|drawing|painting)", re.IGNORECASE),
+                      "chill": re.compile(r"\b(chill|rest|relax)", re.IGNORECASE),
+                      "sleep": re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE),
+                      "school": re.compile(r"(school|home work|homework|study)", re.IGNORECASE),
+                      "work": re.compile(r"\bwork(ed|s|ing)?\b", re.IGNORECASE),
+                      "family": r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
+                                r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)",
+                      "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet)\b", re.IGNORECASE),
+                      "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b"),
+                      "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b"),
+                      "dinosaurs": re.compile(r"\b(dinosaur)"),
+                      "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b"),
+                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b")
+                      }
+
+DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planets?",
+                   "smartphones": "Nowadays it is impossible to imagine world without gadgets. "
+                                  "Do you have an iPhone or Android phone?",
+                   "bitcoin": "Cryptocurrencies let you buy goods and services, or trade them for profit. "
+                              "Would you like to know more about bitcoin?",
+                   "dinosaurs": "Dinosaurs are a group of reptiles that have lived on Earth for about 245 million "
+                                "years. Are you interested in dinosaurs?",
+                   "robots": "Robotics technology influences every aspect of work and home. "
+                             "Would you like to know more about robots?",
+                   "cars": "Cars are an easy and convenient mean of transportation. Do you have a car?"
+                   }

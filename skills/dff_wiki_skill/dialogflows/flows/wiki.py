@@ -724,6 +724,7 @@ simplified_dialog_flow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_TOPIC_SMALLTALK: special_topic_request,
+        State.SYS_TOPIC_FACT: special_topic_facts_request,
         State.SYS_NEWS_STEP: news_step_request,
         State.SYS_INTRO_Q: intro_question_request,
         State.SYS_TELL_FACT: tell_fact_request,
