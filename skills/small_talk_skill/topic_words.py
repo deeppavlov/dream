@@ -5,6 +5,7 @@ TOPIC_PATTERNS = {
     "books": re.compile(r"(\bbooks?\b|\bread|literature|journal|magazine|novel)", re.IGNORECASE),
     "cars": re.compile(r"(\bcars?\b|automobile|driving|drive)", re.IGNORECASE),
     "depression": re.compile(r"(depress|stress|melanchol|doldrum|heaviness)", re.IGNORECASE),
+    "donald trump": re.compile(r"(\btrump|\bdonald trump|\bamerican president|\bthe president)", re.IGNORECASE),
     "family": re.compile(r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
                          r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)", re.IGNORECASE),
     "food": re.compile(r"(\bfood|\beat(ing|s)?\b|\bcook(s|ed|ing)?\b)", re.IGNORECASE),
@@ -29,9 +30,9 @@ TOPIC_PATTERNS = {
     "superheroes": re.compile(r"(\bsuperhero|\bsuper hero|\bhero(es|ism)?\b|\bmarvel|\bnemesis|\bvigilante|\bvillain"
                               r"|\bsidekick|\bcomics)", re.IGNORECASE),
     "travel": re.compile(r"(\btravel|\bjourney|\btour(ism|ists?|s)?\b|\btrips?\b|\bvoyage)", re.IGNORECASE),
-    "donald trump": re.compile(r"(\btrump|\bdonald trump|\bamerican president|\bthe president)", re.IGNORECASE),
     "video games": re.compile(r"(\bvideo ?game|\bgam(e|es|ing)\b|\bplay ?station|\bplaying\b"
-                              r"|\bminecraft|\bgta\b|\broblox\b|\bfortnite\b|\bx ?box\b)", re.IGNORECASE),
+                              r"|\bminecraft|\bgta\b|\broblox\b|\bfortnite\b|\bx ?box\b|"
+                              r"\bplay(ed|ing|s).*\b(tablet|pc|computer)\b)", re.IGNORECASE),
     "weather": re.compile(r"(\bweather|\bforecast)", re.IGNORECASE),
     "work": re.compile(r"(\bwork(ed|ing|s)?|\bjob\b|\boccupation|\bprofession)", re.IGNORECASE),
     "you": re.compile(r"(\babout you\b|\byourself|\bsocialbot|\babout alexa\b|\byou alexa\b"

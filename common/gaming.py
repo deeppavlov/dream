@@ -4,7 +4,8 @@ from pathlib import Path
 
 
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
-    r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b)",
+    r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b|"
+    r"\bplay(ed|ing|s).*\b(tablet|pc|computer)\b)",
     re.IGNORECASE)
 
 
