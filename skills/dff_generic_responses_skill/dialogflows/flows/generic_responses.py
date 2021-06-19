@@ -315,6 +315,8 @@ def usr_response_to_speech_function_response(vars):
         for phrase in phrases:
             if '?' not in phrase:
                 cont = True
+            else:
+                cont = False
         if cont:
             if len(word_tokenize(human_utterance["text"])) > 10:
                 sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
