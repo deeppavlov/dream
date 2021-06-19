@@ -19,7 +19,8 @@ logger = logging.getLogger(__name__)
 
 BLACKLIST_ANNOTATOR_URL = getenv('BLACKLIST_ANNOTATOR_URL')
 
-BLACKLISTED_WORDS = re.compile(r"(\b|^)(gun|shoot|die.?\b|murder|kill|victim)", re.IGNORECASE)
+BLACKLISTED_WORDS = re.compile(r"\b(gun|shoot|die.?\b|murder|kill|victim|stolen"
+                               r"|decease|sick\b|sicken\b|sickness\b|hurt\b|hurting\b|ailing\b)", re.IGNORECASE)
 nltk_sentiment_classifier = SentimentIntensityAnalyzer()
 
 
