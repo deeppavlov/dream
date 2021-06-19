@@ -160,6 +160,9 @@ def about_pet_request(ngrams, vars):
         ans, pet, *_ = answer_users_question(vars)
         if ans and ((pet != "cat" and told_about_dog) or (pet != "dog" and told_about_cat)):
             flag = False
+        used_facts = shared_memory.get("used_facts", {}).get(my_pet, [])
+        if len(used_facts) > 0 and prev_skill != "dff_animals_skill":
+            flag = False
     cat_intro = shared_memory.get("cat_intro", False)
     dog_intro = shared_memory.get("dog_intro", False)
     if (my_pet == "cat" and cat_intro) or (my_pet == "dog" and dog_intro):
