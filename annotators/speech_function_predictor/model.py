@@ -96,17 +96,17 @@ def init_model():
         i = i + 1
         label_to_name.append(el)
 
-    A = [[0] * len(class_dict) for _ in range(len(class_dict))]
+    counters = [[0] * len(class_dict) for _ in range(len(class_dict))]
 
     for label_sequence in (train_labels, test_labels):
         for i, lbl in enumerate(label_sequence):
             if i + 1 < len(label_sequence):
                 num_class = class_dict[label_sequence[i]]
                 num_class2 = class_dict[label_sequence[i + 1]]
-                A[num_class][num_class2] += 1
+                counters[num_class][num_class2] += 1
 
-    for i in range(len(A)):
-        total_count = sum(A[i])
-        for j in range(len(A[i])):
-            A[i][j] /= max(total_count, 1)
-    return class_dict, label_to_name, A
+    for i in range(len(counters)):
+        total_count = sum(counters[i])
+        for j in range(len(counters[i])):
+            counters[i][j] /= max(total_count, 1)
+    return class_dict, label_to_name, counters
