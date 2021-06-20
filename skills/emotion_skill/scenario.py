@@ -8,6 +8,7 @@ from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
     skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested, is_positive_regexp_based
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions
+import common.utils
 from collections import defaultdict
 import re
 
@@ -74,9 +75,9 @@ class EmotionSkillScenario:
 
     # def _is_stop()
 
-    def _get_reply_and_conf(self, user_phrase, bot_phrase, emotion,
+    def _get_reply_and_conf(self, annotated_user_phrase, bot_phrase, emotion,
                             emotion_skill_attributes, intent, human_attr):
-
+        user_phrase = annotated_user_phrase['text']
         start_states = {
             "joy": "joy_i_feel" if self._check_i_feel(user_phrase, bot_phrase)
             else 'joy_feeling_towards_smth',
@@ -92,8 +93,8 @@ class EmotionSkillScenario:
             human_attr['emotion_skill']['last_emotion'] = emotion
         state = emotion_skill_attributes.get("state", "")
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
-        is_yes = intent.get("yes", {}).get("detected", 0)
-        is_no = intent.get("no", {}).get("detected", 0)
+        is_yes = common.utils.is_yes(annotated_user_phrase)
+        is_no = common.utils.is_no(annotated_user_phrase)
         just_asked_about_jokes = "why hearing jokes is so important for you? are you sad?" in bot_phrase
         reply, confidence = "", 0
         link = ''
@@ -182,7 +183,6 @@ class EmotionSkillScenario:
                 bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE_SCENARIO}
                 annotated_user_phrase = dialog['utterances'][-1]
-                # user_phrase = annotated_user_phrase['text']
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
                 intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
                 prev_bot_phrase, prev_annotated_bot_phrase = '', {}
@@ -221,7 +221,7 @@ class EmotionSkillScenario:
                     confidence = 1
                 elif emotion != "neutral" or state != "":
                     reply, confidence, link, emotion_skill_attributes = self._get_reply_and_conf(
-                        annotated_user_phrase['text'],
+                        annotated_user_phrase,
                         prev_bot_phrase,
                         emotion,
                         emotion_skill_attributes,
