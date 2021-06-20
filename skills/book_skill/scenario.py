@@ -168,7 +168,7 @@ class BookSkillScenario:
         if we_asked_about_book and nothing_found:
             if we_repeated:
                 reply = self.book_linkto_reply('', human_attr)
-            elif is_yes(annotated_user_phrase) or annotated_user_phrase['annotations']['ner'] == [[]]:
+            elif is_yes(annotated_user_phrase) or annotated_user_phrase['annotations'].get('ner', [[]]) == [[]]:
                 reply, confidence = f'{bot_phrases[-1]} #+#repeat', self.default_conf
             elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
                 reply, confidence = BOOK_ANY_PHRASE, self.default_conf
