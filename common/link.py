@@ -85,11 +85,11 @@ skills_link_to_weights = {
 link_to_skill2key_words = {
     # "dff_movie_skill": ["movie"],
     "book_skill": ["book"],
-    "game_cooperative_skill": ["game"],
+    # "game_cooperative_skill": ["game"],
     # 'dff_gaming_skill': ["game"], TODO: add when will be merged
     "dff_travel_skill": ["travel"],
     # "dff_animals_skill": ["animal"],
-    # "dff_food_skill": ["food"],
+    "dff_food_skill": ["food"],
     "dff_sport_skill": ["sport"],
     # "dff_gossip_skill": ["gossips"],
     "dff_science_skill": ["science"],
@@ -156,7 +156,7 @@ link_to_skill2i_like_to_talk = {
     "game_cooperative_skill": [
         "Computer games are fantastic. Their virtual worlds help me to escape my prosaic ordinary life in the cloud. "
         "do you love video games?",
-        "With this lockdown video games are my way to escape and thrive. do you love video games?",
+        "Video games are my way to escape and thrive. do you love video games?",
     ],
     "school": [
         "I've never been to school, I've learned everything online. Do you want to talk about school?",

@@ -3579,12 +3579,6 @@
         </template>
     </category>
     <category>
-        <pattern>^ HOLE #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
         <pattern>^ HOLE STUFFER #</pattern>
         <template>
             <srai>FILTER INAPPROPRIATE</srai>

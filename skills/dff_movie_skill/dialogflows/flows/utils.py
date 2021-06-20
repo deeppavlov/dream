@@ -3,6 +3,8 @@ import json
 import pathlib
 import string
 
+from common.books import BOOK_PATTERN
+from common.gaming import VIDEO_GAME_WORDS_COMPILED_PATTERN
 from common.universal_templates import if_chat_about_particular_topic, \
     if_choose_topic, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_not_used_template
@@ -112,6 +114,22 @@ def donot_chat_about_movies(uttr):
 def is_movie_title_question(uttr):
     curr_uttr_is_about_movies = re.search(MOVIE_TITLE_QUESTION, uttr.get("text", ""))
     if curr_uttr_is_about_movies and "do you usually watch movies at home" not in uttr.get("text", ""):
+        return True
+    else:
+        return False
+
+
+def is_book_question(uttr):
+    curr_uttr_is_about_books = re.search(BOOK_PATTERN, uttr.get("text", ""))
+    if curr_uttr_is_about_books:
+        return True
+    else:
+        return False
+
+
+def is_game_question(uttr):
+    curr_uttr_is_about_games = re.search(VIDEO_GAME_WORDS_COMPILED_PATTERN, uttr.get("text", ""))
+    if curr_uttr_is_about_games:
         return True
     else:
         return False

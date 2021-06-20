@@ -6,6 +6,7 @@ from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
 from common.animals import ANIMALS_FIND_TEMPLATE
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_no, is_yes
+from common.wiki_skill_scenarios import topic_config
 
 logger = logging.getLogger(__name__)
 
@@ -254,36 +255,6 @@ transfer_from_skills = {
         "Q1667921",
     },
 }
-
-special_topics = {"art":
-                  {"linkto": ["Would you like to talk about art?"],
-                   "pattern": "(\\bart[\\.!\\?,]?\\b|drawing|painting)"},
-                  "chill":
-                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "\\b(chill|rest|relax)"}, "user", True]]],
-                                  "can_continue": "must"}],
-                   "pattern": "\\b(chill|rest|relax)"},
-                  "sleep":
-                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "\\b(sleep|bedtime|go to bed)"}, "user", True]]],
-                                  "can_continue": "must"}],
-                   "pattern": "\\b(sleep|bedtime|go to bed)"},
-                  "play_with_friends":
-                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "play with (my )?friends"}, "user", True]]],
-                                  "can_continue": "must"}],
-                   "pattern": "play with (my )?friends"},
-                  "school":
-                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": "(school|home work|homework|study)"}, "user", True]]],
-                                  "can_continue": "must"}],
-                   "pattern": "(school|home work|homework|study)"},
-                  "work":
-                  {"switch_on": [{"cond": [[[{"pattern": "what do you do on weekdays"}, "bot", True],
-                                            [{"pattern": r"^work(ed|s|ing)?\b"}, "user", True]]],
-                                  "can_continue": "must"}],
-                   "pattern": r"\bwork(ed|s|ing)?\b"}
-                  }
 
 
 def find_entity_wp(annotations, bot_uttr, specific_types=None):
@@ -536,7 +507,7 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     user_dont_know = if_user_dont_know_topic(user_uttr, bot_uttr)
     asked_name = "what is your name" in bot_uttr.get("text", "").lower()
     asked_news = "news" in user_uttr["text"]
-    for topic, topic_info in special_topics.items():
+    for topic, topic_info in topic_config.items():
         pattern = topic_info.get("pattern", "")
         if pattern and if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
             flag = True

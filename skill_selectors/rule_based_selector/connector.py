@@ -16,7 +16,7 @@ from common.movies import extract_movies_names_from_annotations
 from common.response_selection import UNPREDICTABLE_SKILLS
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, GREETING_QUESTIONS_TEXTS
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news
@@ -39,6 +39,7 @@ class RuleBasedSkillSelectorConnector:
             user_uttr_text = user_uttr["text"].lower()
             user_uttr_annotations = user_uttr["annotations"]
             bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+            bot_uttr_text_lower = bot_uttr.get("text", "").lower()
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
             high_priority_intent_detected = any([k for k in intent_catcher_intents
@@ -84,7 +85,8 @@ class RuleBasedSkillSelectorConnector:
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
-            if "cant_do" in intent_catcher_intents and "What do you do on weekdays?" in bot_uttr.get("text", ""):
+            if "cant_do" in intent_catcher_intents and "play" in user_uttr_text and \
+                    any([phrase in bot_uttr_text_lower for phrase in GREETING_QUESTIONS_TEXTS]):
                 high_priority_intent_detected = False
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["cant_do"] = not_detected

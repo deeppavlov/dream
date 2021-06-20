@@ -236,7 +236,7 @@ def respond():
         for resp_cand, resp_subj, question in zip(resp_cands, resp_subjects, resp_questions):
             if resp_subj is None:
                 # resp_cand can be ""
-                curr_resp["response"] = resp_cand
+                curr_resp["response"] = re.sub(COBOTQA_EXTRA_WORDS, "", resp_cand).strip()
             elif resp_cand:
                 curr_resp["facts"].append({"entity": resp_subj, "fact": resp_cand})
             if resp_subj and resp_subj.lower() in TRAVEL_FACTS:

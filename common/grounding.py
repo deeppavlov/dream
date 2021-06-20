@@ -64,3 +64,14 @@ def detect_end_because(text):
 
 def detect_end_when(text):
     return re.search(WHEN_PATTERN, text)
+
+
+MANY_INTERESTING_QUESTIONS = [
+    "You have so many interesting questions.",
+    "You like to ask interesting questions.",
+    "Aren't you the curious one.",
+    "You ask a lot of questions, my friend.",
+    "You're curious, aren't you?",
+    "You so curious. I like it.",
+    "I like your curiosity."
+]
