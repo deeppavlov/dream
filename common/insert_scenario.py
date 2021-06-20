@@ -536,12 +536,22 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
         if check_condition(condition, user_uttr, bot_uttr, shared_memory):
             found_ackn = ackn["answer"]
             break
+    found_prev_ackn = ""
+    ackns = shared_memory.get("ackn", [])
+    for ackn in ackns:
+        condition = ackn["cond"]
+        if check_condition(condition, user_uttr, bot_uttr, shared_memory):
+            found_prev_ackn = ackn["answer"]
+            break
+    found_ackn = found_ackn or found_prev_ackn
     resp_list = make_resp_list(vars, utt_list, topic_config, shared_memory)
     if resp_list:
         response = " ".join(resp_list).strip().replace("  ", " ")
         used_utt_nums.append(num)
         cur_facts = utt_info.get("facts", {})
         state_utils.save_to_shared_memory(vars, cur_facts=cur_facts)
+        next_ackn = utt_info.get("next_ackn", [])
+        state_utils.save_to_shared_memory(vars, ackn=next_ackn)
         expected_entities = utt_info.get("expected_entities", {})
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
