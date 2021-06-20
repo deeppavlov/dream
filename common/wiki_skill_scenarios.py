@@ -199,7 +199,7 @@ topic_config = \
                                                 {"subtopic": "prisoner_of_azkaban",
                                                  "cond": [[{"pattern": "(prisoner|azbakan)"}, "user", True]]},
                                                 {"subtopic": "goblet_of_fire",
-                                                 "cond": [[{"pattern": "(goblet|fire)"}]]},
+                                                 "cond": [[{"pattern": "(goblet|fire)"}, "user", True]]},
                                                 {"subtopic": "order_phoenix",
                                                  "cond": [[{"pattern": "(order|phoenix)"}, "user", True]]},
                                                 {"subtopic": "half_blood_prince",
