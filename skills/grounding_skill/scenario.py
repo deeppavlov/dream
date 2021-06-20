@@ -181,6 +181,9 @@ def generate_acknowledgement(dialog):
     elif contains_question:
         ackn_response = random.choice(MANY_INTERESTING_QUESTIONS)
         attr = {"response_parts": ["acknowledgement"]}
+    elif not contains_question and "opinion" in curr_considered_intents:
+        ackn_response = get_midas_intent_acknowledgement("opinion", "")
+
     return ackn_response, ACKNOWLEDGEMENT_CONF, human_attr, bot_attr, attr
 
 
@@ -288,14 +291,14 @@ class GroundingSkillScenario:
                 logger.info(f'Grounding skill what_do_you_mean: {reply}')
 
             # ACKNOWLEDGEMENT HYPOTHESES for current utterance
-            # reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
-            # if reply and confidence:
-            #     curr_responses += [reply]
-            #     curr_confidences += [confidence]
-            #     curr_human_attrs += [human_attr]
-            #     curr_bot_attrs += [bot_attr]
-            #     curr_attrs += [attr]
-            #     logger.info(f'Grounding skill acknowledgement: {reply}')
+            reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
+            if reply and confidence:
+                curr_responses += [reply]
+                curr_confidences += [confidence]
+                curr_human_attrs += [human_attr]
+                curr_bot_attrs += [bot_attr]
+                curr_attrs += [attr]
+                logger.info(f'Grounding skill acknowledgement: {reply}')
 
             # UNIVERSAL INTENT RESPONSES
             reply, confidence, human_attr, bot_attr, attr = generate_universal_response(dialog)
