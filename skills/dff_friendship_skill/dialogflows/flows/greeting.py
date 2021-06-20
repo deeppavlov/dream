@@ -192,8 +192,7 @@ def false_positive_response(vars):
 def bye_response(vars):
     state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
     state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
-    intent = "exit"
-    return f"Okay, bye.#+#{intent}"
+    return f"Sorry, bye. #+#exit"
 
 ##################################################################################################################
 # std hello
@@ -281,6 +280,7 @@ def how_are_you_response(vars):
         # question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[which_questions])
         # ask_what_do_you_do = f"{random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} {question_about_activities}"
         question_link = offer_topic_response_part(vars)
+        state_utils.save_to_shared_memory(vars, greeting_step_id=1)
         return f"{how_bot_is_doing_resp} {question_link}"
 
     except Exception as exc:
@@ -309,6 +309,10 @@ def positive_or_negative_request(ngrams, vars):
 
 def no_requests_request(ngrams, vars):
     return condition_utils.no_requests(vars)
+
+
+def no_special_switch_off_requests_request(ngrams, vars):
+    return condition_utils.no_special_switch_off_requests(vars)
 
 
 def how_human_is_doing_response(vars):
@@ -353,6 +357,7 @@ def how_human_is_doing_response(vars):
         # question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[which_questions])
         # ask_what_do_you_do = f"{random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} {question_about_activities}"
         question_link = offer_topic_response_part(vars)
+        state_utils.save_to_shared_memory(vars, greeting_step_id=1)
         return f"{user_mood_acknowledgement} {question_link}"
 
     except Exception as exc:
@@ -590,6 +595,7 @@ simplified_dialogflow.add_system_transition(State.SYS_HELLO, State.USR_HELLO_AND
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_HELLO_AND_CONTNIUE,
     {
+        # State.SYS_STD_GREETING: std_greeting_request,
         (scopes.STARTER, StarterState.USR_START): starter_flow.starter_request,
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: no_requests_request,
@@ -627,9 +633,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_OFFER_TOPICS: was_what_do_you_do_request,
         State.SYS_OFFERED_TOPICS_DECLINED: offered_topic_choice_declined_request,
-        State.SYS_CLOSED_ANSWER: new_entities_is_needed_for_request,
-        State.SYS_LINK_TO_BY_ENITY: link_to_by_enity_request,
-        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
+        State.SYS_STD_GREETING: no_special_switch_off_requests_request
     },
 )
 
