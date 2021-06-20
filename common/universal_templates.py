@@ -469,7 +469,7 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
     return entities_with_attitudes
 
 
-DFF_WIKI_TEMPLATES = {"art": re.compile(r"(\bart[\.!\?,]?\b|drawing|painting)", re.IGNORECASE),
+DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", re.IGNORECASE),
                       "chill": re.compile(r"\b(chill|rest|relax)", re.IGNORECASE),
                       "sleep": re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE),
                       "school": re.compile(r"(school|home work|homework|study)", re.IGNORECASE),
@@ -481,17 +481,7 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"(\bart[\.!\?,]?\b|drawing|painting)", 
                       "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b"),
                       "dinosaurs": re.compile(r"\b(dinosaur)"),
                       "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b"),
-                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b")
+                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b"),
+                      "hiking": re.compile(r"\bhiking\b"),
+                      "tiktok": re.compile(r"\btik[ ]?tok\b")
                       }
-
-DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planets?",
-                   "smartphones": "Nowadays it is impossible to imagine world without gadgets. "
-                                  "Do you have an iPhone or Android phone?",
-                   "bitcoin": "Cryptocurrencies let you buy goods and services, or trade them for profit. "
-                              "Would you like to know more about bitcoin?",
-                   "dinosaurs": "Dinosaurs are a group of reptiles that have lived on Earth for about 245 million "
-                                "years. Are you interested in dinosaurs?",
-                   "robots": "Robotics technology influences every aspect of work and home. "
-                             "Would you like to know more about robots?",
-                   "cars": "Cars are an easy and convenient mean of transportation. Do you have a car?"
-                   }

@@ -11,7 +11,8 @@
                     "special_topic": "smartphones",
                     "cur_facts": [{"wikihow_page": "Speed-up-an-Android-Smartphone", "cond": [["is_yes", "user", true]]}],
                     "used_utt_nums": {"smartphones": [0]},
-                    "cur_mode": "smalltalk"
+                    "cur_mode": "smalltalk",
+                    "ackn": []
                 },
                 "previous_human_utter_index": 0,
                 "history": {
