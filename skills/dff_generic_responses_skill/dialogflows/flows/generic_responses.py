@@ -367,8 +367,9 @@ def usr_response_to_speech_function_response(vars):
         for sf_prediction in sf_predictions_for_last_phrase:
             prediction = sf_prediction["prediction"]
             generic_response = generate_response(vars, prediction, last_phrase_function, False, "")
-            if generic_response is not None and generic_response != '??':
-                generic_responses.append(generic_response)
+            if generic_response is not None:
+                if generic_response != '??' and generic_response != '.?':
+                    generic_responses.append(generic_response)
 
         # get ack, body
         # ack = ""
