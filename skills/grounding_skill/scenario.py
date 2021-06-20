@@ -6,7 +6,7 @@ from os import getenv
 
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
-from common.link import skills_phrases_map
+from common.link import skills_phrases_map, link_to_skill2key_words
 from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
     detect_end_because, detect_end_when, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE, WHEN_PHRASE, \
     MANY_INTERESTING_QUESTIONS
@@ -250,7 +250,8 @@ def ask_for_topic_after_two_no_in_a_row_to_linkto(dialog):
     bot_attr = {}
     if prev_was_linkto and prev_prev_was_linkto and human_is_no and prev_human_is_no:
         offer = random.choice(GREETING_QUESTIONS["what_to_talk_about"])
-        reply = f"Okay then. {offer}"
+        topics_to_offer = ", ".join(sum(link_to_skill2key_words.values(), []))
+        reply = f"Okay then. {offer} {topics_to_offer}?"
         confidence = SUPER_CONF
         attr = {"can_continue": MUST_CONTINUE}
     return reply, confidence, human_attr, bot_attr, attr
