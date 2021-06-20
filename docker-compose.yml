@@ -352,7 +352,8 @@ services:
 
   misheard-asr:
     build:
-      context: ./skills/misheard_asr/
+      context: .
+      dockerfile: ./skills/misheard_asr/Dockerfile
     command: flask run -h 0.0.0.0 -p 8033
     environment:
       - FLASK_APP=server
@@ -1155,7 +1156,7 @@ services:
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8111
-    # command:  flask run -h 0.0.0.0 -p 8111 
+    # command:  flask run -h 0.0.0.0 -p 8111
     # environment:
     #   - FLASK_APP=server
     deploy:
@@ -1197,7 +1198,7 @@ services:
           memory: 80M
         reservations:
           memory: 80M
-          
+
   wiki-facts:
     build:
       args:
