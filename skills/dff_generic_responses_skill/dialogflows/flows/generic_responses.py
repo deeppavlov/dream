@@ -333,20 +333,20 @@ def usr_response_to_speech_function_response(vars):
 
         cont = False
 
-        # check for "?" symbol in the standalone segments of the original user's utterance
-        for phrase in phrases:
-            if '?' not in phrase:
-                cont = True
+        if is_last_bot_utterance_by_us(vars) or len(word_tokenize(human_utterance["text"])) > 10:
+            # check for "?" symbol in the standalone segments of the original user's utterance
+            for phrase in phrases:
+                if '?' not in phrase:
+                    cont = True
+                else:
+                    cont = False
+            if cont:
+                sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
+                logger.info(f"Found Speech Function: {sf_functions}")
             else:
-                cont = False
-        if cont:
-            if is_last_bot_utterance_by_us(vars) or len(word_tokenize(human_utterance["text"])) > 10:
-                sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
-                logger.info(f"Found Speech Function: {sf_functions}")
-        else:
-            if word_tokenize(human_utterance["text"])[0] not in interrogative_words:
-                sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
-                logger.info(f"Found Speech Function: {sf_functions}")
+                if word_tokenize(human_utterance["text"])[0] not in interrogative_words:
+                    sf_functions = current_utils.get_speech_function_for_human_utterance(human_utterance)
+                    logger.info(f"Found Speech Function: {sf_functions}")
 
         if not sf_functions:
             return error_response(vars)
