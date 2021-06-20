@@ -235,7 +235,9 @@ class DummySkillConnector:
                 _is_cant_do = "cant_do" in get_intents(dialog["human_utterances"][-1]) and len(curr_nounphrases) == 0
 
                 cands += [link_to_question]
-                if _is_ask_me_something or _no_to_first_linkto or _if_switch_topic or _is_cant_do:
+                if _no_to_first_linkto:
+                    confs += [0.99]
+                elif _is_ask_me_something or _if_switch_topic or _is_cant_do:
                     confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
