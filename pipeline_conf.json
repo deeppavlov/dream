@@ -139,6 +139,7 @@
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://speech-function-classifier:8108/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_bot_formatter",
@@ -160,6 +161,7 @@
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://speech-function-classifier:8108/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
@@ -173,6 +175,7 @@
             "speech_function_predictor": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://speech-function-predictor:8107/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_predictor_formatter",
@@ -1054,6 +1057,7 @@
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://speech-function-classifier:8108/annotation"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_annotation",
@@ -1064,6 +1068,7 @@
             "speech_function_predictor": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://speech-function-predictor:8107/annotation"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_hypotheses_predictor_formatter",
