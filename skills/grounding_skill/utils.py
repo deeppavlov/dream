@@ -2,6 +2,7 @@ import json
 import random
 import re
 
+from common.grounding import COMPLIMENT_PROPERTIES
 from common.utils import MIDAS_SEMANTIC_LABELS
 
 
@@ -90,6 +91,7 @@ def get_midas_intent_acknowledgement(intent, entity_name):
     pos_responses = MIDAS_INTENT_ACKNOWLEDGMENTS.get(intent, [])
     if pos_responses:
         response = random.choice(pos_responses).replace("SUBJECT", entity_name)
+        response = response.replace("PROPERTY", random.choice(COMPLIMENT_PROPERTIES).lower())
     else:
         response = ""
     response = response.replace('?', '')
