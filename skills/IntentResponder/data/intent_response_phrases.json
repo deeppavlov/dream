@@ -65,11 +65,11 @@
   ],
   "cant_do": {
     "first":[
-      "I am very sorry, but currently I am in a social mode and can only chat.",
-      "I am extremely sorry. Currently I am running in a social mode, so I can only chat. And I really like chatting with you."
+      "Sorry, can't do that. Do you want to chat?"
     ],
     "last":[
-      "If you want to use this feature now, please, repeat your request after saying: Alexa, stop. Or we can chat for a while."
+      "I'm a little bit bored of executing the same commands again and again. A fun chat is what I need to uplift my spirit to serve you. Let's chat.",
+      "Sounds of your voice touch the best springs of my soul. Let's have a chat about anything you want."
     ]
   },
   "tell_me_a_story": {
