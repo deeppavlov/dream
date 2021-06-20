@@ -79,7 +79,7 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: personality_catcher_formatter
+    # Used by: personality_catcher, personality_detection
     return [
         {
             "personality": [
@@ -816,8 +816,3 @@ def topic_recommendation_formatter(dialog: Dict):
     active_skills = [skill for skill in active_skills if skill]
     return [{"active_skills": [active_skills],
              "cobot_topics": [topics]}]
-
-
-def personality_detection_formatter(dialog: Dict) -> List[List[str]]:
-    return [[dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing",
-                                                               dialog['human_utterances'][-1]['text'])]]

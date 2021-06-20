@@ -2,11 +2,14 @@ import os
 import pickle
 import re
 from typing import Any, List
+import logging
+
 
 import numpy as np
 import sentry_sdk
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from starlette.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -17,6 +20,9 @@ cCON = pickle.load(open("data/models/cCON.p", "rb"))
 cOPN = pickle.load(open("data/models/cOPN.p", "rb"))
 vectorizer_31 = pickle.load(open("data/models/vectorizer_31.p", "rb"))
 vectorizer_30 = pickle.load(open("data/models/vectorizer_30.p", "rb"))
+
+
+logger = logging.getLogger(__name__)
 
 
 def jsonify_data(data: Any) -> Any:
@@ -73,6 +79,14 @@ app.add_middleware(
 )
 
 
+class personality_payload(BaseModel):
+    personality : List[str] = Body(...)
+
+
 @app.post('/model')
-def infer(payload: List[str]):
-    return jsonify_data([predict_personality(p) for p in payload])
+def infer(payload: personality_payload):
+    logger.info(f"Personality Detection: {payload}")
+
+    ## return None
+
+    return jsonify_data([predict_personality(p) for p in payload.personality])
