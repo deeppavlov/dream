@@ -8,7 +8,6 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
-from common.discourse import get_speech_function_predictions_for_human_utterance_annotations
 from common.emotion import if_turn_on_emotion
 from common.gossip import check_is_celebrity_mentioned
 from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
