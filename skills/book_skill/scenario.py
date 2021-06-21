@@ -114,9 +114,10 @@ class BookSkillScenario:
             genre = 'fiction'
         for book_info in self.bookreads_data[genre]:
             book = book_info['title']
+            author = book_info['author']
             if book not in human_attr['book_skill']['used_genrebooks']:
                 human_attr['book_skill']['used_genrebooks'].append(book)
-                return book
+                return book, author
 
     def fav_book_request_detected(self, annotated_user_phrase, last_bot_phrase, human_attr):
         user_asked_favourite_book = re.search(favorite_book_template, annotated_user_phrase["text"])
@@ -420,10 +421,10 @@ class BookSkillScenario:
                                                      bot_phrases):
                     # push it to the end to move forward variants where we the topic is known
                     logger.debug(f"Last phrase is WHAT_IS_FAV_GENRE for {annotated_user_phrase['text']}")
-                    book = self.get_genre_book(annotated_user_phrase, human_attr)
-                    if book and not is_no(annotated_user_phrase):
+                    book, author = self.get_genre_book(annotated_user_phrase, human_attr)
+                    if book and author and not is_no(annotated_user_phrase):
                         logger.debug(f'Making genre request')
-                        reply, confidence = f'{HAVE_YOU_READ_BOOK}{book}?', self.default_conf
+                        reply, confidence = f'{HAVE_YOU_READ_BOOK}{book} by {author}?', self.default_conf
                         if get_genre(annotated_user_phrase['text']):
                             confidence = self.super_conf
                         human_attr['book_skill']['book'] = book
