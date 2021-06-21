@@ -9,6 +9,7 @@ from common.link import link_to_skill2i_like_to_talk
 from common.utils import is_yes
 
 import dialogflows.common.intents as common_intents
+from dialogflows.flows.minecraft.intents import is_minecraft_mentioned_in_user_uttr
 from dialogflows.common.game_info import does_text_contain_video_game_words
 
 
@@ -65,10 +66,8 @@ def user_definitely_wants_to_talk_about_particular_game_request(ngrams, vars, ad
     game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
         + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(bot_text)
     if game_names_from_local_list_of_games:
-        if does_text_contain_link_to_gaming(bot_text):
-            logger.info("performing additional check")
-            flag = additional_check(ngrams, vars)
-        elif common_intents.switch_to_particular_game_discussion(vars):
+        if common_intents.switch_to_particular_game_discussion(vars) \
+                and not does_text_contain_link_to_gaming(bot_text):
             assert game_names_from_local_list_of_games,\
                 "At least one game should have been found in function `switch_to_particular_game_discussion()`"
             possible_game_name = game_names_from_local_list_of_games[0]
@@ -84,6 +83,30 @@ def user_definitely_wants_to_talk_about_particular_game_request(ngrams, vars, ad
     logger.info(f"user_definitely_wants_to_talk_about_particular_game_request with additional check "
                 f"{common_intents.get_additional_check_description(additional_check)}: {flag}")
     return flag
+
+
+def user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play_request(
+        ngrams, vars, additional_check=None):
+    logger.info(f"user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play")
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
+        user_uttr.get("text", ""))
+    flag = bool(game_names_from_local_list_of_games) \
+        and does_text_contain_link_to_gaming(bot_uttr.get("text", "")) \
+        and additional_check(ngrams, vars)
+    logger.info(f"user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play with additional check "
+                f"{common_intents.get_additional_check_description(additional_check)}: {flag}")
+    return flag
+
+
+def user_wants_to_discuss_minecraft_request(ngrams, vars):
+    return user_definitely_wants_to_talk_about_particular_game_request(
+        ngrams,
+        vars,
+        additional_check=is_minecraft_mentioned_in_user_uttr,
+    ) or user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play_request(
+        ngrams, vars, additional_check=is_minecraft_mentioned_in_user_uttr)
 
 
 def user_wants_game_description_2_or_more_of_description_turns_remain_request(ngrams, vars):
