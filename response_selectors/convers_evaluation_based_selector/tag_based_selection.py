@@ -188,8 +188,11 @@ def prompt_decision():
     return False
 
 
-def acknowledgement_decision():
-    if np.random.uniform() < ACKNOWLEDGEMENT_PROBA:
+def acknowledgement_decision(all_user_intents):
+    _is_user_opinion = "opinion" in all_user_intents
+    if (_is_user_opinion and np.random.uniform() < ACKNOWLEDGEMENT_PROBA) or (
+        not _is_user_opinion and np.random.uniform() < ACKNOWLEDGEMENT_PROBA / 5
+    ):
         return True
     return False
 
@@ -550,8 +553,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     was_ackn = if_acknowledgement_in_previous_bot_utterance(dialog)
     best_resp_cont_ackn = "acknowledgement" in best_candidate.get("response_parts", [])
-    if acknowledgement_hypothesis and acknowledgement_decision() and n_sents_without_prompt == 1 and not was_ackn and \
-            not best_resp_cont_ackn:
+
+    if acknowledgement_hypothesis and acknowledgement_decision(all_user_intents) and n_sents_without_prompt == 1 and \
+            not was_ackn and not best_resp_cont_ackn:
         logger.info(f"Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
                     f"and we decided to add an acknowledgement to the best candidate.")
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'

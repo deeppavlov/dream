@@ -26,11 +26,12 @@ def animals_skill_was_proposed(prev_bot_utt):
 ANIMALS_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets\b)", re.IGNORECASE)
 ANIMAL_MENTION_TEMPLATE = re.compile(r"animal", re.IGNORECASE)
 PETS_TEMPLATE = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|kitty|kitties|kitten|parrot|"
-                           r"\brat\b|\brats\b|mouse|hamster|fish)", re.IGNORECASE)
+                           r"\brat\b|\brats\b|mouse|hamster|fish\b)", re.IGNORECASE)
 PETS_TEMPLATE_EXT = re.compile(r"(\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|kitty|kitties|kitten|parrot|"
-                               r"\brat\b|\brats\b|mouse|hamster|fish|bird)", re.IGNORECASE)
+                               r"\brat\b|\brats\b|mouse|hamster|fish\b|bird)", re.IGNORECASE)
 ANIMALS_FIND_TEMPLATE = re.compile(r"(animal|\bpet\b|\bpets|\bcat\b|\bcats\b|\bdog\b|\bdogs\b|horse|puppy|puppies|"
-                                   r"kitty|kitties|kitten|parrot|\brat\b|\brats\b|mouse|hamster|fish\b)", re.IGNORECASE)
+                                   r"kitty|kitties|kitten|parrot|\brat\b|\brats\b|mouse|hamster|fish(es)?\b)",
+                                   re.IGNORECASE)
 HAVE_LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had |like )?(any |a )?(pets|pet|animals|animal)",
                                      re.IGNORECASE)
 HAVE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (have |had )?(any |a )?(pets|pet|animals|animal)", re.IGNORECASE)
@@ -171,10 +172,6 @@ MY_PET_FACTS = {"cat":
                  {"ack": "",
                   "statement": "My cat and my dog are good friends but my dog does not like other cats.",
                   "question": "What is your opinion, should a dog like all cats?"},
-                 {"ack": "",
-                  "statement": "Another game that I like to play with my cat is when I blow bubbles and my "
-                               "cat tries to catch them.",
-                  "question": "Do you like blowing bubbles?"},
                  {"ack": "",
                   "statement": "My cat also likes playing on my tablet pc. You know, there are games for "
                                "Android or Ipad with catching fish on screen and my cat slides his paws on the "

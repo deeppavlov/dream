@@ -5,6 +5,7 @@ from typing import Optional, List
 
 import sentry_sdk
 from fastapi import FastAPI
+from nltk import sent_tokenize
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 
@@ -23,6 +24,12 @@ app.add_middleware(
 
 class Payload(BaseModel):
     phrase: List[str]
+    prev_phrase: Optional[str]
+    prev_speech_function: Optional[str]
+
+
+class AnnotationPayload(BaseModel):
+    phrase: str
     prev_phrase: Optional[str]
     prev_speech_function: Optional[str]
 
@@ -66,9 +73,11 @@ async def answer(payload: Payload):
 
 
 @app.post("/annotation")
-async def annotation(payload: List[Payload]):
+async def annotation(payload: List[AnnotationPayload]):
     st_time = time.time()
-    responses = await handler(payload)
+    responses = await handler([Payload(phrase=sent_tokenize(p.phrase),
+                                       prev_phrase=p.prev_phrase,
+                                       prev_speech_function=p.prev_speech_function) for p in payload])
     total_time = time.time() - st_time
     logger.info(f"speech_function_classifier batch exec time: {total_time:.3f}s")
     return [{"batch": responses}]

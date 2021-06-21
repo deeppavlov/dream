@@ -10,10 +10,10 @@ from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-
 import common.dialogflow_framework.utils.dialogflow as dialogflow_utils
 import common.dialogflow_framework.programy.text_preprocessing as text_utils
 import dialogflows.main as main_dialogflow
+import test_server
 
 ignore_logger("root")
 
@@ -113,9 +113,8 @@ def handler(requested_data, random_seed=None):
 
 
 try:
-    # test_server.run_test(handler)
-    # logger.info("test query processed")
-    logger.info("test query wasn't processed. TODO: Add tests!")
+    test_server.run_test(handler)
+    logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
     logger.exception(exc)

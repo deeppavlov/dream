@@ -759,13 +759,13 @@ def speech_function_formatter(dialog: Dict):
 def speech_function_bot_formatter(dialog: Dict):
     bot_sentseg = dialog["bot_utterances"][-1].get('annotations', {}).get('sentseg', {})
     resp = {"phrase": bot_sentseg.get('segments', [dialog["bot_utterances"][-1]['text']])}
-    try:
+    if len(dialog["human_utterances"]) > 1:
         human_sentseg = dialog["human_utterances"][-2].get('annotations', {}).get('sentseg', {})
         resp["prev_phrase"] = human_sentseg.get('segments', [dialog["human_utterances"][-2]['text']])[-1]
         human_function = dialog["human_utterances"][-2].get('annotations', {}).get('speech_function_classifier',
                                                                                    [''])[-1]
         resp['prev_speech_function'] = human_function
-    except IndexError:
+    else:
         resp['prev_phrase'] = None
         resp['prev_speech_function'] = None
     return [resp]
@@ -775,9 +775,10 @@ def speech_function_annotation(dialog: Dict):
     human_sentseg = dialog["human_utterances"][-1].get('annotations', {}).get('sentseg', {})
     prev_phrase = human_sentseg.get('segments', [dialog["human_utterances"][-1]['text']])[-1]
     human_function = dialog["human_utterances"][-1].get('annotations', {}).get('speech_function_classifier', [''])[-1]
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
-    hypot_phrases = [h.get('annotations', {}).get('sentseg', {}).get('segments', [h['text']]) for h in hypotheses]
-    resp = [{'prev_phrase': prev_phrase, 'prev_speech_function': human_function, 'phrase': hp} for hp in hypot_phrases]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    resp = [{'prev_phrase': prev_phrase,
+             'prev_speech_function': human_function,
+             'phrase': h['text']} for h in hypotheses]
     return [resp]
 
 
@@ -786,7 +787,7 @@ def speech_function_predictor_formatter(dialog: Dict):
 
 
 def speech_function_hypotheses_predictor_formatter(dialog: Dict):
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     ans = [h["annotations"].get("speech_function_classifier", ['']) for h in hypotheses]
     return ans
 

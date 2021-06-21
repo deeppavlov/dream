@@ -35,7 +35,7 @@ def main_test():
                     "Do you know what is the genre of this book?",
                     "The Hobbit is a fairy tale.  I have read a plenty of books from different genres. "
                     "What book genre do you like?",
-                    "Amazing! Have you read The Outsiders?",
+                    "Amazing! Have you read The Outsiders by Susan Hinton?",
                     "The Outsiders is about two weeks in the life of a 14-year-old boy. "
                     "The novel tells the story of Ponyboy Curtis and his struggles with right and wrong "
                     "in a society in which he believes that he is an outsider. "

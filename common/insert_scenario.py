@@ -367,7 +367,8 @@ def if_facts_agree(vars):
     return flag
 
 
-def extract_and_save_wikipage(vars):
+def extract_and_save_wikipage(vars, save=False):
+    flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     shared_memory = state_utils.get_shared_memory(vars)
@@ -375,11 +376,14 @@ def extract_and_save_wikipage(vars):
     for fact in cur_facts:
         wikihow_page = fact.get("wikihow_page", "")
         condition = fact["cond"]
-        flag = check_condition(condition, user_uttr, bot_uttr, shared_memory)
-        if flag and wikihow_page:
-            state_utils.save_to_shared_memory(vars, cur_wikihow_page=wikihow_page)
-            state_utils.save_to_shared_memory(vars, cur_facts={})
+        checked = check_condition(condition, user_uttr, bot_uttr, shared_memory)
+        if checked and wikihow_page:
+            flag = True
+            if save:
+                state_utils.save_to_shared_memory(vars, cur_wikihow_page=wikihow_page)
+                state_utils.save_to_shared_memory(vars, cur_facts={})
             break
+    return flag
 
 
 def check_used_subtopic_utt(vars, topic_config, subtopic):
@@ -556,6 +560,7 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
         expected_subtopic_info = utt_info.get("expected_subtopic_info", {})
+        logger.info(f"print expected_subtopic_info {expected_subtopic_info} utt_info {utt_info}")
         state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
         response = f"{found_ackn} {response}".strip().replace("  ", " ")
     return response, used_utt_nums
@@ -617,8 +622,9 @@ def smalltalk_response(vars, topic_config):
         expected_entities = topic_config[found_topic].get("expected_entities", {})
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
-        expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", {})
-        if expected_subtopic_info:
+        existing_subtopic_info = shared_memory.get("expected_subtopic_info", [])
+        expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", [])
+        if expected_subtopic_info and not existing_subtopic_info and first_utt:
             state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
 
     extract_and_save_entity(vars)
@@ -709,6 +715,9 @@ def start_or_continue_facts(vars, topic_config):
             if wikihow_page or wikipedia_page or if_facts_agree(vars):
                 flag = True
         else:
+            checked_wikipage = extract_and_save_wikipage(vars)
+            if checked_wikipage:
+                flag = True
             if cur_wikipedia_page or cur_wikihow_page and not isno:
                 wikihow_page_content_list = memory.get("wikihow_content", [])
                 wikipedia_page_content_list = memory.get("wikipedia_content", [])
@@ -743,7 +752,7 @@ def facts_response(vars, topic_config):
         found_topic, first_utt, utt_can_continue, utt_conf = check_switch(vars, topic_config)
     extract_and_save_entity(vars)
     extract_and_save_subtopic(vars)
-    extract_and_save_wikipage(vars)
+    extract_and_save_wikipage(vars, True)
     if found_topic and cur_mode == "smalltalk":
         if "triggers" in topic_config[found_topic]:
             triggers = topic_config[found_topic]["triggers"]

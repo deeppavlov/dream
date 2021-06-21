@@ -16,7 +16,8 @@ import dialogflows.scopes as scopes
 import dialogflows.flows.utils as local_utils
 from common.science import science_topics, SCIENCE_TOPIC_KEY_PHRASES, SCIENCE_TOPIC_KEY_PHRASE_RE
 
-from common.science import SCIENCE_COMPILED_PATTERN
+from common.science import SCIENCE_COMPILED_PATTERN, OPINION_REQUESTS_ABOUT_SCIENCE, OFFER_TALK_ABOUT_SCIENCE
+from common.link import link_to_skill2i_like_to_talk
 from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, NOT_LIKE_PATTERN
 
@@ -26,6 +27,13 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 
 logger = logging.getLogger(__name__)
 
+
+LINKTO_PHRASES = (
+    link_to_skill2i_like_to_talk.get("dff_science_skill", [])
+    + OPINION_REQUESTS_ABOUT_SCIENCE
+    + OFFER_TALK_ABOUT_SCIENCE
+)
+LINKTO_PHRASES = [phrase.lower() for phrase in LINKTO_PHRASES]
 
 CONF_100 = 1.0
 CONF_98 = 0.98
@@ -81,6 +89,10 @@ def yes_request(ngrams, vars):
     return flag
 
 
+def true_request(ngrams, vars):
+    return True
+
+
 ##################################################################################################################
 # no
 ##################################################################################################################
@@ -102,6 +114,14 @@ def error_response(vars):
     return ""
 
 
+def linkto_yes(vars):
+    prev_uttr = state_utils.get_last_bot_utterance(vars)
+    bot_text = prev_uttr.get("text", "").lower()
+    flag = any([phrase in bot_text for phrase in LINKTO_PHRASES]) and condition_utils.is_yes_vars(vars)
+    logger.info(f"linkto_yes {flag}")
+    return flag
+
+
 def lets_chat_about_science(uttr, prev_uttr=None):
     prev_uttr = {} if prev_uttr is None else prev_uttr
     curr_uttr_is_about_science = re.search(SCIENCE_COMPILED_PATTERN, uttr.get("text", "").lower())
@@ -110,17 +130,20 @@ def lets_chat_about_science(uttr, prev_uttr=None):
     flag = (
         lets_talk_about_science
         or chose_topic
-        or ("?" not in uttr.get("text", "") and "?" in prev_uttr.get("text", "") and curr_uttr_is_about_science)
+        or ("?" not in uttr.get("text", "") and "?" in prev_uttr.get("text", "").lower() and curr_uttr_is_about_science)
     )
     return bool(flag)
 
 
 def science_request(ngrams, vars):
-    flag = bool(
-        lets_chat_about_science(
-            state_utils.get_last_human_utterance(vars),
-            state_utils.get_last_bot_utterance(vars),
+    flag = (
+        bool(
+            lets_chat_about_science(
+                state_utils.get_last_human_utterance(vars),
+                state_utils.get_last_bot_utterance(vars),
+            )
         )
+        or linkto_yes(vars)
     )
     logger.info(f"science_request {flag}")
     return flag
@@ -132,8 +155,9 @@ def first_science_request(ngrams, vars):
             lets_chat_about_science(
                 state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars)
             ),
-            local_utils.get_supported_cobot_topics(vars),
-            local_utils.get_supported_cobot_dialog_topics(vars),
+            linkto_yes(vars),
+            # local_utils.get_supported_cobot_topics(vars),
+            # local_utils.get_supported_cobot_dialog_topics(vars),
         ]
     )
     logger.info(f"first_science_request {flag}")
@@ -217,18 +241,21 @@ def request_science_topic_response(vars):
             body = f"So, maybe next? Do you wanna talk about {current_topic}?"
         else:
             body = f"I like to talk about a variety of scientific topics. Do you wanna talk about {current_topic}?"
-        if lets_chat_about_science(
-            state_utils.get_last_human_utterance(vars),
-            state_utils.get_last_bot_utterance(vars),
+        if (
+            lets_chat_about_science(
+                state_utils.get_last_human_utterance(vars),
+                state_utils.get_last_bot_utterance(vars),
+            )
+            or linkto_yes(vars)
         ):
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=CONF_100)
-        elif local_utils.get_supported_cobot_dialog_topics(vars):
-            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
-            state_utils.set_confidence(vars, confidence=CONF_95)
-        elif local_utils.get_supported_cobot_topics(vars):
-            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
-            state_utils.set_confidence(vars, confidence=CONF_85)
+        # elif local_utils.get_supported_cobot_dialog_topics(vars):
+        #     state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+        #     state_utils.set_confidence(vars, confidence=CONF_95)
+        # elif local_utils.get_supported_cobot_topics(vars):
+        #     state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+        #     state_utils.set_confidence(vars, confidence=CONF_85)
         else:
             return error_response(vars)
 
