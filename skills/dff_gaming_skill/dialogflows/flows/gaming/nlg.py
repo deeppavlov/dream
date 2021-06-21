@@ -6,7 +6,8 @@ import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
-from common.utils import is_no
+from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
+from common.utils import get_entities, is_no
 
 import dialogflows.common.nlg as common_nlg
 import dialogflows.common.shared_memory_ops as gaming_memory
@@ -70,7 +71,20 @@ def check_game_name_with_user_response(vars):
 
 
 @error_handler
-def confess_bot_never_played_game_and_ask_user_if_he_played_response(vars, candidate_game_id_is_already_set):
+def confess_bot_never_played_game_and_ask_user_response(
+        vars,
+        candidate_game_id_is_already_set,
+        did_user_play=False,
+        how_long_user_played=False
+):
+    if not (
+            isinstance(did_user_play, bool)
+            and isinstance(how_long_user_played, bool)
+            and did_user_play + how_long_user_played == 1
+    ):
+        raise ValueError(
+            f"One of parameters `did_user_play` and `how_long_user_played` has to be `True` and the other"
+            f"has to be `False`. did_user_play={did_user_play}, how_long_user_played={how_long_user_played}")
     gaming_memory.set_current_igdb_game_id_if_game_for_discussion_is_identified(vars, candidate_game_id_is_already_set)
     game = gaming_memory.get_current_igdb_game(vars, assert_not_empty=False)
     if game is None:
@@ -91,21 +105,36 @@ def confess_bot_never_played_game_and_ask_user_if_he_played_response(vars, candi
         else:
             genres = f"{IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]} "\
                 f"and {IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][1]]}"
-        response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "\
-                   f"Have you ever played {game['name']}?"
+        response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "
+        if did_user_play:
+            response += f"Have you ever played {game['name']}?"
+        elif how_long_user_played:
+            response += f"When did you start to play {game['name']}?"
+        else:
+            assert False
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
-@error_handler
-def tell_about_what_bot_likes_and_ask_if_user_recommends_game_response(vars):
+def ask_advice(vars):
     game = gaming_memory.get_current_igdb_game(vars)
-    response = f"That is great! Could you give me an advice? I like games in which I can create something and "\
+    response = f"Could you give me an advice? I like games in which I can create something and "\
         f"my favorite game is Minecraft. Would you recommend me to try {game['name']}?"
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
+
+
+@error_handler
+def tell_about_what_bot_likes_and_ask_if_user_recommends_game_response(vars):
+    return "That is great! " + ask_advice(vars)
+
+
+@error_handler
+def comment_on_user_experience_and_ask_if_user_recommends_game_response(vars):
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    return common_nlg.compose_experience_comment(human_uttr.get("text", ""))[0] + "  " + ask_advice(vars)
 
 
 @error_handler
@@ -135,4 +164,59 @@ def describe_game_to_user_response(vars, ask_if_user_wants_more=True):
         state_utils.save_to_shared_memory(vars, curr_summary_sent_index=0)
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+@error_handler
+def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
+    response = "It is known that people who play computer games too much can have health problems, "\
+               "both physical and emotional. Do you agree?"
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    entities = get_entities(human_uttr, only_named=True)
+    logger.info(f"(ask_if_user_thinks_that_gaming_is_unhealthy_response)entities: {entities}")
+    if entities:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    else:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    return response
+
+
+@error_handler
+def ask_if_user_played_minecraft_response(vars):
+    response = "There is one game I play a lot. Did you play Minecraft?"
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+@error_handler
+def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
+    response = "There are several simple rules which help people stay healthy while playing video games. " \
+               "The first is to give your eyes rest regularly. You can use reminders for that. The second rule " \
+               "is to follow schedule and not play games for too long. And the last is to exercise regularly. " \
+               "By the way, what sport do you like?"
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    return response
+
+
+@error_handler
+def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(vars, prefix=None):
+    response = "Minecraft is my favorite video game. In March I have seen a cool animation which was made using " \
+               "Minecraft. It was about living in quarantine and it was published on Reddit by LusinMohinder. " \
+               "By the way, what is your favorite animation?"
+    if prefix is not None:
+        response = prefix + " " + response
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+@error_handler
+def ask_what_game_user_likes_response(vars):
+    response = ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response

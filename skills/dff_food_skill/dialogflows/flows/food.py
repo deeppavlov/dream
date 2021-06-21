@@ -19,7 +19,8 @@ from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
 from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
-    CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD
+    CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD, \
+    ACKNOWLEDGEMENTS
 from common.link import link_to_skill2i_like_to_talk
 from dialogflows.flows.fast_food import State as FFState
 from dialogflows.flows.fast_food import fast_food_request
@@ -106,6 +107,8 @@ class State(Enum):
     SYS_YES_COOK = auto()
     SYS_NO_COOK = auto()
     SYS_ENSURE_FOOD = auto()
+    SYS_LINKTO_PLUS_NO = auto()
+    SYS_LINKTO_PLUS_NO_RECIPE = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -273,6 +276,10 @@ def what_cuisine_response(vars):
             elif not is_no(user_utt):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
+            elif is_no(user_utt):
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                return ACKNOWLEDGEMENTS["cuisine"]
         elif lets_talk_about_asked:
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
@@ -458,6 +465,10 @@ def what_fav_food_response(vars):
             elif not is_no(user_utt):
                 state_utils.set_confidence(vars, confidence=CONF_LOW)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            elif is_no(user_utt):
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                return ACKNOWLEDGEMENTS["fav_food_cook"]
 
         elif bool(lets_talk_about_asked):
             if (food_type == "food") or (lets_talk_about_asked == "if_chat_about_particular_topic"):
@@ -754,6 +765,10 @@ def suggest_cook_response(vars):
             elif not is_no(user_utt):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            elif is_no(user_utt):
+                state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                return ACKNOWLEDGEMENTS["fav_food_cook"]
             else:
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return error_response(vars)
@@ -884,6 +899,14 @@ def ensure_food_request(ngrams, vars):
     return flag
 
 
+def linkto_plus_no_request(ngrams, vars):
+    bot_utt = state_utils.get_last_bot_utterance(vars)["text"]
+    flag = any([ackn in bot_utt for ackn in ACKNOWLEDGEMENTS.values()])
+    flag = flag and condition_utils.no_special_switch_off_requests(vars)
+    logger.info(f"linkto_plus_no_request {flag}")
+    return flag
+
+
 ##################################################################################################################
 ##################################################################################################################
 # linking
@@ -923,6 +946,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_YES_COOK: yes_request,
         State.SYS_NO_COOK: no_request,
+        State.SYS_LINKTO_PLUS_NO: linkto_plus_no_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_SUGGEST_COOK, State.SYS_ERR)
@@ -948,16 +972,37 @@ simplified_dialogflow.add_system_transition(State.SYS_WHAT_CUISINE, State.USR_WH
 simplified_dialogflow.set_error_successor(State.SYS_WHAT_CUISINE, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_WHAT_FAV_FOOD, State.SYS_FAV_FOOD, fav_food_request)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_WHAT_FAV_FOOD,
+    {
+        State.SYS_FAV_FOOD: fav_food_request,
+        State.SYS_LINKTO_PLUS_NO_RECIPE: linkto_plus_no_request
+    },
+)
 simplified_dialogflow.set_error_successor(State.USR_WHAT_FAV_FOOD, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_WHAT_CUISINE, State.SYS_CUISINE, cuisine_request)
+simplified_dialogflow.add_system_transition(State.SYS_LINKTO_PLUS_NO_RECIPE, State.USR_SUGGEST_COOK,
+                                            suggest_cook_response)
+simplified_dialogflow.set_error_successor(State.SYS_LINKTO_PLUS_NO_RECIPE, State.SYS_ERR)
+
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_WHAT_CUISINE,
+    {
+        State.SYS_CUISINE: cuisine_request,
+        State.SYS_LINKTO_PLUS_NO: linkto_plus_no_request
+    },
+)
 simplified_dialogflow.set_error_successor(State.USR_WHAT_CUISINE, State.SYS_ERR)
 
 
 simplified_dialogflow.add_system_transition(State.SYS_CUISINE, State.USR_CUISINE_FACT, cuisine_fact_response)
 simplified_dialogflow.set_error_successor(State.SYS_CUISINE, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_LINKTO_PLUS_NO, State.USR_WHAT_FAV_FOOD, what_fav_food_response)
+simplified_dialogflow.set_error_successor(State.SYS_LINKTO_PLUS_NO, State.SYS_ERR)
 
 
 simplified_dialogflow.add_user_transition(State.USR_CUISINE_FACT, State.SYS_TO_TRAVEL_SKILL, smth_request)

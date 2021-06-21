@@ -7,8 +7,7 @@ from common.link import link_to, LIST_OF_SCRIPTED_TOPICS, skills_phrases_map
 from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
     skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested, is_positive_regexp_based
 from common.universal_templates import book_movie_music_found
-from common.utils import get_emotions
-import common.utils
+from common.utils import get_emotions, is_yes, is_no
 from collections import defaultdict
 import re
 
@@ -76,8 +75,11 @@ class EmotionSkillScenario:
     # def _is_stop()
 
     def _get_reply_and_conf(self, annotated_user_phrase, bot_phrase, emotion,
-                            emotion_skill_attributes, intent, human_attr):
+                            emotion_skill_attributes, human_attr):
         user_phrase = annotated_user_phrase['text']
+
+        is_yes_detected = is_yes(annotated_user_phrase)
+        is_no_detected = is_no(annotated_user_phrase)
         start_states = {
             "joy": "joy_i_feel" if self._check_i_feel(user_phrase, bot_phrase)
             else 'joy_feeling_towards_smth',
@@ -93,14 +95,13 @@ class EmotionSkillScenario:
             human_attr['emotion_skill']['last_emotion'] = emotion
         state = emotion_skill_attributes.get("state", "")
         prev_jokes_advices = emotion_skill_attributes.get("prev_jokes_advices", [])
-        is_yes = common.utils.is_yes(annotated_user_phrase)
-        is_no = common.utils.is_no(annotated_user_phrase)
+
         just_asked_about_jokes = "why hearing jokes is so important for you? are you sad?" in bot_phrase
         reply, confidence = "", 0
         link = ''
         self.logger.info(
             f"_get_reply_and_conf {user_phrase}; {bot_phrase}; {emotion}; {just_asked_about_jokes};"
-            f" {emotion_skill_attributes}; {intent}; {human_attr}"
+            f" {emotion_skill_attributes}; {is_yes_detected}; {is_no_detected}; {human_attr}"
         )
 
         if state == "":
@@ -182,9 +183,9 @@ class EmotionSkillScenario:
                 last_emotion = emotion_skill_attributes.get("last_emotion", "neutral")
                 bot_attributes = {}
                 attr = {"can_continue": CAN_CONTINUE_SCENARIO}
-                annotated_user_phrase = dialog['utterances'][-1]
+                annotated_user_phrase = dialog['human_utterances'][-1]
+                # user_phrase = annotated_user_phrase['text']
                 most_likely_emotion = self._get_user_emotion(annotated_user_phrase)
-                intent = annotated_user_phrase['annotations'].get("intent_catcher", {})
                 prev_bot_phrase, prev_annotated_bot_phrase = '', {}
                 if dialog['bot_utterances']:
                     prev_annotated_bot_phrase = dialog['bot_utterances'][-1]
@@ -193,9 +194,9 @@ class EmotionSkillScenario:
                                       for function in [is_sad, is_boring, is_alone, is_joke_requested, is_pain]])
                 # Confident if regezp
                 link = ''
-                if len(dialog['utterances']) > 1:
+                if len(dialog['bot_utterances']) >= 1:
                     # Check if we were interrupted
-                    active_skill = dialog['utterances'][-2]['active_skill'] == 'emotion_skill'
+                    active_skill = dialog['bot_utterances'][-1]['active_skill'] == 'emotion_skill'
                     if not active_skill and state != "":
                         state = ""
                         emotion_skill_attributes['state'] = ""
@@ -225,7 +226,6 @@ class EmotionSkillScenario:
                         prev_bot_phrase,
                         emotion,
                         emotion_skill_attributes,
-                        intent,
                         human_attributes
                     )
                     human_attributes['emotion_skill_attributes'] = emotion_skill_attributes
