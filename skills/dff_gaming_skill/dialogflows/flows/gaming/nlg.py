@@ -6,6 +6,7 @@ import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
+from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
 from common.utils import get_entities, is_no
 
 import dialogflows.common.nlg as common_nlg
@@ -210,4 +211,12 @@ def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(va
         response = prefix + " " + response
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+@error_handler
+def ask_what_game_user_likes_response(vars):
+    response = ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
