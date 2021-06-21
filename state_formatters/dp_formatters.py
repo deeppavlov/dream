@@ -814,5 +814,4 @@ def topic_recommendation_formatter(dialog: Dict):
         active_skills.append(utt.get("active_skill", ""))
         topics += utt.get("annotations", {}).get('cobot_topics', {}).get("text", [])
     active_skills = [skill for skill in active_skills if skill]
-    return [{"active_skills": [active_skills],
-             "cobot_topics": [topics]}]
+    return [{"active_skills": [active_skills], "cobot_topics": [topics]}]
