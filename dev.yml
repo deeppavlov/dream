@@ -429,7 +429,7 @@ services:
     ports:
       - 8109:8109
   fact-retrieval:
-    env_file: [ .env.dev ]
+    env_file: [.env.dev]
     volumes:
       - "./annotators/fact_retrieval:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -464,7 +464,7 @@ services:
     ports:
       - 8105:8105
   dff-wiki-skill:
-    env_file: [ .env.dev ]
+    env_file: [.env.dev]
     volumes:
       - "./skills/dff_wiki_skill:/src"
       - "./common:/src/common"
@@ -478,14 +478,14 @@ services:
     ports:
       - 8113:8113
   user-persona-extractor:
-    env_file: [ .env.dev ]
+    env_file: [.env.dev]
     volumes:
       - "./annotators/user_persona_extractor:/src"
       - "./common:/src/common"
     ports:
       - 8114:8114
   wiki-facts:
-    env_file: [ .env.dev ]
+    env_file: [.env.dev]
     volumes:
       - "./services/wiki_facts:/src"
       - "./common:/src/common"
@@ -514,7 +514,7 @@ services:
     ports:
       - 8117:8117
   personality-detection:
-    env_file: [ .env.dev ]
+    env_file: [.env.dev]
     volumes:
       - "./annotators/personality_detection:/app/src"
     ports:
