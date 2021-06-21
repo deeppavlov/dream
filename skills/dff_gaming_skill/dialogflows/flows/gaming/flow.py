@@ -53,6 +53,8 @@ simplified_dialogflow.add_user_serial_transitions(
             partial(
                 gaming_intents.user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play_request,
                 additional_check=lambda n, v: not is_minecraft_mentioned_in_user_uttr(n, v)),
+        GamingState.SYS_USER_DOESNT_LIKE_GAMING: gaming_intents.user_doesnt_like_gaming_request,
+        GamingState.SYS_USER_DIDNT_NAME_GAME: gaming_intents.user_didnt_name_game_request,
     },
 )
 # ######### if all *_request==False then transition State.USR_START -> State.SYS_ERR  #########
@@ -91,6 +93,64 @@ simplified_dialogflow.add_system_transition(
 simplified_dialogflow.set_error_successor(
     GamingState.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_GAME_THAT_USER_PLAYED_AND_BOT_DIDNT_PLAY, GamingState.SYS_ERR)
 ##################################################################################################################
+simplified_dialogflow.add_system_transition(
+    GamingState.SYS_USER_DOESNT_LIKE_GAMING,
+    GamingState.USR_ASK_IF_USER_THINKS_THAT_GAMING_IS_UNHEALTHY,
+    gaming_nlg.ask_if_user_thinks_that_gaming_is_unhealthy_response,
+)
+simplified_dialogflow.set_error_successor(
+    GamingState.SYS_USER_DOESNT_LIKE_GAMING, GamingState.SYS_ERR)
+##################################################################################################################
+simplified_dialogflow.add_system_transition(
+    GamingState.SYS_USER_DIDNT_NAME_GAME,
+    GamingState.USR_ASK_IF_USER_PLAYED_MINECRAFT,
+    gaming_nlg.ask_if_user_played_minecraft_response,
+)
+simplified_dialogflow.set_error_successor(
+    GamingState.SYS_USER_DIDNT_NAME_GAME, GamingState.SYS_ERR)
+##################################################################################################################
+simplified_dialogflow.add_user_serial_transitions(
+    GamingState.USR_ASK_IF_USER_THINKS_THAT_GAMING_IS_UNHEALTHY,
+    {
+        GamingState.SYS_USER_THINKS_GAMING_IS_UNHEALTHY: user_says_yes_request,
+        GamingState.SYS_USER_THINKS_GAMING_IS_HEALTHY: user_doesnt_say_yes_request,
+    },
+)
+simplified_dialogflow.set_error_successor(
+    GamingState.USR_ASK_IF_USER_THINKS_THAT_GAMING_IS_UNHEALTHY, GamingState.SYS_ERR)
+#########################
+simplified_dialogflow.add_system_transition(
+    GamingState.SYS_USER_THINKS_GAMING_IS_UNHEALTHY,
+    (scopes.MAIN, scopes.State.USR_ROOT),
+    gaming_nlg.tell_about_healthy_gaming_and_ask_what_sport_user_likes_response,
+)
+simplified_dialogflow.set_error_successor(GamingState.SYS_USER_THINKS_GAMING_IS_UNHEALTHY, GamingState.SYS_ERR)
+##############################################################
+simplified_dialogflow.add_system_transition(
+    GamingState.SYS_USER_THINKS_GAMING_IS_HEALTHY,
+    GamingState.USR_TELL_ABOUT_MINECRAFT_ANIMATION_AND_ASK_WHAT_ANIMATION_USER_LIKES,
+    partial(
+        gaming_nlg.tell_about_minecraft_animation_and_ask_what_animation_user_likes_response,
+        prefix="Okay. I guess some people just don't think that playing video games is fun.")
+)
+simplified_dialogflow.set_error_successor(GamingState.SYS_USER_THINKS_GAMING_IS_UNHEALTHY, GamingState.SYS_ERR)
+##############################################################
+simplified_dialogflow.add_user_serial_transitions(
+    GamingState.USR_ASK_IF_USER_PLAYED_MINECRAFT,
+    {
+        (scopes.MINECRAFT, MinecraftState.USR_START): user_says_yes_request,
+        GamingState.SYS_USER_DIDNT_PLAY_MINECRAFT: user_doesnt_say_yes_request,
+    },
+)
+simplified_dialogflow.set_error_successor(GamingState.USR_ASK_IF_USER_PLAYED_MINECRAFT, GamingState.SYS_ERR)
+#########################
+simplified_dialogflow.add_system_transition(
+    GamingState.SYS_USER_DIDNT_PLAY_MINECRAFT,
+    GamingState.USR_TELL_ABOUT_MINECRAFT_ANIMATION_AND_ASK_WHAT_ANIMATION_USER_LIKES,
+    gaming_nlg.tell_about_minecraft_animation_and_ask_what_animation_user_likes_response
+)
+simplified_dialogflow.set_error_successor(GamingState.SYS_USER_DOESNT_CONFIRM_GAME, GamingState.SYS_ERR)
+##############################################################
 simplified_dialogflow.add_user_serial_transitions(
     GamingState.USR_CHECK_WITH_USER_GAME_TITLE,
     {
