@@ -19,7 +19,7 @@ app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
 )
 
-class_dict, label_to_name, counters = init_model()
+class_dict, counters, label_to_name = init_model()
 
 
 def predict(label_name):
