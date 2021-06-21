@@ -36,7 +36,13 @@ SPECIAL_SKILLS = {
         "dff_sport_skill",
         "dff_food_skill",
         "weather_skill",
-        "dff_bot_persona_skill"
+        "dff_bot_persona_skill",
+        "book_skill",
+        "dff_gaming_skill",
+        "dff_gossip_skill",
+        "dff_science_skill",
+        "dff_travel_skill",
+        "game_cooperative_skill",
     ],
 }
 

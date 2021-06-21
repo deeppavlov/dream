@@ -6,7 +6,7 @@ from os import getenv
 
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
-from common.link import skills_phrases_map
+from common.link import skills_phrases_map, link_to_skill2key_words
 from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
     detect_end_because, detect_end_when, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE, WHEN_PHRASE, \
     MANY_INTERESTING_QUESTIONS
@@ -181,6 +181,9 @@ def generate_acknowledgement(dialog):
     elif contains_question:
         ackn_response = random.choice(MANY_INTERESTING_QUESTIONS)
         attr = {"response_parts": ["acknowledgement"]}
+    elif not contains_question and "opinion" in curr_considered_intents:
+        ackn_response = get_midas_intent_acknowledgement("opinion", "")
+
     return ackn_response, ACKNOWLEDGEMENT_CONF, human_attr, bot_attr, attr
 
 
@@ -247,7 +250,8 @@ def ask_for_topic_after_two_no_in_a_row_to_linkto(dialog):
     bot_attr = {}
     if prev_was_linkto and prev_prev_was_linkto and human_is_no and prev_human_is_no:
         offer = random.choice(GREETING_QUESTIONS["what_to_talk_about"])
-        reply = f"Okay then. {offer}"
+        topics_to_offer = ", ".join(sum(link_to_skill2key_words.values(), []))
+        reply = f"Okay then. {offer} {topics_to_offer}?"
         confidence = SUPER_CONF
         attr = {"can_continue": MUST_CONTINUE}
     return reply, confidence, human_attr, bot_attr, attr
@@ -288,14 +292,14 @@ class GroundingSkillScenario:
                 logger.info(f'Grounding skill what_do_you_mean: {reply}')
 
             # ACKNOWLEDGEMENT HYPOTHESES for current utterance
-            # reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
-            # if reply and confidence:
-            #     curr_responses += [reply]
-            #     curr_confidences += [confidence]
-            #     curr_human_attrs += [human_attr]
-            #     curr_bot_attrs += [bot_attr]
-            #     curr_attrs += [attr]
-            #     logger.info(f'Grounding skill acknowledgement: {reply}')
+            reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement(dialog)
+            if reply and confidence:
+                curr_responses += [reply]
+                curr_confidences += [confidence]
+                curr_human_attrs += [human_attr]
+                curr_bot_attrs += [bot_attr]
+                curr_attrs += [attr]
+                logger.info(f'Grounding skill acknowledgement: {reply}')
 
             # UNIVERSAL INTENT RESPONSES
             reply, confidence, human_attr, bot_attr, attr = generate_universal_response(dialog)

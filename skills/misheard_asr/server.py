@@ -8,6 +8,8 @@ from flask import Flask, request, jsonify
 from os import getenv
 import sentry_sdk
 
+from common.utils import is_yes, is_no
+
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -37,19 +39,19 @@ def misheard_response():
 
     for dialog in dialogs_batch:
         prev_user_utt = None
-        if len(dialog['utterances']) > 2 :
-            prev_user_utt = dialog['utterances'][-3]
+        if len(dialog['human_utterances']) > 1:
+            prev_user_utt = dialog['human_utterances'][-2]
         bot_attributes = dialog["bot"]["attributes"]
         human_attributes = dialog["human"]["attributes"]
-        current_user_utt = dialog['utterances'][-1]
-        prev_bot_utt = dialog['utterances'][-2]
+        current_user_utt = dialog['human_utterances'][-1]
+        prev_bot_utt = dialog['bot_utterances'][-1] if len(dialog['bot_utterances']) > 0 else {}
         logger.debug(f"MISHEARD ASR INPUT: current utt text: {current_user_utt['text']};"
                      f"bot attrs: {bot_attributes}; user attrs: {human_attributes}"
                      f"HYPOTS: {current_user_utt['hypotheses']}"
                      f"PREV BOT UTT: {prev_bot_utt}")
         if bot_attributes.get('asr_misheard') is True and prev_bot_utt['active_skill'] == 'misheard_asr':
             bot_attributes['asr_misheard'] = False
-            if current_user_utt['annotations'].get("intent_catcher", {}).get('yes', {}).get('detected') == 1:
+            if is_yes(current_user_utt):
                 hypots = prev_user_utt["hypotheses"]
                 logger.debug(f"PREV HYPOTS: {hypots}")
                 candidates = []
@@ -62,7 +64,7 @@ def misheard_response():
                 final_confidences.append(confs)
                 final_human_attributes.append([human_attributes] * len(candidates))
                 final_bot_attributes.append([bot_attributes] * len(candidates))
-            elif current_user_utt['annotations'].get("intent_catcher", {}).get('no', {}).get('detected') == 1:
+            elif is_no(current_user_utt):
                 response = "What is it that you'd like to chat about?"
                 final_responses.append([response])
                 final_confidences.append([1.0])
@@ -81,7 +83,7 @@ def misheard_response():
                 final_human_attributes.append([human_attributes])
                 final_bot_attributes.append([bot_attributes])
             elif current_user_utt['annotations']['asr']['asr_confidence'] == 'medium':
-                response = f"Excuse me, I misheard you. Have you said: \"{dialog['utterances'][-1]['text']}\"?"
+                response = f"Excuse me, I misheard you. Have you said: \"{dialog['human_utterances'][-1]['text']}\"?"
                 final_responses.append([response])
                 final_confidences.append([1.0])
                 bot_attributes['asr_misheard'] = True

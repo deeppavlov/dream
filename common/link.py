@@ -167,6 +167,28 @@ link_to_skill2i_like_to_talk = {
     ],
 }
 
+DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planets?",
+                   "smartphones": "Nowadays it is impossible to imagine world without gadgets. "
+                                  "Do you have an iPhone or Android phone?",
+                   "bitcoin": "Cryptocurrencies let you buy goods and services, or trade them for profit. "
+                              "Would you like to know more about bitcoin?",
+                   "dinosaurs": "Dinosaurs are a group of reptiles that have lived on Earth for about 245 million "
+                                "years. Are you interested in dinosaurs?",
+                   "robots": "Robotics technology influences every aspect of work and home. "
+                             "Would you like to know more about robots?",
+                   "cars": "Cars are an easy and convenient mean of transportation. Do you have a car?",
+                   "hiking": "Hiking is one of the most beneficial and healthy hobbies anyone could choose to adopt. "
+                             "Do you like hiking?",
+                   "art": "Art is a good way to express feelings. Would you like to talk about art?",
+                   "drawing": "Drawing gives you a mean to self-reflect and externalize your emotions."
+                              "Do you like drawing?",
+                   "photo": "In our increasingly busy lives it’s difficult to always be in the moment."
+                            "Taking pictures helps you to hang on to those memories a little longer."
+                            "Do you like taking photographs?",
+                   "memes": "Memes are funny artworks we can see on the Internet. Do you like memes?",
+                   "tiktok": "TikTok is known for its funny lip-syncing videos. Have you shot a video for tiktok?"
+                   }
+
 
 def link_to(skills, human_attributes, recent_active_skills=None):
     """

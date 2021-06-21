@@ -151,6 +151,7 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/misheard_asr:/src"
+      - "./common:/src/common"
     ports:
       - 8033:8033
   book-skill:

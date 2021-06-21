@@ -37,7 +37,7 @@ require_action_intents_fname = "require_action_intents.json"
 REQUIRE_ACTION_INTENTS = json.load(open(require_action_intents_fname))
 
 PROMPT_PROBA = 0.3
-ACKNOWLEDGEMENT_PROBA = 1.0
+ACKNOWLEDGEMENT_PROBA = 0.5
 
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
@@ -549,7 +549,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 best_candidate["human_attributes"].pop("used_links")
 
     was_ackn = if_acknowledgement_in_previous_bot_utterance(dialog)
-    if acknowledgement_hypothesis and acknowledgement_decision() and n_sents_without_prompt == 1 and not was_ackn:
+    best_resp_cont_ackn = "acknowledgement" in best_candidate.get("response_parts", [])
+    if acknowledgement_hypothesis and acknowledgement_decision() and n_sents_without_prompt == 1 and not was_ackn and \
+            not best_resp_cont_ackn:
         logger.info(f"Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
                     f"and we decided to add an acknowledgement to the best candidate.")
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'

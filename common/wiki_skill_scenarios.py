@@ -1,20 +1,42 @@
-from common.universal_templates import DFF_WIKI_TEMPLATES, DFF_WIKI_LINKTO
+from common.link import DFF_WIKI_LINKTO
+from common.universal_templates import DFF_WIKI_TEMPLATES
 
 topic_config = \
     {"art":
-     {"linkto": ["Would you like to talk about art?"],
+     {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["art"]}, "bot", True], ["is_yes", "user", True]],
+                              [[{"pattern": DFF_WIKI_LINKTO["art"]}, "bot", True],
+                               [{"pattern": DFF_WIKI_TEMPLATES["art"]}, "user", True]],
+                              ]}],
       "pattern": DFF_WIKI_TEMPLATES["art"],
-      "expected_subtopic_info": [{"subtopic": "drawing", "cond": [[{"pattern": "draw|paint"}, "user", True]]},
-                                 {"subtopic": "photo", "cond": [[{"pattern": "photo"}, "user", True]]}],
+      "expected_subtopic_info": [{"subtopic": "drawing_q",
+                                  "cond": [[[{"pattern": "draw|paint"}, "user", True],
+                                            [{"pattern": DFF_WIKI_LINKTO["drawing"]}, "bot", False]]]},
+                                 {"subtopic": "photo_q",
+                                  "cond": [[[{"pattern": "photo"}, "user", True],
+                                            [{"pattern": DFF_WIKI_LINKTO["photo"]}, "bot", False]]]},
+                                 {"subtopic": "memes_q",
+                                  "cond": [[[{"pattern": "meme"}, "user", True],
+                                            [{"pattern": DFF_WIKI_LINKTO["memes"]}, "bot", False]]]},
+                                 {"subtopic": "drawing",
+                                  "cond": [[{"pattern": DFF_WIKI_LINKTO["drawing"]}, "bot", True]]},
+                                 {"subtopic": "photo", "cond": [[{"pattern": DFF_WIKI_LINKTO["photo"]}, "bot", True]]},
+                                 {"subtopic": "memes", "cond": [[{"pattern": DFF_WIKI_LINKTO["memes"]}, "bot", True]]},
+                                 ],
       "smalltalk": [{"utt": ["Drawing gives you a mean to self-reflect and externalize your emotions.",
                              "Do you like drawing?"],
-                     "expected_subtopic_info": [{"subtopic": "drawing", "cond": [["is_yes", "user", True]]}]},
+                     "expected_subtopic_info": [{"subtopic": "drawing", "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "drawing_q",
+                     },
                     {"utt": ["In our increasingly busy lives it’s difficult to always be in the moment.",
                              "Taking pictures helps you to hang on to those memories a little longer.",
                              "Do you like taking photographs?"],
-                     "expected_subtopic_info": [{"subtopic": "photo", "cond": [["is_yes", "user", True]]}]},
+                     "expected_subtopic_info": [{"subtopic": "photo", "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "photo_q"
+                     },
                     {"utt": ["Memes are funny artworks we can see on the Internet.", "Do you like memes?"],
-                     "expected_subtopic_info": [{"subtopic": "memes", "cond": [["is_yes", "user", True]]}]},
+                     "expected_subtopic_info": [{"subtopic": "memes", "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "memes_q"
+                     },
                     {"utt": ["Do you draw with a pencil or with oil paints?"],
                      "subtopic": "drawing"},
                     {"utt": [
@@ -199,7 +221,7 @@ topic_config = \
                                                 {"subtopic": "prisoner_of_azkaban",
                                                  "cond": [[{"pattern": "(prisoner|azbakan)"}, "user", True]]},
                                                 {"subtopic": "goblet_of_fire",
-                                                 "cond": [[{"pattern": "(goblet|fire)"}]]},
+                                                 "cond": [[{"pattern": "(goblet|fire)"}, "user", True]]},
                                                 {"subtopic": "order_phoenix",
                                                  "cond": [[{"pattern": "(order|phoenix)"}, "user", True]]},
                                                 {"subtopic": "half_blood_prince",
@@ -355,14 +377,14 @@ topic_config = \
      "space":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["space"]}, "bot", True], ["is_yes", "user", True]],
                               [[{"pattern": DFF_WIKI_LINKTO["space"]}, "bot", True],
-                               [{"pattern": DFF_WIKI_LINKTO["space"]}, "user", True]]]}],
+                               [{"pattern": DFF_WIKI_TEMPLATES["space"]}, "user", True]]]}],
       "pattern": DFF_WIKI_TEMPLATES["space"],
       "facts": {"wikipedia_page": "Space exploration", "entity_substr": "space"}
       },
      "smartphones":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["smartphones"]}, "bot", True], ["is_yes", "user", True]],
                               [[{"pattern": DFF_WIKI_LINKTO["smartphones"]}, "bot", True],
-                               [{"pattern": DFF_WIKI_LINKTO["smartphones"]}, "user", True]]]}],
+                               [{"pattern": DFF_WIKI_TEMPLATES["smartphones"]}, "user", True]]]}],
       "pattern": DFF_WIKI_TEMPLATES["smartphones"],
       "expected_subtopic_info": [{"subtopic": "android",
                                   "cond": [[{"pattern": "android|xiaomi|huawei|samsung"}, "user", True]]},
@@ -381,7 +403,7 @@ topic_config = \
      "bitcoin":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["bitcoin"]}, "bot", True], ["is_yes", "user", True]],
                               [[{"pattern": DFF_WIKI_LINKTO["bitcoin"]}, "bot", True],
-                               [{"pattern": DFF_WIKI_LINKTO["bitcoin"]}, "user", True]]]}],
+                               [{"pattern": DFF_WIKI_TEMPLATES["bitcoin"]}, "user", True]]]}],
       "pattern": DFF_WIKI_TEMPLATES["bitcoin"],
       "smalltalk": [{"utt": ["I can tell you how to mine bitcoin and earn a lot, should I continue?"],
                      "facts": [{"wikihow_page": "Mine-Bitcoin",
@@ -393,14 +415,14 @@ topic_config = \
      "dinosaurs":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["dinosaurs"]}, "bot", True], ["is_yes", "user", True]],
                               [[{"pattern": DFF_WIKI_LINKTO["dinosaurs"]}, "bot", True],
-                               [{"pattern": DFF_WIKI_LINKTO["dinosaurs"]}, "user", True]]]}],
+                               [{"pattern": DFF_WIKI_TEMPLATES["dinosaurs"]}, "user", True]]]}],
       "pattern": DFF_WIKI_TEMPLATES["dinosaurs"],
       "facts": {"wikipedia_page": "Dinosaur", "entity_substr": "dinosaurs"}
       },
      "robots":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["robots"]}, "bot", True], ["is_yes", "user", True]],
                               [[{"pattern": DFF_WIKI_LINKTO["robots"]}, "bot", True],
-                               [{"pattern": DFF_WIKI_LINKTO["robots"]}, "user", True]]]}],
+                               [{"pattern": DFF_WIKI_TEMPLATES["robots"]}, "user", True]]]}],
       "pattern": DFF_WIKI_TEMPLATES["robots"],
       "smalltalk": [{"utt": ["Robots can be used in industry and in medicine.",
                              "Also there are flying robots or drones with cameras. Is it interesting?"],
@@ -412,5 +434,77 @@ topic_config = \
                                 "cond": [["is_yes", "user", True]]}]},
                     {"utt": ["Would you like to know how to build a simple robot?"],
                      "facts": [{"wikihow_page": "Build-a-Simple-Robot", "cond": [["is_yes", "user", True]]}]}]
+      },
+     "cars":
+     {"switch_on": [{"cond": [[{"pattern": DFF_WIKI_LINKTO["cars"]}, "bot", True]]}],
+      "pattern": DFF_WIKI_TEMPLATES["cars"],
+      "expected_subtopic_info": [{"subtopic": "car_no", "cond": [["is_no", "user", True]]},
+                                 {"subtopic": "car_yes", "cond": [["is_yes", "user", True],
+                                                                  [{"pattern": "(car|drive)"}, "user", True]]}
+                                 ],
+      "smalltalk": [{"utt": ["Do you drive your car every day to work?"],
+                     "subtopic": "car_yes",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Cool! Car is more comfortable than bus."},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "I agree with you, taking the bus sometimes is more convenient "
+                                              "because you needn't buy expensive gasoline and stay in traffic jams."
+                                    }]
+                     },
+                    {"utt": ["Do you have a sedan, an S.U.V or a coupe?"],
+                     "subtopic": "car_yes",
+                     "next_ackn": [{"cond": [[{"pattern": "sedan"}, "user", True]],
+                                    "answer": "Sedans are the most comfortable type of cars."},
+                                   {"cond": [[{"pattern": "(suv|s.u.v.|off-road|offroad)"}, "user", True]],
+                                    "answer": "S.U.V. cars are good for off-road driving."},
+                                   {"cond": [[{"pattern": "coupe"}, "user", True]],
+                                    "answer": "Coupe cars are very fast."}]},
+                    {"utt": ["Do you like to drive at a high speed?"],
+                     "subtopic": "car_yes",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Cool! Fast driving gives an adrenaline rush."},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "Cool! Safety is an important aspect of driving."}]},
+                    {"utt": ["Nowadays electric cars are becoming more and more popular, "
+                             "because they are eco-friendly and cheap in maintenance, .",
+                             "Would you like to buy an electro car, for example, Tesla?"],
+                     "subtopic": "car_yes",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "I definitely agree with you! "
+                                              "Electric cars are the future of auto industry."}]},
+                    {"utt": ["Car maintenance can be a big budget line.",
+                             "Would you like to know how to calculate the cost of driving"],
+                     "subtopic": "car_yes",
+                     "facts": [{"wikihow_page": "Calculate-the-Cost-of-Driving", "cond": [["is_yes", "user", True]]}]
+                     },
+                    {"utt": ["I would like to tell you how to keep warm in a car in cold weather, should I continue?"],
+                     "subtopic": "car_yes",
+                     "facts": [{"wikihow_page": "Keep-Warm-in-a-Car", "cond": [["is_yes", "user", True]]}]},
+                    {"utt": ["I agree with you, taking the bus sometimes is more convenient because you needn't buy "
+                             "expensive gasoline and stay in traffic jams."],
+                     "subtopic": "car_no"}
+                    ]
+      },
+     "hiking":
+     {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["hiking"]}, "bot", True], ["is_yes", "user", True]],
+                              [[{"pattern": DFF_WIKI_LINKTO["hiking"]}, "bot", True],
+                               [{"pattern": DFF_WIKI_TEMPLATES["hiking"]}, "user", True]]]}],
+      "pattern": DFF_WIKI_TEMPLATES["hiking"],
+      "smalltalk": [{"utt": ["I can tell you how to choose a hiking vacation destination, should I continue?"],
+                     "facts": [{"wikihow_page": "Choose-a-Hiking-Vacation-Destination",
+                                "cond": [["is_yes", "user", True]]}]},
+                    {"utt": ["A dog can be a good hiking companion.",
+                             "Would you like to know how to choose a hiking dog?"],
+                     "facts": [{"wikihow_page": "Choose-a-Good-Hiking-Dog",
+                                "cond": [["is_yes", "user", True]]}]}
+                    ]
+      },
+     "tiktok":
+     {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["tiktok"]}, "bot", True], ["is_yes", "user", True]],
+                              [[{"pattern": DFF_WIKI_LINKTO["tiktok"]}, "bot", True],
+                               [{"pattern": DFF_WIKI_TEMPLATES["tiktok"]}, "user", True]]]}],
+      "pattern": DFF_WIKI_TEMPLATES["tiktok"],
+      "smalltalk": [{"utt": ["I can tell you how to become popular in tiktok, should I continue?"],
+                     "facts": [{"wikihow_page": "Become-Popular-on-TikTok", "cond": [["is_yes", "user", True]]}]}]
       }
      }

@@ -25,26 +25,6 @@
             ]
         }
     ],
-    "cars": [
-        "Can you drive a car?",
-        {
-            "yes": [
-                "One of my oldest engineers still doesn't have a car... Wonder how old were you when you first learned to drive?",
-                "No way! Do you have a car?",
-                "Wish we socialbots could have our own cars! Tell me what are the advantages of owning a car?",
-                "It's quite frightening on US roads sometimes. Have you ever been in a car accident?",
-                "The more people and cars are in the way, the harder it is to drive safely, right? Do you think cars should be banned from city centers?"
-            ],
-            "no": [
-                "Wow! Why not?",
-                "Huh, interesting. So, would you ever consider getting a drive license?",
-                "Freedom to get anywhere you want always fascinated me as one of the top inventions of the XX century. At what age can you get a license in your country?",
-                "As long as people are responsible for driving I think it's important to instate some limits to minimal age of the drivers. Do you think the age for driving should be raised or lowered?",
-                "Heard that driving rules are quite relaxed in India. Are the drivers in your area where you live good drivers?",
-                "Though it's not the best time for travelling I wonder... What will travelling abroad look like in 30 years?"
-            ]
-        }
-    ],
     "depression": [
         "Do you feel depressed?",
         {
