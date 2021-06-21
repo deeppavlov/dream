@@ -155,3 +155,8 @@ ALL_LINKS_TO_BOOKS = compose_list_of_links(links_to_books) + compose_list_of_spe
 
 def skill_trigger_phrases():
     return ["What video game are you playing in recent days?", "What is your favorite video game?"]
+
+
+ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = "Wow, video games are cool. " \
+    "If I didn't love to chat so much, I would definitely played video games at least half a day. " \
+    "What game are you playing now?"

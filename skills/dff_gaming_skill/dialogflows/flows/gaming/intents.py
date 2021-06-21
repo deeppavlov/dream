@@ -4,7 +4,8 @@ import os
 import sentry_sdk
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, skill_trigger_phrases
+from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY, \
+    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, skill_trigger_phrases
 from common.link import link_to_skill2i_like_to_talk
 from common.utils import is_no, is_yes
 
@@ -22,7 +23,9 @@ WORDS_THAT_ARE_DEFINITELY_GAME_NAMES = ["minecraft"]
 
 
 def get_links_to_gaming():
-    return skill_trigger_phrases() + link_to_skill2i_like_to_talk['dff_gaming_skill']
+    return skill_trigger_phrases() \
+        + link_to_skill2i_like_to_talk['dff_gaming_skill'] \
+        + [ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY]
 
 
 def does_text_contain_link_to_gaming(text):
@@ -32,6 +35,26 @@ def does_text_contain_link_to_gaming(text):
     res = any([u.lower() in text.lower() for u in link_phrases])
     logger.info(f"(does_text_contain_link_to_gaming)res: {res}")
     return res
+
+
+def user_mentioned_games_as_his_interest_request(ngrams, vars, first_time=True):
+    logger.info(f"user_mentioned_games_as_his_interest_request")
+    user_text = state_utils.get_last_human_utterance(vars).get("text", "").lower()
+    bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
+    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
+        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(bot_text)
+    flag = not game_names_from_local_list_of_games \
+        and common_intents.switch_to_general_gaming_discussion(vars) \
+        and not user_doesnt_like_gaming_request(ngrams, vars) \
+        and not user_didnt_name_game_request(ngrams, vars) \
+        and (
+            first_time
+            and ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY not in bot_text
+            or not first_time
+            and ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY in bot_text
+        )
+    logger.info(f"user_mentioned_games_as_his_interest_request={flag}")
+    return flag
 
 
 def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):

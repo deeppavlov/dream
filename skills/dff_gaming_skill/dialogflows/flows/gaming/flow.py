@@ -12,7 +12,8 @@ import dialogflows.common.shared_memory_ops as gaming_memory
 import dialogflows.flows.gaming.intents as gaming_intents
 import dialogflows.flows.gaming.nlg as gaming_nlg
 import dialogflows.scopes as scopes
-from dialogflows.common.intents import user_doesnt_say_yes_request, user_says_anything_request, user_says_yes_request
+from dialogflows.common.intents import LogicalOr, user_doesnt_say_yes_request, user_says_anything_request, \
+    user_says_yes_request
 from dialogflows.common.nlg import error_response, link_to_other_skills_response
 from dialogflows.flows.gaming.states import State as GamingState
 from dialogflows.flows.minecraft.intents import is_game_candidate_minecraft, is_minecraft_mentioned_in_user_uttr
@@ -54,12 +55,24 @@ simplified_dialogflow.add_user_serial_transitions(
                 gaming_intents.user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play_request,
                 additional_check=lambda n, v: not is_minecraft_mentioned_in_user_uttr(n, v)),
         GamingState.SYS_USER_DOESNT_LIKE_GAMING: gaming_intents.user_doesnt_like_gaming_request,
-        GamingState.SYS_USER_DIDNT_NAME_GAME: gaming_intents.user_didnt_name_game_request,
+        GamingState.SYS_USER_DIDNT_NAME_GAME: LogicalOr(
+            gaming_intents.user_didnt_name_game_request,
+            partial(gaming_intents.user_mentioned_games_as_his_interest_request, first_time=False)),
+        GamingState.SYS_USER_MENTIONED_GAMES_AS_HIS_INTEREST:
+            gaming_intents.user_mentioned_games_as_his_interest_request,
     },
 )
 # ######### if all *_request==False then transition State.USR_START -> State.SYS_ERR  #########
 simplified_dialogflow.set_error_successor(GamingState.USR_START, GamingState.SYS_ERR)
 
+##################################################################################################################
+simplified_dialogflow.add_system_transition(
+    GamingState.SYS_USER_MENTIONED_GAMES_AS_HIS_INTEREST,
+    (scopes.MAIN, scopes.State.USR_ROOT),
+    gaming_nlg.ask_what_game_user_likes_response,
+)
+simplified_dialogflow.set_error_successor(
+    GamingState.SYS_USER_MENTIONED_GAMES_AS_HIS_INTEREST, GamingState.SYS_ERR)
 ##################################################################################################################
 simplified_dialogflow.add_system_transition(
     GamingState.SYS_USER_MAYBE_WANTS_TO_TALK_ABOUT_PARTICULAR_GAME,
@@ -128,7 +141,7 @@ simplified_dialogflow.set_error_successor(GamingState.SYS_USER_THINKS_GAMING_IS_
 ##############################################################
 simplified_dialogflow.add_system_transition(
     GamingState.SYS_USER_THINKS_GAMING_IS_HEALTHY,
-    GamingState.USR_TELL_ABOUT_MINECRAFT_ANIMATION_AND_ASK_WHAT_ANIMATION_USER_LIKES,
+    (scopes.MAIN, scopes.State.USR_ROOT),
     partial(
         gaming_nlg.tell_about_minecraft_animation_and_ask_what_animation_user_likes_response,
         prefix="Okay. I guess some people just don't think that playing video games is fun.")
@@ -146,7 +159,7 @@ simplified_dialogflow.set_error_successor(GamingState.USR_ASK_IF_USER_PLAYED_MIN
 #########################
 simplified_dialogflow.add_system_transition(
     GamingState.SYS_USER_DIDNT_PLAY_MINECRAFT,
-    GamingState.USR_TELL_ABOUT_MINECRAFT_ANIMATION_AND_ASK_WHAT_ANIMATION_USER_LIKES,
+    (scopes.MAIN, scopes.State.USR_ROOT),
     gaming_nlg.tell_about_minecraft_animation_and_ask_what_animation_user_likes_response
 )
 simplified_dialogflow.set_error_successor(GamingState.SYS_USER_DOESNT_CONFIRM_GAME, GamingState.SYS_ERR)
