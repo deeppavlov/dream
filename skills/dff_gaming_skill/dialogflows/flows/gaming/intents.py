@@ -6,7 +6,7 @@ import sentry_sdk
 import common.dialogflow_framework.utils.state as state_utils
 from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, skill_trigger_phrases
 from common.link import link_to_skill2i_like_to_talk
-from common.utils import is_yes
+from common.utils import is_no, is_yes
 
 import dialogflows.common.intents as common_intents
 from dialogflows.flows.minecraft.intents import is_minecraft_mentioned_in_user_uttr
@@ -97,6 +97,26 @@ def user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play
         and additional_check(ngrams, vars)
     logger.info(f"user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play with additional check "
                 f"{common_intents.get_additional_check_description(additional_check)}: {flag}")
+    return flag
+
+
+def user_doesnt_like_gaming_request(ngrams, vars):
+    logger.info(f"user_doesnt_like_gaming_request")
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    found_game_name = bool(GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_uttr.get("text", "")))
+    flag = is_no(user_uttr) and not found_game_name and does_text_contain_link_to_gaming(bot_uttr.get("text", ""))
+    logger.info(f"user_doesnt_like_gaming_request={flag}")
+    return flag
+
+
+def user_didnt_name_game_request(ngrams, vars):
+    logger.info(f"user_didnt_name_game_request")
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    found_game_name = bool(GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_uttr.get("text", "")))
+    flag = not is_no(user_uttr) and not found_game_name and does_text_contain_link_to_gaming(bot_uttr.get("text", ""))
+    logger.info(f"user_didnt_name_game_request={flag}")
     return flag
 
 

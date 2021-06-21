@@ -6,7 +6,7 @@ import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
-from common.utils import is_no
+from common.utils import get_entities, is_no
 
 import dialogflows.common.nlg as common_nlg
 import dialogflows.common.shared_memory_ops as gaming_memory
@@ -161,6 +161,53 @@ def describe_game_to_user_response(vars, ask_if_user_wants_more=True):
         response = text + " So. Would you like to play this game?"
     if num_remaining_sentences == 0:
         state_utils.save_to_shared_memory(vars, curr_summary_sent_index=0)
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+@error_handler
+def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
+    response = "It is known that people who play computer games too much can have health problems, "\
+               "both physical and emotional. Do you agree?"
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    entities = get_entities(human_uttr, only_named=True)
+    logger.info(f"(ask_if_user_thinks_that_gaming_is_unhealthy_response)entities: {entities}")
+    if entities:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    else:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    return response
+
+
+@error_handler
+def ask_if_user_played_minecraft_response(vars):
+    response = "There is one game I play a lot. Did you play Minecraft?"
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    return response
+
+
+@error_handler
+def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
+    response = "There are several simple rules which help people stay healthy while playing video games. " \
+               "The first is to give your eyes rest regularly. You can use reminders for that. The second rule " \
+               "is to follow schedule and not play games for too long. And the last is to exercise regularly. " \
+               "By the way, what sport do you like?"
+    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    return response
+
+
+@error_handler
+def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(vars, prefix=None):
+    response = "Minecraft is my favorite video game. In March I have seen a cool animation which was made using " \
+               "Minecraft. It was about living in quarantine and it was published on Reddit by LusinMohinder. " \
+               "By the way, what is your favorite animation?"
+    if prefix is not None:
+        response = prefix + " " + response
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
