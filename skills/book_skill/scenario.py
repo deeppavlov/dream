@@ -67,6 +67,7 @@ OPINION_REQUEST_ON_BOOK_PHRASES = ["Did you enjoy this book?",
                                    "Did you find this book interesting?",
                                    "Was this book exciting for you?"]
 WILL_CHECK = 'Never heard about it. I will check it out later.'
+REPEAT_PHRASE = "Could you repeat it, please?"
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
 BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST]
 QUESTIONS_ABOUT_BOOK = BOOK_SKILL_QUESTIONS + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
@@ -165,12 +166,12 @@ class BookSkillScenario:
         we_asked_about_book = any([phrase in bot_phrases[-1]
                                    for phrase in QUESTIONS_ABOUT_BOOK])
         regexp_found_author = find_by(annotated_user_phrase)
-        we_repeated = '#+#repeat' in bot_phrases[-1]
+        we_repeated = REPEAT_PHRASE in bot_phrases[-1]
         if we_asked_about_book and nothing_found:
             if we_repeated:
                 reply = self.book_linkto_reply('', human_attr)
             elif is_yes(annotated_user_phrase) or annotated_user_phrase['annotations'].get('ner', [[]]) == [[]]:
-                reply, confidence = f'{bot_phrases[-1]} #+#repeat', self.default_conf
+                reply, confidence = REPEAT_PHRASE, self.default_conf
             elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
                 reply, confidence = BOOK_ANY_PHRASE, self.default_conf
             elif regexp_found_author:
