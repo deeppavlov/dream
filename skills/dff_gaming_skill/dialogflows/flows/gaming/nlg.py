@@ -70,7 +70,20 @@ def check_game_name_with_user_response(vars):
 
 
 @error_handler
-def confess_bot_never_played_game_and_ask_user_if_he_played_response(vars, candidate_game_id_is_already_set):
+def confess_bot_never_played_game_and_ask_user_response(
+        vars,
+        candidate_game_id_is_already_set,
+        did_user_play=False,
+        how_long_user_played=False
+):
+    if not (
+            isinstance(did_user_play, bool)
+            and isinstance(how_long_user_played, bool)
+            and did_user_play + how_long_user_played == 1
+    ):
+        raise ValueError(
+            f"One of parameters `did_user_play` and `how_long_user_played` has to be `True` and the other"
+            f"has to be `False`. did_user_play={did_user_play}, how_long_user_played={how_long_user_played}")
     gaming_memory.set_current_igdb_game_id_if_game_for_discussion_is_identified(vars, candidate_game_id_is_already_set)
     game = gaming_memory.get_current_igdb_game(vars, assert_not_empty=False)
     if game is None:
@@ -91,21 +104,36 @@ def confess_bot_never_played_game_and_ask_user_if_he_played_response(vars, candi
         else:
             genres = f"{IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]} "\
                 f"and {IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][1]]}"
-        response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "\
-                   f"Have you ever played {game['name']}?"
+        response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "
+        if did_user_play:
+            response += f"Have you ever played {game['name']}?"
+        elif how_long_user_played:
+            response += f"When did you start to play {game['name']}?"
+        else:
+            assert False
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
-@error_handler
-def tell_about_what_bot_likes_and_ask_if_user_recommends_game_response(vars):
+def ask_advice(vars):
     game = gaming_memory.get_current_igdb_game(vars)
-    response = f"That is great! Could you give me an advice? I like games in which I can create something and "\
+    response = f"Could you give me an advice? I like games in which I can create something and "\
         f"my favorite game is Minecraft. Would you recommend me to try {game['name']}?"
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
+
+
+@error_handler
+def tell_about_what_bot_likes_and_ask_if_user_recommends_game_response(vars):
+    return "That is great! " + ask_advice(vars)
+
+
+@error_handler
+def comment_on_user_experience_and_ask_if_user_recommends_game_response(vars):
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    return common_nlg.compose_experience_comment(human_uttr.get("text", ""))[0] + "  " + ask_advice(vars)
 
 
 @error_handler
