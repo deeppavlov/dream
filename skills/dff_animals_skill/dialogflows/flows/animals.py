@@ -178,11 +178,14 @@ def mention_pets_request(ngrams, vars):
 
 def user_mentioned_his_pet_request(ngrams, vars):
     flag = False
-    user_text = state_utils.get_last_human_utterance(vars)["text"]
-    users_pet = re.findall(r"my (cat|dog|puppy|kitty|kitten)", user_text, re.IGNORECASE)
-    has_pet = re.findall(r"i (have |had )(a )?(cat|dog|puppy|kitty|kitten)", user_text, re.IGNORECASE)
-    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, user_text)
-    if (users_pet or has_pet) and not found_blacklist:
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    users_pet = re.findall(r"my (cat|dog|puppy|kitty|kitten)", user_uttr["text"], re.IGNORECASE)
+    has_pet = re.findall(r"i (have |had )(a )?(cat|dog|puppy|kitty|kitten)", user_uttr["text"], re.IGNORECASE)
+    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
+    bot_asked_pet = "do you have pets" in bot_uttr["text"].lower()
+    found_pet = re.search(PETS_TEMPLATE, user_uttr["text"])
+    if (users_pet or has_pet or (bot_asked_pet and found_pet)) and not found_blacklist:
         flag = True
     logger.info(f"user_mentioned_his_pet_request={flag}")
     return flag
