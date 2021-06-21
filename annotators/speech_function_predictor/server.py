@@ -19,7 +19,7 @@ app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
 )
 
-class_dict, label_to_name, A = init_model()
+class_dict, counters, label_to_name = init_model()
 
 
 def predict(label_name):
@@ -29,8 +29,8 @@ def predict(label_name):
         class_id = class_dict[label_name]
     except KeyError:
         return [{}]
-    sorted_lbls = sorted(enumerate(A[class_id]), reverse=True, key=lambda x: x[1])[:5]
-    return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_lbls]
+    sorted_classes = sorted(enumerate(counters[class_id]), reverse=True, key=lambda x: x[1])[:5]
+    return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_classes]
 
 
 try:

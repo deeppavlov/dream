@@ -109,4 +109,4 @@ def init_model():
         total_count = sum(counters[i])
         for j in range(len(counters[i])):
             counters[i][j] /= max(total_count, 1)
-    return class_dict, label_to_name, counters
+    return class_dict, counters, label_to_name
