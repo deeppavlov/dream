@@ -694,7 +694,7 @@ def dff_gossip_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_generic_responses_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_generic_responses_skill")
+    return utils.dff_formatter(dialog, "dff_generic_responses_skill", human_last_turns=5)
 
 
 def dff_movie_skill_formatter(dialog: Dict) -> List[Dict]:

@@ -107,6 +107,10 @@ def get_human_utterances(vars):
     return vars["agent"]["dialog"]["human_utterances"]
 
 
+def get_bot_utterances(vars):
+    return vars["agent"]["dialog"]["bot_utterances"]
+
+
 def get_last_human_utterance(vars):
     return vars["agent"]["dialog"]["human_utterances"][-1]
 

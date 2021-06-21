@@ -185,6 +185,10 @@ def get_pre_last_bot_utterance(vars):
 
 
 def is_last_bot_utterance_by_us(vars):
+    bot_utterances = state_utils.get_bot_utterances(vars)
+    if len(bot_utterances) == 0:
+        return False 
+
     last_bot_utterance = state_utils.get_last_bot_utterance(vars)
 
     active_skill = last_bot_utterance["active_skill"]
@@ -313,15 +317,33 @@ def error_response(vars):
 
 
 def sys_response_to_speech_function_request(ngrams, vars):
-    dialog = state_utils.get_dialog(vars)
+    flag = False
+    
     # added check for introvert/extravert
-    if len(dialog["bot_utterances"]) > 5:
-        if is_introvert(dialog) is False:
-            return False
+    try:
+        dialog = state_utils.get_dialog(vars)
+        human_uttr_idx = len(dialog["human_utterances"])
+        
+        logger.info(f"human dialog length: {human_uttr_idx}")
 
-    human_utterance = state_utils.get_last_human_utterance(vars)
-    bot_utterance = state_utils.get_last_bot_utterance(vars)
-    flag = is_supported_speech_function(human_utterance, bot_utterance)
+        # if len(dialog["human_utterances"]) > 4:
+        #     logger.info("human utterances number: at least 5")
+        #     if is_introvert(dialog) is True:
+        #         logger.info("user is: introvert")
+        #         return False
+
+        #     else:
+        logger.info("user is: extravert")
+        human_utterance = state_utils.get_last_human_utterance(vars)
+        bot_utterance = state_utils.get_last_bot_utterance(vars)
+        flag = is_supported_speech_function(human_utterance, bot_utterance)
+        logger.info(f"sys_response_to_speech_function_request: {flag}")
+
+    except Exception as exc:
+        logger.exception(exc)
+        logger.info(f"sys_response_to_speech_function_request: Exception: {exc}")
+        sentry_sdk.capture_exception(exc)
+
     logger.info(f"sys_response_to_speech_function_request: {flag}")
     return flag
 
@@ -407,6 +429,7 @@ def usr_response_to_speech_function_response(vars):
         return body
     except Exception as exc:
         logger.exception(exc)
+        logger.info(f"usr_response_to_speech_function_response: Exception: {exc}")
         sentry_sdk.capture_exception(exc)
         return error_response(vars)
 
