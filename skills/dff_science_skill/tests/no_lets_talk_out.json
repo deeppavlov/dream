@@ -1,0 +1,31 @@
+[
+    [
+        "",
+        0,
+        {
+            "dff_science_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 3,
+                "history": {
+                    "3": [
+                        "SYSTEM",
+                        "State.USR_ROOT"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"lets talk about pets\", \"__system_state__\": \"<__tuple__>\\\"SYSTEM\\\"<__tuple__>\\\"State.USR_ROOT\\\"\", \"__converged__\": \"True\", \"__state__\": \"State.USR_ROOT\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"SYSTEM\\\"<__tuple__>\\\"State.USR_ROOT\\\"\"}"
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "no"
+        }
+    ]
+]
