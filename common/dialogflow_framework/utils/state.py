@@ -99,6 +99,14 @@ def get_previous_human_utter_index(vars):
     return vars["agent"]["previous_human_utter_index"]
 
 
+def get_dialog(vars):
+    return vars["agent"]["dialog"]
+
+
+def get_human_utterances(vars):
+    return vars["agent"]["dialog"]["human_utterances"]
+
+
 def get_last_human_utterance(vars):
     return vars["agent"]["dialog"]["human_utterances"][-1]
 

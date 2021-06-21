@@ -20,8 +20,8 @@ from utils import add_question_to_statement, lower_duplicates_score, \
     downscore_toxic_blacklisted_responses, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, psycho_help_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec
-from common.discourse import dm_based_response_selection
-from common.psychometrics import is_introvert
+
+											 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -34,7 +34,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
-PSYCHOTYPE_BASED_DIALOG_SUPPORT = True
+									  
 MOST_DUMMY_RESPONSES = ["I really do not know what to answer.",
                         "Sorry, probably, I didn't get what you mean.",
                         "I didn't get it. Sorry"
@@ -67,25 +67,25 @@ def respond():
             logger.info("Curr candidates:")
             logger.info(pprint.pformat(curr_candidates, compact=False))
 
-            len_bot_ut = len(dialog["bot_utterances"])
+													  
 
-            logger.info(f"Length of bot_utterances list: {len_bot_ut}")
+																	   
 
-            if len(dialog["bot_utterances"]) > 5:
-                # EXPERIMENT
-                if PSYCHOTYPE_BASED_DIALOG_SUPPORT:
-                    # if user is Extravert, we can expect user to be talkative
-                    # and therefore we can enable DFF Generic Responses Skill to
-                    # passively support conversation
-                    if is_introvert(dialog) is False:
-                        logger.info(f"Our user seems to be extravert. Using DM-based pre-filtering")
-                        # exp_best_candidate, exp_best_id, exp_curr_single_scores
-                        filtered_candidates = dm_based_response_selection(dialog, curr_candidates)
-                        if len(filtered_candidates) > 0:
-                            non_generic_responses = get_non_generic_responses(filtered_candidates)
-                            if len(non_generic_responses) > 0:
-                                # only if we have at least something good, we can try this out
-                                curr_candidates = filtered_candidates
+												 
+							
+												   
+																			  
+																				
+													
+													 
+																									
+																				 
+																								  
+														
+																								  
+															  
+																							  
+																	 
 
             for skill_data in curr_candidates:
                 if len(dialog["utterances"]) > 1:
@@ -320,26 +320,26 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
     return best_candidate, best_id, curr_single_scores
 
 
-def get_non_generic_responses(candidates):
-    non_generic_candidates = []
-    for candidate in candidates:
-        skill_name = candidate["skill_name"]
-        if skill_name == "dff_generic_responses_skill":
-            continue
-        else:
-            non_generic_candidates.append(candidate)
+										  
+							   
+								
+											
+													   
+					
+			 
+													
 
-    return non_generic_candidates
+								 
 
 
-def get_generic_responses(candidates):
-    generic_candidates = []
-    for candidate in candidates:
-        skill_name = candidate["skill_name"]
-        if skill_name == "dff_generic_responses_skill":
-            generic_candidates.append(candidate)
+									  
+						   
+								
+											
+													   
+												
 
-    return generic_candidates
+							 
 
 
 def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
