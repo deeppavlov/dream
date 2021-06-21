@@ -477,11 +477,11 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", 
                       "family": r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
                                 r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)",
                       "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet)\b", re.IGNORECASE),
-                      "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b"),
-                      "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b"),
-                      "dinosaurs": re.compile(r"\b(dinosaur)"),
-                      "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b"),
-                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b"),
-                      "hiking": re.compile(r"\bhiking\b"),
-                      "tiktok": re.compile(r"\btik[ ]?tok\b")
+                      "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b", re.IGNORECASE),
+                      "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b", re.IGNORECASE),
+                      "dinosaurs": re.compile(r"\b(dinosaur)", re.IGNORECASE),
+                      "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b", re.IGNORECASE),
+                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b", re.IGNORECASE),
+                      "hiking": re.compile(r"\bhiking\b", re.IGNORECASE),
+                      "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE)
                       }
