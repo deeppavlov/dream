@@ -2,7 +2,6 @@ import json
 import time
 import re
 import logging
-from copy import deepcopy
 
 import numpy as np
 
@@ -63,18 +62,18 @@ class IMDb:
 
     def __init__(self, db_path="./databases/database_most_popular_main_info.json"):
         t0 = time.time()
-        self.with_ignored_movies_names = {}
-        self.without_ignored_movies_names = {}
         self.database = {}
         self.professionals = {}
+        self.preprocessed_original = {}
+        self.preprocessed_alternative = {}
         self.genres_pattern = None
         self.names_pattern = {}
 
         self.create_database(db_path)
 
         logger.info(f"Initialized in {time.time() - t0} sec")
-        logger.info(f"Search across {len(self.with_ignored_movies_names)} with ignored movies")
-        logger.info(f"Search across {len(self.without_ignored_movies_names)} without ignored movies")
+        logger.info(f"Search across {len(self.preprocessed_original)} original movie titles")
+        logger.info(f"Search across {len(self.preprocessed_alternative)} alternative movie titles")
         npersons = 0
         for prof in self.professions:
             for person in self.professionals[f"lowercased_{prof}s"]:
@@ -107,36 +106,39 @@ class IMDb:
                 self.database[j].pop("users_rating")
             self.database = {movie["imdb_id"]: movie for movie in self.database}
 
+        # dictionary mapping movie title to list of imdb ids
         self.movies_names = {}
+        # dictionary mapping movie title to processed movie title for internal usage ONLY
+        self.preprocessed_movies_names = {}
+
         for imdb_id in self.database:
             self.movies_names[self.database[imdb_id]["title"]] = []
         for imdb_id in self.database:
-            self.movies_names[self.database[imdb_id]["title"]].append(imdb_id)
-
-        self.without_ignored_movies_names = {self.process_movie_name(movie): self.movies_names[movie]
-                                             for movie in self.movies_names.keys()
-                                             if len(self.process_movie_name(movie)) > 0}
-        # add processed alternative titles
-        for imdb_id in self.database:
-            original_title = self.database[imdb_id]["title"]
-            processed_original_title = self.process_movie_name(original_title)
-            processed_numbers = self.process_numbers_in_movie_name(processed_original_title)
-            if processed_original_title != processed_numbers:
-                self.without_ignored_movies_names[processed_numbers] = self.without_ignored_movies_names[
-                    processed_original_title]
+            movie_title = self.database[imdb_id]["title"]
+            self.movies_names[movie_title].append(imdb_id)
+            self.preprocessed_movies_names[movie_title] = self.process_movie_name(movie_title)
             for alt_title in self.database[imdb_id].get("all_titles", []):
-                processed_alt_title = self.process_movie_name(alt_title)
-                if len(processed_alt_title) > 0:
-                    self.without_ignored_movies_names[processed_alt_title] = self.movies_names[original_title]
+                self.preprocessed_movies_names[alt_title] = self.process_movie_name(alt_title)
 
-                    processed_numbers = self.process_numbers_in_movie_name(processed_alt_title)
-                    if processed_alt_title != processed_numbers:
-                        self.without_ignored_movies_names[processed_numbers] = self.movies_names[original_title]
+        # dictionary mapping processed ORIGINAL movie title to list of imdb ids of movies
+        self.preprocessed_original = {self.preprocessed_movies_names.get(movie, ""): []
+                                      for movie in self.movies_names.keys()
+                                      if self.preprocessed_movies_names.get(movie, "")}
+        # dictionary mapping processed ALTERNATIVE movie title to list of imdb ids of movies
+        self.preprocessed_alternative = {}
 
-        # отсортируем по длине чтобы искать потом предпочтительно самое длинное вхождение сначала
-        self.without_ignored_movies_names = {el: self.without_ignored_movies_names[el]
-                                             for el in sorted(self.without_ignored_movies_names, key=len, reverse=True)}
-        self.with_ignored_movies_names = deepcopy(self.without_ignored_movies_names)
+        for imdb_id in self.database:
+            movie = self.database[imdb_id]["title"]
+            prep_movie = self.preprocessed_movies_names.get(movie, "")
+            if prep_movie:
+                self.preprocessed_original[prep_movie] += [imdb_id]
+
+            for alt_title in self.database[imdb_id].get("all_titles", []):
+                prev_al_title = self.preprocessed_movies_names.get(alt_title, "")
+                if prev_al_title and prev_al_title in self.preprocessed_alternative:
+                    self.preprocessed_alternative[self.preprocessed_movies_names[alt_title]] += [imdb_id]
+                elif prev_al_title:
+                    self.preprocessed_alternative[self.preprocessed_movies_names[alt_title]] = [imdb_id]
 
         with open("databases/google-10000-english-no-swears.txt", "r") as f:
             self.frequent_unigrams = f.read().splitlines()[:2000]
@@ -146,16 +148,6 @@ class IMDb:
             self.frequent_bigrams = json.load(f)
         self.frequent_bigrams = [bigram for bigram in self.frequent_bigrams if self.frequent_bigrams[bigram] > 200]
 
-        movie_titles_to_ignore = self.get_processed_movies_titles_to_ignore()
-        # WITHOUT WORD MOVIE IGNORED MOVIES
-        for proc_title in movie_titles_to_ignore + [
-                "angela", "earthquake", "abortion", "tricks", "isolation", "cage", "back", "stronger", "judy",
-                "live", "lunch", "weekend", "gays", "bean", "her", "eat", "she", "he", "thing", "pets",
-                "happy days", "foster", "travelling", "thing", "voices"]:
-            try:
-                self.without_ignored_movies_names.pop(proc_title)
-            except KeyError:
-                pass
         # TOTALLY REMOVED MOVIES
         for proc_title in [
                 "movie", "tragedy", "favorite", "favourite", "attitude", "do you believe",
@@ -169,22 +161,30 @@ class IMDb:
                 "conversation", "good", "they", "hello", "make", "pretty good", "talk", "ok", "okay",
                 "tell me something", "different", "day", "seen", "i like", "wij", "because", "me too",
                 "horror", "will", "character", "more", "show", "coming out", "remember", "again", "time",
-                "news", "comics", "life", "playing"]:
+                "news", "comics", "life", "playing", "weekend", "gays", "live", "travelling", "abortion", "foster",
+        ]:
             try:
-                self.with_ignored_movies_names.pop(proc_title)
+                self.preprocessed_original.pop(proc_title)
+                self.preprocessed_alternative.pop(proc_title)
             except KeyError:
                 pass
             try:
-                self.without_ignored_movies_names.pop(proc_title)
+                self.preprocessed_original.pop(proc_title)
+                self.preprocessed_alternative.pop(proc_title)
             except KeyError:
                 pass
         to_remove = []
-        for proc_title in self.with_ignored_movies_names.keys():
+        for proc_title in self.preprocessed_original.keys():
             if re.match(f"^[0-9 ]+$", proc_title):
                 to_remove.append(proc_title)
         for proc_title in to_remove:
-            self.with_ignored_movies_names.pop(proc_title)
-            self.without_ignored_movies_names.pop(proc_title)
+            self.preprocessed_original.pop(proc_title)
+        to_remove = []
+        for proc_title in self.preprocessed_alternative.keys():
+            if re.match(f"^[0-9 ]+$", proc_title):
+                to_remove.append(proc_title)
+        for proc_title in to_remove:
+            self.preprocessed_alternative.pop(proc_title)
 
         # add lower-cased names of different professionals to the database
         for imdb_id in self.database:
@@ -237,7 +237,9 @@ class IMDb:
         return name.strip()
 
     def get_processed_movies_titles_to_ignore(self):
-        to_ignore = list(set(self.without_ignored_movies_names.keys()).intersection(
+        to_ignore = list(set(self.preprocessed_original.keys()).intersection(
+            set(self.frequent_unigrams + self.frequent_bigrams)))
+        to_ignore += list(set(self.preprocessed_alternative.keys()).intersection(
             set(self.frequent_unigrams + self.frequent_bigrams)))
 
         return to_ignore
@@ -300,8 +302,13 @@ class IMDb:
             movie `imdb_id`
             None if the movie not in the database
         """
-        imdb_ids = self.with_ignored_movies_names.get(self.process_movie_name(name), None)
-        if imdb_ids is None:
+        preprocessed_original_title_ids = self.preprocessed_original.get(self.process_movie_name(name), None)
+        preprocessed_alternative_title_ids = self.preprocessed_alternative.get(self.process_movie_name(name), None)
+
+        imdb_ids = preprocessed_original_title_ids if preprocessed_original_title_ids else []
+        imdb_ids += preprocessed_alternative_title_ids if preprocessed_alternative_title_ids else []
+
+        if imdb_ids is None or len(imdb_ids) == 0:
             return None
         elif len(imdb_ids) == 1:
             return imdb_ids[0]
