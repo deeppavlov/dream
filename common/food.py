@@ -62,6 +62,10 @@ CONCEPTNET_CAUSESDESIRE_FOOD = [
     "have meal", "have breakfast", "have food", "have steak",
     "cook dinner", "cook potato", "cook meal", "cook food", "cook pasta"
 ]
+ACKNOWLEDGEMENTS = {
+    "cuisine": "I think you're just being humble.",
+    "fav_food_cook": "Okay. Just give it a chance. Hope you will enjoy it!"
+}
 
 
 def skill_trigger_phrases():
