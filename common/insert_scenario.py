@@ -560,6 +560,7 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
         expected_subtopic_info = utt_info.get("expected_subtopic_info", {})
+        logger.info(f"print expected_subtopic_info {expected_subtopic_info} utt_info {utt_info}")
         state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
         response = f"{found_ackn} {response}".strip().replace("  ", " ")
     return response, used_utt_nums
@@ -621,8 +622,9 @@ def smalltalk_response(vars, topic_config):
         expected_entities = topic_config[found_topic].get("expected_entities", {})
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
-        expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", {})
-        if expected_subtopic_info:
+        existing_subtopic_info = shared_memory.get("expected_subtopic_info", [])
+        expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", [])
+        if expected_subtopic_info and not existing_subtopic_info and first_utt:
             state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
 
     extract_and_save_entity(vars)
