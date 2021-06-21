@@ -86,7 +86,4 @@ class personality_payload(BaseModel):
 @app.post('/model')
 def infer(payload: personality_payload):
     logger.info(f"Personality Detection: {payload}")
-
-    ## return None
-
     return jsonify_data([predict_personality(p) for p in payload.personality])
