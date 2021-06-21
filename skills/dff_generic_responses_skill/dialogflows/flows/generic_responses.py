@@ -23,7 +23,7 @@ import common.constants as common_constants
 import dialogflows.scopes as scopes
 
 from dialogflows.flows import utils as current_utils
-
+from common.psychometrics import is_introvert
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -313,6 +313,12 @@ def error_response(vars):
 
 
 def sys_response_to_speech_function_request(ngrams, vars):
+    dialog = state_utils.get_dialog(vars)
+    # added check for introvert/extravert
+    if len(dialog["bot_utterances"]) > 5:
+        if is_introvert(dialog) is False:
+            return False
+
     human_utterance = state_utils.get_last_human_utterance(vars)
     bot_utterance = state_utils.get_last_bot_utterance(vars)
     flag = is_supported_speech_function(human_utterance, bot_utterance)
