@@ -191,6 +191,8 @@ DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planet
                            "I've heard this is an amazing feeling. Are you in relationships with someone?",
                    "hobbies": "Success is not the key to happiness. Happiness is the key to success. "
                               "If you love what you are doing, you will be successful. Do you have any hobbies?",
+                   "politics": "I've recently learned how many different political views in our world. "
+                               "Are you interested in politics?",
                    }
 
 
