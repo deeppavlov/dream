@@ -562,7 +562,7 @@ class BookSkillScenario:
             if isinstance(reply, list):
                 reply = " ".join(reply)
             if reply in human_attr['book_skill']['used_phrases']:
-                confidence *= 0.5
+                confidence *= (0.4 ** (human_attr['book_skill']['used_phrases'].count(reply)))
             texts.append(reply)
             if reply:
                 human_attr['book_skill']['used_phrases'].append(reply)
