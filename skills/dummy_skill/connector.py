@@ -239,16 +239,21 @@ class DummySkillConnector:
 
                 _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
                 _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
-                _is_cant_do = "cant_do" in get_intents(dialog["human_utterances"][-1]) and (
-                    len(curr_nounphrases) == 0 or is_yes(dialog["human_utterances"][-1]))
-                _is_cant_do_stop_it = "cant_do" in get_intents(dialog["human_utterances"][-1]) and is_no(
-                    dialog["human_utterances"][-1])
+
+                if len(dialog["human_utterances"]) > 1:
+                    _was_cant_do = "cant_do" in get_intents(dialog["human_utterances"][-2]) and (
+                        len(curr_nounphrases) == 0 or is_yes(dialog["human_utterances"][-1]))
+                    _was_cant_do_stop_it = "cant_do" in get_intents(dialog["human_utterances"][-2]) and is_no(
+                        dialog["human_utterances"][-1])
+                else:
+                    _was_cant_do = False
+                    _was_cant_do_stop_it = False
 
                 if _no_to_first_linkto:
                     confs += [0.99]
-                elif _is_ask_me_something or _if_switch_topic or _is_cant_do:
+                elif _is_ask_me_something or _if_switch_topic or _was_cant_do:
                     confs += [1.0]  # Use it only as response selector retrieve skill output modifier
-                elif _is_cant_do_stop_it:
+                elif _was_cant_do_stop_it:
                     link_to_question = "Sorry, bye! #+#exit"
                     confs += [1.0]  # finish dialog request
                 else:
