@@ -36,8 +36,8 @@ LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
 YES_CONTINUE_CONFIDENCE = 1.0
 # if let's chat about TOPIC [key-words]
 NOT_SCRIPTED_TOPICS = [
-    'cars', "depression", "family", "life", "love", "politics",
-    "school", "sex", "star wars", "donald trump", "work", "superheroes"
+    "depression", "life", "politics",
+    "sex", "star wars", "donald trump", "superheroes"
 ]
 
 

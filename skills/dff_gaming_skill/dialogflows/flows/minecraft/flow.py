@@ -125,7 +125,7 @@ simplified_dialogflow.add_system_transition(
     partial(
         minecraft_nlg.tell_about_building_hogwarts_in_minecraft_ask_what_interesting_user_built_response,
         must_continue=False,
-        prefix="Probably too many details are boring",
+        prefix="It's probably boring to listen to long instructions.",
     ),
 )
 simplified_dialogflow.set_error_successor(

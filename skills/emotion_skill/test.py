@@ -14,7 +14,7 @@ def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, in
                 "human": {"attributes": human_attributes},
                 "human_attributes": human_attributes,
                 "bot_attributes": {},
-                "utterances": [
+                "human_utterances": [
                     {
                         "user_telegram_id": "test",
                         "text": curr_sent,
@@ -29,12 +29,12 @@ def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, in
                         }
                     }
                 ],
-                "bot_utterances": [{"text": bot_sent}]
+                "bot_utterances": [{"text": bot_sent, "active_skill": "emotion_skill" if bot_sent else ""}]
             }
         ],
     }
-    input_data['dialogs'][-1]['utterances'][-1]['annotations']['emotion_classification']['text'].update(emotion)
-    input_data['dialogs'][-1]['utterances'][-1]['annotations']['intent_catcher'].update(intents)
+    input_data['dialogs'][-1]['human_utterances'][-1]['annotations']['emotion_classification']['text'].update(emotion)
+    input_data['dialogs'][-1]['human_utterances'][-1]['annotations']['intent_catcher'].update(intents)
     return input_data
 #
 #

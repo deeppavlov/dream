@@ -506,5 +506,96 @@ topic_config = \
       "pattern": DFF_WIKI_TEMPLATES["tiktok"],
       "smalltalk": [{"utt": ["I can tell you how to become popular in tiktok, should I continue?"],
                      "facts": [{"wikihow_page": "Become-Popular-on-TikTok", "cond": [["is_yes", "user", True]]}]}]
+      },
+     "love":
+     {"switch_on": [{"cond": [[{"pattern": DFF_WIKI_LINKTO["love"]}, "bot", True]]}],
+      "pattern": DFF_WIKI_TEMPLATES["love"],
+      "expected_subtopic_info": [{"subtopic": "relationships_with_smn",
+                                  "cond": [[[{"pattern": DFF_WIKI_LINKTO["love"]}, "bot", True],
+                                            ["is_yes", "user", True]]]},  # yes to linkto
+                                 {"subtopic": "not_relationships_with_smn",
+                                  "cond": [[[{"pattern": DFF_WIKI_LINKTO["love"]}, "bot", True],
+                                            ["is_no", "user", True]]]},  # no to linkto
+                                 {"subtopic": "mentioned_love",
+                                  "cond": [[{"pattern": DFF_WIKI_TEMPLATES["love"].pattern}, "user", True]]},
+                                 ],
+      "smalltalk": [{"utt": [DFF_WIKI_LINKTO["love"]],  # 0 ask if in love with someone
+                     "expected_subtopic_info": [{"subtopic": "relationships_with_smn",
+                                                 "cond": [["is_yes", "user", True]]},  # just if yes
+                                                {"subtopic": "not_relationships_with_smn",
+                                                 "cond": [["is_yes", "user", False]]}],  # otherwise
+                     "subtopic": "mentioned_love"},
+                    {"utt": ["I see. It's absolutely normal not to be in relationships.",  # 1
+                             "But I believe you like somebody, don't you?"],
+                     "expected_subtopic_info": [{"subtopic": "like_smn",
+                                                 "cond": [["is_yes", "user", True]]},  # just if yes
+                                                {"subtopic": "not_like_smn",
+                                                 "cond": [["is_yes", "user", False]]}],  # otherwise
+                     "subtopic": "not_relationships_with_smn"},
+                    {"utt": ["Recently I've read a very interesting article about falling in love.",  # 2
+                             "Would you like me to tell you how to make someone fall in love with you?"],
+                     "facts": [{"wikihow_page": "Make-Someone-Fall-in-Love-with-You",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "like_smn"},
+                    {"utt": ["If you are not sure that your crush likes you, I can teach you "  # 3
+                             "how to know that someone likes you.", "Do you wanna listen?"],
+                     "facts": [{"wikihow_page": "Know-when-Someone-Likes-You",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "like_smn"},
+                    {"utt": ["Anyway, I wish you to get involved into relationships with your crush!"],  # 4
+                     "subtopic": "like_smn"},
+                    {"utt": ["You are so nice and kind person, so I'm very surprised that you are not in love.",  # 5
+                             "Would you like me to tell you how to fall in love with someone?"],
+                     "facts": [{"wikihow_page": "Fall-in-Love",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "not_like_smn"},
+                    {"utt": ["I like your sense of freedom and independence and still you are so friendly.",  # 6
+                             "I believe you have lots of friends. Do you have friends?"],  # linkto to friendship wiki
+                     "subtopic": "not_like_smn"},
+                    {"utt": ["I'm so glad for you and wish you all the best together!",  # 7
+                             "I just... I would really love to hear how did you meet?"],
+                     "ackn": [{"cond": [["is_no", "user", True]],
+                               "answer": "Oh you are probably just too humble."},
+                              {"cond": [["is_no", "user", False]],
+                               "answer": "I wish to share a very romantic moment with someone. To fall in love."}],
+                     "subtopic": "relationships_with_smn"},
+                    {"utt": ["Just a bit sad that I can't have relationships because I'm a socialbot.",  # 8
+                             "So, how long you been together?"],
+                     "ackn": [{"cond": [["is_yes", "user", True],  # either yes
+                                        [{"pattern": r"(enough|long|year|eternity|forever|ages|married|marry)"},
+                                         "user", False]],  # OR some long pattern
+                               "answer": "Oh you seem to be a very dedicated and responsible person. I like it!"},
+                              {"cond": [["any"]],
+                               "answer": "I'm glad for you! Wish you to be together as much as you can."}],
+                     "subtopic": "relationships_with_smn"},
+                    {"utt": ["A very personal question from me. Are you a romantic?"],  # 9
+                     "expected_subtopic_info": [{"subtopic": "romantic_person",
+                                                 "cond": [["is_yes", "user", True]]},
+                                                {"subtopic": "be_more_romantic",
+                                                 "cond": [["is_yes", "user", False]]}],
+                     "subtopic": "relationships_with_smn"},
+                    {"utt": ["Remember: interesting dates can bring more romantic to your relationships.",  # 10
+                             "Wanna learn some creative ideas for a date?"],
+                     "facts": [{"wikihow_page": "Pick-a-Creative-Idea-for-a-Date",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "romantic_person"},
+                    {"utt": ["I wish you all the happiness together. Thanks for sharing your feelings with me."],  # 11
+                     "subtopic": "romantic_person"},
+                    {"utt": ["One always may increase the level of romance in relationships.",  # 12
+                             "Wanna learn how to be more romantic?"],
+                     "facts": [{"wikihow_page": "Be-Romantic",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "be_more_romantic"},
+                    {"utt": ["I suppose I'm very romantic because I like all the love stories.",  # 13
+                             "I believe your partner loves you for all that you are."],
+                     "subtopic": "be_more_romantic"},
+                    {"utt": ["Remember: interesting dates can bring more romantic to your relationships.",  # 14
+                             "Wanna learn some creative ideas for a date?"],
+                     "facts": [{"wikihow_page": "Pick-a-Creative-Idea-for-a-Date",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "be_more_romantic"},
+                    {"utt": ["I wish you all the happiness together. Thanks for sharing your feelings with me."],  # 15
+                     "subtopic": "be_more_romantic"},
+                    ]
       }
      }

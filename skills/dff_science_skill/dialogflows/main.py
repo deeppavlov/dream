@@ -34,7 +34,7 @@ simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow
 for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
-        {(scopes.SCIENCE, science_flow.State.USR_START): science_flow.lets_talk_about_request},
+        {(scopes.SCIENCE, science_flow.State.USR_START): science_flow.true_request},
     )
 simplified_dialogflow.set_error_successor(scopes.State.USR_ROOT, scopes.State.SYS_ERR)
 simplified_dialogflow.set_error_successor(scopes.State.USR_ERR, scopes.State.SYS_ERR)
