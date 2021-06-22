@@ -2,7 +2,7 @@ import re
 
 from common.animals import ANIMALS_TEMPLATE, PETS_TEMPLATE
 from common.books import BOOK_PATTERN
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN
+from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN
 from common.gossip import HAVE_YOU_GOSSIP_TEMPLATE, GOSSIP_COMPILED_PATTERN
 from common.coronavirus import virus_compiled
 from common.food import FOOD_COMPILED_PATTERN, FOOD_SKILL_TRANSFER_PHRASES_RE
@@ -66,8 +66,9 @@ SKILL_TOPICS = {
         ]
     },
     "dff_gaming_skill": {
-        "compiled_patterns": [GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN],
-        "previous_bot_patterns": [GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN],
+        "compiled_patterns": [GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN],
+        "previous_bot_patterns": [
+            GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN],
         "cobot_dialogact_topics": [
             "Entertainment_General"
         ],
