@@ -354,7 +354,7 @@ class BookSkillScenario:
                         reply = f"I am pleased to know it. {reply}"
                     book_question = get_not_given_question_about_books(human_attr['book_skill']['used_phrases'])
                     reply = f'{reply} Apart from the Bible, {book_question}'
-                    confidence = self.default_conf
+                    confidence = self.super_conf
                 elif self.fav_book_request_detected(annotated_user_phrase, bot_phrases[-1], human_attr):
                     # if user asked us about favorite book
                     logger.debug('Detected favorite book request')
