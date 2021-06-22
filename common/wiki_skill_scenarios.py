@@ -565,14 +565,14 @@ topic_config = \
                                    {"cond": [["is_no", "user", True]],
                                     "answer": "Cool! Safety is an important aspect of driving."}]},
                     {"utt": ["Nowadays electric cars are becoming more and more popular, "
-                             "because they are eco-friendly and cheap in maintenance, .",
+                             "because they are eco-friendly and cheap in maintenance. ",
                              "Would you like to buy an electro car, for example, Tesla?"],
                      "subtopic": "car_yes",
                      "next_ackn": [{"cond": [["is_yes", "user", True]],
                                     "answer": "I definitely agree with you! "
                                               "Electric cars are the future of auto industry."}]},
                     {"utt": ["Car maintenance can be a big budget line.",
-                             "Would you like to know how to calculate the cost of driving"],
+                             "Would you like to know how to calculate the cost of driving?"],
                      "subtopic": "car_yes",
                      "facts": [{"wikihow_page": "Calculate-the-Cost-of-Driving", "cond": [["is_yes", "user", True]]}]
                      },
