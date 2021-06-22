@@ -633,7 +633,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_OFFER_TOPICS: was_what_do_you_do_request,
         State.SYS_OFFERED_TOPICS_DECLINED: offered_topic_choice_declined_request,
-        State.SYS_STD_GREETING: no_special_switch_off_requests_request
+        State.SYS_STD_GREETING: std_greeting_request
     },
 )
 
