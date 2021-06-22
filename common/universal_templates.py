@@ -488,4 +488,7 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", 
                                          r"|boyfriend|\bgirls\b|\bboys\b|\bdating\b|\bdates\b"
                                          r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)", re.IGNORECASE),
                       "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
+                      "politics": re.compile(r"(politic|democra|republic|president|\btrump\b|\bbyden\b"
+                                             r"|authoritarianism|monarch)",
+                                             re.IGNORECASE),
                       }
