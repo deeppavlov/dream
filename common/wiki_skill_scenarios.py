@@ -685,6 +685,77 @@ topic_config = \
       "smalltalk": [{"utt": ["I can tell you how to become popular in tiktok, should I continue?"],
                      "facts": [{"wikihow_page": "Become-Popular-on-TikTok", "cond": [["is_yes", "user", True]]}]}]
       },
+     "anime":
+     {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["anime"]}, "bot", True], ["is_no", "user", False]],
+                              [[{"pattern": DFF_WIKI_LINKTO["anime"]}, "bot", True],
+                               [{"pattern": DFF_WIKI_TEMPLATES["anime"]}, "user", True]]]}],
+      "pattern": DFF_WIKI_TEMPLATES["anime"],
+      "expected_subtopic_info": [{"subtopic": "hayao_miyazaki",
+                                  "cond": [[{"pattern": r"miyazaki|"
+                                                        r"castle.*cagliostro|valley of the wind|castle in the sky"
+                                                        r"|totoro|kiki.*delivery service|porco rosso|mononoke|"
+                                                        r"spirited away|"
+                                                        r"moving castle|ponyo|wind rises"}, "user", True]]},
+                                 {"subtopic": "how_long",
+                                  "cond": [["any"]]},
+                                 ],
+      "smalltalk": [{"utt": ["Are you an anime connoisseur? "],
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Hmm, As I know anime is very diverse, "
+                                    "I only know the most popular. "},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "Let's talk about the most popular anime. "}],
+                     "expected_subtopic_info": [{"subtopic": "anime_top",
+                                                 "cond": [["is_yes", "user", True]]},
+                                                {"subtopic": "hayao_miyazaki",
+                                                 "cond": [["any"]]}],
+                     "subtopic": "how_long", },
+                    {"utt": ["Most of all I like Princess Mononoke and Spirited Away. "
+                             "When I saw them for the first time, I was shocked that anime can be so inspiring. "
+                             "Do you think anime can motivate itself to do good things? "
+                             ],
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Yah, Miyazaki's work motivates me a lot. "},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "Hmmm. I think if anything can motivate it is Miazaki's work. "}],
+                     "expected_subtopic_info": [{"subtopic": "anime_top",
+                                                 "cond": [["any", "user", True]]}],
+                     "subtopic": "hayao_miyazaki", },
+                    {"utt": ["Most of all I like Princess Mononoke and Spirited Away. "
+                             "When I saw them for the first time, I was shocked that anime can be so inspiring. "
+                             "Do you think anime can motivate itself to do good things? "
+                             ],
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Yah, Miyazaki's work motivates me a lot. "},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "Hmmm. I think if anything can motivate it is Miazaki's work. "}],
+                     "expected_subtopic_info": [{"subtopic": "anime_top",
+                                                 "cond": [["any", "user", True]]}],
+                     "subtopic": "hayao_miyazaki", },
+                    {"utt": ["I'm not an anime expert, but my friends advised me to watch Attack of the Titans. "
+                             "Have you watched it? "
+                             "Do you think anime can motivate itself to do good things? "
+                             ],
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Yah, I think I should definitely look too, I'm curious. "},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "My friends advised me very persistently, "
+                                              "I definitely want to watch this anime, "
+                                              "then I can recommend it to you if I like it "}],
+                     "subtopic": "anime_top", },
+                    {"utt": ["I really liked 2 anime, I watched them several times. "
+                             "One is called Code Geass, and the other is called the Death Note. "
+                             "If you haven't watched them yet, I definitely recommend them to you, they are very cool. "
+                             "Entangled plot and unexpected denouement. "
+                             "Although when I looked at Death Note, "
+                             "I guessed that everything would end like this. "
+                             "Would you like to tell you how to make an anime? "
+                             ],
+                     "facts": [{"wikihow_page": "Make-an-Anime",
+                                "cond": [["is_yes", "user", True]]}],
+                     "subtopic": "anime_top", },
+                    ],
+      },
      "love":
      {"switch_on": [{"cond": [[{"pattern": DFF_WIKI_LINKTO["love"]}, "bot", True]]}],
       "pattern": DFF_WIKI_TEMPLATES["love"],
