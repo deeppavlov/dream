@@ -6,9 +6,9 @@ from common.greeting import GREETING_QUESTIONS
 topic_config = \
     {"hobbies":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["hobbies"]}, "bot", True], ["is_yes", "user", True]],
-                              [[{"pattern": GREETING_QUESTIONS["what_are_your_interests"]}, "bot", True],
+                              [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_interests"])}, "bot", True],
                                [{"pattern": HOBBIES_RE}, "user", True]],
-                              [[{"pattern": GREETING_QUESTIONS["what_are_your_hobbies"]}, "bot", True],
+                              [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_hobbies"])}, "bot", True],
                                [{"pattern": HOBBIES_RE}, "user", True]],
                               [[{"pattern": DFF_WIKI_TEMPLATES["hobbies"]}, "bot", True],
                                [{"pattern": HOBBIES_RE}, "user", True]]
@@ -17,9 +17,9 @@ topic_config = \
       "expected_subtopic_info": [{"subtopic": "user_has_hobbies",
                                   "cond": [[[{"pattern": DFF_WIKI_LINKTO["hobbies"]}, "bot", True],
                                             ["is_yes", "user", True]],
-                                           [[{"pattern": GREETING_QUESTIONS["what_are_your_interests"]},
+                                           [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_interests"])},
                                              "bot", True], [{"pattern": HOBBIES_RE}, "user", True]],
-                                           [[{"pattern": GREETING_QUESTIONS["what_are_your_hobbies"]},
+                                           [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_hobbies"])},
                                              "bot", True], [{"pattern": HOBBIES_RE}, "user", True]],
                                            [[{"pattern": DFF_WIKI_TEMPLATES["hobbies"]}, "bot", True],
                                             [{"pattern": HOBBIES_RE}, "user", True]]]},
