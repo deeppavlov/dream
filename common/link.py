@@ -187,6 +187,7 @@ DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planet
                             "Do you like taking photographs?",
                    "memes": "Memes are funny artworks we can see on the Internet. Do you like memes?",
                    "tiktok": "TikTok is known for its funny lip-syncing videos. Have you shot a video for tiktok?",
+                   "friends": "A friend at hand is better than a relative at a distance. Do you have any friends?",
                    "love": "I have a lot of friends but as a socialbot I can not fall in love with someone. Although, "
                            "I've heard this is an amazing feeling. Are you in relationships with someone?",
                    "hobbies": "Success is not the key to happiness. Happiness is the key to success. "
