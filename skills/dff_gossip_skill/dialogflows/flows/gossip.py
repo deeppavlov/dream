@@ -818,7 +818,7 @@ def usr_agrees_abt_person_response(vars):
             # + " in " + human_topic)
 
         # we need to remember that user agreed with us. Now, the question is, what our emotion was?
-        bot_emotion_towards_current_person = shared_memory.get("bot_emotion_towards_current_person", "")
+        bot_emotion_towards_current_person = shared_memory.get("bot_emotion_towards_current_person", "Liked")
         # obtaining judgement
         bot_judgement = get_random_judgement_for_emotion(bot_emotion_towards_current_person)
 
