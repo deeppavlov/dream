@@ -1232,12 +1232,12 @@ services:
     command: uvicorn server:app --reload --host 0.0.0.0 --port 8108
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 3
       resources:
         limits:
-          memory: 1G
+          memory: 2G
         reservations:
-          memory: 1G
+          memory: 2G
 
   speech-function-predictor:
     build:

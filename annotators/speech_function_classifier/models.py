@@ -13,6 +13,8 @@ from transformers import AutoTokenizer, AutoModel
 
 nlp = spacy.load("en_core_web_sm")
 
+cuda_is_available = torch.cuda.is_available()
+
 with open('common/speech_functions/res_cor.json') as data:
     file = json.load(data)
 
@@ -183,12 +185,17 @@ cut_test_labels = get_cut_labels(test_labels)
 tokenizer = AutoTokenizer.from_pretrained("DeepPavlov/bert-base-cased-conversational")
 embed_model = AutoModel.from_pretrained("DeepPavlov/bert-base-cased-conversational")
 
+if cuda_is_available:
+    embed_model.to('cuda')
+
 
 def get_embeddings(data):
     outputs = []
     for text in data:
         with torch.no_grad():
             input_ph = tokenizer(text, padding=True, truncation=True, max_length=30, return_tensors="pt")
+            if cuda_is_available:
+                input_ph.to('cuda')
             output_ph = embed_model(**input_ph)
     #        train_outputs.append(output_ph.pooler_output.cpu().numpy())
             sentence_embedding = output_ph.last_hidden_state.mean(dim=1).cpu().numpy()
