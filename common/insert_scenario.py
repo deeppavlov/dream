@@ -261,9 +261,11 @@ def preprocess_wikihow_page(article_content):
     return page_content_list
 
 
-def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_content):
+def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_content, predefined_titles=None):
     logger.info(f"found_entity_substr {found_entity_substr} found_entity_types {found_entity_types}")
     titles_q, titles_we_use, all_titles = get_titles(found_entity_substr, found_entity_types, article_content)
+    if predefined_titles:
+        titles_we_use = predefined_titles
     logger.info(f"titles_we_use {titles_we_use} all_titles {all_titles}")
     facts_list = []
     for n, title in enumerate(titles_we_use):
@@ -573,8 +575,9 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
 def check_switch(vars, topic_config):
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    found_topic = shared_memory.get("special_topic", "")
     first_utt = False
-    found_topic = ""
     utt_can_continue = "can"
     utt_conf = 0.0
     shared_memory = state_utils.get_shared_memory(vars)
@@ -586,12 +589,17 @@ def check_switch(vars, topic_config):
                 first_utt = True
                 break
         pattern = topic_config[topic].get("pattern", "")
-        if pattern and re.findall(pattern, user_uttr["text"]):
+        if pattern:
             if if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
                 utt_can_continue = "must"
                 utt_conf = 1.0
-            found_topic = topic
-            first_utt = True
+                found_topic = topic
+                first_utt = True
+            elif re.findall(pattern, user_uttr["text"]) and not found_topic:
+                utt_can_continue = "prompt"
+                utt_conf = 0.95
+                found_topic = topic
+                first_utt = True
         switch_on = topic_config[topic].get("switch_on", [])
         for switch_elem in switch_on:
             condition = switch_elem["cond"]
@@ -695,6 +703,8 @@ def smalltalk_response(vars, topic_config):
             state_utils.set_confidence(vars, confidence=CONF_DICT["WIKI_TOPIC"])
         if first_utt or utt_can_continue == "must":
             state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        elif utt_can_continue == "prompt":
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_PROMPT)
         else:
             state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     else:
@@ -742,7 +752,7 @@ def start_or_continue_facts(vars, topic_config):
     return flag
 
 
-def facts_response(vars, topic_config):
+def facts_response(vars, topic_config, wikihow_cache):
     shared_memory = state_utils.get_shared_memory(vars)
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
     response = ""
@@ -752,6 +762,8 @@ def facts_response(vars, topic_config):
     found_topic = shared_memory.get("special_topic", "")
     utt_can_continue = common_constants.CAN_CONTINUE_SCENARIO
     utt_conf = CONF_DICT["WIKI_TOPIC"]
+    entity_substr = ""
+    entity_types = []
     if not found_topic:
         found_topic, first_utt, utt_can_continue, utt_conf = check_switch(vars, topic_config)
     extract_and_save_entity(vars)
@@ -771,14 +783,26 @@ def facts_response(vars, topic_config):
         if not wikihow_page:
             wikihow_page = shared_memory.get("cur_wikihow_page", "")
         if wikihow_page:
-            page_content = get_wikihow_content(wikihow_page)
+            if wikihow_page in wikihow_cache:
+                page_content = wikihow_cache[wikihow_page]
+            else:
+                page_content = get_wikihow_content(wikihow_page)
             wikihow_page_content_list = preprocess_wikihow_page(page_content)
             memory["wikihow_content"] = wikihow_page_content_list
             state_utils.save_to_shared_memory(vars, cur_wikihow_page=wikihow_page)
 
         if wikipedia_page:
             page_content, _ = get_page_content(wikipedia_page)
-            wikipedia_page_content_list = preprocess_wikipedia_page(entity_substr, entity_types, page_content)
+            if not entity_substr:
+                entity_substr = wikipedia_page.lower()
+            titles_info = topic_config[found_topic].get("titles_info", [])
+            predefined_titles = []
+            for titles_info_elem in titles_info:
+                if wikipedia_page in titles_info_elem["pages"]:
+                    predefined_titles = titles_info_elem["titles"]
+                    break
+            wikipedia_page_content_list = preprocess_wikipedia_page(entity_substr, entity_types, page_content,
+                                                                    predefined_titles)
             memory["wikipedia_content"] = wikipedia_page_content_list
             state_utils.save_to_shared_memory(vars, cur_wikipedia_page=wikipedia_page)
         logger.info(f"wikihow_page {wikihow_page} wikipedia_page {wikipedia_page}")

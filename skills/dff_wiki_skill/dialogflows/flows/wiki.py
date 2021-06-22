@@ -49,6 +49,9 @@ facts_memory = {}
 with open("page_dict.json", 'r') as fl:
     cache_page_dict = json.load(fl)
 
+with open("wikihow_cache.json", 'r') as fl:
+    wikihow_cache = json.load(fl)
+
 
 def special_topic_request(ngrams, vars):
     flag = start_or_continue_scenario(vars, topic_config)
@@ -68,7 +71,7 @@ def special_topic_facts_request(ngrams, vars):
 
 
 def special_topic_facts_response(vars):
-    response = facts_response(vars, topic_config)
+    response = facts_response(vars, topic_config, wikihow_cache)
     return response
 
 
