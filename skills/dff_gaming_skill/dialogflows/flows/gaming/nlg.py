@@ -210,7 +210,7 @@ def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(va
     if prefix is not None:
         response = prefix + " " + response
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
 
 
