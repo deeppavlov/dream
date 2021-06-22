@@ -486,6 +486,6 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", 
                       "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE),
                       "love": re.compile(r"(\blove\b|\blovers?\b|\bbeloved\b|relations?|relationships?|girlfriend"
                                          r"|boyfriend|\bgirls\b|\bboys\b|\bdating\b|\bdates\b"
-                                         r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)",
-                                         re.IGNORECASE),
+                                         r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)", re.IGNORECASE),
+                      "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
                       }

@@ -562,6 +562,10 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
         expected_subtopic_info = utt_info.get("expected_subtopic_info", {})
         logger.info(f"print expected_subtopic_info {expected_subtopic_info} utt_info {utt_info}")
         state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
+        if found_ackn:
+            found_ackn_sentences = nltk.sent_tokenize(found_ackn)
+            found_ackn_list = make_resp_list(vars, found_ackn_sentences, topic_config, shared_memory)
+            found_ackn = " ".join(found_ackn_list)
         response = f"{found_ackn} {response}".strip().replace("  ", " ")
     return response, used_utt_nums
 
