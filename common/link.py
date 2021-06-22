@@ -189,6 +189,8 @@ DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planet
                    "tiktok": "TikTok is known for its funny lip-syncing videos. Have you shot a video for tiktok?",
                    "love": "I have a lot of friends but as a socialbot I can not fall in love with someone. Although, "
                            "I've heard this is an amazing feeling. Are you in relationships with someone?",
+                   "hobbies": "Success is not the key to happiness. Happiness is the key to success. "
+                              "If you love what you are doing, you will be successful. Do you have any hobbies?",
                    }
 
 
