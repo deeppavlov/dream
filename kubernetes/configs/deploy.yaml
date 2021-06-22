@@ -4,7 +4,7 @@ combined-classification:
 
 kbqa:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 0
+  gpu: 2
 
 factoid-classification:
   CUDA_VISIBLE_DEVICES: '0'
@@ -20,7 +20,7 @@ comet-atomic:
 
 comet-conceptnet:
   CUDA_VISIBLE_DEVICES: '0'
-  gpu: 2
+  gpu: 0
 
 entity-linking:
   CUDA_VISIBLE_DEVICES: "''"
@@ -55,3 +55,7 @@ hypothesis-scorer:
 topic-recommendation:
   CUDA_VISIBLE_DEVICES: '0'
   gpu: 1
+
+speech-function-classifier:
+  CUDA_VISIBLE_DEVICES: '0'
+  gpu: 0
