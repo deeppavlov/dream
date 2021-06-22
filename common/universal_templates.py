@@ -174,7 +174,6 @@ COMPILE_SOMETHING = re.compile(join_sentences_in_or_pattern(
      join_words_in_or_pattern(DONOTKNOW_LIKE)]) + END,
     re.IGNORECASE)
 
-
 LIKE_WORDS = r"\b(prefer|adore|enjoy|love|like|stand|into\b|fond of|passionate of|crazy|appreciate|interested|fan\b)"
 LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
 
@@ -469,6 +468,11 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
     return entities_with_attitudes
 
 
+ANY_FRIEND_QUESTION = "Do you have any friends?"
+MY_FRIENDS_TEMPLATE = re.compile(r"my \b(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE)
+NO_FRIENDS_TEMPLATE = re.compile(r"(have )?(not|n't|no) (have )?(got )?(any )?(true |real |sincere )?"
+                                 r"(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE)
+
 DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", re.IGNORECASE),
                       "chill": re.compile(r"\b(chill|rest|relax)", re.IGNORECASE),
                       "sleep": re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE),
@@ -477,6 +481,7 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", 
                       "family": r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
                                 r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)",
                       "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet)\b", re.IGNORECASE),
+                      "friends": re.compile(r"\b(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE),
                       "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b", re.IGNORECASE),
                       "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b", re.IGNORECASE),
                       "dinosaurs": re.compile(r"\b(dinosaur)", re.IGNORECASE),

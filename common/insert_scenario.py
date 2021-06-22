@@ -635,7 +635,7 @@ def smalltalk_response(vars, topic_config):
         if expected_entities:
             state_utils.save_to_shared_memory(vars, expected_entities=expected_entities)
         existing_subtopic_info = shared_memory.get("expected_subtopic_info", [])
-        expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", [])
+        expected_subtopic_info = topic_config[found_topic].get("expected_subtopic_info", {})
         if expected_subtopic_info and not existing_subtopic_info and first_utt:
             state_utils.save_to_shared_memory(vars, expected_subtopic_info=expected_subtopic_info)
 

@@ -7,10 +7,10 @@ BOOK_SKILL_CHECK_PHRASE2 = 'your favourite book'
 BOOK_SKILL_CHECK_PHRASE3 = 'book did impress you the most'
 SWITCH_BOOK_SKILL_PHRASE = f"What is {BOOK_SKILL_CHECK_PHRASE} you've read?"
 ASK_TO_REPEAT_BOOK = 'Could you repeat please what book are we discussing?'
-
+WHAT_BOOK_RECOMMEND = "What's a book you would recommend to your friend?"
 QUESTIONS_ABOUT_BOOKS = ["What is your favorite book?",
                          "What book do you like to read?",
-                         "What's a book you would recommend to your friend?",
+                         WHAT_BOOK_RECOMMEND,
                          "What is the longest book you have ever read?",
                          "What's a book you like to recommend to other people?",
                          "What is a book that was recommended to you?"]
