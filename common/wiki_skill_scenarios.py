@@ -554,19 +554,19 @@ topic_config = \
                      "subtopic": "not_like_smn"},
                     {"utt": ["I'm so glad for you and wish you all the best together!",  # 7
                              "I just... I would really love to hear how did you meet?"],
-                     "ackn": [{"cond": [["is_no", "user", True]],
-                               "answer": "Oh you are probably just too humble."},
-                              {"cond": [["is_no", "user", False]],
-                               "answer": "I wish to share a very romantic moment with someone. To fall in love."}],
+                     "next_ackn": [{"cond": [["is_no", "user", True]],
+                                    "answer": "Oh you are probably just too humble."},
+                                   {"cond": [["is_no", "user", False]],
+                                    "answer": "I wish to share a very romantic moment with someone. To fall in love."}],
                      "subtopic": "relationships_with_smn"},
                     {"utt": ["Just a bit sad that I can't have relationships because I'm a socialbot.",  # 8
                              "So, how long you been together?"],
-                     "ackn": [{"cond": [["is_yes", "user", True],  # either yes
-                                        [{"pattern": r"(enough|long|year|eternity|forever|ages|married|marry)"},
-                                         "user", False]],  # OR some long pattern
-                               "answer": "Oh you seem to be a very dedicated and responsible person. I like it!"},
-                              {"cond": [["any"]],
-                               "answer": "I'm glad for you! Wish you to be together as much as you can."}],
+                     "next_ackn": [{"cond": [["is_yes", "user", True],  # either yes
+                                             [{"pattern": r"(enough|long|year|eternity|forever|ages|married|marry)"},
+                                              "user", False]],  # OR some long pattern
+                                    "answer": "Oh you seem to be a very dedicated and responsible person. I like it!"},
+                                   {"cond": [["any"]],
+                                    "answer": "I'm glad for you! Wish you to be together as much as you can."}],
                      "subtopic": "relationships_with_smn"},
                     {"utt": ["A very personal question from me. Are you a romantic?"],  # 9
                      "expected_subtopic_info": [{"subtopic": "romantic_person",
