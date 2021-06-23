@@ -326,18 +326,18 @@ def sys_response_to_speech_function_request(ngrams, vars):
         
         logger.info(f"human dialog length: {human_uttr_idx}")
 
-        # if len(dialog["human_utterances"]) > 4:
-        #     logger.info("human utterances number: at least 5")
-        #     if is_introvert(dialog) is True:
-        #         logger.info("user is: introvert")
-        #         return False
+        if len(dialog["human_utterances"]) > 4:
+            logger.info("human utterances number: at least 5")
+            if is_introvert(dialog) is True:
+                logger.info("user is: introvert")
+                return False
 
-        #     else:
-        logger.info("user is: extravert")
-        human_utterance = state_utils.get_last_human_utterance(vars)
-        bot_utterance = state_utils.get_last_bot_utterance(vars)
-        flag = is_supported_speech_function(human_utterance, bot_utterance)
-        logger.info(f"sys_response_to_speech_function_request: {flag}")
+            else:
+                logger.info("user is: extravert")
+                human_utterance = state_utils.get_last_human_utterance(vars)
+                bot_utterance = state_utils.get_last_bot_utterance(vars)
+                flag = is_supported_speech_function(human_utterance, bot_utterance)
+                logger.info(f"sys_response_to_speech_function_request: {flag}")
 
     except Exception as exc:
         logger.exception(exc)
