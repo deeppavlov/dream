@@ -21,7 +21,6 @@ from utils import add_question_to_statement, lower_duplicates_score, \
     how_are_you_spec, what_i_can_do_spec, psycho_help_spec, greeting_spec, misheard_with_spec1, \
     misheard_with_spec2, alexa_abilities_spec
 
-											 
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -34,11 +33,11 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
-									  
-MOST_DUMMY_RESPONSES = ["I really do not know what to answer.",
-                        "Sorry, probably, I didn't get what you mean.",
-                        "I didn't get it. Sorry"
-                        ]
+MOST_DUMMY_RESPONSES = [
+    "I really do not know what to answer.",
+    "Sorry, probably, I didn't get what you mean.",
+    "I didn't get it. Sorry"
+]
 
 
 @app.route("/respond", methods=['POST'])
@@ -66,26 +65,6 @@ def respond():
             curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
             logger.info("Curr candidates:")
             logger.info(pprint.pformat(curr_candidates, compact=False))
-
-													  
-
-																	   
-
-												 
-							
-												   
-																			  
-																				
-													
-													 
-																									
-																				 
-																								  
-														
-																								  
-															  
-																							  
-																	 
 
             for skill_data in curr_candidates:
                 if len(dialog["utterances"]) > 1:
@@ -320,30 +299,8 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
     return best_candidate, best_id, curr_single_scores
 
 
-										  
-							   
-								
-											
-													   
-					
-			 
-													
-
-								 
-
-
-									  
-						   
-								
-											
-													   
-												
-
-							 
-
-
-def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
-                    has_inappropriate, dialog, all_prev_active_skills=None):
+def select_response(candidates, scores, confidences, toxicities, has_blacklisted, has_inappropriate, dialog,
+                    all_prev_active_skills=None):
     # TOXICITY & BLACKLISTS checks
     n_toxic_candidates, scores, confidences = downscore_toxic_blacklisted_responses(
         scores, confidences, toxicities, has_blacklisted, has_inappropriate)

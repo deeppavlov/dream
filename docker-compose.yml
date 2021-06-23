@@ -1230,14 +1230,16 @@ services:
       context: .
       dockerfile: ./annotators/speech_function_classifier/Dockerfile
     command: uvicorn server:app --reload --host 0.0.0.0 --port 8108
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 3
       resources:
         limits:
-          memory: 1G
+          memory: 2.5G
         reservations:
-          memory: 1G
+          memory: 2.5G
 
   speech-function-predictor:
     build:

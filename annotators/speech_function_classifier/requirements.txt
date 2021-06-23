@@ -57,7 +57,6 @@ pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==8.2.0
 preshed==3.0.5
-prometheus-client==0.10.1
 prompt-toolkit==3.0.18
 ptyprocess==0.7.0
 pycparser==2.20

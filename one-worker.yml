@@ -1,86 +1,294 @@
 services:
   agent:
-    command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
+    deploy:
+      mode: replicated
+      replicas: 1
   cobotqa:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
-  personality-catcher:
-    command: uvicorn server:app --host 0.0.0.0 --port 8010
+    deploy:
+      mode: replicated
+      replicas: 1
+  cobotqa-annotator:
+    deploy:
+      mode: replicated
+      replicas: 1
+  cobot-topics:
+    deploy:
+      mode: replicated
+      replicas: 1
+  cobot-dialogact:
+    deploy:
+      mode: replicated
+      replicas: 1
+  cobot-convers-evaluator-annotator:
+    deploy:
+      mode: replicated
+      replicas: 1
   cobot-nounphrases:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60
+    deploy:
+      mode: replicated
+      replicas: 1
+  program-y:
+    deploy:
+      mode: replicated
+      replicas: 1
+  personality-catcher:
+    deploy:
+      mode: replicated
+      replicas: 1
   sentseg:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
+    deploy:
+      mode: replicated
+      replicas: 1
   convers-evaluation-selector:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
+    deploy:
+      mode: replicated
+      replicas: 1
   sentrewrite:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60
+    deploy:
+      mode: replicated
+      replicas: 1
   intent-responder:
-    command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
+    deploy:
+      mode: replicated
+      replicas: 1
   intent-catcher:
-    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
+    deploy:
+      mode: replicated
+      replicas: 1
   blacklisted-words:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8018
-  dummy-skill-dialog:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8052 -t 60
+    deploy:
+      mode: replicated
+      replicas: 1
+  program-y-dangerous:
+    deploy:
+      mode: replicated
+      replicas: 1
   dff-movie-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
+    deploy:
+      mode: replicated
+      replicas: 1
   ner:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
+    deploy:
+      mode: replicated
+      replicas: 1
   eliza:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
-  book-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8032 -t 60
+    deploy:
+      mode: replicated
+      replicas: 1
   convert-reddit:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
+    deploy:
+      mode: replicated
+      replicas: 1
   personal-info-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
+    deploy:
+      mode: replicated
+      replicas: 1
+  asr:
+    deploy:
+      mode: replicated
+      replicas: 1
+  misheard-asr:
+    deploy:
+      mode: replicated
+      replicas: 1
+  book-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
   weather-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
+    deploy:
+      mode: replicated
+      replicas: 1
   emotion-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
+    deploy:
+      mode: replicated
+      replicas: 1
+  dummy-skill-dialog:
+    deploy:
+      mode: replicated
+      replicas: 1
+  comet-atomic:
+    deploy:
+      mode: replicated
+      replicas: 1
+  comet-conceptnet:
+    deploy:
+      mode: replicated
+      replicas: 1
   meta-script-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
+    deploy:
+      mode: replicated
+      replicas: 1
+  short-story-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
   coronavirus-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
+    deploy:
+      mode: replicated
+      replicas: 1
   small-talk-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
+    deploy:
+      mode: replicated
+      replicas: 1
   game-cooperative-skill:
-    command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068"
+    deploy:
+      mode: replicated
+      replicas: 1
+  program-y-wide:
+    deploy:
+      mode: replicated
+      replicas: 1
   news-api-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
+    deploy:
+      mode: replicated
+      replicas: 1
   news-api-annotator:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8112 -t 15
+    deploy:
+      mode: replicated
+      replicas: 1
   factoid-qa:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
+    deploy:
+      mode: replicated
+      replicas: 1
+  entity-linking:
+    deploy:
+      mode: replicated
+      replicas: 1
+  wiki-parser:
+    deploy:
+      mode: replicated
+      replicas: 1
+  text-qa:
+    deploy:
+      mode: replicated
+      replicas: 1
   kbqa:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8072
+    deploy:
+      mode: replicated
+      replicas: 1
+  factoid-classification:
+    deploy:
+      mode: replicated
+      replicas: 1
   spelling-preprocessing:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
+    deploy:
+      mode: replicated
+      replicas: 1
   grounding-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --timeout=100
+    deploy:
+      mode: replicated
+      replicas: 1
   knowledge-grounding:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
-  knowledge-grounding-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8085
-  midas-classification:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8090
-  combined-classification:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087
-  dff-travel-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
-  dff-food-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
+    deploy:
+      mode: replicated
+      replicas: 1
   dff-gaming-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-friendship-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  masked-lm:
+    deploy:
+      mode: replicated
+      replicas: 1
+  entity-storer:
+    deploy:
+      mode: replicated
+      replicas: 1
+  knowledge-grounding-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  combined-classification:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-animals-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-travel-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-sport-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-food-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
   dff-science-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8101
-  cobot-entities:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8102
-  dff-funfact-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8104
-  dff-bot-persona-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-music-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
   dff-gossip-skill:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8109
+    deploy:
+      mode: replicated
+      replicas: 1
+  midas-classification:
+    deploy:
+      mode: replicated
+      replicas: 1
+  fact-retrieval:
+    deploy:
+      mode: replicated
+      replicas: 1
+  cobot-entities:
+    deploy:
+      mode: replicated
+      replicas: 1
   hypothesis-scorer:
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-bot-persona-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-funfact-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-wiki-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  topic-recommendation:
+    deploy:
+      mode: replicated
+      replicas: 1
+  user-persona-extractor:
+    deploy:
+      mode: replicated
+      replicas: 1
+  wiki-facts:
+    deploy:
+      mode: replicated
+      replicas: 1
+  speech-function-classifier:
+    deploy:
+      mode: replicated
+      replicas: 1
+  speech-function-predictor:
+    deploy:
+      mode: replicated
+      replicas: 1
+  dff-generic-responses-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
+  personality-detection:
+    deploy:
+      mode: replicated
+      replicas: 1
 version: '3.7'

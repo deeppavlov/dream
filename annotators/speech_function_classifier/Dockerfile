@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM deeppavlov/base-gpu:0.14.1
 
 WORKDIR /src
 
