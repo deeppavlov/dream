@@ -473,28 +473,29 @@ MY_FRIENDS_TEMPLATE = re.compile(r"my \b(friend|buddy|buddies|homie|homey|mate\b
 NO_FRIENDS_TEMPLATE = re.compile(r"(have )?(not|n't|no) (have )?(got )?(any )?(true |real |sincere )?"
                                  r"(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE)
 
-DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", re.IGNORECASE),
+DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art(s|work)?|draw(s|ed|ing)?|paint(s|ed|ing)?|meme)(s)?\b",
+                                        re.IGNORECASE),
                       "chill": re.compile(r"\b(chill|rest|relax)", re.IGNORECASE),
                       "sleep": re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE),
                       "school": re.compile(r"(school|home work|homework|study)", re.IGNORECASE),
                       "work": re.compile(r"\bwork(ed|s|ing)?\b", re.IGNORECASE),
                       "family": r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
                                 r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)",
-                      "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet)\b", re.IGNORECASE),
-                      "friends": re.compile(r"\b(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE),
+                      "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet(s)?)\b", re.IGNORECASE),
+                      "friends": re.compile(r"\b(friend|buddy|buddies|homie|homey|mate(s)?\b)", re.IGNORECASE),
                       "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b", re.IGNORECASE),
                       "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b", re.IGNORECASE),
                       "dinosaurs": re.compile(r"\b(dinosaur)", re.IGNORECASE),
                       "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b", re.IGNORECASE),
-                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b", re.IGNORECASE),
-                      "hiking": re.compile(r"\bhiking\b", re.IGNORECASE),
+                      "cars": re.compile(r"\b(car(s)?|automobile(s)?|driv(e|ed|es|ing)|auto(s)?)\b", re.IGNORECASE),
+                      "hiking": re.compile(r"\b(hiking|mountain(s)?)\b", re.IGNORECASE),
                       "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE),
                       "anime": re.compile(r"\banime\b|\bpokemon\b", re.IGNORECASE),
                       "love": re.compile(r"(\blove\b|\blovers?\b|\bbeloved\b|relations?|relationships?|girlfriend"
                                          r"|boyfriend|\bgirls\b|\bboys\b|\bdating\b|\bdates\b"
                                          r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)", re.IGNORECASE),
                       "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
-                      "politics": re.compile(r"(politic|democra|republic|president|\btrump\b|\bbyden\b"
+                      "politics": re.compile(r"\b(politic|democra|republi|liber|president|trump\b|byden\b"
                                              r"|authoritarianism|monarch)",
-                                             re.IGNORECASE),
+                                             re.IGNORECASE)
                       }

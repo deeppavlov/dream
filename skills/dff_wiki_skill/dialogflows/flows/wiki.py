@@ -20,7 +20,7 @@ from common.wiki_skill import CONF_DICT, NEWS_MORE
 from common.insert_scenario import get_page_content, get_wikihow_content, get_page_title, make_facts_str, get_titles, \
     questions_by_entity_substr, wikihowq_by_substr, preprocess_wikipedia_page, preprocess_wikihow_page
 from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
-    facts_response
+    facts_response, delete_topic_info
 from common.news import get_news_about_topic
 from common.wiki_skill_scenarios import topic_config
 
@@ -718,6 +718,7 @@ def error_response(vars):
     state_utils.save_to_shared_memory(vars, interrupted_skill="")
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     state_utils.set_confidence(vars, 0)
+    delete_topic_info(vars)
     return ""
 
 
