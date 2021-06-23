@@ -16,7 +16,7 @@ from dialogflows.common.intents import LogicalOr, user_doesnt_say_yes_request, u
     user_says_yes_request
 from dialogflows.common.nlg import error_response, link_to_other_skills_response
 from dialogflows.flows.gaming.states import State as GamingState
-from dialogflows.flows.minecraft.intents import is_game_candidate_minecraft, is_minecraft_mentioned_in_user_uttr
+from dialogflows.flows.minecraft.intents import is_game_candidate_minecraft, is_minecraft_mentioned_in_user_or_bot_uttr
 from dialogflows.flows.minecraft.states import State as MinecraftState
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -47,13 +47,13 @@ simplified_dialogflow.add_user_serial_transitions(
         GamingState.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_GAME_BOT_NEVER_PLAYED:
             partial(
                 gaming_intents.user_definitely_wants_to_talk_about_particular_game_request,
-                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_uttr(n, v),
+                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_or_bot_uttr(n, v),
             ),
         (scopes.MINECRAFT, MinecraftState.USR_START): gaming_intents.user_wants_to_discuss_minecraft_request,
         GamingState.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_GAME_THAT_USER_PLAYED_AND_BOT_DIDNT_PLAY:
             partial(
-                gaming_intents.user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play_request,
-                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_uttr(n, v)),
+                gaming_intents.user_definitely_wants_to_talk_about_game_that_user_played_request,
+                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_or_bot_uttr(n, v)),
         GamingState.SYS_USER_DOESNT_LIKE_GAMING: gaming_intents.user_doesnt_like_gaming_request,
         GamingState.SYS_USER_DIDNT_NAME_GAME: LogicalOr(
             gaming_intents.user_didnt_name_game_after_link_and_didnt_refuse_to_discuss_request,
