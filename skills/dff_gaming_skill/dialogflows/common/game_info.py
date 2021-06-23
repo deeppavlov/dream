@@ -66,8 +66,9 @@ else:
 
 
 def does_text_contain_video_game_words(text):
-    logger.info(f"(is_found_text_definitely_game)text: {text}")
-    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text))
+    flag = bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text))
+    logger.info(f"does_text_contain_video_game_words={flag}")
+    return flag
 
 
 def get_game_description_for_first_igdb_candidate(name, results_sort_key):

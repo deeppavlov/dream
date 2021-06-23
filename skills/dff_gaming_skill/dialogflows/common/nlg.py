@@ -107,6 +107,7 @@ def link_to_other_skills_response(vars, prefix="Okay.", shared_memory_actions=No
         for action in shared_memory_actions:
             action(vars)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    gaming_memory.mark_current_bot_utterance_as_link_to_other_skill(vars)
     return response
 
 

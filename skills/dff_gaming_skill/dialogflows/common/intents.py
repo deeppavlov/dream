@@ -43,10 +43,12 @@ def switch_to_particular_game_discussion(vars):
         "?" not in user_text and "?" in prev_bot_text and found_video_game_in_user_uttr)
     bot_asked_about_game_and_user_answered_yes = (
         found_video_game_in_bot_uttr and "?" in prev_bot_text and is_yes(user_uttr))
-    return lets_talk_about(vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
+    flag = lets_talk_about(vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
         or choose_particular_game \
         or question_answer_contains_video_game \
         or bot_asked_about_game_and_user_answered_yes
+    logger.info(f"switch_to_particular_game_discussion={flag}")
+    return flag
 
 
 def switch_to_general_gaming_discussion(vars):
@@ -62,10 +64,12 @@ def switch_to_general_gaming_discussion(vars):
         "?" not in user_text and "?" in prev_bot_text and found_video_game_words_in_user_uttr)
     bot_asked_about_game_and_user_answered_yes = (
         found_video_game_words_in_bot_uttr and "?" in prev_bot_text and is_yes(user_uttr))
-    return lets_talk_about(vars, VIDEO_GAME_WORDS_COMPILED_PATTERN) \
+    flag = lets_talk_about(vars, VIDEO_GAME_WORDS_COMPILED_PATTERN) \
         or choose_gaming_discussion \
         or question_answer_contains_video_game_words \
         or bot_asked_about_game_and_user_answered_yes
+    logger.info(f"switch_to_general_gaming_discussion={flag}")
+    return flag
 
 
 def islambda(v):
