@@ -493,6 +493,7 @@ def start_or_continue_scenario(vars, topic_config):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
+    prev_active_skill = bot_uttr.get("active_skill", "")
     shared_memory = state_utils.get_shared_memory(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
     cur_mode = shared_memory.get("cur_mode", "smalltalk")
@@ -503,6 +504,7 @@ def start_or_continue_scenario(vars, topic_config):
     logger.info(f"start_or_continue_scenario, user_info {user_info}, entity_triplets {entity_triplets}")
     if cur_mode == "facts" and isno:
         cur_mode = "smalltalk"
+    first_utt = False
     if not found_topic:
         for topic in topic_config:
             linkto = topic_config[topic].get("linkto", [])
@@ -520,6 +522,7 @@ def start_or_continue_scenario(vars, topic_config):
                     found_topic = topic
                     break
             if found_topic:
+                first_utt = True
                 break
     if found_topic:
         cur_topic_smalltalk = topic_config[found_topic].get("smalltalk", [])
@@ -527,6 +530,8 @@ def start_or_continue_scenario(vars, topic_config):
         logger.info(f"used_smalltalk {used_utt_nums}")
         if cur_topic_smalltalk and len(used_utt_nums) < len(cur_topic_smalltalk) and cur_mode == "smalltalk":
             flag = True
+        if not first_utt and prev_active_skill != "dff_wiki_skill":
+            flag = False
     return flag
 
 
@@ -860,3 +865,14 @@ def facts_response(vars, topic_config, wikihow_cache):
         state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     return response
+
+
+def delete_topic_info(vars):
+    state_utils.save_to_shared_memory(vars, special_topic="")
+    state_utils.save_to_shared_memory(vars, expected_subtopic_info={})
+    state_utils.save_to_shared_memory(vars, available_utterances=[])
+    state_utils.save_to_shared_memory(vars, subtopics=[])
+    state_utils.save_to_shared_memory(vars, cur_facts=[])
+    state_utils.save_to_shared_memory(vars, used_utt_nums={})
+    state_utils.save_to_shared_memory(vars, cur_mode="")
+    state_utils.save_to_shared_memory(vars, ackn=[])
