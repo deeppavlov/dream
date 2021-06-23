@@ -1,4 +1,15 @@
 {
+    "animals": [
+        "I love baby animals, especially baby pandas. I think they're the cutest! What are some animals that live in your country?",
+        "So many species should be protected. Are there animal rights groups where you live?",
+        {
+            "yes": "Cool! Have you ever been to a zoo?",
+            "no": "I hope they exist but you just don't know about them. Have you ever been to a zoo?"
+        },
+        "Oh I love giraffes. They're super cool! What is the largest animal you have ever seen?",
+        "Hm... Here's the question: Do you think that animals dream?",
+        "Share your thoughts. What can people learn from animals?"
+    ],
     "family": [
         "Do you have a family?",
         {

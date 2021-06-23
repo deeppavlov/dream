@@ -177,19 +177,25 @@ def my_pet_request(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
+    prev_active_skill = bot_uttr.get("active_skill", "")
     dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", user_uttr["text"])
     isno = is_no(state_utils.get_last_human_utterance(vars))
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
     all_facts_used = False
+    start_using_facts = False
     if my_pet:
         used_facts = shared_memory.get("used_facts", {}).get(my_pet, [])
         all_facts = MY_PET_FACTS[my_pet]
         if len(all_facts) == len(used_facts):
             all_facts_used = True
+        if len(used_facts) > 0:
+            start_using_facts = True
     about_users_pet = if_about_users_pet(ngrams, vars)
     if not about_users_pet and my_pet and not dontlike and not all_facts_used:
         flag = True
+    if start_using_facts and prev_active_skill != "dff_animals_skill":
+        flag = False
     if "would you like" in bot_uttr["text"].lower() and isno:
         flag = False
     logger.info(f"my_pet_request={flag}")
