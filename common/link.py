@@ -17,7 +17,7 @@ import common.game_cooperative_skill as game_cooperative_skill
 import common.travel as dff_travel_skill
 # import common.celebrities as dff_celebrity_skill
 import common.gaming as dff_gaming_skill
-import common.gossip as dff_gossip_skill
+# import common.gossip as dff_gossip_skill
 import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
 import common.food as dff_food_skill
@@ -43,7 +43,7 @@ skills_phrases_map = {
     'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases()),
     'dff_animals_skill': set(dff_animals_skill.skill_trigger_phrases()),
     # 'dff_celebrity_skill': set(dff_celebrity_skill.skill_trigger_phrases()),
-    'dff_gossip_skill': set(dff_gossip_skill.skill_trigger_phrases()),
+    # 'dff_gossip_skill': set(dff_gossip_skill.skill_trigger_phrases()),
     'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
     'dff_science_skill': set(dff_science_skill.skill_trigger_phrases()),
     'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
@@ -58,7 +58,7 @@ LIST_OF_SCRIPTED_TOPICS = {
     # "dff_celebrity_skill": "celebrities"
     "dff_food_skill": "food",
     "dff_gaming_skill": "games",
-    "dff_gossip_skill": "gossips",
+    # "dff_gossip_skill": "gossips",
     "dff_movie_skill": "movies",
     "dff_music_skill": "music",
     "dff_science_skill": "science",
@@ -187,8 +187,14 @@ DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planet
                             "Do you like taking photographs?",
                    "memes": "Memes are funny artworks we can see on the Internet. Do you like memes?",
                    "tiktok": "TikTok is known for its funny lip-syncing videos. Have you shot a video for tiktok?",
+                   "anime": "Anime is hand-drawn and computer animation originating from Japan. Do you like anime?",
+                   "friends": "A friend at hand is better than a relative at a distance. Do you have any friends?",
                    "love": "I have a lot of friends but as a socialbot I can not fall in love with someone. Although, "
                            "I've heard this is an amazing feeling. Are you in relationships with someone?",
+                   "hobbies": "Success is not the key to happiness. Happiness is the key to success. "
+                              "If you love what you are doing, you will be successful. Do you have any hobbies?",
+                   "politics": "I've recently learned how many different political views in our world. "
+                               "Are you interested in politics?",
                    }
 
 

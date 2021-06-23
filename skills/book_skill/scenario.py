@@ -94,6 +94,7 @@ class BookSkillScenario:
             human_attr['book_skill']['we_asked_genre'] = True
         elif not_named_fav and not_met_reply:
             reply = f'{reply} {PROPOSE_FAVOURITE_BOOK}'
+            human_attr['book_skill']['named_favourite'] = True
         elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
             reply = f'{reply} {WHAT_BOOK_IMPRESSED_MOST}'
         return reply
@@ -354,7 +355,7 @@ class BookSkillScenario:
                         reply = f"I am pleased to know it. {reply}"
                     book_question = get_not_given_question_about_books(human_attr['book_skill']['used_phrases'])
                     reply = f'{reply} Apart from the Bible, {book_question}'
-                    confidence = self.default_conf
+                    confidence = self.super_conf
                 elif self.fav_book_request_detected(annotated_user_phrase, bot_phrases[-1], human_attr):
                     # if user asked us about favorite book
                     logger.debug('Detected favorite book request')
@@ -470,12 +471,13 @@ class BookSkillScenario:
                         logger.debug('Tell_me_more or is_yes and bookname')
                         reply = tell_about_genre_book(bookname, self.bookreads_data)
                         if reply:
-                            if not human_attr['book_skill'].get('named_favourite', False):
-                                reply = f'{reply} {PROPOSE_FAVOURITE_BOOK}'
-                                confidence = self.super_conf
-                            else:
+                            new_reply = self.book_linkto_reply(reply, human_attr)
+                            if new_reply == reply:
+                                logger.debug('We are over - finish')
                                 reply = exit_skill(reply, human_attr)
                                 confidence = self.default_conf
+                            else:
+                                reply, confidence = new_reply, self.default_conf
                         elif plain_bookname:
                             book_fact = what_is_book_about(plain_bookname)
                             if book_fact:
@@ -489,11 +491,8 @@ class BookSkillScenario:
                             warning_message = 'Either plain_bookname or genre book should be. Check the code'
                             sentry_sdk.capture_exception(Exception(warning_message))
                             logger.exception(warning_message)
-                            if not human_attr['book_skill'].get('named_favourite', False):
-                                reply = f'{PROPOSE_FAVOURITE_BOOK}'
-                                confidence = self.default_conf
-                            else:
-                                reply, confidence = '', 0
+                            reply = self.book_linkto_reply('', human_attr)
+                            confidence = self.default_conf
                     elif is_no(annotated_user_phrase):
                         reply = 'OK, as you wish.'
                         reply = exit_skill(reply, human_attr)
@@ -563,7 +562,7 @@ class BookSkillScenario:
             if isinstance(reply, list):
                 reply = " ".join(reply)
             if reply in human_attr['book_skill']['used_phrases']:
-                confidence *= 0.5
+                confidence *= (0.4 ** (human_attr['book_skill']['used_phrases'].count(reply)))
             texts.append(reply)
             if reply:
                 human_attr['book_skill']['used_phrases'].append(reply)

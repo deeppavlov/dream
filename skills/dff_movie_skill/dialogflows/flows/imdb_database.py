@@ -142,11 +142,7 @@ class IMDb:
 
         with open("databases/google-10000-english-no-swears.txt", "r") as f:
             self.frequent_unigrams = f.read().splitlines()[:2000]
-
-        with open("databases/topics_counter_50.json", "r") as f:
-            # phrases are like `verb + noun` or `verb + prep + noun` WITHOUT articles
-            self.frequent_bigrams = json.load(f)
-        self.frequent_bigrams = [bigram for bigram in self.frequent_bigrams if self.frequent_bigrams[bigram] > 200]
+        self.frequent_unigrams.remove("up")  # very popular movie, let's leave it in our database
 
         # TOTALLY REMOVED MOVIES
         for proc_title in [
@@ -162,6 +158,7 @@ class IMDb:
                 "tell me something", "different", "day", "seen", "i like", "wij", "because", "me too",
                 "horror", "will", "character", "more", "show", "coming out", "remember", "again", "time",
                 "news", "comics", "life", "playing", "weekend", "gays", "live", "travelling", "abortion", "foster",
+                "kites"
         ]:
             try:
                 self.preprocessed_original.pop(proc_title)
@@ -302,8 +299,9 @@ class IMDb:
             movie `imdb_id`
             None if the movie not in the database
         """
-        preprocessed_original_title_ids = self.preprocessed_original.get(self.process_movie_name(name), None)
-        preprocessed_alternative_title_ids = self.preprocessed_alternative.get(self.process_movie_name(name), None)
+        processed_movie_title = self.process_movie_name(name)
+        preprocessed_original_title_ids = self.preprocessed_original.get(processed_movie_title, None)
+        preprocessed_alternative_title_ids = self.preprocessed_alternative.get(processed_movie_title, None)
 
         imdb_ids = preprocessed_original_title_ids if preprocessed_original_title_ids else []
         imdb_ids += preprocessed_alternative_title_ids if preprocessed_alternative_title_ids else []
