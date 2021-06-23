@@ -14,7 +14,7 @@ from common.sensitive import is_sensitive_situation
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
     is_any_question_sentence_in_utterance, if_not_want_to_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intent_name, get_intents, get_topics, get_entities, \
-    get_common_tokens_in_lists_of_strings
+    get_common_tokens_in_lists_of_strings, is_no
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
     how_are_you_spec, what_i_can_do_spec, greeting_spec, misheard_with_spec1, psycho_help_spec, \
     misheard_with_spec2, alexa_abilities_spec, join_used_links_in_attributes, get_updated_disliked_skills
@@ -510,10 +510,18 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     logger.info(f"Best candidate: {best_candidate}")
     n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
     _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
-
     no_question_by_user = "?" not in dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get(
         "punct_sent", dialog["human_utterances"][-1]["text"])
-    if _no_script_two_times_in_a_row and _is_best_not_script and no_question_by_user and "?" in best_candidate["text"]:
+
+    # if `no` to 1st in a row linkto question, and chosen response is not from scripted skill
+    _no_to_first_linkto = is_no(dialog["human_utterances"][-1]) and any([
+        phrase.lower() in _prev_bot_uttr["text"].lower() for phrase in LINK_TO_PHRASES])
+    # if chosen short response or question by not-scripted skill
+    _is_short_or_question_by_not_script = _is_best_not_script and (
+        "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4)
+
+    if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
+            _no_to_first_linkto and _is_best_not_script):
         # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
         # and user utterance does not contain "?", replace utterance with dummy!
         best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)

@@ -11,7 +11,7 @@ ACTIVE_SKILLS = [
     "small_talk_skill", "dff_wiki_skill"
 ]
 ALMOST_ACTIVE_SKILLS = [
-    "friendship_skill", "dff_friendship_skill", "knowledge_grounding_skill",
+    "friendship_skill", "dff_friendship_skill",
 ]
 UNPREDICTABLE_SKILLS = [
     "convert_reddit", "knowledge_grounding_skill",
