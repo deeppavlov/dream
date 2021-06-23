@@ -29,16 +29,20 @@ def is_game_candidate_minecraft(ngrams, vars):
         f"as candidate for discussion, the igdb game description should have been put into global variable "\
         f"`games_igdb_ids`"
     candidate_game = game_info.games_igdb_ids[candidate_game_id_str]
-    return "minecraft" in candidate_game["name"].lower()
+    result = "minecraft" in candidate_game["name"].lower()
+    logger.info(f"is_game_candidate_minecraft={result}")
+    return result
 
 
-def is_minecraft_mentioned_in_user_uttr(ngrams, vars):
-    user_uttr_text = state_utils.get_last_human_utterance(vars)["text"]
-    return "minecraft" in user_uttr_text.lower()
+def is_minecraft_mentioned_in_user_or_bot_uttr(ngrams, vars):
+    user_uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
+    bot_uttr_text = state_utils.get_last_bot_utterance(vars).get("text", "")
+    result = "minecraft" in user_uttr_text.lower() or "minecraft" in bot_uttr_text.lower()
+    logger.info(f"is_minecraft_mentioned_in_user_or_bot_uttr={result}")
+    return result
 
 
 def user_wants_to_talk_about_minecraft_request(ngrams, vars):
-    logger.info(f"user_wants_to_talk_about_particular_game_request")
     if common_intents.switch_to_particular_game_discussion(vars):
         user_uttr = state_utils.get_last_human_utterance(vars)
         prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
