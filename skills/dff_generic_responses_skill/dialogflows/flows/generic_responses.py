@@ -187,7 +187,7 @@ def get_pre_last_bot_utterance(vars):
 def is_last_bot_utterance_by_us(vars):
     bot_utterances = state_utils.get_bot_utterances(vars)
     if len(bot_utterances) == 0:
-        return False 
+        return False
 
     last_bot_utterance = state_utils.get_last_bot_utterance(vars)
 
@@ -318,12 +318,12 @@ def error_response(vars):
 
 def sys_response_to_speech_function_request(ngrams, vars):
     flag = False
-    
+
     # added check for introvert/extravert
     try:
         dialog = state_utils.get_dialog(vars)
         human_uttr_idx = len(dialog["human_utterances"])
-        
+
         logger.info(f"human dialog length: {human_uttr_idx}")
 
         if len(dialog["human_utterances"]) > 4:
