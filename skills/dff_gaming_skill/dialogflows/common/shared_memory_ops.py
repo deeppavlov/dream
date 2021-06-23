@@ -176,3 +176,25 @@ def add_how_to_index_to_used_how_to_indices(vars, i):
     indices = shared_memory.get("used_how_to_indices", [])
     indices.append(i)
     state_utils.save_to_shared_memory(vars, used_how_to_indices=indices)
+
+
+def mark_current_bot_utterance_as_link_to_other_skill(vars):
+    current_human_utterance_index = state_utils.get_human_utter_index(vars)
+    logger.info(f"Bot utterance after human utterance with index {current_human_utterance_index} "
+                f"is marked to link to other skill")
+    state_utils.save_to_shared_memory(
+        vars, index_of_last_human_utterance_after_which_link_from_gaming_was_made=current_human_utterance_index)
+
+
+def was_link_from_gaming_to_other_skill_made_in_previous_bot_utterance(vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill")
+    index_of_last_human_utterance_after_which_link_from_gaming_was_made = shared_memory.get(
+        "index_of_last_human_utterance_after_which_link_from_gaming_was_made", -2)
+    current_human_utterance_index = state_utils.get_human_utter_index(vars)
+    diff = current_human_utterance_index - index_of_last_human_utterance_after_which_link_from_gaming_was_made
+    if index_of_last_human_utterance_after_which_link_from_gaming_was_made < 0:
+        logger.info(f"No link from dff_gaming_skill was done in this dialog.")
+    else:
+        logger.info(f"The last link from dff_gaming_skill to other skill was done {diff} turns before")
+    return diff < 2 and prev_active_skill is not None and prev_active_skill == "dff_gaming_skill"

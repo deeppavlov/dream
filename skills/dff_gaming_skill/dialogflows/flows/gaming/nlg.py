@@ -199,6 +199,7 @@ def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
                "By the way, what sport do you like?"
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    gaming_memory.mark_current_bot_utterance_as_link_to_other_skill(vars)
     return response
 
 
@@ -211,6 +212,7 @@ def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(va
         response = prefix + " " + response
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    gaming_memory.mark_current_bot_utterance_as_link_to_other_skill(vars)
     return response
 
 

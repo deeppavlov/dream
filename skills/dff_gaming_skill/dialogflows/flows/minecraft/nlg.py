@@ -137,4 +137,5 @@ def praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_respons
     else:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_0)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    shared_memory_ops.mark_current_bot_utterance_as_link_to_other_skill(vars)
     return response
