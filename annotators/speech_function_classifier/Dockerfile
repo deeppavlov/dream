@@ -1,5 +1,7 @@
 FROM deeppavlov/base-gpu:0.14.1
 
+ARG asdf=asdf
+
 WORKDIR /src
 
 COPY ./annotators/speech_function_classifier/requirements.txt requirements.txt
