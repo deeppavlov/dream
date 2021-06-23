@@ -65,12 +65,13 @@ def base_skill_selector_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: convert
+    dialog_20 = utils.get_last_n_turns(dialog, bot_last_turns=20)
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [
         {
-            "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
+            "utterances_histories": [[utt["text"] for utt in dialog_20["utterances"]]],
             "personality": [dialog["bot"]["persona"]],
             "num_ongoing_utt": [utils.count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")],
             "human_attributes": [dialog["human"]["attributes"]],
