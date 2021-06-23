@@ -33,8 +33,7 @@ class EmotionSkillScenario:
 
     def _get_user_emotion(self, annotated_user_phrase, discard_emotion=None):
         if any([is_sad(annotated_user_phrase),
-                is_alone(annotated_user_phrase),
-                is_boring(annotated_user_phrase)]):
+                is_alone(annotated_user_phrase)]):
             self.regexp_sad = True
             logger.info(f"Sadness detected by regexp in {annotated_user_phrase['text']}")
             return 'sadness'
@@ -237,6 +236,8 @@ class EmotionSkillScenario:
                     confidence = 0.0
                 was_trigger = any([trigger_question in prev_bot_phrase
                                    for trigger_question in skill_trigger_phrases()])
+                was_scripted_trigger = any([trigger_phrase in prev_bot_phrase
+                                            for trigger_phrase in SCRIPTED_TRIGGER_PHRASES])
                 if dialog['bot_utterances']:
                     was_active = dialog['bot_utterances'][-1].get('active_skill', '') == 'emotion_skill'
                     was_scripted = dialog['bot_utterances'][-1].get('active_skill', '') in LIST_OF_SCRIPTED_TOPICS
@@ -246,13 +247,12 @@ class EmotionSkillScenario:
                 if (was_trigger or was_active or self.regexp_sad) and not was_scripted:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
-                elif was_scripted or reply == dialog['bot_utterances'][-1]:
-                    confidence = 0.5 * confidence
-                if not very_confident and not was_active:
+                elif not very_confident and not was_active:
                     confidence = min(confidence, 0.99)
                     attr['can_continue'] = CAN_CONTINUE_SCENARIO
-                if any([trigger_phrase in prev_bot_phrase for trigger_phrase in SCRIPTED_TRIGGER_PHRASES]):
-                    confidence = 0.5 * confidence
+                elif state != "joke_requested":
+                    if was_scripted or reply == dialog['bot_utterances'][-1] or was_scripted_trigger:
+                        confidence = 0.5 * confidence
             except Exception as e:
                 self.logger.exception("exception in emotion skill")
                 sentry_sdk.capture_exception(e)
