@@ -181,6 +181,8 @@ NOT_LIKE_PATTERN = re.compile(
     rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
     re.IGNORECASE)
 
+STOP_PATTERN = re.compile(r"(stop|shut|something else|change|don't want)", re.IGNORECASE)
+
 
 def if_lets_chat(uttr):
     uttr_ = uttr.lower()

@@ -208,7 +208,18 @@ QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
                       "Let me tell you about {} of {}, okey?"
                       ]
 
-NEWS_MORE = ["Do you want more details?", "Should I continue?", "What is your opinion?"]
+QUESTION_TEMPLATES_SHORT = ["Would you like to know about {}?",
+                            "Do you want to learn about {}?",
+                            "Are you interested in {}?",
+                            "Do you want to hear about {}?",
+                            "Do you want to know about {}?",
+                            "Do you want me to tell you about {}?",
+                            "The next topic is {}, continue?",
+                            "Let me tell you about {}, okey?"
+                            ]
+
+NEWS_MORE = ["Do you want more details?", "Should I continue?", "What is your opinion?",
+             "Do you want to hear more?", "I can tell you more, okay?", "Would you like to learn more?"]
 dff_wiki_phrases = ["Are you listening to music or playing games"]
 
 CONF_DICT = {"UNDEFINED": 0.0, "USER_QUESTION_IN_BEGIN": 0.8, "ENTITY_IN_HISTORY": 0.9, "WIKI_TYPE_DOUBT": 0.9,
