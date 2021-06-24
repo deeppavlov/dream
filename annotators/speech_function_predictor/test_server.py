@@ -15,7 +15,7 @@ def run_test(handler):
     hypothesis = handler(["React.Respond.Reply.Accept", "React.Respond.Develop.Extend"])
     print(f"test name: {hypothesis}")
     assert hypothesis == [[[{}], [{'prediction': 'Sustain.Continue.Prolong.Elaborate',
-                                   'confidence': 0.20689655172413793},
+                                   'confidence': 0.1896551724137931},
                                   {'prediction': 'React.Respond.Reply.Agree',
                                    'confidence': 0.13793103448275862},
                                   {'prediction': 'Sustain.Continue.Prolong.Enhance',
