@@ -148,10 +148,13 @@ def user_definitely_wants_to_talk_about_game_that_user_played_request(
 def user_doesnt_like_gaming_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
+    bot_text = bot_uttr.get("text", "").lower()
     found_game_name = bool(find_games_in_text(user_uttr.get("text", "")))
     flag = is_no(user_uttr) \
         and not found_game_name \
-        and does_text_contain_link_to_gaming(bot_uttr.get("text", "")) \
+        and (
+            does_text_contain_link_to_gaming(bot_text)
+            or common_intents.is_question_about_games(bot_text)) \
         and not was_link_from_gaming_to_other_skill_made_in_previous_bot_utterance(vars)
     logger.info(f"user_doesnt_like_gaming_request={flag}")
     return flag

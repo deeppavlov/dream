@@ -206,9 +206,9 @@ def ask_if_user_played_minecraft_response(vars):
 
 @error_handler
 def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
-    response = "There are several simple rules which help people stay healthy while playing video games. " \
-               "The first is to give your eyes rest regularly. You can use reminders for that. The second rule " \
-               "is to follow schedule and not play games for too long. And the last is to exercise regularly. " \
+    response = "There are several simple rules which help people stay healthy while playing video games and using " \
+               "computer in general. The first is to give your eyes rest regularly. You can use reminders for that. " \
+               "The second rule is to follow break schedule. And the last rule is to exercise regularly. " \
                "By the way, what sport do you like?"
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)

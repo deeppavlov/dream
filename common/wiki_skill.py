@@ -180,7 +180,8 @@ blacklist_words = {"yup", "true", "false", "boy", "boys", "meow", "people", "ale
 blacklist_titles = {"ethymology", "terminology"}
 
 prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pet", "pets", "coronavirus",
-                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs", "pop", "rock", "rap"}
+                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs", "pop", "rock", "rap",
+                     "video game", "video games"}
 prohibited_types = {"Q571",  # book
                     "Q277759",  # book series
                     "Q8261",  # novel
