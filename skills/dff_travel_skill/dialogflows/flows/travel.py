@@ -361,7 +361,7 @@ def user_refused_to_mention_named_entity_loc_request(ngrams, vars):
         logger.info(f"Not found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
         return False
 
-    if asked_for_loc and (len(user_mentioned_locations) == 0 or is_no or nowhere_found):
+    if asked_for_loc and (len(user_mentioned_locations) == 0 or (is_no and not nowhere_found)):
         logger.info(f"Not found mentioned named locations in user utterances")
         return True
     return False
