@@ -60,7 +60,7 @@ simplified_dialogflow.add_user_serial_transitions(
                 additional_check=lambda n, v: not is_minecraft_mentioned_in_user_or_bot_uttr(n, v)),
         GamingState.SYS_USER_DOESNT_LIKE_GAMING: gaming_intents.user_doesnt_like_gaming_request,
         GamingState.SYS_USER_DIDNT_NAME_GAME: LogicalOr(
-            gaming_intents.user_didnt_name_game_after_link_and_didnt_refuse_to_discuss_request,
+            gaming_intents.user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request,
             partial(gaming_intents.user_mentioned_games_as_his_interest_request, first_time=False)),
         GamingState.SYS_USER_MENTIONED_GAMES_AS_HIS_INTEREST:
             gaming_intents.user_mentioned_games_as_his_interest_request,

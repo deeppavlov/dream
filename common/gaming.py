@@ -11,7 +11,7 @@ from common.inflect import engine
 
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
     r"\bvideo ?game|\bgaming\b|\bplay ?station|\bx ?box\b|\bplay(?:ed|ing|s).*\b(?:tablet|pc|computer)\b|"
-    r"\bgames? for (?:android|pc|computer|play ?station|x ?box|tablet|ipad)\b",
+    r"\bgames? for (?:android|pc|computer|play ?station|x ?box|tablet|ipad)\b|\b(what|which)\b.+\bgame.+\bplay.+\?",
     re.IGNORECASE)
 
 CHECK_DEFINITELY_GAME_COMPILED_PATTERN = re.compile(
