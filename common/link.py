@@ -83,17 +83,17 @@ skills_link_to_weights = {
 }
 
 link_to_skill2key_words = {
-    # "dff_movie_skill": ["movie"],
+    "dff_movie_skill": ["movie"],
     "book_skill": ["book"],
-    # "game_cooperative_skill": ["game"],
-    # 'dff_gaming_skill': ["game"], TODO: add when will be merged
+    "game_cooperative_skill": ["game"],
+    # 'dff_gaming_skill': ["game"],   # TODO: add when will be merged
     "dff_travel_skill": ["travel"],
-    # "dff_animals_skill": ["animal"],
+    "dff_animals_skill": ["animal"],
     "dff_food_skill": ["food"],
     "dff_sport_skill": ["sport"],
     # "dff_gossip_skill": ["gossips"],
     "dff_science_skill": ["science"],
-    # "dff_music_skill": ["music"],
+    "dff_music_skill": ["music"],
 }
 
 link_to_skill2i_like_to_talk = {
