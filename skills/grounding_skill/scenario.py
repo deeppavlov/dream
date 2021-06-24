@@ -7,8 +7,7 @@ from os import getenv
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import skills_phrases_map, link_to_skill2key_words
-from common.grounding import what_we_talk_about, are_we_recorded, detect_interrupt, detect_end_but, \
-    detect_end_because, detect_end_when, BUT_PHRASE, REPEAT_PHRASE, BECAUSE_PHRASE, WHEN_PHRASE, \
+from common.grounding import what_we_talk_about, are_we_recorded, \
     MANY_INTERESTING_QUESTIONS
 from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
@@ -82,15 +81,15 @@ def what_do_you_mean_response(dialog):
             "intent_catcher", {}).get(
             "what_are_you_talking_about", {}).get(
             "detected", False)
-        if detect_interrupt(dialog['human_utterances'][-1]['text']):
-            reply, confidence = REPEAT_PHRASE, SUPER_CONF
-        elif detect_end_but(dialog['human_utterances'][-1]['text']):
-            reply, confidence = BUT_PHRASE, SUPER_CONF
-        elif detect_end_because(dialog['human_utterances'][-1]['text']):
-            reply, confidence = BECAUSE_PHRASE, SUPER_CONF
-        elif detect_end_when(dialog['human_utterances'][-1]['text']):
-            reply, confidence = WHEN_PHRASE, SUPER_CONF
-        elif not (what_we_talk_about(dialog['human_utterances'][-1]) or what_do_you_mean_intent):
+        # if detect_interrupt(dialog['human_utterances'][-1]['text']):
+        #     reply, confidence = REPEAT_PHRASE, SUPER_CONF
+        # elif detect_end_but(dialog['human_utterances'][-1]['text']):
+        #     reply, confidence = BUT_PHRASE, SUPER_CONF
+        # elif detect_end_because(dialog['human_utterances'][-1]['text']):
+        #     reply, confidence = BECAUSE_PHRASE, SUPER_CONF
+        # elif detect_end_when(dialog['human_utterances'][-1]['text']):
+        #     reply, confidence = WHEN_PHRASE, SUPER_CONF
+        if not (what_we_talk_about(dialog['human_utterances'][-1]) or what_do_you_mean_intent):
             reply, confidence = '', 0
         elif len(dialog.get('human_utterances', [])) < 2:
             reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
