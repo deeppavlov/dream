@@ -132,6 +132,8 @@
             "reg_phrases": [
                 "(leave|end) (the|this) conversation",
                 "alexa done",
+                "(.* )?(stop alexa)",
+                "(.* )?(i have to go)(.* )?",
                 "alexa we are done",
                 "talk to (a )?(different|another) bot",
                 "give (me )?(different|another) bot",
