@@ -14,16 +14,12 @@ def handler(requested_data):
 def run_test(handler):
     hypothesis = handler(["React.Respond.Reply.Accept", "React.Respond.Develop.Extend"])
     print(f"test name: {hypothesis}")
-    assert hypothesis == [[[{}], [{'prediction': 'Sustain.Continue.Prolong.Elaborate',
-                                   'confidence': 0.1896551724137931},
-                                  {'prediction': 'React.Respond.Reply.Agree',
-                                   'confidence': 0.13793103448275862},
-                                  {'prediction': 'Sustain.Continue.Prolong.Enhance',
-                                   'confidence': 0.10344827586206896},
-                                  {'prediction': 'React.Rejoinder.Track.Confirm',
-                                   'confidence': 0.08620689655172414},
-                                  {'prediction': 'Sustain.Continue.Prolong.Extend',
-                                   'confidence': 0.08620689655172414}]]]
+    assert hypothesis[0][0] == [{}]
+    assert {h['prediction'] for h in hypothesis[0][1]} == {'Sustain.Continue.Prolong.Elaborate',
+                                                           'React.Respond.Reply.Agree',
+                                                           'Sustain.Continue.Prolong.Enhance',
+                                                           'Sustain.Continue.Prolong.Extend',
+                                                           'React.Rejoinder.Track.Confirm'}
     print("Success")
 
 
