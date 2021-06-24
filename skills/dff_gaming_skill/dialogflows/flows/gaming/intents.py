@@ -49,7 +49,7 @@ def user_mentioned_games_as_his_interest_request(ngrams, vars, first_time=True):
     flag = not game_names_from_local_list_of_games \
         and common_intents.switch_to_general_gaming_discussion(vars) \
         and not user_doesnt_like_gaming_request(ngrams, vars) \
-        and not user_didnt_name_game_after_link_and_didnt_refuse_to_discuss_request(ngrams, vars) \
+        and not user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request(ngrams, vars) \
         and (
             first_time
             and ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY not in bot_text
@@ -160,14 +160,14 @@ def user_doesnt_like_gaming_request(ngrams, vars):
     return flag
 
 
-def user_didnt_name_game_after_link_and_didnt_refuse_to_discuss_request(ngrams, vars):
+def user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request(ngrams, vars):
     logger.info(f"user_didnt_name_game_request")
     user_uttr = state_utils.get_last_human_utterance(vars)
-    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     found_game_name = bool(find_games_in_text(user_uttr.get("text", "")))
     flag = not is_no(user_uttr) \
         and not found_game_name \
-        and does_text_contain_link_to_gaming(bot_uttr.get("text", "")) \
+        and (does_text_contain_link_to_gaming(bot_text) or common_intents.is_question_about_games(bot_text)) \
         and not was_link_from_gaming_to_other_skill_made_in_previous_bot_utterance(vars)
     logger.info(f"user_didnt_name_game_request={flag}")
     return flag
