@@ -185,7 +185,7 @@ def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
 
 @error_handler
 def ask_if_user_played_minecraft_response(vars):
-    response = "There is one game I play a lot. Did you play Minecraft?"
+    response = "Unfortunately I haven't heard about this game. There is one game I play a lot. Did you play Minecraft?"
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
