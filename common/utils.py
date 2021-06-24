@@ -1177,6 +1177,6 @@ COBOTQA_EXTRA_WORDS = re.compile(
     r"(this might answer your question[:\,]? "
     r"|(according to|from) (wikipedia|wikihow)[:\,]? "
     r"|here's (something|what) I found (from|on) [a-zA-Z0-9\-\.]+:"
-    r"|here's a fact about [a-zA-Z0-9\- ]+\.)",
+    r"|here's a fact about [a-zA-Z0-9\- \,]+\.)",
     re.IGNORECASE,
 )
