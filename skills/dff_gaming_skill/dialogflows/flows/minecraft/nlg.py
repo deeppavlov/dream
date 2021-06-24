@@ -1,12 +1,14 @@
 import logging
 import os
 import random
+import re
 
 import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
 import common.gaming as common_gaming
+from common.universal_templates import if_chat_about_particular_topic
 
 import dialogflows.common.nlg as common_nlg
 from dialogflows.common import shared_memory_ops
@@ -27,8 +29,17 @@ def ask_user_when_he_started_to_play_minecraft_response(vars, candidate_game_id_
         vars, candidate_game_id_is_already_set)
     response = f"Cool! Minecraft is the best game ever! I dived into the game right after I was created. "\
         f"And what about you? When did you start to play Minecraft?"
-    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
+    if not if_chat_about_particular_topic(
+            human_uttr,
+            compiled_pattern=re.compile("minecraft", flags=re.I)) \
+            and any([p.lower() in bot_text.lower() for p in common_gaming.NO_LINK_PHRASES]):
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    else:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 

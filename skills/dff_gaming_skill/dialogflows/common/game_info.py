@@ -6,7 +6,7 @@ import sentry_sdk
 from requests import RequestException
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import VIDEO_GAME_WORDS_COMPILED_PATTERN, load_json, find_games_in_text
+from common.gaming import CHECK_DEFINITELY_GAME_COMPILED_PATTERN, load_json, find_games_in_text
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -65,7 +65,7 @@ else:
 
 
 def does_text_contain_video_game_words(text):
-    flag = bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text))
+    flag = bool(CHECK_DEFINITELY_GAME_COMPILED_PATTERN.search(text))
     logger.info(f"does_text_contain_video_game_words={flag}")
     return flag
 

@@ -9,6 +9,15 @@ import sentry_sdk
 from common.inflect import engine
 
 
+VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
+    r"\bvideo ?game|\bgaming\b|\bplay ?station|\bx ?box\b|\bplay(?:ed|ing|s).*\b(?:tablet|pc|computer)\b|"
+    r"\bgames? for (?:android|pc|computer|play ?station|x ?box|tablet|ipad)\b",
+    re.IGNORECASE)
+
+CHECK_DEFINITELY_GAME_COMPILED_PATTERN = re.compile(
+    VIDEO_GAME_WORDS_COMPILED_PATTERN.pattern + r'|\bgames?\b|\bplay(?:ed|ing|s)\b', re.IGNORECASE)
+
+
 logger = logging.getLogger(__name__)
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
@@ -368,3 +377,35 @@ def skill_trigger_phrases():
 ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = "Wow, video games are cool. " \
     "If I didn't love to chat so much, I would definitely played video games at least half a day. " \
     "What game are you playing now?"
+
+
+NO_LINK_PHRASES = [
+    "Do you think that pets can use gadgets the same way as humans?",
+    "I love games, especially stats like top of the games released.",
+    "play with my cat different games, such as run and fetch",
+    "I played with my cat a game",
+    "play with my dog different game",
+    "Got a list of the top released games, wanna discuss it?",
+    "Which of these time periods is of interest for you?",
+    "Got a list of the top released games, wanna discuss it?",
+    "I can talk about the most popular games for this or last year, last month, or even the last week",
+    "released games highly rated in this year. Do you want to learn more?",
+    "If you want to discuss it in details say I want to talk about it.",
+    "Do you want to learn more about it, or shall we move on?",
+    "Have you played it before?",
+    "You can always talk to me about other popular games.",
+    "Do you want to chat about the best games of the past year, this year, last month or week?",
+    "Let me know if we should talk about the next one or discuss this one",
+    "Talking about it or going on?",
+    "Discussing it or moving on?",
+    "Chatting about it or the next one?",
+    "How would you rate the desire to play it again",
+    "Your rating is way lower than one given by the rest of the players.",
+    "My memory failed me and I can't recall anything else about the games.",
+    "one of my hobbies is keeping fresh stats about the top video games.",
+    "How would you rate the desire to play",
+    "I'd love to talk about other things but my developer forgot to add them to my memory banks.",
+    "I was talking about games, do you want to continue?",
+    "I can tell you about some music for gaming, should I continue?",
+    "game that I like to play with my cat",
+]
