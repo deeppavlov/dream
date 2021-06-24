@@ -5,7 +5,9 @@ import sentry_sdk
 
 import common.dialogflow_framework.utils.state as state_utils
 from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY, \
-    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN, skill_trigger_phrases
+    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN, find_games_in_text, \
+    skill_trigger_phrases
+
 from common.link import link_to_skill2i_like_to_talk
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_no, is_yes
@@ -43,8 +45,7 @@ def user_mentioned_games_as_his_interest_request(ngrams, vars, first_time=True):
     user_uttr = state_utils.get_last_human_utterance(vars)
     user_text = user_uttr.get("text", "").lower()
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
-    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
-        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(bot_text)
+    game_names_from_local_list_of_games = find_games_in_text(user_text) + find_games_in_text(bot_text)
     flag = not game_names_from_local_list_of_games \
         and common_intents.switch_to_general_gaming_discussion(vars) \
         and not user_doesnt_like_gaming_request(ngrams, vars) \
@@ -67,8 +68,7 @@ def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
     user_text = user_uttr.get("text", "").lower()
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
-    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
-        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(bot_text)
+    game_names_from_local_list_of_games = find_games_in_text(user_text) + find_games_in_text(bot_text)
     if game_names_from_local_list_of_games:
         if does_text_contain_link_to_gaming(bot_text):
             logger.info("performing additional check")
@@ -76,7 +76,7 @@ def user_maybe_wants_to_talk_about_particular_game_request(ngrams, vars):
         elif common_intents.switch_to_particular_game_discussion(vars):
             assert game_names_from_local_list_of_games,\
                 "At least one game should have been found in function `switch_to_particular_game_discussion()`"
-            possible_game_name = game_names_from_local_list_of_games[0]
+            possible_game_name = game_names_from_local_list_of_games[0][0]
             flag = not any([n.lower() in possible_game_name.lower() for n in WORDS_THAT_ARE_DEFINITELY_GAME_NAMES]) \
                 and not does_text_contain_video_game_words(user_text) \
                 and not does_text_contain_link_to_gaming(bot_text) \
@@ -98,14 +98,13 @@ def user_definitely_wants_to_talk_about_particular_game_request(ngrams, vars, ad
     user_uttr = state_utils.get_last_human_utterance(vars)
     user_text = user_uttr.get("text", "").lower()
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
-    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
-        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(bot_text)
+    game_names_from_local_list_of_games = find_games_in_text(user_text) + find_games_in_text(bot_text)
     if game_names_from_local_list_of_games:
         if common_intents.switch_to_particular_game_discussion(vars) \
                 and not does_text_contain_link_to_gaming(bot_text):
             assert game_names_from_local_list_of_games,\
                 "At least one game should have been found in function `switch_to_particular_game_discussion()`"
-            possible_game_name = game_names_from_local_list_of_games[0]
+            possible_game_name = game_names_from_local_list_of_games[0][0]
             flag = (
                 any([n.lower() in possible_game_name.lower() for n in WORDS_THAT_ARE_DEFINITELY_GAME_NAMES])
                 or does_text_contain_video_game_words(user_text)
@@ -131,8 +130,7 @@ def user_definitely_wants_to_talk_about_game_that_user_played_request(
         ngrams, vars, additional_check=None):
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
-    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
-        user_uttr.get("text", ""))
+    game_names_from_local_list_of_games = find_games_in_text(user_uttr.get("text", ""))
     flag = bool(game_names_from_local_list_of_games) \
         and does_text_contain_link_to_gaming(bot_uttr.get("text", "")) \
         and additional_check(ngrams, vars) \
@@ -150,7 +148,7 @@ def user_definitely_wants_to_talk_about_game_that_user_played_request(
 def user_doesnt_like_gaming_request(ngrams, vars):
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
-    found_game_name = bool(GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_uttr.get("text", "")))
+    found_game_name = bool(find_games_in_text(user_uttr.get("text", "")))
     flag = is_no(user_uttr) \
         and not found_game_name \
         and does_text_contain_link_to_gaming(bot_uttr.get("text", "")) \
@@ -163,7 +161,7 @@ def user_didnt_name_game_after_link_and_didnt_refuse_to_discuss_request(ngrams, 
     logger.info(f"user_didnt_name_game_request")
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
-    found_game_name = bool(GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_uttr.get("text", "")))
+    found_game_name = bool(find_games_in_text(user_uttr.get("text", "")))
     flag = not is_no(user_uttr) \
         and not found_game_name \
         and does_text_contain_link_to_gaming(bot_uttr.get("text", "")) \

@@ -4,7 +4,7 @@ import os
 import sentry_sdk
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, load_json
+from common.gaming import find_games_in_text, load_json
 from common.utils import is_yes
 
 import dialogflows.common.intents as common_intents
@@ -46,18 +46,16 @@ def user_wants_to_talk_about_minecraft_request(ngrams, vars):
     if common_intents.switch_to_particular_game_discussion(vars):
         user_uttr = state_utils.get_last_human_utterance(vars)
         prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
-        game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(
-            user_uttr.get("text", ""))
+        game_names_from_local_list_of_games = find_games_in_text(user_uttr.get("text", ""))
         if is_yes(user_uttr):
-            game_names_from_local_list_of_games += \
-                GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(prev_bot_uttr.get("text", ""))
+            game_names_from_local_list_of_games += find_games_in_text(prev_bot_uttr.get("text", ""))
         logger.info(
             f"(user_wants_to_talk_about_minecraft_request)game_names_from_local_list_of_games: "
             f"{game_names_from_local_list_of_games}"
         )
         assert game_names_from_local_list_of_games,\
             "At least one game should have been found in function `switch_to_particular_game_discussion()`"
-        flag = any(["minecraft" in gn.lower() for gn in game_names_from_local_list_of_games])
+        flag = any(["minecraft" in gn[0].lower() for gn in game_names_from_local_list_of_games])
     else:
         flag = False
     logger.info(f"user_wants_to_talk_about_minecraft_request={flag}")

@@ -68,7 +68,7 @@ def get_theme_and_genre_groups(themes, genres):
 def get_all_relevant_linkto_responses_based_on_genres_and_themes(vars):
     game = gaming_memory.get_current_igdb_game(vars, assert_not_empty=False)
     candidate_responses = []
-    if game:
+    if game is not None:
         themes, genres = game.get("themes", []), game.get("genres", [])
         theme_and_genre_groups = get_theme_and_genre_groups(themes, genres)
         for skill_links in [common_gaming.links_to_movies, common_gaming.links_to_books]:
