@@ -1,15 +1,14 @@
+import logging
 import os
 import pickle
 import re
 from typing import Any, List
-import logging
-
 
 import numpy as np
 import sentry_sdk
 from fastapi import FastAPI, Body
-from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from starlette.middleware.cors import CORSMiddleware
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -79,11 +78,11 @@ app.add_middleware(
 )
 
 
-class personality_payload(BaseModel):
-    personality : List[str] = Body(...)
+class PersonalityPayload(BaseModel):
+    personality: List[str] = Body(...)
 
 
 @app.post('/model')
-def infer(payload: personality_payload):
+def infer(payload: PersonalityPayload):
     logger.info(f"Personality Detection: {payload}")
     return jsonify_data([predict_personality(p) for p in payload.personality])

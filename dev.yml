@@ -516,7 +516,7 @@ services:
   personality-detection:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/personality_detection:/app/src"
+      - "./annotators/personality_detection:/src"
     ports:
       - 8120:8120
 version: "3.7"

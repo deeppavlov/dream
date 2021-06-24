@@ -1278,7 +1278,7 @@ services:
   personality-detection:
     build:
       context: annotators/personality_detection
-    command: uvicorn src.server:app --host 0.0.0.0 --port 8120
+    command: uvicorn server:app --host 0.0.0.0 --port 8120
     deploy:
       mode: replicated
       replicas: 1
