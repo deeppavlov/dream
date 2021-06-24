@@ -1014,9 +1014,9 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 256M
+          memory: 512M
         reservations:
-          memory: 256M
+          memory: 512M
 
   dff-gossip-skill:
     build:

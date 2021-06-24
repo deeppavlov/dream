@@ -46,8 +46,8 @@ ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
 found_pages_dict = {}
 facts_memory = {}
 
-with open("page_dict.json", 'r') as fl:
-    cache_page_dict = json.load(fl)
+with open("wikipedia_cache.json", 'r') as fl:
+    wikipedia_cache = json.load(fl)
 
 with open("wikihow_cache.json", 'r') as fl:
     wikihow_cache = json.load(fl)
@@ -71,7 +71,7 @@ def special_topic_facts_request(ngrams, vars):
 
 
 def special_topic_facts_response(vars):
-    response = facts_response(vars, topic_config, wikihow_cache)
+    response = facts_response(vars, topic_config, wikihow_cache, wikipedia_cache)
     return response
 
 
@@ -378,7 +378,7 @@ def tell_fact_response(vars):
                     f"found_entity_types {found_entity_types}")
         wikipedia_page = get_page_title(vars, found_entity_substr)
         if wikipedia_page:
-            page_content, _ = get_page_content(wikipedia_page, cache_page_dict)
+            page_content, _ = get_page_content(wikipedia_page, wikipedia_cache)
             wikipedia_page_content_list = preprocess_wikipedia_page(found_entity_substr, found_entity_types,
                                                                     page_content)
             facts_memory["wikipedia_content"] = wikipedia_page_content_list
