@@ -1,5 +1,5 @@
 [
-  "PlayerUnknown's Battlegrounds",
+  ["PlayerUnknown's Battlegrounds", "PUBG"],
   "Minecraft",
   "Diablo III",
   "Garry's Mod",
@@ -58,7 +58,7 @@
   "Factorio",
   "Final Fantasy VII",
   "Final Fantasy",
-  "Grand Theft Auto V",
+  ["Grand Theft Auto V", "GTA V"],
   "Doom",
   "Doom II: Hell on Earth",
   "Warcraft II: Tides of Darkness",
@@ -206,7 +206,7 @@
   "Cuphead",
   "Mordhau",
   "Crusader Kings III",
-  "GTA",
+  ["Grand Theft Auto", "GTA"],
   "Roblox",
   "Fortnite"
 ]

@@ -5,7 +5,8 @@ import os
 import sentry_sdk
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN
+from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN, \
+    find_games_in_text
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import is_no, is_yes
 
@@ -29,12 +30,11 @@ def switch_to_particular_game_discussion(vars):
     user_text = user_uttr.get("text", "").lower()
     prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
     prev_bot_text = prev_bot_uttr.get("text", "")
-    found_video_game_in_user_uttr = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(user_text)
+    found_video_game_in_user_uttr = find_games_in_text(user_text)
     logger.info(
         f"(switch_to_particular_game_discussion)found_video_game_in_user_uttr: {found_video_game_in_user_uttr}")
     found_video_game_in_user_uttr = bool(found_video_game_in_user_uttr)
-    found_video_game_in_bot_uttr = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(
-        prev_bot_uttr.get("text", "").lower())
+    found_video_game_in_bot_uttr = find_games_in_text(prev_bot_text)
     logger.info(
         f"(switch_to_particular_game_discussion)found_video_game_in_bot_uttr: {found_video_game_in_bot_uttr}")
     found_video_game_in_bot_uttr = bool(found_video_game_in_bot_uttr)

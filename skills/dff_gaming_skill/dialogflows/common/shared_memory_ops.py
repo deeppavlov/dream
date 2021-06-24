@@ -126,6 +126,8 @@ def set_current_igdb_game_id_if_game_for_discussion_is_identified(vars, candidat
         if igdb_game_description is not None:
             state_utils.save_to_shared_memory(vars, current_igdb_game_id=igdb_game_description["id"])
             put_game_id_to_igdb_game_ids_user_wanted_to_discuss(vars, igdb_game_description["id"])
+        else:
+            state_utils.save_to_shared_memory(vars, current_igdb_game_id="")
     clean_candidate_game_id(vars)
 
 

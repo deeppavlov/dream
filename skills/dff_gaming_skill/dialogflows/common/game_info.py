@@ -6,8 +6,7 @@ import sentry_sdk
 from requests import RequestException
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN,\
-    load_json
+from common.gaming import VIDEO_GAME_WORDS_COMPILED_PATTERN, load_json, find_games_in_text
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -71,7 +70,8 @@ def does_text_contain_video_game_words(text):
     return flag
 
 
-def get_game_description_for_first_igdb_candidate(name, results_sort_key):
+def get_game_description_for_first_igdb_candidate(match_names, results_sort_key):
+    name = match_names[0]
     name_lower = name.lower()
     if isinstance(results_sort_key, str):
         def results_sort_key(x):
@@ -116,14 +116,14 @@ def get_game_description_for_first_igdb_candidate(name, results_sort_key):
 
 
 def search_igdb_for_game(
-        name,
+        match_names,
         results_sort_key="rating_count",
         search_result_keys_to_keep=(
             "url", "rating", "rating_count", "summary", "created_at", "first_release_date", "involved_companies",
             "genres", "themes", "category", "name", "id"),
 ):
-    logger.info(f"Searching for igdb game description of game {repr(name)}")
-    igdb_game_description = get_game_description_for_first_igdb_candidate(name, results_sort_key)
+    logger.info(f"Searching for igdb game description of game {repr(match_names)}")
+    igdb_game_description = get_game_description_for_first_igdb_candidate(match_names, results_sort_key)
     if igdb_game_description is not None:
         filtered_game_description = {}
         game_description_lacks_required_keys = False
@@ -150,11 +150,10 @@ def search_igdb_for_game(
 def search_igdb_game_description_by_user_and_bot_phrases(vars):
     user_text = state_utils.get_last_human_utterance(vars).get("text", "").lower()
     prev_bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
-    game_names_from_local_list_of_games = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(user_text) \
-        + GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(prev_bot_text)
+    game_names_from_local_list_of_games = find_games_in_text(user_text) + find_games_in_text(prev_bot_text)
     assert game_names_from_local_list_of_games, \
         "At least one game should have been found in function `switch_to_particular_game_discussion()`"
-    first_name = game_names_from_local_list_of_games[0]
+    first_match_names = game_names_from_local_list_of_games[0]
     game_word_mentioned = does_text_contain_video_game_words(user_text) \
         or does_text_contain_video_game_words(prev_bot_text)
-    return search_igdb_for_game(first_name), game_word_mentioned
+    return search_igdb_for_game(first_match_names), game_word_mentioned
