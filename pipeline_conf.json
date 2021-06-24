@@ -1057,7 +1057,7 @@
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 1,
                     "url": "http://speech-function-classifier:8108/annotation"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_annotation",
