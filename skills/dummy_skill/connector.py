@@ -18,7 +18,7 @@ import sentry_sdk
 from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, DFF_WIKI_LINKTO, \
     skills_phrases_map, compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question, is_switch_topic
+from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
 
@@ -244,6 +244,7 @@ class DummySkillConnector:
                 _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
 
                 _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
+                _if_choose_topic = if_choose_topic(dialog["human_utterances"][-1], _prev_bot_uttr)
                 _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
 
                 if len(dialog["human_utterances"]) > 1:
@@ -255,13 +256,13 @@ class DummySkillConnector:
                     _was_cant_do = False
                     _was_cant_do_stop_it = False
 
-                if _no_to_first_linkto:
-                    confs += [0.99]
-                elif _is_ask_me_something or _if_switch_topic or _was_cant_do:
-                    confs += [1.0]  # Use it only as response selector retrieve skill output modifier
-                elif _was_cant_do_stop_it:
+                if _was_cant_do_stop_it:
                     link_to_question = "Sorry, bye! #+#exit"
                     confs += [1.0]  # finish dialog request
+                elif _no_to_first_linkto:
+                    confs += [0.99]
+                elif _is_ask_me_something or _if_switch_topic or _was_cant_do or _if_choose_topic:
+                    confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
                 cands += [link_to_question]
