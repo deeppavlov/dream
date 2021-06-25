@@ -244,7 +244,8 @@ class DummySkillConnector:
                 _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
 
                 _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
-                _if_choose_topic = if_choose_topic(dialog["human_utterances"][-1], _prev_bot_uttr)
+                bot_uttr_dict = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
+                _if_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr_dict)
                 _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
 
                 if len(dialog["human_utterances"]) > 1:
