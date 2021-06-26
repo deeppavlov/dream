@@ -611,7 +611,7 @@ def food_fact_response(vars):
             if all([facts, entity, entity in food_item]):
                 fact = random.choice([i for i in facts if i not in used_facts])
                 # facts[0]
-            elif facts:
+            elif facts and not entity:
                 for facts_item in facts:
                     if all(
                         [
@@ -625,6 +625,9 @@ def food_fact_response(vars):
                     else:
                         fact = ""
                         entity = ""
+            else:
+                fact = ""
+                entity = ""
         acknowledgements = [
             f"I like {entity} too. ", f"I'm okay with {entity}. ", f"{entity}. It's awesome. ",
             f"{entity}. Fantastic. ", f"Mmm, {entity}. Loving it. ", f"{entity}. Yummy! "
