@@ -255,6 +255,7 @@ def hello_response(vars):
 HOW_ARE_YOU_TEMPLATE = re.compile(r"(how are you|what about you|how about you|and you|how you doing)", re.IGNORECASE)
 HOW_ARE_YOU_PRECISE_TEMPLATE = re.compile(
     r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE)
+ANY_YOU_TEMPLATE = re.compile(r"\b(you|your|yours|yourself)\b", re.IGNORECASE)
 
 
 def how_are_you_request(ngrams, vars):
@@ -262,7 +263,12 @@ def how_are_you_request(ngrams, vars):
     prev_frindship_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "") == "dff_friendship_skill"
     how_are_you_found = HOW_ARE_YOU_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"])
     how_are_you_precise_found = HOW_ARE_YOU_PRECISE_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"])
-    if (prev_frindship_skill and how_are_you_found) or how_are_you_precise_found:
+    how_are_you_by_bot_found = HOW_ARE_YOU_TEMPLATE.search(state_utils.get_last_bot_utterance(vars)["text"])
+    any_you_in_user = ANY_YOU_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"])
+
+    if how_are_you_precise_found:
+        return True
+    elif prev_frindship_skill and (how_are_you_found or (how_are_you_by_bot_found and any_you_in_user)):
         return True
     return False
 
