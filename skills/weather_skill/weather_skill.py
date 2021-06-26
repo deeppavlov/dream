@@ -181,7 +181,12 @@ class WeatherSkill:
 
                     weather_forecast_str = self.request_weather_service(city_str)
                     current_reply = weather_forecast_str + ". " + question_phrase
-                    curr_confidence = FORECAST_CONFIDENCE
+                    if weather_without_city_requested or is_weather_requested_by_user:
+                        context_dict['can_continue'] = MUST_CONTINUE
+                        curr_confidence = FORECAST_CONFIDENCE
+                    else:
+                        context_dict['can_continue'] = CAN_CONTINUE_SCENARIO
+                        curr_confidence = QUESTION_CONFIDENCE
                 else:
                     ############################################################
                     # request CITY SLOT
