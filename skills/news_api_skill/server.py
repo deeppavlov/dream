@@ -49,9 +49,12 @@ LINKTO_FOR_LONG_RESPONSE_CONFIDENCE = 0.7
 OFFER_MORE = "Do you want to hear more?"
 ASK_OPINION = "What do you think about it?"
 
-NEWS_TEMPLATES = re.compile(r"(tell (me )?(some )?news|(what is|what's)( the)? new|something new)")
-FALSE_NEWS_TEMPLATES = re.compile(r"(s good news|s bad news|s sad news|s awful news|s terrible news)")
-TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news|learn more)")
+NEWS_TEMPLATES = re.compile(r"(tell (me )?(some )?news|(what is|what's)( the)? new|something new)", re.IGNORECASE)
+FALSE_NEWS_TEMPLATES = re.compile(r"(s good news|s bad news|s sad news|s awful news|s terrible news)", re.IGNORECASE)
+TELL_MORE_NEWS_TEMPLATES = re.compile(r"(tell me more|tell me next|more news|next news|other news|learn more)",
+                                      re.IGNORECASE)
+ANY_TOPIC_PATTERN = re.compile(r"\b(first|any|both|either|all|don't know|not know)\b", re.IGNORECASE)
+SECOND_TOPIC_PATTERN = re.compile(r"\b(second|last)\b", re.IGNORECASE)
 
 
 def remove_punct_and_articles(s, lowecase=True):
@@ -141,12 +144,11 @@ def collect_topics_and_statuses(dialogs):
             elif prev_status == OFFERED_NEWS_TOPIC_CATEGORIES_STATUS:
                 if not (news_rejection(curr_uttr["text"].lower()) or is_no(curr_uttr)):
                     logger.info("User chose the topic for news")
-                    if any([word in curr_uttr["text"].lower()
-                            for word in ["first", "any", "both", "either", "all", "don't know", "not know"]]):
+                    if ANY_TOPIC_PATTERN.search(curr_uttr["text"]):
                         topics.append(prev_topic.split()[0])
                         curr_news_samples.append(get_news_for_current_entity(
                             prev_topic.split()[0], curr_uttr, discussed_news))
-                    elif "second" in curr_uttr["text"].lower() or "last" in curr_uttr["text"].lower():
+                    elif SECOND_TOPIC_PATTERN.search(curr_uttr["text"]):
                         topics.append(prev_topic.split()[1])
                         curr_news_samples.append(get_news_for_current_entity(
                             prev_topic.split()[1], curr_uttr, discussed_news))
