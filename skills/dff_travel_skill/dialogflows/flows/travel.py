@@ -71,7 +71,6 @@ class State(Enum):
     USR_WISH_WOULD_VISIT_LOC = auto()
 
     SYS_WOULD_NOT_VISIT_LOC = auto()
-    USR_ACK_NOT_VISIT_LOC_WHAT_LOC = auto()
 
     SYS_USR_RESP_ABOUT_WISHES = auto()
     USR_OFFER_FACT_ABOUT_LOC = auto()
@@ -186,7 +185,8 @@ def negative_sentiment_request(ngrams, vars):
 
 def mentioned_travelling_request(ngrams, vars):
     # SYS_MENTIONED_TRAVELLING
-    if TRAVELLING_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"]):
+    if TRAVELLING_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"]) and \
+            "interstellar" not in state_utils.get_last_human_utterance(vars)["text"]:
         logger.info(f"Mentioned travelling in user utterances")
         return True
     return False
@@ -200,7 +200,7 @@ def lets_chat_about_travelling_request(ngrams, vars):
         state_utils.get_last_bot_utterance(vars),
         compiled_pattern=TRAVELLING_TEMPLATE)
 
-    if user_lets_chat_about_travelling:
+    if user_lets_chat_about_travelling and "interstellar" not in state_utils.get_last_human_utterance(vars)["text"]:
         logger.info(f"Let's chat about travelling in user utterances")
         return True
     return False
@@ -631,7 +631,7 @@ def user_would_like_to_visit_response(vars):
 
 # if user answers he/she would NOT like to visit location
 def user_would_not_like_to_visit_response(vars):
-    # USR_ACK_NOT_VISIT_LOC_WHAT_LOC
+    # USR_WHAT_LOC_CONF
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         location = shared_memory.get("discussed_location", "")
@@ -1033,7 +1033,7 @@ simplified_dialogflow.set_error_successor(State.USR_OFFER_FACT_ABOUT_LOC, State.
 
 ##################################################################################################################
 #  SYS_WOULD_NOT_VISIT_LOC
-simplified_dialogflow.add_system_transition(State.SYS_WOULD_NOT_VISIT_LOC, State.USR_ACK_NOT_VISIT_LOC_WHAT_LOC,
+simplified_dialogflow.add_system_transition(State.SYS_WOULD_NOT_VISIT_LOC, State.USR_WHAT_LOC_CONF,
                                             user_would_not_like_to_visit_response)
 # there are no user serial transitions because we asked about other location to discuss
 

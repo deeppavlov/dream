@@ -46,7 +46,7 @@ TRAVEL_LOCATION_QUESTION = re.compile(
     r"(what|which|where)[a-zA-Z\- ']+" + TRAVELLING_WORDS + r"[a-zA-Z\- ']*\?",
     re.IGNORECASE)
 
-NOWHERE_TEMPLATE = re.compile(r"(nowhere|(n't|not) know)", re.IGNORECASE)
+NOWHERE_TEMPLATE = re.compile(r"(nowhere|(n't|not) (know|remember|tell))", re.IGNORECASE)
 
 TOO_SIMPLE_TRAVEL_FACTS = re.compile("(is (a|the) (city|country|capital)|is located)", re.IGNORECASE)
 
@@ -141,8 +141,8 @@ WHY_BOT_LIKES_TO_TRAVEL = [
 ]
 
 HAVE_YOU_BEEN_IN_PHRASES = [
-    "I've been LOCATION just virtually because physically I live in the cloud. Have you been there?",
-    "I've been LOCATION via pictures and videos. Have you been there?",
+    "I've been LOCATION just virtually because physically I live in the cloud. Have you been in LOCATION?",
+    "I've been LOCATION via pictures and videos. Have you been in LOCATION?",
 ]
 
 I_HAVE_BEEN_IN_AND_LIKED_MOST = [
