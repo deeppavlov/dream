@@ -81,7 +81,7 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
              "gonna", "will", "can", "could", "plan to", "in need to", "demand", "want to"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "that", "everything"]
+SOMETHING_LIKE = ["anything", "something", "that", "everything", "thing"]
 NOTHING_LIKE = ["nothing", "none", "neither"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
 KNOW_LIKE = ["know", "learn", "find out"]
@@ -368,7 +368,7 @@ def tell_me_more(annotated_uttr):
     return cond1 or cond2
 
 
-QUESTION_BEGINNINGS = QUESTION_LIKE + [
+QUESTION_BEGINNINGS = [
     r"what'?s?", "when", "where", "which", r"who'?s?", "whom", "whose", r"how'?s?", "why", "whether",
     "do (i|we|you|they)", "does (it|he|she)", "have (i|we|you|they)", "has (it|he|she)",
     "can (i|it|we|you|they)", "could (i|it|we|you|they)", "shall (i|we|you|they)", "should (i|it|we|you|they)",
