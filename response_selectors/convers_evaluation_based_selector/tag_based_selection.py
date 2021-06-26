@@ -515,7 +515,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     # if `no` to 1st in a row linkto question, and chosen response is not from scripted skill
     _no_to_first_linkto = is_no(dialog["human_utterances"][-1]) and any([
-        phrase.lower() in _prev_bot_uttr["text"].lower() for phrase in LINK_TO_PHRASES])
+        phrase.lower() in _prev_bot_uttr.get("text", "").lower() for phrase in LINK_TO_PHRASES])
     # if chosen short response or question by not-scripted skill
     _is_short_or_question_by_not_script = _is_best_not_script and (
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4)
