@@ -92,7 +92,14 @@ def handler(requested_data, random_seed=None):
                 clarification_request_flag,
             )
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, dff_shared_state, used_links, age_group, disliked_skills = dialogflow_utils.get_dialog_state(DF)
+            (
+                state,
+                dff_shared_state,
+                used_links,
+                age_group,
+                disliked_skills,
+                response_parts,
+            ) = dialogflow_utils.get_dialog_state(DF)
 
             human_attr = {
                 f"{SERVICE_NAME}_state": state,
@@ -102,6 +109,8 @@ def handler(requested_data, random_seed=None):
                 "disliked_skills": disliked_skills,
             }
             hype_attr = {"can_continue": can_continue}
+            if response_parts:
+                hype_attr["response_parts"] = response_parts
 
             responses.append((text, confidence, human_attr, {}, hype_attr))
         except Exception as exc:

@@ -198,3 +198,96 @@ Then in skill\_selectors/rule\_based_selector/connector.py:
 ```
 
 4. Reverse transition (from dff\_wiki\_skill to dff\_animals_skill in our example) is made the way.
+
+## Insert scenario parser to a dff skill
+
+```python
+    ... # some imports
+    import json
+    from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
+        facts_response # imports for scenario insertion
+    
+    # place your config in the directory skills/your_dff_skill_name/{inserted_scenario_config_name}.json
+    # and load config
+    with open(inserted_scenario_config_name, 'r') as fl:
+        topic_config = json.load(fl)
+
+    class State(Enum):
+        USR_START = auto()
+        #
+        ... # States of your skill
+        
+        # States for scenario insertion
+        SYS_INSERT_SMALLTALK = auto()
+        USR_INSERT_SMALLTALK = auto()
+        #
+        SYS_INSERT_FACT = auto()
+        USR_INSERT_FACT = auto()
+
+        ... # Some other states of your skill
+
+        # Two request and two response functions for scenario insertion
+
+        def insert_scenario_smalltalk_request(ngrams, vars):
+            flag = start_or_continue_scenario(vars, topic_config)
+            logger.info(f"special_topic_request={flag}")
+            return flag
+        
+        
+        def insert_scenario_smalltalk_response(vars):
+            response = smalltalk_response(vars, topic_config)
+            return response
+        
+        
+        def insert_scenario_facts_request(ngrams, vars):
+            flag = start_or_continue_facts(vars, topic_config)
+            logger.info(f"special_topic_facts_request={flag}")
+            return flag
+        
+        
+        def insert_scenario_facts_response(vars):
+            response = facts_response(vars, topic_config)
+            return response
+
+        simplified_dialog_flow = dialogflow_extention.DFEasyFilling(State.USR_START)
+    
+        ... # Your state transitions
+
+        # State transitions for scenario insertion
+
+        simplified_dialog_flow.add_user_serial_transitions(
+            State.SOME_STATE,
+            {
+                ... # transitions to other states
+                State.SYS_INSERT_SMALLTALK: insert_scenario_smalltalk_request,
+            },
+        )
+
+        simplified_dialog_flow.add_user_serial_transitions(
+            State.USR_INSERT_SMALLTALK,
+            {
+                State.SYS_INSERT_FACT: insert_scenario_facts_request,
+                State.SYS_INSERT_SMALLTALK: insert_scenario_smalltalk_request,
+                State.SOME_OTHER_YOUR_STATE: some_other_state_request,
+            },
+        )
+        
+        simplified_dialog_flow.add_user_serial_transitions(
+            State.USR_INSERT_FACT,
+            {
+                State.SYS_INSERT_SMALLTALK: insert_scenario_smalltalk_request,
+                State.SYS_INSERT_FACT: insert_scenario_facts_request,
+                State.SOME_OTHER_YOUR_STATE: some_other_state_request,
+            },
+        )
+        
+        simplified_dialog_flow.add_system_transition(State.SYS_INSERT_SMALLTALK, State.USR_INSERT_SMALLTALK,
+                                             insert_scenario_smalltalk_response, )
+        simplified_dialog_flow.add_system_transition(State.SYS_INSERT_FACT, State.USR_INSERT_FACT,
+                                             insert_scenario_facts_response, )
+
+        simplified_dialog_flow.set_error_successor(State.SYS_INSERT_SMALLTALK, State.SYS_ERR)
+        simplified_dialog_flow.set_error_successor(State.USR_INSERT_SMALLTALK, State.SYS_ERR)
+        simplified_dialog_flow.set_error_successor(State.SYS_INSERT_FACT, State.SYS_ERR)
+        simplified_dialog_flow.set_error_successor(State.USR_INSERT_FACT, State.SYS_ERR)
+```

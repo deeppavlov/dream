@@ -71,6 +71,46 @@ def set_cross_link(
     }
 
 
+def reset_response_parts(vars):
+    if "response_parts" in vars["agent"]:
+        del vars["agent"]["response_parts"]
+
+
+def add_parts_to_response_parts(vars, parts=[]):
+    response_parts = set(vars["agent"].get("response_parts", []))
+    response_parts.update(parts)
+    vars["agent"]["response_parts"] = list(response_parts)
+
+
+def set_acknowledgement_to_response_parts(vars):
+    reset_response_parts(vars)
+    add_parts_to_response_parts(vars, parts=["acknowledgement"])
+
+
+def add_acknowledgement_to_response_parts(vars):
+    if vars["agent"].get("response_parts") is None:
+        add_parts_to_response_parts(vars, parts=["body"])
+    add_parts_to_response_parts(vars, parts=["acknowledgement"])
+
+
+def set_body_to_response_parts(vars):
+    reset_response_parts(vars)
+    add_parts_to_response_parts(vars, parts=["body"])
+
+
+def add_body_to_response_parts(vars):
+    add_parts_to_response_parts(vars, parts=["body"])
+
+
+def set_prompt_to_response_parts(vars):
+    reset_response_parts(vars)
+    add_parts_to_response_parts(vars, parts=["prompt"])
+
+
+def add_prompt_to_response_parts(vars):
+    add_parts_to_response_parts(vars, parts=["prompt"])
+
+
 def get_shared_memory(vars):
     return vars["agent"]["shared_memory"]
 

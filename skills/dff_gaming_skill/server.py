@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
 import logging
+import time
 import os
 import random
-import time
 
-import sentry_sdk
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
+import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
+
 
 import common.dialogflow_framework.utils.dialogflow as dialogflow_utils
 import common.dialogflow_framework.programy.text_preprocessing as text_utils
 import dialogflows.main as main_dialogflow
 import test_server
-
 
 ignore_logger("root")
 
@@ -78,7 +78,6 @@ def handler(requested_data, random_seed=None):
 
             text = dialog["human_utterances"][-1]["text"]
             text = text_utils.clean_text(text)
-            logger.info(f"(handler)input text: {text}")
 
             dialogflow_utils.load_into_dialogflow(
                 DF,
@@ -93,7 +92,14 @@ def handler(requested_data, random_seed=None):
                 clarification_request_flag,
             )
             text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, dff_shared_state, used_links, age_group, disliked_skills = dialogflow_utils.get_dialog_state(DF)
+            (
+                state,
+                dff_shared_state,
+                used_links,
+                age_group,
+                disliked_skills,
+                response_parts,
+            ) = dialogflow_utils.get_dialog_state(DF)
 
             human_attr = {
                 f"{SERVICE_NAME}_state": state,
@@ -103,6 +109,8 @@ def handler(requested_data, random_seed=None):
                 "disliked_skills": disliked_skills,
             }
             hype_attr = {"can_continue": can_continue}
+            if response_parts:
+                hype_attr["response_parts"] = response_parts
 
             responses.append((text, confidence, human_attr, {}, hype_attr))
         except Exception as exc:
@@ -128,10 +136,9 @@ logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # # TEST
-    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)
-    # responses = handler(request.json, RANDOM_SEED)
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)
+    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
+    # responses = handler(request.json, RANDOM_SEED)  # TEST
+    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
     responses = handler(request.json)
     return jsonify(responses)
 
