@@ -138,6 +138,8 @@
                 "talk to (a )?(different|another) bot",
                 "give (me )?(different|another) bot",
                 "alexa i am done",
+                "(let's|let us) chat tomorrow",
+                "have a good night",
                 "can we stop( please)?",
                 "cancel siri",
                 "(alexa ){0,1}let's stop our chat now",
