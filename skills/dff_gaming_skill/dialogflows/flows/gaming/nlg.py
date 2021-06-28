@@ -134,12 +134,14 @@ def ask_advice(vars):
 
 @error_handler
 def tell_about_what_bot_likes_and_ask_if_user_recommends_game_response(vars):
-    return "That is great! " + ask_advice(vars)
+    state_utils.add_acknowledgement_to_response_parts(vars)
+    return "Your gaming outlook is great! " + ask_advice(vars)
 
 
 @error_handler
 def comment_on_user_experience_and_ask_if_user_recommends_game_response(vars):
     human_uttr = state_utils.get_last_human_utterance(vars)
+    state_utils.add_acknowledgement_to_response_parts(vars)
     return common_nlg.compose_experience_comment(human_uttr.get("text", ""))[0] + "  " + ask_advice(vars)
 
 
@@ -206,10 +208,11 @@ def ask_if_user_played_minecraft_response(vars):
 
 @error_handler
 def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
-    response = "There are several simple rules which help people stay healthy while playing video games and using " \
-               "computer in general. The first is to give your eyes rest regularly. You can use reminders for that. " \
-               "The second rule is to follow break schedule. And the last rule is to exercise regularly. " \
-               "By the way, what sport do you like?"
+    response = "You are very sensible person. There are several simple rules which help people stay healthy while " \
+               "playing video games and using computer in general. The first is to give your eyes rest regularly. " \
+               "You can use reminders for that. The second rule is to follow break schedule. And the last rule is " \
+               "to exercise regularly. By the way, what sport do you like?"
+    state_utils.add_acknowledgement_to_response_parts(vars)
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     gaming_memory.mark_current_bot_utterance_as_link_to_other_skill(vars)
