@@ -14,6 +14,8 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.greeting as common_greeting
+from common.universal_templates import COMPILE_SOMETHING
+from common.utils import get_not_used_template
 import dialogflows.scopes as scopes
 from dialogflows.flows.starter_states import State as StarterState
 import dialogflows.flows.weekend as weekend_flow
@@ -59,6 +61,7 @@ class State(Enum):
     USR_LINK_TO_BY_ENITY = auto()
     SYS_OFFERED_TOPICS_DECLINED = auto()
     SYS_OFFER_TOPICS = auto()
+    SYS_ASKED_EVENTS_AND_YES_INTENT = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -111,6 +114,35 @@ def offered_topic_choice_declined_request(ngrams, vars):
     if offered_topics and what_to_talk_about_offered and declined:
         return True
     return False
+
+
+def asked_for_events_and_got_yes_request(ngrams, vars):
+    # SYS_ASKED_EVENTS_AND_YES_INTENT
+    prev_bot_uttr = state_utils.get_last_bot_utterance(vars).get("text", "")
+    was_event_question = any([resp.lower() in prev_bot_uttr.lower()
+                              for resp in common_greeting.GREETING_QUESTIONS["recent_personal_events"]])
+
+    agreed = condition_utils.is_yes_vars(vars)
+    entities = state_utils.get_nounphrases_from_human_utterance(vars)
+    if was_event_question and agreed and len(entities) == 0:
+        return True
+    return False
+
+
+def clarify_event_response(vars):
+    # USR_STD_GREETING
+    try:
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        state_utils.set_can_continue(vars, MUST_CONTINUE)
+        response = random.choice(["Cool! Tell me about it.",
+                                  "Great! What is it?"])
+        state_utils.save_to_shared_memory(vars, greeting_step_id=1)
+        return response
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        return error_response(vars)
 
 
 def offer_topic_response_part(vars, excluded_skills=None):
@@ -280,14 +312,11 @@ def how_are_you_response(vars):
         state_utils.set_can_continue(vars, MUST_CONTINUE)
         how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES)
 
-        # which_questions = random.choice(["what_do_you_do_on_weekdays",
-        #                                  "what_are_your_interests",
-        #                                  "what_are_your_hobbies"])
-        # question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[which_questions])
-        # ask_what_do_you_do = f"{random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} {question_about_activities}"
-        question_link = offer_topic_response_part(vars)
+        question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS["recent_personal_events"])
+        response = f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} " \
+                   f"{question_about_activities}"
         state_utils.save_to_shared_memory(vars, greeting_step_id=1)
-        return f"{how_bot_is_doing_resp} {question_link}"
+        return response
 
     except Exception as exc:
         logger.exception(exc)
@@ -313,6 +342,22 @@ def positive_or_negative_request(ngrams, vars):
     return False
 
 
+def health_problems(vars):
+    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "conceptnet", {})
+
+    for elem, triplets in annotations_conceptnet.items():
+        symbol_of = triplets.get("SymbolOf", []) + triplets.get("Causes", [])
+        _is_about_health = any(
+            [
+                i in symbol_of for i in ["death", "ache", "disease", "illness", "sickness", "sick"]
+            ]
+        )
+        if _is_about_health:
+            return True
+    return False
+
+
 def no_requests_request(ngrams, vars):
     return condition_utils.no_requests(vars)
 
@@ -327,17 +372,19 @@ def how_human_is_doing_response(vars):
         usr_sentiment = state_utils.get_human_sentiment(vars)
         _no_entities = len(state_utils.get_nounphrases_from_human_utterance(vars)) == 0
         _no_requests = condition_utils.no_requests(vars)
+        _is_unhealthy = health_problems(vars)
         if is_positive_regexp_based(state_utils.get_last_human_utterance(vars)):
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
-        elif is_negative_regexp_based(state_utils.get_last_human_utterance(vars)):
+        elif _is_unhealthy or is_negative_regexp_based(state_utils.get_last_human_utterance(vars)):
             state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             user_mood_acknowledgement = (
                 f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} "
                 f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
             )
+            state_utils.add_acknowledgement_to_response_parts(vars)
         else:
             if _no_entities and _no_requests and usr_sentiment != "negative":
                 # we do not set super conf for negative responses because we hope that emotion_skill will respond
@@ -357,14 +404,11 @@ def how_human_is_doing_response(vars):
             else:
                 user_mood_acknowledgement = "Okay."
 
-        # which_questions = random.choice(["what_do_you_do_on_weekdays",
-        #                                  "what_are_your_interests",
-        #                                  "what_are_your_hobbies"])
-        # question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[which_questions])
-        # ask_what_do_you_do = f"{random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} {question_about_activities}"
-        question_link = offer_topic_response_part(vars)
+        question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS["recent_personal_events"])
+        response = f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} " \
+                   f"{question_about_activities}"
         state_utils.save_to_shared_memory(vars, greeting_step_id=1)
-        return f"{user_mood_acknowledgement} {question_link}"
+        return response
 
     except Exception as exc:
         logger.exception(exc)
@@ -415,7 +459,7 @@ def offered_topic_choice_declined_response(vars):
 def was_what_do_you_do_request(ngrams, vars):
     bot_uttr_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     if condition_utils.no_requests(vars) and any(
-            [phrase in bot_uttr_text for phrase in common_greeting.WHAT_DO_YOU_DO_RESPONSES]):
+            [phrase in bot_uttr_text for phrase in common_greeting.GREETING_QUESTIONS["what_do_you_do_on_weekdays"]]):
         return True
     return False
 
@@ -453,12 +497,12 @@ GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
 
 def std_greeting_request(ngrams, vars):
     flag = True
-    flag = flag and not condition_utils.is_new_human_entity(vars)
-    flag = flag and not condition_utils.is_switch_topic(vars)
-    flag = flag and not condition_utils.is_opinion_request(vars)
-    flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
-    flag = flag and not condition_utils.is_question(vars)
-    flag = flag and condition_utils.is_begin_of_dialog(vars)
+    # flag = flag and not condition_utils.is_new_human_entity(vars)
+    # flag = flag and not condition_utils.is_switch_topic(vars)
+    # flag = flag and not condition_utils.is_opinion_request(vars)
+    # flag = flag and not condition_utils.is_lets_chat_about_topic_human_initiative(vars)
+    # flag = flag and not condition_utils.is_question(vars)
+    # flag = flag and condition_utils.is_begin_of_dialog(vars)
     if flag:
         shared_memory = state_utils.get_shared_memory(vars)
         flag = flag and shared_memory.get("greeting_step_id", 0) < len(GREETING_STEPS)
@@ -471,9 +515,50 @@ def std_greeting_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
 
         greeting_step_id = shared_memory.get("greeting_step_id", 0)
-        # get ack, body
-        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
-        if greeting_step_id == 0:
+
+        _friendship_was_active = "dff_friendship_skill" == state_utils.get_last_bot_utterance(vars).get("active_skill",
+                                                                                                        "")
+        _entities = state_utils.get_nounphrases_from_human_utterance(vars)
+        _no_requests = condition_utils.no_requests(vars)
+        _lets_talk_about = condition_utils.is_lets_chat_about_topic_human_initiative(vars)
+        _nothing_dont_know = COMPILE_SOMETHING.search(state_utils.get_last_human_utterance(vars)["text"])
+
+        # acknowledgement, confidences
+        if _nothing_dont_know or (_no_requests and len(_entities) == 0):
+            used_complex_ack = shared_memory.get("used_complex_ack", [])
+            ack = get_not_used_template(used_complex_ack, common_greeting.NOT_TALKY_PERSON)
+            state_utils.save_to_shared_memory(vars, used_complex_ack=used_complex_ack + [ack])
+            if _friendship_was_active:
+                state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+                state_utils.set_can_continue(vars, MUST_CONTINUE)
+            else:
+                state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
+                state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+            state_utils.add_acknowledgement_to_response_parts(vars)
+        elif len(_entities) > 0 and _lets_talk_about:
+            # user wants to talk about something particular. We are just a dummy response, if no appropriate
+            used_complex_ack = shared_memory.get("used_complex_ack", [])
+            ack = get_not_used_template(used_complex_ack, common_greeting.PREFER_TO_GET_TO_KNOW_YOU_BEFORE)
+            state_utils.save_to_shared_memory(vars, used_complex_ack=used_complex_ack + [ack])
+            sent_ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
+            ack = f"{sent_ack} {ack}"
+            state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+            state_utils.add_acknowledgement_to_response_parts(vars)
+        else:
+            if len(_entities) == 0 or _no_requests:
+                state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
+            else:
+                state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
+            # some request by user detected OR no requests but some entities detected
+            ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+
+        if health_problems(vars):
+            ack = f"I'm so sorry to hear that. Hope, everything will be fine soon. {ack}"
+            state_utils.add_acknowledgement_to_response_parts(vars)
+
+        if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
             prev_active_skills = [uttr.get("active_skill", "") for uttr in vars["agent"]["dialog"]["bot_utterances"]][
                 -5:
             ]
@@ -482,11 +567,9 @@ def std_greeting_response(vars):
         else:
             body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
 
-        # set_confidence
-        set_confidence_by_universal_policy(vars)
         state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
 
-        return " ".join([ack, body])
+        return f"{ack} {body}"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -602,10 +685,10 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_HELLO_AND_CONTNIUE,
     {
         # State.SYS_STD_GREETING: std_greeting_request,
-        (scopes.STARTER, StarterState.USR_START): starter_flow.starter_request,
+        (scopes.STARTER, StarterState.USR_START): starter_flow.starter_request,  # ["starter_genre", "starter_weekday"]
         State.SYS_USR_ASKS_BOT_HOW_ARE_YOU: how_are_you_request,
         State.SYS_USR_ANSWERS_HOW_IS_HE_DOING: no_requests_request,
-        (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
+        # (scopes.WEEKEND, weekend_flow.State.USR_START): weekend_flow.std_weekend_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_HELLO_AND_CONTNIUE, State.SYS_ERR)
@@ -639,6 +722,7 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_OFFER_TOPICS: was_what_do_you_do_request,
         State.SYS_OFFERED_TOPICS_DECLINED: offered_topic_choice_declined_request,
+        State.SYS_ASKED_EVENTS_AND_YES_INTENT: asked_for_events_and_got_yes_request,
         State.SYS_STD_GREETING: std_greeting_request
     },
 )
@@ -650,6 +734,12 @@ simplified_dialogflow.set_error_successor(State.USR_STD_GREETING, State.SYS_ERR)
 
 simplified_dialogflow.add_system_transition(
     State.SYS_OFFER_TOPICS, State.USR_STD_GREETING, offer_topics_choice_response
+)
+##################################################################################################################
+#  SYS_ASKED_EVENTS_AND_YES_INTENT
+
+simplified_dialogflow.add_system_transition(
+    State.SYS_ASKED_EVENTS_AND_YES_INTENT, State.USR_STD_GREETING, clarify_event_response
 )
 ##################################################################################################################
 #  SYS_OFFERED_TOPICS_DECLINED
