@@ -5,15 +5,12 @@ from common.books import WHAT_BOOK_RECOMMEND
 from common.hobbies import HOBBIES_RE
 from common.greeting import GREETING_QUESTIONS
 
-INTERESTS_TEMPLATE = f"({'|'.join(GREETING_QUESTIONS['what_are_your_interests'])})"
 HOBBIES_TEMPLATE = f"({'|'.join(GREETING_QUESTIONS['what_are_your_hobbies'])})"
 
 
 topic_config = \
     {"hobbies":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["hobbies"]}, "bot", True], ["is_yes", "user", True]],
-                              [[{"pattern": INTERESTS_TEMPLATE}, "bot", True],
-                               [{"pattern": HOBBIES_RE}, "user", True]],
                               [[{"pattern": HOBBIES_TEMPLATE}, "bot", True],
                                [{"pattern": HOBBIES_RE}, "user", True]],
                               [[{"pattern": DFF_WIKI_TEMPLATES["hobbies"]}, "bot", True],
@@ -23,8 +20,6 @@ topic_config = \
       "expected_subtopic_info": [{"subtopic": "user_has_hobbies",
                                   "cond": [[[{"pattern": DFF_WIKI_LINKTO["hobbies"]}, "bot", True],
                                             ["is_yes", "user", True]],
-                                           [[{"pattern": INTERESTS_TEMPLATE},
-                                             "bot", True], [{"pattern": HOBBIES_RE}, "user", True]],
                                            [[{"pattern": HOBBIES_TEMPLATE},
                                              "bot", True], [{"pattern": HOBBIES_RE}, "user", True]],
                                            [[{"pattern": DFF_WIKI_TEMPLATES["hobbies"]}, "bot", True],

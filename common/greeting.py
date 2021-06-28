@@ -11,6 +11,9 @@ WHAT_DO_YOU_DO_RESPONSES = [
     "I listened to my favorite music all day. Such a great thing you know!",
 ]
 
+WHAT_HAPPENED_TO_BOT_RECENTLY = [
+]
+
 FREE_TIME_RESPONSES = [
     "When you have 30 minutes of free time, how do you pass the time?"
 ]
@@ -37,30 +40,32 @@ TOPIC_OFFERING_TEMPLATES = ["Maybe, TOPIC1 or TOPIC2?",
                             ]
 
 GREETING_QUESTIONS = {
+    "recent_personal_events": ["What was the highlight of your day today?",
+                               "What was the highlight of your week?",
+                               "Has anything exciting happened today?",
+                               "What is the best thing that has happened to you recently?",
+                               "Anything out of the ordinary has happened to you recently?",
+                               "Has anything unusual happen to you recently?",
+                               "Has anything extraordinary happened today?",
+                               ],
+    "what_are_your_hobbies": ["What are your hobbies?",
+                              "What do you like to do in your free time?",
+                              "Which things capture your imagination?",
+                              "What are the things you love to spend your spare time with?",
+                              "How do you like to spend your spare time?",
+                              "What's the most recent new hobby or interest that you've tried?",
+                              "What are your interests?",
+                              "What things excite you?",
+                              ],
+    "what_do_you_do_on_weekdays": ["What do you do on weekdays?",
+                                   "What did you get up to today?"
+                                   ],
     "what_to_talk_about": ["What do you want to talk about?",
                            "What would you want to talk about?",
                            "What would you like to chat about?",
                            "What do you wanna talk about?",
                            "What are we gonna talk about?",
-                           # "What's on your mind?"
                            ],
-    "what_are_your_interests": ["What are your interests?",
-                                "What do you like?",
-                                "What things excite you?",
-                                # "What's cool?"
-                                ],
-    "what_are_your_hobbies": ["What are your hobbies?",
-                              "What do you like to do in your free time?",
-                              "Which things capture your imagination?",
-                              "What are the things you love to spend your spare time with?",
-                              "How do you like to spend your spare time?"
-                              ],
-    "recent_personal_events": ["What happened in your life recently?",
-                               "What's happening?",
-                               "What's going on?",
-                               "What's up?"
-                               ],
-    "what_do_you_do_on_weekdays": ["What do you do on weekdays?"]
 }
 
 dont_tell_you_templates = re.compile(
@@ -121,3 +126,17 @@ GIVE_ME_CHANCE_TO_CHEER_UP = [
 
 LIST_ACTIVITIES_RESPONSE = "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. " \
                            "I can answer questions, share fun facts, discuss movies, books and news."
+
+NOT_TALKY_PERSON = [
+    "You don't say a lot, do you? Anyway, I like that.",
+    "Not much of a talker, are you? By the way, less talkative persons are usually smarter.",
+    "Incidentally, you're a person of few words. I bet I could get you to talk.",
+    "You don't really say much, do you? I believe you are just humble.",
+]
+
+PREFER_TO_GET_TO_KNOW_YOU_BEFORE = [
+    "I would like to get to know you better. I believe we could become friends.",
+    "I'd like to get to know you better to make friendship with you.",
+    "I want to get to know you a little better, all right?",
+    "I am really looking forward to getting to know each other better because it will be awesome!",
+]
