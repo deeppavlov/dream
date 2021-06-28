@@ -28,7 +28,7 @@ SAD_PATTERN = r"\b(sad|horrible|depressed|terrible|tired|awful|dire|upset|trash|
               r"pity|poor|ill|low|exhausted|inferior|miserable|cry|naughty|nasty|foul|ugly|grisly|harmful|" \
               r"spoiled|depraved|tained|awry|so so|badly|sadly|wretched|bad|unhappy)\b"
 POSITIVE_PATTERN = r"\b(happy|good|okay|great|yeah|cool|awesome|perfect|nice|well|ok|fine|" \
-                   r"neat|swell|peachy|excellent|exciting|excited|splendid|all right" \
+                   r"neat|swell|fabulous|peachy|excellent|exciting|excited|splendid|all right" \
                    r"|super|classy|tops|famous|superb|incredible|tremendous|class|crackajack|crackerjack)\b"
 ALONE_PATTERN = r"(i am alone|lonely|loneliness|do you love me)"
 NOT_PATTERN = r"((\bnot|n't\bno)( too| that| really| so| feel| going)?)"
