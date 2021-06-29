@@ -23,7 +23,7 @@ from common.movies import get_movie_template, praise_actor, praise_director_or_w
     DIFFERENT_SCRIPT_TEMPLATES, RECOMMEND_REQUEST_PATTERN, RECOMMEND_OFFER_PATTERN, RECOMMEND_OFFER_RESPONSE, \
     RECOMMENDATION_PHRASES, REPEAT_RECOMMENDATION_PHRASES, WOULD_YOU_LIKE_TO_CONTINUE_TALK_ABOUT_MOVIES, \
     WHAT_IS_YOUR_FAVORITE_MOMENT_PHRASES, WHAT_IS_YOUR_FAVORITE_MOMENT_NO_PLOT_FOUND_PHRASES, NOT_WATCHED_TEMPLATE, \
-    NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE
+    NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE, ACKNOWLEDGEMENT_LIKES_MOVIE
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_opinion_request, is_opinion_expression, get_not_used_template, \
     find_first_complete_sentence, get_all_not_used_templates, COBOTQA_EXTRA_WORDS
@@ -686,8 +686,13 @@ def ask_do_you_know_question_response(vars):
             else:
                 praise_to_director_or_writer_or_visuals = ""
 
-            response = f"{get_movie_template('user_opinion_comment', subcategory=sentiment, movie_type=movie_type)} " \
-                       f"{praise_to_director_or_writer_or_visuals} {response}"
+            if sentiment == "positive":
+                ack = random.choice(ACKNOWLEDGEMENT_LIKES_MOVIE)
+                state_utils.add_acknowledgement_to_response_parts(vars)
+            else:
+                ack = get_movie_template('user_opinion_comment', subcategory=sentiment, movie_type=movie_type)
+
+            response = f"{ack} {praise_to_director_or_writer_or_visuals} {response}"
         else:
             logger.info(f"No appropriate info for Do you know question found. Ask for another movie.")
             response = not_confident_lets_chat_about_movies_response(vars)

@@ -166,6 +166,16 @@ DIFFERENT_SCRIPT_TEMPLATES = {
     ]
 }
 
+ACKNOWLEDGEMENT_LIKES_MOVIE = [
+    "So cool! I like it too! You have a good eye in movies.",
+    "Great! Seems like you're well versed in movies.",
+    "You've got a pretty sophisticated knowledge of movies.",
+    "I'm glad you like it, it's a really nice film.",
+    "Amazing! Agree with you! You have a excellent eye in movies.",
+    "Wow! I see you're perfectly versed in movies.",
+    "Yeah, it's a really amazing film."
+]
+
 
 def get_movie_template(category, subcategory=None, movie_type="movie"):
 
