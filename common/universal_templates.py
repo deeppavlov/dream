@@ -501,3 +501,7 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art(s|work)?|draw(s|ed|ing)?|paint(
                                              r"|authoritarianism|monarch)",
                                              re.IGNORECASE)
                       }
+
+HEALTH_PROBLEMS = re.compile(
+    r"\b(broke|health problem|death|dead\b|ache|disease|illnes|ill\b|sickness|sick\b|shoot|chopped off)",
+    re.IGNORECASE)

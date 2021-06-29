@@ -14,8 +14,7 @@ import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_exten
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.greeting as common_greeting
-from common.universal_templates import COMPILE_SOMETHING
-from common.utils import get_not_used_template
+from common.universal_templates import COMPILE_SOMETHING, HEALTH_PROBLEMS
 import dialogflows.scopes as scopes
 from dialogflows.flows.starter_states import State as StarterState
 import dialogflows.flows.weekend as weekend_flow
@@ -355,6 +354,9 @@ def health_problems(vars):
         )
         if _is_about_health:
             return True
+
+    if HEALTH_PROBLEMS.search(state_utils.get_last_human_utterance(vars)["text"]):
+        return True
     return False
 
 
@@ -520,14 +522,12 @@ def std_greeting_response(vars):
                                                                                                         "")
         _entities = state_utils.get_nounphrases_from_human_utterance(vars)
         _no_requests = condition_utils.no_requests(vars)
-        _lets_talk_about = condition_utils.is_lets_chat_about_topic_human_initiative(vars)
         _nothing_dont_know = COMPILE_SOMETHING.search(state_utils.get_last_human_utterance(vars)["text"])
 
         # acknowledgement, confidences
         if _nothing_dont_know or (_no_requests and len(_entities) == 0):
-            used_complex_ack = shared_memory.get("used_complex_ack", [])
-            ack = get_not_used_template(used_complex_ack, common_greeting.NOT_TALKY_PERSON)
-            state_utils.save_to_shared_memory(vars, used_complex_ack=used_complex_ack + [ack])
+            ack = random.choice(
+                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[GREETING_STEPS[greeting_step_id]])
             if _friendship_was_active:
                 state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
                 state_utils.set_can_continue(vars, MUST_CONTINUE)
@@ -535,11 +535,10 @@ def std_greeting_response(vars):
                 state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
                 state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             state_utils.add_acknowledgement_to_response_parts(vars)
-        elif len(_entities) > 0 and _lets_talk_about:
+        elif not _no_requests and len(_entities) > 0:
             # user wants to talk about something particular. We are just a dummy response, if no appropriate
-            used_complex_ack = shared_memory.get("used_complex_ack", [])
-            ack = get_not_used_template(used_complex_ack, common_greeting.PREFER_TO_GET_TO_KNOW_YOU_BEFORE)
-            state_utils.save_to_shared_memory(vars, used_complex_ack=used_complex_ack + [ack])
+            ack = random.choice(
+                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY["what_do_you_do_on_weekdays"])
             sent_ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
             ack = f"{sent_ack} {ack}"
             state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
@@ -551,7 +550,10 @@ def std_greeting_response(vars):
             else:
                 state_utils.set_confidence(vars, confidence=MIDDLE_CONFIDENCE)
             # some request by user detected OR no requests but some entities detected
-            ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
+            if GREETING_STEPS[greeting_step_id] == "recent_personal_events":
+                ack = random.choice(common_greeting.INTERESTING_PERSON_THANKS_FOR_CHATTING)
+            else:
+                ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         if health_problems(vars):
