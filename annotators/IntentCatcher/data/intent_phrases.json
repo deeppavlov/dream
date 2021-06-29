@@ -77,6 +77,7 @@
                 "(alexa ){0,1}(please ){0,1}(can we){0,1}stop ((chatting)|(talking))",
                 "i am going to go to bed now",
                 "i am going to bed now",
+                "i wanna go back to sleep now",
                 "turn off the alexa social bot",
                 "stop this bot",
                 "i don't want this social bot",
@@ -247,7 +248,8 @@
                 "((definetely not)|(never)|(never ask me that again)|(that's boring)|(that will be boring)|(i don't know)|(i am not sure))"
             ],
             "reg_phrases": [
-                ".* no no"
+                ".* no no",
+                 ".* not today"
             ],
             "min_precision": 0.0,
             "punctuation": [
