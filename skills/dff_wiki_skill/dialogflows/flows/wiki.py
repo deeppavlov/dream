@@ -732,7 +732,6 @@ simplified_dialog_flow.add_user_serial_transitions(
         State.SYS_NEWS_STEP: news_step_request,
         State.SYS_INTRO_Q: intro_question_request,
         State.SYS_TELL_FACT: tell_fact_request,
-        State.SYS_START_TALK: start_talk_request,
     },
 )
 
@@ -784,15 +783,6 @@ simplified_dialog_flow.add_user_serial_transitions(
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    State.USR_START_TALK,
-    {
-        State.SYS_START_TALK: start_talk_request,
-        State.SYS_FACTOID_Q: factoid_q_request,
-        State.SYS_TELL_FACT: tell_fact_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
     State.USR_TELL_FACT,
     {
         State.SYS_TELL_FACT: tell_fact_request,
@@ -823,7 +813,6 @@ simplified_dialog_flow.add_system_transition(State.SYS_TELL_FACT, State.USR_TELL
 simplified_dialog_flow.add_system_transition(State.SYS_FACTOID_Q, State.USR_FACTOID_Q, factoid_q_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_MORE_DETAILED, State.USR_MORE_DETAILED,
                                              more_details_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_START_TALK, State.USR_START_TALK, start_talk_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_NEWS_STEP, State.USR_NEWS_STEP, news_step_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
 
@@ -840,8 +829,6 @@ simplified_dialog_flow.set_error_successor(State.SYS_WIKIHOW_Q, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_WIKIHOW_Q, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_WIKIHOW_STEP, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_WIKIHOW_STEP, State.SYS_ERR)
-simplified_dialog_flow.set_error_successor(State.SYS_START_TALK, State.SYS_ERR)
-simplified_dialog_flow.set_error_successor(State.USR_START_TALK, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_MORE_DETAILED, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_MORE_DETAILED, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_FACTOID_Q, State.SYS_ERR)
