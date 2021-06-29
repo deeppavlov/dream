@@ -111,7 +111,7 @@ topic_config = \
                            {"utt": ["I think that live performance of your favourite singer is a cool event.",
                                     "Have you been to any live shows lately?"]},
                            {"utt": ["Do you like listening to music on the journey, in the car or in the bus?"],
-                            "next_ackn": [{"cond": [["is_yes", "user", True]],
+                            "next_ackn": [{"cond": [["is_yes", "user", True], [{"pattern": "(car|bus)"}, "user", True]],
                                            "answer": "Great! Relaxing music makes time go faster."},
                                           {"cond": [["is_no", "user", True]],
                                            "answer": "I agree with you! It's better to travel in silence."}]},

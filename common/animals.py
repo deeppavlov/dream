@@ -39,7 +39,7 @@ LIKE_PETS_TEMPLATE = re.compile(r"(do|did|have) you (like |love )?(any |a )?(pet
 DONT_LIKE = re.compile(r"(do not like|don't like|dont like|hate)", re.IGNORECASE)
 DO_YOU_HAVE_TEMPLATE = re.compile(r"do you have (a |an |the |any |some )?(cat|dog|puppy|kitty|kitten|rat|fish|parrot"
                                   r"|hamster|\bpet|\bpets)", re.IGNORECASE)
-NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog)", re.IGNORECASE)
+NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog|doja cat)", re.IGNORECASE)
 ANIMAL_BLACKLIST = {"animal", "animals"}
 
 breed_replace_dict = {"lab": "labrador"}

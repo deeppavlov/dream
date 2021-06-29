@@ -675,6 +675,7 @@ def smalltalk_response(vars, topic_config):
     available_utterances = shared_memory.get("available_utterances", [])
     logger.info(f"subtopics {shared_memory.get('subtopics', [])}")
     subtopics_to_delete = 0
+    add_general_ackn = False
     if found_topic:
         used_utt_nums_dict = shared_memory.get("used_utt_nums", {})
         used_utt_nums = used_utt_nums_dict.get(found_topic, [])
@@ -692,6 +693,7 @@ def smalltalk_response(vars, topic_config):
                             response, used_utt_nums = make_smalltalk_response(vars, topic_config, shared_memory,
                                                                               utt_info, used_utt_nums, num)
                             if response:
+                                add_general_ackn = utt_info.get("add_general_ackn", False)
                                 utt_can_continue = utt_info.get("can_continue", "can")
                                 utt_conf = utt_info.get("conf", utt_conf)
                                 break
@@ -713,6 +715,7 @@ def smalltalk_response(vars, topic_config):
                     if response:
                         utt_can_continue = utt_info.get("can_continue", "can")
                         utt_conf = utt_info.get("conf", utt_conf)
+                        add_general_ackn = utt_info.get("add_general_ackn", False)
                         used_utt_nums_dict[found_topic] = used_utt_nums
                         state_utils.save_to_shared_memory(vars, used_utt_nums=used_utt_nums_dict)
                         break
@@ -741,6 +744,8 @@ def smalltalk_response(vars, topic_config):
     else:
         state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    if not add_general_ackn:
+        state_utils.add_acknowledgement_to_response_parts(vars)
     return response
 
 
@@ -794,7 +799,8 @@ def start_or_continue_facts(vars, topic_config):
 
 def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
     shared_memory = state_utils.get_shared_memory(vars)
-    isyes = is_yes(state_utils.get_last_human_utterance(vars))
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    isyes = is_yes(user_uttr) or "go ahead" in user_uttr["text"].lower()
     response = ""
     cur_mode = shared_memory.get("cur_mode", "smalltalk")
     wikipedia_page = shared_memory.get("cur_wikipedia_page", "")
@@ -802,6 +808,7 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
     found_topic = shared_memory.get("special_topic", "")
     utt_can_continue = common_constants.CAN_CONTINUE_SCENARIO
     utt_conf = CONF_DICT["WIKI_TOPIC"]
+    first_utt = False
     entity_substr = ""
     entity_types = []
     if not found_topic:
@@ -861,7 +868,7 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
         logger.info(f"response, used_wikihow_nums {used_wikihow_nums} used_wikipedia_nums {used_wikipedia_nums}")
         logger.info(f"response, wikipedia_page_content_list {wikipedia_page_content_list[:3]} "
                     f"wikihow_page_content_list {wikihow_page_content_list[:3]}")
-        if wikihow_page_content_list:
+        if wikihow_page and wikihow_page_content_list:
             for num, fact in enumerate(wikihow_page_content_list):
                 if num not in used_wikihow_nums:
                     facts_str = fact.get("facts_str", "")
@@ -871,7 +878,7 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
                     used_wikihow_nums_dict[wikihow_page] = used_wikihow_nums
                     state_utils.save_to_shared_memory(vars, used_wikihow_nums=used_wikihow_nums_dict)
                     break
-        if not response and wikipedia_page_content_list:
+        if not response and wikipedia_page and wikipedia_page_content_list:
             for num, fact in enumerate(wikipedia_page_content_list):
                 if num not in used_wikipedia_nums:
                     facts_str = fact.get("facts_str", "")
@@ -907,6 +914,7 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
     else:
         state_utils.set_confidence(vars, confidence=CONF_DICT["UNDEFINED"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    state_utils.add_acknowledgement_to_response_parts(vars)
     return response
 
 
