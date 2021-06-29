@@ -140,6 +140,8 @@ class EmotionSkillScenario:
                         state = "sad_and_lonely_end"
                 confidence = 1.0 if is_yes else 0.95
         else:
+            if emotion in ['sadness', 'fear', 'anger'] and 'joy' in state:
+                state = "sad_and_lonely"
             step = self.steps[state]
             reply = random.choice(step['answers'])
             if len(step['next_step']):
