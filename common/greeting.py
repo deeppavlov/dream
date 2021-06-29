@@ -127,16 +127,31 @@ GIVE_ME_CHANCE_TO_CHEER_UP = [
 LIST_ACTIVITIES_RESPONSE = "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. " \
                            "I can answer questions, share fun facts, discuss movies, books and news."
 
-NOT_TALKY_PERSON = [
-    "You don't say a lot, do you? Anyway, I like that.",
-    "Not much of a talker, are you? By the way, less talkative persons are usually smarter.",
-    "Incidentally, you're a person of few words. I bet I could get you to talk.",
-    "You don't really say much, do you? I believe you are just humble.",
-]
+AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY = {
+    "recent_personal_events": ["Anyway, I believe you are an interesting person.",
+                               "Still I'd love to know you better. What about your personality.",
+                               ],
+    "what_are_your_hobbies": ["You probably just did not find something really interesting to you.",
+                              "I like to do nothing but my work and my hobby is to chat with people.",
+                              "No way. I beileve you have lots of things to do.",
+                              ],
+    "what_do_you_do_on_weekdays": [
+        "I would like to get to know you better. I believe we could become friends.",
+        "I'd like to get to know you better to make friendship with you.",
+        "I want to get to know you a little better, all right?",
+        "I am really looking forward to getting to know each other better because it will be awesome!",
+    ],
+    "what_to_talk_about": ["What do you want to talk about?",
+                           "What would you want to talk about?",
+                           "What would you like to chat about?",
+                           "What do you wanna talk about?",
+                           "What are we gonna talk about?",
+                           ],
+}
 
-PREFER_TO_GET_TO_KNOW_YOU_BEFORE = [
-    "I would like to get to know you better. I believe we could become friends.",
-    "I'd like to get to know you better to make friendship with you.",
-    "I want to get to know you a little better, all right?",
-    "I am really looking forward to getting to know each other better because it will be awesome!",
+INTERESTING_PERSON_THANKS_FOR_CHATTING = [
+    "You are really interesting person, so I'm grateful that you took a couple of minutes to chat with me.",
+    "I am glad you have a busy life, and thanks for taking the time to chat with me ",
+    "I believe you have a lot of things to do, so I'm grateful that you took a couple of minutes to chat with me.",
+    "So many interesting things happen in human life! Thank you for taking the time to chat with me.",
 ]
