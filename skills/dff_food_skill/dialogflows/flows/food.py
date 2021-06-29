@@ -20,7 +20,7 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CO
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
 from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
     CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD, \
-    ACKNOWLEDGEMENTS
+    ACKNOWLEDGEMENTS, FOOD_FACT_ACKNOWLEDGEMENTS
 from common.link import link_to_skill2i_like_to_talk
 from dialogflows.flows.fast_food import State as FFState
 from dialogflows.flows.fast_food import fast_food_request
@@ -329,14 +329,19 @@ def cuisine_fact_response(vars):
                     return cuisine_fact
             if not cuisine_fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                return "Haven't tried it yet. What do you recommend to start with?"
+                response = "You have such a refined taste in food! "
+                "I haven't tried it yet. What do you recommend to start with?"
+                state_utils.add_acknowledgement_to_response_parts(vars)
+                return response
         elif conceptnet_flag:
             entity_linking = last_utt["annotations"].get("entity_linking", [])
             if entity_linking:
                 _facts = entity_linking[0].get("entity_pages", [])
                 if _facts:
                     state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                    return f"Jummy! I know about {food_item} that {_facts[0]}"
+                    response = f"You're a gourmet! I know about {food_item} that {_facts[0]}"
+                    state_utils.add_acknowledgement_to_response_parts(vars)
+                    return response
                 else:
                     return ""
             else:
@@ -628,10 +633,7 @@ def food_fact_response(vars):
             else:
                 fact = ""
                 entity = ""
-        acknowledgements = [
-            f"I like {entity} too. ", f"I'm okay with {entity}. ", f"{entity}. It's awesome. ",
-            f"{entity}. Fantastic. ", f"Mmm, {entity}. Loving it. ", f"{entity}. Yummy! "
-        ]
+        acknowledgement = random.choice(FOOD_FACT_ACKNOWLEDGEMENTS).replace("ENTITY", entity.lower())
         state_utils.save_to_shared_memory(vars, used_facts=used_facts + [fact])
 
         try:
@@ -664,7 +666,9 @@ def food_fact_response(vars):
                 if len(used_facts):
                     return f"{fact} Do you want me to tell you more about {entity}?"
                 else:
-                    return random.choice(acknowledgements) + f"{fact} Do you want to hear more about {entity}?"
+                    response = acknowledgement + f"{fact} Do you want to hear more about {entity}?"
+                    state_utils.add_acknowledgement_to_response_parts(vars)
+                    return response
             elif fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 if len(used_facts):
@@ -770,7 +774,9 @@ def gourmet_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-        return "It seems you're a gourmet! What meal do you like?"
+        response = "It seems you're a gourmet! What meal do you like?"
+        state_utils.add_acknowledgement_to_response_parts(vars)
+        return response
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)

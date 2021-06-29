@@ -67,6 +67,15 @@ ACKNOWLEDGEMENTS = {
     "fav_food_cook": "Okay. Just give it a chance. Hope you will enjoy it!"
 }
 
+FOOD_FACT_ACKNOWLEDGEMENTS = [
+    "Your taste in food is so exquisite! I like ENTITY too. ",
+    "Great choice! I'm okay with ENTITY. ",
+    "Your have a good taste! ENTITY is awesome. ",
+    "Wow! We are food soulmates! I enjoy eating ENTITY every time. ",
+    "Mmm, ENTITY. You're a gourmet! ",
+    "ENTITY. Yummy! I love it too. "
+]
+
 
 def skill_trigger_phrases():
     return TRIGGER_PHRASES
