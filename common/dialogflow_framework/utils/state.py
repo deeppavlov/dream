@@ -1,5 +1,6 @@
 import logging
 import os
+import random
 
 import common.constants as common_constants
 import common.news as common_news
@@ -248,3 +249,18 @@ def get_facts_from_fact_retrieval(vars):
         elif isinstance(annotations["fact_retrieval"], list):
             return annotations["fact_retrieval"]
     return []
+
+
+def get_unrepeatable_index_from_rand_seq(vars, seq_name, seq_max, renew_seq_if_empty=False):
+    """Return a unrepeatable index from RANDOM_SEQUENCE.
+    RANDOM_SEQUENCE is stored in shared merory by name `seq_name`.
+    RANDOM_SEQUENCE is shuffled [0..`seq_max`].
+    RANDOM_SEQUENCE will be updated after index will get out of RANDOM_SEQUENCE if `renew_seq_if_empty` is True
+    """
+    shared_memory = get_shared_memory(vars)
+    seq = shared_memory.get(seq_name, random.sample(list(range(seq_max)), seq_max))
+    if renew_seq_if_empty or seq:
+        seq = seq if seq else random.sample(list(range(seq_max)), seq_max)
+        next_index = seq[-1] if seq else None
+        save_to_shared_memory(vars, **{seq_name: seq[:-1]})
+        return next_index

@@ -4,6 +4,14 @@ import pathlib
 from common.utils import join_sentences_in_or_pattern
 
 
+NICE_CHAT_ACKS = [
+    "I enjoyed chatting with you about science so much. You are a very pleasant conversationalist.",
+    "People who are drawn to science are special, I am very pleased to have a conversation with you on this topic.",
+    "How wonderful it is to see an interest in science in people, thank you for that, "
+    "I really missed such conversations.",
+    "Thank you for this dialogue time, I was very pleased to talk with you about science.",
+]
+
 OPINION_REQUESTS_ABOUT_SCIENCE = [
     "Do you like science?",
     "Do you think science is cool?",
