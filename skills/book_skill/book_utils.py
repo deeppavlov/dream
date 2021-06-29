@@ -442,6 +442,8 @@ def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_book
                 if len(filtered_bookname_list) < top_n_best_books:
                     if last_bookname.lower() not in entity_to_label(book).lower():
                         filtered_bookname_list.append(book)
+                        if len(filtered_bookname_list) >= top_n_best_books:
+                            break
             if len(filtered_bookname_list) > 0:
                 best_bookname = random.choice(filtered_bookname_list)
         logger.debug(f'Answer for best_plain_book_by_author {best_bookname}')
