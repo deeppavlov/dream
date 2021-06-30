@@ -83,6 +83,7 @@ def request_triples_wikidata(parser_info, queries, query_dict=None):
                                      timeout=1)
                 if resp.status_code == 200:
                     curr_response = resp.json()
+                    query_dict[(parser_info, query)] = curr_response
             if isinstance(curr_response, list):
                 responses.extend(curr_response)
             else:
