@@ -96,6 +96,13 @@ def is_request_about_book_detected(annotated_user_phrase):
     return cond1 or cond2 or cond3  # or cond4
 
 
+WHAT_ABOUT_PATTERN = re.compile(r"what (it is|is it|is this book) about", re.IGNORECASE)
+
+
+def what_is_book_about_request(annotated_user_phrase):
+    return re.search(WHAT_ABOUT_PATTERN, annotated_user_phrase['text'])
+
+
 def what_is_book_about(book):
     fact = ''
     logger.info(f'Requesting for {book}')
