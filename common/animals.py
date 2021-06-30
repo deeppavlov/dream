@@ -1,5 +1,5 @@
 import re
-from common.universal_templates import is_any_question_sentence_in_utterance
+from common.universal_templates import is_any_question_sentence_in_utterance, NOT_LIKE_PATTERN
 
 LIKE_ANIMALS_REQUESTS = ["Do you like animals?"]
 HAVE_PETS_REQUESTS = ["Do you have pets?"]
@@ -122,8 +122,10 @@ def stop_about_animals(user_uttr, shared_memory):
     is_stop = re.findall(r"(stop|shut|something else|change|don't want)", user_uttr["text"])
     found_animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521", "Q43577", "Q39367", "Q38547"})
     isq = is_any_question_sentence_in_utterance(user_uttr)
+    user_ask = re.findall(r"ask (you )?(a )?question", user_uttr["text"], re.IGNORECASE)
+    dont_like = re.findall(NOT_LIKE_PATTERN, user_uttr["text"])
     if (isq and cobot_entities and not name_in_entities and not found_animal_substr and not found_animal_wp
-            and not found_nounphr_for_questions) or is_stop:
+            and not found_nounphr_for_questions) or is_stop or user_ask or dont_like:
         flag = True
     return flag
 
