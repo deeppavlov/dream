@@ -93,7 +93,7 @@ class BookSkillScenario:
 
     def __init__(self):
         self.super_conf = 1.0
-        self.default_conf = 0.95
+        self.default_conf = 0.98
         self.low_conf = 0.7
         self.default_reply = ""
         self.bookreads_dir = 'bookreads_data.json'
