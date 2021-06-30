@@ -166,6 +166,8 @@ def compose_experience_comment(user_text):
     if time is None:
         experience_comment = "Interesting."
     else:
+        now = now.replace(tzinfo=None)
+        time = time.replace(tzinfo=None)
         experience = now - time
         if experience < EXPERIENCE["negative"]:
             experience_comment = "It seems you came from the future. You probably know what will say next."
