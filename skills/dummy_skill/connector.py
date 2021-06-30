@@ -18,7 +18,7 @@ import sentry_sdk
 from common.link import LIST_OF_SCRIPTED_TOPICS, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED, DFF_WIKI_LINKTO, \
     skills_phrases_map, compose_linkto_with_connection_phrase
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question, is_switch_topic
+from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
 
@@ -137,22 +137,28 @@ def get_link_to_question(dialog, all_prev_active_skills):
     # remove prev active skills from those we can link to
     available_links = list(set(SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED).difference(all_prev_active_skills))
     # use recommended skills
-    recommended_skills = dialog["human_utterances"][-1].get("annotations", []).get("topic_recommendation", [])
-    if len(set(available_links).intersection(recommended_skills)) > 0:
-        available_links = list(set(recommended_skills).intersection(available_links))
+    # recommended_skills = dialog["human_utterances"][-1].get("annotations", []).get("topic_recommendation", [])
+    # if len(set(available_links).intersection(recommended_skills)) > 0:
+    #     available_links = list(set(recommended_skills).intersection(available_links))
 
     all_wiki_topics = set(DFF_WIKI_LINKTO.keys())
     available_wiki_topics = list(all_wiki_topics.difference(set(human_attr["used_wiki_topics"])))
+    available_best_wiki_topics = list(set(["art", "love", "anime"]).difference(
+        set(human_attr["used_wiki_topics"])))
 
     if len(available_links) > 0:
         # if we still have skill to link to, try to generate linking question
         # {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
-        link = compose_linkto_with_connection_phrase(
-            available_links, human_attributes=human_attr,
-            recent_active_skills=all_prev_active_skills, from_skill=from_skill)
-        human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
-        human_attr["prelinkto_connections"] = human_attr["prelinkto_connections"] + [link.get("connection_phrase", "")]
-        linked_question = link["phrase"]
+        if len(available_best_wiki_topics) > 0 and random.uniform(0, 1) < 0.2:
+            chosen_topic = random.choice(available_best_wiki_topics)
+            linked_question = DFF_WIKI_LINKTO[chosen_topic]
+        else:
+            link = compose_linkto_with_connection_phrase(
+                available_links, human_attributes=human_attr,
+                recent_active_skills=all_prev_active_skills, from_skill=from_skill)
+            human_attr["used_links"][link["skill"]] = human_attr["used_links"].get(link["skill"], []) + [link['phrase']]
+            human_attr["prelinkto_connections"] += [link.get("connection_phrase", "")]
+            linked_question = link["phrase"]
     elif len(available_wiki_topics) > 0:
         chosen_topic = random.choice(available_wiki_topics)
         linked_question = DFF_WIKI_LINKTO[chosen_topic]
@@ -238,6 +244,8 @@ class DummySkillConnector:
                 _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
 
                 _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
+                bot_uttr_dict = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
+                _if_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr_dict)
                 _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
 
                 if len(dialog["human_utterances"]) > 1:
@@ -249,13 +257,13 @@ class DummySkillConnector:
                     _was_cant_do = False
                     _was_cant_do_stop_it = False
 
-                if _no_to_first_linkto:
-                    confs += [0.99]
-                elif _is_ask_me_something or _if_switch_topic or _was_cant_do:
-                    confs += [1.0]  # Use it only as response selector retrieve skill output modifier
-                elif _was_cant_do_stop_it:
+                if _was_cant_do_stop_it:
                     link_to_question = "Sorry, bye! #+#exit"
                     confs += [1.0]  # finish dialog request
+                elif _no_to_first_linkto:
+                    confs += [0.99]
+                elif _is_ask_me_something or _if_switch_topic or _was_cant_do or _if_choose_topic:
+                    confs += [1.0]  # Use it only as response selector retrieve skill output modifier
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
                 cands += [link_to_question]

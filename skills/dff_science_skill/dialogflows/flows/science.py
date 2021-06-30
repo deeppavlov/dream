@@ -14,12 +14,16 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 import dialogflows.flows.utils as local_utils
-from common.science import science_topics, SCIENCE_TOPIC_KEY_PHRASES, SCIENCE_TOPIC_KEY_PHRASE_RE
+from common.science import science_topics, NICE_CHAT_ACKS
 
 from common.science import SCIENCE_COMPILED_PATTERN, OPINION_REQUESTS_ABOUT_SCIENCE, OFFER_TALK_ABOUT_SCIENCE
 from common.link import link_to_skill2i_like_to_talk
 from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, NOT_LIKE_PATTERN
+from common.universal_templates import (
+    if_chat_about_particular_topic,
+    NOT_LIKE_PATTERN,
+    if_not_want_to_chat_about_particular_topic,
+)
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -122,61 +126,32 @@ def linkto_yes(vars):
     return flag
 
 
-def lets_chat_about_science(uttr, prev_uttr=None):
+def if_chat_about_science_topic_pattern(vars, compiled_pattern=SCIENCE_COMPILED_PATTERN):
+    uttr = state_utils.get_last_human_utterance(vars)
+    prev_uttr = state_utils.get_last_bot_utterance(vars)
     prev_uttr = {} if prev_uttr is None else prev_uttr
-    curr_uttr_is_about_science = re.search(SCIENCE_COMPILED_PATTERN, uttr.get("text", "").lower())
-    lets_talk_about_science = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=SCIENCE_COMPILED_PATTERN)
-    chose_topic = if_choose_topic(uttr, prev_uttr) and curr_uttr_is_about_science
-    flag = (
-        lets_talk_about_science
-        or chose_topic
-        or ("?" not in uttr.get("text", "") and "?" in prev_uttr.get("text", "").lower() and curr_uttr_is_about_science)
-    )
+    flag = if_chat_about_particular_topic(uttr, prev_uttr, compiled_pattern=compiled_pattern)
     return bool(flag)
 
 
+def is_mentioned_science_pattern(vars, compiled_pattern=SCIENCE_COMPILED_PATTERN):
+    uttr = state_utils.get_last_human_utterance(vars)
+    prev_uttr = state_utils.get_last_bot_utterance(vars)
+    prev_uttr = {} if prev_uttr is None else prev_uttr
+    is_not_wanted = if_not_want_to_chat_about_particular_topic(uttr, prev_uttr)
+    flag = bool(re.search(compiled_pattern, uttr.get("text", "").lower())) and not is_not_wanted
+    return flag
+
+
 def science_request(ngrams, vars):
-    flag = (
-        bool(
-            lets_chat_about_science(
-                state_utils.get_last_human_utterance(vars),
-                state_utils.get_last_bot_utterance(vars),
-            )
-        )
-        or linkto_yes(vars)
+    flag = any(
+        [
+            if_chat_about_science_topic_pattern(vars),
+            is_mentioned_science_pattern(vars),
+            linkto_yes(vars),
+        ]
     )
     logger.info(f"science_request {flag}")
-    return flag
-
-
-def first_science_request(ngrams, vars):
-    flag = any(
-        [
-            lets_chat_about_science(
-                state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars)
-            ),
-            linkto_yes(vars),
-            # local_utils.get_supported_cobot_topics(vars),
-            # local_utils.get_supported_cobot_dialog_topics(vars),
-        ]
-    )
-    logger.info(f"first_science_request {flag}")
-    return flag
-
-
-def subtopic_science_request(ngrams, vars):
-    last_human_utterance = state_utils.get_last_human_utterance(vars)
-    conceptnet = SCIENCE_TOPIC_KEY_PHRASES & set(
-        last_human_utterance["annotations"].get("conceptnet", {}).get("SymbolOf", [])
-    )
-
-    flag = any(
-        [
-            conceptnet,
-            SCIENCE_TOPIC_KEY_PHRASE_RE.search(last_human_utterance["text"]),
-        ]
-    )
-    logger.info(f"subtopic_science_request {flag}")
     return flag
 
 
@@ -223,10 +198,18 @@ def request_science_topic_response(vars):
         if not science_topics_names:
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=CONF_100)
-            return (
+            next_index = state_utils.get_unrepeatable_index_from_rand_seq(
+                vars,
+                "nice_chat_acks",
+                len(NICE_CHAT_ACKS),
+                True,
+            )
+            ack = f"{NICE_CHAT_ACKS[next_index]}"
+            body = (
                 f"Okay, There are many scientific topics that could be discussed, "
                 "when I learn something new I will be ready to talk to you about it."
             )
+            return " ".join([ack, body])
         science_topics_names = science_topics_names if science_topics_names else list(science_topics.keys())
         current_topic = random.sample(science_topics_names, 1)[0]
         local_utils.add_unused_topics(vars, current_topic)
@@ -236,26 +219,28 @@ def request_science_topic_response(vars):
         is_requested_topic_before = shared_memory.get("is_requested_topic_before")
         state_utils.save_to_shared_memory(vars, current_topic=current_topic, is_requested_topic_before=True)
 
-        ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
         if is_requested_topic_before:
+            next_index = state_utils.get_unrepeatable_index_from_rand_seq(
+                vars,
+                "nice_chat_acks",
+                len(NICE_CHAT_ACKS),
+                True,
+            )
+            ack = f"{NICE_CHAT_ACKS[next_index]}"
             body = f"So, maybe next? Do you wanna talk about {current_topic}?"
         else:
+            ack = f"I think people who are interested in science are special."
             body = f"I like to talk about a variety of scientific topics. Do you wanna talk about {current_topic}?"
-        if (
-            lets_chat_about_science(
-                state_utils.get_last_human_utterance(vars),
-                state_utils.get_last_bot_utterance(vars),
-            )
-            or linkto_yes(vars)
-        ):
+        state_utils.add_acknowledgement_to_response_parts(vars)
+        if linkto_yes(vars):
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=CONF_100)
-        # elif local_utils.get_supported_cobot_dialog_topics(vars):
-        #     state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
-        #     state_utils.set_confidence(vars, confidence=CONF_95)
-        # elif local_utils.get_supported_cobot_topics(vars):
-        #     state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
-        #     state_utils.set_confidence(vars, confidence=CONF_85)
+        elif if_chat_about_science_topic_pattern(vars):
+            state_utils.set_can_continue(vars, MUST_CONTINUE)
+            state_utils.set_confidence(vars, confidence=CONF_100)
+        elif is_mentioned_science_pattern(vars):
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+            state_utils.set_confidence(vars, confidence=CONF_95)
         else:
             return error_response(vars)
 
@@ -340,7 +325,7 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
     {
         State.SYS_NO_SCIENCE: no_science_request,
-        State.SYS_REQUEST_SCIENCE_TOPIC: first_science_request,
+        State.SYS_REQUEST_SCIENCE_TOPIC: science_request,
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)

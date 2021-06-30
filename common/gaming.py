@@ -1,16 +1,211 @@
 import json
+import logging
+import os
 import re
 from pathlib import Path
+from typing import Dict, List, Union
+
+import sentry_sdk
+from common.inflect import engine
 
 
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
-    r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b|"
-    r"\bplay(ed|ing|s).*\b(tablet|pc|computer)\b)",
+    r"\bvideo ?game|\bgaming\b|\bplay ?station|\bx ?box\b|\bplay(?:ed|ing|s).*\b(?:tablet|pc|computer)\b|"
+    r"\bgames? for (?:android|pc|computer|play ?station|x ?box|tablet|ipad)\b|\b(what|which)\b.+\bgame.+\bplay.+\?",
     re.IGNORECASE)
 
+CHECK_DEFINITELY_GAME_COMPILED_PATTERN = re.compile(
+    VIDEO_GAME_WORDS_COMPILED_PATTERN.pattern + r'|\bgames?\b|\bplay(?:ed|ing|s)\b', re.IGNORECASE)
 
-def compile_re_pattern_for_list_of_strings(strings):
-    regex = r'\b' + r'\b|\b'.join(strings) + r'\b'
+
+logger = logging.getLogger(__name__)
+
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+
+
+inflect_engine = engine()
+
+
+INT_TO_ROMAN = {
+    1000: "M",
+    900: "CM",
+    500: "D",
+    400: "CD",
+    100: "C",
+    90: "XC",
+    50: "L",
+    40: "XL",
+    10: "X",
+    9: "IX",
+    5: "V",
+    4: "IV",
+    1: "I",
+}
+ROMAN_TO_INT = {
+    'I': 1,
+    'V': 5,
+    'X': 10,
+    'L': 50,
+    'C': 100,
+    'D': 500,
+    'M': 1000,
+    'IV': 4,
+    'IX': 9,
+    'XL': 40,
+    'XC': 90,
+    'CD': 400,
+    'CM': 900
+}
+ROMAN_NUMBER_COMPILED_PATTERN = re.compile(
+    r"\b(?:M{1,4}(?:CM|CD|DC{0,3}|C{1,3})?(?:XC|XL|LX{0,3}|X{1,3})?(?:IX|IV|VI{0,3}|I{1,3})?|"
+    r"(?:CM|CD|DC{0,3}|C{1,3})(?:XC|XL|LX{0,3}|X{1,3})?(?:IX|IV|VI{0,3}|I{1,3})?|"
+    r"(?:XC|XL|LX{0,3}|X{1,3})(?:IX|IV|VI{0,3}|I{1,3})?|"
+    r"(?:IX|IV|VI{0,3}|I{1,3}))\b",
+    re.I)
+INTEGER_PATTERN = re.compile(r"[1-9][0-9]*", re.I)
+NUMBER_COMPILED_PATTERN = re.compile(
+    ROMAN_NUMBER_COMPILED_PATTERN.pattern + '|' + INTEGER_PATTERN.pattern, re.I)
+
+
+def write_roman(num):
+    def roman_num(num):
+        for r in INT_TO_ROMAN.keys():
+            x, y = divmod(num, r)
+            yield INT_TO_ROMAN[r] * x
+            num -= (r * x)
+            if num <= 0:
+                break
+    return "".join([a for a in roman_num(num)])
+
+
+def roman_to_int(s):
+    i = 0
+    num = 0
+    while i < len(s):
+        if i + 1 < len(s) and s[i:i + 2] in ROMAN_TO_INT:
+            num += ROMAN_TO_INT[s[i:i + 2]]
+            i += 2
+        else:
+            num += ROMAN_TO_INT[s[i]]
+        i += 1
+    return num
+
+
+def roman_number_replace(match_obj):
+    i = roman_to_int(match_obj.group(0).upper())
+    words = inflect_engine.number_to_words(i)
+    return f"(?:part )?(?:{i}|{words}|{match_obj.group(0)})"
+
+
+def integer_replace(match_obj):
+    i = int(match_obj.group(0))
+    roman = write_roman(i)
+    words = inflect_engine.number_to_words(i)
+    return f"(?:part )?(?:{i}|{words}|{roman})"
+
+
+def number_replace(match_obj):
+    if ROMAN_NUMBER_COMPILED_PATTERN.match(match_obj.group(0)):
+        return roman_number_replace(match_obj)
+    else:
+        return integer_replace(match_obj)
+
+
+ARTICLE_PATTERN = re.compile(r"(\ba |\ban |\bthe )", re.I)
+COLON_PATTERN = re.compile(r":")
+ARTICLE_COLON_PATTERN = re.compile(ARTICLE_PATTERN.pattern + '|' + COLON_PATTERN.pattern, re.I)
+
+
+def article_colon_replacement(match_obj):
+    s = match_obj.group(0)
+    if ARTICLE_PATTERN.match(s):
+        return ARTICLE_PATTERN.sub(r"(?:\1)?", s)
+    else:
+        return COLON_PATTERN.sub(r":?", s)
+
+
+def compose_game_name_re(name):
+    first_number = NUMBER_COMPILED_PATTERN.search(name)
+    if first_number is None:
+        no_numbers_name = None
+    else:
+        no_numbers_name = ARTICLE_COLON_PATTERN.sub(
+            article_colon_replacement, name[:first_number.start()]).strip()
+        if not no_numbers_name:
+            no_numbers_name = None
+    if ':' in name:
+        before_colon_name = name.split(':')[0].strip()
+        if before_colon_name:
+            before_colon_name = ARTICLE_COLON_PATTERN.sub(article_colon_replacement, before_colon_name)
+            before_colon_name = NUMBER_COMPILED_PATTERN.sub(number_replace, before_colon_name)
+        else:
+            before_colon_name = None
+    else:
+        before_colon_name = None
+    pattern = ARTICLE_COLON_PATTERN.sub(article_colon_replacement, name)
+    pattern = NUMBER_COMPILED_PATTERN.sub(number_replace, pattern)
+    return pattern, before_colon_name, no_numbers_name
+
+
+def compile_re_pattern_for_list_of_strings(list_of_game_names: List[Union[str, List[str]]]):
+    full_name_patterns = []  # Stores regexps for main names which than extended to final game regexps
+
+    # A dictionary which keys are lowercased game names patterns created from main game name part which precedes the
+    # first number. For instance: if main game name is "The Witcher 3: Wild Hunt", the key in the dictionary will be
+    # "(the )?witcher". The values of `before_number_name_to_full_names` dictionaries of the form
+    # {"not_lowered": <before_number_pattern>, "full_indices": <list of indices of corresponding full patterns in
+    # `full_name_patterns`>}. `before_number_name_to_full_names` is used to collect information to which full name
+    # patterns before_number patterns should be added. A before_number pattern is added if there is no same full
+    # pattern. For example, if there is game "the Witcher" in `list_of_game_names` than before_number pattern for
+    # "The Witcher 3: Wild Hunt" will not be used.
+    before_number_name_to_full_names: Dict[str, Dict[str, Union[str, List[int]]]] = {}
+
+    # Contains main names patterns which do not have before_number name pattern equal to some other full name pattern
+    full_names_without_numbers = []
+
+    # If `list_of_game_names` is a list than the zeroth element of such list is a main game name and the remaining game
+    # names are alternative names. The keys of `alternative_names` are alternative names and values are lists of
+    # indices of main names in `full_name_patterns`. Alternative name can several corresponding main names.
+    alternative_names = {}
+
+    before_colon_names = []
+    for i, game_names in enumerate(list_of_game_names):
+        if isinstance(game_names, list):
+            main_name = game_names[0]
+            for name in game_names[1:]:
+                if name not in alternative_names:
+                    alternative_names[name] = [i]
+                else:
+                    alternative_names[name].append(i)
+        else:
+            main_name = game_names
+        full, before_colon, before_number = compose_game_name_re(main_name)
+        full_name_patterns.append(full)
+        before_colon_names.append(before_colon)
+        if before_number is not None:
+            before_number_l = before_number.lower()
+            if before_number_l in before_number_name_to_full_names:
+                before_number_name_to_full_names[before_number_l]['full_indices'].append(i)
+            else:
+                before_number_name_to_full_names[before_number_l] = {
+                    "not_lowered": before_number, "full_indices": [i]}
+        else:
+            full_names_without_numbers.append(full)
+    for full in full_names_without_numbers:
+        full = full.lower()
+        if full in before_number_name_to_full_names:
+            del before_number_name_to_full_names[full]
+    for before_number_info in before_number_name_to_full_names.values():
+        for i in before_number_info['full_indices']:
+            full_name_patterns[i] += r'\b|\b' + before_number_info['not_lowered']
+    for alternative_name, full_name_indices in alternative_names.items():
+        alternative_name_pattern = compose_game_name_re(alternative_name)[0]
+        for i in full_name_indices:
+            full_name_patterns[i] += r'\b|\b' + alternative_name_pattern
+    for i, name in enumerate(before_colon_names):
+        if name is not None:
+            full_name_patterns[i] += r'\b|\b' + name
+    regex = '|'.join([r'(\b' + p + r'\b)' for p in full_name_patterns])
     return re.compile(regex, flags=re.I)
 
 
@@ -20,10 +215,32 @@ def load_json(file_path):
     return data
 
 
-GAMES_WITH_AT_LEAST_1M_COPIES_SOLD = load_json(
-    Path(__file__).parent / Path("games_with_at_least_1M_copies_sold.json"))
+path = Path(__file__).parent / Path("games_with_at_least_1M_copies_sold.json")
+GAMES_WITH_AT_LEAST_1M_COPIES_SOLD = load_json(path)
 GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN = compile_re_pattern_for_list_of_strings(
     GAMES_WITH_AT_LEAST_1M_COPIES_SOLD)
+
+
+def find_games_in_text(text):
+    found_names = []
+    for match_groups in GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.findall(text):
+        match_names = []
+        for i, name in enumerate(match_groups):
+            if name:
+                orig = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD[i]
+                if isinstance(orig, list):
+                    orig = orig[0]
+                logger.info(f"orig: {orig}")
+                match_names.append(orig)
+        assert match_names
+        found_names.append(match_names)
+    return found_names
+
+
+VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
+    r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b|"
+    r"\bplay(ed|ing|s).*\b(tablet|pc|computer)\b)",
+    re.IGNORECASE)
 
 
 genre_and_theme_groups = {
@@ -160,3 +377,35 @@ def skill_trigger_phrases():
 ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = "Wow, video games are cool. " \
     "If I didn't love to chat so much, I would definitely played video games at least half a day. " \
     "What game are you playing now?"
+
+
+NO_LINK_PHRASES = [
+    "Do you think that pets can use gadgets the same way as humans?",
+    "I love games, especially stats like top of the games released.",
+    "play with my cat different games, such as run and fetch",
+    "I played with my cat a game",
+    "play with my dog different game",
+    "Got a list of the top released games, wanna discuss it?",
+    "Which of these time periods is of interest for you?",
+    "Got a list of the top released games, wanna discuss it?",
+    "I can talk about the most popular games for this or last year, last month, or even the last week",
+    "released games highly rated in this year. Do you want to learn more?",
+    "If you want to discuss it in details say I want to talk about it.",
+    "Do you want to learn more about it, or shall we move on?",
+    "Have you played it before?",
+    "You can always talk to me about other popular games.",
+    "Do you want to chat about the best games of the past year, this year, last month or week?",
+    "Let me know if we should talk about the next one or discuss this one",
+    "Talking about it or going on?",
+    "Discussing it or moving on?",
+    "Chatting about it or the next one?",
+    "How would you rate the desire to play it again",
+    "Your rating is way lower than one given by the rest of the players.",
+    "My memory failed me and I can't recall anything else about the games.",
+    "one of my hobbies is keeping fresh stats about the top video games.",
+    "How would you rate the desire to play",
+    "I'd love to talk about other things but my developer forgot to add them to my memory banks.",
+    "I was talking about games, do you want to continue?",
+    "I can tell you about some music for gaming, should I continue?",
+    "game that I like to play with my cat",
+]

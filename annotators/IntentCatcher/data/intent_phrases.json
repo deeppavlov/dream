@@ -77,6 +77,7 @@
                 "(alexa ){0,1}(please ){0,1}(can we){0,1}stop ((chatting)|(talking))",
                 "i am going to go to bed now",
                 "i am going to bed now",
+                "i wanna go back to sleep now",
                 "turn off the alexa social bot",
                 "stop this bot",
                 "i don't want this social bot",
@@ -132,10 +133,14 @@
             "reg_phrases": [
                 "(leave|end) (the|this) conversation",
                 "alexa done",
+                "(.* )?(stop alexa)",
+                "(.* )?(i have to go)(.* )?",
                 "alexa we are done",
                 "talk to (a )?(different|another) bot",
                 "give (me )?(different|another) bot",
                 "alexa i am done",
+                "(let's|let us) chat tomorrow",
+                "have a good night",
                 "can we stop( please)?",
                 "cancel siri",
                 "(alexa ){0,1}let's stop our chat now",
@@ -152,6 +157,7 @@
                 "(.* )?can i get the normal alexa back.*",
                 "(.* )?gotta go",
                 "hang up",
+                "(please )?just stop",
                 "(alexa )?(buy|bye)"
             ],
             "min_precision": 0.99,
@@ -243,7 +249,8 @@
                 "((definetely not)|(never)|(never ask me that again)|(that's boring)|(that will be boring)|(i don't know)|(i am not sure))"
             ],
             "reg_phrases": [
-                ".* no no"
+                ".* no no",
+                 ".* not today"
             ],
             "min_precision": 0.0,
             "punctuation": [
@@ -333,6 +340,7 @@
                 "(can you ){0,1}((pause)|(stop)) (the ){0,1}music.*",
                 "(alexa ){0,1}turn on.*",
                 "can i have some music on",
+                "can you go to wi fi network",
                 "(alexa ){0,1}can you play .*",
                 "(alexa ){0,1}start a personality test",
                 ".*(alexa )?turn (on |off )?(the |a |my )?alarm( on| off)?.*",
@@ -1570,7 +1578,8 @@
             "wonderful",
             "play sweet",
             "can you not answer the question?",
-            "we are not good"
+            "we are not good",
+            "pull a better wow"
         ],
         "punctuation": [
             ".",

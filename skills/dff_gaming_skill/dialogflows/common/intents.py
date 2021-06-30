@@ -5,7 +5,8 @@ import os
 import sentry_sdk
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN
+from common.gaming import GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN, \
+    find_games_in_text
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import is_no, is_yes
 
@@ -29,12 +30,11 @@ def switch_to_particular_game_discussion(vars):
     user_text = user_uttr.get("text", "").lower()
     prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
     prev_bot_text = prev_bot_uttr.get("text", "")
-    found_video_game_in_user_uttr = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(user_text)
+    found_video_game_in_user_uttr = find_games_in_text(user_text)
     logger.info(
         f"(switch_to_particular_game_discussion)found_video_game_in_user_uttr: {found_video_game_in_user_uttr}")
     found_video_game_in_user_uttr = bool(found_video_game_in_user_uttr)
-    found_video_game_in_bot_uttr = GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN.search(
-        prev_bot_uttr.get("text", "").lower())
+    found_video_game_in_bot_uttr = find_games_in_text(prev_bot_text)
     logger.info(
         f"(switch_to_particular_game_discussion)found_video_game_in_bot_uttr: {found_video_game_in_bot_uttr}")
     found_video_game_in_bot_uttr = bool(found_video_game_in_bot_uttr)
@@ -43,10 +43,16 @@ def switch_to_particular_game_discussion(vars):
         "?" not in user_text and "?" in prev_bot_text and found_video_game_in_user_uttr)
     bot_asked_about_game_and_user_answered_yes = (
         found_video_game_in_bot_uttr and "?" in prev_bot_text and is_yes(user_uttr))
-    return lets_talk_about(vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
+    flag = lets_talk_about(vars, GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
         or choose_particular_game \
         or question_answer_contains_video_game \
         or bot_asked_about_game_and_user_answered_yes
+    logger.info(f"switch_to_particular_game_discussion={flag}")
+    return flag
+
+
+def is_question_about_games(text):
+    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text.lower())) and "?" in text
 
 
 def switch_to_general_gaming_discussion(vars):
@@ -55,17 +61,16 @@ def switch_to_general_gaming_discussion(vars):
     prev_bot_uttr = state_utils.get_last_bot_utterance(vars)
     prev_bot_text = prev_bot_uttr.get("text", "")
     found_video_game_words_in_user_uttr = bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(user_text))
-    found_video_game_words_in_bot_uttr = bool(
-        VIDEO_GAME_WORDS_COMPILED_PATTERN.search(prev_bot_uttr.get("text", "").lower()))
     choose_gaming_discussion = if_choose_topic(user_uttr, prev_bot_uttr) and found_video_game_words_in_user_uttr
     question_answer_contains_video_game_words = (
         "?" not in user_text and "?" in prev_bot_text and found_video_game_words_in_user_uttr)
-    bot_asked_about_game_and_user_answered_yes = (
-        found_video_game_words_in_bot_uttr and "?" in prev_bot_text and is_yes(user_uttr))
-    return lets_talk_about(vars, VIDEO_GAME_WORDS_COMPILED_PATTERN) \
+    bot_asked_about_game_and_user_answered_yes = is_yes(user_uttr) and is_question_about_games(prev_bot_text)
+    flag = lets_talk_about(vars, VIDEO_GAME_WORDS_COMPILED_PATTERN) \
         or choose_gaming_discussion \
         or question_answer_contains_video_game_words \
         or bot_asked_about_game_and_user_answered_yes
+    logger.info(f"switch_to_general_gaming_discussion={flag}")
+    return flag
 
 
 def islambda(v):

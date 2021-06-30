@@ -65,6 +65,7 @@ def get_dialog_state(dialogflow):
     age_group = agent["age_group"]
     disliked_skills = agent["disliked_skills"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
+    response_parts = agent.get("response_parts", [])
     history[str(human_utter_index)] = dialogflow.controller().vars()["__system_state__"]
     state = {
         "shared_memory": agent["shared_memory"],
@@ -75,7 +76,7 @@ def get_dialog_state(dialogflow):
     del dialogflow.controller().vars()["agent"]
     state["dialogflow_state"] = dialogflow.serialize()
     logger.debug(f"state={state}")
-    return state, dff_shared_state, used_links, age_group, disliked_skills
+    return state, dff_shared_state, used_links, age_group, disliked_skills, response_parts
 
 
 def run_turn(dialogflow, text):

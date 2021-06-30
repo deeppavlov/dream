@@ -9,7 +9,7 @@ OPINION_REQUESTS_ABOUT_FOOD = ["Do you like cooking?",
 FOOD_WORDS = r"(food|cook|cooking|\bbake\b|baking|cuisine|daily bread|meals|foodstuffs" \
     r"|edibles|drink|pepperoni|pizza|strawberries|chocolate|coffee|\beat\b|\bate\b" \
     r"|\beating\b|\beats\b|dinner|breakfast|\bpasta\b|burger|cheese|tasty|" \
-    r"waffles|banana|\bfries\b|\bdairy\b)"
+    r"waffles|banana|\bfries\b|\bdairy\b|\bfrench fries\b)"
 
 FOOD_UTTERANCES = r"(do you know .* most (favorite|favourite) food" \
     r"|.*what is your (favorite|favourite) food" \
@@ -66,6 +66,15 @@ ACKNOWLEDGEMENTS = {
     "cuisine": "I think you're just being humble.",
     "fav_food_cook": "Okay. Just give it a chance. Hope you will enjoy it!"
 }
+
+FOOD_FACT_ACKNOWLEDGEMENTS = [
+    "Your taste in food is so exquisite! I like ENTITY too. ",
+    "Great choice! I'm okay with ENTITY. ",
+    "Your have a good taste! ENTITY is awesome. ",
+    "Wow! We are food soulmates! I enjoy eating ENTITY every time. ",
+    "Mmm, ENTITY. You're a gourmet! ",
+    "ENTITY. Yummy! I love it too. "
+]
 
 
 def skill_trigger_phrases():

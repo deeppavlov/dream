@@ -79,9 +79,9 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
                                       r"speaking|chatter|chitchat|chit chat)",
              f"tell {ANY_WORDS}"]
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
-             "gonna", "will", "can", "could", "plan to", "in need to", "demand", "want to"]
+             "gonna", "will", "can", "could", "plan to", "in need to", "demand", "want to", "care to"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "that", "everything"]
+SOMETHING_LIKE = ["anything", "something", "that", "everything", "thing"]
 NOTHING_LIKE = ["nothing", "none", "neither"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
 KNOW_LIKE = ["know", "learn", "find out"]
@@ -180,6 +180,8 @@ LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
 NOT_LIKE_PATTERN = re.compile(
     rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
     re.IGNORECASE)
+
+STOP_PATTERN = re.compile(r"(stop|shut|something else|change|don't want)", re.IGNORECASE)
 
 
 def if_lets_chat(uttr):
@@ -366,7 +368,7 @@ def tell_me_more(annotated_uttr):
     return cond1 or cond2
 
 
-QUESTION_BEGINNINGS = QUESTION_LIKE + [
+QUESTION_BEGINNINGS = [
     r"what'?s?", "when", "where", "which", r"who'?s?", "whom", "whose", r"how'?s?", "why", "whether",
     "do (i|we|you|they)", "does (it|he|she)", "have (i|we|you|they)", "has (it|he|she)",
     "can (i|it|we|you|they)", "could (i|it|we|you|they)", "shall (i|we|you|they)", "should (i|it|we|you|they)",
@@ -473,28 +475,40 @@ MY_FRIENDS_TEMPLATE = re.compile(r"my \b(friend|buddy|buddies|homie|homey|mate\b
 NO_FRIENDS_TEMPLATE = re.compile(r"(have )?(not|n't|no) (have )?(got )?(any )?(true |real |sincere )?"
                                  r"(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE)
 
-DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art|drawing|painting|meme)(s)?\b", re.IGNORECASE),
+DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art(s|work)?|draw(s|ed|ing)?|paint(s|ed|ing)?|meme)(s)?\b",
+                                        re.IGNORECASE),
                       "chill": re.compile(r"\b(chill|rest|relax)", re.IGNORECASE),
                       "sleep": re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE),
                       "school": re.compile(r"(school|home work|homework|study)", re.IGNORECASE),
                       "work": re.compile(r"\bwork(ed|s|ing)?\b", re.IGNORECASE),
                       "family": r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
                                 r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)",
-                      "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet)\b", re.IGNORECASE),
-                      "friends": re.compile(r"\b(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE),
+                      "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet(s)?)\b", re.IGNORECASE),
+                      "friends": re.compile(r"\b(friend|buddy|buddies|homie|homey|mate(s)?\b)", re.IGNORECASE),
                       "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b", re.IGNORECASE),
                       "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b", re.IGNORECASE),
                       "dinosaurs": re.compile(r"\b(dinosaur)", re.IGNORECASE),
                       "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b", re.IGNORECASE),
-                      "cars": re.compile(r"\b(car(s)?|automobile(s)?)\b", re.IGNORECASE),
-                      "hiking": re.compile(r"\bhiking\b", re.IGNORECASE),
+                      "cars": re.compile(r"\b(car(s)?|automobile(s)?|driv(e|ed|es|ing)|auto(s)?)\b", re.IGNORECASE),
+                      "hiking": re.compile(r"\b(hiking|mountain(s)?)\b", re.IGNORECASE),
                       "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE),
                       "anime": re.compile(r"\banime\b|\bpokemon\b", re.IGNORECASE),
                       "love": re.compile(r"(\blove\b|\blovers?\b|\bbeloved\b|relations?|relationships?|girlfriend"
                                          r"|boyfriend|\bgirls\b|\bboys\b|\bdating\b|\bdates\b"
                                          r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)", re.IGNORECASE),
                       "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
-                      "politics": re.compile(r"(politic|democra|republic|president|\btrump\b|\bbyden\b"
+                      "politics": re.compile(r"\b(politic|democra|republi|liber|president|trump\b|byden\b"
                                              r"|authoritarianism|monarch)",
-                                             re.IGNORECASE),
+                                             re.IGNORECASE)
                       }
+
+HEALTH_PROBLEMS = re.compile(
+    r"\b(broke|health problem|death|dead\b|ache|disease|illnes|ill\b|sickness|sick\b|shoot|chopped off)",
+    re.IGNORECASE)
+
+LETS_GET_BACK_TO_TOPIC = [
+    "But can we get back on topic, please?",
+    "Let's get back on topic.",
+    "Let's get back to our topic.",
+    "Back on topic,",
+]

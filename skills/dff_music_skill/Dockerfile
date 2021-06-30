@@ -19,6 +19,12 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 
+RUN python -m spacy download en
+RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download en_core_web_md
+RUN python -m nltk.downloader vader_lexicon
+RUN python -m nltk.downloader punkt
+
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
 

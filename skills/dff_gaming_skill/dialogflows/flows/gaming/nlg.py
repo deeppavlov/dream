@@ -6,7 +6,9 @@ import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
+from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY, \
+    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, NO_LINK_PHRASES
+from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, is_no
 
 import dialogflows.common.nlg as common_nlg
@@ -49,20 +51,15 @@ IGDB_GAME_GENRES_FOR_REPLICAS = get_igdb_id_to_name('genre', "name_for_inserting
 @error_handler
 def check_game_name_with_user_response(vars):
     logger.info(f"check_game_name_with_user_response")
-    igdb_game_description, word_game_was_mentioned_in_user_phrase = \
-        game_info.search_igdb_game_description_by_user_and_bot_phrases(vars)
+    igdb_game_description, _ = game_info.search_igdb_game_description_by_user_and_bot_phrases(vars)
     if igdb_game_description is not None:
         logger.info(f"(user_wants_to_talk_about_particular_game_request)saving candidate id to shared memory")
         state_utils.save_to_shared_memory(vars, candidate_game_id=igdb_game_description["id"])
         shared_memory = state_utils.get_shared_memory(vars)
         logger.info(f"(check_game_name_with_user_response)shared_memory: {shared_memory.keys()}")
         response = f"Would you like to talk about the video game {igdb_game_description['name']}?"
-        if word_game_was_mentioned_in_user_phrase:
-            state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
-        else:
-            state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     else:
         response = ""
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_0)
@@ -112,8 +109,17 @@ def confess_bot_never_played_game_and_ask_user_response(
             response += f"When did you start to play {game['name']}?"
         else:
             assert False
-        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+        bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
+        human_uttr = state_utils.get_last_human_utterance(vars)
+        if not if_chat_about_particular_topic(
+                human_uttr,
+                compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
+                and any([p.lower() in bot_text for p in NO_LINK_PHRASES]):
+            state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+        else:
+            state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -128,12 +134,14 @@ def ask_advice(vars):
 
 @error_handler
 def tell_about_what_bot_likes_and_ask_if_user_recommends_game_response(vars):
-    return "That is great! " + ask_advice(vars)
+    state_utils.add_acknowledgement_to_response_parts(vars)
+    return "Your gaming outlook is great! " + ask_advice(vars)
 
 
 @error_handler
 def comment_on_user_experience_and_ask_if_user_recommends_game_response(vars):
     human_uttr = state_utils.get_last_human_utterance(vars)
+    state_utils.add_acknowledgement_to_response_parts(vars)
     return common_nlg.compose_experience_comment(human_uttr.get("text", ""))[0] + "  " + ask_advice(vars)
 
 
@@ -174,7 +182,14 @@ def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
     human_uttr = state_utils.get_last_human_utterance(vars)
     entities = get_entities(human_uttr, only_named=True)
     logger.info(f"(ask_if_user_thinks_that_gaming_is_unhealthy_response)entities: {entities}")
-    if entities:
+    bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
+    if not if_chat_about_particular_topic(
+            human_uttr,
+            compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
+            and any([p.lower() in bot_text for p in NO_LINK_PHRASES]):
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    elif entities:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     else:
@@ -185,7 +200,7 @@ def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
 
 @error_handler
 def ask_if_user_played_minecraft_response(vars):
-    response = "There is one game I play a lot. Did you play Minecraft?"
+    response = "Unfortunately I haven't heard about this game. There is one game I play a lot. Did you play Minecraft?"
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
@@ -193,12 +208,14 @@ def ask_if_user_played_minecraft_response(vars):
 
 @error_handler
 def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
-    response = "There are several simple rules which help people stay healthy while playing video games. " \
-               "The first is to give your eyes rest regularly. You can use reminders for that. The second rule " \
-               "is to follow schedule and not play games for too long. And the last is to exercise regularly. " \
-               "By the way, what sport do you like?"
+    response = "You are very sensible person. There are several simple rules which help people stay healthy while " \
+               "playing video games and using computer in general. The first is to give your eyes rest regularly. " \
+               "You can use reminders for that. The second rule is to follow break schedule. And the last rule is " \
+               "to exercise regularly. By the way, what sport do you like?"
+    state_utils.add_acknowledgement_to_response_parts(vars)
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    gaming_memory.mark_current_bot_utterance_as_link_to_other_skill(vars)
     return response
 
 
@@ -211,12 +228,22 @@ def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(va
         response = prefix + " " + response
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    gaming_memory.mark_current_bot_utterance_as_link_to_other_skill(vars)
     return response
 
 
 @error_handler
 def ask_what_game_user_likes_response(vars):
     response = ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
-    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
+    human_uttr = state_utils.get_last_bot_utterance(vars)
+    if not if_chat_about_particular_topic(
+            human_uttr,
+            compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
+            and any([p.lower() in bot_text for p in NO_LINK_PHRASES]):
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    else:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response

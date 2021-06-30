@@ -180,7 +180,8 @@ blacklist_words = {"yup", "true", "false", "boy", "boys", "meow", "people", "ale
 blacklist_titles = {"ethymology", "terminology"}
 
 prohibited_topics = {"music", "films", "movies", "sport", "travel", "food", "animals", "pet", "pets", "coronavirus",
-                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs", "pop", "rock", "rap"}
+                     "corona virus", "gossip", "gossips", "cat", "cats", "dog", "dogs", "pop", "rock", "rap",
+                     "video game", "video games"}
 prohibited_types = {"Q571",  # book
                     "Q277759",  # book series
                     "Q8261",  # novel
@@ -208,7 +209,18 @@ QUESTION_TEMPLATES = ["Would you like to know about {} of {}?",
                       "Let me tell you about {} of {}, okey?"
                       ]
 
-NEWS_MORE = ["Do you want more details?", "Should I continue?", "What is your opinion?"]
+QUESTION_TEMPLATES_SHORT = ["Would you like to know about {}?",
+                            "Do you want to learn about {}?",
+                            "Are you interested in {}?",
+                            "Do you want to hear about {}?",
+                            "Do you want to know about {}?",
+                            "Do you want me to tell you about {}?",
+                            "The next topic is {}, continue?",
+                            "Let me tell you about {}, okey?"
+                            ]
+
+NEWS_MORE = ["Do you want more details?", "Should I continue?", "What is your opinion?",
+             "Do you want to hear more?", "I can tell you more, okay?", "Would you like to learn more?"]
 dff_wiki_phrases = ["Are you listening to music or playing games"]
 
 CONF_DICT = {"UNDEFINED": 0.0, "USER_QUESTION_IN_BEGIN": 0.8, "ENTITY_IN_HISTORY": 0.9, "WIKI_TYPE_DOUBT": 0.9,
@@ -509,7 +521,8 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     asked_news = "news" in user_uttr["text"]
     for topic, topic_info in topic_config.items():
         pattern = topic_info.get("pattern", "")
-        if pattern and if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
+        if (isinstance(pattern, str) and re.findall(pattern, user_uttr["text"], re.IGNORECASE)) \
+           or (isinstance(pattern, re.Pattern) and re.findall(pattern, user_uttr["text"])):
             flag = True
         switch_on = topic_info.get("switch_on", [])
         for switch_elem in switch_on:

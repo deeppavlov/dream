@@ -442,6 +442,8 @@ def best_plain_book_by_author(plain_author_name, default_phrase, plain_last_book
                 if len(filtered_bookname_list) < top_n_best_books:
                     if last_bookname.lower() not in entity_to_label(book).lower():
                         filtered_bookname_list.append(book)
+                        if len(filtered_bookname_list) >= top_n_best_books:
+                            break
             if len(filtered_bookname_list) > 0:
                 best_bookname = random.choice(filtered_bookname_list)
         logger.debug(f'Answer for best_plain_book_by_author {best_bookname}')
@@ -649,3 +651,14 @@ WHAT_TEMPLATE = re.compile(r"what (is|it)", re.IGNORECASE)
 
 def asked_what(annotated_user_phrase):
     return re.search(WHAT_TEMPLATE, annotated_user_phrase['text'])
+
+
+def set_favourite(human_attr, index, FAVOURITE_BOOK_ATTRS, FAVOURITE_BOOK_ANSWERS):
+    plain_book, n_years_ago, book, author = FAVOURITE_BOOK_ATTRS[index]
+    fav_book_phrases = FAVOURITE_BOOK_ANSWERS[index]
+    human_attr['book_skill']['plain_book'] = plain_book
+    human_attr['book_skill']['n_years_ago'] = n_years_ago
+    human_attr['book_skill']['book'] = book
+    human_attr['book_skill']['author'] = author
+    human_attr['book_skill']['fav_book_phrases'] = fav_book_phrases
+    return human_attr

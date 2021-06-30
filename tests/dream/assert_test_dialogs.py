@@ -42,6 +42,7 @@ SPECIAL_SKILLS = {
         "dff_gossip_skill",
         "dff_science_skill",
         "dff_travel_skill",
+        "dff_wiki_skill",
         "game_cooperative_skill",
     ],
 }

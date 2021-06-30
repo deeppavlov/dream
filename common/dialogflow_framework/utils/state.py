@@ -1,5 +1,6 @@
 import logging
 import os
+import random
 
 import common.constants as common_constants
 import common.news as common_news
@@ -69,6 +70,46 @@ def set_cross_link(
             **cross_link_additional_data,
         }
     }
+
+
+def reset_response_parts(vars):
+    if "response_parts" in vars["agent"]:
+        del vars["agent"]["response_parts"]
+
+
+def add_parts_to_response_parts(vars, parts=[]):
+    response_parts = set(vars["agent"].get("response_parts", []))
+    response_parts.update(parts)
+    vars["agent"]["response_parts"] = list(response_parts)
+
+
+def set_acknowledgement_to_response_parts(vars):
+    reset_response_parts(vars)
+    add_parts_to_response_parts(vars, parts=["acknowledgement"])
+
+
+def add_acknowledgement_to_response_parts(vars):
+    if vars["agent"].get("response_parts") is None:
+        add_parts_to_response_parts(vars, parts=["body"])
+    add_parts_to_response_parts(vars, parts=["acknowledgement"])
+
+
+def set_body_to_response_parts(vars):
+    reset_response_parts(vars)
+    add_parts_to_response_parts(vars, parts=["body"])
+
+
+def add_body_to_response_parts(vars):
+    add_parts_to_response_parts(vars, parts=["body"])
+
+
+def set_prompt_to_response_parts(vars):
+    reset_response_parts(vars)
+    add_parts_to_response_parts(vars, parts=["prompt"])
+
+
+def add_prompt_to_response_parts(vars):
+    add_parts_to_response_parts(vars, parts=["prompt"])
 
 
 def get_shared_memory(vars):
@@ -220,3 +261,18 @@ def get_facts_from_fact_retrieval(vars):
         elif isinstance(annotations["fact_retrieval"], list):
             return annotations["fact_retrieval"]
     return []
+
+
+def get_unrepeatable_index_from_rand_seq(vars, seq_name, seq_max, renew_seq_if_empty=False):
+    """Return a unrepeatable index from RANDOM_SEQUENCE.
+    RANDOM_SEQUENCE is stored in shared merory by name `seq_name`.
+    RANDOM_SEQUENCE is shuffled [0..`seq_max`].
+    RANDOM_SEQUENCE will be updated after index will get out of RANDOM_SEQUENCE if `renew_seq_if_empty` is True
+    """
+    shared_memory = get_shared_memory(vars)
+    seq = shared_memory.get(seq_name, random.sample(list(range(seq_max)), seq_max))
+    if renew_seq_if_empty or seq:
+        seq = seq if seq else random.sample(list(range(seq_max)), seq_max)
+        next_index = seq[-1] if seq else None
+        save_to_shared_memory(vars, **{seq_name: seq[:-1]})
+        return next_index

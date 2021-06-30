@@ -65,12 +65,13 @@ def base_skill_selector_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: convert
+    dialog_20 = utils.get_last_n_turns(dialog, bot_last_turns=20)
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [
         {
-            "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
+            "utterances_histories": [[utt["text"] for utt in dialog_20["utterances"]]],
             "personality": [dialog["bot"]["persona"]],
             "num_ongoing_utt": [utils.count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")],
             "human_attributes": [dialog["human"]["attributes"]],
@@ -725,7 +726,7 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_wiki_skill"
-    return utils.dff_formatter(dialog, service_name, human_last_turns=5, bot_last_turns=5,
+    return utils.dff_formatter(dialog, service_name,
                                used_annotations=["cobot_entities", "cobot_nounphrases", "entity_linking",
                                                  "factoid_classification", "wiki_parser", "cobot_topics",
                                                  "news_api_annotator"])

@@ -18,7 +18,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, find_by, \
     best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, if_loves_reading, \
     my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request, \
-    asked_what
+    asked_what, set_favourite
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -44,14 +44,30 @@ ACKNOWLEDGE_AUTHOR = "AUTHOR is a wonderful writer."
 WHEN_IT_WAS_PUBLISHED = "Do you know when it was first published?"
 OFFER_FACT_ABOUT_BOOK = "Would you like to know some facts about it?"
 OFFER_FACT_DID_NOT_FIND_IT = "Sorry, I suggested the fact but can not find it now."
-PROPOSE_FAVOURITE_BOOK = 'Do you want to know what my favourite book is?'
+FAVOURITE_BOOK_PHRASES = ["Do you want to know what my favourite book is?",
+                          "Do you want to know what my other favourite book is?",
+                          "Do you want to hear about one more book that impressed me?"]
 DID_NOT_EXIST = ["I didn't exist in that time.", "It is so far away from us!"]
 BOOK_ANY_PHRASE = "I see you can't name it. Could you please name any book you have read?"
 FAVOURITE_GENRE_ANSWERS = list(GENRE_PHRASES.values())
-FAVOURITE_BOOK_ANSWERS = [f'My favourite book is "The catcher in the rye" by Jerome David Salinger. {TELL_REQUEST}',
-                          f'The novel "The catcher in the rye" tells the story of a teenager '
-                          f'who has been kicked out of a boarding school.'
-                          f'This is my favourite story, it is truly fascinating. {TELL_REQUEST2}']
+CURRENT_YEAR = datetime.datetime.today().year
+FAVOURITE_BOOK_ANSWERS = [[f'My favourite book is "The catcher in the rye" by Jerome David Salinger. {TELL_REQUEST}',
+                           f'The novel "The catcher in the rye" tells the story of a teenager '
+                           f'who has been kicked out of a boarding school.'
+                           f'This is my favourite story, it is truly fascinating. {TELL_REQUEST2}'],
+                          [f'My other favourite book is "The NeverEnding Story" by Michael Ende. {TELL_REQUEST}',
+                           f'The "NeverEnding Story" tells the story of a troubled young boy Bastien '
+                           f'who escapes some pursuing bullies in an old book shop. '
+                           f'While he reads the book, he suddenly moves into the world described there, '
+                           f'as the only one who can save it. {TELL_REQUEST2}'],
+                          [f'I was really impressed by the book "The Little Prince" '
+                           f'by Antoine de Saint-Exupéry. {TELL_REQUEST}',
+                           f'The Little Prince is a poetic tale, with watercolor illustrations by the author, '
+                           f'in which a pilot stranded in the desert meets a young prince '
+                           f'visiting Earth from a tiny asteroid. {TELL_REQUEST2}']]
+FAVOURITE_BOOK_ATTRS = [['Q183883', CURRENT_YEAR - 1951, "The Catcher in the Rye", "Jerome Salinger"],
+                        ['Q463108', CURRENT_YEAR - 1979, "The NeverEnding Story", "Michael Ende"],
+                        ['Q25338', CURRENT_YEAR - 1943, "The Little Prince", "Antoine de Saint-Exupéry"]]
 WHAT_IS_FAV_GENRE = 'I have read a plenty of books from different genres. What book genre do you like?'
 HAVE_YOU_READ_BOOK = f'Amazing! Have you read '
 BIBLE_RESPONSES = ["I know that Bible is one of the most widespread books on the Earth. "
@@ -71,7 +87,6 @@ REPEAT_PHRASE = "Could you repeat it, please?"
 DONT_KNOW_EITHER = "I don't know either. Let's talk about something else."
 BOOK_SKILL_QUESTIONS = [BOOK_ANY_PHRASE, LAST_BOOK_READ, WHAT_BOOK_IMPRESSED_MOST]
 QUESTIONS_ABOUT_BOOK = BOOK_SKILL_QUESTIONS + BOOK_SKILL_CHECK_PHRASES + ALL_LINKS_TO_BOOKS
-CURRENT_YEAR = datetime.datetime.today().year
 
 
 class BookSkillScenario:
@@ -87,14 +102,19 @@ class BookSkillScenario:
 
     def book_linkto_reply(self, reply, human_attr, default_phrases=[]):
         not_asked_genre = not human_attr['book_skill'].get('we_asked_genre', False)
-        not_named_fav = not human_attr['book_skill'].get('named_favourite', False)
+        not_denied_fav = not human_attr['book_skill'].get('denied_favourite', False)
         not_met_reply = reply not in default_phrases
         if not_asked_genre and not_met_reply:
             reply = f"{reply} {WHAT_IS_FAV_GENRE}"
             human_attr['book_skill']['we_asked_genre'] = True
-        elif not_named_fav and not_met_reply:
-            reply = f'{reply} {PROPOSE_FAVOURITE_BOOK}'
-            human_attr['book_skill']['named_favourite'] = True
+        elif not_denied_fav and not_met_reply:
+            for i, favourite_book_question in enumerate(FAVOURITE_BOOK_PHRASES):
+                if all([favourite_book_question not in human_attr['book_skill']['used_phrases'],
+                        FAVOURITE_BOOK_ANSWERS[i][0] not in human_attr['book_skill']['used_phrases']]):
+                    logger.info(f"{favourite_book_question} {human_attr['book_skill']['used_phrases']}")
+                    reply = f'{reply} {favourite_book_question}'
+                    set_favourite(human_attr, i, FAVOURITE_BOOK_ATTRS, FAVOURITE_BOOK_ANSWERS)
+                    break
         elif all([WHAT_BOOK_IMPRESSED_MOST not in j for j in human_attr['book_skill']['used_phrases']]):
             reply = f'{reply} {WHAT_BOOK_IMPRESSED_MOST}'
         return reply
@@ -123,10 +143,15 @@ class BookSkillScenario:
 
     def fav_book_request_detected(self, annotated_user_phrase, last_bot_phrase, human_attr):
         user_asked_favourite_book = re.search(favorite_book_template, annotated_user_phrase["text"])
+        fav_book_beginnings = [j[0] for j in FAVOURITE_BOOK_ANSWERS] + FAVOURITE_BOOK_PHRASES
         bot_proposed_favourite_book = any([k in last_bot_phrase
-                                           for k in [PROPOSE_FAVOURITE_BOOK, FAVOURITE_BOOK_ANSWERS[0]]])
+                                           for k in fav_book_beginnings])
         not_finished = FAVOURITE_BOOK_ANSWERS[1] not in human_attr['book_skill']['used_phrases']
         user_agreed = is_yes(annotated_user_phrase)
+        user_disagreed = is_no(annotated_user_phrase)
+        if bot_proposed_favourite_book and user_disagreed:
+            human_attr['book_skill']['denied_favourite'] = True
+            return False
         user_asked_what = asked_what(annotated_user_phrase)
         return any([user_asked_favourite_book,
                     user_asked_what,
@@ -359,15 +384,13 @@ class BookSkillScenario:
                 elif self.fav_book_request_detected(annotated_user_phrase, bot_phrases[-1], human_attr):
                     # if user asked us about favorite book
                     logger.debug('Detected favorite book request')
-                    if FAVOURITE_BOOK_ANSWERS[0] not in human_attr['book_skill']['used_phrases']:
-                        human_attr['book_skill']['named_favourite'] = True
-                        reply = FAVOURITE_BOOK_ANSWERS[0]
-                        human_attr['book_skill']['plain_book'] = 'Q183883'
-                        human_attr['book_skill']['n_years_ago'] = CURRENT_YEAR - 1951
-                        human_attr['book_skill']['book'] = "The Catcher in the Rye"
-                        human_attr['book_skill']['author'] = "Jerome Salinger"
+                    if 'fav_book_phrases' not in human_attr['book_skill']:
+                        set_favourite(human_attr, 0, FAVOURITE_BOOK_ATTRS, FAVOURITE_BOOK_ANSWERS)
+                    favourite_book_answers = human_attr['book_skill']['fav_book_phrases']
+                    if favourite_book_answers[0] not in human_attr['book_skill']['used_phrases']:
+                        reply = favourite_book_answers[0]
                     else:
-                        reply = FAVOURITE_BOOK_ANSWERS[1]
+                        reply = favourite_book_answers[1]
                         # TODO in next PRs: behave proactively about this book, propose to discuss it next
                     confidence = self.super_conf
                 elif START_PHRASE in bot_phrases[-1]:
@@ -442,11 +465,11 @@ class BookSkillScenario:
                     logger.debug('Amazing! Have HAVE_YOU_READ_BOOK in last bot phrase')
                     if tell_me_more(annotated_user_phrase) and bookname in self.bookreads_books:
                         reply = tell_about_genre_book(bookname, self.bookreads_data)
-                        if not human_attr['book_skill'].get('named_favourite', False) and reply:
-                            reply = f'{reply} {PROPOSE_FAVOURITE_BOOK}'
-                            confidence = self.super_conf
-                        else:
+                        new_reply = self.book_linkto_reply(reply, human_attr)
+                        if new_reply == reply:
                             reply = exit_skill(reply, human_attr)
+                        else:
+                            reply = new_reply
                             confidence = self.default_conf
                     elif is_no(annotated_user_phrase) or havent_read(annotated_user_phrase):
                         logger.debug('intent NO detected')
@@ -457,11 +480,7 @@ class BookSkillScenario:
                                                                   OPINION_REQUEST_ON_BOOK_PHRASES)
                     else:
                         logger.debug('No intent detected. Returning nothing')
-                        if not any([PROPOSE_FAVOURITE_BOOK in phrase
-                                    for phrase in human_attr['book_skill']['used_phrases']]):
-                            reply, confidence = PROPOSE_FAVOURITE_BOOK, self.default_conf
-                        else:
-                            reply, confidence = '', 0
+                        reply, confidence = self.book_linkto_reply('', human_attr), self.default_conf
                 elif len(bot_phrases) >= 1 and any([k in bot_phrases[-1] for k in [TELL_REQUEST, TELL_REQUEST2]]):
                     # We have offered information about book
                     plain_bookname = human_attr['book_skill'].get('plain_book', '')
@@ -471,13 +490,7 @@ class BookSkillScenario:
                         logger.debug('Tell_me_more or is_yes and bookname')
                         reply = tell_about_genre_book(bookname, self.bookreads_data)
                         if reply:
-                            new_reply = self.book_linkto_reply(reply, human_attr)
-                            if new_reply == reply:
-                                logger.debug('We are over - finish')
-                                reply = exit_skill(reply, human_attr)
-                                confidence = self.default_conf
-                            else:
-                                reply, confidence = new_reply, self.default_conf
+                            reply, confidence = self.book_linkto_reply(reply, human_attr), self.default_conf
                         elif plain_bookname:
                             book_fact = what_is_book_about(plain_bookname)
                             if book_fact:
@@ -495,8 +508,13 @@ class BookSkillScenario:
                             confidence = self.default_conf
                     elif is_no(annotated_user_phrase):
                         reply = 'OK, as you wish.'
-                        reply = exit_skill(reply, human_attr)
-                        confidence = self.low_conf
+                        new_reply = self.book_linkto_reply(reply, human_attr)
+                        if new_reply == reply:
+                            logger.debug('We are over - finish')
+                            reply = exit_skill(reply, human_attr)
+                            confidence = self.default_conf
+                        else:
+                            reply, confidence = new_reply, self.default_conf
                     else:
                         reply, confidence = '', 0
                 elif about_book(annotated_user_phrase):

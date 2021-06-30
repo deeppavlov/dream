@@ -1,12 +1,14 @@
 import logging
 import os
 import random
+import re
 
 import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
 import common.gaming as common_gaming
+from common.universal_templates import if_chat_about_particular_topic
 
 import dialogflows.common.nlg as common_nlg
 from dialogflows.common import shared_memory_ops
@@ -25,10 +27,20 @@ MINECRAFT_HOW_TOS = common_gaming.load_json(os.getenv("MINECRAFT_HOW_TOS"))
 def ask_user_when_he_started_to_play_minecraft_response(vars, candidate_game_id_is_already_set):
     shared_memory_ops.set_current_igdb_game_id_if_game_for_discussion_is_identified(
         vars, candidate_game_id_is_already_set)
-    response = f"Cool! Minecraft is the best game ever! I dived into the game right after I was created. "\
+    response = f"Perfect taste! Minecraft is the best game ever! I dived into the game right after I was created. "\
         f"And what about you? When did you start to play Minecraft?"
-    state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    human_uttr = state_utils.get_last_human_utterance(vars)
+    bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
+    state_utils.add_acknowledgement_to_response_parts(vars)
+    if not if_chat_about_particular_topic(
+            human_uttr,
+            compiled_pattern=re.compile("minecraft", flags=re.I)) \
+            and any([p.lower() in bot_text.lower() for p in common_gaming.NO_LINK_PHRASES]):
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+    else:
+        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -49,6 +61,7 @@ def tell_how_to(vars, must_continue=True):
 
 @error_handler
 def ask_if_user_wants_to_know_how_to_response(vars, must_continue=True):
+    state_utils.add_acknowledgement_to_response_parts(vars)
     return "I know another cool thing. " + tell_how_to(vars, must_continue)
 
 
@@ -57,6 +70,7 @@ def comment_on_user_experience_and_ask_if_user_wants_to_know_how_to_response(var
     uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
     experience_comment, time_detected = common_nlg.compose_experience_comment(uttr_text)
     do_you_want_how_to = tell_how_to(vars, must_continue=time_detected)
+    state_utils.add_acknowledgement_to_response_parts(vars)
     return experience_comment \
         + " During one of my hacks into Minecraft I discovered a secret trick. " \
         + do_you_want_how_to
@@ -137,4 +151,6 @@ def praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_respons
     else:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_0)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
+    shared_memory_ops.mark_current_bot_utterance_as_link_to_other_skill(vars)
+    state_utils.add_acknowledgement_to_response_parts(vars)
     return response

@@ -570,7 +570,10 @@ def respond():
                 else:
                     curr_attributes.append(attr)
                     curr_confidences.append(max(0.0, confidence))
-                    curr_responses.append(re.sub(r'\s([?.!",;:](?:\s|$))', r'\1', add_intro + raw_responses[curr_i]))
+                    curr_responses.append(
+                        re.sub(r'\s([?.!",;:](?:\s|$))', r'\1',
+                               add_intro + raw_responses[curr_i]).replace(" ' t", "'t")
+                    )
             attributes.append(curr_attributes)
             confidences.append(curr_confidences)
             responses.append(curr_responses)

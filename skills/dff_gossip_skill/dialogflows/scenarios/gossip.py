@@ -5,11 +5,12 @@ TOPIC_TO_EVENT_QUESTIONS = [
 ]
 
 EVENT_TO_PERSON_QUESTIONS = [
-    "Well usually I don't like talking about people but... target_person, you know, "
+    "You have a great taste! Well usually I don't like talking about people but... target_person, you know, "
     "is quite an target_judgement target_occupation.",
-    "Now, well, it's not in my habit to talk about people but... this target_person, yeah, is a rather "
-    "target_judgement target_occupation.",
-    "So, huh, usually I'm not that into target_occupations but target_person, well, piqued my interest. "
+    "You interests are quite sound to me! Now, well, it's not in my habit to talk about people but... "
+    "this target_person, yeah, is a rather target_judgement target_occupation.",
+    "We have so much in common! So, huh, usually I'm not that into target_occupations "
+    "but target_person, well, piqued my interest. "
     "target_judgement target_occupation.",
 ]
 

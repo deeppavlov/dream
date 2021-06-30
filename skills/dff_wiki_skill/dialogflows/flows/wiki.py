@@ -20,7 +20,7 @@ from common.wiki_skill import CONF_DICT, NEWS_MORE
 from common.insert_scenario import get_page_content, get_wikihow_content, get_page_title, make_facts_str, get_titles, \
     questions_by_entity_substr, wikihowq_by_substr, preprocess_wikipedia_page, preprocess_wikihow_page
 from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
-    facts_response
+    facts_response, delete_topic_info
 from common.news import get_news_about_topic
 from common.wiki_skill_scenarios import topic_config
 
@@ -46,8 +46,8 @@ ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
 found_pages_dict = {}
 facts_memory = {}
 
-with open("page_dict.json", 'r') as fl:
-    cache_page_dict = json.load(fl)
+with open("wikipedia_cache.json", 'r') as fl:
+    wikipedia_cache = json.load(fl)
 
 with open("wikihow_cache.json", 'r') as fl:
     wikihow_cache = json.load(fl)
@@ -71,7 +71,7 @@ def special_topic_facts_request(ngrams, vars):
 
 
 def special_topic_facts_response(vars):
-    response = facts_response(vars, topic_config, wikihow_cache)
+    response = facts_response(vars, topic_config, wikihow_cache, wikipedia_cache)
     return response
 
 
@@ -378,7 +378,7 @@ def tell_fact_response(vars):
                     f"found_entity_types {found_entity_types}")
         wikipedia_page = get_page_title(vars, found_entity_substr)
         if wikipedia_page:
-            page_content, _ = get_page_content(wikipedia_page, cache_page_dict)
+            page_content, _ = get_page_content(wikipedia_page, wikipedia_cache)
             wikipedia_page_content_list = preprocess_wikipedia_page(found_entity_substr, found_entity_types,
                                                                     page_content)
             facts_memory["wikipedia_content"] = wikipedia_page_content_list
@@ -718,6 +718,7 @@ def error_response(vars):
     state_utils.save_to_shared_memory(vars, interrupted_skill="")
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     state_utils.set_confidence(vars, 0)
+    delete_topic_info(vars)
     return ""
 
 
@@ -731,7 +732,6 @@ simplified_dialog_flow.add_user_serial_transitions(
         State.SYS_NEWS_STEP: news_step_request,
         State.SYS_INTRO_Q: intro_question_request,
         State.SYS_TELL_FACT: tell_fact_request,
-        State.SYS_START_TALK: start_talk_request,
     },
 )
 
@@ -783,15 +783,6 @@ simplified_dialog_flow.add_user_serial_transitions(
 )
 
 simplified_dialog_flow.add_user_serial_transitions(
-    State.USR_START_TALK,
-    {
-        State.SYS_START_TALK: start_talk_request,
-        State.SYS_FACTOID_Q: factoid_q_request,
-        State.SYS_TELL_FACT: tell_fact_request,
-    },
-)
-
-simplified_dialog_flow.add_user_serial_transitions(
     State.USR_TELL_FACT,
     {
         State.SYS_TELL_FACT: tell_fact_request,
@@ -822,7 +813,6 @@ simplified_dialog_flow.add_system_transition(State.SYS_TELL_FACT, State.USR_TELL
 simplified_dialog_flow.add_system_transition(State.SYS_FACTOID_Q, State.USR_FACTOID_Q, factoid_q_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_MORE_DETAILED, State.USR_MORE_DETAILED,
                                              more_details_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_START_TALK, State.USR_START_TALK, start_talk_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_NEWS_STEP, State.USR_NEWS_STEP, news_step_response, )
 simplified_dialog_flow.add_system_transition(State.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
 
@@ -839,8 +829,6 @@ simplified_dialog_flow.set_error_successor(State.SYS_WIKIHOW_Q, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_WIKIHOW_Q, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_WIKIHOW_STEP, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_WIKIHOW_STEP, State.SYS_ERR)
-simplified_dialog_flow.set_error_successor(State.SYS_START_TALK, State.SYS_ERR)
-simplified_dialog_flow.set_error_successor(State.USR_START_TALK, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_MORE_DETAILED, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.USR_MORE_DETAILED, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_FACTOID_Q, State.SYS_ERR)

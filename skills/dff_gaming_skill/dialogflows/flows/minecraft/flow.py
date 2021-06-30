@@ -164,7 +164,7 @@ simplified_dialogflow.add_system_transition(
     ),
 )
 simplified_dialogflow.set_error_successor(
-    MinecraftState.SYS_USER_TELLS_ABOUT_HIS_ACHIEVEMENT_IN_MINECRAFT, MinecraftState.SYS_ERR)
+    MinecraftState.SYS_USER_DOESNT_WANT_TO_KNOW_HOW_TO, MinecraftState.SYS_ERR)
 ##############################################################
 simplified_dialogflow.add_user_serial_transitions(
     MinecraftState.USR_TELL_ABOUT_BUILDING_HOGWARTS_IN_MINECRAFT_ASK_WHAT_INTERESTING_USER_BUILT,

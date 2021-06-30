@@ -16,7 +16,7 @@ from dialogflows.common.intents import LogicalOr, user_doesnt_say_yes_request, u
     user_says_yes_request
 from dialogflows.common.nlg import error_response, link_to_other_skills_response
 from dialogflows.flows.gaming.states import State as GamingState
-from dialogflows.flows.minecraft.intents import is_game_candidate_minecraft, is_minecraft_mentioned_in_user_uttr
+from dialogflows.flows.minecraft.intents import is_game_candidate_minecraft, is_minecraft_mentioned_in_user_or_bot_uttr
 from dialogflows.flows.minecraft.states import State as MinecraftState
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -37,6 +37,11 @@ logger = logging.getLogger(__name__)
 
 simplified_dialogflow = dialogflow_extention.DFEasyFilling(GamingState.USR_START)
 ##################################################################################################################
+#  GLOBAL
+simplified_dialogflow.add_global_user_serial_transitions(
+    {(scopes.MINECRAFT, MinecraftState.USR_START): gaming_intents.user_wants_to_discuss_minecraft_request}
+)
+##################################################################################################################
 #  START
 # ######### transition State.USR_START -> State.SYS_HI if hi_request==True (request returns only bool values) ####
 simplified_dialogflow.add_user_serial_transitions(
@@ -47,16 +52,15 @@ simplified_dialogflow.add_user_serial_transitions(
         GamingState.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_GAME_BOT_NEVER_PLAYED:
             partial(
                 gaming_intents.user_definitely_wants_to_talk_about_particular_game_request,
-                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_uttr(n, v),
+                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_or_bot_uttr(n, v),
             ),
-        (scopes.MINECRAFT, MinecraftState.USR_START): gaming_intents.user_wants_to_discuss_minecraft_request,
         GamingState.SYS_USER_DEFINITELY_WANTS_TO_TALK_ABOUT_GAME_THAT_USER_PLAYED_AND_BOT_DIDNT_PLAY:
             partial(
-                gaming_intents.user_definitely_wants_to_talk_about_game_that_user_played_and_bot_didnt_play_request,
-                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_uttr(n, v)),
+                gaming_intents.user_definitely_wants_to_talk_about_game_that_user_played_request,
+                additional_check=lambda n, v: not is_minecraft_mentioned_in_user_or_bot_uttr(n, v)),
         GamingState.SYS_USER_DOESNT_LIKE_GAMING: gaming_intents.user_doesnt_like_gaming_request,
         GamingState.SYS_USER_DIDNT_NAME_GAME: LogicalOr(
-            gaming_intents.user_didnt_name_game_request,
+            gaming_intents.user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request,
             partial(gaming_intents.user_mentioned_games_as_his_interest_request, first_time=False)),
         GamingState.SYS_USER_MENTIONED_GAMES_AS_HIS_INTEREST:
             gaming_intents.user_mentioned_games_as_his_interest_request,
@@ -146,7 +150,7 @@ simplified_dialogflow.add_system_transition(
         gaming_nlg.tell_about_minecraft_animation_and_ask_what_animation_user_likes_response,
         prefix="Okay. I guess some people just don't think that playing video games is fun.")
 )
-simplified_dialogflow.set_error_successor(GamingState.SYS_USER_THINKS_GAMING_IS_UNHEALTHY, GamingState.SYS_ERR)
+simplified_dialogflow.set_error_successor(GamingState.SYS_USER_THINKS_GAMING_IS_HEALTHY, GamingState.SYS_ERR)
 ##############################################################
 simplified_dialogflow.add_user_serial_transitions(
     GamingState.USR_ASK_IF_USER_PLAYED_MINECRAFT,
@@ -162,7 +166,7 @@ simplified_dialogflow.add_system_transition(
     (scopes.MAIN, scopes.State.USR_ROOT),
     gaming_nlg.tell_about_minecraft_animation_and_ask_what_animation_user_likes_response
 )
-simplified_dialogflow.set_error_successor(GamingState.SYS_USER_DOESNT_CONFIRM_GAME, GamingState.SYS_ERR)
+simplified_dialogflow.set_error_successor(GamingState.SYS_USER_DIDNT_PLAY_MINECRAFT, GamingState.SYS_ERR)
 ##############################################################
 simplified_dialogflow.add_user_serial_transitions(
     GamingState.USR_CHECK_WITH_USER_GAME_TITLE,
@@ -331,7 +335,8 @@ simplified_dialogflow.add_user_serial_transitions(
         GamingState.SYS_USER_SAYS_HE_DOESNT_WANT_TO_PLAY_GAME: user_doesnt_say_yes_request,
     },
 )
-simplified_dialogflow.set_error_successor(GamingState.USR_SUGGEST_USER_GAME_DESCRIPTION, GamingState.SYS_ERR)
+simplified_dialogflow.set_error_successor(
+    GamingState.USR_DESCRIBE_GAME_TO_USER_AND_ASK_HE_WANTS_TO_PLAY_GAME, GamingState.SYS_ERR)
 ##############################################################
 simplified_dialogflow.add_system_transition(
     GamingState.SYS_USER_DOESNT_WANT_GAME_DESCRIPTION,
@@ -342,7 +347,7 @@ simplified_dialogflow.add_system_transition(
         shared_memory_actions=[lambda vars: state_utils.save_to_shared_memory(vars, curr_summary_sent_index=0)],
     ),
 )
-simplified_dialogflow.set_error_successor(GamingState.SYS_USER_RECOMMENDS_GAME, GamingState.SYS_ERR)
+simplified_dialogflow.set_error_successor(GamingState.SYS_USER_DOESNT_WANT_GAME_DESCRIPTION, GamingState.SYS_ERR)
 ##############################################################
 simplified_dialogflow.add_system_transition(
     GamingState.SYS_USER_SAYS_HE_WANTS_TO_PLAY_GAME,

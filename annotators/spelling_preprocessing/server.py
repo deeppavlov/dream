@@ -87,10 +87,47 @@ templates += [(re.compile(r"\bwanna\b", flags=re.IGNORECASE), "want to")]
 templates += [(re.compile(r"\bgonna\b", flags=re.IGNORECASE), "going to")]
 templates += [(re.compile(r"\bna\b", flags=re.IGNORECASE), "no")]
 
-for written_number, int_number in NUMBERS.items():
+for written_number, int_number in list(NUMBERS.items())[::-1]:
     templates += [(re.compile(r"\b" + written_number + r"\b", flags=re.IGNORECASE), str(int_number))]
 
-templates += [(re.compile(r"\b([0-9]+) ([0-9]+)\b", flags=re.IGNORECASE), r"\1\2")]
+
+def hundred_repl(match_obj):
+    second_term = 0 if match_obj.group(2) is None else int(match_obj.group(2))
+    return str(int(match_obj.group(1)) * 100 + second_term)
+
+
+templates += [(re.compile(r"\b([1-9]) hundred( [0-9]{1,2})?\b"), hundred_repl)]
+
+
+def ten_power_3n_repl(match_obj):
+    number_groups = [1, 6, 10, 13]
+    for i_ng, ng in enumerate(number_groups):
+        if match_obj.group(ng) is not None:
+            start = ng + 1
+            n = 4 - i_ng
+            break
+    result = 0
+    for i in range(start, start + n):
+        power = (start + n - i - 1) * 3
+        result += 0 if match_obj.group(i) is None else int(match_obj.group(i)) * 10 ** power
+    return str(result)
+
+
+templates += [
+    (
+        re.compile(
+            r"(\b(?:([1-9][0-9]{0,2}) billion)(?:( [1-9][0-9]{0,2}) million)?(?:( [1-9][0-9]{0,2}) thousand)?"
+            r"( [1-9][0-9]{0,2})?\b)|"
+            r"(\b(?:([1-9][0-9]{0,2}) million)(?:( [1-9][0-9]{0,2}) thousand)?( [1-9][0-9]{0,2})?\b)|"
+            r"(\b(?:([1-9][0-9]{0,2}) thousand)( [1-9][0-9]{0,2})?\b)|"
+            r"(\b([1-9][0-9]{0,2})\b)",
+            flags=re.IGNORECASE,
+        ),
+        ten_power_3n_repl
+    )
+]
+
+templates += [(re.compile(r"(?<![0-9] )\b([0-9]{1,2}) ([0-9]{1,2})\b(?! [0-9])", flags=re.IGNORECASE), r"\1\2")]
 templates += [(re.compile(r"\s+"), " ")]
 
 

@@ -83,17 +83,17 @@ skills_link_to_weights = {
 }
 
 link_to_skill2key_words = {
-    # "dff_movie_skill": ["movie"],
+    "dff_movie_skill": ["movie"],
     "book_skill": ["book"],
-    # "game_cooperative_skill": ["game"],
-    # 'dff_gaming_skill': ["game"], TODO: add when will be merged
+    "game_cooperative_skill": ["game"],
+    # 'dff_gaming_skill': ["game"],   # TODO: add when will be merged
     "dff_travel_skill": ["travel"],
-    # "dff_animals_skill": ["animal"],
+    "dff_animals_skill": ["animal"],
     "dff_food_skill": ["food"],
     "dff_sport_skill": ["sport"],
     # "dff_gossip_skill": ["gossips"],
     "dff_science_skill": ["science"],
-    # "dff_music_skill": ["music"],
+    "dff_music_skill": ["music"],
 }
 
 link_to_skill2i_like_to_talk = {
@@ -132,9 +132,9 @@ link_to_skill2i_like_to_talk = {
     "dff_music_skill": [
         "There are so many new songs released every day. I've listened music for all night. So cool! "
         "Liked everything! What music do you listen usually?",
-        "I listen music every day either to calm down or to cheer up myself. "
-        "What music do you listen to cheer up yourself?",
-        "I listen music every day either to calm down or to cheer up myself. "
+        "I listen music every day either to calm down or to cheer myself up. "
+        "What music do you listen to cheer yourself up?",
+        "I listen music every day either to calm down or to cheer myself up. "
         "What music do you listen to calm down?",
     ],
     "dff_science_skill": [

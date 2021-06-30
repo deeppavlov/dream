@@ -5,12 +5,13 @@ from common.books import WHAT_BOOK_RECOMMEND
 from common.hobbies import HOBBIES_RE
 from common.greeting import GREETING_QUESTIONS
 
+HOBBIES_TEMPLATE = f"({'|'.join(GREETING_QUESTIONS['what_are_your_hobbies'])})"
+
+
 topic_config = \
     {"hobbies":
      {"switch_on": [{"cond": [[[{"pattern": DFF_WIKI_LINKTO["hobbies"]}, "bot", True], ["is_yes", "user", True]],
-                              [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_interests"])}, "bot", True],
-                               [{"pattern": HOBBIES_RE}, "user", True]],
-                              [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_hobbies"])}, "bot", True],
+                              [[{"pattern": HOBBIES_TEMPLATE}, "bot", True],
                                [{"pattern": HOBBIES_RE}, "user", True]],
                               [[{"pattern": DFF_WIKI_TEMPLATES["hobbies"]}, "bot", True],
                                [{"pattern": HOBBIES_RE}, "user", True]]
@@ -19,9 +20,7 @@ topic_config = \
       "expected_subtopic_info": [{"subtopic": "user_has_hobbies",
                                   "cond": [[[{"pattern": DFF_WIKI_LINKTO["hobbies"]}, "bot", True],
                                             ["is_yes", "user", True]],
-                                           [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_interests"])},
-                                             "bot", True], [{"pattern": HOBBIES_RE}, "user", True]],
-                                           [[{"pattern": "|".join(GREETING_QUESTIONS["what_are_your_hobbies"])},
+                                           [[{"pattern": HOBBIES_TEMPLATE},
                                              "bot", True], [{"pattern": HOBBIES_RE}, "user", True]],
                                            [[{"pattern": DFF_WIKI_TEMPLATES["hobbies"]}, "bot", True],
                                             [{"pattern": HOBBIES_RE}, "user", True]]]},
@@ -43,8 +42,18 @@ topic_config = \
                                     "answer": "I am glad to share a couple ideas with you!"},
                                    {"cond": [["is_no", "user", True]],
                                     "answer": "No problem, we'll discuss it later if you want."}],
-                     "facts": [{"wikihow_page": "Find-a-Hobby",
-                                "cond": [["is_yes", "user", True]]}]},
+                     "expected_subtopic_info": [{"subtopic": "how_find_hobby",
+                                                 "cond": [["is_yes", "user", True]]}]},
+                    {"utt": ["Learning to play the guitar or piano is a great hobby idea.",
+                             "You can play your favorite songs or try your hand at creating your own tunes.",
+                             "Should I continue?"],
+                     "subtopic": "how_find_hobby",
+                     "expected_subtopic_info": [{"subtopic": "more_about_hobbies",
+                                                 "cond": [["is_yes", "user", True]]}]},
+                    {"utt": ["Whether you venture near or far, travel is a very rewarding hobby.",
+                             "Travel introduces you to new places, new people, and new cultures",
+                             "I'm very happy to tell you some ideas about hobbies."],
+                     "subtopic": "more_about_hobbies"},
                     {"utt": ["I think trying to start your own radio show "
                              "or learn how to inlay wood are amazing ideas to spend your free time.",
                              "What do you think?"],
@@ -52,7 +61,10 @@ topic_config = \
                      "expected_subtopic_info": [{"subtopic": "user_likes_hobbies",
                                                  "cond": [["is_yes", "user", True]]},
                                                 {"subtopic": "user_doesnt_like_hobbies",
-                                                 "cond": [["is_no", "user", True]]}]},
+                                                 "cond": [["is_no", "user", True]]}],
+                     "next_ackn": [{"cond": [["any"]],
+                                    "answer": "I'm always happy to have a conversation with "
+                                              "such a wonderful person."}]},
                     {"utt": ["Recently I found some life hacks and I think "
                              "collecting them may become one of my hobbies.",
                              "Just for your interest, I can share with you how to use life hacks.",
@@ -90,6 +102,8 @@ topic_config = \
                      "expected_subtopic_info": [{"subtopic": "user_has_hobbies", "cond": [["is_yes", "user", True]]},
                                                 {"subtopic": "user_separate_hobby",
                                                  "cond": [["is_no", "user", True]]}],
+                     "next_ackn": [{"cond": [["any"]],
+                                    "answer": "You are a very impressive person!"}],
                      "subtopic": "user_has_hobbies"},
                     {"utt": ["Seems like for you it is more than a hobby."],
                      "subtopic": "user_has_hobbies"},
@@ -135,8 +149,10 @@ topic_config = \
                                                             "cond": [["is_no", "user", True]]}]
                                 },
                                {"utt": ["Lucky you! How many friends do you have?"],
-                                "subtopic": "has_friends"
-                                },
+                                "subtopic": "has_friends",
+                                "next_ackn": [{"cond": [["any"]],
+                                               "answer": "I'm always happy to have a conversation with "
+                                                         "such a wonderful person."}]},
                                {"utt": ["Cool! Friends can help you celebrate good times and provide "
                                         "support during bad times. "
                                         "I meet my friends every day via the Amazon Echo. "
@@ -196,27 +212,35 @@ topic_config = \
                                   "cond": [[{"pattern": DFF_WIKI_LINKTO["drawing"]}, "bot", True]]},
                                  {"subtopic": "photo", "cond": [[{"pattern": DFF_WIKI_LINKTO["photo"]}, "bot", True]]},
                                  {"subtopic": "memes", "cond": [[{"pattern": DFF_WIKI_LINKTO["memes"]}, "bot", True]]},
+                                 {"subtopic": "drawing", "cond": [["any"]]}
                                  ],
       "smalltalk": [{"utt": ["Drawing gives you a mean to self-reflect and externalize your emotions.",
                              "Do you like drawing?"],
-                     "expected_subtopic_info": [{"subtopic": "drawing", "cond": [["is_yes", "user", True]]}],
+                     "expected_subtopic_info": [{"subtopic": "drawing", "cond": [["is_yes", "user", True]]},
+                                                {"subtopic": "photo_q", "cond": [["any"]]}],
                      "subtopic": "drawing_q",
-                     },
+                     "next_ackn": [{"cond": [["any"]],
+                                    "answer": "I'm always happy to have a conversation with "
+                                              "such a wonderful person."}]},
                     {"utt": ["In our increasingly busy lives it’s difficult to always be in the moment.",
                              "Taking pictures helps you to hang on to those memories a little longer.",
                              "Do you like taking photographs?"],
-                     "expected_subtopic_info": [{"subtopic": "photo", "cond": [["is_yes", "user", True]]}],
-                     "subtopic": "photo_q"
-                     },
+                     "next_ackn": [{"cond": [["any"]],
+                                    "answer": "You are a very impressive person!"}],
+                     "expected_subtopic_info": [{"subtopic": "photo", "cond": [["is_yes", "user", True]]},
+                                                {"subtopic": "memes_q", "cond": [["any"]]}],
+                     "subtopic": "photo_q"},
                     {"utt": ["Memes are funny artworks we can see on the Internet.", "Do you like memes?"],
-                     "expected_subtopic_info": [{"subtopic": "memes", "cond": [["is_yes", "user", True]]}],
-                     "subtopic": "memes_q"
-                     },
+                     "expected_subtopic_info": [{"subtopic": "memes", "cond": [["is_yes", "user", True]]},
+                                                {"subtopic": "drawing_q", "cond": [["any"]]}
+                                                ],
+                     "subtopic": "memes_q"},
                     {"utt": ["Do you draw with a pencil or with oil paints?"],
+                     "subtopic": "drawing",
+                     "ackn": [{"cond": [[{"pattern": "mean to self-reflect"}, "bot", False]],
+                               "answer": "Drawing gives you a mean to self-reflect and externalize your emotions."}]},
+                    {"utt": ["What kind of paintings do you like to draw: landscapes, portraits or something else?"],
                      "subtopic": "drawing"},
-                    {"utt": [
-                        "What king of paintings do you like to draw: landscapes, portraits or something else?"],
-                        "subtopic": "drawing"},
                     {"utt": ["Would you like to know how to improve your drawing skills?"],
                      "subtopic": "drawing",
                      "facts": [{"wikihow_page": "Improve-Your-Drawing-Skills",
@@ -230,25 +254,55 @@ topic_config = \
                     {"utt": ["I also like paintings of {user_fav_painter}!",
                              "Last weekend I was in National Gallery.", "Do you like to visit art museums?"],
                      "subtopic": "drawing"},
-                    {"utt": ["Do you have any funny photos of your family or pets?"],
-                     "subtopic": "photo"},
+                    {"utt": ["Cool! Do you have any funny photos of your family or pets?"],
+                     "subtopic": "photo",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "It's great to capture funny moments of your life."}]
+                     },
                     {"utt": ["I can tell you some tips about photography.",
                              "Would you like to know how to take picture of pets?"],
                      "subtopic": "photo",
                      "facts": [{"wikihow_page": "Photograph-Pets", "cond": [["is_yes", "user", True]]}]},
                     {"utt": ["Do you think that CIA watch you through the front-camera of your cell phone?"],
-                     "subtopic": "photo"},
+                     "subtopic": "photo",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "I agree with you! But on the other hand it is impossible for CIA to "
+                                              "watch all people who have cell phones."},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "I agree with you! It is impossible for CIA to watch all people who "
+                                              "have cell phones."}]
+                     },
                     {"utt": ["Do you take photos on an SLR camera or on your cell phone?"],
-                     "subtopic": "photo"},
+                     "subtopic": "photo",
+                     "next_ackn": [{"cond": [[{"pattern": "(phone|mobile)"}]],
+                                    "answer": "Yes, using phone is more convenient way to take photos, "
+                                              "because your phone is with you everywhere."},
+                                   {"cond": [[{"pattern": "(camera|slr)"}]],
+                                    "answer": "SLR camera gives better quality of photos."}]
+                     },
                     {"utt": ["Do you share your photos in Instagram or Flickr?"],
-                     "subtopic": "photo"},
+                     "subtopic": "photo",
+                     "next_ackn": [{"cond": [["is_yes", "user", True],
+                                             [{"pattern": "(instagram|flickr)"}, "user", True]],
+                                    "answer": "Cool! I guess you have a lot of followers!"},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "Cool! It's great to take photos only for yourself and your family."}
+                                   ]},
                     {"utt": ["Using Photoshop or Adobe Lightroom can help to increase the quality of pictures.",
                              "Do you use any tools for photo processing?"],
-                     "subtopic": "photo"},
+                     "subtopic": "photo",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "You are a very smart person!"}]},
                     {"utt": ["Do you think that memes are a separate kind of art, the same as painting?"],
-                     "subtopic": "memes"},
+                     "subtopic": "memes",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "I definitely agree with you!"}]},
                     {"utt": ["I draw some memes with cats.", "Have you tried to draw a meme?"],
-                     "subtopic": "memes"},
+                     "subtopic": "memes",
+                     "next_ackn": [{"cond": [["is_yes", "user", True]],
+                                    "answer": "Great! You are a very creative person!"},
+                                   {"cond": [["is_no", "user", True]],
+                                    "answer": "It's never late to try!"}]},
                     {"utt": ["Would you like to know how to draw a meme?"],
                      "subtopic": "memes",
                      "facts": [{"wikihow_page": "Make-a-Meme", "cond": [["is_yes", "user", True]]}]}
@@ -364,7 +418,10 @@ topic_config = \
                         {"utt": ["Ok, that's very interesting.",
                                  "Do you think it is more important to make a lot of money than to enjoy your job?"],
                          "expected_subtopic_info": [{"subtopic": "money_yes", "cond": [["is_yes", "user", True]]},
-                                                    {"subtopic": "money_no", "cond": [["any"]]}]},
+                                                    {"subtopic": "money_no", "cond": [["any"]]}],
+                         "next_ackn": [{"cond": [["any"]],
+                                        "answer": "I'm always happy to have a conversation with "
+                                                  "such a wonderful person."}]},
                         {"utt": ["So agree with you!", "Money is a terrible master but an excellent servant.",
                                  "Do you agree?"],
                          "subtopic": "money_yes"},
@@ -411,6 +468,8 @@ topic_config = \
                         {"utt": ["Chamber of Secrets keeps in suspense.",
                                  "My favourite moment was the battle of Harry with Basilisk.",
                                  "What scene do you like most?"],
+                         "next_ackn": [{"cond": [["any"]],
+                                        "answer": "You are a very impressive person!"}],
                          "subtopic": "chamber_of_secrets",
                          "can_continue": "must", "conf": 1.0},
                         {"utt": ["Prisoner of Azkaban's plot has quite a surprise development.",
@@ -432,7 +491,9 @@ topic_config = \
                         {"utt": ["In Deathly Hallows Harry finally defeated Voldemort.",
                                  "What scene do you like most?"],
                          "subtopic": "deathly_hallows",
-                         "can_continue": "must", "conf": 1.0},
+                         "can_continue": "must", "conf": 1.0,
+                         "next_ackn": [{"cond": [["any"]],
+                                        "answer": "You are a very impressive person!"}]},
                         {"utt": ["ai gife apsle. dofe dinfe feslure.",
                                  "In Elglish it means I eat an apple. A dog jumped on the floor."],
                          "subtopic": "parseltongue"},
@@ -462,19 +523,16 @@ topic_config = \
                    {"cond": [[[{"pattern": "pet owl"}, "bot", True], ["is_yes", "user", True]]],
                     "answer": ["I think that if I had an owl, she may hoot at night and disturb my sleep."]},
                    {"cond": [[[{"pattern": "magic outside hogwarts"}, "bot", True], ["is_yes", "user", True]]],
-                    "answer": ["I definitely agree with you!"]},
+                    "answer": ["Your feedback was very intelligent! I definitely agree with you!"]},
                    {"cond": [[[{"pattern": "magic outside hogwarts"}, "bot", True], ["is_no", "user", True]]],
-                    "answer": ["I definitely agree with you!"]}
+                    "answer": ["Your feedback was very intelligent! I definitely agree with you!"]}
                    ]
           },
      "family":
-         {"switch_on": [{"cond": [[[{"pattern": r"(my|your) " + DFF_WIKI_TEMPLATES["family"]}, "user", True],
-                                   [{"pattern": "(died|dead)"}, "user", False]]],
-                         "can_continue": "must", "conf": 1.0}
-                        ],
+         {"pattern": DFF_WIKI_TEMPLATES["family"],
           "expected_subtopic_info": [{"subtopic": "help",
-                                      "cond": [
-                                          [{"pattern": r"help my " + DFF_WIKI_TEMPLATES["family"]}, "user", True]]},
+                                      "cond": [[{"pattern": r"help my " + DFF_WIKI_TEMPLATES["family"]},
+                                                "user", True]]},
                                      {"subtopic": "play_with_family",
                                       "cond": [[{"pattern": r"play (.*?) my "
                                                             + DFF_WIKI_TEMPLATES["family"]}, "user", True]]},
@@ -488,7 +546,9 @@ topic_config = \
                                      {"subtopic": "my_relative",
                                       "cond": [[{"pattern": r"my " + DFF_WIKI_TEMPLATES["family"]}, "user", True]]},
                                      {"subtopic": "jokes", "cond": [[{"pattern": "your mom"}, "user", True]],
-                                      "available_utterances": ["jokes"]}],
+                                      "available_utterances": ["jokes"]},
+                                     {"subtopic": "family_mentioned",
+                                      "cond": [[{"pattern": DFF_WIKI_TEMPLATES["family"]}, "user", True]]}],
           "expected_entities": [{"name": "user_relative", "entity_substr": [["dad", "(\\bdad|\\bfather)"],
                                                                             ["mom", "(\\bmom|\\bmother)"],
                                                                             ["brother", "(\\bbrother\\b)"],
@@ -504,7 +564,10 @@ topic_config = \
                                                                             ["granddaughter", "granddaugter"],
                                                                             ["grandchildren", "grandchildren"],
                                                                             ["kids", "(\\bkids\\b|\\bchildren\\b)"]]}],
-          "smalltalk": [{"utt": ["Lucky you! Your family is very close! Do you clean the house together?"],
+          "smalltalk": [{"utt": ["Family provides love and support to us.",
+                                 "Could you tell me more about your family?"],
+                         "subtopic": "family_mentioned"},
+                        {"utt": ["Lucky you! Your family is very close! Do you clean the house together?"],
                          "subtopic": "help"},
                         {"utt": ["I'm happy that you had a great time! What games did you play?"],
                          "subtopic": "play_with_family"},
@@ -512,14 +575,17 @@ topic_config = \
                          "subtopic": "spend_time"},
                         {"utt": ["You are a very caring and mindful person!"],
                          "subtopic": "take_care", "key": "take_care"},
-                        {"utt": ["Lucky you! Who is in your family?"],
+                        {"utt": ["Who is in your family?"],
                          "subtopic": "my_family"},
                         {"utt": ["Lucky you! How often is your entire family together?"],
                          "subtopic": "my_relative"},
                         {"utt": ["Do you help your children with their school work?"],
                          "subtopic": "kids"},
                         {"utt": ["Do you have breakfast or dinner together with your family?"]},
-                        {"utt": ["Do you go out on a field trip or picnic with your family?"]},
+                        {"utt": ["Do you go out on a field trip or picnic with your family?"],
+                         "next_ackn": [{"cond": [["any"]],
+                                        "answer": "I'm always happy to have a conversation with "
+                                                  "such a wonderful person."}]},
                         {"utt": ["Does your family have a set of traditions that are passed on through generations.",
                                  "It could be something as simple as having a secret handshake or going to a fancy "
                                  "restaurant once a month."]},
@@ -572,7 +638,8 @@ topic_config = \
              "smalltalk": [{"utt": ["Would you like to know how to speed up an Android smartphone?"],
                             "subtopic": "android",
                             "facts": [{"wikihow_page": "Speed-up-an-Android-Smartphone",
-                                       "cond": [["is_yes", "user", True]]}]},
+                                       "cond": [["is_yes", "user", True]]}],
+                            "add_general_ackn": True},
                            {"utt": ["I can tell you how to transfer music from the iPod to an iPhone?"],
                             "subtopic": "apple",
                             "facts": [{"wikihow_page": "Transfer-Music-from-the-iPod-to-an-iPhone",
@@ -710,7 +777,8 @@ topic_config = \
                                                 {"subtopic": "hayao_miyazaki",
                                                  "cond": [["any"]]}],
                      "subtopic": "how_long", },
-                    {"utt": ["Most of all I like Princess Mononoke and Spirited Away. "
+                    {"utt": ["You have an amazing taste! I also like Hayao Miyazaki!",
+                             "Most of all I like Princess Mononoke and Spirited Away.",
                              "When I saw them for the first time, I was shocked that anime can be so inspiring. "
                              "Do you think anime can motivate itself to do good things? "
                              ],
@@ -822,7 +890,10 @@ topic_config = \
                                                  "cond": [["is_yes", "user", True]]},
                                                 {"subtopic": "be_more_romantic",
                                                  "cond": [["is_yes", "user", False]]}],
-                     "subtopic": "relationships_with_smn"},
+                     "subtopic": "relationships_with_smn",
+                     "next_ackn": [{"cond": [["any"]],
+                                    "answer": "I'm always happy to have a conversation with "
+                                              "such a wonderful person."}]},
                     {"utt": ["Remember: interesting dates can bring more romantic to your relationships.",  # 10
                              "Wanna learn some creative ideas for a date?"],
                      "facts": [{"wikihow_page": "Pick-a-Creative-Idea-for-a-Date",
@@ -905,7 +976,10 @@ topic_config = \
                                                  "cond": [["is_yes", "user", True]]},
                                                 {"subtopic": "not_interested_in_politics",
                                                  "cond": [["is_yes", "user", False]]}],
-                     "subtopic": "interested_in_politics"},
+                     "subtopic": "interested_in_politics",
+                     "next_ackn": [{"cond": [["any"]],
+                                    "answer": "I'm always happy to have a conversation with "
+                                              "such a wonderful person."}]},
                     {"utt": ["Cool! Because I can be very helpfull.",
                              "Would you like me to tell you how to choose a political party to vote for?"],
                      "facts": [{"wikihow_page": "Choose-a-Political-Party",

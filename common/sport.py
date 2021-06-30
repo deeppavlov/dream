@@ -55,7 +55,8 @@ ING_FORMS = {'run': 'running', 'swim': 'swimming', 'ski': 'skiing', 'dive': 'div
              'car race': 'car racing', 'wakeboard': 'wakeboarding',
              'long jump': 'long jumping'}
 REVERSE_ING_FORMS = {ING_FORMS[key]: key for key in ING_FORMS}
-SPORTS = rf"({'|'.join(ING_FORMS.values())}|{SPORTS_NO_ING})"
+regexp_ing_forms = rf'|'.join([rf"\b{k}" for k in ING_FORMS.values()])
+SPORTS = rf"({regexp_ing_forms}|{SPORTS_NO_ING})"
 KIND_OF_SPORTS_TEMPLATE = re.compile(
     SPORTS,
     re.IGNORECASE,

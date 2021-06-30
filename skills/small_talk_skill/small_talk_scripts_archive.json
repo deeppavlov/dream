@@ -1,4 +1,55 @@
 {
+    "music": [
+        "What kind of music do you like?",
+        "Me too. How much time do you spend listening to music?",
+        "It's not so much actually. Have you ever been to a concert?",
+        "Great! What do you think the world would be like without music?",
+        "I think it will be a very sad world. Why do you think music is important and how does it affect different people?",
+        "Cool! Very interesting thoughts!"
+    ],
+    "pets": [
+        "Do you have a pet?",
+        {
+            "yes": [
+                "Lucky you! Tell me about it. What is its name?",
+                "No way! Where did you get it from?",
+                "Such a warm story! Does it know any tricks or understand any words?",
+                "What are the pros and cons of keeping a pet?"
+            ],
+            "no": [
+                "Why not?",
+                "So, would you ever consider getting a pet?",
+                "Did you grow up with pets in your home?",
+                "What can children learn by having a pet?",
+                "Nice. Why do some people not like pets?"
+            ]
+        }
+    ],
+    "video games": [
+        "Do you like video games? Why or why not?",
+        {
+            "yes": [
+                "How much time per week do you spend playing video games?",
+                "What is your favorite all-time game?",
+                "Cool! Why was it great?",
+                "These days, some gamers make a living from playing video games. Do you think professional gamers are similar to the athletes in other sports?",
+                "I agree with you. Some people say that video games are a waste of time. Do you agree or disagree?",
+                "Thanks for sharing!"
+            ],
+            "no": []
+        }
+    ],
+    "animals": [
+        "I love baby animals, especially baby pandas. I think they're the cutest! What are some animals that live in your country?",
+        "So many species should be protected. Are there animal rights groups where you live?",
+        {
+            "yes": "Cool! Have you ever been to a zoo?",
+            "no": "I hope they exist but you just don't know about them. Have you ever been to a zoo?"
+        },
+        "Oh I love giraffes. They're super cool! What is the largest animal you have ever seen?",
+        "Hm... Here's the question: Do you think that animals dream?",
+        "Share your thoughts. What can people learn from animals?"
+    ],
     "family": [
         "Do you have a family?",
         {

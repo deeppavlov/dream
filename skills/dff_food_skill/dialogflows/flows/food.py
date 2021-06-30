@@ -20,7 +20,7 @@ from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CO
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
 from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
     CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD, \
-    ACKNOWLEDGEMENTS
+    ACKNOWLEDGEMENTS, FOOD_FACT_ACKNOWLEDGEMENTS
 from common.link import link_to_skill2i_like_to_talk
 from dialogflows.flows.fast_food import State as FFState
 from dialogflows.flows.fast_food import fast_food_request
@@ -109,6 +109,7 @@ class State(Enum):
     SYS_ENSURE_FOOD = auto()
     SYS_LINKTO_PLUS_NO = auto()
     SYS_LINKTO_PLUS_NO_RECIPE = auto()
+    SYS_MORE_FACTS = auto()
     #
     SYS_ERR = auto()
     USR_ERR = auto()
@@ -262,6 +263,7 @@ def lets_talk_about_check(vars):
 def what_cuisine_response(vars):
     user_utt = state_utils.get_last_human_utterance(vars)
     bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
+    banned_words = ["water"]
     linkto_food_skill_agreed = any(
         [
             req.lower() in bot_utt for req in TRIGGER_PHRASES
@@ -269,24 +271,25 @@ def what_cuisine_response(vars):
     )
     lets_talk_about_asked = bool(lets_talk_about_check(vars))
     try:
-        if linkto_food_skill_agreed:
-            if is_yes(user_utt):
+        if not any([i in user_utt["text"].lower() for i in banned_words]):
+            if linkto_food_skill_agreed:
+                if is_yes(user_utt):
+                    state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                    state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+                elif not is_no(user_utt):
+                    state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
+                elif is_no(user_utt):
+                    state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                    state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+                    return ACKNOWLEDGEMENTS["cuisine"]
+            elif lets_talk_about_asked:
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-            elif not is_no(user_utt):
-                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
-                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-            elif is_no(user_utt):
-                state_utils.set_confidence(vars, confidence=CONF_HIGH)
-                state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                return ACKNOWLEDGEMENTS["cuisine"]
-        elif lets_talk_about_asked:
-            state_utils.set_confidence(vars, confidence=CONF_HIGH)
-            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        else:
-            state_utils.set_confidence(vars, confidence=CONF_LOW)
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-        return "I'm a fan of Mediterranean cuisine dishes. What cuisine do you prefer?"
+            else:
+                state_utils.set_confidence(vars, confidence=CONF_LOW)
+                state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+            return "I'm a fan of Mediterranean cuisine dishes. What cuisine do you prefer?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -326,14 +329,19 @@ def cuisine_fact_response(vars):
                     return cuisine_fact
             if not cuisine_fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                return "Haven't tried it yet. What do you recommend to start with?"
+                response = "You have such a refined taste in food! "
+                "I haven't tried it yet. What do you recommend to start with?"
+                state_utils.add_acknowledgement_to_response_parts(vars)
+                return response
         elif conceptnet_flag:
             entity_linking = last_utt["annotations"].get("entity_linking", [])
             if entity_linking:
                 _facts = entity_linking[0].get("entity_pages", [])
                 if _facts:
                     state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                    return f"Jummy! I know about {food_item} that {_facts[0]}"
+                    response = f"You're a gourmet! I know about {food_item} that {_facts[0]}"
+                    state_utils.add_acknowledgement_to_response_parts(vars)
+                    return response
                 else:
                     return ""
             else:
@@ -360,17 +368,26 @@ def country_response(vars):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return f"Have you ever been in {CUISINES_COUNTRIES[cuisine_discussed]}?"
             else:
-                state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-                return "Where are you from?"
+                return error_response(vars)
         else:
-            state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-            return "Where are you from?"
+            return error_response(vars)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         return error_response(vars)
+
+
+def to_travel_skill_request(ngrams, vars):
+    flag = False
+    shared_memory = state_utils.get_shared_memory(vars)
+    cuisine_discussed = shared_memory.get("cuisine", "")
+    if cuisine_discussed:
+        if cuisine_discussed in CUISINES_COUNTRIES:
+            flag = True
+    logger.info(f"to_travel_skill_request {flag}")
+    return flag
 
 
 def what_fav_food_response(vars):
@@ -536,14 +553,12 @@ def fav_food_request(ngrams, vars):
 
 
 def food_fact_response(vars):
-    acknowledgements = [
-        "I like it too.", "Okay.", "It's awesome.",
-        "Fantastic.", "Loving it.", "Yummy!"
-    ]
     human_utt = state_utils.get_last_human_utterance(vars)
     annotations = human_utt["annotations"]
     human_utt_text = human_utt["text"].lower()
     bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"]
+    shared_memory = state_utils.get_shared_memory(vars)
+    used_facts = shared_memory.get("used_facts", [])
 
     fact = ""
     facts = []
@@ -581,10 +596,16 @@ def food_fact_response(vars):
                 entity = berry_name
             elif berry_name:
                 if facts and entity:
-                    fact = facts[0]
+                    fact = random.choice([i for i in facts if i not in used_facts])
+                    # facts[0]
                 elif facts:
                     for facts_item in facts:
-                        if facts_item.get("entity", "xxx") in food_item:
+                        if all(
+                            [
+                                facts_item.get("entity", "xxx") in food_item,
+                                facts_item.get("fact", "") not in used_facts
+                            ]
+                        ):
                             fact = facts_item.get("fact", "")
                             entity = facts_item.get("entity", "")
                             break
@@ -593,16 +614,28 @@ def food_fact_response(vars):
                             entity = ""
         else:
             if all([facts, entity, entity in food_item]):
-                fact = facts[0]
-            elif facts:
+                fact = random.choice([i for i in facts if i not in used_facts])
+                # facts[0]
+            elif facts and not entity:
                 for facts_item in facts:
-                    if facts_item.get("entity", "xxx") in food_item:
+                    if all(
+                        [
+                            facts_item.get("entity", "xxx") in food_item,
+                            facts_item.get("fact", "") not in used_facts
+                        ]
+                    ):
                         fact = facts_item.get("fact", "")
                         entity = facts_item.get("entity", "")
                         break
                     else:
                         fact = ""
                         entity = ""
+            else:
+                fact = ""
+                entity = ""
+        acknowledgement = random.choice(FOOD_FACT_ACKNOWLEDGEMENTS).replace("ENTITY", entity.lower())
+        state_utils.save_to_shared_memory(vars, used_facts=used_facts + [fact])
+
         try:
             if bot_persona_fav_food_check(vars) or len(
                 state_utils.get_last_human_utterance(vars)['text'].split()
@@ -630,10 +663,18 @@ def food_fact_response(vars):
                 return error_response(vars)
             elif (fact and entity):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                return f"{entity}. {random.choice(acknowledgements)} {fact}"
+                if len(used_facts):
+                    return f"{fact} Do you want me to tell you more about {entity}?"
+                else:
+                    response = acknowledgement + f"{fact} Do you want to hear more about {entity}?"
+                    state_utils.add_acknowledgement_to_response_parts(vars)
+                    return response
             elif fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                return f"Okay. {fact}"
+                if len(used_facts):
+                    return f"{fact} Do you want me to tell you more about {entity}?"
+                else:
+                    return f"Okay. {fact} I can share with you one more cool fact. Do you agree?"
             elif linkto_check:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -652,6 +693,21 @@ def food_fact_response(vars):
     else:
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return error_response(vars)
+
+
+def more_facts_request(ngrams, vars):
+    shared_memory = state_utils.get_shared_memory(vars)
+    used_facts = shared_memory.get("used_facts", [])
+
+    flag = all(
+        [
+            bool(len(used_facts)),
+            condition_utils.no_special_switch_off_requests(vars),
+            yes_request(ngrams, vars)
+        ]
+    )
+    logger.info(f"more_facts_request {flag}")
+    return flag
 
 
 def are_you_gourmet_response(vars):
@@ -718,7 +774,9 @@ def gourmet_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
-        return "It seems you're a gourmet! What meal do you like?"
+        response = "It seems you're a gourmet! What meal do you like?"
+        state_utils.add_acknowledgement_to_response_parts(vars)
+        return response
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -1005,7 +1063,13 @@ simplified_dialogflow.add_system_transition(State.SYS_LINKTO_PLUS_NO, State.USR_
 simplified_dialogflow.set_error_successor(State.SYS_LINKTO_PLUS_NO, State.SYS_ERR)
 
 
-simplified_dialogflow.add_user_transition(State.USR_CUISINE_FACT, State.SYS_TO_TRAVEL_SKILL, smth_request)
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_CUISINE_FACT,
+    {
+        State.SYS_TO_TRAVEL_SKILL: to_travel_skill_request,
+        State.USR_WHAT_FAV_FOOD: what_fav_food_response
+    },
+)
 simplified_dialogflow.set_error_successor(State.USR_CUISINE_FACT, State.SYS_ERR)
 
 
@@ -1071,11 +1135,16 @@ simplified_dialogflow.add_user_serial_transitions(
     State.USR_FOOD_FACT,
     {
         State.SYS_ENSURE_FOOD: ensure_food_request,
+        State.SYS_MORE_FACTS: more_facts_request,
         State.SYS_SOMETHING: smth_random_request,
         (scopes.FAST_FOOD, FFState.USR_START): fast_food_request,
     }
 )
 simplified_dialogflow.set_error_successor(State.USR_FOOD_FACT, State.SYS_ERR)
+
+
+simplified_dialogflow.add_system_transition(State.SYS_MORE_FACTS, State.USR_FOOD_FACT, food_fact_response)
+simplified_dialogflow.set_error_successor(State.SYS_MORE_FACTS, State.SYS_ERR)
 
 
 simplified_dialogflow.add_system_transition(State.SYS_ENSURE_FOOD, State.USR_FOOD_FACT, food_fact_response)

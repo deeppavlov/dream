@@ -144,6 +144,9 @@ def my_fav_story_response(vars):
                     if topic == "book":
                         state_utils.set_confidence(vars, confidence=CONF_LOW)
                         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+                    elif topic == "music" and "what kind of music do you like" in utt:
+                        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+                        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
                     elif topic == "music":
                         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
