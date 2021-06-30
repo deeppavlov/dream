@@ -163,8 +163,8 @@ def respond():
 
             if is_special_factoid_question(curr_uttr) and confidence > 0 and subject is None:
                 # for special factoid questions, original cobotqa response is found, assign conf to 1.0
-                entities = get_entities(curr_uttr)
-                if any([ent.lower() in response.lower() for ent in entities]):
+                _common = get_common_words(response.lower(), curr_uttr["text"].lower())
+                if _common and any([len(word) > 3 for word in _common]):
                     confidence = 1.0
 
             response = COBOTQA_EXTRA_WORDS.sub("", response).strip()
