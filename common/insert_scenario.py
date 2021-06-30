@@ -12,6 +12,7 @@ from common.universal_templates import if_chat_about_particular_topic
 from common.wiki_skill import check_condition, find_entity_by_types, check_nounphr, find_page_title, find_paragraph, \
     delete_hyperlinks, find_all_titles, used_types_dict, NEWS_MORE, WIKI_BLACKLIST, QUESTION_TEMPLATES, \
     QUESTION_TEMPLATES_SHORT, CONF_DICT
+from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
 
 sentry_sdk.init(os.getenv('SENTRY_DSN'))
@@ -223,6 +224,17 @@ def find_trigger(vars, triggers):
                     wikihow_page = substr_info.get("wikihow_page", "")
                     return found_substr, [], wikipedia_page, wikihow_page
     return "", [], "", ""
+
+
+def delete_topic_info(vars):
+    state_utils.save_to_shared_memory(vars, special_topic="")
+    state_utils.save_to_shared_memory(vars, expected_subtopic_info={})
+    state_utils.save_to_shared_memory(vars, available_utterances=[])
+    state_utils.save_to_shared_memory(vars, subtopics=[])
+    state_utils.save_to_shared_memory(vars, cur_facts=[])
+    state_utils.save_to_shared_memory(vars, used_utt_nums={})
+    state_utils.save_to_shared_memory(vars, cur_mode="")
+    state_utils.save_to_shared_memory(vars, ackn=[])
 
 
 def preprocess_wikihow_page(article_content):
@@ -514,9 +526,50 @@ def answer_users_question(vars, topic_config):
     return answer
 
 
+def check_switch(vars, topic_config):
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    shared_memory = state_utils.get_shared_memory(vars)
+    found_topic = shared_memory.get("special_topic", "")
+    first_utt = False
+    utt_can_continue = "can"
+    utt_conf = 0.0
+    shared_memory = state_utils.get_shared_memory(vars)
+    for topic in topic_config:
+        linkto = topic_config[topic].get("linkto", [])
+        for phrase in linkto:
+            if phrase.lower() in bot_uttr["text"].lower():
+                found_topic = topic
+                first_utt = True
+                break
+        pattern = topic_config[topic].get("pattern", "")
+        if pattern:
+            if if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
+                utt_can_continue = "must"
+                utt_conf = 1.0
+                found_topic = topic
+                first_utt = True
+            elif re.findall(pattern, user_uttr["text"]) and not found_topic:
+                utt_can_continue = "prompt"
+                utt_conf = 0.95
+                found_topic = topic
+                first_utt = True
+        switch_on = topic_config[topic].get("switch_on", [])
+        for switch_elem in switch_on:
+            condition = switch_elem["cond"]
+            if check_condition(condition, user_uttr, bot_uttr, shared_memory):
+                found_topic = topic
+                utt_can_continue = switch_elem.get("can_continue", "can")
+                utt_conf = switch_elem.get("conf", utt_conf)
+                first_utt = True
+                break
+        if found_topic:
+            break
+    return found_topic, first_utt, utt_can_continue, utt_conf
+
+
 def start_or_continue_scenario(vars, topic_config):
     flag = False
-    user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     prev_active_skill = bot_uttr.get("active_skill", "")
     shared_memory = state_utils.get_shared_memory(vars)
@@ -530,25 +583,9 @@ def start_or_continue_scenario(vars, topic_config):
     if cur_mode == "facts" and isno:
         cur_mode = "smalltalk"
     first_utt = False
-    if not found_topic:
-        for topic in topic_config:
-            linkto = topic_config[topic].get("linkto", [])
-            for phrase in linkto:
-                if phrase.lower() in bot_uttr["text"].lower():
-                    found_topic = topic
-                    break
-            pattern = topic_config[topic].get("pattern", "")
-            if pattern and re.findall(pattern, user_uttr["text"]):
-                found_topic = topic
-            switch_on = topic_config[topic].get("switch_on", [])
-            for switch_elem in switch_on:
-                condition = switch_elem["cond"]
-                if check_condition(condition, user_uttr, bot_uttr, shared_memory):
-                    found_topic = topic
-                    break
-            if found_topic:
-                first_utt = True
-                break
+    if not found_topic or prev_active_skill not in {"dff_wiki_skill", "dff_music_skill"}:
+        found_topic, first_utt, utt_can_continue, utt_conf = check_switch(vars, topic_config)
+        logger.info(f"start_or_continue_scenario, {found_topic}, {first_utt}")
     if found_topic:
         cur_topic_smalltalk = topic_config[found_topic].get("smalltalk", [])
         used_utt_nums = shared_memory.get("used_utt_nums", {}).get("found_topic", [])
@@ -603,52 +640,14 @@ def make_smalltalk_response(vars, topic_config, shared_memory, utt_info, used_ut
     return response, used_utt_nums
 
 
-def check_switch(vars, topic_config):
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    bot_uttr = state_utils.get_last_bot_utterance(vars)
-    shared_memory = state_utils.get_shared_memory(vars)
-    found_topic = shared_memory.get("special_topic", "")
-    first_utt = False
-    utt_can_continue = "can"
-    utt_conf = 0.0
-    shared_memory = state_utils.get_shared_memory(vars)
-    for topic in topic_config:
-        linkto = topic_config[topic].get("linkto", [])
-        for phrase in linkto:
-            if phrase.lower() in bot_uttr["text"].lower():
-                found_topic = topic
-                first_utt = True
-                break
-        pattern = topic_config[topic].get("pattern", "")
-        if pattern:
-            if if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
-                utt_can_continue = "must"
-                utt_conf = 1.0
-                found_topic = topic
-                first_utt = True
-            elif re.findall(pattern, user_uttr["text"]) and not found_topic:
-                utt_can_continue = "prompt"
-                utt_conf = 0.95
-                found_topic = topic
-                first_utt = True
-        switch_on = topic_config[topic].get("switch_on", [])
-        for switch_elem in switch_on:
-            condition = switch_elem["cond"]
-            if check_condition(condition, user_uttr, bot_uttr, shared_memory):
-                found_topic = topic
-                utt_can_continue = switch_elem.get("can_continue", "can")
-                utt_conf = switch_elem.get("conf", utt_conf)
-                first_utt = True
-                break
-        if found_topic:
-            break
-    return found_topic, first_utt, utt_can_continue, utt_conf
-
-
 def smalltalk_response(vars, topic_config):
     response = ""
     first_utt = False
     shared_memory = state_utils.get_shared_memory(vars)
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    prev_active_skill = bot_uttr.get("active_skill", "")
+    if prev_active_skill not in {"dff_wiki_skill", "dff_music_skill"}:
+        delete_topic_info(vars)
     found_topic = shared_memory.get("special_topic", "")
     cur_mode = shared_memory.get("cur_mode", "smalltalk")
     isno = is_no(state_utils.get_last_human_utterance(vars))
@@ -784,7 +783,7 @@ def start_or_continue_facts(vars, topic_config):
                     flag = True
 
     first_utt = False
-    if not shared_memory.get("special_topic", ""):
+    if not shared_memory.get("special_topic", "") or prev_active_skill not in {"dff_wiki_skill", "dff_music_skill"}:
         found_topic, first_utt, utt_can_continue, utt_conf = check_switch(vars, topic_config)
     logger.info(f"start_or_continue_facts, first_utt {first_utt}")
     if found_topic:
@@ -800,7 +799,11 @@ def start_or_continue_facts(vars, topic_config):
 def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
     shared_memory = state_utils.get_shared_memory(vars)
     user_uttr = state_utils.get_last_human_utterance(vars)
-    isyes = is_yes(user_uttr) or "go ahead" in user_uttr["text"].lower()
+    bot_uttr = state_utils.get_last_bot_utterance(vars)
+    prev_active_skill = bot_uttr.get("active_skill", "")
+    if prev_active_skill not in {"dff_wiki_skill", "dff_music_skill"}:
+        delete_topic_info(vars)
+    isyes = is_yes(user_uttr) or re.findall(CONTINUE_PATTERN, user_uttr["text"])
     response = ""
     cur_mode = shared_memory.get("cur_mode", "smalltalk")
     wikipedia_page = shared_memory.get("cur_wikipedia_page", "")
@@ -916,14 +919,3 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     state_utils.add_acknowledgement_to_response_parts(vars)
     return response
-
-
-def delete_topic_info(vars):
-    state_utils.save_to_shared_memory(vars, special_topic="")
-    state_utils.save_to_shared_memory(vars, expected_subtopic_info={})
-    state_utils.save_to_shared_memory(vars, available_utterances=[])
-    state_utils.save_to_shared_memory(vars, subtopics=[])
-    state_utils.save_to_shared_memory(vars, cur_facts=[])
-    state_utils.save_to_shared_memory(vars, used_utt_nums={})
-    state_utils.save_to_shared_memory(vars, cur_mode="")
-    state_utils.save_to_shared_memory(vars, ackn=[])

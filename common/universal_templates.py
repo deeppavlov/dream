@@ -182,6 +182,7 @@ NOT_LIKE_PATTERN = re.compile(
     re.IGNORECASE)
 
 STOP_PATTERN = re.compile(r"(stop|shut|something else|change|don't want)", re.IGNORECASE)
+CONTINUE_PATTERN = re.compile(r"(continue|more|go ahead)", re.IGNORECASE)
 
 
 def if_lets_chat(uttr):

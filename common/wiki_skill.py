@@ -522,7 +522,8 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
     for topic, topic_info in topic_config.items():
         pattern = topic_info.get("pattern", "")
         if (isinstance(pattern, str) and re.findall(pattern, user_uttr["text"], re.IGNORECASE)) \
-           or (isinstance(pattern, re.Pattern) and re.findall(pattern, user_uttr["text"])):
+           or (isinstance(pattern, re.Pattern) and re.findall(pattern, user_uttr["text"])) \
+           or if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern):
             flag = True
         switch_on = topic_info.get("switch_on", [])
         for switch_elem in switch_on:
