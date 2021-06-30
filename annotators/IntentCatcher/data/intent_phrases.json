@@ -157,6 +157,7 @@
                 "(.* )?can i get the normal alexa back.*",
                 "(.* )?gotta go",
                 "hang up",
+                "(please )?just stop",
                 "(alexa )?(buy|bye)"
             ],
             "min_precision": 0.99,
@@ -339,6 +340,7 @@
                 "(can you ){0,1}((pause)|(stop)) (the ){0,1}music.*",
                 "(alexa ){0,1}turn on.*",
                 "can i have some music on",
+                "can you go to wi fi network",
                 "(alexa ){0,1}can you play .*",
                 "(alexa ){0,1}start a personality test",
                 ".*(alexa )?turn (on |off )?(the |a |my )?alarm( on| off)?.*",
@@ -1576,7 +1578,8 @@
             "wonderful",
             "play sweet",
             "can you not answer the question?",
-            "we are not good"
+            "we are not good",
+            "pull a better wow"
         ],
         "punctuation": [
             ".",
