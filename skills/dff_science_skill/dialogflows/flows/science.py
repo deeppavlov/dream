@@ -236,8 +236,8 @@ def request_science_topic_response(vars):
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=CONF_100)
         elif if_chat_about_science_topic_pattern(vars):
-            state_utils.set_can_continue(vars, MUST_CONTINUE)
-            state_utils.set_confidence(vars, confidence=CONF_100)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+            state_utils.set_confidence(vars, confidence=CONF_95)
         elif is_mentioned_science_pattern(vars):
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             state_utils.set_confidence(vars, confidence=CONF_95)
