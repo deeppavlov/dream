@@ -81,7 +81,7 @@ TALK_LIKE = ["talk", "chat", "converse", "discuss", "speak", "tell", "say", "gos
 WANT_LIKE = ["want to", "wanna", "wish to", "need to", "desire to", r"(would |'d )?(like|love|dream) to", "going to",
              "gonna", "will", "can", "could", "plan to", "in need to", "demand", "want to", "care to"]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "that", "everything", "thing"]
+SOMETHING_LIKE = ["anything", "something", "that", "everything", "thing", "stuff", "other things"]
 NOTHING_LIKE = ["nothing", "none", "neither"]
 DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
 KNOW_LIKE = ["know", "learn", "find out"]
@@ -499,12 +499,15 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art(s|work)?|draw(s|ed|ing)?|paint(
                                          r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)", re.IGNORECASE),
                       "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
                       "politics": re.compile(r"\b(politic|democra|republi|liber|president|trump\b|byden\b"
-                                             r"|authoritarianism|monarch)",
+                                             r"|authoritarianism|monarch|joe biden|biden\b)",
                                              re.IGNORECASE)
                       }
 
 HEALTH_PROBLEMS = re.compile(
-    r"\b(broke|health problem|death|dead\b|ache|disease|illnes|ill\b|sickness|sick\b|shoot|chopped off)",
+    r"\b(broke|health problem|death|dead\b|died\b|dying\b|ache|disease|illnes|ill\b|sickness|sick\b|shoot|chopped off"
+    r"|cough\b|runny nose|bruise|sunburn|backache|headache|stomachache|nausea|dizziness|flu\b|fever\b|pain\b|stroke\b"
+    r"|influenza|insomnia|pneumonia|covid\b|coronavirus|cancer|diabetes|diarrhea|Dementia|Paralysis|heart attack"
+    r"|allergy|Appendicitis|Asthma|infection|Psoriasis|Vitiligo)",
     re.IGNORECASE)
 
 LETS_GET_BACK_TO_TOPIC = [
