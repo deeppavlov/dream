@@ -1,7 +1,7 @@
 import re
 import json
 import pathlib
-from common.utils import join_sentences_in_or_pattern
+from common.utils import join_sentences_in_or_pattern, join_words_in_or_pattern
 
 
 NICE_CHAT_ACKS = [
@@ -57,9 +57,8 @@ SCIENCE_TOPIC_KEY_PHRASE_RE = re.compile(
 )
 
 for subtopic in science_topics:
-    science_topics[subtopic]["key_phrases_re"] = re.compile(
-        "(" + "|".join(science_topics[subtopic]["key_phrases"]) + ")", re.IGNORECASE
-    )
+    pattern = join_words_in_or_pattern(science_topics[subtopic]["key_phrases"])
+    science_topics[subtopic]["key_phrases_re"] = re.compile(pattern, re.I)
 
 TRIGGER_PHRASES = OPINION_REQUESTS_ABOUT_SCIENCE + OFFER_TALK_ABOUT_SCIENCE
 
