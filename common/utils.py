@@ -358,7 +358,8 @@ def is_no(annotated_phrase):
     is_not_horrible = "horrible" != user_phrase
     no_regexp_detected = re.search(no_templates, annotated_phrase.get("text", "").lower())
     is_not_idontknow = not is_donot_know(annotated_phrase)
-    if is_not_horrible and (no_detected or midas_no_detected or no_regexp_detected) and is_not_idontknow:
+    _yes = is_yes(annotated_phrase)
+    if is_not_horrible and (no_detected or midas_no_detected or no_regexp_detected) and is_not_idontknow and not _yes:
         return True
 
     return False
