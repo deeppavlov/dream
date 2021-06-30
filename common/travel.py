@@ -141,8 +141,8 @@ WHY_BOT_LIKES_TO_TRAVEL = [
 ]
 
 HAVE_YOU_BEEN_IN_PHRASES = [
-    "I've been LOCATION just virtually because physically I live in the cloud. Have you been in LOCATION?",
-    "I've been LOCATION via pictures and videos. Have you been in LOCATION?",
+    "I've been LOCATION just virtually because physically I live in the cloud. Have you been LOCATION?",
+    "I've been LOCATION via pictures and videos. Have you been LOCATION?",
 ]
 
 I_HAVE_BEEN_IN_AND_LIKED_MOST = [
