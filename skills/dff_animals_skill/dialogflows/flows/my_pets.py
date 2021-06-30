@@ -10,6 +10,7 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import is_no
 from common.animals import MY_PET_FACTS, pet_games, stop_about_animals, fallbacks, DO_YOU_HAVE_TEMPLATE
+from common.universal_templates import NOT_LIKE_PATTERN
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
@@ -179,7 +180,7 @@ def my_pet_request(ngrams, vars):
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     prev_active_skill = bot_uttr.get("active_skill", "")
     dontlike = re.findall(r"(do not like |don't like |hate )(cat|dog)", user_uttr["text"])
-    isno = is_no(state_utils.get_last_human_utterance(vars))
+    isno = is_no(user_uttr)
     shared_memory = state_utils.get_shared_memory(vars)
     my_pet = shared_memory.get("my_pet", "")
     all_facts_used = False
@@ -196,10 +197,28 @@ def my_pet_request(ngrams, vars):
         flag = True
     if start_using_facts and prev_active_skill != "dff_animals_skill":
         flag = False
-    if "would you like" in bot_uttr["text"].lower() and isno:
+    if re.findall(r"(would you like|can tell you more)", bot_uttr["text"], re.IGNORECASE) and isno:
         flag = False
     logger.info(f"my_pet_request={flag}")
     return flag
+
+
+def scenario_end_request(ngrams, vars):
+    flag = False
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    isno = is_no(user_uttr)
+    dont_like = re.findall(NOT_LIKE_PATTERN, user_uttr["text"])
+    if re.findall(r"can tell you more", user_uttr["text"]) and (isno or dont_like):
+        flag = True
+    logger.info(f"scenario_end_request={flag}")
+    return flag
+
+
+def scenario_end_response(vars):
+    response = "I was very happy to tell you about my pets! You are a wonderful person!"
+    state_utils.set_confidence(vars, confidence=CONF_1)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    return response
 
 
 def user_asked_about_pet(user_uttr, my_pet):
@@ -340,6 +359,7 @@ simplified_dialog_flow.add_user_serial_transitions(
 simplified_dialog_flow.add_user_serial_transitions(
     MyPetsState.USR_MY_PET,
     {
+        MyPetsState.SYS_END: scenario_end_request,
         MyPetsState.SYS_ERR: stop_animals_request,
         MyPetsState.SYS_MY_PET: my_pet_request,
         MyPetsState.SYS_ABOUT_PET: about_pet_request,
@@ -349,6 +369,7 @@ simplified_dialog_flow.add_user_serial_transitions(
 
 simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ABOUT_PET, MyPetsState.USR_ABOUT_PET,
                                              tell_about_pet_response, )
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_END, MyPetsState.USR_END, scenario_end_response, )
 simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_PET, MyPetsState.USR_MY_PET, my_pet_response, )
 simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT),
                                              error_response, )

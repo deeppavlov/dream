@@ -12,6 +12,10 @@ class State(Enum):
     #
     USR_MY_PET = auto()
     #
+    SYS_END = auto()
+    #
+    USR_END = auto()
+    #
     SYS_WHAT_ANIMALS = auto()
     SYS_Q_HAVE_PETS = auto()
     #
