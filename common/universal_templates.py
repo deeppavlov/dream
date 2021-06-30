@@ -505,3 +505,10 @@ DFF_WIKI_TEMPLATES = {"art": re.compile(r"\b(art(s|work)?|draw(s|ed|ing)?|paint(
 HEALTH_PROBLEMS = re.compile(
     r"\b(broke|health problem|death|dead\b|ache|disease|illnes|ill\b|sickness|sick\b|shoot|chopped off)",
     re.IGNORECASE)
+
+LETS_GET_BACK_TO_TOPIC = [
+    "But can we get back on topic, please?",
+    "Let's get back on topic.",
+    "Let's get back to our topic.",
+    "Back on topic,",
+]
