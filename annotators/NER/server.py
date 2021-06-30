@@ -25,7 +25,7 @@ NLTK_STOPWORDS = set([line.strip() for line in open(nltk_stopwords_file, 'r').re
 BANNED_ENTITIES = re.compile(r"\b(okay|ok|name|ocean|hey|cool|corona|pop|rap|bo+"
                              r"|hmph|oops|ouch|sh+|hush|whew|whoa|uhu|huh|wow|ya+y|yip+e+|yahoo|hurray"
                              r"|[aeou]+[mhrw]+[aeou]*|[mhrw]+[aeou]+[mhrw]+|[mhrw]+|nowhere|nice|good"
-                             r"|somewhere|anywhere)\b", re.IGNORECASE)
+                             r"|somewhere|anywhere|honey)\b", re.IGNORECASE)
 
 EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-]")
 DOUBLE_SPACES = re.compile(r"\s+")
