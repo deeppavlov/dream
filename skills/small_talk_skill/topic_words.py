@@ -23,7 +23,7 @@ TOPIC_PATTERNS = {
                               r"|\bsidekick|\bcomics)", re.IGNORECASE),
     "travel": re.compile(r"(\btravel|\bjourney|\btour(ism|ists?|s)?\b|\btrips?\b|\bvoyage)", re.IGNORECASE),
     "weather": re.compile(r"(\bweather|\bforecast)", re.IGNORECASE),
-    "you": re.compile(r"(\babout you\b|\byourself|\bsocialbot|\babout alexa\b|\byou alexa\b"
+    "you": re.compile(r"(^(you|alexa).?$|\babout you\b|\byourself|\bsocialbot|\babout alexa\b|\byou alexa\b"
                       r"|\b(this|that|amazon|current|alexa) (competition|challenge))", re.IGNORECASE),
 }
 
