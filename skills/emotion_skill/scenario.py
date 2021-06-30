@@ -118,7 +118,7 @@ class EmotionSkillScenario:
             state = ''
         elif state == 'offered_advice':
             # we offered an advice
-            if is_no or is_positive_regexp_based({'text': user_phrase}):
+            if is_no_detected or is_positive_regexp_based({'text': user_phrase}):
                 state = 'no'
                 step = self.steps[state]
                 reply = random.choice(step['answers'])
