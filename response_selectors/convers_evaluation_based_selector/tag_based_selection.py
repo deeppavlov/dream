@@ -336,10 +336,10 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
 
-        # _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
-        #                                                                  all_user_named_entities)) > 0
-        # _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
-        #                                                               all_user_nounphrases)) > 0
+        _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
+                                                                         all_user_named_entities)) > 0
+        _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
+                                                                      all_user_nounphrases)) > 0
         _same_topic_entity = False
 
         # if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
