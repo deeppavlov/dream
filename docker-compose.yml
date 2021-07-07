@@ -19,7 +19,6 @@ services:
     build:
       context: skills/harvesters_maintenance_skill
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3002
-    volumes: []
     ports:
       - 3002:3002
   mongo:
@@ -33,7 +32,6 @@ services:
     build:
       context: selectors/rule_based_response_selector
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3003
-    volumes: []
     ports:
       - 3003:3003
   emotion_classification:
