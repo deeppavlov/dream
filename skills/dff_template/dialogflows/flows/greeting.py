@@ -5,7 +5,7 @@ from enum import Enum, auto
 
 import sentry_sdk
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 
 import dialogflows.scopes as scopes
@@ -47,7 +47,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################

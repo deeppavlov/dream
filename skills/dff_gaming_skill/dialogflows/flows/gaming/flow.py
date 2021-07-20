@@ -5,7 +5,7 @@ from functools import partial
 
 import sentry_sdk
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 
 import dialogflows.common.shared_memory_ops as gaming_memory
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 ##################################################################################################################
 ##################################################################################################################
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(GamingState.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(GamingState.USR_START)
 ##################################################################################################################
 #  GLOBAL
 simplified_dialogflow.add_global_user_serial_transitions(

@@ -18,7 +18,7 @@ from book_utils import get_name, get_genre, suggest_template, get_not_given_ques
     asked_about_genre, GENRE_DICT, is_previous_was_book_skill, just_mentioned, dontknow_books, find_by, \
     best_plain_book_by_author, tell_about_genre_book, bible_request, get_movie_answer, if_loves_reading, \
     my_favorite, get_author, what_is_book_about, havent_read, is_wikidata_entity, published_year_request, \
-    asked_what, set_favourite
+    asked_what, set_favourite, what_is_book_about_request
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 
@@ -93,7 +93,7 @@ class BookSkillScenario:
 
     def __init__(self):
         self.super_conf = 1.0
-        self.default_conf = 0.95
+        self.default_conf = 0.98
         self.low_conf = 0.7
         self.default_reply = ""
         self.bookreads_dir = 'bookreads_data.json'
@@ -154,8 +154,7 @@ class BookSkillScenario:
             return False
         user_asked_what = asked_what(annotated_user_phrase)
         return any([user_asked_favourite_book,
-                    user_asked_what,
-                    bot_proposed_favourite_book and user_agreed]) and not_finished
+                    bot_proposed_favourite_book and (user_asked_what or user_agreed)]) and not_finished
 
     def genrebook_request_detected(self, annotated_user_phrase, bot_phrases):
         was_bot_phrase = WHAT_IS_FAV_GENRE in bot_phrases[-1]
@@ -196,6 +195,7 @@ class BookSkillScenario:
         if we_asked_about_book and nothing_found:
             if we_repeated:
                 reply = self.book_linkto_reply('', human_attr)
+                confidence = self.default_conf
             elif is_yes(annotated_user_phrase) or annotated_user_phrase['annotations'].get('ner', [[]]) == [[]]:
                 reply, confidence = REPEAT_PHRASE, self.default_conf
             elif is_no(annotated_user_phrase) or dontknow_books(annotated_user_phrase):
@@ -321,6 +321,9 @@ class BookSkillScenario:
                 questions_about_book = [BOOK_ANY_PHRASE, LAST_BOOK_READ,
                                         WHAT_BOOK_IMPRESSED_MOST] + BOOK_SKILL_CHECK_PHRASES
                 we_asked_about_book = any([question in bot_phrases[-1] for question in questions_about_book])
+                we_offered_information = len(bot_phrases) >= 1 and any([k in bot_phrases[-1]
+                                                                        for k in [TELL_REQUEST, TELL_REQUEST2]])
+                what_about_requested = what_is_book_about_request(annotated_user_phrase)
                 if len(dialog['human_utterances']) > 1:
                     annotated_prev_phrase = dialog['human_utterances'][-2]
                 else:
@@ -481,10 +484,10 @@ class BookSkillScenario:
                     else:
                         logger.debug('No intent detected. Returning nothing')
                         reply, confidence = self.book_linkto_reply('', human_attr), self.default_conf
-                elif len(bot_phrases) >= 1 and any([k in bot_phrases[-1] for k in [TELL_REQUEST, TELL_REQUEST2]]):
+                elif we_offered_information or what_about_requested:
                     # We have offered information about book
                     plain_bookname = human_attr['book_skill'].get('plain_book', '')
-                    bookname = human_attr['book_skill']['book']
+                    bookname = human_attr['book_skill'].get('book', '')
                     logger.debug(f'TELL_REQUEST with {bookname} {plain_bookname}')
                     if (tell_me_more(annotated_user_phrase) or is_yes(annotated_user_phrase)) and bookname:
                         logger.debug('Tell_me_more or is_yes and bookname')

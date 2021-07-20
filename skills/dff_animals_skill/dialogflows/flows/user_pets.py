@@ -6,7 +6,7 @@ import re
 import sentry_sdk
 
 import common.constants as common_constants
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import is_no, is_yes
@@ -488,7 +488,7 @@ def error_response(vars):
     return ""
 
 
-simplified_dialog_flow = dialogflow_extention.DFEasyFilling(UserPetsState.USR_START)
+simplified_dialog_flow = dialogflow_extension.DFEasyFilling(UserPetsState.USR_START)
 
 simplified_dialog_flow.add_user_serial_transitions(
     UserPetsState.USR_START,

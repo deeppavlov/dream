@@ -1,9 +1,9 @@
 import logging
 
-from emora_stdm import CompositeDialogueFlow, DialogueFlow
+from dff import CompositeDialogueFlow, DialogueFlow
 
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 
 import dialogflows.flows.gaming.flow as gaming_flow
 import dialogflows.flows.minecraft.flow as minecraft_flow
@@ -25,7 +25,7 @@ composite_dialogflow.add_component(gaming_flow.dialogflow, scopes.GAMING)
 composite_dialogflow.add_component(minecraft_flow.dialogflow, scopes.MINECRAFT)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(dialogflow=dialogflow)
 
 
 ##################################################################################################################

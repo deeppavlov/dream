@@ -10,7 +10,7 @@ import requests
 
 import dialogflows.scopes as scopes
 from CoBotQA.cobotqa_service import send_cobotqa
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
 from common.link import link_to_skill2i_like_to_talk
@@ -122,7 +122,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 
 ##################################################################################################################

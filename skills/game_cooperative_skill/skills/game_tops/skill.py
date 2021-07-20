@@ -176,7 +176,7 @@ def select_top_handler(state, skill_state, true_model_names, true_cmds):
         current_top = get_game_db().get("previous_yearly_top", [])
         period_plh = "the last year"
         top_name = "previous_yearly_top"
-    elif "this_year" in true_model_names:
+    elif "this_year" in true_model_names or "YES_ANSWER" in true_cmds:
         current_top = get_game_db().get("yearly_top", [])
         period_plh = "this year"
         top_name = "yearly_top"

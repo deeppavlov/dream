@@ -9,7 +9,7 @@ from enum import Enum, auto
 import sentry_sdk
 
 import dialogflows.scopes as scopes
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.dialogflow_framework.utils.state as state_utils
 
@@ -102,7 +102,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 
 ##################################################################################################################
@@ -396,13 +396,14 @@ def have_bot_been_in_response(vars):
         user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
 
         if len(user_mentioned_locations):
-            location = f"in {user_mentioned_locations[-1]}"
+            location = f"{user_mentioned_locations[-1]}"
             shared_memory = state_utils.get_shared_memory(vars)
             discussed_locations = list(set(shared_memory.get("discussed_locations", [])))
-            state_utils.save_to_shared_memory(vars, discussed_location=user_mentioned_locations[-1])
+            state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(
-                vars, discussed_locations=discussed_locations + [user_mentioned_locations[-1]])
-            collect_and_save_facts_about_location(user_mentioned_locations[-1], vars)
+                vars, discussed_locations=discussed_locations + [location])
+            collect_and_save_facts_about_location(location, vars)
+            location = f"in {location}"
         else:
             location = "there"
         logger.info(f"Bot responses that bot has not been in LOC: {location}.")
@@ -568,8 +569,8 @@ def user_have_not_been_in_response(vars):
         user_mentioned_locations = get_mentioned_locations(state_utils.get_last_human_utterance(vars))
         shared_memory = state_utils.get_shared_memory(vars)
 
-        if re.search(HAVE_YOU_BEEN_TEMPLATE,
-                     state_utils.get_last_bot_utterance(vars).get("text", "")) and condition_utils.is_no_vars(vars):
+        if bot_mentioned_locations and condition_utils.is_no_vars(vars) and re.search(
+                HAVE_YOU_BEEN_TEMPLATE, state_utils.get_last_bot_utterance(vars).get("text", "")):
             location = bot_mentioned_locations[-1]
         elif len(user_mentioned_locations) > 0:
             location = user_mentioned_locations[-1]

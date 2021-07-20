@@ -6,7 +6,7 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-import common.dialogflow_framework.stdm.cached_functions as cached_functions
+from dff import cached_functions
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 
 ignore_logger("root")

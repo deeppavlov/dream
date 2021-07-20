@@ -9,7 +9,7 @@ import re
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.utils as common_utils
@@ -89,7 +89,7 @@ HIGH_CONFIDENCE = 0.98
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 
 ##################################################################################################################

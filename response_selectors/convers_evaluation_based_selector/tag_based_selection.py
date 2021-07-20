@@ -1,6 +1,5 @@
 import json
 import logging
-import random
 from copy import deepcopy
 from collections import Counter
 from os import getenv
@@ -13,8 +12,7 @@ from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import if_chat_about_particular_topic, is_switch_topic, \
-    is_any_question_sentence_in_utterance, if_not_want_to_chat_about_particular_topic, if_choose_topic, \
-    LETS_GET_BACK_TO_TOPIC
+    is_any_question_sentence_in_utterance, if_not_want_to_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intent_name, get_intents, get_topics, get_entities, \
     get_common_tokens_in_lists_of_strings, is_no
 from utils import calculate_single_convers_evaluator_score, CONV_EVAL_STRENGTH, CONFIDENCE_STRENGTH, \
@@ -285,7 +283,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                              for _intent in _require_action_intents_detected], [])
     _contains_entities = len(get_entities(annotated_uttr, only_named=False, with_labels=False)) > 0
     _is_active_skill_can_not_continue = False
-    active_hypothesis = None
 
     _prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
     _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
@@ -339,10 +336,10 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
 
-        # _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
-        #                                                                  all_user_named_entities)) > 0
-        # _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
-        #                                                               all_user_nounphrases)) > 0
+        _same_named_entities = len(get_common_tokens_in_lists_of_strings(all_cand_named_entities,
+                                                                         all_user_named_entities)) > 0
+        _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases,
+                                                                      all_user_nounphrases)) > 0
         _same_topic_entity = False
 
         # if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
@@ -481,10 +478,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if cand_uttr["skill_name"] == "grounding_skill" and "acknowledgement" in cand_uttr.get("response_parts", []):
             acknowledgement_hypothesis = deepcopy(cand_uttr)
 
-        if _prev_active_skill == cand_uttr["skill_name"] and skill_name in ACTIVE_SKILLS and _can_continue in [
-                MUST_CONTINUE, CAN_CONTINUE_SCENARIO]:
-            active_hypothesis = deepcopy(cand_uttr)
-
     logger.info(f"Current CASE: {CASE}")
     # now compute current scores as one float value
     curr_single_scores = compute_curr_single_scores(candidates, scores, confidences)
@@ -534,14 +527,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
         best_candidate = deepcopy(candidates[best_prompt_id])
         best_cand_id = best_prompt_id
-
-    if active_hypothesis and _is_require_action_intent and "?" not in best_candidate["text"] and \
-            best_candidate["text"] != active_hypothesis["text"]:
-        required_dialog_act_response = best_candidate["text"]
-        best_candidate = deepcopy(active_hypothesis)
-        best_cand_id = candidates.index(best_candidate)
-        best_candidate["text"] = f'{required_dialog_act_response} {random.choice(LETS_GET_BACK_TO_TOPIC)} ' \
-                                 f'{best_candidate["text"]}'
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols

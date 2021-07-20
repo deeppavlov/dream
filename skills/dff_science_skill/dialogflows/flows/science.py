@@ -9,7 +9,7 @@ from enum import Enum, auto
 
 import sentry_sdk
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
@@ -75,7 +75,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################
@@ -236,8 +236,8 @@ def request_science_topic_response(vars):
             state_utils.set_can_continue(vars, MUST_CONTINUE)
             state_utils.set_confidence(vars, confidence=CONF_100)
         elif if_chat_about_science_topic_pattern(vars):
-            state_utils.set_can_continue(vars, MUST_CONTINUE)
-            state_utils.set_confidence(vars, confidence=CONF_100)
+            state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
+            state_utils.set_confidence(vars, confidence=CONF_95)
         elif is_mentioned_science_pattern(vars):
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
             state_utils.set_confidence(vars, confidence=CONF_95)

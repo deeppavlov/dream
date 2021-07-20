@@ -8,6 +8,7 @@ from common.emotion import is_joke_requested, is_sad, is_alone, is_boring, \
     skill_trigger_phrases, talk_about_emotion, is_pain, emo_advice_requested, is_positive_regexp_based
 from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions, is_yes, is_no
+from common.greeting import HOW_ARE_YOU_RESPONSES
 from collections import defaultdict
 import re
 
@@ -117,7 +118,7 @@ class EmotionSkillScenario:
             state = ''
         elif state == 'offered_advice':
             # we offered an advice
-            if is_no or is_positive_regexp_based({'text': user_phrase}):
+            if is_no_detected or is_positive_regexp_based({'text': user_phrase}):
                 state = 'no'
                 step = self.steps[state]
                 reply = random.choice(step['answers'])
@@ -193,6 +194,9 @@ class EmotionSkillScenario:
                     prev_bot_phrase = prev_annotated_bot_phrase['text']
                 very_confident = any([function(annotated_user_phrase)
                                       for function in [is_sad, is_boring, is_alone, is_joke_requested, is_pain]])
+                very_very_confident = very_confident and any([how_are_you_response.lower()
+                                                              in prev_bot_phrase.lower()
+                                                              for how_are_you_response in HOW_ARE_YOU_RESPONSES])
                 # Confident if regezp
                 link = ''
                 if len(dialog['bot_utterances']) >= 1:
@@ -249,7 +253,7 @@ class EmotionSkillScenario:
                 if (was_trigger or was_active or self.regexp_sad) and not was_scripted:
                     attr['can_continue'] = MUST_CONTINUE
                     confidence = 1
-                elif not very_confident and not was_active:
+                elif not very_very_confident and not was_active:
                     confidence = min(confidence, 0.99)
                     attr['can_continue'] = CAN_CONTINUE_SCENARIO
                 elif state != "joke_requested":

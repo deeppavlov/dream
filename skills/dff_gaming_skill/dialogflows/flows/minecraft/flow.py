@@ -2,7 +2,7 @@ import logging
 import os
 from functools import partial
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.gaming as common_gaming
 
@@ -26,7 +26,7 @@ MINECRAFT_HOW_TOS = common_gaming.load_json(os.getenv("MINECRAFT_HOW_TOS"))
 ##################################################################################################################
 ##################################################################################################################
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(MinecraftState.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(MinecraftState.USR_START)
 ##############################################################
 simplified_dialogflow.add_user_serial_transitions(
     MinecraftState.USR_START,

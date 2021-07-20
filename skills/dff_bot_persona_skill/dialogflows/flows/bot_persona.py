@@ -8,7 +8,7 @@ import re
 import sentry_sdk
 from spacy import load
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 # from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
@@ -59,7 +59,7 @@ CONF_LOW = 0.9
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(BS.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(BS.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################
