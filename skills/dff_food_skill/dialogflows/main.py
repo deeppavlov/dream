@@ -1,9 +1,9 @@
 import logging
 
-from emora_stdm import CompositeDialogueFlow, DialogueFlow
+from dff import CompositeDialogueFlow, DialogueFlow
 
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 
 import dialogflows.flows.food as food_flow
 import dialogflows.flows.fast_food as fast_food_flow
@@ -24,7 +24,7 @@ composite_dialogflow.add_component(food_flow.dialogflow, scopes.FOOD)
 composite_dialogflow.add_component(fast_food_flow.dialogflow, scopes.FAST_FOOD)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(dialogflow=dialogflow)
 
 
 ##################################################################################################################

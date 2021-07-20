@@ -7,7 +7,7 @@ import inflect
 import sentry_sdk
 
 import common.constants as common_constants
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 from common.dialogflow_framework.utils.condition import if_was_prev_active
 from common.dialogflow_framework.utils.condition import get_last_state
@@ -407,7 +407,7 @@ def error_response(vars):
     return ""
 
 
-simplified_dialog_flow = dialogflow_extention.DFEasyFilling(AS.USR_START)
+simplified_dialog_flow = dialogflow_extension.DFEasyFilling(AS.USR_START)
 
 simplified_dialog_flow.add_user_serial_transitions(
     AS.USR_START,

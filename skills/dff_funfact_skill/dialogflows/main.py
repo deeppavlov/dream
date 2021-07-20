@@ -1,8 +1,8 @@
 import logging
 
-from emora_stdm import CompositeDialogueFlow, DialogueFlow
+from dff import CompositeDialogueFlow, DialogueFlow
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 
 import dialogflows.flows.funfact as funfact_flow
 import dialogflows.scopes as scopes
@@ -19,7 +19,7 @@ composite_dialogflow = CompositeDialogueFlow(
 composite_dialogflow.add_component(funfact_flow.dialogflow, scopes.FUNFACT)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(dialogflow=dialogflow)
 
 ##################################################################################################################
 ##################################################################################################################

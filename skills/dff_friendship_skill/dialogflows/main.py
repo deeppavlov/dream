@@ -1,9 +1,9 @@
 import logging
 
-from emora_stdm import CompositeDialogueFlow, DialogueFlow
+from dff import CompositeDialogueFlow, DialogueFlow
 
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 
 import dialogflows.flows.greeting as greeting_flow
 import dialogflows.flows.starter as starter_flow
@@ -28,7 +28,7 @@ composite_dialogflow.add_component(weekend_flow.dialogflow, scopes.WEEKEND)
 
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(dialogflow=dialogflow)
 
 
 ##################################################################################################################

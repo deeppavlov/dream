@@ -10,7 +10,7 @@ import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import common.greeting as common_greeting
@@ -173,7 +173,7 @@ def offer_topic_response_part(vars, excluded_skills=None):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################
