@@ -9,7 +9,7 @@ import nltk
 import sentry_sdk
 
 import common.constants as common_constants
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK
 from common.utils import is_no, is_yes
@@ -722,7 +722,7 @@ def error_response(vars):
     return ""
 
 
-simplified_dialog_flow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialog_flow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 simplified_dialog_flow.add_user_serial_transitions(
     State.USR_START,

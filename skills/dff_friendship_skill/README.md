@@ -249,7 +249,7 @@ Then in skill\_selectors/rule\_based_selector/connector.py:
             response = facts_response(vars, topic_config)
             return response
 
-        simplified_dialog_flow = dialogflow_extention.DFEasyFilling(State.USR_START)
+        simplified_dialog_flow = dialogflow_extension.DFEasyFilling(State.USR_START)
     
         ... # Your state transitions
 

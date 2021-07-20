@@ -10,7 +10,7 @@ import sentry_sdk
 from common.funfact import funfact_requested, story_requested, FUNFACT_LIST, make_question
 from common.constants import MUST_CONTINUE
 from common.utils import get_topics
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 
 from CoBotQA.cobotqa_service import send_cobotqa
@@ -36,7 +36,7 @@ class State(Enum):
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################

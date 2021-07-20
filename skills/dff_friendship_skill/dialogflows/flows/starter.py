@@ -6,7 +6,7 @@ import json
 import pytz
 import sentry_sdk
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE
@@ -41,7 +41,7 @@ CONF_LOW = 0.9
 ##################################################################################################################
 
 
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(State.USR_START)
 
 ##################################################################################################################
 ##################################################################################################################

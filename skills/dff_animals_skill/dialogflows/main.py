@@ -1,8 +1,8 @@
 import logging
 
-from emora_stdm import CompositeDialogueFlow, DialogueFlow
+from dff import CompositeDialogueFlow, DialogueFlow
 
-import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+from dff import dialogflow_extension
 
 import dialogflows.flows.animals as animals_flow
 import dialogflows.flows.my_pets as my_pets_flow
@@ -26,7 +26,7 @@ composite_dialogflow.add_component(user_pets_flow.dialogflow, scopes.USER_PETS)
 composite_dialogflow.add_component(wild_animals_flow.dialogflow, scopes.WILD_ANIMALS)
 
 dialogflow = composite_dialogflow.component(scopes.MAIN)
-simplified_dialogflow = dialogflow_extention.DFEasyFilling(dialogflow=dialogflow)
+simplified_dialogflow = dialogflow_extension.DFEasyFilling(dialogflow=dialogflow)
 
 
 ##################################################################################################################
