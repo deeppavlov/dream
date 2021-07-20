@@ -9,16 +9,17 @@ import sentry_sdk
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.emotion import if_turn_on_emotion
-from common.gossip import check_is_celebrity_mentioned
 from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
-from common.movies import extract_movies_names_from_annotations
-from common.response_selection import UNPREDICTABLE_SKILLS
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, GREETING_QUESTIONS_TEXTS
 from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news
+from common.response_selection import UNPREDICTABLE_SKILLS
+from common.movies import extract_movies_names_from_annotations
+
+from common.gossip import check_is_celebrity_mentioned
 
 sentry_sdk.init(getenv('SENTRY_DSN'))
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -50,9 +51,6 @@ class RuleBasedSkillSelectorConnector:
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
 
             is_factoid = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.) > 0.9
-
-            # DFF Generic Responses Skill
-            skills_for_uttr.append("dff_generic_responses_skill")
 
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
