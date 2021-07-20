@@ -45,13 +45,13 @@ except Exception as e:
 
 
 async def handler(payload: List[Payload]):
-    responses = [''] * len(payload)
+    responses = [""] * len(payload)
     try:
         responses = []
         for p in payload:
             phrase_len = len(p.phrase)
             phrases = [p.prev_phrase] + p.phrase
-            authors = ['John'] + ['Doe'] * phrase_len
+            authors = ["John"] + ["Doe"] * phrase_len
             response = [p.prev_speech_function]
             for phr, prev_phr, auth, prev_auth in zip(phrases[1:], phrases[:-1], authors[1:], authors[:-1]):
                 speech_f = get_speech_function(phr, prev_phr, response[-1], auth, prev_auth)
@@ -75,9 +75,14 @@ async def answer(payload: Payload):
 @app.post("/annotation")
 async def annotation(payload: List[AnnotationPayload]):
     st_time = time.time()
-    responses = await handler([Payload(phrase=sent_tokenize(p.phrase),
-                                       prev_phrase=p.prev_phrase,
-                                       prev_speech_function=p.prev_speech_function) for p in payload])
+    responses = await handler(
+        [
+            Payload(
+                phrase=sent_tokenize(p.phrase), prev_phrase=p.prev_phrase, prev_speech_function=p.prev_speech_function
+            )
+            for p in payload
+        ]
+    )
     total_time = time.time() - st_time
     logger.info(f"speech_function_classifier batch exec time: {total_time:.3f}s")
     return [{"batch": responses}]

@@ -15,11 +15,13 @@ def run_test(handler):
     hypothesis = handler(["React.Respond.Reply.Accept", "React.Respond.Develop.Extend"])
     print(f"test name: {hypothesis}")
     assert hypothesis[0][0] == [{}]
-    assert {h['prediction'] for h in hypothesis[0][1]} == {'Sustain.Continue.Prolong.Elaborate',
-                                                           'React.Respond.Reply.Agree',
-                                                           'Sustain.Continue.Prolong.Enhance',
-                                                           'Sustain.Continue.Prolong.Extend',
-                                                           'React.Rejoinder.Track.Confirm'}
+    assert {h["prediction"] for h in hypothesis[0][1]} == {
+        "Sustain.Continue.Prolong.Elaborate",
+        "React.Respond.Reply.Agree",
+        "Sustain.Continue.Prolong.Enhance",
+        "Sustain.Continue.Prolong.Extend",
+        "React.Rejoinder.Track.Confirm",
+    }
     print("Success")
 
 

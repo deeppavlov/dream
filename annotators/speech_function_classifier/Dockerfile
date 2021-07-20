@@ -1,14 +1,14 @@
 FROM deeppavlov/base-gpu:0.14.1
 
-ARG asdf=asdf
-
 WORKDIR /src
 
 COPY ./annotators/speech_function_classifier/requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY ./annotators/speech_function_classifier/* ./
+RUN python -c "import nltk; nltk.download('punkt')"
+
+COPY ./annotators/speech_function_classifier ./
 COPY ./common ./common
 
 RUN python models.py

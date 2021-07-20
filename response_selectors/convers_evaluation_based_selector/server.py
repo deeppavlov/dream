@@ -33,11 +33,10 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
-MOST_DUMMY_RESPONSES = [
-    "I really do not know what to answer.",
-    "Sorry, probably, I didn't get what you mean.",
-    "I didn't get it. Sorry"
-]
+MOST_DUMMY_RESPONSES = ["I really do not know what to answer.",
+                        "Sorry, probably, I didn't get what you mean.",
+                        "I didn't get it. Sorry"
+                        ]
 
 
 @app.route("/respond", methods=['POST'])
@@ -299,8 +298,8 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
     return best_candidate, best_id, curr_single_scores
 
 
-def select_response(candidates, scores, confidences, toxicities, has_blacklisted, has_inappropriate, dialog,
-                    all_prev_active_skills=None):
+def select_response(candidates, scores, confidences, toxicities, has_blacklisted,
+                    has_inappropriate, dialog, all_prev_active_skills=None):
     # TOXICITY & BLACKLISTS checks
     n_toxic_candidates, scores, confidences = downscore_toxic_blacklisted_responses(
         scores, confidences, toxicities, has_blacklisted, has_inappropriate)

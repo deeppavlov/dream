@@ -23,8 +23,8 @@ class_dict, counters, label_to_name = init_model()
 
 
 def predict(label_name):
-    if label_name == 'React.Respond.Response.Resolve.':
-        label_name = 'React.Rejoinder.Response.Resolve'
+    if label_name == "React.Respond.Response.Resolve.":
+        label_name = "React.Rejoinder.Response.Resolve"
     try:
         class_id = class_dict[label_name]
     except KeyError:
@@ -45,7 +45,7 @@ except Exception as e:
 async def handler(payload: List[str]):
     responses = [{}] * len(payload)
     try:
-        responses = [predict(speech_function.strip('.')) for speech_function in payload]
+        responses = [predict(speech_function.strip(".")) for speech_function in payload]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

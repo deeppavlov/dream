@@ -12,5 +12,5 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-COPY ./annotators/speech_function_predictor/* ./
+COPY ./annotators/speech_function_predictor ./
 COPY ./common ./common
