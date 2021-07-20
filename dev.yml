@@ -506,13 +506,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8107:8107
-  dff-generic-responses-skill:
-    env_file: [.env.dev]
-    volumes:
-      - "./skills/dff_generic_responses_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8117:8117
   personality-detection:
     env_file: [.env.dev]
     volumes:

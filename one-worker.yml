@@ -283,10 +283,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-  dff-generic-responses-skill:
-    deploy:
-      mode: replicated
-      replicas: 1
   personality-detection:
     deploy:
       mode: replicated

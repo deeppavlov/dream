@@ -198,8 +198,6 @@ services:
       - CUDA_VISIBLE_DEVICES=''
   speech-function-predictor:
     env_file: [ .env.dev ]
-  dff-generic-responses-skill:
-    env_file: [ .env.dev ]
   personality-detection:
     env_file: [ .env.dev ]
 version: '3.7'
