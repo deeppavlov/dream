@@ -587,4 +587,3 @@ def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John
         if y_pred == "React.Rejoinder.":
             y_pred = get_labels_for_rejoinder(phrase, prev_phrase, speaker, previous_speaker)
     return y_pred
-
