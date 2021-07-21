@@ -47,8 +47,7 @@ except Exception as e:
 async def handler(payload: List[Payload]):
     responses = [""] * len(payload)
     try:
-        responses = []
-        for p in payload:
+        for i, p in enumerate(payload):
             phrase_len = len(p.phrase)
             phrases = [p.prev_phrase] + p.phrase
             authors = ["John"] + ["Doe"] * phrase_len
@@ -56,7 +55,7 @@ async def handler(payload: List[Payload]):
             for phr, prev_phr, auth, prev_auth in zip(phrases[1:], phrases[:-1], authors[1:], authors[:-1]):
                 speech_f = get_speech_function(phr, prev_phr, response[-1], auth, prev_auth)
                 response.append(speech_f)
-            responses.append(response[1:])
+            responses[i] = response[1:]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
