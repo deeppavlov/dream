@@ -52,5 +52,5 @@ services:
       context: ./annotators/intent_catcher/
     ports:
       - 3007:3007
-    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3007 --timeout=100 server:app
+    command: python -m deeppavlov riseapi intent_catcher -d -p 3007
 version: "3.7"

@@ -5,15 +5,19 @@ EXPOSE 3006:3006
 WORKDIR /
 
 RUN  apt-get update \
-  && apt-get install -y wget \
+
+  && apt-get install -y wget git \
   && rm -rf /var/lib/apt/lists/*
 
 COPY ./requirements.txt requirements.txt
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install -r requirements.txt && \
+    pip install git+git://github.com/deepmipt/DeepPavlov.git@rulebased_gobot
 
 COPY ./ /
 
-RUN python -c "import tensorflow_hub as hub; hub.Module(\"https://tfhub.dev/google/universal-sentence-encoder/2\")"
+RUN python -c "import tensorflow_hub as hub; hub.Module(\"https://tfhub.dev/google/universal-sentence-encoder/2\")" && \
+    wget -O /usr/local/lib/python3.6/dist-packages/deeppavlov/utils/server/server.py \
+    https://raw.githubusercontent.com/deepmipt/DeepPavlov/1e707d55ca090782f16f918f15450d1d07d27c85/deeppavlov/utils/server/server.py
 
-CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3007 --timeout=500 server:app
+CMD python -m deeppavlov riseapi intent_catcher -d -p 3007
