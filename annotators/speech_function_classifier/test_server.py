@@ -16,11 +16,11 @@ def run_test(handler):
         {
             "phrase": ["fine, thank you.", "and you?"],
             "prev_phrase": "How are you doing today?",
-            "prev_speech_function": "React.Respond.Develop.Extend",
+            "prev_speech_function": "Open.Demand.Fact.",
         }
     )
     print(f"test name: {hypothesis}")
-    assert hypothesis == [["React.Respond.Reply.Accept", "React.Respond.Develop.Extend"]]
+    assert hypothesis == [["Open.Give.Fact.", "React.Rejoinder.Response.Re-challenge"]]
     print("Success")
 
 
