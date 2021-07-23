@@ -6,8 +6,8 @@ logger = logging.getLogger(__name__)
 LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
 
 
-def first_utt_dialog(dialog: Dict) -> Dict:
-    return [{'x': [dialog['utterances'][0]['text']]}]
+def catcher_formatter(dialog: Dict) -> Dict:
+    return [{'x': [dialog['utterances'][-1]['text']]}]
 
 
 def last_utt_dialog(dialog: Dict) -> Dict:

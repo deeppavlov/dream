@@ -33,7 +33,7 @@
                     "protocol": "http",
                     "url": "http://intent_catcher:3007/model"
                 },
-                "dialog_formatter": "dp_formatters:first_utt_dialog",
+                "dialog_formatter": "dp_formatters:catcher_formatter",
                 "response_formatter": "dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             }
