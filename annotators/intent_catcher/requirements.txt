@@ -1,0 +1,6 @@
+sentry_sdk == 0.12.2
+Flask == 1.1.1
+requests == 2.22.0
+xeger == 0.3.5
+tensorflow-hub==0.10.0
+gunicorn==19.9.0

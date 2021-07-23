@@ -45,4 +45,10 @@ services:
       context: skills/program-y
     ports:
       - 3005:3005
+  intent_catcher:
+    build:
+      context: ./annotators/intent_catcher/
+    ports:
+      - 3007:3007
+    command: python -m deeppavlov riseapi intent_catcher -d -p 3007
 version: "3.7"
