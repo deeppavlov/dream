@@ -1,4 +1,0 @@
-tfhub_model/*
-metrics/*
-data/logs/*
-*.ipynb
