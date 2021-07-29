@@ -22,15 +22,6 @@ with open("data/track_list.txt") as track_list:
     track_list = track_list.readlines()
 
 
-with open("data/SBC058.json") as proba:
-    proba = json.load(proba)
-    dialogue = proba["text"]
-    dialogue = [i for i in dialogue if not (i["phrase"] == "PAUSE")]
-    phrases = []
-    speakers = []
-    for i in range(len(dialogue)):
-        phrases.append(dialogue[i]["phrase"])
-        speakers.append(dialogue[i]["speaker"])
 
 
 def load_pickle(filepath):
@@ -230,7 +221,6 @@ all_cuts.extend(cut_train_labels)
 all_cuts.extend(cut_test_labels)
 
 
-phrases = delete_odds(phrases)
 
 model = LogisticRegression(C=0.01, class_weight="balanced")
 
@@ -374,14 +364,14 @@ def get_open_labels(phrase, y_pred):
     open_tag = predict(phrase)
     if open_tag == "Fact":
         if "?" not in phrase:
-            open_tag = "Give.Fact."
+            open_tag = "Give.Fact"
         else:
-            open_tag = "Demand.Fact."
+            open_tag = "Demand.Fact"
     else:
         if "?" not in phrase:
-            open_tag = "Give.Opinion."
+            open_tag = "Give.Opinion"
         else:
-            open_tag = "Demand.Opinion."
+            open_tag = "Demand.Opinion"
     y_pred = y_pred + open_tag
     if len(word_tokenize(phrase)) < 4:
         poses = []
@@ -397,7 +387,7 @@ def check_develop(y_pred, y_pred_previous, current_speaker, previous_speaker):
     if current_speaker != previous_speaker:
         if "Sustain.Continue." in y_pred_previous:
             if "Sustain.Continue." in y_pred:
-                y_pred = "React.Respond.Develop."
+                y_pred = "React.Respond.Support.Develop."
     return y_pred
 
 
@@ -419,7 +409,7 @@ def get_label_for_sustains(phrase, y_pred):
     tags_for_sus = lr_sus.predict(test_sustains_emb)
     if y_pred == "Sustain.Continue.":
         y_pred = "".join(tags_for_sus)
-    if y_pred == "React.Respond.Develop.":
+    if y_pred == "React.Respond.Support.Develop.":
         cut_tags = "".join(tags_for_sus).split(".")[-1]
         if cut_tags != "Monitor":
             y_pred += cut_tags
@@ -464,28 +454,29 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
     tag_for_track = map_tracks(y_pred_track)
     if current_speaker != previous_speaker:
         if y_pred == "React.Respond." and tag_for_track != "5":
-            y_pred = "React.Rejoinder." + tag_for_track
+            y_pred = "React.Rejoinder.Support." + tag_for_track
         if y_pred == "React.Rejoinder." and tag_for_track != "5":
+            y_pred += "Support."
             y_pred += tag_for_track
         if y_pred == "React.Rejoinder." and tag_for_track == "5":
             for word in interrogative_words:
                 if word in phrase:
-                    y_pred = "React.Rejoinder.Rebound"
+                    y_pred = "React.Rejoinder.Confront.Challenge.Rebound"
                 else:
-                    y_pred = "React.Rejoinder.Re-challenge"
+                    y_pred = "React.Rejoinder.Confront.Response.Re-challenge"
         if y_pred == "Sustain.Continue.":
-            y_pred = "React.Rejoinder." + tag_for_track
+            y_pred = "React.Rejoinder.Support." + tag_for_track
         if y_pred == "Open.":
             pass
     if current_speaker == previous_speaker:
         if y_pred == "React.Rejoinder." and tag_for_track != "5":
-            y_pred += tag_for_track
+            y_pred = tag_for_track
         if y_pred == "React.Rejoinder." and tag_for_track == "5":
             for word in interrogative_words:
                 if word in phrase:
-                    y_pred = "React.Rejoinder.Rebound"
+                    y_pred = "React.Rejoinder.Confront.Challenge.Rebound"
                 else:
-                    y_pred = "React.Rejoinder.Re-challenge"
+                    y_pred = "React.Rejoinder.Confront.Response.Re-challenge"
         if y_pred == "Open.":
             pass
         if y_pred == "Sustain.Continue.":
@@ -509,6 +500,9 @@ lr_responds.fit(responds_concatenate, respond_tags)
 
 
 def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, current_speaker, previous_speaker):
+    confront_labels = ['Reply.Disawow', 'Reply.Disagree', 'Reply.Contradict']
+    support_labels = ['Reply.Acknowledge', 'Reply.Affirm', 'Reply.Agree', 'Develop.Elaborate',
+                      'Develop.Enhance', 'Develop.Extend']
     try_replies = []
     test_prev_lines = []
     test_responds = []
@@ -519,11 +513,20 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             try_replies.append(phrase)
             test_concat = np.concatenate([get_embeddings(try_replies), get_embeddings(test_prev_lines)], axis=1)
             tag_for_reply = lr_reply.predict(test_concat)
-            y_pred = y_pred + "".join(tag_for_reply)
+            if tag_for_reply == 'Reply.Decline':
+                tag_for_reply = 'Reply.Contradict'
             if "yes" in str(try_replies).lower():
-                if y_pred == "React.Respond.Reply.Disagree":
+                if "Disagree" in tag_for_reply:
                     if "Confirm" in y_pred_previous:
-                        y_pred = "React.Respond.Reply.Affirm"
+                        y_pred = "React.Respond.Support.Reply.Affirm"
+            if tag_for_reply in confront_labels:
+                y_pred = y_pred + 'Confront.' + ''.join(tag_for_reply)
+            if tag_for_reply in support_labels:
+                y_pred = y_pred + 'Support.' + ''.join(tag_for_reply)
+            if 'Response.Resolve.' in tag_for_reply:
+                y_pred = 'React.Rejoinder.Support.Response.Resolve'
+
+
         else:
             test_responds_prev_lines.append(previous_phrase)
             test_responds.append(phrase)
@@ -531,9 +534,13 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
                 [get_embeddings(test_responds), get_embeddings(test_responds_prev_lines)], axis=1
             )
             tags_for_responds = lr_responds.predict(test_responds_concatenate)
-            y_pred = y_pred + "".join(tags_for_responds)
-            if " no " in str(test_responds).lower():
-                y_pred = "Rejoinder.Counter"
+            if tags_for_responds in confront_labels:
+                y_pred = y_pred + 'Confront.' + ''.join(tags_for_responds)
+            if tags_for_responds in support_labels:
+                y_pred = y_pred + 'Support.' + ''.join(tags_for_responds)
+            for token in nlp(phrase):
+                if token.dep_ == 'neg':
+                    return 'React.Rejoinder.Confront.Challenge.Counter'
 
     else:
         test_responds_prev_lines.append(previous_phrase)
@@ -542,27 +549,36 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             [get_embeddings(test_responds), get_embeddings(test_responds_prev_lines)], axis=1
         )
         tags_for_responds = lr_responds.predict(test_responds_concatenate)
-        y_pred = y_pred + "".join(tags_for_responds)
-        if " no " in str(test_responds).lower():
-            y_pred = "Rejoinder.Counter"
+        if tags_for_responds in support_labels:
+            y_pred = y_pred + 'Support.' + ''.join(tags_for_responds)
+        elif tags_for_responds in confront_labels:
+            y_pred = y_pred + 'Confront.' + ''.join(tags_for_responds)
+        else:
+            y_pred = y_pred + ''.join(tags_for_responds)
+        for token in nlp(phrase):
+            if token.dep_ == 'neg':
+                y_pred = 'React.Rejoinder.Confront.Challenge.Counter'
     return y_pred
 
 
 def get_labels_for_rejoinder(phrase, previous_phrase, current_speaker, previous_speaker):
-    if " no " in phrase.lower():
-        return "React.Rejoinder.Counter"
+    for token in nlp(phrase):
+        if token.dep_=='neg':
+            y_pred = "React.Rejoinder.Confront.Challenge.Counter"
+            return y_pred
     if "?" in previous_phrase:
         if previous_speaker != current_speaker:
-            y_pred = "React.Rejoinder.Response.Resolve"
+            y_pred = "React.Rejoinder.Support.Response.Resolve"
         else:
-            y_pred = "React.Rejoinder.Re-challenge"
+            y_pred = "React.Rejoinder.Confront.Response.Re-challenge"
     else:
-        y_pred = "React.Respond.Develop.Extend"
+        y_pred = "React.Respond.Support.Develop.Extend"
     return y_pred
 
 
 # тут вся классификация
 y_preds = []
+
 
 
 def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John", previous_speaker="Doe"):
@@ -578,7 +594,7 @@ def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John
         if y_pred == "Sustain.Continue.":
             y_pred = check_develop(y_pred, prev_speech_function, speaker, previous_speaker)
             y_pred = get_label_for_sustains(phrase, y_pred)
-        if "?" in phrases[i]:
+        if "?" in phrase:
             y_pred = get_label_for_question(phrase, y_pred, speaker, previous_speaker)
         if y_pred == "React.Respond.":
             y_pred = get_label_for_responds(
