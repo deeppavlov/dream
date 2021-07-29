@@ -18,7 +18,7 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTI
 from common.universal_templates import is_switch_topic, if_chat_about_particular_topic
 
 from common.utils import get_skill_outputs_from_dialog, is_yes
-from common.game_cooperative_skill import game_skill_was_proposed, GAMES_COMPILED_PATTERN
+from common.game_cooperative_skill import game_skill_was_proposed, GAMES_COMPILED_PATTERN, FALLBACK_ACKN_TEXT
 from common.gaming import find_games_in_text
 from common.dialogflow_framework.programy.text_preprocessing import clean_text
 
@@ -111,6 +111,7 @@ def respond():
             agent_intents = get_agent_intents(last_utter)
 
             # for tests
+            attr = {}
             if rand_seed:
                 random.seed(int(rand_seed))
             response, state = skill([last_utter_text], state, agent_intents)
@@ -138,6 +139,10 @@ def respond():
                 confidence = 1
             elif is_yes(dialog["human_utterances"][-1]) and game_skill_was_proposed(bot_utterance):
                 confidence = 1
+            elif not is_yes(dialog["human_utterances"][-1]) and game_skill_was_proposed(bot_utterance):
+                confidence = 0.95
+                text = FALLBACK_ACKN_TEXT
+                state = prev_state
             elif GAMES_COMPILED_PATTERN.search(last_utter_text) and not is_active_last_answer:
                 confidence = 0.98
             else:
@@ -152,14 +157,13 @@ def respond():
 
             if confidence == 1:
                 can_continue = MUST_CONTINUE
-            elif confidence > 0.9:
+            elif confidence > 0.95:
                 can_continue = CAN_CONTINUE_SCENARIO
             else:
                 can_continue = CAN_NOT_CONTINUE
 
             human_attr["game_cooperative_skill"] = {"state": state}
-            attr = {"can_continue": can_continue}
-            responses
+            attr["can_continue"] = can_continue
 
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
