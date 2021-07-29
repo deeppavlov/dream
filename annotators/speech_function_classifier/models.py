@@ -553,7 +553,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
 
 def get_labels_for_rejoinder(phrase, previous_phrase, current_speaker, previous_speaker):
     for token in nlp(phrase):
-        if token.dep_== 'neg':
+        if token.dep_ == 'neg':
             y_pred = "React.Rejoinder.Confront.Challenge.Counter"
             return y_pred
     if "?" in previous_phrase:
