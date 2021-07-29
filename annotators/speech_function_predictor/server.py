@@ -21,16 +21,75 @@ app.add_middleware(
 
 class_dict, counters, label_to_name = init_model()
 
+full_labels = ['Open.Attend',
+               'Open.Demand.Fact',
+               'Open.Demand.Opinion',
+               'Open.Give.Fact',
+               'Open.Give.Opinion',
+               'React.Rejoinder.Confront.Challenge.Counter',
+               'React.Rejoinder.Confront.Response.Re-challenge',
+               'React.Rejoinder.Support.Challenge.Rebound',
+               'React.Rejoinder.Support.Develop.Elaborate',
+               'React.Rejoinder.Support.Response.Resolve',
+               'React.Rejoinder.Support.Track.Check',
+               'React.Rejoinder.Support.Track.Clarify',
+               'React.Rejoinder.Support.Track.Confirm',
+               'React.Rejoinder.Support.Track.Probe',
+               'React.Respond.Confront.Disengage',
+               'React.Respond.Confront.Reply.Contradict',
+               'React.Respond.Confront.Reply.Disagree',
+               'React.Respond.Confront.Reply.Disawow',
+               'React.Respond.Support.Develop.Elaborate',
+               'React.Respond.Support.Develop.Enhance',
+               'React.Respond.Support.Develop.Extend',
+               'React.Respond.Support.Engage',
+               'React.Respond.Support.Register',
+               'React.Respond.Support.Reply.Acknowledge',
+               'React.Respond.Support.Reply.Affirm',
+               'React.Respond.Support.Reply.Agree',
+               'React.Respond.Support.Response.Resolve',
+               'Sustain.Continue.Monitor',
+               'Sustain.Continue.Prolong.Elaborate',
+               'Sustain.Continue.Prolong.Enhance',
+               'Sustain.Continue.Prolong.Extend']
+
+
+def check_sfc(full_labels, label, labels, probabilities, pattern=''):
+    new_label_idx = int(labels.index(label)) + 1
+    for i in range(len(full_labels)):
+        if pattern in full_labels[i]:
+            if pattern == 'Track.':
+                if 'Probe' not in full_labels[i]:
+                    if full_labels[i] not in labels:
+                        labels.insert(new_label_idx, full_labels[i])
+                        probabilities.insert(new_label_idx, probabilities[labels.index(label)])
+            else:
+                if full_labels[i] not in labels:
+                    labels.insert(new_label_idx, full_labels[i])
+                    probabilities.insert(new_label_idx, probabilities[labels.index(label)])
+
 
 def predict(label_name):
-    if label_name == "React.Respond.Response.Resolve.":
-        label_name = "React.Rejoinder.Response.Resolve"
+    probabilities = []
+    labels = []
     try:
         class_id = class_dict[label_name]
     except KeyError:
         return [{}]
     sorted_classes = sorted(enumerate(counters[class_id]), reverse=True, key=lambda x: x[1])[:5]
-    return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_classes]
+    for label, probability in sorted_classes:
+        probabilities.append(probability)
+        labels.append(label_to_name[label])
+        for sf in labels:
+            if 'Prolong' in sf:
+                check_sfc(full_labels, sf, labels, probabilities, 'Sustain.Continue.Prolong')
+            if 'Track' in sf:
+                check_sfc(full_labels, sf, labels, probabilities, 'Track.')
+            if 'Develop' in sf:
+                check_sfc(full_labels, sf, labels, probabilities, 'Develop')
+            if 'Reply' in sf:
+                check_sfc(full_labels, sf, labels, probabilities, 'Reply')
+    return [{"prediction": label, "confidence": probability} for label, probability in zip(labels, probabilities)]
 
 
 try:
