@@ -22,8 +22,6 @@ with open("data/track_list.txt") as track_list:
     track_list = track_list.readlines()
 
 
-
-
 def load_pickle(filepath):
     documents_f = open(filepath, "rb")
     file = pickle.load(documents_f)
@@ -219,8 +217,6 @@ all_outputs.extend(get_embeddings(test_data))
 all_cuts = []
 all_cuts.extend(cut_train_labels)
 all_cuts.extend(cut_test_labels)
-
-
 
 model = LogisticRegression(C=0.01, class_weight="balanced")
 
@@ -466,19 +462,16 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
                     y_pred = "React.Rejoinder.Confront.Response.Re-challenge"
         if y_pred == "Sustain.Continue.":
             y_pred = "React.Rejoinder.Support." + tag_for_track
-        if y_pred == "Open.":
-            pass
     if current_speaker == previous_speaker:
         if y_pred == "React.Rejoinder." and tag_for_track != "5":
-            y_pred = tag_for_track
+            y_pred += 'Support.'
+            y_pred += tag_for_track
         if y_pred == "React.Rejoinder." and tag_for_track == "5":
             for word in interrogative_words:
                 if word in phrase:
                     y_pred = "React.Rejoinder.Confront.Challenge.Rebound"
                 else:
                     y_pred = "React.Rejoinder.Confront.Response.Re-challenge"
-        if y_pred == "Open.":
-            pass
         if y_pred == "Sustain.Continue.":
             y_pred = "Sustain.Continue.Monitor"
     return y_pred
@@ -525,8 +518,6 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
                 y_pred = y_pred + 'Support.' + ''.join(tag_for_reply)
             if 'Response.Resolve.' in tag_for_reply:
                 y_pred = 'React.Rejoinder.Support.Response.Resolve'
-
-
         else:
             test_responds_prev_lines.append(previous_phrase)
             test_responds.append(phrase)
@@ -541,7 +532,6 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             for token in nlp(phrase):
                 if token.dep_ == 'neg':
                     return 'React.Rejoinder.Confront.Challenge.Counter'
-
     else:
         test_responds_prev_lines.append(previous_phrase)
         test_responds.append(phrase)
@@ -563,7 +553,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
 
 def get_labels_for_rejoinder(phrase, previous_phrase, current_speaker, previous_speaker):
     for token in nlp(phrase):
-        if token.dep_=='neg':
+        if token.dep_== 'neg':
             y_pred = "React.Rejoinder.Confront.Challenge.Counter"
             return y_pred
     if "?" in previous_phrase:
@@ -574,11 +564,6 @@ def get_labels_for_rejoinder(phrase, previous_phrase, current_speaker, previous_
     else:
         y_pred = "React.Respond.Support.Develop.Extend"
     return y_pred
-
-
-# тут вся классификация
-y_preds = []
-
 
 
 def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John", previous_speaker="Doe"):
