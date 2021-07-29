@@ -757,7 +757,7 @@ def recipe_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
         used_meal = shared_memory.get("used_meals", "")
         recipe = send_cobotqa(f"how to cook {used_meal}")
-        state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
         if not (used_meal and recipe):
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             recipe = "Great! Enjoy your meal!"
