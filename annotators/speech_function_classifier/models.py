@@ -578,7 +578,7 @@ def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John
         if y_pred == "Sustain.Continue.":
             y_pred = check_develop(y_pred, prev_speech_function, speaker, previous_speaker)
             y_pred = get_label_for_sustains(phrase, y_pred)
-        if "?" in phrases[i]:
+        if "?" in phrase:
             y_pred = get_label_for_question(phrase, y_pred, speaker, previous_speaker)
         if y_pred == "React.Respond.":
             y_pred = get_label_for_responds(
