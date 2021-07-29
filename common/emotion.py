@@ -25,7 +25,7 @@ HOW_DO_YOU_FEEL = 'How do you feel?'
 PAIN_PATTERN = r"\b(pain|backache|heart attack|earache|headache|" \
                r"stomachache|toothache|diseased|ailing|damaged|sick|sore)\b"
 SAD_PATTERN = r"\b(sad|horrible|depressed|terrible|tired|awful|dire|upset|trash|" \
-              r"pity|poor|ill|low|exhausted|inferior|miserable|cry|naughty|nasty|foul|ugly|grisly|harmful|" \
+              r"pity|poor|ill|low|exhausted|inferior|crying|miserable|cry|naughty|nasty|foul|ugly|grisly|harmful|" \
               r"spoiled|depraved|tained|awry|so so|badly|sadly|wretched|bad|unhappy)\b"
 POSITIVE_PATTERN = r"\b(happy|good|okay|great|yeah|cool|awesome|perfect|nice|well|ok|fine|" \
                    r"neat|swell|fabulous|peachy|excellent|exciting|excited|splendid|all right" \
