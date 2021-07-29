@@ -4,7 +4,7 @@ from os import getenv
 from random import choice
 
 from common.utils import join_words_in_or_pattern, join_sentences_in_or_pattern, get_topics, \
-    get_intents, get_sentiment, is_yes, is_no, get_entities
+    get_intents, get_sentiment, is_yes, is_no, get_entities, join_word_beginnings_in_or_pattern
 from common.greeting import GREETING_QUESTIONS, WHAT_DO_YOU_DO_RESPONSES, FREE_TIME_RESPONSES
 import sentry_sdk
 
@@ -326,14 +326,20 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
         return False
     elif prev_what_to_chat_about or chat_about:
         if key_words:
-            offered_this_topic = any([word in prev_uttr_ for word in key_words])
+            trigger_pattern = re.compile(rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?",
+                                         re.IGNORECASE)
+            offered_this_topic = trigger_pattern.search(prev_uttr_)
             user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
             if any([word in uttr_ for word in key_words]) or (offered_this_topic and user_agrees_or_any):
                 return True
             else:
                 return False
         elif compiled_pattern:
-            offered_this_topic = re.search(compiled_pattern, prev_uttr_)
+            if isinstance(compiled_pattern, str):
+                offered_this_topic = re.search(rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE)
+            else:
+                offered_this_topic = re.search(rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?",
+                                               prev_uttr_, re.IGNORECASE)
             user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
             if re.search(compiled_pattern, uttr_) or (offered_this_topic and user_agrees_or_any):
                 return True
