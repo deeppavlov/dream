@@ -18,11 +18,11 @@ def cut_labels(list_of_labels):
         if 'Re-challenge' in list_of_labels[i]:
             list_of_labels[i] = 'React.Rejoinder.Confront.Response.Re-challenge'
         if 'Open.Fact' in list_of_labels[i]:
-            list_of_labels[i] = re.sub('Open.Fact','Fact',list_of_labels[i])
+            list_of_labels[i] = re.sub('Open.Fact', 'Fact', list_of_labels[i])
         if 'Open.Fact' in list_of_labels[i]:
             list_of_labels[i] = re.sub('Open.Fact', 'Fact', list_of_labels[i])
         if 'Decline' in list_of_labels[i]:
-            list_of_labels[i] = re.sub('Decline','Contradict', list_of_labels[i])
+            list_of_labels[i] = re.sub('Decline', 'Contradict', list_of_labels[i])
         if 'Accept' in list_of_labels[i]:
             list_of_labels[i] = re.sub('Accept', 'Affirm', list_of_labels[i])
         if 'Response.Refute' in list_of_labels[i]:
@@ -49,7 +49,7 @@ def cut_labels(list_of_labels):
             list_of_labels[i] = 'Sustain.Continue.Prolong.Elaborate'
         if 'Rebound' in list_of_labels[i]:
             list_of_labels[i] = 'React.Rejoinder.Support.Challenge.Rebound'
-        if 'React.Rejoinder.Confront.Develop.Elaborate'in list_of_labels[i]:
+        if 'React.Rejoinder.Confront.Develop.Elaborate' in list_of_labels[i]:
             list_of_labels[i] = 'React.Rejoinder.Support.Develop.Elaborate'
         if 'Fact.Extend' in list_of_labels[i]:
             list_of_labels[i] = 'Open.Give.Fact'
