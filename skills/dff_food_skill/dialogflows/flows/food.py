@@ -584,7 +584,7 @@ def food_fact_response(vars):
     if black_list_check:
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         return error_response(vars)
-    elif conceptnet_flag and ("shower" not in human_utt_text):
+    elif conceptnet_flag and all(["shower" not in human_utt_text, " mela" not in human_utt_text]):
         if "berry" in bot_utt_text.lower():
             berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
             if berry_names:
