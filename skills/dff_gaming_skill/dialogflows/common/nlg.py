@@ -180,3 +180,18 @@ def compose_experience_comment(user_text):
         else:
             experience_comment = "Wow! You have probably seen everything in the game."
     return experience_comment, time is not None
+
+
+def maybe_set_confidence_and_continue_based_on_previous_bot_phrase(vars, bot_text, response_candidate):
+    result = True
+    logger.info(f"bot_text: {repr(bot_text)}")
+    if any([p.lower() in bot_text.lower() for p in common_gaming.CAN_NOT_CONTINUE_PHRASES]):
+        response_candidate = error_response(vars)
+        state_utils.set_confidence(vars, CONF_0)
+        state_utils.set_can_continue(vars, common_constants.CAN_NOT_CONTINUE)
+    elif any([p.lower() in bot_text.lower() for p in common_gaming.CAN_CONTINUE_PHRASES]):
+        state_utils.set_confidence(vars, CONF_092_CAN_CONTINUE)
+        state_utils.set_can_continue(vars, common_constants.CAN_CONTINUE_SCENARIO)
+    else:
+        result = False
+    return result, response_candidate

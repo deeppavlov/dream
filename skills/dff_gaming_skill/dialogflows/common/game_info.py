@@ -6,7 +6,8 @@ import sentry_sdk
 from requests import RequestException
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import CHECK_DEFINITELY_GAME_COMPILED_PATTERN, load_json, find_games_in_text
+from common.gaming import CHECK_DEFINITELY_GAME_COMPILED_PATTERN, get_igdb_client_token, get_igdb_post_kwargs, \
+    load_json, find_games_in_text
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -22,46 +23,12 @@ CLIENT_ID = os.getenv("TWITCH_IGDB_CLIENT_ID")
 CLIENT_SECRET = os.getenv("TWITCH_IGDB_CLIENT_SECRET")
 
 
-def get_igdb_client_token():
-    payload = {"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET, "grant_type": "client_credentials"}
-    url = "https://id.twitch.tv/oauth2/token?"
-    timeout = 20.0
-    try:
-        token_data = requests.post(url, params=payload, timeout=timeout)
-    except RequestException as e:
-        logger.warning(f"Request to {url} failed. `dff_gaming_skill` failed to get access to igdb.com. {e}")
-        access_token = None
-    else:
-        token_data_json = token_data.json()
-        access_token = token_data_json.get("access_token")
-        if access_token is None:
-            logger.warning(
-                f"Could not get access token for CLIENT_ID={CLIENT_ID} and CLIENT_SECRET={CLIENT_SECRET}. "
-                f"`dff_gaming_skill` failed to get access to igdb.com\n"
-                f"payload={payload}\nurl={url}\ntimeout={timeout}\nresponse status code: {token_data.status_code}"
-            )
-    return access_token
-
-
-class BearerAuth(requests.auth.AuthBase):
-    def __init__(self, token):
-        self.token = token
-
-    def __call__(self, r):
-        r.headers["Authorization"] = "Bearer " + self.token
-        return r
-
-
-CLIENT_TOKEN = get_igdb_client_token()
+CLIENT_TOKEN = get_igdb_client_token(CLIENT_ID, CLIENT_SECRET)
 logger.info(f"CLIENT_TOKEN={CLIENT_TOKEN}")
 if CLIENT_TOKEN is None:
     IGDB_POST_KWARGS = None
 else:
-    IGDB_POST_KWARGS = {
-        "auth": BearerAuth(CLIENT_TOKEN),
-        "headers": {"Client-ID": CLIENT_ID, "Accept": "application/json", "Content-Type": "text/plain"},
-        "timeout": 1.0,
-    }
+    IGDB_POST_KWARGS = get_igdb_post_kwargs(CLIENT_TOKEN, CLIENT_ID)
 
 
 def does_text_contain_video_game_words(text):

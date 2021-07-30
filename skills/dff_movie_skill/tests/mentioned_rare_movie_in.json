@@ -70,7 +70,7 @@
                             "dff_movie_skill",
                             "dff_animals_skill"
                         ],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [],
                             "labelled_entities": []
                         },
@@ -366,7 +366,7 @@
                             "game_cooperative_skill",
                             "dff_animals_skill"
                         ],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [
                                 "her"
                             ],

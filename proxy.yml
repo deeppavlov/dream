@@ -551,6 +551,14 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/speech-function-classifier
       - PORT=8108
     command: [ "nginx", "-g", "daemon off;" ]
+  entity-detection:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/entity-detection
+      - PORT=8103
+    command: [ "nginx", "-g", "daemon off;" ]
   speech-function-predictor:
     build:
       context: dp/proxy/
@@ -567,4 +575,5 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/personality-detection
       - PORT=8120
     command: [ "nginx", "-g", "daemon off;" ]
+
 version: '3.7'

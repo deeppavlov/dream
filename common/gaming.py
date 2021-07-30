@@ -5,8 +5,10 @@ import re
 from pathlib import Path
 from typing import Dict, List, Union
 
+import requests
 import sentry_sdk
 from common.inflect import engine
+from requests import RequestException
 
 
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
@@ -379,12 +381,8 @@ ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = 
     "What game are you playing now?"
 
 
-NO_LINK_PHRASES = [
-    "Do you think that pets can use gadgets the same way as humans?",
+CAN_CONTINUE_PHRASES = [
     "I love games, especially stats like top of the games released.",
-    "play with my cat different games, such as run and fetch",
-    "I played with my cat a game",
-    "play with my dog different game",
     "Got a list of the top released games, wanna discuss it?",
     "Which of these time periods is of interest for you?",
     "Got a list of the top released games, wanna discuss it?",
@@ -407,5 +405,53 @@ NO_LINK_PHRASES = [
     "I'd love to talk about other things but my developer forgot to add them to my memory banks.",
     "I was talking about games, do you want to continue?",
     "I can tell you about some music for gaming, should I continue?",
-    "game that I like to play with my cat",
 ]
+
+
+CAN_NOT_CONTINUE_PHRASES = [
+    "Do you think that pets can use gadgets the same way as humans?",
+    "play with my cat different games, such as run and fetch",
+    "I played with my cat a game",
+    "play with my dog different game",
+    "game that I like to play with my cat",
+    "playing with a pet makes a lot of fun",
+]
+
+
+def get_igdb_client_token(client_id, client_secret):
+    payload = {"client_id": client_id, "client_secret": client_secret, "grant_type": "client_credentials"}
+    url = "https://id.twitch.tv/oauth2/token?"
+    timeout = 20.0
+    try:
+        token_data = requests.post(url, params=payload, timeout=timeout)
+    except RequestException as e:
+        logger.warning(f"Request to {url} failed. `dff_gaming_skill` failed to get access to igdb.com. {e}")
+        access_token = None
+    else:
+        token_data_json = token_data.json()
+        access_token = token_data_json.get("access_token")
+        if access_token is None:
+            logger.warning(
+                f"Could not get access token for CLIENT_ID={client_id} and CLIENT_SECRET={client_secret}. "
+                f"`dff_gaming_skill` failed to get access to igdb.com\n"
+                f"payload={payload}\nurl={url}\ntimeout={timeout}\nresponse status code: {token_data.status_code}"
+            )
+    return access_token
+
+
+class BearerAuth(requests.auth.AuthBase):
+    def __init__(self, token):
+        self.token = token
+
+    def __call__(self, r):
+        r.headers["Authorization"] = "Bearer " + self.token
+        return r
+
+
+def get_igdb_post_kwargs(client_token, client_id):
+    kw = {
+        "auth": BearerAuth(client_token),
+        "headers": {"Client-ID": client_id, "Accept": "application/json", "Content-Type": "text/plain"},
+        "timeout": 1.0,
+    }
+    return kw

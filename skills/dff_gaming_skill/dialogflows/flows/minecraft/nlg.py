@@ -32,13 +32,12 @@ def ask_user_when_he_started_to_play_minecraft_response(vars, candidate_game_id_
     human_uttr = state_utils.get_last_human_utterance(vars)
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     state_utils.add_acknowledgement_to_response_parts(vars)
-    if not if_chat_about_particular_topic(
-            human_uttr,
-            compiled_pattern=re.compile("minecraft", flags=re.I)) \
-            and any([p.lower() in bot_text.lower() for p in common_gaming.NO_LINK_PHRASES]):
-        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    else:
+    flags_set = False
+    if not if_chat_about_particular_topic(human_uttr, compiled_pattern=re.compile("minecraft", flags=re.I)):
+        flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
+            vars, bot_text, response)
+        logger.info(f"flags_set: {flags_set}")
+    if not flags_set:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response

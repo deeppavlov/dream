@@ -353,6 +353,20 @@
                     "annotators.sentseg"
                 ]
             },
+            "entity_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://entity-detection:8103/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
+            },
             "kbqa": {
                 "connector": {
                     "protocol": "http",
@@ -1090,6 +1104,19 @@
                     "protocol": "http",
                     "timeout": 1,
                     "url": "http://cobot-nounphrases:8006/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "entity_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://entity-detection:8103/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
