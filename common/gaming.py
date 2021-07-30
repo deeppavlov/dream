@@ -381,12 +381,8 @@ ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = 
     "What game are you playing now?"
 
 
-NO_LINK_PHRASES = [
-    "Do you think that pets can use gadgets the same way as humans?",
+CAN_CONTINUE_PHRASES = [
     "I love games, especially stats like top of the games released.",
-    "play with my cat different games, such as run and fetch",
-    "I played with my cat a game",
-    "play with my dog different game",
     "Got a list of the top released games, wanna discuss it?",
     "Which of these time periods is of interest for you?",
     "Got a list of the top released games, wanna discuss it?",
@@ -409,7 +405,16 @@ NO_LINK_PHRASES = [
     "I'd love to talk about other things but my developer forgot to add them to my memory banks.",
     "I was talking about games, do you want to continue?",
     "I can tell you about some music for gaming, should I continue?",
+]
+
+
+CAN_NOT_CONTINUE_PHRASES = [
+    "Do you think that pets can use gadgets the same way as humans?",
+    "play with my cat different games, such as run and fetch",
+    "I played with my cat a game",
+    "play with my dog different game",
     "game that I like to play with my cat",
+    "playing with a pet makes a lot of fun",
 ]
 
 

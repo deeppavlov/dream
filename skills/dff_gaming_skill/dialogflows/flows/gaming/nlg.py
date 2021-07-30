@@ -7,7 +7,7 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
 from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY, \
-    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, NO_LINK_PHRASES
+    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, is_no
 
@@ -111,13 +111,12 @@ def confess_bot_never_played_game_and_ask_user_response(
             assert False
         bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
         human_uttr = state_utils.get_last_human_utterance(vars)
+        flags_set = False
         if not if_chat_about_particular_topic(
-                human_uttr,
-                compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
-                and any([p.lower() in bot_text for p in NO_LINK_PHRASES]):
-            state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-        else:
+                human_uttr, compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN):
+            flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
+                vars, bot_text, response)
+        if not flags_set:
             state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
             state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
@@ -183,18 +182,17 @@ def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
     entities = get_entities(human_uttr, only_named=True)
     logger.info(f"(ask_if_user_thinks_that_gaming_is_unhealthy_response)entities: {entities}")
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
-    if not if_chat_about_particular_topic(
-            human_uttr,
-            compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
-            and any([p.lower() in bot_text for p in NO_LINK_PHRASES]):
-        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    elif entities:
-        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    else:
-        state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    flags_set = False
+    if not if_chat_about_particular_topic(human_uttr, compiled_pattern=VIDEO_GAME_WORDS_COMPILED_PATTERN):
+        flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
+            vars, bot_text, response)
+    if not flags_set:
+        if entities:
+            state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+        else:
+            state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
+            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -237,13 +235,12 @@ def ask_what_game_user_likes_response(vars):
     response = ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
     human_uttr = state_utils.get_last_bot_utterance(vars)
+    flags_set = False
     if not if_chat_about_particular_topic(
-            human_uttr,
-            compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN) \
-            and any([p.lower() in bot_text for p in NO_LINK_PHRASES]):
-        state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    else:
+            human_uttr, compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN):
+        flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
+            vars, bot_text, response)
+    if not flags_set:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
