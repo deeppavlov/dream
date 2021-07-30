@@ -492,7 +492,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8116:8116
-<<<<<<< HEAD
   speech-function-classifier:
     env_file: [.env.dev]
     volumes:
@@ -513,7 +512,6 @@ services:
       - "./annotators/personality_detection:/src"
     ports:
       - 8120:8120
-=======
   entity-detection:
     env_file: [ .env.dev ]
     volumes:
@@ -521,5 +519,4 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
->>>>>>> origin/dev
 version: "3.7"
