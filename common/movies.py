@@ -216,7 +216,7 @@ def praise_director_or_writer_or_visuals(director, writer):
 
 def extract_movies_names_from_annotations(annotated_uttr, check_full_utterance=False):
     movies_titles = None
-    if "cobot_entities" in annotated_uttr["annotations"]:
+    if "entity_detection" in annotated_uttr["annotations"]:
         movies_titles = []
         entities = get_entities(annotated_uttr, only_named=False, with_labels=True)
         for ent in entities:

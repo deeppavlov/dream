@@ -38,7 +38,7 @@
                             }
                         },
                         "cobot_nounphrases": [],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [],
                             "labelled_entities": []
                         },
@@ -270,7 +270,7 @@
                         "cobot_nounphrases": [
                             "the conjuring"
                         ],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [
                                 "conjuring"
                             ],

@@ -163,7 +163,7 @@
                         "ner": [
                             []
                         ],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [],
                             "labelled_entities": []
                         },
@@ -269,7 +269,7 @@
                             "dans",
                             "paris"
                         ],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [
                                 "dans paris"
                             ],

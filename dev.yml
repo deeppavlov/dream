@@ -492,4 +492,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8116:8116
+  entity-detection:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/entity_detection:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8103:8103
 version: "3.7"
