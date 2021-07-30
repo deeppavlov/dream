@@ -167,7 +167,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.sentseg",
                     "post_annotators.speech_function_classifier"
                 ]
@@ -1040,7 +1040,7 @@
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 1,
                     "url": "http://speech-function-classifier:8108/annotation"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_annotation",

@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 def get_speech_function_for_human_utterance_annotations(annotations):
     sfs = annotations.get("speech_function_classifier", {})
-    phrases = annotations.get("sentseg", {}).get("segments", {})
+    phrases = annotations.get("sentseg", {}).get("segments", [])
 
     sfunctions = {}
     i = 0
