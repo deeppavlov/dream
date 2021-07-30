@@ -1,0 +1,38 @@
+[
+    [
+        "I think people who are interested in science are special. I like to talk about a variety of scientific topics. Do you wanna talk about interstellar travel?",
+        1.0,
+        {
+            "dff_science_skill_state": {
+                "shared_memory": {
+                    "unused_topics": [
+                        "interstellar travel"
+                    ],
+                    "current_topic": "interstellar travel",
+                    "is_requested_topic_before": true
+                },
+                "previous_human_utter_index": 6,
+                "history": {
+                    "6": "State.SYS_REQUEST_SCIENCE_TOPIC"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"yes\", \"__system_state__\": \"State.SYS_REQUEST_SCIENCE_TOPIC\", \"__state__\": \"State.USR_REQUEST_SCIENCE_TOPIC\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I think people who are interested in science are special. I like to talk about a variety of scientific topics. Do you wanna talk about interstellar travel?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"SCIENCE\\\"<__tuple__>\\\"State.USR_REQUEST_SCIENCE_TOPIC\\\"\"}"
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must",
+            "response_parts": [
+                "acknowledgement",
+                "body"
+            ]
+        }
+    ]
+]
