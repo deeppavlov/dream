@@ -161,7 +161,7 @@ def user_doesnt_like_gaming_request(ngrams, vars):
 
 
 def user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request(ngrams, vars):
-    logger.info(f"user_didnt_name_game_request")
+    logger.info(f"user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request")
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     found_game_name = bool(find_games_in_text(user_uttr.get("text", "")))
@@ -169,7 +169,7 @@ def user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_
         and not found_game_name \
         and (does_text_contain_link_to_gaming(bot_text) or common_intents.is_question_about_games(bot_text)) \
         and not was_link_from_gaming_to_other_skill_made_in_previous_bot_utterance(vars)
-    logger.info(f"user_didnt_name_game_request={flag}")
+    logger.info(f"user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request={flag}")
     return flag
 
 
