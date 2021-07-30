@@ -35,7 +35,7 @@ class AnnotationPayload(BaseModel):
 
 
 try:
-    speech_function = get_speech_function("fine, thank you", 'How are you doing?', 'Open.Demand.Fact.')
+    speech_function = get_speech_function("fine, thank you", "How are you doing?", "Open.Demand.Fact.")
     logger.info(speech_function)
     logger.info("model loaded, test query processed")
 except Exception as e:

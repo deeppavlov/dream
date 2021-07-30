@@ -464,7 +464,7 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
             y_pred = "React.Rejoinder.Support." + tag_for_track
     if current_speaker == previous_speaker:
         if y_pred == "React.Rejoinder." and tag_for_track != "5":
-            y_pred += 'Support.'
+            y_pred += "Support."
             y_pred += tag_for_track
         if y_pred == "React.Rejoinder." and tag_for_track == "5":
             for word in interrogative_words:
@@ -493,9 +493,15 @@ lr_responds.fit(responds_concatenate, respond_tags)
 
 
 def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, current_speaker, previous_speaker):
-    confront_labels = ['Reply.Disawow', 'Reply.Disagree', 'Reply.Contradict']
-    support_labels = ['Reply.Acknowledge', 'Reply.Affirm', 'Reply.Agree', 'Develop.Elaborate',
-                      'Develop.Enhance', 'Develop.Extend']
+    confront_labels = ["Reply.Disawow", "Reply.Disagree", "Reply.Contradict"]
+    support_labels = [
+        "Reply.Acknowledge",
+        "Reply.Affirm",
+        "Reply.Agree",
+        "Develop.Elaborate",
+        "Develop.Enhance",
+        "Develop.Extend",
+    ]
     try_replies = []
     test_prev_lines = []
     test_responds = []
@@ -506,18 +512,18 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             try_replies.append(phrase)
             test_concat = np.concatenate([get_embeddings(try_replies), get_embeddings(test_prev_lines)], axis=1)
             tag_for_reply = lr_reply.predict(test_concat)
-            if tag_for_reply == 'Reply.Decline':
-                tag_for_reply = 'Reply.Contradict'
+            if tag_for_reply == "Reply.Decline":
+                tag_for_reply = "Reply.Contradict"
             if "yes" in str(try_replies).lower():
                 if "Disagree" in tag_for_reply:
                     if "Confirm" in y_pred_previous:
                         y_pred = "React.Respond.Support.Reply.Affirm"
             if tag_for_reply in confront_labels:
-                y_pred = y_pred + 'Confront.' + ''.join(tag_for_reply)
+                y_pred = y_pred + "Confront." + "".join(tag_for_reply)
             if tag_for_reply in support_labels:
-                y_pred = y_pred + 'Support.' + ''.join(tag_for_reply)
-            if 'Response.Resolve.' in tag_for_reply:
-                y_pred = 'React.Rejoinder.Support.Response.Resolve'
+                y_pred = y_pred + "Support." + "".join(tag_for_reply)
+            if "Response.Resolve." in tag_for_reply:
+                y_pred = "React.Rejoinder.Support.Response.Resolve"
         else:
             test_responds_prev_lines.append(previous_phrase)
             test_responds.append(phrase)
@@ -526,12 +532,12 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             )
             tags_for_responds = lr_responds.predict(test_responds_concatenate)
             if tags_for_responds in confront_labels:
-                y_pred = y_pred + 'Confront.' + ''.join(tags_for_responds)
+                y_pred = y_pred + "Confront." + "".join(tags_for_responds)
             if tags_for_responds in support_labels:
-                y_pred = y_pred + 'Support.' + ''.join(tags_for_responds)
+                y_pred = y_pred + "Support." + "".join(tags_for_responds)
             for token in nlp(phrase):
-                if token.dep_ == 'neg':
-                    return 'React.Rejoinder.Confront.Challenge.Counter'
+                if token.dep_ == "neg":
+                    return "React.Rejoinder.Confront.Challenge.Counter"
     else:
         test_responds_prev_lines.append(previous_phrase)
         test_responds.append(phrase)
@@ -540,20 +546,20 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
         )
         tags_for_responds = lr_responds.predict(test_responds_concatenate)
         if tags_for_responds in support_labels:
-            y_pred = y_pred + 'Support.' + ''.join(tags_for_responds)
+            y_pred = y_pred + "Support." + "".join(tags_for_responds)
         elif tags_for_responds in confront_labels:
-            y_pred = y_pred + 'Confront.' + ''.join(tags_for_responds)
+            y_pred = y_pred + "Confront." + "".join(tags_for_responds)
         else:
-            y_pred = y_pred + ''.join(tags_for_responds)
+            y_pred = y_pred + "".join(tags_for_responds)
         for token in nlp(phrase):
-            if token.dep_ == 'neg':
-                y_pred = 'React.Rejoinder.Confront.Challenge.Counter'
+            if token.dep_ == "neg":
+                y_pred = "React.Rejoinder.Confront.Challenge.Counter"
     return y_pred
 
 
 def get_labels_for_rejoinder(phrase, previous_phrase, current_speaker, previous_speaker):
     for token in nlp(phrase):
-        if token.dep_ == 'neg':
+        if token.dep_ == "neg":
             y_pred = "React.Rejoinder.Confront.Challenge.Counter"
             return y_pred
     if "?" in previous_phrase:
