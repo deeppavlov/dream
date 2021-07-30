@@ -492,6 +492,13 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8116:8116
+  dff-art-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_art_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8117:8117
   entity-detection:
     env_file: [ .env.dev ]
     volumes:

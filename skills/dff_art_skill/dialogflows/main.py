@@ -1,0 +1,5 @@
+from common.dff_markup_scenarios.art_scenario import flows
+from common.dialogflow_framework.stdm.parse_dialogflow_markup import make_composite_dialogflow
+
+
+composite_dialogflow = make_composite_dialogflow(flows)

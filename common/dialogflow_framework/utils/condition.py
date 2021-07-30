@@ -115,6 +115,16 @@ def get_last_state(vars):
     return last_state
 
 
+def get_n_last_state(vars, n):
+    last_state = ""
+    history = list(vars["agent"]["history"].items())
+    if history:
+        history_sorted = sorted(history, key=lambda x: x[0])
+        if len(history_sorted) >= n:
+            last_state = history_sorted[-n][1]
+    return last_state
+
+
 def is_last_state(vars, state):
     flag = False
     history = list(vars["agent"]["history"].items())

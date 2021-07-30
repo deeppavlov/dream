@@ -1,0 +1,62 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                 {
+                   "text": "let's talk about art.",
+                   "annotations": {
+                     "cobot_nounphrases": [],
+                     "sentseg": {
+                       "punct_sent": "let's talk about art.",
+                       "segments": ["let's talk about art."]
+                     }
+                   }
+                 }
+               ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_wiki_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "animal": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9997689723968506
+                        },
+                        "full_name": "art",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Science_and_Technology"
+                        ]
+                    }
+                ],
+                "name": "art"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "random_seed": 2718
+}
