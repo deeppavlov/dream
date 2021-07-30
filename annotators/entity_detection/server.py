@@ -34,7 +34,7 @@ DOUBLE_SPACES = re.compile(r"\s+")
 
 def get_result(request):
     st_time = time.time()
-    last_utterances = request.json["last_utterances"]
+    last_utterances = request.json.get("last_utterances", [])
     logger.info(f"input (the last utterances): {last_utterances}")
 
     utterances_list = []
@@ -46,25 +46,29 @@ def get_result(request):
 
     utt_entities_batch = []
     utt_entities = {}
-    entities_batch, tags_batch, positions_batch, entities_offsets_batch, probas_batch = ner(utterances_list)
-    cur_num = 0
-    for entities_list, tags_list, entities_offsets_list, num in \
-            zip(entities_batch, tags_batch, entities_offsets_batch, utterances_nums):
-        if num != cur_num:
+    if last_utterances:
+        entities_batch, tags_batch, positions_batch, entities_offsets_batch, probas_batch = ner(utterances_list)
+        cur_num = 0
+        for entities_list, tags_list, entities_offsets_list, num in \
+                zip(entities_batch, tags_batch, entities_offsets_batch, utterances_nums):
+            if num != cur_num:
+                utt_entities_batch.append(utt_entities)
+                utt_entities = {}
+                cur_num = num
+            for entity, tag, offsets in zip(entities_list, tags_list, entities_offsets_list):
+                if entity not in nltk_stopwords and len(entity) > 2:
+                    entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
+                    entity = DOUBLE_SPACES.sub(" ", entity).strip()
+                    if "entities" in utt_entities:
+                        utt_entities["entities"].append(entity)
+                        utt_entities["labelled_entities"].append({"text": entity, "label": tag.lower(),
+                                                                  "offsets": offsets})
+                    else:
+                        utt_entities["entities"] = [entity]
+                        utt_entities["labelled_entities"] = [{"text": entity, "label": tag.lower(), "offsets": offsets}]
+        if utt_entities:
             utt_entities_batch.append(utt_entities)
-            utt_entities = {}
-        for entity, tag, offsets in zip(entities_list, tags_list, entities_offsets_list):
-            if entity not in nltk_stopwords and len(entity) > 2:
-                entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
-                entity = DOUBLE_SPACES.sub(" ", entity).strip()
-                if "entities" in utt_entities:
-                    utt_entities["entities"].append(entity)
-                    utt_entities["labelled_entities"].append({"text": entity, "label": tag.lower(),
-                                                              "offsets": offsets})
-                else:
-                    utt_entities["entities"] = [entity]
-                    utt_entities["labelled_entities"] = [{"text": entity, "label": tag.lower(), "offsets": offsets}]
-    if utt_entities:
+    else:
         utt_entities_batch.append(utt_entities)
 
     total_time = time.time() - st_time
