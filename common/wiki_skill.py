@@ -510,6 +510,13 @@ def check_condition(condition, user_uttr, bot_uttr, shared_memory):
     return flag
 
 
+def if_switch_test_skill(user_uttr, bot_uttr):
+    flag = False
+    if re.findall(r"(\bart\b|drawing|painting|photo)", user_uttr["text"], re.IGNORECASE):
+        flag = True
+    return flag
+
+
 def if_switch_wiki_skill(user_uttr, bot_uttr):
     flag = False
     user_uttr_annotations = user_uttr["annotations"]

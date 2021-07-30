@@ -543,6 +543,14 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/wiki-facts
       - PORT=8116
     command: [ "nginx", "-g", "daemon off;" ]
+  dff-art-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/dff-art-skill
+      - PORT=8117
+    command: [ "nginx", "-g", "daemon off;" ]
   entity-detection:
     build:
       context: dp/proxy/

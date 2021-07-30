@@ -192,6 +192,8 @@ services:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+  dff-art-skill:
+    env_file: [ .env.dev ]
   entity-detection:
     env_file: [ .env.dev ]
     volumes:
