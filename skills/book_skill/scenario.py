@@ -493,7 +493,7 @@ class BookSkillScenario:
                         logger.debug('Tell_me_more or is_yes and bookname')
                         reply = tell_about_genre_book(bookname, self.bookreads_data)
                         if reply:
-                            reply, confidence = self.book_linkto_reply(reply, human_attr), self.default_conf
+                            reply, confidence = self.book_linkto_reply(reply, human_attr), self.super_conf
                         elif plain_bookname:
                             book_fact = what_is_book_about(plain_bookname)
                             if book_fact:
