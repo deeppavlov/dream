@@ -870,8 +870,8 @@ COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
 def get_entities(annotated_utterance, only_named=False, with_labels=False):
     entities = None
     if not only_named:
-        if "cobot_entities" in annotated_utterance.get("annotations", {}):
-            labelled_entities = annotated_utterance["annotations"]["cobot_entities"].get("labelled_entities", [])
+        if "entity_detection" in annotated_utterance.get("annotations", {}):
+            labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
             # skip some labels
             entities = [ent for ent in labelled_entities if ent["label"] not in COBOT_ENTITIES_SKIP_LABELS]
             if not with_labels:

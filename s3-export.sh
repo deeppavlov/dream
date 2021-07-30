@@ -69,6 +69,7 @@ files=(
   datasets/wikipedia/enwiki_latest_topic.db
   alexaprize_data/movie_plots_v0.tar.gz
   alexaprize_data/reddit_embeddings.pickle
+  deeppavlov_data/dialog_entity_detection/dialog_entity_detection_model.tar.gz
 )
 
 for file in ${files[@]}; do

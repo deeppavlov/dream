@@ -1,0 +1,66 @@
+{
+  "chainer": {
+    "in": ["x"],
+    "in_y": ["y"],
+    "pipe": [
+      {
+        "config_path": "{CONFIGS_PATH}/ner/ner_lcquad_bert_detect_entities_pr.json",
+        "in": ["x"],
+        "out": ["x_tokens", "x_offsets", "y_pred"]
+      },
+      {
+        "in": ["x_tokens", "x_offsets", "y_pred"],
+        "out": ["entities", "tags", "types", "entities_offsets", "types_offsets"],
+        "entity_tags": ["E-TAG"],
+        "type_tag": "T-TAG",
+        "o_tag": "O-TAG",
+        "ent_thres_proba": 0.7,
+        "type_thres_proba": 0.2,
+        "tags_file": "{NER_PATH}/tag.dict",
+        "class_name": "entity_detection_parser:EntityDetectionParser"
+      }
+    ],
+    "out": ["entities", "tags", "types", "entities_offsets", "types_offsets"]
+  },
+  "train": {
+    "epochs": 30,
+    "batch_size": 16,
+    "metrics": [
+      {
+        "name": "ner_f1",
+        "inputs": ["y", "y_pred"]
+      },
+      {
+        "name": "ner_token_f1",
+        "inputs": ["y", "y_pred"]
+      }
+    ],
+    "validation_patience": 10,
+    "val_every_n_batches": 400,
+
+    "log_every_n_batches": 400,
+    "tensorboard_log_dir": "{NER_PATH}/logs",
+    "show_examples": false,
+    "pytest_max_batches": 2,
+    "pytest_batch_size": 8,
+    "evaluation_targets": ["valid", "test"],
+    "class_name": "nn_trainer"
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/ner_lcquad_detect_entities",
+      "NER_PATH": "{MODELS_PATH}/ner_lcquad_detect_entities",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/gensim.txt",
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+      "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"
+    ],
+    "download": [
+    ]
+  }
+}

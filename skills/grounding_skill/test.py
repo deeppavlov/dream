@@ -25,7 +25,7 @@ def main_test():
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
         "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
     }
-    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["entity_detection"] = {
         "entities": ["horses"],
         "labelled_entities": [{"text": "horses", "label": "misc"}]
     }
@@ -39,7 +39,7 @@ def main_test():
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
         "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
     }
-    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["entity_detection"] = {
         "entities": ["horses"],
         "labelled_entities": [{"text": "horses", "label": "misc"}]
     }
@@ -53,7 +53,7 @@ def main_test():
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
         "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
     }
-    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["entity_detection"] = {
         "entities": ["horses name"],
         "labelled_entities": [{"text": "horses", "label": "misc"}]
     }
@@ -67,7 +67,7 @@ def main_test():
     new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["sentseg"] = {
         "segments": [new_input_data["dialogs"][0]["human_utterances"][-1]["text"]]
     }
-    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["cobot_entities"] = {
+    new_input_data["dialogs"][0]["human_utterances"][-1]["annotations"]["entity_detection"] = {
         "entities": ["horses"],
         "labelled_entities": [{"text": "horses", "label": "misc"}]
     }

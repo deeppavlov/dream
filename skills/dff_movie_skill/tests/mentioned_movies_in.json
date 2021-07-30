@@ -166,7 +166,7 @@
                                 "Other"
                             ]
                         },
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [],
                             "labelled_entities": []
                         },
@@ -360,7 +360,7 @@
                         "ner": [
                             []
                         ],
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [
                                 "movies"
                             ],

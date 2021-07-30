@@ -282,6 +282,10 @@ services:
     image: ${DOCKER_REGISTRY}/wiki-facts:${VERSION}
     env_file:
       - ${ENV_FILE}
+  entity-detection:
+    image: ${DOCKER_REGISTRY}/entity-detection:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:

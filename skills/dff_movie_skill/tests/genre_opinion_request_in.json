@@ -171,7 +171,7 @@
                                 "Phatic"
                             ]
                         },
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [],
                             "labelled_entities": []
                         },
@@ -264,7 +264,7 @@
                                 "what do you think about thrillers?"
                             ]
                         },
-                        "cobot_entities": {
+                        "entity_detection": {
                             "entities": [
                                 "thrillers"
                             ],
