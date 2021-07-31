@@ -1254,7 +1254,7 @@ services:
       replicas: 2
       resources:
         limits:
-          memory: 2.5M
+          memory: 2.5G
         reservations:
-          memory: 2.5M
+          memory: 2.5G
 version: '3.7'
