@@ -200,6 +200,8 @@ services:
     env_file: [ .env.dev ]
   personality-detection:
     env_file: [ .env.dev ]
+  dff-art-skill:
+    env_file: [ .env.dev ]
   entity-detection:
     env_file: [ .env.dev ]
     volumes:

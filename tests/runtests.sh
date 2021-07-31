@@ -149,7 +149,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      fact-retrieval cobot-entities news-api-skill cobotqa-annotator hypothesis-scorer \
                      dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
                      user-persona-extractor small-talk-skill personality-detection \
-                     speech-function-predictor speech-function-classifier wiki-facts; do
+                     speech-function-predictor speech-function-classifier wiki-facts dff-art-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
