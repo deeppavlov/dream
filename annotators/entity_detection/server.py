@@ -41,18 +41,19 @@ def get_result(request):
     utterances_nums = []
     for n, utterances in enumerate(last_utterances):
         for elem in utterances:
-            utterances_list.append(elem.lower())
-            utterances_nums.append(n)
+            if len(elem) > 0:
+                utterances_list.append(elem.lower())
+                utterances_nums.append(n)
 
-    utt_entities_batch = []
+    utt_entities_batch = [{} for _ in last_utterances]
     utt_entities = {}
-    if last_utterances:
+    if utterances_list:
         entities_batch, tags_batch, positions_batch, entities_offsets_batch, probas_batch = ner(utterances_list)
         cur_num = 0
         for entities_list, tags_list, entities_offsets_list, num in \
                 zip(entities_batch, tags_batch, entities_offsets_batch, utterances_nums):
             if num != cur_num:
-                utt_entities_batch.append(utt_entities)
+                utt_entities_batch[cur_num] = utt_entities
                 utt_entities = {}
                 cur_num = num
             for entity, tag, offsets in zip(entities_list, tags_list, entities_offsets_list):
@@ -67,12 +68,14 @@ def get_result(request):
                         utt_entities["entities"] = [entity]
                         utt_entities["labelled_entities"] = [{"text": entity, "label": tag.lower(), "offsets": offsets}]
         if utt_entities:
-            utt_entities_batch.append(utt_entities)
-    else:
-        utt_entities_batch.append(utt_entities)
+            utt_entities_batch[cur_num] = utt_entities
+
+    if not last_utterances:
+        utt_entities_batch.append({})
 
     total_time = time.time() - st_time
     logger.info(f'entity detection exec time: {total_time: .3f}s')
+    logger.info(f'entity_detection, input {last_utterances}, output {utt_entities_batch}')
     return utt_entities_batch
 
 
