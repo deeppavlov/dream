@@ -195,7 +195,7 @@ services:
   speech-function-classifier:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=''
+      - CUDA_VISIBLE_DEVICES=6
   speech-function-predictor:
     env_file: [ .env.dev ]
   personality-detection:
