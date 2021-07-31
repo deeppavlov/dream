@@ -152,6 +152,7 @@
             "personality_detection": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://personality-detection:8120/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:personality_catcher_formatter_dialog",
