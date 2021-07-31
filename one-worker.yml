@@ -247,6 +247,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+  dff-art-skill:
+    deploy:
+      mode: replicated
+      replicas: 1
   hypothesis-scorer:
     deploy:
       mode: replicated

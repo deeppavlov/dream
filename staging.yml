@@ -298,6 +298,10 @@ services:
     image: ${DOCKER_REGISTRY}/entity-detection:${VERSION}
     env_file:
       - ${ENV_FILE}
+  dff-art-skill:
+    image: ${DOCKER_REGISTRY}/dff-art-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
 volumes:
   external-logs:
   external-deeppavlov:
