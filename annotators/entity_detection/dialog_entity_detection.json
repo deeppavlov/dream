@@ -5,11 +5,12 @@
     "pipe": [
       {
         "class_name": "torch_transformers_preprocessor:TorchTransformersNerPreprocessor",
-        "vocab_file": "{TRANSFORMER}",
+        "vocab_file": "{TRANSFORMER}/vocab.txt",
         "do_lower_case": false,
         "max_seq_length": 512,
         "max_subword_length": 15,
         "token_masking_prob": 0.0,
+        "from_file": true,
         "in": ["x"],
         "out": [
           "x_tokens",
@@ -37,6 +38,7 @@
         "class_name": "torch_transformers_sequence_tagger:TorchTransformersSequenceTagger",
         "n_tags": "#tag_vocab.len",
         "pretrained_bert": "{TRANSFORMER}",
+        "from_file": true,
         "attention_probs_keep_prob": 0.5,
         "return_probas": true,
         "encoder_layer_ids": [
@@ -119,7 +121,7 @@
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "TRANSFORMER": "bert-base-uncased",
+      "TRANSFORMER": "{DOWNLOADS_PATH}/bert_models/bert-base-uncased",
       "MODEL_PATH": "{MODELS_PATH}/dialog_entity_detection",
       "NER_PATH": "{MODELS_PATH}/dialog_entity_detection"
     },
@@ -131,6 +133,10 @@
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/dialog_entity_detection/dialog_entity_detection_model.tar.gz",
         "subdir": "{MODELS_PATH}/dialog_entity_detection"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/dialog_entity_detection/bert-base-uncased.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/bert_models/bert-base-uncased"
       }
     ]
   }

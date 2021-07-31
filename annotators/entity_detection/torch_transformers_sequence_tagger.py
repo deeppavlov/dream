@@ -229,6 +229,7 @@ class TorchTransformersSequenceTagger(TorchModel):
                  load_before_drop: bool = True,
                  clip_norm: Optional[float] = None,
                  min_learning_rate: float = 1e-07,
+                 from_file: bool = False,
                  **kwargs) -> None:
 
         self.n_classes = n_tags
@@ -239,6 +240,7 @@ class TorchTransformersSequenceTagger(TorchModel):
 
         self.pretrained_bert = pretrained_bert
         self.bert_config_file = bert_config_file
+        self.from_file = from_file
 
         super().__init__(optimizer=optimizer,
                          optimizer_parameters=optimizer_parameters,
@@ -333,18 +335,12 @@ class TorchTransformersSequenceTagger(TorchModel):
         if fname is not None:
             self.load_path = fname
 
+        if self.from_file:
+            self.pretrained_bert = str(expand_path(self.pretrained_bert))
         if self.pretrained_bert:
             config = AutoConfig.from_pretrained(self.pretrained_bert, num_labels=self.n_classes,
                                                 output_attentions=False, output_hidden_states=False)
             self.model = AutoModelForTokenClassification.from_pretrained(self.pretrained_bert, config=config)
-        elif self.bert_config_file and Path(self.bert_config_file).is_file():
-            self.bert_config = AutoConfig.from_json_file(str(expand_path(self.bert_config_file)))
-
-            if self.attention_probs_keep_prob is not None:
-                self.bert_config.attention_probs_dropout_prob = 1.0 - self.attention_probs_keep_prob
-            if self.hidden_keep_prob is not None:
-                self.bert_config.hidden_dropout_prob = 1.0 - self.hidden_keep_prob
-            self.model = AutoModelForTokenClassification(config=self.bert_config)
         else:
             raise ConfigError("No pre-trained BERT model is given.")
 
