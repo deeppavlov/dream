@@ -272,4 +272,12 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  speech-function-classifier:
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  speech-function-predictor:
+    env_file: [ .gpu1.dev ]
+  personality-detection:
+    env_file: [ .gpu1.dev ]
 version: '3.7'
