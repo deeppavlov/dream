@@ -14,6 +14,11 @@ def last_utt_dialog(dialog: Dict) -> Dict:
     return [{'sentences': [dialog['utterances'][-1]['text']]}]
 
 
+def persona_formatter(dialog: Dict) -> Dict:
+    return [{'sentences': [dialog['utterances'][-1]['text']],
+            'annotations': [dialog['utterances'][-1]['annotations']]}]
+
+
 def base_response_selector_formatter_service(payload: List) -> Dict:
     if len(payload) == 3:
         return {"skill_name": payload[0], "text": payload[1], "confidence": payload[2]}

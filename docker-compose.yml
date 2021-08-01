@@ -51,4 +51,10 @@ services:
     ports:
       - 3007:3007
     command: python -m deeppavlov riseapi intent_catcher -d -p 3007
+  persona_annotator:
+    build:
+      context: ./annotators/persona_annotator
+    command: python -m deeppavlov riseapi persona_annotator.json -p 3008
+    ports:
+      - 3008:3008
 version: "3.7"

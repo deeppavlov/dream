@@ -36,6 +36,16 @@
                 "dialog_formatter": "dp_formatters:catcher_formatter",
                 "response_formatter": "dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
+            },
+            "persona_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://persona_annotator:3008/response"
+                },
+                "dialog_formatter": "dp_formatters:persona_formatter",
+                "response_formatter": "dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": ["entity_linking"]
             }
         },
         "skills": {

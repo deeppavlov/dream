@@ -1,0 +1,38 @@
+{
+  "chainer": {
+    "in": [
+      "sentences", "annotations"
+    ],
+    "out": [
+      "input_reaction"
+    ],
+    "pipe": [
+      {
+        "class_name": "persona_annotator",
+        "in": [
+          "sentences", "annotations"
+        ],
+        "out": [
+          "input_reaction"
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "imports": [
+      "input_classifier"
+    ],
+    "requirements": [
+      "requirements.txt"
+    ],
+    "variables": {
+      "ROOT_PATH": "~/deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/classifiers"
+    },
+    "labels": {
+      "server_utils": "EmotionClassificationModel2"
+    }
+  }
+}
