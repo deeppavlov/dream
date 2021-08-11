@@ -287,7 +287,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-topics:8000/topics"
+                    "url": "http://cobot-topics:8001/topics"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
