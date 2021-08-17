@@ -11,40 +11,40 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=5
   factoid-classification:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=5
   text-qa:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=5
   comet-atomic:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=5
   comet-conceptnet:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=5
   knowledge-grounding:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=6
   midas-classification:
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=6
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   combined-classification:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=7
   mongo:
     env_file: [ .env.dev ]
     command: mongod
@@ -93,7 +93,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=7
   eliza:
     env_file: [ .env.dev ]
   convert-reddit:
@@ -145,7 +145,7 @@ services:
   masked-lm:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=8
   dff-friendship-skill:
     env_file: [ .env.dev ]
   entity-storer:
@@ -169,7 +169,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=8
   dff-bot-persona-skill:
     env_file: [ .env.dev ]
   cobot-entities:
@@ -181,7 +181,7 @@ services:
   hypothesis-scorer:
     env_file: [ .env.dev ]
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=8
   dff-wiki-skill:
     env_file: [ .env.dev ]
   topic-recommendation:
@@ -199,5 +199,5 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=9
 version: '3.7'

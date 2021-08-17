@@ -123,7 +123,7 @@ spec:
                       done
                       '''
                   sh label: 'generate deployment', script: 'python3 kubernetes/kuber_generator.py'
-                  sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml -f s3.yml build'
+                  sh label: 'docker build', script: 'docker-compose -f docker-compose.yml -f staging.yml -f network.yml build'
                   sh label: 'docker push', script: 'docker-compose -f docker-compose.yml -f staging.yml push'
                 }
                 catch (Exception e) {
@@ -240,7 +240,7 @@ spec:
     stage('Tests') {
 
       agent {
-        label 'aws-test1'
+        label 'dream'
       }
 
       when {
@@ -323,8 +323,6 @@ spec:
               catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                 try {
                   sh '''
-                        sed -i -r "s/(CUDA_VISIBLE_DEVICES=)0/\\1\${GPU0}/g" test.yml
-                        sed -i -r "s/(CUDA_VISIBLE_DEVICES=)1/\\1\${GPU1}/g" test.yml
                         cat test.yml
                   '''
                   sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
