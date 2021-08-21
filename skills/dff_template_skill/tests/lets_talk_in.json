@@ -1,0 +1,112 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Hi",
+                    "annotations": {}
+                },
+                {
+                    "text": "how are you",
+                    "annotations": {}
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, how are you?",
+                    "annotations": {},
+                    "active_skill": "dff_template_skill"
+                }
+            ]
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 0,
+                "id": "3983c08a-9dad-4fae-86d0-ae0992f59e29",
+                "misc": {
+                    "agent": {
+                        "age_group": "",
+                        "cache": {},
+                        "clarification_request_flag": false,
+                        "current_turn_dff_suspended": false,
+                        "dff_shared_state": {
+                            "cross_links": {},
+                            "cross_states": {}
+                        },
+                        "dialog": {
+                            "bot_utterances": [],
+                            "human_utterances": [
+                                {
+                                    "annotations": {},
+                                    "text": "Hi"
+                                }
+                            ]
+                        },
+                        "disliked_skills": {},
+                        "entities": {},
+                        "history": {
+                            "0": [
+                                "greeting_flow",
+                                "node1"
+                            ]
+                        },
+                        "human_utter_index": 0,
+                        "previous_human_utter_index": -1,
+                        "previous_turn_dff_suspended": false,
+                        "response": {},
+                        "shared_memory": {},
+                        "used_links": {}
+                    }
+                },
+                "node_labels": {
+                    "0": [
+                        "greeting_flow",
+                        "node1"
+                    ]
+                },
+                "previous_index": 0,
+                "requests": {
+                    "0": "Hi"
+                },
+                "responses": {
+                    "0": "Hi, how are you?"
+                }
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "greeting_flow",
+                    "node1"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

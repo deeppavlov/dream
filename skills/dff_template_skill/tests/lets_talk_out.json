@@ -1,0 +1,100 @@
+[
+    [
+        "Good. What do you want to talk about?",
+        0.85,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "0": [
+                        "greeting_flow",
+                        "node1"
+                    ],
+                    "1": [
+                        "greeting_flow",
+                        "node2"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "3983c08a-9dad-4fae-86d0-ae0992f59e29",
+                    "node_labels": {
+                        "1": [
+                            "greeting_flow",
+                            "node2"
+                        ]
+                    },
+                    "requests": {
+                        "1": "how are you"
+                    },
+                    "responses": {
+                        "1": "Good. What do you want to talk about?"
+                    },
+                    "previous_index": 1,
+                    "current_index": 1,
+                    "misc": {
+                        "agent": {
+                            "previous_human_utter_index": 0,
+                            "human_utter_index": 1,
+                            "dialog": {
+                                "human_utterances": [
+                                    {
+                                        "text": "Hi",
+                                        "annotations": {}
+                                    },
+                                    {
+                                        "text": "how are you",
+                                        "annotations": {}
+                                    }
+                                ],
+                                "bot_utterances": [
+                                    {
+                                        "text": "Hi, how are you?",
+                                        "annotations": {},
+                                        "active_skill": "dff_template_skill"
+                                    }
+                                ]
+                            },
+                            "entities": {},
+                            "shared_memory": {},
+                            "previous_turn_dff_suspended": false,
+                            "current_turn_dff_suspended": false,
+                            "response": {},
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "cache": {},
+                            "history": {
+                                "0": [
+                                    "greeting_flow",
+                                    "node1"
+                                ],
+                                "1": [
+                                    "greeting_flow",
+                                    "node2"
+                                ]
+                            },
+                            "used_links": {},
+                            "age_group": "",
+                            "disliked_skills": [],
+                            "clarification_request_flag": false
+                        }
+                    }
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
