@@ -7,18 +7,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-  cobotqa-annotator:
-    deploy:
-      mode: replicated
-      replicas: 1
-  cobot-topics:
-    deploy:
-      mode: replicated
-      replicas: 1
-  cobot-dialogact:
-    deploy:
-      mode: replicated
-      replicas: 1
   cobot-convers-evaluator-annotator:
     deploy:
       mode: replicated
@@ -243,10 +231,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-  cobot-entities:
-    deploy:
-      mode: replicated
-      replicas: 1
   dff-art-skill:
     deploy:
       mode: replicated
@@ -288,6 +272,14 @@ services:
       mode: replicated
       replicas: 1
   personality-detection:
+    deploy:
+      mode: replicated
+      replicas: 1
+  fact-random:
+    deploy:
+      mode: replicated
+      replicas: 1
+  entity-detection:
     deploy:
       mode: replicated
       replicas: 1

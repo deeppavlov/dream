@@ -65,21 +65,12 @@ services:
   cobotqa:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
-  cobotqa-annotator:
-    restart: unless-stopped
-    env_file: [ .gpu1.dev ]
   cobot-convers-evaluator-annotator:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
-    restart: unless-stopped
-    env_file: [ .gpu1.dev ]
-  cobot-topics:
-    restart: unless-stopped
-    env_file: [ .gpu1.dev ]
-  cobot-dialogact:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
   program-y:
@@ -234,9 +225,6 @@ services:
   dff-bot-persona-skill:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
-  cobot-entities:
-    restart: unless-stopped
-    env_file: [ .gpu1.dev ]
   dff-funfact-skill:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
@@ -281,6 +269,9 @@ services:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
   personality-detection:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  fact-random:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
 version: '3.7'

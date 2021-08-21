@@ -1,20 +1,4 @@
 services:
-  cobot-topics:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru
-      - PORT=8001
-  cobot-dialogact:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru
-      - PORT=8002
   cobot-convers-evaluator-annotator:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -23,14 +7,6 @@ services:
     environment:
       - PROXY_PASS=lnsigo.mipt.ru
       - PORT=8004
-  cobot-nounphrases:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru
-      - PORT=8006
   program-y:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -327,14 +303,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru
       - PORT=8081
     command: ["nginx", "-g", "daemon off;"]
-  cobotqa-annotator:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru
-      - PORT=8106
-    command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding:
     build:
       context: dp/proxy/
@@ -399,14 +367,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru
       - PORT=8080
     command: [ "nginx", "-g", "daemon off;"]
-  convers-evaluation-selector:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru
-      - PORT=8009
-    command: [ "nginx", "-g", "daemon off;" ]
   dff-animals-skill:
     build:
       context: dp/proxy/
@@ -463,14 +423,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru
       - PORT=8100
     command: [ "nginx", "-g", "daemon off;" ]
-  cobot-entities:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru
-      - PORT=8102
-    command: ["nginx", "-g", "daemon off;"]
   hypothesis-scorer:
     build:
       context: dp/proxy/
@@ -583,5 +535,28 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru
       - PORT=8120
     command: [ "nginx", "-g", "daemon off;" ]
-
+  fact-random:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru
+      - PORT=8119
+    command: [ "nginx", "-g", "daemon off;" ]
+  cobot-nounphrases:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru
+      - PORT=8006
+    command: [ "nginx", "-g", "daemon off;" ]
+  convers-evaluation-selector:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru
+      - PORT=8009
+    command: [ "nginx", "-g", "daemon off;" ]
 version: '3.7'
