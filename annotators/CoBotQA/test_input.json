@@ -1,0 +1,581 @@
+[
+    {
+        "_id": "null",
+        "dialog_id": "7fdaf1e74c8f4a76db2a242bf66a01ab",
+        "human": {
+            "id": "38c3f9aaacb24a60ba3f4c6be89f1a01",
+            "user_external_id": "623515",
+            "persona": {},
+            "profile": {
+                "name": null,
+                "gender": null,
+                "birthdate": null,
+                "location": null,
+                "home_coordinates": null,
+                "work_coordinates": null,
+                "occupation": null,
+                "income_per_year": null
+            },
+            "user_type": "human",
+            "attributes": {}
+        },
+        "bot": {
+            "id": "3fba7f5da9fc4d9285f1466e9370c020",
+            "persona": {},
+            "user_type": "bot",
+            "attributes": {}
+        },
+        "channel_type": "cmd_client",
+        "date_start": "null",
+        "date_finish": "null",
+        "_active": "True",
+        "attributes": {},
+        "utterances": [
+            {
+                "utt_id": "43d55247cfda42a8e9260854a11d8bdc",
+                "text": "I like Michael Jordan , Michael Jordan is a cool basebal player.",
+                "user": {
+                    "id": "38c3f9aaacb24a60ba3f4c6be89f1a01",
+                    "user_external_id": "623515",
+                    "persona": {},
+                    "profile": {
+                        "name": null,
+                        "gender": null,
+                        "birthdate": null,
+                        "location": null,
+                        "home_coordinates": null,
+                        "work_coordinates": null,
+                        "occupation": null,
+                        "income_per_year": null
+                    },
+                    "attributes": {
+                        "entities": {
+                            "jordan": {
+                                "bot_encounters": [],
+                                "human_encounters": [
+                                    {
+                                        "emotions": {
+                                            "joy": 0.6739855408668518,
+                                            "neutral": 0.9928994178771973
+                                        },
+                                        "full_name": "jordan",
+                                        "human_utterance_index": 0,
+                                        "intents": [
+                                            "Information_DeliveryIntent"
+                                        ],
+                                        "next_skill_name": "",
+                                        "pos": [
+                                            "NOUN"
+                                        ],
+                                        "previous_skill_name": "pre_start",
+                                        "sentiment": "positive",
+                                        "topics": [
+                                            "Games",
+                                            "Entertainment_General",
+                                            "Sports"
+                                        ]
+                                    }
+                                ],
+                                "name": "jordan"
+                            }
+                        }
+                    },
+                    "user_type": "human"
+                },
+                "annotations": {
+                    "spelling_preprocessing": "I like Michael Jordan , Michael Jordan is a cool basebal player.",
+                    "asr": {
+                        "asr_confidence": "undefined"
+                    },
+                    "blacklisted_words": {
+                        "inappropriate": false,
+                        "profanity": false,
+                        "restricted_topics": false
+                    },
+                    "sentseg": {
+                        "punct_sent": "I like Michael Jordan , Michael Jordan is a cool basebal player.",
+                        "segments": [
+                            "I like Michael Jordan , Michael Jordan is a cool basebal player."
+                        ]
+                    },
+                    "combined_classification": {
+                        "cobot_dialogact_intents": {
+                            "Information_DeliveryIntent": 0.9991974830627441
+                        },
+                        "cobot_dialogact_topics": {
+                            "Entertainment_General": 0.9290804266929626,
+                            "Sports": 0.5170907974243164
+                        },
+                        "cobot_topics": {
+                            "Games": 0.9929051399230957
+                        },
+                        "emotion_classification": {
+                            "joy": 0.6739855408668518,
+                            "neutral": 0.9928994178771973
+                        },
+                        "sentiment_classification": {
+                            "positive": 0.9301113486289978
+                        },
+                        "toxic_classification": {
+                            "toxic": 0.0015763938426971436
+                        }
+                    },
+                    "factoid_classification": {
+                        "factoid": 0.001073386985808611,
+                        "conversational": 0.99892657995224
+                    },
+                    "cobot_nounphrases": [
+                        "michael jordan"
+                    ],
+                    "cobot_entities": {
+                        "entities": [
+                            "Michael Jordan",
+                            "Michael Jordan"
+                        ],
+                        "labelled_entities": [
+                            {
+                                "label": "person",
+                                "text": "Michael Jordan"
+                            },
+                            {
+                                "label": "person",
+                                "text": "Michael Jordan"
+                            }
+                        ]
+                    },
+                    "conceptnet": {
+                        "michael jordan": {
+                            "Causes": [
+                                "global thermonuclear war",
+                                "death",
+                                "suicide"
+                            ],
+                            "CausesDesire": [
+                                "play basketball",
+                                "play football",
+                                "sing"
+                            ],
+                            "HasProperty": [
+                                "dead",
+                                "gay",
+                                "good"
+                            ],
+                            "SymbolOf": [
+                                "purity",
+                                "peace",
+                                "suicide"
+                            ]
+                        }
+                    },
+                    "intent_catcher": {
+                        "cant_do": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "choose_topic": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "doing_well": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "dont_understand": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "exit": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "lets_chat_about": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "no": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "opinion_request": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "repeat": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "stupid": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "tell_me_a_story": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "tell_me_more": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "topic_switching": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "weather_forecast_intent": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_are_you_talking_about": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_can_you_do": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_is_your_job": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_is_your_name": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_time": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "where_are_you_from": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "who_made_you": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "yes": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        }
+                    },
+                    "midas_classification": {
+                        "opinion": 0.9712738511869689
+                    },
+                    "cobot_dialogact": {
+                        "intents": [
+                            "Information_DeliveryIntent"
+                        ],
+                        "topics": [
+                            "Sports"
+                        ]
+                    },
+                    "ner": [
+                        [
+                            {
+                                "confidence": 1,
+                                "end_pos": 4,
+                                "start_pos": 2,
+                                "text": "michael jordan",
+                                "type": "PER"
+                            },
+                            {
+                                "confidence": 1,
+                                "end_pos": 7,
+                                "start_pos": 5,
+                                "text": "michael jordan",
+                                "type": "PER"
+                            }
+                        ]
+                    ],
+                    "cobot_topics": {
+                        "text": [
+                            "Sports"
+                        ]
+                    },
+                    "sentrewrite": {
+                        "clusters": [],
+                        "modified_sents": [
+                            "I like Michael Jordan , Michael Jordan is a cool basebal player."
+                        ]
+                    }
+                },
+                "hypotheses": [],
+                "date_time": "2021-04-17 14:42:49.730934",
+                "attributes": {}
+            }
+        ],
+        "human_utterances": [
+            {
+                "utt_id": "43d55247cfda42a8e9260854a11d8bdc",
+                "text": "I like Michael Jordan , Michael Jordan is a cool basebal player.",
+                "user": {
+                    "id": "38c3f9aaacb24a60ba3f4c6be89f1a01",
+                    "user_external_id": "623515",
+                    "persona": {},
+                    "profile": {
+                        "name": null,
+                        "gender": null,
+                        "birthdate": null,
+                        "location": null,
+                        "home_coordinates": null,
+                        "work_coordinates": null,
+                        "occupation": null,
+                        "income_per_year": null
+                    },
+                    "attributes": {
+                        "entities": {
+                            "jordan": {
+                                "bot_encounters": [],
+                                "human_encounters": [
+                                    {
+                                        "emotions": {
+                                            "joy": 0.6739855408668518,
+                                            "neutral": 0.9928994178771973
+                                        },
+                                        "full_name": "jordan",
+                                        "human_utterance_index": 0,
+                                        "intents": [
+                                            "Information_DeliveryIntent"
+                                        ],
+                                        "next_skill_name": "",
+                                        "pos": [
+                                            "NOUN"
+                                        ],
+                                        "previous_skill_name": "pre_start",
+                                        "sentiment": "positive",
+                                        "topics": [
+                                            "Games",
+                                            "Entertainment_General",
+                                            "Sports"
+                                        ]
+                                    }
+                                ],
+                                "name": "jordan"
+                            }
+                        }
+                    },
+                    "user_type": "human"
+                },
+                "annotations": {
+                    "spelling_preprocessing": "I like Michael Jordan , Michael Jordan is a cool basebal player.",
+                    "asr": {
+                        "asr_confidence": "undefined"
+                    },
+                    "blacklisted_words": {
+                        "inappropriate": false,
+                        "profanity": false,
+                        "restricted_topics": false
+                    },
+                    "sentseg": {
+                        "punct_sent": "I like Michael Jordan , Michael Jordan is a cool basebal player.",
+                        "segments": [
+                            "I like Michael Jordan , Michael Jordan is a cool basebal player."
+                        ]
+                    },
+                    "combined_classification": {
+                        "cobot_dialogact_intents": {
+                            "Information_DeliveryIntent": 0.9991974830627441
+                        },
+                        "cobot_dialogact_topics": {
+                            "Entertainment_General": 0.9290804266929626,
+                            "Sports": 0.5170907974243164
+                        },
+                        "cobot_topics": {
+                            "Games": 0.9929051399230957
+                        },
+                        "emotion_classification": {
+                            "joy": 0.6739855408668518,
+                            "neutral": 0.9928994178771973
+                        },
+                        "sentiment_classification": {
+                            "positive": 0.9301113486289978
+                        },
+                        "toxic_classification": {
+                            "toxic": 0.0015763938426971436
+                        }
+                    },
+                    "factoid_classification": {
+                        "factoid": 0.001073386985808611,
+                        "conversational": 0.99892657995224
+                    },
+                    "cobot_nounphrases": [
+                        "michael jordan"
+                    ],
+                    "cobot_entities": {
+                        "entities": [
+                            "Michael Jordan",
+                            "Michael Jordan"
+                        ],
+                        "labelled_entities": [
+                            {
+                                "label": "person",
+                                "text": "Michael Jordan"
+                            },
+                            {
+                                "label": "person",
+                                "text": "Michael Jordan"
+                            }
+                        ]
+                    },
+                    "conceptnet": {
+                        "michael jordan": {
+                            "Causes": [
+                                "global thermonuclear war",
+                                "death",
+                                "suicide"
+                            ],
+                            "CausesDesire": [
+                                "play basketball",
+                                "play football",
+                                "sing"
+                            ],
+                            "HasProperty": [
+                                "dead",
+                                "gay",
+                                "good"
+                            ],
+                            "SymbolOf": [
+                                "purity",
+                                "peace",
+                                "suicide"
+                            ]
+                        }
+                    },
+                    "intent_catcher": {
+                        "cant_do": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "choose_topic": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "doing_well": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "dont_understand": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "exit": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "lets_chat_about": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "no": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "opinion_request": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "repeat": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "stupid": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "tell_me_a_story": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "tell_me_more": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "topic_switching": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "weather_forecast_intent": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_are_you_talking_about": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_can_you_do": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_is_your_job": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_is_your_name": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "what_time": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "where_are_you_from": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "who_made_you": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        },
+                        "yes": {
+                            "confidence": 0.0,
+                            "detected": 0
+                        }
+                    },
+                    "midas_classification": {
+                        "opinion": 0.9712738511869689
+                    },
+                    "cobot_dialogact": {
+                        "intents": [
+                            "Information_DeliveryIntent"
+                        ],
+                        "topics": [
+                            "Sports"
+                        ]
+                    },
+                    "ner": [
+                        [
+                            {
+                                "confidence": 1,
+                                "end_pos": 4,
+                                "start_pos": 2,
+                                "text": "michael jordan",
+                                "type": "PER"
+                            },
+                            {
+                                "confidence": 1,
+                                "end_pos": 7,
+                                "start_pos": 5,
+                                "text": "michael jordan",
+                                "type": "PER"
+                            }
+                        ]
+                    ],
+                    "cobot_topics": {
+                        "text": [
+                            "Sports"
+                        ]
+                    },
+                    "sentrewrite": {
+                        "clusters": [],
+                        "modified_sents": [
+                            "I like Michael Jordan , Michael Jordan is a cool basebal player."
+                        ]
+                    }
+                },
+                "hypotheses": [],
+                "date_time": "2021-04-17 14:42:49.730934",
+                "attributes": {}
+            }
+        ],
+        "bot_utterances": []
+    }
+]

@@ -1,0 +1,5 @@
+sphinx==2.1.2
+recommonmark==0.5.0
+sphinx_rtd_theme
+Pygments==2.4.2
+flake8

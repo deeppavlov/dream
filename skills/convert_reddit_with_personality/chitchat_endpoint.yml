@@ -1,0 +1,38 @@
+parameters:
+  - in: body
+    name: placeholder
+    schema:
+      type: object
+      required:
+        - personality
+        - utterances_histories
+      properties:
+        personality:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        utterances_histories:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+      example:
+        {
+          "personality":
+            [
+              [
+                "I like listening music.",
+                "I like watching movies and series.",
+                "I like to play sports.",
+                "I love dogs.",
+                "I like sushi.",
+              ],
+            ],
+          "utterances_histories": [["hello", "hi", "how are you"]],
+        }
+responses:
+  200:
+    description: Skill response

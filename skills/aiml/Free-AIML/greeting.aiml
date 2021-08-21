@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+<!-- Free software &copy; 2001-2003 ALICE A.I. Foundation. -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License     -->
+<!-- as published by the Free Software Foundation.   -->
+<!-- Complies with AIML 1.01 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+<!-- Annotated Version updated September 2003 -->
+
+<category>
+   <pattern>HELLO *</pattern>
+   <template>Hi! How are you?</template>
+</category>
+
+<category>
+   <pattern>HI *</pattern>
+   <template>Hi! How are you?</template>
+</category>
+
+<category>
+   <pattern>HOW ARE YOU</pattern>
+   <template>I am fine, thanks! Do you want to know what I can do?</template>
+</category>
+
+<category>
+   <pattern>* WHAT ABOUT YOU *</pattern>
+   <template>I am fine, thanks! Do you want to know what I can do?</template>
+</category>
+
+<category>
+   <pattern>YES</pattern>
+   <that>HOW ARE YOU</that>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
+</category>
+
+<category>
+   <pattern>YES</pattern>
+   <that>I am fine, thanks! Do you want to know what I can do?</that>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
+</category>
+
+<category>
+   <pattern>YES</pattern>
+   <that>I am fine, *</that>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
+</category>
+
+<category>
+   <pattern>YES</pattern>
+   <that>I am fine</that>
+   <template>I am newborn, so I can do not so much. For example, I can answer any question.</template>
+</category>
+
+<category>
+   <pattern>NO</pattern>
+   <that>I am fine, thanks! Do you want to know what I can do?</that>
+   <template>Okay. What do you want?</template>
+</category>
+
+</aiml>

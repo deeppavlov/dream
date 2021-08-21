@@ -1,0 +1,29 @@
+[
+    [
+        "What is your opinion of travel?",
+        1.0,
+        {
+            "dff_travel_skill_state": {
+                "shared_memory": {
+                    "used_opinion_request_about_travelling": [
+                        "What is your opinion of travel?"
+                    ]
+                },
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": "State.SYS_LETS_CHAT_ABOUT_TRAVELLING"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"lets talk about traveling\", \"__system_state__\": \"State.SYS_LETS_CHAT_ABOUT_TRAVELLING\", \"__state__\": \"State.USR_OPINION_TRAVELLING\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"What is your opinion of travel?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"TRAVEL\\\"<__tuple__>\\\"State.USR_OPINION_TRAVELLING\\\"\"}"
+            },
+            "dff_shared_state": {},
+            "used_links": {},
+            "age_group":"",
+            "disliked_skills": {}
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

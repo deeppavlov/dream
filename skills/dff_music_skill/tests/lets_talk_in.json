@@ -1,0 +1,313 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "let's talk about music.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "let's talk about music",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0019981167279183865,
+                            "conversational": 0.9980018734931946
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9770923852920532
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Music": 0.9764801263809204
+                            },
+                            "cobot_topics": {
+                                "Music": 0.9994005560874939
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995986819267273
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8295563459396362
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0009880363941192627
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "music"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "let's talk about music.",
+                            "segments": [
+                                "let's talk about music."
+                            ]
+                        },
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": 0,
+                            "answer_sentence": "",
+                            "confidence": 0.0,
+                            "first_par": "",
+                            "paragraph": "",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "dialog_breakdown": {
+                            "breakdown": 0.1560441106557846,
+                            "no_breakdown": 0.843955934047699
+                        },
+                        "midas_classification": {
+                            "abandon": 0.0008655383835483608,
+                            "appreciation": 0.00015076823281341998,
+                            "back-channeling": 7.324510968301681e-05,
+                            "clarifying_question": 0.00022864357605393792,
+                            "closing": 0.00041303811964919687,
+                            "command": 0.9901298627740982,
+                            "comment": 4.260730201724879e-05,
+                            "complaint": 0.00044422055746043534,
+                            "correction": 0.00010592773139095043,
+                            "dev_command": 0.0015002625785961936,
+                            "hold": 0.00034098813978414424,
+                            "neg_answer": 9.207633666222608e-05,
+                            "non_compliant": 0.00022528884993894524,
+                            "nonsense": 0.0009571197176357182,
+                            "open_question_factual": 0.0003515119090143443,
+                            "open_question_opinion": 0.0009687092409759738,
+                            "open_question_personal": 0.00013265022018576234,
+                            "opening": 0.00015486339331180008,
+                            "opinion": 0.0006005592028285865,
+                            "other_answers": 8.50189858095102e-05,
+                            "pos_answer": 0.0008163763912503226,
+                            "statement": 0.00017963279397019687,
+                            "uncertain": 0.00011209809567990836,
+                            "yes_no_question": 0.0010289923576417366
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Music"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Music"
+                            ]
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q1921383",
+                                    "Q155358",
+                                    "Q11342639",
+                                    "Q638",
+                                    "Q1437440"
+                                ]
+                            ],
+                            [
+                                [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about music."
+                            ]
+                        },
+                        "wiki_parser": [
+                            {
+                                "Music": {
+                                    "instance of": [
+                                        [
+                                            "Q134556",
+                                            "single"
+                                        ],
+                                        [
+                                            "Q7366",
+                                            "song"
+                                        ]
+                                    ]
+                                }
+                            }
+                        ],
+                        "kbqa": [
+                            "Not Found",
+                            0.0
+                        ],
+                        "conceptnet": {
+                            "music": {
+                                "Causes": [
+                                    "you feel good",
+                                    "relaxation",
+                                    "enjoyment"
+                                ],
+                                "CausesDesire": [
+                                    "listen to music",
+                                    "play piano",
+                                    "sing"
+                                ],
+                                "HasProperty": [
+                                    "fun to listen to",
+                                    "fun",
+                                    "good"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "life",
+                                    "creativity"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_music_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "music": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9995986819267273
+                        },
+                        "full_name": "music",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "positive",
+                        "topics": [
+                            "Music",
+                            "Entertainment_Music"
+                        ]
+                    }
+                ],
+                "name": "music"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "random_seed": 2718
+}

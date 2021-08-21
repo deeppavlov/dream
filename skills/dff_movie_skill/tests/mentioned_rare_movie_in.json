@@ -1,0 +1,543 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_movie_skill",
+                            "dff_animals_skill"
+                        ],
+                        "entity_detection": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "conceptnet": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "MELBOURNE, Australia \u2014 The devices, procured on the black market, performed only a single function hidden behind a calculator app: sending encrypted messages and photos.\nFor years, organized crime figures around the globe relied on the devices to orc... [858 chars]",
+                                    "description": "MELBOURNE, Australia \u2014 The devices, procured on the black market, performed only a single function hidden behind a calculator app: sending encrypted messages and photos.",
+                                    "image": "https://static01.nyt.com/images/2021/06/08/world/08STING1/08STING1-facebookJumbo.jpg",
+                                    "publishedAt": "2021-06-08T11:14:10Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Hundreds Arrested in Global Sting Using App Run by F.B.I.",
+                                    "url": "https://www.nytimes.com/2021/06/08/world/australia/operation-trojan-horse-anom.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "i watched movie her.",
+                    "annotations": {
+                        "spelling_preprocessing": "i watched movie her",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.014863061718642712,
+                            "conversational": 0.985136866569519
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9927219152450562
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9968552589416504
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9993519186973572
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984903335571289
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6520847082138062
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0012921690940856934
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "i watched movie her.",
+                            "segments": [
+                                "i watched movie her."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "game_cooperative_skill",
+                            "dff_animals_skill"
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "her"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "her"
+                                }
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0004352304677013308,
+                                "command": 0.002340033883228898,
+                                "comment": 0.0011965694138780236,
+                                "complaint": 0.0011680448660627007,
+                                "dev_command": 0.0013146018609404564,
+                                "neg_answer": 0.0005528908804990351,
+                                "open_question_factual": 0.0009579953039065003,
+                                "open_question_opinion": 0.0004558123473543674,
+                                "opinion": 0.008222086355090141,
+                                "other_answers": 0.0007943268283270299,
+                                "pos_answer": 0.0007668813341297209,
+                                "statement": 0.9806995987892151,
+                                "yes_no_question": 0.0010959598002955317
+                            }
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "conceptnet": {
+                            "her": {
+                                "Causes": [
+                                    "you feel sad",
+                                    "happiness",
+                                    "feel good"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "compete",
+                                    "play"
+                                ],
+                                "HasProperty": [
+                                    "pretty",
+                                    "red",
+                                    "ugly"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "purity",
+                                    "peace"
+                                ]
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [],
+                                "entity_ids": [],
+                                "entity_pages": [],
+                                "entity_pages_titles": [],
+                                "entity_substr": "her",
+                                "tokens_match_conf": []
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [
+                                "Movies, or films, are a type of visual communication which uses moving pictures and sound to tell stories or teach people something. Most people watch movies as a type of entertainment or a way to have fun. For some people, fun movies can mean movies that make them laugh, while for others it can mean movies that make them cry, or feel afraid."
+                            ],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "MELBOURNE, Australia \u2014 The devices, procured on the black market, performed only a single function hidden behind a calculator app: sending encrypted messages and photos.\nFor years, organized crime figures around the globe relied on the devices to orc... [858 chars]",
+                                    "description": "MELBOURNE, Australia \u2014 The devices, procured on the black market, performed only a single function hidden behind a calculator app: sending encrypted messages and photos.",
+                                    "image": "https://static01.nyt.com/images/2021/06/08/world/08STING1/08STING1-facebookJumbo.jpg",
+                                    "publishedAt": "2021-06-08T11:14:10Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Hundreds Arrested in Global Sting Using App Run by F.B.I.",
+                                    "url": "https://www.nytimes.com/2021/06/08/world/australia/operation-trojan-horse-anom.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "her",
+                                "news": {
+                                    "content": "The woman arrested in the disappearance of a 5-year-old Houston boy will likely face additional charges, a prosecutor said \u2014 as a judge also increased her bond in her first court appearance.\nTheresa Balboa, 29, the girlfriend of Samuel Olson\u2019s father... [1382 chars]",
+                                    "description": "The woman arrested in the disappearance of a 5-year-old Houston boy will likely face additional charges, a prosecutor said \u2014 as a judge also increased her bond in her first court appearance.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/06/theresa-balboa-samuel-olson-63.jpg?quality=90&strip=all&w=1200",
+                                    "publishedAt": "2021-06-08T12:07:40Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Suspect will likely face additional charges in death of Samuel Olson",
+                                    "url": "https://nypost.com/2021/06/08/suspect-will-likely-face-additional-charges-in-death-of-samuel-olson/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

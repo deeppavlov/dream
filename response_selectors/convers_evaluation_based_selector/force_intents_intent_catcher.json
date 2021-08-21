@@ -1,0 +1,39 @@
+{
+    "exit": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "repeat": [
+        "intent_catcher"
+    ],
+    "what_time": [
+        "intent_catcher"
+    ],
+    "cant_do": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "what_is_your_name": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "where_are_you_from": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "who_made_you": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "what_is_your_job": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "what_can_you_do": [
+        "intent_catcher",
+        "program_y"
+    ],
+    "dont_understand": [
+        "intent_catcher"
+    ]
+}

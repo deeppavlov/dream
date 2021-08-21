@@ -1,0 +1,88 @@
+[
+  {
+    "curr_sent": "hey",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"text":""}
+  },
+  {
+    "curr_sent": "i am feeling depressed",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.9, "surprise": 0, "neutral": 0},
+    "results":{"state":["sad_and_lonely"]}
+  },
+  {
+    "curr_sent": "any phrase",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state":"sad_and_lonely", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 0},
+    "results":{"state":["sad_and_lonely_2"]}
+  },
+    {
+    "curr_sent": "any phrase",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state":"sad_and_lonely_2", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offer_advice"]}
+  },
+  {
+    "curr_sent": "yes go on",
+    "bot_sent":"Although I am a socialbot, I know what humans can do to become happier, when they feel like you feel now. May I tell you about it?",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 1.0, "detected": 1}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offer_another_advice"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "thanks",
+    "bot_sent":"an advice",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state":"offer_another_advice", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":["offered_advice"], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "no",
+    "bot_sent":"Maybe another advice will help?",
+    "intents":{
+      "no": {"confidence": 1.0, "detected": 1},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state":"offered_advice", "emotion":"sadness"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"state":[""], "emotion":"sadness"}
+  },
+  {
+    "curr_sent": "All right",
+    "bot_sent":"",
+    "intents":{
+      "no": {"confidence": 0.0, "detected": 0},
+      "yes": {"confidence": 0.0, "detected": 0}
+    },
+    "human_attributes":{"emotion_skill_attributes":{"state": "joy_link_to_joke", "emotion":"joy"}},
+    "emotion": {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0.0, "surprise": 0, "neutral": 0},
+    "results":{"states":["offered_joke", ""], "emotion":"joy"}
+  }
+]

@@ -1,0 +1,77 @@
+{
+    "albumname": [
+        "dff_music_skill"
+    ],
+    "genre": [
+        "dff_movie_skill",
+        "book_skill",
+        "dff_music_skill",
+        "game_cooperative_skill"
+    ],
+    "sportteam": [
+        "dff_sport_skill"
+    ],
+    "songname": [
+        "dff_music_skill"
+    ],
+    "event": [
+        "news_api_skill",
+        "dff_gossip_skill"
+    ],
+    "channelname": [
+        "dff_movie_skill"
+    ],
+    "party": [
+        "news_api_skill",
+        "dff_gossip_skill"
+    ],
+    "person": [
+        "emotion_skill",
+        "dff_gossip_skill",
+        "dff_bot_persona_skill"
+    ],
+    "sport": [
+        "dff_sport_skill"
+    ],
+    "venue": [
+        "news_api_skill",
+        "dff_gossip_skill"
+    ],
+    "gamename": [
+        "game_cooperative_skill"
+    ],
+    "position": [
+        "emotion_skill",
+        "dff_gossip_skill",
+        "dff_bot_persona_skill"
+    ],
+    "bookname": [
+        "book_skill"
+    ],
+    "videoname": [
+        "dff_movie_skill"
+    ],
+    "location": [
+        "news_api_skill",
+        "dff_gossip_skill",
+        "dff_travel_skill"
+    ],
+    "sportrole": [
+        "dff_sport_skill"
+    ],
+    "-": [
+        "dff_travel_skill",
+        "dff_movie_skill",
+        "weather_skill",
+        "book_skill",
+        "emotion_skill",
+        "news_api_skill",
+        "dff_music_skill",
+        "dff_animals_skill",
+        "dff_gossip_skill",
+        "dff_food_skill",
+        "dff_sport_skill",
+        "game_cooperative_skill",
+        "dff_bot_persona_skill"
+    ]
+}

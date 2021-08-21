@@ -1,0 +1,28 @@
+[
+    {
+        "human_attributes": {
+            "entities": {
+                "apple": {
+                    "name": "apple",
+                    "human_encounters": [],
+                    "bot_encounters": [],
+                    "human_attitude": "like",
+                    "bot_attitude": null
+                },
+                "jewelry": {
+                    "name": "jewelry",
+                    "human_encounters": [],
+                    "bot_encounters": [
+                        {
+                            "human_utterance_index": 6,
+                            "full_name": "jewelry",
+                            "skill_name": "grounding_skill"
+                        }
+                    ],
+                    "human_attitude": null,
+                    "bot_attitude": "like"
+                }
+            }
+        }
+    }
+]

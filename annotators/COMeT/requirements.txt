@@ -1,0 +1,7 @@
+flask==1.1.1
+gunicorn==19.9.0
+pandas==0.24.2
+spacy==2.2.3
+ftfy==5.1
+requests==2.22.0
+sentry-sdk[flask]==0.14.1

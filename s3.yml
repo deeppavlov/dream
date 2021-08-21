@@ -1,0 +1,94 @@
+services:
+  comet-atomic:
+    build:
+      args:
+        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/comet/atomic_pretrained_model.pickle
+        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
+  comet-conceptnet:
+    build:
+      args:
+        PRETRAINED_MODEL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
+        PREPROCESS_DATA: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
+  convert-reddit:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/convert_reddit_v2.8.tar.gz
+  entity-linking:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  factoid-classification:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  ner:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/elmo2.tar.gz
+        NER_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/ner.tar.xz
+  book-skill:
+    build:
+      args:
+        QUERY_DICT: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/book_query_dict.pkl
+  text-qa:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  fact-retrieval:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  kbqa:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  wiki-parser:
+    build:
+      args:
+        WIKI_LITE_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/wikidata_lite.hdt
+        WIKI_LITE_INDEX_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
+        WIKI_CACHE_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/wikidata_cache.json
+  combined-classification:
+    build:
+      args:
+        DATA_URL: https://team-dream-storage.s3.amazonaws.com/alexaprize_data/cobot_bert_6task.tar.gz
+  midas-classification:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  dff-movie-skill:
+    build:
+      args:
+        DATABASE_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/database_most_popular_main_info_v1.json
+        MOVIE_PLOTS_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/movie_plots_v0.tar.gz
+  dff-animals-skill:
+    build:
+      args:
+        BREED_FACTS_DB: http://team-dream-storage.s3.amazonaws.com/kbqa/wikidata/breed_facts.json
+  dummy-skill-dialog:
+    build:
+      args:
+        DATA_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/dummy_skill_dialog.tar.gz
+  dff-wiki-skill:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  topic-recommendation:
+    build:
+      args:
+        DATA_URL: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/reddit_embeddings.pickle
+  knowledge-grounding:
+    build:
+      args:
+        DATA_ARG: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/parlai_grounding_knowledge/parlai_topical_chat_data.tar.gz
+        MODEL1_ARG: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz
+        MODEL2_ARG: http://team-dream-storage.s3.amazonaws.com/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz
+  wiki-facts:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+  entity-detection:
+    build:
+      args:
+        SED_ARG: http://files.deeppavlov.ai|https://team-dream-storage.s3.amazonaws.com
+version: "3.7"

@@ -1,0 +1,580 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "spelling_preprocessing": "hi",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "cobot_nounphrases": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "entity_detection": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "SAN ANTONIO \u2014 Minnesota\u2019s statewide mask mandate is over. But in Minneapolis, the state\u2019s largest city, face coverings are still required.\nIn Michigan, Kentucky and Oregon, governors cheerily told vaccinated people that they could go out maskless. Bu... [618 chars]",
+                                    "description": "SAN ANTONIO \u2014 Minnesota\u2019s statewide mask mandate is over. But in Minneapolis, the state\u2019s largest city, face coverings are still required. In Michigan, Kentucky and Oregon, governors cheerily told vaccinated people that they could go out maskless.",
+                                    "image": "https://static01.nyt.com/images/2021/05/14/us/14virus-maskreax/merlin_187754226_cf065d90-4893-4118-8bfa-6f7f21b0eceb-facebookJumbo.jpg",
+                                    "publishedAt": "2021-05-15T03:12:00Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Federal Mask Retreat Sets Off Confusing Scramble for States and Cities",
+                                    "url": "https://www.nytimes.com/2021/05/14/us/no-masks-cdc.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "watching movies?",
+                    "annotations": {
+                        "spelling_preprocessing": "watching movies",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9853994250297546
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.99520343542099
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9983576536178589
+                            },
+                            "emotion_classification": {
+                                "anger": 0.7257308959960938,
+                                "fear": 0.5644752383232117,
+                                "joy": 0.6451273560523987,
+                                "neutral": 0.5402883887290955
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6528998613357544
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0026584863662719727
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0055992756970226765,
+                            "conversational": 0.994400680065155
+                        },
+                        "cobot_nounphrases": [
+                            "movies"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "watching movies?",
+                            "segments": [
+                                "watching movies?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "movies"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "movies"
+                                }
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_DeliveryIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0013989204308018088,
+                                "command": 0.0065033696591854095,
+                                "comment": 0.0017905778950080276,
+                                "complaint": 0.0011481910478323698,
+                                "dev_command": 0.002988221123814583,
+                                "neg_answer": 0.0008517423993907869,
+                                "open_question_factual": 0.00513609079644084,
+                                "open_question_opinion": 0.006815379019826651,
+                                "opinion": 0.8979646563529968,
+                                "other_answers": 0.0026164476294070482,
+                                "pos_answer": 0.002134207868948579,
+                                "statement": 0.06533416360616684,
+                                "yes_no_question": 0.005318037234246731
+                            }
+                        ],
+                        "conceptnet": {
+                            "movies": {
+                                "Causes": [
+                                    "laughter",
+                                    "you see movie",
+                                    "fun"
+                                ],
+                                "CausesDesire": [
+                                    "watch movie",
+                                    "watch film",
+                                    "watch television"
+                                ],
+                                "HasProperty": [
+                                    "fun to watch",
+                                    "funny",
+                                    "fun"
+                                ],
+                                "SymbolOf": [
+                                    "porn",
+                                    "violence",
+                                    "space"
+                                ]
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "watching movies?"
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9195295572280884,
+                                    0.9195295572280884,
+                                    0.9051361083984375,
+                                    0.8389714360237122,
+                                    0.8299154043197632
+                                ],
+                                "entity_ids": [
+                                    "Q42311253",
+                                    "Q42623475",
+                                    "Q42817647",
+                                    "Q50842289",
+                                    "Q50842419"
+                                ],
+                                "entity_pages": [],
+                                "entity_pages_titles": [],
+                                "entity_substr": "movies",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "movies": {
+                                    "conf": 0.9195295572280884,
+                                    "country": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "entity_label": "Movies",
+                                    "instance of": [
+                                        [
+                                            "Q41253",
+                                            "movie theater"
+                                        ]
+                                    ],
+                                    "located in": [
+                                        [
+                                            "Q79733",
+                                            "Kingman"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q42311253",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q17350442",
+                                            "venue"
+                                        ],
+                                        [
+                                            "Q41253",
+                                            "movie theater"
+                                        ],
+                                        [
+                                            "Q294422",
+                                            "public building"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "What do you do on weekdays?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "alexa prize",
+                                    "type": "MISC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

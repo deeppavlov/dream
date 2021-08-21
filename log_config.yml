@@ -1,0 +1,45 @@
+version: 1
+disable_existing_loggers: false
+loggers:
+  core:
+    level: 'INFO'
+    propagate: true
+    handlers: ['stderr']
+  service_logger:
+    level: 'INFO'
+    propagate: true
+    handlers: ['file_service_logger']
+  workflow_logger:
+    level: 'WARNING'
+    propagate: true
+    handlers: ['file_workflow_logger']
+formatters:
+  default:
+    format: "%(asctime)s.%(msecs)d %(levelname)s in '%(name)s'['%(module)s'] at line %(lineno)d: %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+handlers:
+  file:
+    class: 'logging.FileHandler'
+    level: 'INFO'
+    formatter: 'default'
+    filename: '~/dp_agent.log'
+  stdout:
+    class: 'logging.StreamHandler'
+    level: 'INFO'
+    formatter: 'default'
+    stream: 'ext://sys.stdout'
+  stderr:
+    class: 'logging.StreamHandler'
+    level: 'INFO'
+    formatter: 'default'
+    stream: 'ext://sys.stderr'
+  file_service_logger:
+    class: 'logging.FileHandler'
+    level: 'INFO'
+    formatter: 'default'
+    filename: 'service.log'
+  file_workflow_logger:
+    class: 'logging.FileHandler'
+    level: 'INFO'
+    formatter: 'default'
+    filename: 'workflow.log'

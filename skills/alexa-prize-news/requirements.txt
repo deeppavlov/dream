@@ -1,0 +1,12 @@
+tqdm==4.32.2
+deeppavlov==0.5.1
+nltk==3.2.5
+gensim==3.7.3
+python-Levenshtein==0.12.0
+git+ssh://git@gitlab.com/eora/dialog-systems/zdialog.git
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+sentry-sdk==0.12.3
+wget==3.2
+numpy==1.17.2

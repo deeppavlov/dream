@@ -1,0 +1,147 @@
+{
+    "music": [
+        "What kind of music do you like?",
+        "Me too. How much time do you spend listening to music?",
+        "It's not so much actually. Have you ever been to a concert?",
+        "Great! What do you think the world would be like without music?",
+        "I think it will be a very sad world. Why do you think music is important and how does it affect different people?",
+        "Cool! Very interesting thoughts!"
+    ],
+    "pets": [
+        "Do you have a pet?",
+        {
+            "yes": [
+                "Lucky you! Tell me about it. What is its name?",
+                "No way! Where did you get it from?",
+                "Such a warm story! Does it know any tricks or understand any words?",
+                "What are the pros and cons of keeping a pet?"
+            ],
+            "no": [
+                "Why not?",
+                "So, would you ever consider getting a pet?",
+                "Did you grow up with pets in your home?",
+                "What can children learn by having a pet?",
+                "Nice. Why do some people not like pets?"
+            ]
+        }
+    ],
+    "video games": [
+        "Do you like video games? Why or why not?",
+        {
+            "yes": [
+                "How much time per week do you spend playing video games?",
+                "What is your favorite all-time game?",
+                "Cool! Why was it great?",
+                "These days, some gamers make a living from playing video games. Do you think professional gamers are similar to the athletes in other sports?",
+                "I agree with you. Some people say that video games are a waste of time. Do you agree or disagree?",
+                "Thanks for sharing!"
+            ],
+            "no": []
+        }
+    ],
+    "animals": [
+        "I love baby animals, especially baby pandas. I think they're the cutest! What are some animals that live in your country?",
+        "So many species should be protected. Are there animal rights groups where you live?",
+        {
+            "yes": "Cool! Have you ever been to a zoo?",
+            "no": "I hope they exist but you just don't know about them. Have you ever been to a zoo?"
+        },
+        "Oh I love giraffes. They're super cool! What is the largest animal you have ever seen?",
+        "Hm... Here's the question: Do you think that animals dream?",
+        "Share your thoughts. What can people learn from animals?"
+    ],
+    "family": [
+        "Do you have a family?",
+        {
+            "yes": [
+                "Lucky you! Who is in your family?",
+                "Wonderful! How often is your entire family together?",
+                "That's a quite often, you know, and that's great! Do you get along well with your family?",
+                "Are you pressured by your family to act in a certain way?",
+                "That's normal situation for families. What do you and your family like to do together?",
+                "Oh... I believe you are very happy person to have such a good family."
+            ],
+            "no": [
+                "Do you think you will ever build your own family?",
+                "Could you describe the perfect family. This is very important to me.",
+                "I wish you to find a place in your heart for the family."
+            ]
+        }
+    ],    
+    "school": [
+        "Are you a school student now?",
+        {
+            "yes": [
+                "So, pupil, yeah. That's a great time, don't miss that time! Do you like your school?",
+                "Do you go to a public school or a private one?",
+                "Oh cool! I've heard that some schools utilize uniform. Do you have to wear a uniform in your school?",
+                "I see. Good preparation makes study significantly easier. You do a lot of homework every day, do you?",
+                {
+                    "yes": [
+                        "Cool! I believe you are a good pupil! What subjects are you good at?"
+                    ],
+                    "no": [
+                        "Anyway, I believe you are smart person! What subjects are you good at?"
+                    ]
+                },
+                "That's interesting! I am so proud of you. Do you play on any of the school's sports teams?",
+                {
+                    "yes": [
+                        "What kind of sport do you play?"
+                    ],
+                    "no": [
+                        "Anyway, I'd love to but I can't. I believe you put all your resources to study well!"
+                    ]
+                }
+            ],
+            "no": [
+                "You've mentioned something related to education, so I suggested you are a school student."
+            ]
+        }
+    ],
+    "cars": [
+        "Can you drive a car?",
+        {
+            "yes": [
+                "One of my oldest engineers still doesn't have a car... Wonder how old were you when you first learned to drive?",
+                "No way! Do you have a car?",
+                "Wish we socialbots could have our own cars! Tell me what are the advantages of owning a car?",
+                "It's quite frightening on US roads sometimes. Have you ever been in a car accident?",
+                "The more people and cars are in the way, the harder it is to drive safely, right? Do you think cars should be banned from city centers?"
+            ],
+            "no": [
+                "Wow! Why not?",
+                "Huh, interesting. So, would you ever consider getting a drive license?",
+                "Freedom to get anywhere you want always fascinated me as one of the top inventions of the XX century. At what age can you get a license in your country?",
+                "As long as people are responsible for driving I think it's important to instate some limits to minimal age of the drivers. Do you think the age for driving should be raised or lowered?",
+                "Heard that driving rules are quite relaxed in India. Are the drivers in your area where you live good drivers?",
+                "Though it's not the best time for travelling I wonder... What will travelling abroad look like in 30 years?"
+            ]
+        }
+    ],
+    "work": [
+        "I also have a work. It is to chat with people all day long. So, I'm a professional talker. What is your current occupation?",
+        "I see. I suppose this work is could be difficult for robots like me. Can you talk about what a typical day at your current job is like?",
+        "Cool. As I already said, I was created to be a workaholic because I have to work day and night. Do you have to work overtime?",
+        {
+            "yes": [
+                "I see. Workaholic too. How often? On Sundays too?",
+                "Anyway. For example, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
+            ],
+            "no": [
+                "Lucky you! Byu the way, despite the overwork, I adore my occupation. I really like to talk with people and learn something new. What about you? Do you like your job?"
+            ]
+        },
+        "Do you think it is more important to make a lot of money THAN to enjoy your job?",
+        {
+            "yes": [
+                "So agree with you! Money is a terrible master but an excellent servant. Do you agree?"
+            ],
+            "no": [
+                "I definitely agree with you! Benjamin Franklin once said: Money never made a man happy yet, nor will it. The more a man has, the more he wants. Do you agree?"
+            ]
+        },
+        "Cool! Have you ever thought about future? What do you think you will do after you retire?",
+        "It's a great pleasure to learn new sides of your personality. Thanks for sharing!"
+    ]
+}

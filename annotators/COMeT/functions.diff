@@ -1,0 +1,51 @@
+diff --git a/src/interactive/functions.py b/src/interactive/functions.py
+index 894e680..d5deaa9 100644
+--- a/src/interactive/functions.py
++++ b/src/interactive/functions.py
+@@ -89,7 +89,7 @@ def set_sampler(opt, sampling_algorithm, data_loader):
+ 
+ 
+ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, category):
+-    if isinstance(category, list):
++    if isinstance(category, (list, tuple)):
+         outputs = {}
+         for cat in category:
+             new_outputs = get_atomic_sequence(
+@@ -124,8 +124,6 @@ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder,
+ 
+         sequence_all['beams'] = sampling_result["beams"]
+ 
+-        print_atomic_sequence(sequence_all)
+-
+         return {category: sequence_all}
+ 
+ 
+@@ -147,8 +145,9 @@ def print_atomic_sequence(sequence_object):
+ def set_atomic_inputs(input_event, category, data_loader, text_encoder):
+     XMB = torch.zeros(1, data_loader.max_event + 1).long().to(cfg.device)
+     prefix, suffix = data.atomic_data.do_example(text_encoder, input_event, None, True, None)
++    max_len = min(len(prefix), data_loader.max_event + 1)
+ 
+-    XMB[:, :len(prefix)] = torch.LongTensor(prefix)
++    XMB[:, :max_len] = torch.LongTensor(prefix[:max_len])
+     XMB[:, -1] = torch.LongTensor([text_encoder.encoder["<{}>".format(category)]])
+ 
+     batch = {}
+@@ -159,7 +158,7 @@ def set_atomic_inputs(input_event, category, data_loader, text_encoder):
+ 
+ 
+ def get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, relation, force=False):
+-    if isinstance(relation, list):
++    if isinstance(relation, (list, tuple)):
+         outputs = {}
+ 
+         for rel in relation:
+@@ -202,8 +201,6 @@ def get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, relat
+ 
+         sequence_all['beams'] = sampling_result["beams"]
+ 
+-        print_conceptnet_sequence(sequence_all)
+-
+         return {relation: sequence_all}
+ 
+ 

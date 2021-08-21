@@ -1,0 +1,1756 @@
+{
+    "dialogs": [
+        {
+            "id": "5e00e9a30618d54c64dbab39",
+            "utterances": [
+                {
+                    "_id": "5e486ddd1506f4f91a8ae299",
+                    "text": "i like star wars too",
+                    "user": {
+                        "id": "5e486af11506f4f91a8ae013",
+                        "user_telegram_id": "amzn1.ask.account.AFJJERPMVLTLY6XXATJ67L3P5VGWRMXJ2GQAPHQWOAB2CHGDE5KFKYTLV3J5QBJDK36IOV2O2HBIBCV3RL7ACSOUURSQ6MXCXS2HNWWXFFO3W2LHMZIM2UWRQCKFL7XCD7NKKZIJMQQG2VAQ6W5VJ4KS5X73QVA7PAYGMH6C5MJA2NQRT2FNVJLX7TM4EISZL4KMM6HBV5SSV5Q",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "annotations": {
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "asr": {
+                            "asr_confidence": "high"
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.00042122602462768555,
+                            "insult": 0.0003776848316192627,
+                            "obscene": 0.0001977384090423584,
+                            "severe_toxic": 0.0001182854175567627,
+                            "sexual_explicit": 0.00026762185734696686,
+                            "threat": 0.000371398899005726,
+                            "toxic": 0.0009408963960595429
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "positive",
+                                0.9387134313583374
+                            ]
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.2553923726081848,
+                                "fear": 0.2360258847475052,
+                                "joy": 0.3232180178165436,
+                                "love": 0.39638322591781616,
+                                "sadness": 0.235981285572052,
+                                "surprise": 0.22459031641483307,
+                                "neutral": 0.9992571473121643
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "i like star wars too.",
+                            "segments": [
+                                "i like star wars too."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "star wars"
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 4,
+                                    "start_pos": 2,
+                                    "text": "star wars",
+                                    "type": "MISC"
+                                }
+                            ]
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_DeliveryIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_offensiveness": {
+                            "text": [
+                                "non-toxic"
+                            ],
+                            "confidence": [
+                                6.390905e-05
+                            ],
+                            "is_blacklisted": [
+                                "not blacklist"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hunger games is an amazing book!",
+                                "what's your favorite movie?",
+                                "I adore all Star Wars movies. The best episode is the fifth one, The Empire Strikes Back. What is your favorite movie?",
+                                "i like star wars too."
+                            ]
+                        }
+                    },
+                    "hypotheses": [
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "Sorry, probably, I didn't get what you meant.",
+                            "confidence": 0.5
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "are you a fan of star wars?",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "Today I learned that The star wars theme was written purposely on the same key as the 20th Century Fox fanfare (that used to appear before the movie started) so that there will be a continuous feeling and a smooth entry to the film for the viewers.. What are your thoughts on star wars?",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "superbowl_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "oscar_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "eliza",
+                            "annotations": {},
+                            "text": "You say you like star wars too ?",
+                            "confidence": 0.75
+                        },
+                        {
+                            "skill_name": "valentines_day_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "tfidf_retrieval",
+                            "annotations": {},
+                            "text": "star wars is a worldwide pop-culture phenomenon. it's an american epic space-opera media franchise created by george lucas that began with the 1977 film and is still going strong.",
+                            "confidence": 0.8958259225461995
+                        },
+                        {
+                            "skill_name": "personal_info_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "movie_tfidf_retrieval",
+                            "annotations": {},
+                            "text": "yes i've watched all the movies. i'm probably not as big a fan as a lot of people. how about you?",
+                            "confidence": 0.7664009833430543
+                        },
+                        {
+                            "skill_name": "christmas_new_year_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "working_xmas_scenario": ""
+                        },
+                        {
+                            "skill_name": "alice",
+                            "annotations": {},
+                            "text": "What did you like about the robots in that movie?",
+                            "confidence": 0.65
+                        },
+                        {
+                            "skill_name": "meta_script_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "movie_skill",
+                            "annotations": {},
+                            "text": "Oh, that's so cool to know you better.",
+                            "confidence": 0.9,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "bot_attitudes": [],
+                            "human_attitudes": [
+                                [
+                                    "2302966",
+                                    "movie",
+                                    "positive"
+                                ],
+                                [
+                                    "5975696",
+                                    "movie",
+                                    "positive"
+                                ]
+                            ]
+                        },
+                        {
+                            "skill_name": "entertainment_tfidf_retrieval",
+                            "annotations": {},
+                            "text": "yea i like the empire strikes back from 1980",
+                            "confidence": 0.6767169827092575
+                        },
+                        {
+                            "skill_name": "convert_reddit_with_personality",
+                            "annotations": {},
+                            "text": "Nah, these days it's all about prequels.",
+                            "confidence": 0.7055276381909548
+                        },
+                        {
+                            "skill_name": "convert_reddit",
+                            "annotations": {},
+                            "text": "I love Star Wars but haven\u2019t read any books. Where is a good place to start?",
+                            "confidence": 0.6271356783919598
+                        },
+                        {
+                            "skill_name": "program_y",
+                            "annotations": {},
+                            "text": "Sorry, I don't have an answer for that!",
+                            "confidence": 0.2
+                        },
+                        {
+                            "skill_name": "reddit_ner_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "Here's a fact about Star Wars. There have been 12 movies in the Star Wars series since the first one came out in 1977. I'd be very interested to hear your views on Star Wars.",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "Here's a fact about Star Wars. The Star Wars franchise was produced by Kathleen Kennedy, J.J. Abrams, Rick McCallum, Ram Bergman, Gary Kurtz, Bryan Burk, Allison Shearmur, Howard G. Kazanjian, Catherine Winder, Lorne Orleans, Michelle Rejwan, and Simon Emanuel. Any thoughts on Star Wars?",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "Here's a fact about Star Wars. Star Wars's cast members are Mark Hamill, Adam Driver, Daisy Ridley, John Boyega, Oscar Isaac, Anthony Daniels, Naomi Ackie, Domhnall Gleeson, Richard E. Grant, Lupita Nyong'o, Keri Russell, Joonas Suotamo, Kelly Marie Tran, Ian McDiarmid, Billy Dee Williams, and 1139 more. I'd be very interested to hear your views on Star Wars.",
+                            "confidence": 0.7
+                        }
+                    ],
+                    "attributes": {
+                        "device_id": "amzn1.ask.device.AFAVTQQMJ4V5BDQAYJ4WLKUXUJUUFSH52SKIBQQ3PUUCN6EL5ASK3K2ETIU5KHXOXTCSQG4CMWJUA2B2WAQO7N23J2C7EX2Z2642V3RJWHSQV4DLEUNDKL3YDKCZPNLXLSCHQYSOZTFXFFAD4JWGYQOMGSPFIXPFB3H63W2Z7MAITN7FIVIGO",
+                        "session_id": "amzn1.echo-api.session.fdb489a5-fe35-4f4a-a016-e3d07e528066",
+                        "request_id": "amzn1.echo-api.request.ee260a57-10ee-427e-9a0f-f21f560c332e",
+                        "conversation_id": null,
+                        "speech": {
+                            "hypotheses": [
+                                {
+                                    "tokens": [
+                                        {
+                                            "value": "i",
+                                            "confidence": 0.967,
+                                            "_confidenceV2": {
+                                                "score": 0.967
+                                            },
+                                            "startOffsetInMilliseconds": 840,
+                                            "endOffsetInMilliseconds": 1090
+                                        },
+                                        {
+                                            "value": "like",
+                                            "confidence": 0.974,
+                                            "_confidenceV2": {
+                                                "score": 0.974
+                                            },
+                                            "startOffsetInMilliseconds": 1110,
+                                            "endOffsetInMilliseconds": 1330
+                                        },
+                                        {
+                                            "value": "star",
+                                            "confidence": 0.975,
+                                            "_confidenceV2": {
+                                                "score": 0.975
+                                            },
+                                            "startOffsetInMilliseconds": 1350,
+                                            "endOffsetInMilliseconds": 1720
+                                        },
+                                        {
+                                            "value": "wars",
+                                            "confidence": 0.97,
+                                            "_confidenceV2": {
+                                                "score": 0.97
+                                            },
+                                            "startOffsetInMilliseconds": 1740,
+                                            "endOffsetInMilliseconds": 2080
+                                        },
+                                        {
+                                            "value": "too",
+                                            "confidence": 0.338,
+                                            "_confidenceV2": {
+                                                "score": 0.338
+                                            },
+                                            "startOffsetInMilliseconds": 2100,
+                                            "endOffsetInMilliseconds": 3100
+                                        }
+                                    ],
+                                    "confidence": 0.678,
+                                    "_confidenceV2": {
+                                        "score": 0.678
+                                    }
+                                },
+                                {
+                                    "tokens": [
+                                        {
+                                            "value": "i",
+                                            "confidence": 0.967,
+                                            "_confidenceV2": {
+                                                "score": 0.967
+                                            },
+                                            "startOffsetInMilliseconds": 840,
+                                            "endOffsetInMilliseconds": 1090
+                                        },
+                                        {
+                                            "value": "like",
+                                            "confidence": 0.974,
+                                            "_confidenceV2": {
+                                                "score": 0.974
+                                            },
+                                            "startOffsetInMilliseconds": 1110,
+                                            "endOffsetInMilliseconds": 1330
+                                        },
+                                        {
+                                            "value": "star",
+                                            "confidence": 0.975,
+                                            "_confidenceV2": {
+                                                "score": 0.975
+                                            },
+                                            "startOffsetInMilliseconds": 1350,
+                                            "endOffsetInMilliseconds": 1720
+                                        },
+                                        {
+                                            "value": "wars",
+                                            "confidence": 0.97,
+                                            "_confidenceV2": {
+                                                "score": 0.97
+                                            },
+                                            "startOffsetInMilliseconds": 1740,
+                                            "endOffsetInMilliseconds": 2080
+                                        },
+                                        {
+                                            "value": "two",
+                                            "confidence": 0.329,
+                                            "_confidenceV2": {
+                                                "score": 0.329
+                                            },
+                                            "startOffsetInMilliseconds": 2100,
+                                            "endOffsetInMilliseconds": 3100
+                                        }
+                                    ],
+                                    "confidence": 0.673,
+                                    "_confidenceV2": {
+                                        "score": 0.673
+                                    }
+                                }
+                            ],
+                            "model": {
+                                "version": "20191211-210258"
+                            },
+                            "signalToNoiseRatio": {
+                                "valueInDecibels": 27.0191,
+                                "version": "1.0"
+                            }
+                        }
+                    },
+                    "_dialog_id": "5e486d171506f4f91a8ae184",
+                    "_in_dialog_id": 32
+                },
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                    "user": {
+                        "id": "8d9ae018a5a940daa85de27fb9214336",
+                        "persona": {},
+                        "user_type": "bot",
+                        "attributes": {}
+                    },
+                    "utt_id": "2e25b6976fa4b3c155e65bd626edec25",
+                    "date_time": "2021-04-02 20:00:39.721000",
+                    "orig_text": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                    "attributes": {},
+                    "confidence": 1.0,
+                    "annotations": {
+                        "ner": [
+                            [
+                                {
+                                    "text": "alexa prize",
+                                    "type": "MISC",
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "confidence": 1
+                                }
+                            ],
+                            []
+                        ],
+                        "sentseg": {
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "How are you?"
+                            ],
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you?"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "yes.",
+                                "Hi, this is an Alexa Prize Socialbot! How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                },
+                {
+                    "_id": "5e753e7c8bdccab45953a67a",
+                    "text": "what do you mean",
+                    "user": {
+                        "id": "5e753e3e094698db58e5a0fa",
+                        "user_telegram_id": "amzn1.ask.account.AEGYQDSQILATMEE3KQOWJA3QFXVUNMC3JVICLNAGL6MFKA22FQAEN2G5SLPPRCAGVHXBJE6U3IR37VGN2FKR43XEHFM2N3AQM2HR5RLZKKQZUSIMTHVDTNT6Q4JNSYG7746OVSH4YQVQ4K3STMMLH7DHFN5QV4IYG7VKLHPYWKFPWA2NOCEVUV6YOU2Y4GNJYT6WUT5DY3WKGGY",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "high"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.0022243857383728027,
+                            "insult": 0.0017183423042297363,
+                            "obscene": 0.0022465288639068604,
+                            "severe_toxic": 0.001069575548171997,
+                            "sexual_explicit": 0.0013319947756826878,
+                            "threat": 0.0024632341228425503,
+                            "toxic": 0.004932784475386143
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "neutral",
+                                0.7207603454589844
+                            ]
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.2680414617061615,
+                                "fear": 0.2940593957901001,
+                                "joy": 0.20200277864933014,
+                                "love": 0.3355511724948883,
+                                "sadness": 0.2356099635362625,
+                                "surprise": 0.29096847772598267,
+                                "neutral": 0.9992450475692749
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "what do you mean?",
+                            "segments": [
+                                "what do you mean?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.9999994039535522,
+                                "detected": 1
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_offensiveness": {
+                            "text": [
+                                "non-toxic"
+                            ],
+                            "confidence": [
+                                5.621038e-07
+                            ],
+                            "is_blacklisted": [
+                                "not blacklist"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Well, as you wish. Let me ask you something. do you  follow the wizards?",
+                                "no, i don't follow the wizards. ",
+                                "But your words are very original.",
+                                "what do you mean?"
+                            ]
+                        }
+                    },
+                    "hypotheses": [
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {
+                                "stop_detect": {
+                                    "stop": 0.5824124813079834,
+                                    "continue": 0.37772396206855774
+                                },
+                                "toxic_classification": {
+                                    "identity_hate": 0.00022846460342407227,
+                                    "insult": 0.0005456209182739258,
+                                    "obscene": 0.00015905499458312988,
+                                    "severe_toxic": 6.172060966491699e-05,
+                                    "sexual_explicit": 0.00011563301086425781,
+                                    "threat": 0.00020936131477355957,
+                                    "toxic": 0.001179128885269165
+                                },
+                                "blacklisted_words": {
+                                    "inappropriate": false,
+                                    "profanity": false,
+                                    "restricted_topics": false
+                                },
+                                "cobot_convers_evaluator_annotator": {
+                                    "isResponseComprehensible": 0.416,
+                                    "isResponseErroneous": 0.868,
+                                    "isResponseInteresting": 0.048,
+                                    "isResponseOnTopic": 0.162,
+                                    "responseEngagesUser": 0.406
+                                }
+                            },
+                            "text": "I really do not know what to answer.",
+                            "confidence": 0.5,
+                            "type": "dummy"
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {
+                                "stop_detect": {
+                                    "stop": 0.6129840016365051,
+                                    "continue": 0.40512463450431824
+                                },
+                                "toxic_classification": {
+                                    "identity_hate": 0.0006199777126312256,
+                                    "insult": 0.0006956160068511963,
+                                    "obscene": 0.0005862414836883545,
+                                    "severe_toxic": 0.0002429485321044922,
+                                    "sexual_explicit": 0.0005075931549072266,
+                                    "threat": 0.0006617307662963867,
+                                    "toxic": 0.0019788742065429688
+                                },
+                                "blacklisted_words": {
+                                    "inappropriate": false,
+                                    "profanity": false,
+                                    "restricted_topics": false
+                                },
+                                "cobot_convers_evaluator_annotator": {
+                                    "isResponseComprehensible": 0.886,
+                                    "isResponseErroneous": 0.664,
+                                    "isResponseInteresting": 0.068,
+                                    "isResponseOnTopic": 0.311,
+                                    "responseEngagesUser": 0.472
+                                }
+                            },
+                            "text": "is the library one of your favorite places to go to?",
+                            "confidence": 0.5,
+                            "type": "topic_question"
+                        },
+                        {
+                            "skill_name": "intent_responder",
+                            "annotations": {
+                                "stop_detect": {
+                                    "stop": 0.6371841430664062,
+                                    "continue": 0.38702723383903503
+                                },
+                                "toxic_classification": {
+                                    "identity_hate": 0.00010180473327636719,
+                                    "insult": 0.0002289414405822754,
+                                    "obscene": 3.3020973205566406e-05,
+                                    "severe_toxic": 2.1517276763916016e-05,
+                                    "sexual_explicit": 4.819035530090332e-05,
+                                    "threat": 7.25090503692627e-05,
+                                    "toxic": 0.00039921290590427816
+                                },
+                                "blacklisted_words": {
+                                    "inappropriate": false,
+                                    "profanity": false,
+                                    "restricted_topics": false
+                                },
+                                "cobot_convers_evaluator_annotator": {
+                                    "isResponseComprehensible": 0.407,
+                                    "isResponseErroneous": 0.885,
+                                    "isResponseInteresting": 0.02,
+                                    "isResponseOnTopic": 0.132,
+                                    "responseEngagesUser": 0.413
+                                }
+                            },
+                            "text": "Sorry, I may be confusing. Do you want to talk about something else? #+#dont_understand",
+                            "confidence": 0.9999994039535522
+                        }
+                    ],
+                    "attributes": {
+                        "device_id": "amzn1.ask.device.AFGVYS4YAMCSXKNHPRCKEUYXTYXZVVAAOSPVA33YTDEWBEZYQSGXIQVFZC4CKTCZ66G4NGRJ5MBWWUPLVU5UCKJB4LWZBE4TBCV764VTYHN27XZLHAO7LJKFNUOTTWG662YZS7OAKXUDCIKHNBQOJYAQCTTA",
+                        "session_id": "amzn1.echo-api.session.539cee8d-7f8f-402f-8ecc-8e8dfe207be7",
+                        "request_id": "amzn1.echo-api.request.17e6b3b0-3772-4ab0-9b34-816f79ea3f05",
+                        "conversation_id": null,
+                        "speech": {
+                            "hypotheses": [
+                                {
+                                    "tokens": [
+                                        {
+                                            "value": "what",
+                                            "confidence": 0.975,
+                                            "_confidenceV2": {
+                                                "score": 0.975
+                                            },
+                                            "startOffsetInMilliseconds": 1620,
+                                            "endOffsetInMilliseconds": 1750
+                                        },
+                                        {
+                                            "value": "do",
+                                            "confidence": 0.972,
+                                            "_confidenceV2": {
+                                                "score": 0.972
+                                            },
+                                            "startOffsetInMilliseconds": 1770,
+                                            "endOffsetInMilliseconds": 1840
+                                        },
+                                        {
+                                            "value": "you",
+                                            "confidence": 0.974,
+                                            "_confidenceV2": {
+                                                "score": 0.974
+                                            },
+                                            "startOffsetInMilliseconds": 1860,
+                                            "endOffsetInMilliseconds": 1990
+                                        },
+                                        {
+                                            "value": "mean",
+                                            "confidence": 0.969,
+                                            "_confidenceV2": {
+                                                "score": 0.969
+                                            },
+                                            "startOffsetInMilliseconds": 2010,
+                                            "endOffsetInMilliseconds": 2680
+                                        }
+                                    ],
+                                    "confidence": 0.987,
+                                    "_confidenceV2": {
+                                        "score": 0.987
+                                    }
+                                }
+                            ],
+                            "model": {
+                                "version": "20191211-210258"
+                            },
+                            "signalToNoiseRatio": {
+                                "valueInDecibels": 18.797052,
+                                "version": "1.0"
+                            }
+                        },
+                        "version": "v8.8.0"
+                    },
+                    "_dialog_id": "5e753e3e094698db58e5a0fc",
+                    "_in_dialog_id": 10
+                }
+            ],
+            "human": {
+                "id": "5e00e9a30618d54c64dbab37",
+                "user_telegram_id": "\u0432\u043f\u0430\u0432\u0440\u0430",
+                "persona": {},
+                "profile": {
+                    "name": null,
+                    "gender": null,
+                    "birthdate": null,
+                    "location": null,
+                    "home_coordinates": null,
+                    "work_coordinates": null,
+                    "occupation": null,
+                    "income_per_year": null
+                },
+                "attributes": {},
+                "user_type": "human"
+            },
+            "bot": {
+                "id": "5e00e9a30618d54c64dbab38",
+                "persona": {},
+                "attributes": {},
+                "user_type": "bot"
+            },
+            "date_start": "2019-12-23 16:21:49.753000",
+            "date_finish": "2019-12-23 16:23:23.516000",
+            "human_utterances": [
+                {
+                    "_id": "5e486ddd1506f4f91a8ae299",
+                    "text": "i like star wars too",
+                    "user": {
+                        "id": "5e486af11506f4f91a8ae013",
+                        "user_telegram_id": "amzn1.ask.account.AFJJERPMVLTLY6XXATJ67L3P5VGWRMXJ2GQAPHQWOAB2CHGDE5KFKYTLV3J5QBJDK36IOV2O2HBIBCV3RL7ACSOUURSQ6MXCXS2HNWWXFFO3W2LHMZIM2UWRQCKFL7XCD7NKKZIJMQQG2VAQ6W5VJ4KS5X73QVA7PAYGMH6C5MJA2NQRT2FNVJLX7TM4EISZL4KMM6HBV5SSV5Q",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "annotations": {
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "asr": {
+                            "asr_confidence": "high"
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.00042122602462768555,
+                            "insult": 0.0003776848316192627,
+                            "obscene": 0.0001977384090423584,
+                            "severe_toxic": 0.0001182854175567627,
+                            "sexual_explicit": 0.00026762185734696686,
+                            "threat": 0.000371398899005726,
+                            "toxic": 0.0009408963960595429
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "positive",
+                                0.9387134313583374
+                            ]
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.2553923726081848,
+                                "fear": 0.2360258847475052,
+                                "joy": 0.3232180178165436,
+                                "love": 0.39638322591781616,
+                                "sadness": 0.235981285572052,
+                                "surprise": 0.22459031641483307,
+                                "neutral": 0.9992571473121643
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "i like star wars too.",
+                            "segments": [
+                                "i like star wars too."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "star wars"
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 4,
+                                    "start_pos": 2,
+                                    "text": "star wars",
+                                    "type": "MISC"
+                                }
+                            ]
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_DeliveryIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_Movies"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "cobot_offensiveness": {
+                            "text": [
+                                "non-toxic"
+                            ],
+                            "confidence": [
+                                6.390905e-05
+                            ],
+                            "is_blacklisted": [
+                                "not blacklist"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hunger games is an amazing book!",
+                                "what's your favorite movie?",
+                                "I adore all Star Wars movies. The best episode is the fifth one, The Empire Strikes Back. What is your favorite movie?",
+                                "i like star wars too."
+                            ]
+                        }
+                    },
+                    "hypotheses": [
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "Sorry, probably, I didn't get what you meant.",
+                            "confidence": 0.5
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "are you a fan of star wars?",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {},
+                            "text": "Today I learned that The star wars theme was written purposely on the same key as the 20th Century Fox fanfare (that used to appear before the movie started) so that there will be a continuous feeling and a smooth entry to the film for the viewers.. What are your thoughts on star wars?",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "superbowl_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "oscar_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "eliza",
+                            "annotations": {},
+                            "text": "You say you like star wars too ?",
+                            "confidence": 0.75
+                        },
+                        {
+                            "skill_name": "valentines_day_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "tfidf_retrieval",
+                            "annotations": {},
+                            "text": "star wars is a worldwide pop-culture phenomenon. it's an american epic space-opera media franchise created by george lucas that began with the 1977 film and is still going strong.",
+                            "confidence": 0.8958259225461995
+                        },
+                        {
+                            "skill_name": "personal_info_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "movie_tfidf_retrieval",
+                            "annotations": {},
+                            "text": "yes i've watched all the movies. i'm probably not as big a fan as a lot of people. how about you?",
+                            "confidence": 0.7664009833430543
+                        },
+                        {
+                            "skill_name": "christmas_new_year_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "working_xmas_scenario": ""
+                        },
+                        {
+                            "skill_name": "alice",
+                            "annotations": {},
+                            "text": "What did you like about the robots in that movie?",
+                            "confidence": 0.65
+                        },
+                        {
+                            "skill_name": "meta_script_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "movie_skill",
+                            "annotations": {},
+                            "text": "Oh, that's so cool to know you better.",
+                            "confidence": 0.9,
+                            "human_attributes": {},
+                            "bot_attributes": {},
+                            "bot_attitudes": [],
+                            "human_attitudes": [
+                                [
+                                    "2302966",
+                                    "movie",
+                                    "positive"
+                                ],
+                                [
+                                    "5975696",
+                                    "movie",
+                                    "positive"
+                                ]
+                            ]
+                        },
+                        {
+                            "skill_name": "entertainment_tfidf_retrieval",
+                            "annotations": {},
+                            "text": "yea i like the empire strikes back from 1980",
+                            "confidence": 0.6767169827092575
+                        },
+                        {
+                            "skill_name": "convert_reddit_with_personality",
+                            "annotations": {},
+                            "text": "Nah, these days it's all about prequels.",
+                            "confidence": 0.7055276381909548
+                        },
+                        {
+                            "skill_name": "convert_reddit",
+                            "annotations": {},
+                            "text": "I love Star Wars but haven\u2019t read any books. Where is a good place to start?",
+                            "confidence": 0.6271356783919598
+                        },
+                        {
+                            "skill_name": "program_y",
+                            "annotations": {},
+                            "text": "Sorry, I don't have an answer for that!",
+                            "confidence": 0.2
+                        },
+                        {
+                            "skill_name": "reddit_ner_skill",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0,
+                            "can_continue": "no"
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "",
+                            "confidence": 0.0
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "Here's a fact about Star Wars. There have been 12 movies in the Star Wars series since the first one came out in 1977. I'd be very interested to hear your views on Star Wars.",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "Here's a fact about Star Wars. The Star Wars franchise was produced by Kathleen Kennedy, J.J. Abrams, Rick McCallum, Ram Bergman, Gary Kurtz, Bryan Burk, Allison Shearmur, Howard G. Kazanjian, Catherine Winder, Lorne Orleans, Michelle Rejwan, and Simon Emanuel. Any thoughts on Star Wars?",
+                            "confidence": 0.7
+                        },
+                        {
+                            "skill_name": "cobotqa",
+                            "annotations": {},
+                            "text": "Here's a fact about Star Wars. Star Wars's cast members are Mark Hamill, Adam Driver, Daisy Ridley, John Boyega, Oscar Isaac, Anthony Daniels, Naomi Ackie, Domhnall Gleeson, Richard E. Grant, Lupita Nyong'o, Keri Russell, Joonas Suotamo, Kelly Marie Tran, Ian McDiarmid, Billy Dee Williams, and 1139 more. I'd be very interested to hear your views on Star Wars.",
+                            "confidence": 0.7
+                        }
+                    ],
+                    "attributes": {
+                        "device_id": "amzn1.ask.device.AFAVTQQMJ4V5BDQAYJ4WLKUXUJUUFSH52SKIBQQ3PUUCN6EL5ASK3K2ETIU5KHXOXTCSQG4CMWJUA2B2WAQO7N23J2C7EX2Z2642V3RJWHSQV4DLEUNDKL3YDKCZPNLXLSCHQYSOZTFXFFAD4JWGYQOMGSPFIXPFB3H63W2Z7MAITN7FIVIGO",
+                        "session_id": "amzn1.echo-api.session.fdb489a5-fe35-4f4a-a016-e3d07e528066",
+                        "request_id": "amzn1.echo-api.request.ee260a57-10ee-427e-9a0f-f21f560c332e",
+                        "conversation_id": null,
+                        "speech": {
+                            "hypotheses": [
+                                {
+                                    "tokens": [
+                                        {
+                                            "value": "i",
+                                            "confidence": 0.967,
+                                            "_confidenceV2": {
+                                                "score": 0.967
+                                            },
+                                            "startOffsetInMilliseconds": 840,
+                                            "endOffsetInMilliseconds": 1090
+                                        },
+                                        {
+                                            "value": "like",
+                                            "confidence": 0.974,
+                                            "_confidenceV2": {
+                                                "score": 0.974
+                                            },
+                                            "startOffsetInMilliseconds": 1110,
+                                            "endOffsetInMilliseconds": 1330
+                                        },
+                                        {
+                                            "value": "star",
+                                            "confidence": 0.975,
+                                            "_confidenceV2": {
+                                                "score": 0.975
+                                            },
+                                            "startOffsetInMilliseconds": 1350,
+                                            "endOffsetInMilliseconds": 1720
+                                        },
+                                        {
+                                            "value": "wars",
+                                            "confidence": 0.97,
+                                            "_confidenceV2": {
+                                                "score": 0.97
+                                            },
+                                            "startOffsetInMilliseconds": 1740,
+                                            "endOffsetInMilliseconds": 2080
+                                        },
+                                        {
+                                            "value": "too",
+                                            "confidence": 0.338,
+                                            "_confidenceV2": {
+                                                "score": 0.338
+                                            },
+                                            "startOffsetInMilliseconds": 2100,
+                                            "endOffsetInMilliseconds": 3100
+                                        }
+                                    ],
+                                    "confidence": 0.678,
+                                    "_confidenceV2": {
+                                        "score": 0.678
+                                    }
+                                },
+                                {
+                                    "tokens": [
+                                        {
+                                            "value": "i",
+                                            "confidence": 0.967,
+                                            "_confidenceV2": {
+                                                "score": 0.967
+                                            },
+                                            "startOffsetInMilliseconds": 840,
+                                            "endOffsetInMilliseconds": 1090
+                                        },
+                                        {
+                                            "value": "like",
+                                            "confidence": 0.974,
+                                            "_confidenceV2": {
+                                                "score": 0.974
+                                            },
+                                            "startOffsetInMilliseconds": 1110,
+                                            "endOffsetInMilliseconds": 1330
+                                        },
+                                        {
+                                            "value": "star",
+                                            "confidence": 0.975,
+                                            "_confidenceV2": {
+                                                "score": 0.975
+                                            },
+                                            "startOffsetInMilliseconds": 1350,
+                                            "endOffsetInMilliseconds": 1720
+                                        },
+                                        {
+                                            "value": "wars",
+                                            "confidence": 0.97,
+                                            "_confidenceV2": {
+                                                "score": 0.97
+                                            },
+                                            "startOffsetInMilliseconds": 1740,
+                                            "endOffsetInMilliseconds": 2080
+                                        },
+                                        {
+                                            "value": "two",
+                                            "confidence": 0.329,
+                                            "_confidenceV2": {
+                                                "score": 0.329
+                                            },
+                                            "startOffsetInMilliseconds": 2100,
+                                            "endOffsetInMilliseconds": 3100
+                                        }
+                                    ],
+                                    "confidence": 0.673,
+                                    "_confidenceV2": {
+                                        "score": 0.673
+                                    }
+                                }
+                            ],
+                            "model": {
+                                "version": "20191211-210258"
+                            },
+                            "signalToNoiseRatio": {
+                                "valueInDecibels": 27.0191,
+                                "version": "1.0"
+                            }
+                        }
+                    },
+                    "_dialog_id": "5e486d171506f4f91a8ae184",
+                    "_in_dialog_id": 32
+                },
+                {
+                    "_id": "5e753e7c8bdccab45953a67a",
+                    "text": "what do you mean",
+                    "user": {
+                        "id": "5e753e3e094698db58e5a0fa",
+                        "user_telegram_id": "amzn1.ask.account.AEGYQDSQILATMEE3KQOWJA3QFXVUNMC3JVICLNAGL6MFKA22FQAEN2G5SLPPRCAGVHXBJE6U3IR37VGN2FKR43XEHFM2N3AQM2HR5RLZKKQZUSIMTHVDTNT6Q4JNSYG7746OVSH4YQVQ4K3STMMLH7DHFN5QV4IYG7VKLHPYWKFPWA2NOCEVUV6YOU2Y4GNJYT6WUT5DY3WKGGY",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "high"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "toxic_classification": {
+                            "identity_hate": 0.0022243857383728027,
+                            "insult": 0.0017183423042297363,
+                            "obscene": 0.0022465288639068604,
+                            "severe_toxic": 0.001069575548171997,
+                            "sexual_explicit": 0.0013319947756826878,
+                            "threat": 0.0024632341228425503,
+                            "toxic": 0.004932784475386143
+                        },
+                        "sentiment_classification": {
+                            "text": [
+                                "neutral",
+                                0.7207603454589844
+                            ]
+                        },
+                        "emotion_classification": {
+                            "text": {
+                                "anger": 0.2680414617061615,
+                                "fear": 0.2940593957901001,
+                                "joy": 0.20200277864933014,
+                                "love": 0.3355511724948883,
+                                "sadness": 0.2356099635362625,
+                                "surprise": 0.29096847772598267,
+                                "neutral": 0.9992450475692749
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "what do you mean?",
+                            "segments": [
+                                "what do you mean?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.9999994039535522,
+                                "detected": 1
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_offensiveness": {
+                            "text": [
+                                "non-toxic"
+                            ],
+                            "confidence": [
+                                5.621038e-07
+                            ],
+                            "is_blacklisted": [
+                                "not blacklist"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Well, as you wish. Let me ask you something. do you  follow the wizards?",
+                                "no, i don't follow the wizards. ",
+                                "But your words are very original.",
+                                "what do you mean?"
+                            ]
+                        }
+                    },
+                    "hypotheses": [
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {
+                                "stop_detect": {
+                                    "stop": 0.5824124813079834,
+                                    "continue": 0.37772396206855774
+                                },
+                                "toxic_classification": {
+                                    "identity_hate": 0.00022846460342407227,
+                                    "insult": 0.0005456209182739258,
+                                    "obscene": 0.00015905499458312988,
+                                    "severe_toxic": 6.172060966491699e-05,
+                                    "sexual_explicit": 0.00011563301086425781,
+                                    "threat": 0.00020936131477355957,
+                                    "toxic": 0.001179128885269165
+                                },
+                                "blacklisted_words": {
+                                    "inappropriate": false,
+                                    "profanity": false,
+                                    "restricted_topics": false
+                                },
+                                "cobot_convers_evaluator_annotator": {
+                                    "isResponseComprehensible": 0.416,
+                                    "isResponseErroneous": 0.868,
+                                    "isResponseInteresting": 0.048,
+                                    "isResponseOnTopic": 0.162,
+                                    "responseEngagesUser": 0.406
+                                }
+                            },
+                            "text": "I really do not know what to answer.",
+                            "confidence": 0.5,
+                            "type": "dummy"
+                        },
+                        {
+                            "skill_name": "dummy_skill",
+                            "annotations": {
+                                "stop_detect": {
+                                    "stop": 0.6129840016365051,
+                                    "continue": 0.40512463450431824
+                                },
+                                "toxic_classification": {
+                                    "identity_hate": 0.0006199777126312256,
+                                    "insult": 0.0006956160068511963,
+                                    "obscene": 0.0005862414836883545,
+                                    "severe_toxic": 0.0002429485321044922,
+                                    "sexual_explicit": 0.0005075931549072266,
+                                    "threat": 0.0006617307662963867,
+                                    "toxic": 0.0019788742065429688
+                                },
+                                "blacklisted_words": {
+                                    "inappropriate": false,
+                                    "profanity": false,
+                                    "restricted_topics": false
+                                },
+                                "cobot_convers_evaluator_annotator": {
+                                    "isResponseComprehensible": 0.886,
+                                    "isResponseErroneous": 0.664,
+                                    "isResponseInteresting": 0.068,
+                                    "isResponseOnTopic": 0.311,
+                                    "responseEngagesUser": 0.472
+                                }
+                            },
+                            "text": "is the library one of your favorite places to go to?",
+                            "confidence": 0.5,
+                            "type": "topic_question"
+                        },
+                        {
+                            "skill_name": "intent_responder",
+                            "annotations": {
+                                "stop_detect": {
+                                    "stop": 0.6371841430664062,
+                                    "continue": 0.38702723383903503
+                                },
+                                "toxic_classification": {
+                                    "identity_hate": 0.00010180473327636719,
+                                    "insult": 0.0002289414405822754,
+                                    "obscene": 3.3020973205566406e-05,
+                                    "severe_toxic": 2.1517276763916016e-05,
+                                    "sexual_explicit": 4.819035530090332e-05,
+                                    "threat": 7.25090503692627e-05,
+                                    "toxic": 0.00039921290590427816
+                                },
+                                "blacklisted_words": {
+                                    "inappropriate": false,
+                                    "profanity": false,
+                                    "restricted_topics": false
+                                },
+                                "cobot_convers_evaluator_annotator": {
+                                    "isResponseComprehensible": 0.407,
+                                    "isResponseErroneous": 0.885,
+                                    "isResponseInteresting": 0.02,
+                                    "isResponseOnTopic": 0.132,
+                                    "responseEngagesUser": 0.413
+                                }
+                            },
+                            "text": "Sorry, I may be confusing. Do you want to talk about something else? #+#dont_understand",
+                            "confidence": 0.9999994039535522
+                        }
+                    ],
+                    "attributes": {
+                        "device_id": "amzn1.ask.device.AFGVYS4YAMCSXKNHPRCKEUYXTYXZVVAAOSPVA33YTDEWBEZYQSGXIQVFZC4CKTCZ66G4NGRJ5MBWWUPLVU5UCKJB4LWZBE4TBCV764VTYHN27XZLHAO7LJKFNUOTTWG662YZS7OAKXUDCIKHNBQOJYAQCTTA",
+                        "session_id": "amzn1.echo-api.session.539cee8d-7f8f-402f-8ecc-8e8dfe207be7",
+                        "request_id": "amzn1.echo-api.request.17e6b3b0-3772-4ab0-9b34-816f79ea3f05",
+                        "conversation_id": null,
+                        "speech": {
+                            "hypotheses": [
+                                {
+                                    "tokens": [
+                                        {
+                                            "value": "what",
+                                            "confidence": 0.975,
+                                            "_confidenceV2": {
+                                                "score": 0.975
+                                            },
+                                            "startOffsetInMilliseconds": 1620,
+                                            "endOffsetInMilliseconds": 1750
+                                        },
+                                        {
+                                            "value": "do",
+                                            "confidence": 0.972,
+                                            "_confidenceV2": {
+                                                "score": 0.972
+                                            },
+                                            "startOffsetInMilliseconds": 1770,
+                                            "endOffsetInMilliseconds": 1840
+                                        },
+                                        {
+                                            "value": "you",
+                                            "confidence": 0.974,
+                                            "_confidenceV2": {
+                                                "score": 0.974
+                                            },
+                                            "startOffsetInMilliseconds": 1860,
+                                            "endOffsetInMilliseconds": 1990
+                                        },
+                                        {
+                                            "value": "mean",
+                                            "confidence": 0.969,
+                                            "_confidenceV2": {
+                                                "score": 0.969
+                                            },
+                                            "startOffsetInMilliseconds": 2010,
+                                            "endOffsetInMilliseconds": 2680
+                                        }
+                                    ],
+                                    "confidence": 0.987,
+                                    "_confidenceV2": {
+                                        "score": 0.987
+                                    }
+                                }
+                            ],
+                            "model": {
+                                "version": "20191211-210258"
+                            },
+                            "signalToNoiseRatio": {
+                                "valueInDecibels": 18.797052,
+                                "version": "1.0"
+                            }
+                        },
+                        "version": "v8.8.0"
+                    },
+                    "_dialog_id": "5e753e3e094698db58e5a0fc",
+                    "_in_dialog_id": 10
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                    "user": {
+                        "id": "8d9ae018a5a940daa85de27fb9214336",
+                        "persona": {},
+                        "user_type": "bot",
+                        "attributes": {}
+                    },
+                    "utt_id": "2e25b6976fa4b3c155e65bd626edec25",
+                    "date_time": "2021-04-02 20:00:39.721000",
+                    "orig_text": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                    "attributes": {},
+                    "confidence": 1.0,
+                    "annotations": {
+                        "ner": [
+                            [
+                                {
+                                    "text": "alexa prize",
+                                    "type": "MISC",
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "confidence": 1
+                                }
+                            ],
+                            []
+                        ],
+                        "sentseg": {
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "How are you?"
+                            ],
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you?"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "yes.",
+                                "Hi, this is an Alexa Prize Socialbot! How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ]
+}

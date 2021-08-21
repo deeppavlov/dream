@@ -1,0 +1,430 @@
+[
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Stephen King once said: Books and movies are like apples and oranges. They both are fruit, but taste completely different.",
+            "Comparing a book to a movie is like comparing glasses to a mirror. The same ingredient doesn't make them similar.",
+            "I agree with Paulo Coelho who said: The book is a film that takes place in the mind of the reader. That's why we go to movies and say, Oh, the book is better."
+        ]
+    },
+    {
+        "skill_pair": [
+            "game_cooperative_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Watching movies is a passive mode of consumption of art. Playing games is interactive, and games have to be adaptive to that.",
+            "While movies allow human to enjoy and relax, I believe video games can be even more useful to develop imagination and explore the world."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_travel_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "I like watching movies for the opportunity to virtually travel around the world.",
+            "I've seen a lot of amazing places and got to know different cultures throughout the art of movies.",
+            "While there are many things that can contribute to the touristic success of a destination such as excellent weather or fabulous food, another important factor can be the amount of screen time a destination has received in films or on TV.",
+            "More and more travelers are visiting locations after seeing them featured in a movie, like Joker's stairs in the Bronx.",
+            "Binge watching is sometimes one of the only things that makes a long-haul flight, road trip, or long-distance traveling tolerable."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Trained owls were used in the Harry Potter films, and the entire first batch of letters had to be rewritten because they were too heavy for the little owls to carry.",
+            "Multiple animals are often used for one character, but in Babe, the star was played by total of 48 piglets!",
+            "In movie Babe, the little piggies were fed peanut butter to give the illusion of them speaking.",
+            "If you were thinking the squirrels in Charlie and the Chocolate Factory were CGI, you would be wrong - they were real squirrels who were trained to crack nuts!"
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_sport_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Movies and sports are related. People draw inspiration by watching movies depicting the struggle and hardships of those sportsmen.",
+            "Sports movie earns a huge profit as people can relate to real life examples and love to watch such films.",
+            "Sports movies are never just sports movies — they're tales of the human spirit triumphing over adversity, or metaphors for the little guy taking on the corporate."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Whether you're somebody who takes great care and pleasure in food, or somebody who sees little more in it that sustenance, food is an excellent tool for a movie to use to forge a connection with the audience.",
+            "The act of eating can be so inexplicable when so many meal sequences in movies are set up only to have someone leave the scene soon after a measly helping of food.",
+            "Food can be one of the most revealing of character traits on screen. As a device that's intrinsically linked to sustenance and nourishment, food is one of the most effective ways to convey character as well as plot development."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_music_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Music guides the audience and invokes the emotions behind the film's story, the action and the words. It is a great enhancement to any film.",
+            "Musical themes can make an audience feel as though they're in the past, or far in the future. This is why music is so important for any movie.",
+            "Music can convey feelings, even the deepest and most difficult to explain emotions can be understood by an audience in less than a minute with the proper musical theme. This is why music is a must have in any movie.",
+            "Music establishes clearly the feeling of what the story is about. It helps establish character, it provides insight into a character or event, it intensifies the overall impact of the film."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_gossip_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_science_skill",
+            "dff_movie_skill"
+        ],
+        "phrases": [
+            "Science is a core element of sci-fi movies, which usually focus on love, friendship, teamwork, good versus evil, and any other commonly used thematic trope in cinema.",
+            "Star Trek have inspired the development of mobile telephones, the internet, video conferencing and multipurpose medical devices?",
+            "When the Oscars are handed out every year, there are no special awards for best portrayal of a scientist or best explanation of quantum theory. Still, a few films that have some relation to science have enjoyed recognition. In 1998, Good Will Hunting took an Oscar for best original screenplay and a A Beautiful Mind won four in 2002."
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": [
+            "Video games often have a reputation for being juvenile, thoughtless entertainment for children. Well, much like any other entertainment medium, there are a wide variety of video games from brainless entertainment t to deep exploration of complicated ethical dilemmas.",
+            "I enjoy a great deal about both reading and video gaming, each has a place in my life.",
+            "I like reading's constructive entertainment. I enjoy video gaming with its escape into somewhere where you can adventure around. That is why the both are good in their own way."
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": [
+            "Although not everyone can concentrate on long journeys, reading while traveling is a great way to make the most of your time and boost your brain health and cognitive processes.",
+            "Reading while traveling is a great way to make the most of your time, thereby turning those moments of inactivity into very active ones for your brain.",
+            "The world is a book and those who do not travel read only one page."
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_animals_skill"
+        ],
+        "phrases": [
+            "The usage of talking animals enable storytellers to combine the basic characteristics of the animal with human behavior, to apply metaphor, and to entertain children.",
+            "In literature, animals function as projections. They are a projection of a character's state of mind or of their deepest insecurity.",
+            "Animals as characters, can bring silliness and incongruity, making a story more enjoyable.",
+            "In any book, animals add a degree of emotional distance for the reader, which is important when the story message is personal, painful or powerful."
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_sport_skill"
+        ],
+        "phrases": [
+            "For every epic sports moment or figure that you can think of, there's probably a book where you can learn more. Want to learn more about Mike Tyson? You got it. Maybe you want to find a great Yogi Berra quote to text your mom to make her laugh. A solid option!",
+            "The link between sports and literature dates practically to the advent of the written word, as far back as the Epic Of Gilgamesh and its tests of strength or The Iliad with its ritualized funeral games. Ever since, the greatest writers among us have been inclined again and again to test their mettle with the stories of those who dare step into the arena.",
+            "Sports are full of drama, intensity and sometimes moments of comedy. They don't need to be fictionalized to tell great stories, but off course, they can be."
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_food_skill"
+        ],
+        "phrases": [
+            "At its best, a cookbook is a chronicle and treasury of the fine art of cooking, an art whose masterpieces — created only to be consumed — would otherwise be lost.",
+            "Just as food memoir is one of my favorite literary genres, so is fiction that revolves around food.",
+            "The writers use food and eating to symbolize cultural issues of acceptance, resistance, and preservation of culture, as well as symbols of memory, emotions, narrative history, relationships, power, and consumption.",
+            "Food and fiction are two of my favorite things in the world – and when the two combine, it's magic!"
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_music_skill"
+        ],
+        "phrases": [
+            "Music is a powerful influence, affecting us emotionally, physically, mentally -- even moving us at a molecular level. Many writers employ music in their novels as a way of communicating emotions beyond words, or to encourage consistency in character, tone, and language.",
+            "Music in fiction can create the mood of a time, like John Updike's Rabbit Run, set in the late 1950s, or it can influence the structure of a novel like James Joyce's Ulysses.",
+            "People who love both fiction and music might waffle Hamlet-like about whether to enjoy a book or some tunes in their free time. But there's a way to combine both! I don't mean reading and listening to music at the same time, I mean reading fiction containing some musical elements."
+        ]
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_gossip_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "book_skill",
+            "dff_science_skill"
+        ],
+        "phrases": [
+            "People love real world technology that appeared in science fiction first because it gives them a sense that they are living in the future.",
+            "Sci-fi sweeps its audiences up in technologically enabled tales of adventure and drama, making the audience wish for it, and for some few, want to make it."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_travel_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": [
+            "today, thanks to remarkable advancements in graphic capabilities and data storage, many games resemble vast, vibrant worlds that lie waiting to be explored, taking the form of the rolling plains of the American Wild West or the mesmeric depths of the ocean.",
+            "Whether based on real world locations or set in fantastical settings out of designers' imaginations, navigating through some video games can mimic the sense of wonder and curiosity sparked by physically traveling to a new place.",
+            "Traveling is like playing an open-world video game. But instead of being guided by some main storyline or quest list, you get to choose your own adventure, save up resources so you can go to the parts of the world you want to explore, try to visit as many places as possible by breezing through or stay longer so you can explore each place more thoroughly."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_sport_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": [
+            "With the development of competitive gaming and global competitions that promise millions in cash prizes, many are now debating if video games should be classified as a sport.",
+            "Competitive video gamers need to put in just as much practice, effort, and dedication as traditional athletes.",
+            "A recent study conducted by the German Sports University in Cologne has shown that professional gamers exhibit high levels of physical strain during competitions, comparable in many cases to traditional sports."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_music_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": [
+            "When you think of music in video games, you think of the iconic soundtracks of Super Mario Bros, Tetris and Street Fighter II just to name a few. These games have tracks that are often regarded as the greatest in video games’ short but impressive history.",
+            "In video games Many Action and First Person Shooters have adopted the idea that a driving soundtrack can greatly enhance the players experience of the game.",
+            "Grand Theft Auto video game has a diverse collection of radio stations for the player to choose and listen to whilst driving along.",
+            "As video games have become more and more mainstream, the soundtracks have gotten bigger and a lot more impressive."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_gossip_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_science_skill",
+            "game_cooperative_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_sport_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": [
+            "Sports tourism is the act of travelling from one locality to another, with the intention of being in some way involved with a sporting activity or event.",
+            "Hard sports tourism refers to traveling for and participating in competitive sporting events. This includes many of the big events that sometimes attract hundreds of thousands of people.",
+            "Events that would be considered soft tourism include hiking, canoeing, skiing, and other recreational or extreme sports.",
+            "Perhaps the biggest common example of soft sports tourism is golf, as people travel all over the world to play different courses."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": [
+            "Food is an important part of cultural heritage and national identity.",
+            "Food can connect us to people and places, bringing friends and families together, and food habits, such as whether you should eat all of the food on your plate vary across the globe."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_music_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": [
+            "I've always connected music with travel. Firstly, they're two of my favourite things in the world. But, more than that, I've found hearing a certain song can take me straight back to a specific time and place.",
+            "I find music and travel both utterly addictive. After one short trip away, I return with post-travel blues, desperate to go on another one. The same with music – I'm incapable of listening to one song, then turning off.",
+            "There is one thing that almost everyone considers the best thing to do while traveling – listening to music. Whether you are traveling on land, water, or air, the presence or absence of music can completely change your travel experience.",
+            "You need to look at sights, taste local food, smell a different environment, and hear enjoyable music to have the full value of your travels.",
+            "Music makes even the longest journeys bearable as it takes your mind away from the current temporary but challenging situation. Research shows that music reduces anxiety and ushers in a wave of calmness."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_gossip_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_science_skill",
+            "dff_travel_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_sport_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_food_skill"
+        ],
+        "phrases": [
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_music_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_gossip_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_animals_skill",
+            "dff_science_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "dff_sport_skill"
+        ],
+        "phrases": [
+            "Good nutrition can enhance sporting performance. A well-planned, nutritious diet should meet most of an athlete's vitamin and mineral needs, and provide enough protein to promote muscle growth and repair.",
+            "Foods rich in unrefined carbohydrates, like wholegrain breads and cereals, should form the basis of the athlete's diet.",
+            "Аthletes мake a plan to eat a variety of fruits and vegetables daily. The goal is to eat at least five servings per day, and include varieties of fruit and vegetable color.",
+            "Fruits and vegetables are filled with the energy and nutrients necessary for training and recovery.",
+            "A typical healthy breakfast for athletes will contain a carb source such as fruit and vegetables, whole grain cereal such as porridge or muesli, and rye bread.Nutrition for athletes includes eating right and staying hydrated."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_music_skill",
+            "dff_sport_skill"
+        ],
+        "phrases": [
+            "Team sports and musical ensembles entail working together with others, in a fluid and highly interactive way.",
+            "We go far beyond what you thought you're capable of in both sports and music.",
+            "Research has shown that listening to music whilst exercising can reduce your rate of perceived effort by 12% and improve your endurance by 15%.",
+            "Basketball players who were prone to performing poorly under pressure converted more free-throw shots when they had listened to an upbeat piece of music beforehand, as this distracted them from the pressure of performing in front of a crowd.",
+            "Athletes can use music to manipulate their emotions before a competition. Athlete Dame Kelly Holmes said she listened to Alicia Keys ballads as part of her pre-event routine for the 2004 Olympic Games, which relaxed her and allowed her to peak her performance."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_gossip_skill",
+            "dff_sport_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_science_skill",
+            "dff_sport_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "dff_music_skill"
+        ],
+        "phrases": [
+            "Slow music tends to slow down our speed of eating with the result that customers spend longer in restaurants and potentially order more courses.",
+            "One study has shown that people bought more expensive wines when classical music was played but selected lower priced bottles when pop hits were in the background.",
+            "Jazz music was found to significantly enhance people's liking for chocolate compared to hip hop music for example.",
+            "The restaurant which has a good playlist is likely to create more loyal customers because people will associate the good music of the restaurant with the quality of food and ambiance of the place.",
+            "Food and music are interlinked such that listening to music while eating increases our food and drink intake. The rhythm of music also influences the rhythm of chewing."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "dff_gossip_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_food_skill",
+            "dff_science_skill"
+        ],
+        "phrases": [
+            "Perhaps the most compelling reason for cooks to follow recipes is the science of cooking. Yeah, cooking is primarily a practical exercise in chemistry.",
+            "Cooking food makes you feel like a scientist. Each ingredient in recipes serves one or more specific purposes, from generating gases to creating glutens to binding other ingredients together."
+        ]
+    },
+    {
+        "skill_pair": [
+            "dff_gossip_skill",
+            "dff_music_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_music_skill",
+            "dff_science_skill"
+        ],
+        "phrases": []
+    },
+    {
+        "skill_pair": [
+            "dff_gossip_skill",
+            "dff_science_skill"
+        ],
+        "phrases": []
+    }
+]

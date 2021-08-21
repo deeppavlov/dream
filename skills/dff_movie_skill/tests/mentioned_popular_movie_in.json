@@ -1,0 +1,685 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "spelling_preprocessing": "hi",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "entity_detection": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "conceptnet": {},
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_movie_skill",
+                            "dff_animals_skill"
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WASHINGTON \u2014 U.S. Capitol Police leaders learned that Trump supporters were discussing ways to infiltrate tunnels around the complex and target Democratic members of Congress on Jan. 6 but failed to act on the threats, according to a new Senate repor... [10840 chars]",
+                                    "description": "Capitol Police learned Trump backers had discussed entering Capitol tunnels and targeting Democrats on Jan. 6 but didn't act on threats, new Senate report says.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_23/3480997/210607-washington-capitol-mob-riot-ac-529p_0.jpg",
+                                    "publishedAt": "2021-06-08T09:00:16Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Capitol Police didn't act on warnings Trump backers would breach Capitol, target Democrats, report says",
+                                    "url": "https://www.nbcnews.com/politics/congress/capitol-police-didn-t-act-warnings-trump-backers-would-breach-n1269888"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "watched the conjuring.",
+                    "annotations": {
+                        "spelling_preprocessing": "watched the conjuring",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.006642981432378292,
+                            "conversational": 0.9933570027351379
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9419320821762085
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9978549480438232
+                            },
+                            "cobot_topics": {
+                                "Celebrities": 0.904719352722168
+                            },
+                            "emotion_classification": {
+                                "anger": 0.6894047260284424,
+                                "fear": 0.5277460813522339,
+                                "joy": 0.5667851567268372,
+                                "neutral": 0.841903805732727
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.5992509126663208
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.005112737417221069
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "the conjuring"
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "conjuring"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "text": "conjuring"
+                                }
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "watched the conjuring.",
+                            "segments": [
+                                "watched the conjuring."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_travel_skill",
+                            "dff_animals_skill",
+                            "game_cooperative_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "conceptnet": {
+                            "conjuring": {
+                                "Causes": [
+                                    "hallucination",
+                                    "illusion",
+                                    "you become hypnotize"
+                                ],
+                                "CausesDesire": [
+                                    "create illusion",
+                                    "perform trick",
+                                    "create dream"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "entertain",
+                                    "good"
+                                ],
+                                "SymbolOf": [
+                                    "pagan religion",
+                                    "witchcraft",
+                                    "magic"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0020918352529406548,
+                                "command": 0.009003600105643272,
+                                "comment": 0.004490260034799576,
+                                "complaint": 0.0036138605792075396,
+                                "dev_command": 0.009249228984117508,
+                                "neg_answer": 0.0013690516352653503,
+                                "open_question_factual": 0.004563090391457081,
+                                "open_question_opinion": 0.0019947083201259375,
+                                "opinion": 0.0461726114153862,
+                                "other_answers": 0.002006476279348135,
+                                "pos_answer": 0.0024277609772980213,
+                                "statement": 0.9069463610649109,
+                                "yes_no_question": 0.006071203388273716
+                            }
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "SciTech"
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.014249587431550026,
+                                    0.045067090541124344,
+                                    0.11064642667770386
+                                ],
+                                "entity_ids": [
+                                    "Q5540479",
+                                    "Q27959608",
+                                    "Q5161201"
+                                ],
+                                "entity_pages": [
+                                    "The Conjuring is a 2013 American supernatural horror film directed by James Wan and written by Chad Hayes and Carey W. Hayes. It is the inaugural film in the Conjuring Universe franchise. Patrick Wilson and Vera Farmiga star as Ed and Lorraine Warren, paranormal investigators and authors associated with prominent cases of haunting. Their purportedly real-life reports inspired The Amityville Horror story and film franchise. The Warrens come to the assistance of the Perron family, who experienced increasingly disturbing events in their farmhouse in Rhode Island in 1971.",
+                                    "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
+                                ],
+                                "entity_pages_titles": [
+                                    "The Conjuring",
+                                    "Conjuring (film)",
+                                    "Conjuring (book)"
+                                ],
+                                "entity_substr": "conjuring",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WASHINGTON \u2014 U.S. Capitol Police leaders learned that Trump supporters were discussing ways to infiltrate tunnels around the complex and target Democratic members of Congress on Jan. 6 but failed to act on the threats, according to a new Senate repor... [10840 chars]",
+                                    "description": "Capitol Police learned Trump backers had discussed entering Capitol tunnels and targeting Democrats on Jan. 6 but didn't act on threats, new Senate report says.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/newscms/2021_23/3480997/210607-washington-capitol-mob-riot-ac-529p_0.jpg",
+                                    "publishedAt": "2021-06-08T09:00:16Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Capitol Police didn't act on warnings Trump backers would breach Capitol, target Democrats, report says",
+                                    "url": "https://www.nbcnews.com/politics/congress/capitol-police-didn-t-act-warnings-trump-backers-would-breach-n1269888"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "conjuring",
+                                "news": {
+                                    "content": "The Conjuring: The Devil Made Me Do It is now in theaters and streaming on HBO Max. Like the previous two main Conjuring movies before it, The Devil Made Me Do It is supposedly based on a true story. But just how true is The Devil Made Me Do It?\nAs y... [6165 chars]",
+                                    "description": "The Conjuring: The Devil Made Me Do It is now in theaters and streaming on HBO Max. Like the previous two main Conjuring movies before it, The Devil Made Me Do It is supposedly based on a true story.",
+                                    "image": "https://d13ezvd6yrslxm.cloudfront.net/wp/wp-content/images/The-Devil-Made-Me-Do-It-Ending-Explained.jpg",
+                                    "publishedAt": "2021-06-07T15:47:05Z",
+                                    "source": {
+                                        "name": "/FILM",
+                                        "url": "https://www.slashfilm.com"
+                                    },
+                                    "title": "The Devil Made Me Do It Ending Explained",
+                                    "url": "https://www.slashfilm.com/the-devil-made-me-do-it-ending-explained/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "conjuring": {
+                                    "conf": 0.014249587431550026,
+                                    "entity_label": "The Conjuring",
+                                    "genre": [
+                                        [
+                                            "Q200092",
+                                            "horror film"
+                                        ],
+                                        [
+                                            "Q2484376",
+                                            "thriller film"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q45171911",
+                                            "passes the Bechdel Test"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q779",
+                                            "Connecticut"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q5540479",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+2013-06-08^^T\"",
+                                            "08 June 2013"
+                                        ],
+                                        [
+                                            "\"+2013-08-01^^T\"",
+                                            "01 August 2013"
+                                        ],
+                                        [
+                                            "\"+2013-09-19^^T\"",
+                                            "19 September 2013"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "conjuring": {
+                                    "author": [
+                                        [
+                                            "Q294918",
+                                            "James Randi"
+                                        ]
+                                    ],
+                                    "conf": 0.11064642667770386,
+                                    "entity_label": "Conjuring",
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q5161201",
+                                    "pos": 2,
+                                    "publication date": [
+                                        [
+                                            "\"+1992-00-00^^T\"",
+                                            "1992"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_retrieval": {
+                            "facts": [
+                                "The Conjuring is a 2013 American supernatural horror film directed by James Wan and written by Chad Hayes and Carey W. Hayes.",
+                                "It is the inaugural film in the Conjuring Universe franchise.",
+                                "Conjuring is a 1896 French short silent film directed by Georges M\u00e9li\u00e8s."
+                            ],
+                            "topic_facts": []
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! How are you?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

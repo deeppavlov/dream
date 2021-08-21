@@ -1,0 +1,29 @@
+[
+    [
+        "My favorite number is seven. A 2008 study on memory by Migliore, Novara and Tegolo, showed that the brain produced the best information when the branches that receive stimulation numbered seven. It suggests that humans remember best in sevens because that is how human brains prefer to store data. What about you?",
+        1.0,
+        {
+            "dff_bot_persona_skill_state": {
+                "shared_memory": {
+                    "used_topics": [
+                        "number"
+                    ]
+                },
+                "previous_human_utter_index": 2,
+                "history": {
+                    "2": "State.SYS_FAV_OR_LETS_CHAT"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_MY_FAV_STORY\", \"__stack__\": [], \"__user_utterance__\": \"your favorite number\", \"__system_state__\": \"State.SYS_FAV_OR_LETS_CHAT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"My favorite number is seven. A 2008 study on memory by Migliore, Novara and Tegolo, showed that the brain produced the best information when the branches that receive stimulation numbered seven. It suggests that humans remember best in sevens because that is how human brains prefer to store data. What about you?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"BOT_PERSONA\\\"<__tuple__>\\\"State.USR_MY_FAV_STORY\\\"\"}"
+            },
+            "dff_shared_state": {},
+            "used_links": {},
+            "age_group":"",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

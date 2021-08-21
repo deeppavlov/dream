@@ -1,0 +1,261 @@
+{
+  "semantic_request": {
+    "question": {
+      "open_question_factual": [
+        "alexa where do you live",
+        "no but can you tell me tips how to not pee in my pants",
+        "what is its mascot",
+        "how old are you",
+        "what's the weather in austin texas",
+        "who is the leading scorer in the n. b. a. right now",
+        "who has the best record in the n. b. a.",
+        "no where do you live",
+        "what is a. i. stand for",
+        "taking over the world"
+      ],
+      "open_question_opinion": [
+        "how do you feel about the vaccine",
+        "who has the best record in the n. b. a.",
+        "it's pretty good my favorite character is harry and who's yours who's your favorite death eater",
+        "yes",
+        "which anime do you like",
+        "what do you think about the democratic party",
+        "what do you think about the republican party",
+        "do you think about donald trump",
+        "what do you think about health business school"
+      ],
+      "open_question_personal": [
+        "i didn't even ask you about flamingos",
+        "i'm good how are you doing",
+        "my dog",
+        "how do you feel about the vaccine",
+        "how do you feel about the vaccine",
+        "i feel fine thank you how do you feel",
+        "how old are you",
+        "do you think that's a good invention",
+        "how do you feel",
+        "how old are you"
+      ],
+      "yes_no_question": [
+        "alexa is my mom home",
+        "do you smell",
+        "alexa can you sing",
+        "do you know my favorite color",
+        "can you listen to me",
+        "alexa do you know ryan",
+        "do you have any dogs",
+        "yes i have a german shepherd",
+        "do you think that's a good invention",
+        "can you play fortnite"
+      ],
+      "clarifying_question": [
+        "i didn't even ask you about flamingos",
+        "alexa say that again i didn't hear you",
+        "why are you so mean",
+        "i don't know what you're talking about",
+        "why did you change the topic when i asked why your name was a secret"
+      ]
+    },
+    "command": {
+      "command": [
+        "let's talk",
+        "pets",
+        "let's talk",
+        "yes halloween",
+        "/alexa_exceeded_max_reprompts",
+        "movies",
+        "talk to me",
+        "wine",
+        "getting my name right let's talk about names",
+        "y. e. t. eat"
+      ],
+      "dev_command": [
+        "/alexa_USER_INITIATED",
+        "show me the best games of this month",
+        "alexa just because she was talking about kaven and chicken know that i was on",
+        "play miraculous",
+        "sing",
+        "no it was a creek playdos ex machina",
+        "computer i'm interested break dancing",
+        "play sayanora",
+        "play sayanora",
+        "alexa play songs from sayanora film"
+      ]
+    },
+    "opinion": {
+      "appreciation": [
+        "awesome",
+        "alexa you're funny",
+        "that's cool",
+        "cool",
+        "it's funny",
+        "i have four breath parks",
+        "that's cool",
+        "yeah that's cool",
+        "alexa it's good been great talking with you thank you",
+        "cool"
+      ],
+      "opinion": [
+        "star wars",
+        "good",
+        "i think it's really good and very realistic since it's based off a true story",
+        "zombies two",
+        "evil stuff",
+        "i am delicious",
+        "nice and quiet",
+        "awesome",
+        "who does he play",
+        "football"
+      ],
+      "complaint": [
+        "oh my god i did not know that",
+        "say get out",
+        "no",
+        "none",
+        "the you to shut the hell up",
+        "you're making no sense",
+        "none",
+        "show me the best games of this month",
+        "i'm talking about a sad musical a musical is just singing",
+        "no but sing humans and even though you're robot and make sense but it still kind of creepy"
+      ],
+      "comment": [
+        "alexa you're funny",
+        "it's funny",
+        "they're adorable",
+        "i know you're different but you're so cool",
+        "you're funny",
+        "alexa you are funny",
+        "it is cool",
+        "it's cool",
+        "you're a smart ass",
+        "alexa funny"
+      ]
+    },
+    "statement": {
+      "statement": [
+        "k. d.",
+        "k. d.",
+        "conjuring",
+        "yes halloween",
+        "my name is kiki kiki",
+        "it's not kiki kiki it's kiki the i. s. h. i.",
+        "how about let's talking about getting my name right",
+        "yes",
+        "my name is eat",
+        "my name is"
+      ]
+    },
+    "answer": {
+      "other_answers": [
+        "none",
+        "i don't know",
+        "i don't have one i don't read books",
+        "i don't know",
+        "i don't know",
+        "i don't know",
+        "i don't read books",
+        "i don't know who that is",
+        "i don't know",
+        "i don't really know how to do that"
+      ],
+      "pos_answer": [
+        "sure",
+        "yeah glad to teach you",
+        "yeah i know",
+        "i'm scared",
+        "sure",
+        "sometimes a cat usually thinks yes",
+        "yes",
+        "yes",
+        "yes",
+        "yes"
+      ],
+      "neg_answer": [
+        "no",
+        "no i do not play any sports",
+        "none",
+        "no",
+        "no no",
+        "no",
+        "no",
+        "no that's weird",
+        "no",
+        "not really"
+      ]
+    }
+  },
+  "functional_request": {
+    "incomplete": {
+      "abandon": [
+        "k. d.",
+        "k. d.",
+        "oh my god i did not know that",
+        "say alexa say say get out",
+        "say get out",
+        "let's have a conversation",
+        "good",
+        "same",
+        "conjuring",
+        "i think it's really good and very realistic since it's based off a true story"
+      ],
+      "nonsense": [
+        "/alexa_exceeded_max_reprompts",
+        "y. e. t. eat",
+        "turn the not trees",
+        "/alexa_USER_INITIATED",
+        "getting nails to my nails done",
+        "johnny jumper",
+        "books",
+        "hey i",
+        "i try go sign",
+        "alexa i said hannah"
+      ]
+    },
+    "social_convention": {
+      "opening": [],
+      "closing": [
+        "/alexa_stop_handler",
+        "/alexa_stop_handler",
+        "the you to shut the hell up",
+        "/alexa_stop_handler",
+        "/alexa_stop_handler",
+        "no just life",
+        "/alexa_USER_INITIATED",
+        "/alexa_exceeded_max_reprompts",
+        "/alexa_stop_handler",
+        "alexa exit chat mode"
+      ],
+      "hold": [
+        "oh my god i did not know that",
+        "say alexa say say get out",
+        "let's have a conversation",
+        "good",
+        "same",
+        "i think it's really good and very realistic since it's based off a true story",
+        "terrible",
+        "no i said i'm gonna be me",
+        "let's have a discussion",
+        "movies"
+      ],
+      "back-channeling": [
+        "yeah glad to teach you",
+        "yeah",
+        "that's okay",
+        "i have four breath parks",
+        "yes i do",
+        "yeah",
+        "okay",
+        "yeah that's cool",
+        "yeah",
+        "no no no no no oh yeah i think i did"
+      ]
+    },
+    "apology": {},
+    "other": {
+      "uncertain": [],
+      "non_compliant": [],
+      "correction": []
+    }
+  }
+}

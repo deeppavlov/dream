@@ -1,0 +1,6 @@
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+numpy==1.17.2
+sentry-sdk==0.12.3
+nltk==3.2.5

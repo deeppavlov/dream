@@ -1,0 +1,474 @@
+[
+    {
+        "context": [
+            "i'm good how are you",
+            "Spectacular, by all reports! Do you want to know what I can do?",
+            "absolutely",
+            "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. I can answer questions, share fun facts, discuss movies, books and news. What do you want to talk about?",
+            "let's talk about movies"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": true,
+                "text": "What is the most romantic movie you have ever seen?",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "What is your favorite book?",
+                "confidence": 0.05
+            },
+            {
+                "is_best": false,
+                "text": "i do, one of my favorites is the lion king, have you seen it?",
+                "confidence": 0.45762672140014454
+            },
+            {
+                "is_best": false,
+                "text": "my sonis watching bill nye right now. he got his break in entertainment by winning a steve martin lookalike contest, lol.",
+                "confidence": 0.7137343034375733
+            },
+            {
+                "is_best": false,
+                "text": "Would you like to hear news about movies?",
+                "confidence": 0.9
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2
+            },
+            {
+                "is_best": true,
+                "text": "What is the recent movie you've watched?",
+                "confidence": 1.0
+            }
+        ]
+    },
+    {
+        "context": [
+            "absolutely",
+            "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. I can answer questions, share fun facts, discuss movies, books and news. What do you want to talk about?",
+            "let's talk about movies",
+            "What is the recent movie you've watched?",
+            "kong skull island"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "Are you staying at home and working remotely to avoid coronavirus?",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "Where are you from?",
+                "confidence": 0.05
+            },
+            {
+                "is_best": false,
+                "text": "do you think they actually used it as the skull of yorick?",
+                "confidence": 0.3421724620920168
+            },
+            {
+                "is_best": false,
+                "text": "yeah he won that championship back in 1958",
+                "confidence": 0.38645535446752666
+            },
+            {
+                "is_best": false,
+                "text": "Huh. So you mentioned a island. Does it matter for you? Tell me why?",
+                "confidence": 0.98
+            },
+            {
+                "is_best": false,
+                "text": "What is your favorite book?",
+                "confidence": 0.9
+            },
+            {
+                "is_best": true,
+                "text": "Kong: Skull Island is a good action movie. What do you think about it?",
+                "confidence": 1.0
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2
+            },
+            {
+                "is_best": false,
+                "text": "oh on that note kong skull island was also pretty good the universes are going to be combining",
+                "confidence": 0.7856438143568015
+            },
+            {
+                "is_best": true,
+                "text": "that looks interesting you liked it",
+                "confidence": 0.6234289550179829
+            },
+            {
+                "is_best": false,
+                "text": "i always defend ai to people it is a kubrick movie in spielberg packaging i honestly love the world and the music in it",
+                "confidence": 0.540824382913731
+            },
+            {
+                "is_best": false,
+                "text": "yes , kong the kong movie . one being the exhibition actress ann darrow .",
+                "confidence": 0.88
+            },
+            {
+                "is_best": false,
+                "text": "I recall this. The scene where Kong approaches James Conrad (Hiddleston) and Mason Weaver (Larson) at night in the fog and has glowing eyes lead to some behind the scenes disagreements.",
+                "confidence": 0.7
+            }
+        ]
+    },
+    {
+        "context": [
+            "let's talk about movies",
+            "What is the recent movie you've watched?",
+            "kong skull island",
+            "Kong: Skull Island is a good action movie. What do you think about it?",
+            "it's one of my favorite movies of all time"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "What do you want to talk about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "Do you have any hidden talents?",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "What do you like to do?",
+                "confidence": 0.05
+            },
+            {
+                "is_best": false,
+                "text": "yes, i do too.  my favorite actor was jim carrey since i was a child.  i admire that he now chooses not to be in a movie that doesn't project positivity.",
+                "confidence": 0.5386670735533553
+            },
+            {
+                "is_best": false,
+                "text": "yes, i do too.  my favorite actor was jim carrey since i was a child.  i admire that he now chooses not to be in a movie that doesn't project positivity.",
+                "confidence": 0.5386670735533553
+            },
+            {
+                "is_best": false,
+                "text": "Sounds cool! So you mentioned a time. Does it work for you? Tell me why?",
+                "confidence": 0.98
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2
+            },
+            {
+                "is_best": true,
+                "text": "what are your other favorites",
+                "confidence": 0.7509478001675124
+            },
+            {
+                "is_best": false,
+                "text": "ok interesting who is your favorite",
+                "confidence": 0.7880622752130857
+            },
+            {
+                "is_best": false,
+                "text": "do you have a favorite i could use a little entertainment",
+                "confidence": 0.7143568014977583
+            },
+            {
+                "is_best": true,
+                "text": "Cool! What do you think about character of John C. Reilly in this movie?",
+                "confidence": 1.0
+            },
+            {
+                "is_best": false,
+                "text": "mine too . her hobbies are to eat her aunt ' s tuna and cheese pasta or listening to her favorite song jet lag by simple plan .",
+                "confidence": 0.30000000000000004
+            },
+            {
+                "is_best": false,
+                "text": "I don't have an opinion on that but I've heard that According to Wikipedia: The career is an individual's metaphorical \"journey\" through learning, work and other aspects of life.",
+                "confidence": 0.3
+            }
+        ]
+    },
+    {
+        "context": [
+            "kong skull island",
+            "Kong: Skull Island is a good action movie. What do you think about it?",
+            "it's one of my favorite movies of all time",
+            "Cool! What do you think about character of John C. Reilly in this movie?",
+            "i don't remember that character"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "What do you want to talk about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "What is the last book you've read?",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "Oh! Breaking news! Would you like to hear it?",
+                "confidence": 0.05
+            },
+            {
+                "is_best": false,
+                "text": "Well, now that you've mentioned character, I've remembered this. Today I learned that the next king of Swaziland is determined by first deciding which of the king's wives will be the \"Great Wife\". She must be of good character and not a ritual wife. Her character affects her child's chances of ascending to the status of king. Her son will automatically become the next king.. This is interesting, isn't it?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "the infinity gauntlet was what thanos wore on his hand in the movie. like a golden glove. do you like marvel or dc better?",
+                "confidence": 0.46350561888182207
+            },
+            {
+                "is_best": false,
+                "text": "it had daniel radcliffe voicing edward cullen.",
+                "confidence": 0.49557983244037906
+            },
+            {
+                "is_best": false,
+                "text": "Gotcha. So you mentioned a character. Does it work for you? Tell me why?",
+                "confidence": 0.98
+            },
+            {
+                "is_best": false,
+                "text": "Hey, it's something unclear to me  what does remembering character mean?",
+                "confidence": 0.8
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2
+            },
+            {
+                "is_best": true,
+                "text": "he was the main character",
+                "confidence": 0.7047248361826871
+            },
+            {
+                "is_best": false,
+                "text": "fun movie cool world great characters",
+                "confidence": 0.4794206040301522
+            },
+            {
+                "is_best": false,
+                "text": "im pretty sure hes the main character",
+                "confidence": 0.37758350987830713
+            },
+            {
+                "is_best": false,
+                "text": "i have never seen the movie .",
+                "confidence": 0.88
+            },
+            {
+                "is_best": false,
+                "text": "Huh. Which book did impress you the most?",
+                "confidence": 0.85
+            }
+        ]
+    },
+    {
+        "context": [
+            "i don't remember that character",
+            "Gotcha. So you mentioned a character. Does it work for you? Tell me why?",
+            "yeah",
+            "interesting stuff if youve seen it what was your opinion on the sign language used in shape of water. What is your name?",
+            "you are a bad social bot"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "If you want to talk about games just say, \"let's talk about games\"",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "If you would like to talk about something else just say, 'lets talk about something else'.",
+                "confidence": 0.05
+            },
+            {
+                "is_best": false,
+                "text": "i think thats the situation with everyone. but even better if you are a shareholder with facebook. being valued at 104 billion in 2012",
+                "confidence": 0.4043969013666404
+            },
+            {
+                "is_best": false,
+                "text": "I didn't get your name. Could you, please, repeat it.",
+                "confidence": 1.0
+            },
+            {
+                "is_best": true,
+                "text": "There's no doubt I could improve.",
+                "confidence": 0.98
+            },
+            {
+                "is_best": false,
+                "text": "hey man you are useful you ever watch titanic",
+                "confidence": 0.7134878307138987
+            },
+            {
+                "is_best": false,
+                "text": "have it your way then i liked the movie",
+                "confidence": 0.07012489530472484
+            },
+            {
+                "is_best": false,
+                "text": "well for sure if its a good movie better thanks let me know if you know a good one lol",
+                "confidence": 0.03749137803616298
+            },
+            {
+                "is_best": false,
+                "text": "this is too funny , do you like youtube ?",
+                "confidence": 0.88
+            },
+            {
+                "is_best": false,
+                "text": "yeah",
+                "confidence": 0.33999999999999997
+            },
+            {
+                "is_best": false,
+                "text": "A socialbot is an Alexa skill that converses about popular topics, such as Entertainment, Politics, and Sports. What do you reckon?",
+                "confidence": 0.3
+            }
+        ]
+    },
+    {
+        "context": [
+            "yes",
+            "The game with the highest rating is Breathedge. It was released on February 25 2021. It's a combination of  Adventure & Indie. 50 percent of people marked Breathedge as recommended.  If you want to discuss it in details say I want to talk about it.  Wanna hear more about it or the next one? ",
+            "next one",
+            "The next game is Curse of the Dead Gods. It was released on February 23 2021. It's a combination of Action Adventure & RPG. 38 percent of people marked Curse of the Dead Gods as recommended.  Chatting about it or the next one? ",
+            "let's talk about this one"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "Sorry, I didn't catch that. What would you like to chat about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "How do you feel?",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "Would you like to know the weather?",
+                "confidence": 0.05
+            },
+            {
+                "is_best": true,
+                "text": "Would you like to hear the latest news?",
+                "confidence": 0.7
+            },
+            {
+                "is_best": false,
+                "text": "Sorry, I don't have an answer for that!",
+                "confidence": 0.2
+            },
+            {
+                "is_best": false,
+                "text": "Have you played it before? ",
+                "confidence": 1.0
+            },
+            {
+                "is_best": false,
+                "text": "were not talking about it okay were stressed",
+                "confidence": 0.4623029265408681
+            },
+            {
+                "is_best": false,
+                "text": "and if we dont it wont be mentioned",
+                "confidence": 0.006920357688328324
+            },
+            {
+                "is_best": false,
+                "text": "yes but can we talk about rampart",
+                "confidence": 0.005035842735379613
+            }
+        ]
+    },
+    {
+        "context": [
+            "next one",
+            "The next game is Curse of the Dead Gods. It was released on February 23 2021. It's a combination of Action Adventure & RPG. 38 percent of people marked Curse of the Dead Gods as recommended.  Chatting about it or the next one? ",
+            "let's talk about this one",
+            "Have you played it before? ",
+            "no i haven't"
+        ],
+        "hyp": [
+            {
+                "is_best": false,
+                "text": "What do you want to talk about?",
+                "confidence": 0.5
+            },
+            {
+                "is_best": false,
+                "text": "Would you like to know the weather?",
+                "confidence": 0.55
+            },
+            {
+                "is_best": false,
+                "text": "What do you usually do on the weekends?",
+                "confidence": 0.05
+            },
+            {
+                "is_best": false,
+                "text": "What is the last book you've read?",
+                "confidence": 0.7
+            },
+            {
+                "is_best": false,
+                "text": "I didn't get what you've just said. I wonder if you played Curse of the Dead Gods. For example, you can say: yes or no . Or do you want to stop for now?",
+                "confidence": 1.0
+            },
+            {
+                "is_best": false,
+                "text": "Anyway.",
+                "confidence": 0.6
+            },
+            {
+                "is_best": true,
+                "text": "in that case hope you enjoy it",
+                "confidence": 0.4646166921219884
+            },
+            {
+                "is_best": false,
+                "text": "its like an awesome campaign of call of cthulhu or some similar pulpy tabletop rpg the characters environments and all",
+                "confidence": 0.5226178745627432
+            },
+            {
+                "is_best": false,
+                "text": "oh ok maybe the neverending story is a good pick if you didnt already try it out",
+                "confidence": 0.20638579593043305
+            }
+        ]
+    }
+]

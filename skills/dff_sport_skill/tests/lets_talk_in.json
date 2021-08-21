@@ -1,0 +1,325 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "let's talk about sports.",
+                    "annotations": {
+                        "spelling_preprocessing": "let's talk about sports",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0011375236790627241,
+                            "conversational": 0.9988625049591064
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9965341091156006
+                            },
+                            "cobot_dialogact_topics": {
+                                "Sports": 0.9938513040542603
+                            },
+                            "cobot_topics": {
+                                "Sports": 0.9994038343429565
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9993917346000671
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6910978555679321
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0010571777820587158
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "sports"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "let's talk about sports.",
+                            "segments": [
+                                "let's talk about sports."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "dialog_breakdown": {
+                            "breakdown": 0.15007245540618896,
+                            "no_breakdown": 0.849927544593811
+                        },
+                        "midas_classification": {
+                            "abandon": 0.0007814279923403705,
+                            "appreciation": 0.00014431820145387108,
+                            "back-channeling": 7.462414288080992e-05,
+                            "clarifying_question": 0.00023414639341614514,
+                            "closing": 0.0005257485841523509,
+                            "command": 0.9902095815803281,
+                            "comment": 4.128848490580456e-05,
+                            "complaint": 0.0004751931063812058,
+                            "correction": 0.00010990285616398241,
+                            "dev_command": 0.0014855246225659972,
+                            "hold": 0.0003235786057286486,
+                            "neg_answer": 0.00010588031751211104,
+                            "non_compliant": 0.00023247672231923062,
+                            "nonsense": 0.0008840763455083434,
+                            "open_question_factual": 0.00031913873737318406,
+                            "open_question_opinion": 0.0009395633650941117,
+                            "open_question_personal": 0.00013466829945180933,
+                            "opening": 0.00016597567298688886,
+                            "opinion": 0.0005306983160685236,
+                            "other_answers": 9.552151703853104e-05,
+                            "pos_answer": 0.0008489625423226834,
+                            "statement": 0.00018541011483306976,
+                            "uncertain": 0.00012185131561262826,
+                            "yes_no_question": 0.0010304421635617535
+                        },
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": 0,
+                            "answer_sentence": "",
+                            "confidence": 0.0,
+                            "first_par": "",
+                            "paragraph": "",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Sports"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Sports"
+                            ]
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q349",
+                                    "Q245685",
+                                    "Q18614790",
+                                    "Q7579677",
+                                    "Q5232927"
+                                ]
+                            ],
+                            [
+                                [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about sports."
+                            ]
+                        },
+                        "wiki_parser": [
+                            {
+                                "sport": {
+                                    "instance of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ]
+                                    ],
+                                    "subclass of": [
+                                        [
+                                            "Q1914636",
+                                            "activity"
+                                        ],
+                                        [
+                                            "Q747883",
+                                            "physical activity"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q31629",
+                                            "type of sport"
+                                        ]
+                                    ]
+                                }
+                            }
+                        ],
+                        "kbqa": [
+                            "Not Found",
+                            0.0
+                        ],
+                        "conceptnet": {
+                            "sports": {
+                                "Causes": [
+                                    "injury",
+                                    "win or lose",
+                                    "you get good"
+                                ],
+                                "CausesDesire": [
+                                    "play sport",
+                                    "compete against someone",
+                                    "compete"
+                                ],
+                                "HasProperty": [
+                                    "competitive",
+                                    "expensive",
+                                    "fun"
+                                ],
+                                "SymbolOf": [
+                                    "victory",
+                                    "football",
+                                    "baseball"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_sport_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "sport": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9993917346000671
+                        },
+                        "full_name": "sports",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Sports",
+                            "Sports"
+                        ]
+                    }
+                ],
+                "name": "sport"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "random_seed": 2718
+}

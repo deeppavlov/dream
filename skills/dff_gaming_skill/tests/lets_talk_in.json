@@ -1,0 +1,496 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Let's chat about minecraft.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Let's chat about minecraft",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9984753727912903
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_General": 0.997327446937561
+                            },
+                            "cobot_topics": {
+                                "Games": 0.9959005117416382
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9982600808143616
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6668213605880737
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.002767711877822876
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.2867066264152527,
+                            "conversational": 0.7132933735847473
+                        },
+                        "cobot_nounphrases": [
+                            "minecraft"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "Let's chat about minecraft.",
+                            "segments": [
+                                "Let's chat about minecraft."
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0022058365866541862,
+                                "command": 0.9699698686599731,
+                                "comment": 0.0014357703039422631,
+                                "complaint": 0.0020122379064559937,
+                                "dev_command": 0.009781230241060257,
+                                "neg_answer": 0.0009705795673653483,
+                                "open_question_factual": 0.001431997399777174,
+                                "open_question_opinion": 0.0020266943611204624,
+                                "opinion": 0.0018756520003080368,
+                                "other_answers": 0.0007756554405204952,
+                                "pos_answer": 0.0029564034193754196,
+                                "statement": 0.002314765239134431,
+                                "yes_no_question": 0.0022433025296777487
+                            }
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Entertainment_General"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Games"
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [
+                                "minecraft"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "gamename",
+                                    "text": "minecraft"
+                                }
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_sport_skill",
+                            "book_skill"
+                        ],
+                        "conceptnet": {
+                            "minecraft": {
+                                "Causes": [
+                                    "enlightenment",
+                                    "learn",
+                                    "you learn"
+                                ],
+                                "CausesDesire": [
+                                    "learn about subject",
+                                    "study",
+                                    "write essay"
+                                ],
+                                "HasProperty": [
+                                    "science fiction",
+                                    "science",
+                                    "interest"
+                                ],
+                                "SymbolOf": [
+                                    "philosophy",
+                                    "religion",
+                                    "science"
+                                ]
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Let's chat about minecraft."
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.08163661509752274,
+                                    0.018438857048749924,
+                                    0.20840223133563995,
+                                    0.560638427734375,
+                                    0.7610310912132263
+                                ],
+                                "entity_ids": [
+                                    "Q49740",
+                                    "Q40083273",
+                                    "Q25445348",
+                                    "Q6518580",
+                                    "Q26945014"
+                                ],
+                                "entity_pages": [
+                                    "Minecraft is a sandbox video game developed by Mojang. The game was created by Markus \"Notch\" Persson in the Java programming language. Following several early test versions, it was released as a paid public alpha for personal computers in 2009 before releasing in November 2011, with Jens Bergensten taking over development. Minecraft has since been ported to several other platforms and is the best-selling video game of all time, with 200 million copies sold and 126 million monthly active users ."
+                                ],
+                                "entity_pages_titles": [
+                                    "Minecraft",
+                                    "Lego Minecraft"
+                                ],
+                                "entity_substr": "minecraft",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Since \u201cIn the Heights,\u201d a lauded adaptation of Lin-Manuel Miranda\u2019s Broadway musical, fell short of box office expectations, it would be easy to point to its hybrid debut on HBO Max as the culprit.\nBut streaming isn\u2019t necessarily to blame for the mov... [7659 chars]",
+                                    "description": "Since \u201cIn the Heights,\u201d a lauded adaptation of Lin-Manuel Miranda\u2019s Broadway musical, fell short of box office expectations, it would be easy to point to its hybrid debut on HBO Max as the culprit.",
+                                    "image": "https://variety.com/wp-content/uploads/2020/09/intheheights.jpg?w=1000",
+                                    "publishedAt": "2021-06-14T14:16:00Z",
+                                    "source": {
+                                        "name": "Variety",
+                                        "url": "https://variety.com"
+                                    },
+                                    "title": "HBO Max Isn't to Blame After 'In the Heights' Fizzles at Box Office",
+                                    "url": "https://variety.com/2021/film/box-office/in-the-heights-box-office-hbo-max-1234995410/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "minecraft",
+                                "news": {
+                                    "content": "Published 06/11/2021, 1:48 PM EDT\nAfter months of waiting, fans of the popular sandbox video game, Minecraft, have something huge to cheer about. Recently, developers Mojang finally released Part 1 of their long-awaited Caves & Cliffs Update that the... [3081 chars]",
+                                    "description": "Published 06/11/2021, 1:48 PM EDT\nAfter months of waiting, fans of the popular sandbox video game, Minecraft, have something huge to cheer about.",
+                                    "image": "https://image-cdn.essentiallysports.com/wp-content/uploads/20200607053218/Minecraft-1.jpg",
+                                    "publishedAt": "2021-06-11T17:48:13Z",
+                                    "source": {
+                                        "name": "Essentially Sports",
+                                        "url": "https://www.essentiallysports.com"
+                                    },
+                                    "title": "Minecraft: Everything You Need to Know About Part I of the Caves & Cliffs Update",
+                                    "url": "https://www.essentiallysports.com/minecraft-everything-you-need-to-know-about-part-i-of-the-caves-cliffs-update-esports-news/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "minecraft": {
+                                    "awards received": [
+                                        [
+                                            "Q16218137",
+                                            "Seumas McNally Grand Prize"
+                                        ]
+                                    ],
+                                    "conf": 0.08163661509752274,
+                                    "entity_label": "Minecraft",
+                                    "genre": [
+                                        [
+                                            "Q21030988",
+                                            "survival game"
+                                        ],
+                                        [
+                                            "Q343568",
+                                            "action-adventure game"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q70719326",
+                                            "crafting"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q49740",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ],
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "minecraft": {
+                                    "conf": 0.018438857048749924,
+                                    "entity_label": "Minecraft",
+                                    "instance of": [
+                                        [
+                                            "Q18011172",
+                                            "film project"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q40083273",
+                                    "pos": 1,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q18011172",
+                                            "film project"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q64728694",
+                                            "proposed entity"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {
+                                "minecraft": {
+                                    "awards received": [
+                                        [
+                                            "Q16218137",
+                                            "Seumas McNally Grand Prize"
+                                        ]
+                                    ],
+                                    "conf": 0.08163661509752274,
+                                    "entity_label": "Minecraft",
+                                    "genre": [
+                                        [
+                                            "Q21030988",
+                                            "survival game"
+                                        ],
+                                        [
+                                            "Q343568",
+                                            "action-adventure game"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q70719326",
+                                            "crafting"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q49740",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ],
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "fact_retrieval": {
+                            "facts": [
+                                "Minecraft is a sandbox video game developed by Mojang.",
+                                "The game was created by Markus \"Notch\" Persson in the Java programming language."
+                            ],
+                            "topic_facts": []
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [
+                                {
+                                    "entity": "minecraft",
+                                    "fact": "Here's a fact about Minecrafts. Minecraft was released on September 3, 2014 and it is available on Amazon Fire TV, Android, iOS, Linux, Mac and 12 other platforms."
+                                }
+                            ],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_gaming_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "minecraft": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "minecraft",
+                        "human_utterance_index": 0,
+                        "previous_skill_name": "pre_start"
+                    }
+                ],
+                "name": "minecraft"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

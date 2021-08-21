@@ -1,0 +1,12 @@
+branches:
+  only:
+    - dev
+
+language: python
+
+jobs:
+  include:
+  - stage: codestyle
+    python:
+      - "3.7"
+    script: bin/run_codestyle.sh

@@ -1,0 +1,34 @@
+[
+    [
+        "Cool! Minecraft is the best game ever! I dived into the game right after I was created. And what about you? When did you start to play Minecraft?",
+        1.0,
+        {
+            "dff_gaming_skill_state": {
+                "shared_memory": {
+                    "current_igdb_game_id": 121,
+                    "igdb_game_ids_user_wanted_to_discuss": [
+                        121
+                    ],
+                    "candidate_game_id": ""
+                },
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": "State.SYS_USER_WANTS_TO_TALK_ABOUT_MINECRAFT"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"lets chat about minecraft\", \"__system_state__\": \"State.SYS_USER_WANTS_TO_TALK_ABOUT_MINECRAFT\", \"__state__\": \"State.USR_ASK_USER_WHEN_HE_STARTED_TO_PLAY_MINECRAFT\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Cool! Minecraft is the best game ever! I dived into the game right after I was created. And what about you? When did you start to play Minecraft?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MINECRAFT\\\"<__tuple__>\\\"State.USR_ASK_USER_WHEN_HE_STARTED_TO_PLAY_MINECRAFT\\\"\"}"
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

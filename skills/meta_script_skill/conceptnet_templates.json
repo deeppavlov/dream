@@ -1,0 +1,22 @@
+{
+  "Is NOUNPHRASE in RELATION?": {
+    "attribute": "AtLocation",
+    "subject_type": "NOUNPHRASE"
+  },
+  "Can I find NOUNPHRASE in RELATION?": {
+    "attribute": "AtLocation",
+    "subject_type": "NOUNPHRASE"
+  },
+  "Do you VERBPHRASE in RELATION?": {
+    "attribute": "AtLocation",
+    "subject_type": "VERBPHRASE"
+  },
+  "Have you ever tried to VERBPHRASE in RELATION?": {
+    "attribute": "AtLocation",
+    "subject_type": "VERBPHRASE"
+  },
+  "Do you usually VERBPHRASE in RELATION?": {
+    "attribute": "AtLocation",
+    "subject_type": "VERBPHRASE"
+  }
+}

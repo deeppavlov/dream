@@ -1,0 +1,34 @@
+[
+    [
+        "Would you like to know how to speed up an Android smartphone?",
+        1.0,
+        {
+            "dff_wiki_skill_state": {
+                "shared_memory": {
+                    "expected_subtopic_info": {},
+                    "available_utterances": [],
+                    "subtopics": [],
+                    "special_topic": "smartphones",
+                    "cur_facts": [{"wikihow_page": "Speed-up-an-Android-Smartphone", "cond": [["is_yes", "user", true]]}],
+                    "used_utt_nums": {"smartphones": [0]},
+                    "cur_mode": "smalltalk",
+                    "ackn": []
+                },
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": "State.SYS_TOPIC_SMALLTALK"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_TOPIC_SMALLTALK\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about smartphones\", \"__system_state__\": \"State.SYS_TOPIC_SMALLTALK\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Would you like to know how to speed up an Android smartphone?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"WIKI\\\"<__tuple__>\\\"State.USR_TOPIC_SMALLTALK\\\"\"}"
+            },
+            "dff_shared_state": {},
+            "used_links": {},
+            "age_group":"",
+            "disliked_skills": {}
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

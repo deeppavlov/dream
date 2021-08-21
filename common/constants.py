@@ -1,0 +1,4 @@
+CAN_NOT_CONTINUE = "no"
+CAN_CONTINUE_SCENARIO = "can"
+MUST_CONTINUE = "must"
+CAN_CONTINUE_PROMPT = "can_prompt"

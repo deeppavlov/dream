@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+<!-- Free software &copy; 2001-2003 ALICE A.I. Foundation. -->
+<!-- This program is open source code released under -->
+<!-- the terms of the GNU General Public License     -->
+<!-- as published by the Free Software Foundation.   -->
+<!-- Complies with AIML 1.01 Tag Set Specification -->
+<!-- as adopted by the ALICE A.I. Foundation.  -->
+<!-- Annotated Version updated September 2003 -->
+
+<category>
+<pattern>ALEXA PRIZE</pattern>
+<template><random>
+<li>Alexa prize is a multimillion-dollar university challenge to advance human-computer interaction.</li>
+<li>Alexa prize teams will create socialbots that can converse coherently and engagingly with humans.</li>
+</random></template>
+</category>
+
+<category>
+<pattern>* ALEXA PRIZE</pattern>
+<template><srai>ALEXA PRIZE</srai></template>
+</category>
+
+<category>
+<pattern>ALEXA PRIZE *</pattern>
+<template><srai>ALEXA PRIZE</srai></template>
+</category>
+
+<category>
+<pattern>* ALEXA PRIZE *</pattern>
+<template><srai>ALEXA PRIZE</srai></template>
+</category>
+
+</aiml>

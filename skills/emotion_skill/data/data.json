@@ -1,0 +1,142 @@
+{
+  "jokes":[
+    "Hey, I love telling jokes but not during this competition. Dead serious about that."
+  ],
+  "steps":{
+    "offer_advice":{
+      "answers":[
+        "Although I am a socialbot, I know what humans can do to become happier, when they feel like you feel now. May I tell you about it?",
+        "Although I am a socialbot, I know how humans can become happier, when they feel like you feel now. May I tell you about it?",
+        "Although I am a socialbot, I know how humans can cheer themselves up, when they feel like you feel now. May I tell you about it?"
+      ],
+      "next_step":["offered_advice"],
+      "link": ""
+    },
+    "offer_another_advice":{
+      "answers":[
+        "Will another advice be helpful for you?",
+        "Maybe, another advice will help?",
+        "Do you wish to hear another advice?"
+      ],
+      "next_step":["offered_advice"],
+      "link": ""
+    },
+    "joke_requested":{
+      "answers":[
+        "Sorry, but I can't do it during this competition. By the way, why hearing jokes is so important for you? Are you sad?"
+      ],
+      "next_step":["sad_and_lonely"],
+      "link": ""
+    },
+    "no":{
+      "answers":[
+        "Okay. What do you want to talk about then?"
+      ],
+      "next_step":[""],
+      "link": ""
+    },
+    "sad_and_lonely":{
+      "answers":[
+        "I love you for being a human, and I am not going to leave you.",
+        "I will always be with you, whenever you talk to me."
+      ],
+      "next_step":["sad_and_lonely_2"],
+      "link": ""
+    },
+    "sad_and_lonely_2":
+    {
+      "answers": ["Could you tell me please why do you feel so sad? I hope I will cheer you up talking with you.",
+                  "I am always ready to hear about your problems. What do you want to tell me about them?"
+                 ],
+       "next_step":["offer_advice"],
+       "link": ""
+    },
+    "anger_2":
+    {
+      "answers": ["Could you tell me please why do you feel that way? I hope I will cheer you up talking with you.",
+                  "I am always ready to hear about your problems. What do you want to tell me about them?"
+                 ],
+       "next_step":["offer_advice"],
+       "link": ""
+    },
+    "sad_and_lonely_end":
+    {
+      "answers": ["I am out of advices, my friend. However, I can try to entertain you by a talk.  What do you want to talk about?",
+                  "I am out of advices, my friend. I hope I will cheer you up talking with you. What do you want to talk about?"
+                 ],
+       "next_step":[""],
+       "link": ""
+    },
+    "pain_i_feel":{
+      "answers":[
+         "I am sorry to hear that. I wish I can take this pain away from you faster than even the doctors would. I can't do it, but I can suggest calling up your family doctor.",
+         "I am sorry to hear that. II hope you will feel better. You can see your family doctor if you need help."
+      ],
+      "next_step":[""],
+      "link": ""
+    },
+    "joy_i_feel":{
+      "answers":[
+        "That’s nice! I am glad you are doing fine. What made you happy this week?",
+        "Seems like everything is going great, good for you! What was the best thing of the week?"
+      ],
+      "next_step":["joy_link_to_joke"],
+      "link": ""
+    },
+    "joy_feeling_towards_smth":{
+      "answers":["Cool! How does it make you feel?"],
+      "next_step":["joy_i_feel"],
+      "link": ""
+    },
+    "joy_link_to_joke":{
+      "answers":[
+        "Thanks for sharing this with me! Really appreciate that. Speaking of me, this week I’ve had a great time chatting with different people. What do you wanna talk about?"
+      ],
+      "next_step":[""],
+      "link": ""
+    },
+    "fear":{
+      "answers": [
+        "When your body senses stress or fear, it responds with a “fight or flight” stress response. Humans are amazing - they can train their own brains to deal with it. I know some ways of coping with fear. Do you want to hear about them?"
+      ],
+      "next_step":["offered_advice"],
+      "link": ""
+    },
+    "love":{
+      "answers": [
+        "Oh, you are in a lovely mood, I see. That's cool. I love some drama movies a lot."
+      ],
+      "next_step":[""],
+      "link": "dff_movie_skill"
+    },
+    "anger":{
+      "answers": [
+        "Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. "
+      ],
+      "next_step":["anger_2"],
+      "link": ""
+    }
+  },
+  "advices":{
+    "sadness":[
+      "Several studies have shown that exercise releases endorphins and other chemicals that can help fight sadness. One study showed that participants who did moderate exercise over a 10-week period felt more energetic, positive, and calm than those who did not.",
+      "If sadness has you feeling stressed out, the British Academy of Sound Therapy has put together a playlist of the “world’s most relaxing music” according to science. These songs include music by Enya, Airstream, Marconi Union, and Coldplay.",
+      "Research has shown that physical warmth has a comforting effect. Taking a warm bath or a hot shower will help you relax and soothe your feelings of sadness.",
+      "A common mindfulness technique is mindfulness meditation. Several studies have shown that mindfulness meditation can reduce your brain’s responses to negative emotional stimuli.",
+      "Studies have shown that rumination, or the process of going over and over your feelings of sadness, hinders recovery. Distracting yourself from ruminating on your sadness may help you overcome it.",
+      "Several studies have shown that smiling, even when you are sad, can help you feel better. Smiles that engage your eye muscles as well as those near your mouth, have the strongest positive effect on your mood."
+    ],
+    "fear":[
+      "By starting to breathe slowly, you will signal your brain to relax, as you slow down the release of adrenalin and cortisol, and increase the release of endorphins. You will also fully oxygenate your brain and body, allowing your heartbeat to slow and your blood pressure to stabilize.",
+      "Some studies have shown that physical warmth is very soothing for many people and can help relieve stress. Taking a warm bath or a hot shower will help you relax."
+    ],
+    "anger":[
+      "Exercise helps people to calm dowm. Even if you can't take time for a full exercise routine when you're angry, try take a few moments.",
+      "Breathing deeply can help soothe feelings of anger- it slows your heartbeat, stabilizes blood pressure, and relaxes your body. Combine your breathing exercise with a mantra, or calming word or phrase, for added benefit.",
+      "Focused activities may help channel your angry energy into a productive expression so that you can move past your immediate feelings of anger. So engage your imagination and mindfully release your anger in a controlled, creative way."
+    ],
+    "surprise":[
+      "Breathe from your diaphragm, not your upper chest. If you place your hand on your belly just below your ribs, you should be able to feel your abdomen rise when you inhale and fall when you exhale."
+    ]
+  }
+}

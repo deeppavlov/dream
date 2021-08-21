@@ -1,0 +1,35 @@
+{
+  "chainer": {
+    "in": ["question_raw", "top_facts"],
+    "pipe": [
+      {
+        "class_name": "string_multiplier",
+        "id": "str_mult"
+      },
+      {
+        "class_name": "logit_ranker",
+        "string_multiplier": "#str_mult",
+        "batch_size": 32,
+        "squad_model": {"config_path": "{CONFIGS_PATH}/squad/multi_squad_noans_infer.json"},
+        "sort_noans": true,
+        "return_answer_sentence": true,
+        "in": ["question_raw", "top_facts"],
+        "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_context"]
+      }
+    ],
+    "out": ["answer", "answer_score", "answer_place", "answer_sentence"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+      "{DEEPPAVLOV_PATH}/requirements/spacy.txt",
+      "{DEEPPAVLOV_PATH}/requirements/en_core_web_sm.txt"
+    ]
+  }
+}

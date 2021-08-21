@@ -1,0 +1,7 @@
+sentry_sdk==0.14.3
+flask==1.1.1
+numpy==1.17.3
+requests==2.22.0
+gunicorn==19.9.0
+ahocorapy==1.5.2
+nltk==3.2.5

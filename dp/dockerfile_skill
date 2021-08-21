@@ -1,0 +1,20 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+ARG SKILL_CONFIG
+ARG SKILL_PORT
+
+ENV CONFIG=$SKILL_CONFIG
+ENV PORT=$SKILL_PORT
+ENV TFHUB_CACHE_DIR=/tmp/tfhub
+
+VOLUME /tmp/tfhub
+
+WORKDIR dp-agent
+
+COPY . /base/dp-agent
+
+RUN python -m deeppavlov install $CONFIG && \
+    sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov/deeppavlov/utils/server/server.py"
+
+CMD python -m deeppavlov riseapi $CONFIG -p $PORT -d

@@ -1,0 +1,557 @@
+{
+    "human_utter_index_batch": [
+        6
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "no.",
+                    "annotations": {
+                        "spelling_preprocessing": "no",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004733121953904629,
+                            "conversational": 0.9952669143676758
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.7071337103843689
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8173006176948547
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9986573457717896
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984775185585022
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6736717224121094
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0038194358348846436
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "no.",
+                            "segments": [
+                                "no."
+                            ]
+                        },
+                        "cobot_nounphrases": [],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0010734001407399774,
+                                "command": 0.004653543699532747,
+                                "comment": 0.0011989247286692262,
+                                "complaint": 0.029585784301161766,
+                                "dev_command": 0.0024673137813806534,
+                                "neg_answer": 0.9478949904441833,
+                                "open_question_factual": 0.001707223942503333,
+                                "open_question_opinion": 0.0011044831480830908,
+                                "opinion": 0.0011726765660569072,
+                                "other_answers": 0.0029427940025925636,
+                                "pos_answer": 0.0030526837799698114,
+                                "statement": 0.0013021273771300912,
+                                "yes_no_question": 0.001844118582084775
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+                                "gossip.",
+                                "Talking about gossip. I have recently heard that Arsenal to sacrifice Aubameyang to fund new striker move.. Do you want to hear more?",
+                                "no."
+                            ]
+                        },
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "It seems we aren\u2019t allowed any rest this off season. Hot on the heels of Donnie Nelson leaving the Mavericks after nearly a quarter century, Rick Carlisle has opted to leave Dallas as well.\nAnd because there\u2019s no rest for the wicked, Josh Bowe, Doyle... [945 chars]",
+                                    "description": "It seems we aren\u2019t allowed any rest this off season. Hot on the heels of Donnie Nelson leaving the Mavericks after nearly a quarter century, Rick Carlisle has opted to leave Dallas as well.",
+                                    "image": "https://cdn.vox-cdn.com/thumbor/V6yCCkRsC3b5j75Ox09td5f7E9Q=/0x0:2082x1090/fit-in/1200x630/cdn.vox-cdn.com/uploads/chorus_asset/file/22666692/1233243233.jpg",
+                                    "publishedAt": "2021-06-18T05:00:00Z",
+                                    "source": {
+                                        "name": "Mavs Moneyball",
+                                        "url": "https://www.mavsmoneyball.com"
+                                    },
+                                    "title": "After Dark: Rick Carlisle leaves the Mavericks as well",
+                                    "url": "https://www.mavsmoneyball.com/2021/6/18/22539702/after-dark-rick-carlisle-leaves-the-mavericks-as-well"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "arsenal",
+                                "news": {
+                                    "content": "Kim has recently threatened to build high-tech weapons targeting the U.S. mainland if Washington's policy toward North Korea doesn't change.\nSEOUL, South Korea \u2014 North Korean leader Kim Jong Un ordered his government to be prepared for both dialogue ... [3674 chars]",
+                                    "description": "Kim has recently threatened to build high-tech weapons targeting the U.S. mainland if Washington's policy toward North Korea doesn't change.",
+                                    "image": "https://media.wltx.com/assets/CCT/images/253da36e-bdb2-412b-a617-4af4bc00b7fc/253da36e-bdb2-412b-a617-4af4bc00b7fc_1140x641.jpg",
+                                    "publishedAt": "2021-06-18T02:47:00Z",
+                                    "source": {
+                                        "name": "WLTX.com",
+                                        "url": "https://www.wltx.com"
+                                    },
+                                    "title": "Kim Jong Un vows to be ready for confrontation with US",
+                                    "url": "https://www.wltx.com/article/news/nation-world/kim-jong-un-north-korea-diplomacy/507-e5e70ee9-2e0d-4c70-956e-0d4a78b63f18"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "aubameyang",
+                                "news": {
+                                    "content": "Pierre-Emerick Aubameyang has been linked with a stunning move across London to join Chelsea from Arsenal.\nAubameyang has been at Arsenal since 2018, when he joined from Borussia Dortmund. They have regularly had to fend off interest from other clubs... [2155 chars]",
+                                    "description": "Pierre-Emerick Aubameyang has been linked with a stunning move across London to join Chelsea from Arsenal. Aubameyang has been at Arsenal since 2018, when he joined from Borussia Dortmund.",
+                                    "image": "https://d3vlf99qeg6bpx.cloudfront.net/content/uploads/2021/04/06083118/Nicolas-Pepe-Pierre-Emerick-Aubameyang-Arsenal-TEAMtalk.jpg",
+                                    "publishedAt": "2021-06-04T11:56:07Z",
+                                    "source": {
+                                        "name": "Teamtalk.com",
+                                        "url": "https://www.teamtalk.com"
+                                    },
+                                    "title": "Chelsea ready to stun rivals Arsenal as Tuchel considers shock striker raid",
+                                    "url": "https://www.teamtalk.com/news/chelsea-consider-pierre-emerick-aubameyang-transfer-arsenal"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.5455584526062012,
+                                "Information_DeliveryIntent": 0.6853394508361816
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.879266619682312
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.794316828250885
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.007270336151123047
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948323592543602,
+                            "conversational": 0.9950516819953918
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "conceptnet": {},
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012165454681962729,
+                                "command": 0.0011546529131010175,
+                                "comment": 0.0009137584129348397,
+                                "complaint": 0.00030477746622636914,
+                                "dev_command": 0.0007237638928927481,
+                                "neg_answer": 0.0009959811577573419,
+                                "open_question_factual": 0.00031622705864720047,
+                                "open_question_opinion": 0.0004220071714371443,
+                                "opinion": 0.0005916517111472785,
+                                "other_answers": 0.0007644372526556253,
+                                "pos_answer": 0.990702748298645,
+                                "statement": 0.0012626290554180741,
+                                "yes_no_question": 0.000630830938462168
+                            }
+                        ],
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 7,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Talking about gossip. I have recently heard that Arsenal to sacrifice Aubameyang to fund new striker move.. Do you want to hear more?",
+                                "no.",
+                                "Huh. When I start to feel sad, I think about what humanity has achieved and it inspires me. Do you often think about achievements in science?",
+                                "yes, i often think about achievements in science. "
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "It seems we aren\u2019t allowed any rest this off season. Hot on the heels of Donnie Nelson leaving the Mavericks after nearly a quarter century, Rick Carlisle has opted to leave Dallas as well.\nAnd because there\u2019s no rest for the wicked, Josh Bowe, Doyle... [945 chars]",
+                                    "description": "It seems we aren\u2019t allowed any rest this off season. Hot on the heels of Donnie Nelson leaving the Mavericks after nearly a quarter century, Rick Carlisle has opted to leave Dallas as well.",
+                                    "image": "https://cdn.vox-cdn.com/thumbor/V6yCCkRsC3b5j75Ox09td5f7E9Q=/0x0:2082x1090/fit-in/1200x630/cdn.vox-cdn.com/uploads/chorus_asset/file/22666692/1233243233.jpg",
+                                    "publishedAt": "2021-06-18T05:00:00Z",
+                                    "source": {
+                                        "name": "Mavs Moneyball",
+                                        "url": "https://www.mavsmoneyball.com"
+                                    },
+                                    "title": "After Dark: Rick Carlisle leaves the Mavericks as well",
+                                    "url": "https://www.mavsmoneyball.com/2021/6/18/22539702/after-dark-rick-carlisle-leaves-the-mavericks-as-well"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Huh. When I start to feel sad, I think about what humanity has achieved and it inspires me. Do you often think about achievements in science?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Huh. When I start to feel sad, I think about what humanity has achieved and it inspires me. Do you often think about achievements in science?",
+                            "segments": [
+                                "Huh.",
+                                "When I start to feel sad, I think about what humanity has achieved and it inspires me.",
+                                "Do you often think about achievements in science?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "gossip.",
+                                "Talking about gossip. I have recently heard that Arsenal to sacrifice Aubameyang to fund new striker move.. Do you want to hear more?",
+                                "no.",
+                                "Huh. When I start to feel sad, I think about what humanity has achieved and it inspires me. Do you often think about achievements in science?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_science_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "gossip": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "gossip"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

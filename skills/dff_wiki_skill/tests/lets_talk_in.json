@@ -1,0 +1,81 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                 {
+                   "text": "let's talk about smartphones.",
+                   "annotations": {
+                     "cobot_nounphrases": [],
+                     "sentseg": {
+                       "punct_sent": "let's talk about smartphones.",
+                       "segments": ["let's talk about smartphones."]
+                     },
+                     "entity_linking": [{"confidences": [0.9412198662757874,
+                                                         0.97691410779953,
+                                                         0.9502331614494324,
+                                                         0.9730489253997803,
+                                                         0.9415334463119507],
+                                         "entity_ids": ["Q22645", "Q19723451", "Q18623089", "Q18611337", "Q48423376"],
+                                         "tokens_match_conf": [1.0, 1.0, 1.0, 1.0, 1.0],
+                                         "entity_substr": "smartphone",
+                                         "entity_pages_titles": ["Smartphone"]
+                                        }],
+                     "wiki_parser": {"entities_info": {"smartphone": {"entity_label": "smartphone",
+                                                                      "plain_entity": "Q22645",
+                                                                      "conf": 1.0, "token_conf": 1.0, "pos": 0,
+                                                                      "types": [["Q1067263", "information appliance"],
+                                                                                ["Q11253473", "smart device"],
+                                                                                ["Q16917685", "mobile computer"],
+                                                                                ["Q17517", "mobile phone"]]}},
+                                     "topic_skill_entities_info": {}},
+                     "news_api_annotator": []
+                   }
+                 }
+               ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_wiki_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "animal": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9997689723968506
+                        },
+                        "full_name": "smartphone",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Science_and_Technology"
+                        ]
+                    }
+                ],
+                "name": "smartphone"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "random_seed": 2718
+}

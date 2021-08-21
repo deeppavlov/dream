@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ NEXT ^</pattern>
+        <template>
+            NEXT_ANSWER
+        </template>
+    </category>
+
+   <category>
+        <pattern> ^ MOVING ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ GO ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+       <category>
+        <pattern> ^ GOING ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ CONTINUE ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ PROCEED ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ CARRY ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ GO AHEAD ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ KEEP UP ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ KEEP ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+   <category>
+        <pattern> ^ MOVE ON ^ </pattern>
+        <template>
+            <srai>NEXT</srai>
+        </template>
+    </category>
+</aiml>

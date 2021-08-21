@@ -1,0 +1,7 @@
+uuid "send timestamp" "receive timestamp" processing_time "phrase length" "phrase text" response
+1 1569517403.5267823 1569517408.8743486 5.347566366195679 2 Hi Greetings!
+1 1569517408.8743753 1569517411.9757288 3.101353406906128 11 "How are you" "I'm fine, thanks! Do you want to know what I can do?"
+1 1569517411.9757378 1569517416.2258403 4.250102519989014 3 Yes "I'm newborn, so I can't do so much. For example I can answer for any question."
+1 1569517416.2258494 1569517420.207787 3.9819376468658447 17 "Do you like Siri?" "Siri was a big inspiration to me."
+1 1569517420.2078004 1569517423.769674 3.5618736743927 24 "Do you better than Siri?" "i don't know. i like to read."
+1 1569517423.7696912 1569517426.9963174 3.22662615776062 7 Goodbye "See ya!"

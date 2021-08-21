@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <category>
+    <pattern># I # NOT ASKED YOU #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # NOT ASK YOU #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASKED YOU # NOT #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASK YOU # NOT #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASKED YOU # ELSE #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># I # ASK YOU # ELSE #</pattern>
+    <template>
+      <random>
+        <li>Probably, I misunderstood you. What did you ask me about?</li>
+        <li>Probably, I misunderstood you. Could you, please, ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+
+
+
+  <category>
+    <pattern># THAT WAS <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># THAT IS <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># IT WAS <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># IT IS <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># THIS WAS <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># THIS IS <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># YOU ARE <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># YOU ARE SO <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># YOU ARE THE MOST <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># YOU ARE AN <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># YOU ARE A <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ARE YOU <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ARE YOU SO <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># <set>stupid</set> ARE YOU #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+
+  <category>
+    <pattern>THAT_IS_STUPID</pattern>
+    <template>
+      <random>
+        <li>Yeah... Sometimes I can say something really strange. Sorry for that but I'm still learning.</li>
+        <li>Huh. Sorry, sometimes I can say something really confusing. You can try to ask me in more simple way.</li>
+      </random>
+    </template>
+  </category>
+
+
+</aiml>

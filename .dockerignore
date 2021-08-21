@@ -1,0 +1,16 @@
+skills/program-y/dream_aiml/storage/conversations/
+skills/alexa-prize-news/data/
+.git
+.cache
+*.md
+docker-compose.yml
+staging.yml
+dev.yml
+cpu.yml
+one_worker.yml
+!log_config.yml
+Jenkinsfile
+__pycache__
+logs
+logs*
+*.log

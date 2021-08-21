@@ -1,0 +1,244 @@
+{
+  "structured_data":{
+    "country":{
+      "Luke Combs":[
+        "Better Together",
+        "Without You",
+        "Loving On You",
+        "Cold As You"
+      ],
+      "Morgan Wallen": [
+        "7 Summers",
+        "Heartless",
+        "Wasted On You",
+        "Cover Me Up",
+        "865"
+      ],
+      "Kane Brown": ["Be Like That"],
+      "Maren Morris": ["The Bones", "You And Over Me"]
+    },
+    "80s":{
+      "AC/DC":[
+        "Hells Bells",
+        "Shoot to Thrill",
+        "Back in Black",
+        "Have a Drink on Me",
+        "Shake A Leg"
+      ]
+    },
+    "70s":{
+      "ABBA":[
+      "Mamma Mia",
+      "Money, Money, Money",
+      "Rock Me",
+      "Dancing Queen",
+      "Fernando"
+      ]
+    },
+    "pop":{
+      "Britney Spears":[
+        "Toxic",
+        "Everytime",
+        "Oops I did it again",
+        "Womanizer"
+      ],
+      "Taylor Swift":[
+        "Me!",
+        "Exile",
+        "Love Story",
+        "Blank Space"
+      ],
+      "The Weekend":[
+        "Blinding Lights",
+        "Save Your Tears",
+        "Call out my name",
+        "I feel it coming",
+        "Heartless"
+      ],
+      "Lady Gaga":[
+        "Shallow",
+        "Poker Face",
+        "Stupid Love",
+        "Bad Romance",
+        "Paparazzi"
+      ],
+      "Ariana Grande":[
+        "34 plus 35",
+        "Seven rings",
+        "Thank you, next",
+        "positions"
+      ],
+      "Selena Gomez":[
+        "Lose you to love me",
+        "Wolves",
+        "The heart wants what it wants",
+        "Feel me"
+      ],
+      "Drake":[
+        "God's plan",
+        "Hotline bling",
+        "Hold on, we are coming home",
+        "In my feelings"
+      ],
+      "Post Malone":[
+        "Rockstar",
+        "Congratulations",
+        "sunflower",
+        "circles",
+        "better now"
+      ],
+      "Billie Eilish":[
+        "Lovely",
+        "bad guy",
+        "therefore i am",
+        "everything i wanted",
+        "when the party is over",
+        "bellyache"
+      ]
+    },
+    "rock": {
+      "Beatles":[],
+      "Pink Floyd": []
+    },
+    "metal": {
+      "Iron Maiden":[],
+      "Ozzy Osborn": [],
+      "Black Sabbath": [],
+      "Judas Priest": []
+    },
+    "hardcore": {
+      "Angelfist":[],
+      "Catscan": []
+    },
+    "electronic": {
+      "Prodigy":[],
+      "Aphex Twin": [],
+      "Kraftwerk": [],
+      "Depeche Mode": [],
+      "Dead mouse": [],
+      "Moby": []
+    },
+    "trance": {
+      "van Buuren":[],
+      "van Dyk": [],
+      "Ferry Corsten": []
+    },
+    "house": {
+      "David Guetta":[],
+      "Tod Terry": [],
+      "Cascade": []
+    },
+    "dance": {
+      "Tiesto":[],
+      "Madonna": [],
+      "Pet Shop": [],
+      "Beyonce": [],
+      "Rihanna": [],
+      "Guetta": []
+    },
+    "techno": {
+      "Richie Hawtin":[],
+      "Carl Cox":[],
+      "Carl Craig":[],
+      "Amelie Lens":[]
+    },
+    "hip hop": {
+      "Kanye West": [],
+      "Jay": [],
+      "Eminem": [],
+      "Drake": [],
+      "Lamar": [],
+      "Shakur": [],
+      "Wayne": [],
+      "Minaj": [],
+      "Snoop": [],
+      "Future":[
+        "Mask off",
+        "Life is Good",
+        "Low life",
+        "Love me"
+      ]
+    },
+    "rap": {
+      "Kanye": [],
+      "Jay Z": [],
+      "Eminem": [],
+      "Drake": [],
+      "Lamar": [],
+      "Shakur": [],
+      "Lil Wayne": [],
+      "Nicki Minaj": [],
+      "Snoop Dogg": [],
+      "Future":[
+        "Mask off",
+        "Life is Good",
+        "Low life",
+        "Love me"
+      ]
+    },
+    "jazz": {
+      "Davis": [],
+      "Coltrane": [],
+      "Simone": [],
+      "Ellington": [],
+      "Armstrong": []
+    },
+    "classic": {
+      "Beethoven": [],
+      "Bach": [],
+      "Mozart": [],
+      "Brahms": [],
+      "Wagner": []
+    },
+    "children": {
+      "Nancy Sinatra": [],
+      "Shon Lennon": [],
+      "Raffi": []
+    }
+  },
+  "genres":[
+    "pop",
+    "rock",
+    "metal",
+    "hardcore",
+    "electronic",
+    "trance",
+    "house",
+    "dance",
+    "techno",
+    "hip hop",
+    "rap",
+    "jazz",
+    "classic",
+    "children",
+    "country",
+    "folk",
+    "indie",
+    "all",
+    "everything",
+    "alternative",
+    "contemporary",
+    "eighties",
+    "nineties",
+    "80s",
+    "70s"
+  ],
+  "artist": [
+    "Britney Spears",
+    "Taylor Swift",
+    "The Weekend",
+    "Lady Gaga",
+    "Ariana Grande",
+    "Selena Gomez",
+    "Drake",
+    "Post Malone",
+    "Billie Eilish",
+    "Luke Combs",
+    "Morgan Wallen",
+    "Kane Brown",
+    "Maren Morris"
+  ],
+  "song":[
+
+  ]
+}

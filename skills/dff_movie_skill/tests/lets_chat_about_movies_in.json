@@ -1,0 +1,621 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "spelling_preprocessing": "hi",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "entity_detection": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": [],
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "SAN ANTONIO \u2014 Minnesota\u2019s statewide mask mandate is over. But in Minneapolis, the state\u2019s largest city, face coverings are still required.\nIn Michigan, Kentucky and Oregon, governors cheerily told vaccinated people that they could go out maskless. Bu... [618 chars]",
+                                    "description": "SAN ANTONIO \u2014 Minnesota\u2019s statewide mask mandate is over. But in Minneapolis, the state\u2019s largest city, face coverings are still required. In Michigan, Kentucky and Oregon, governors cheerily told vaccinated people that they could go out maskless.",
+                                    "image": "https://static01.nyt.com/images/2021/05/14/us/14virus-maskreax/merlin_187754226_cf065d90-4893-4118-8bfa-6f7f21b0eceb-facebookJumbo.jpg",
+                                    "publishedAt": "2021-05-15T03:12:00Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Federal Mask Retreat Sets Off Confusing Scramble for States and Cities",
+                                    "url": "https://www.nytimes.com/2021/05/14/us/no-masks-cdc.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "let's chat about movies.",
+                    "annotations": {
+                        "spelling_preprocessing": "let's chat about movies",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0012974474811926484,
+                            "conversational": 0.9987025260925293
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9817681312561035
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9853262901306152
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9981228709220886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997791051864624
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8064022064208984
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0007504820823669434
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "movies"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "let's chat about movies.",
+                            "segments": [
+                                "let's chat about movies."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "movies"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "movies"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV"
+                            ]
+                        },
+                        "conceptnet": {
+                            "movies": {
+                                "Causes": [
+                                    "laughter",
+                                    "you see movie",
+                                    "fun"
+                                ],
+                                "CausesDesire": [
+                                    "watch movie",
+                                    "watch film",
+                                    "watch television"
+                                ],
+                                "HasProperty": [
+                                    "fun to watch",
+                                    "funny",
+                                    "fun"
+                                ],
+                                "SymbolOf": [
+                                    "porn",
+                                    "violence",
+                                    "space"
+                                ]
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9639502167701721,
+                                    0.3251708149909973,
+                                    0.25880536437034607,
+                                    0.9760697484016418,
+                                    0.9732561707496643
+                                ],
+                                "entity_ids": [
+                                    "Q11424",
+                                    "Q3032397",
+                                    "Q2650998",
+                                    "Q477809",
+                                    "Q21093430"
+                                ],
+                                "entity_pages": [
+                                    "A film, also called a movie, motion picture or moving picture, is a work of visual art used to simulate experiences that communicate ideas, stories, perceptions, feelings, beauty, or atmosphere through the use of moving images. These images are generally accompanied by sound, and more rarely, other sensory stimulations. The word \"cinema\", short for cinematography, is often used to refer to filmmaking and the film industry, and to the art form that is the result of it.",
+                                    "Kites is a 2010 Indian romantic action thriller film directed by Anurag Basu, with the story written and produced by Rakesh Roshan, starring Hrithik Roshan, B\u00e1rbara Mori, Kangana Ranaut, and Kabir Bedi."
+                                ],
+                                "entity_pages_titles": [
+                                    "Film",
+                                    "Kites (film)",
+                                    "A Movie",
+                                    "AllMovie"
+                                ],
+                                "entity_substr": "movies",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "let's chat about movies."
+                            ]
+                        },
+                        "fact_retrieval": [
+                            "Kites is a 2010 Indian romantic action thriller film directed by Anurag Basu, with the story written and produced by Rakesh Roshan, starring Hrithik Roshan, B\u00e1rbara Mori, Kangana Ranaut, and Kabir Bedi."
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "movies": {
+                                    "conf": 0.9639502167701721,
+                                    "entity_label": "film",
+                                    "plain_entity": "Q11424",
+                                    "pos": 0,
+                                    "subclass of": [
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": []
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "movies": {
+                                    "conf": 0.3251708149909973,
+                                    "entity_label": "Kites",
+                                    "genre": [
+                                        [
+                                            "Q130232",
+                                            "drama"
+                                        ],
+                                        [
+                                            "Q188473",
+                                            "action film"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q96",
+                                            "Mexico"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q3032397",
+                                    "pos": 1,
+                                    "publication date": [
+                                        [
+                                            "\"+2010-01-01^^T\"",
+                                            "01 January 2010"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "What do you do on weekdays?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "alexa prize",
+                                    "type": "MISC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "movie": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "movies",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "movie"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

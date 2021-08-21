@@ -1,0 +1,5 @@
+requests==2.22.0
+Flask==1.1.1
+typing==3.7.4.1
+gunicorn==19.9.0
+sentry-sdk==0.12.3

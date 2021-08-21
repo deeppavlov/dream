@@ -1,0 +1,8 @@
+sentry-sdk[flask]==0.14.1
+flask==1.1.1
+gunicorn==19.9.0
+requests==2.22.0
+torch==1.7.0
+torchtext==0.4.0
+transformers==4.0.0
+click==7.1.2

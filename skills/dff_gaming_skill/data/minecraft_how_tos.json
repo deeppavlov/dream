@@ -1,0 +1,52 @@
+[
+  {
+    "task": "become invisible to endermen",
+    "question_to_user": "Would you like to know how to become invisible to endermen?",
+    "answer": "If you equip a pumpkin as your head armor on the inventory screen, endermen will not be able to see you. Unfortunately your viewpoint will be severely restricted since they’re looking out the eyeholes of a jack-o-lantern, but you can stare at Endermen all you want without fear."
+  },
+  {
+    "task": "blow things up with a bed",
+    "question_to_user": "Would you like to know how to blow things up with a bed?",
+    "answer": "This trick seems almost like a glitch in the code, and it’s not the most practical way to blow something up in Minecraft, but it sure is fun. You can place a block of material on the ground, then place a bed immediately adjacent to the block. After this, all you have to do is position themselves so that the block is between them and the foot of the bed, push themselves right up against the block, and try to sleep in the bed."
+  },
+  {
+    "task": "walk through walls using a boat",
+    "question_to_user": "Should I tell you how to walk through walls using a boat?",
+    "answer": "“Walking” may be a bit of a misnomer, but the result is the same; all a you have to do is place a boat in front of a wall and gently push it into the blocks of the wall until about half of the boat is inside it. Then, the you can left-click on the boat to enter it, then left-shift to exit it. Since you always exit off of the front of the boat, you’ll find that you’ve phased through the wall that the boat was sticking into and out the other side. It’s incredibly useful for making quick escapes or for breaching into a structure during player-vs-player survival matches, but be warned: it only works in one direction. Once you’re through the wall, you can’t use the boat to go back."
+  },
+  {
+    "task": "make an automatic cooked chicken farm",
+    "question_to_user": "Would you like to know how to make an automatic cooked chicken farm?",
+    "answer": "Unlike in Creative Mode, Survival Mode requires you to continually find and consume food to survive. YouTube user The Beached Hippo created a “farm” that automatically spawns chickens, kills them, cooks them, and then uses water to wash all of the finished chicken and feathers out to the waiting player. It's harder than just farming wheat, but arguably much more satisfying."
+  },
+  {
+    "task": "trap players with ice and soul sand",
+    "question_to_user": "Would you like me tell you how to trap players with ice and soul sand?",
+    "answer": "In Survival Multiplayer, Minecraft users have the option of working together to survive, build, explore, and create, or fight each other using endlessly more inventive deathtraps and weapons to kill each other before plundering. Players normally slow down when they walk over soul sand, but a lot of players don’t know that burying a block of ice underneath a block of soul sand multiplies the effect, reducing the speed of a sprinting player to a snail-like creep."
+  },
+  {
+    "task": "create pockets of air underwater with torches, doors, signs and ladders",
+    "question_to_user": "Would you like to know how to create pockets of air underwater with torches, doors, signs and ladders?",
+    "answer": "A lot of players don’t know that torches, doors, signs, and ladders can be placed just so underwater to create a pocket of air around them, saving players from certain, choking doom. Not only that, but just like fences placed next to each other form one long fence, the pockets of air generated chain together, allowing you to create underwater passageways."
+  },
+  {
+    "task": "use torches to hold any amount of weight",
+    "question_to_user": "Would you like to know how to use torches to hold any amount of weight?",
+    "answer": "Torches can hold any amount of weight. Once a torch is placed on a wall or floor, you can place any kind and any number of blocks on top of it, such as sand, dirt, wood, steel, diamond, and the torch will bear the weight no matter how high the stack of blocks is."
+  },
+  {
+    "task": "cure zombie villagers",
+    "question_to_user": "Would you like to know how to cure zombie villagers?",
+    "answer": "Villagers can become zombified, but unlike regular zombies, they can be cured, restoring their usefulness as a trading resource. The process requires being able to make potions and having the necessary ingredients to brew a Splash Potion of Weakness as well as having a Golden Apple. You just have to throw the potion at a zombie Villager, then use the Golden Apple on it, and within five minutes the village be back to their old self."
+  },
+  {
+    "task": "create an infinite water source",
+    "question_to_user": "Would you like to know how to create an infinite water source?",
+    "answer": "It takes advantage of the quirks of Minecraft physics: all you have to do is dig a hole three blocks long and one block deep in the ground. Then, simply pour the water into the blocks to the left and right of the center block before pouring one final bucket of water into the center block."
+  },
+  {
+    "task": "create invisible blocks",
+    "question_to_user": "Would you like to know how to create invisible blocks?",
+    "answer": "Not to be confused with see-through blocks, such as blocks made of glass and ice, players can actually spawn blocks that are entirely invisible. Available only in creative mode and only obtainable through a command line prompt, players can spawn blocks known as “barriers” by simply typing in: “give minecraft barrier”."
+  }
+]

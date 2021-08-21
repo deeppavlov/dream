@@ -1,0 +1,30 @@
+[
+    [
+        "I adore comedies because they help me to develop my sense of humor. What is the last Comedy movie you've watched?",
+        0.98,
+        {
+            "dff_movie_skill_state": {
+                "shared_memory": {
+                    "current_status": "movie_prompt"
+                },
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": "State.SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE_GENRE"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_WAS_REQUESTED_MOVIE_OPINION\", \"__stack__\": [], \"__user_utterance__\": \"i like comedies do you like them\", \"__system_state__\": \"State.SYS_USER_REQUESTS_OPINION_ABOUT_MOVIE_GENRE\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"I adore comedies because they help me to develop my sense of humor. What is the last Comedy movie you've watched?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"MOVIES\\\"<__tuple__>\\\"State.USR_WAS_REQUESTED_MOVIE_OPINION\\\"\"}"
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can_prompt"
+        }
+    ]
+]

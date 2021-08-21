@@ -1,0 +1,139 @@
+{
+  "chainer": {
+    "in": ["x_init", "x_init", "template_type", "entities", "types"],
+    "pipe": [
+      {
+        "class_name": "template_matcher",
+        "id": "template_m",
+        "num_processors": 8,
+        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "templates_filename": "templates_eng_compr.json"
+      },
+      {
+        "class_name": "api_requester",
+        "id": "linker_entities",
+        "url": "http://entity-linking:8075/model",
+        "out": ["entity_ids"],
+        "param_names": ["entity_substr", "template_found"]
+      },
+      {
+        "class_name": "wiki_parser",
+        "id": "wiki_p",
+        "wiki_filename": "{DOWNLOADS_PATH}/wikidata/wikidata_lite.hdt",
+        "file_format": "hdt",
+        "max_comb_num": 1000,
+        "lang": "@en"
+      },
+      {
+        "class_name": "kbqa_entity_linker",
+        "id": "linker_types",
+        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "inverted_index_filename": "inverted_index_types_eng.pickle",
+        "entities_list_filename": "types_list.pickle",
+        "q2name_filename": "wiki_eng_q_to_name_types.pickle",
+        "build_inverted_index": false,
+        "use_descriptions": false,
+        "use_prefix_tree": false
+      },
+      {
+        "class_name": "rel_ranking_infer",
+        "id": "rel_r_inf",
+        "ranker": {"config_path": "{CONFIGS_PATH}/classifiers/rel_ranking_bert_lite.json"},
+        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "rel_q2name_filename": "wiki_dict_properties.pickle",
+        "rels_to_leave": 40
+      },
+      {
+        "class_name": "query_generator",
+        "id": "query_g",
+        "linker_entities": "#linker_entities",
+        "linker_types": "#linker_types",
+        "template_matcher": "#template_m",
+        "rel_ranker": "#rel_r_inf",
+        "wiki_parser": "#wiki_p",
+        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "rank_rels_filename_1": "rels_0.txt",
+        "rank_rels_filename_2": "rels_1.txt",
+        "sparql_queries_filename": "{DOWNLOADS_PATH}/wikidata/sparql_queries.json",
+        "entities_to_leave": 8,
+        "rels_to_leave": 10,
+        "return_all_possible_answers": true,
+        "use_alt_templates": false,
+        "max_comb_num": 50,
+        "use_wp_api_requester": false,
+        "use_el_api_requester": true,
+        "in": ["x_init", "x_init", "template_type", "entities", "types"],
+        "out": ["candidate_rels_answers", "entities", "template_answers"]
+      },
+      {
+        "class_name": "rel_ranking_infer",
+        "rank": false,
+        "wiki_parser": "#wiki_p",
+        "batch_size": 32,
+        "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
+        "rel_q2name_filename": "wiki_dict_properties.pickle",
+        "use_mt_bert": true,
+        "use_api_requester": false,
+        "return_confidences": true,
+        "return_all_possible_answers": true,
+	    "return_sentence_answer": true,
+	    "in": ["x_init", "candidate_rels_answers", "entities", "template_answers"],
+        "out": ["answers"]
+      }
+    ],
+    "out": ["answers"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "BERT_PATH": "{DOWNLOADS_PATH}/bert_models_kbqa/cased_L-12_H-768_A-12",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
+      "MT_BERT_PATH": "{MODELS_PATH}/mt_bert_kbqa"
+    },
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+      "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
+      "{DEEPPAVLOV_PATH}/requirements/fasttext.txt",
+      "{DEEPPAVLOV_PATH}/requirements/rapidfuzz.txt",
+      "{DEEPPAVLOV_PATH}/requirements/hdt.txt",
+      "{DEEPPAVLOV_PATH}/requirements/faiss.txt",
+      "{DEEPPAVLOV_PATH}/requirements/spelling.txt",
+      "{DEEPPAVLOV_PATH}/requirements/wikihow.txt",
+      "{DEEPPAVLOV_PATH}/requirements/spacy.txt",
+      "{DEEPPAVLOV_PATH}/requirements/en_core_web_sm.txt",
+      "{DEEPPAVLOV_PATH}/requirements/pyinflect.txt"
+    ],
+    "labels": {
+      "telegram_utils": "KBQA_MT_BERT_MODEL",
+      "server_utils": "KBQA"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wiki_eng_files_no_el.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/sparql_queries.json",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/templates_eng_compr.json",
+        "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      }
+    ]
+  }
+}

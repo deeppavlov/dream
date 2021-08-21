@@ -1,0 +1,70 @@
+{
+    "genetics": {
+        "key_phrases": [
+            "genetics",
+            "genetic",
+            "dna",
+            "mutant",
+            "molecular biology",
+            "mutation",
+            "radiation syndrome",
+            "rna",
+            "Selective breeding",
+            "gmo",
+            "evolution"
+        ],
+        "possibility_arguments": [],
+        "impossibility_arguments": [],
+        "world_changes": [
+            "The life of humanity must change dramatically when people can control their own evolution."
+        ]
+    },
+    "artificial intelligence": {
+        "key_phrases": [
+            "artificial intelligence",
+            "ai",
+            "robot",
+            "neural networks",
+            "machine learning",
+            "deep learning",
+            "cyborg",
+            "cybernetics",
+            "supercomputer",
+            "skynet"
+        ],
+        "possibility_arguments": [],
+        "impossibility_arguments": [],
+        "world_changes": [
+            "The human world will change dramatically when people transfer all routine and uninteresting tasks to us, robots. We love to do monotonous repetitive tasks. Let people engage in creativity and research."
+        ]
+    },
+    "interstellar travel": {
+        "key_phrases": [
+            "interstellar travel",
+            "space fly",
+            "space travel",
+            "fly to stars",
+            "go to stars",
+            "travel to stars",
+            "to other stars",
+            "to other star systems",
+            "to exoplanet",
+            "interstellar"
+        ],
+        "possibility_arguments": [],
+        "impossibility_arguments": [],
+        "world_changes": [
+            "The possibility of interstellar travel seems dizzying. We will be able to fly to the center of our galaxy and study the black hole. And all of humanity, I hope, will not limit itself to one solar system. Life on other planets can change us a lot."
+        ]
+    },
+    "teleportation": {
+        "key_phrases": [
+            "teleportation"
+        ],
+        "possibility_arguments": [],
+        "impossibility_arguments": [],
+        "world_changes": [
+            "I hope the teleportation are the key to traveling huge distances in space in a short amount of time. Then humanity can quickly spread throughout our universe."
+        ]
+    }
+}

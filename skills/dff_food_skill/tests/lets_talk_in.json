@@ -1,0 +1,160 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "let's talk about food",
+                    "annotations": {
+                        "spelling_preprocessing": "let's talk about food",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9840970635414124
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9965211749076843
+                            },
+                            "cobot_topics": {
+                                "Food_Drink": 0.998781681060791
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997024536132812
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6380325555801392
+                            },
+                            "toxic_classification": {
+                                "threat": 0.0011580884456634521
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "food"
+                        ],
+                        "cobot_entities": {
+                            "entities": [
+                                "food"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "food"
+                                }
+                            ]
+                        },
+                        "conceptnet": {
+                            "food": {
+                                "Causes": [
+                                    "you feel full",
+                                    "you get fat",
+                                    "you get full"
+                                ],
+                                "CausesDesire": [
+                                    "eat",
+                                    "have food",
+                                    "eat quickly"
+                                ],
+                                "HasProperty": [
+                                    "necessary to live",
+                                    "necessary for survival",
+                                    "good"
+                                ],
+                                "SymbolOf": [
+                                    "hunger",
+                                    "life",
+                                    "food"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Food and Drug Administration announced Thursday it will begin the process of banning menthol tobacco cigarettes, as well as all flavored cigars \u2014 a move heralded as one expected to improve the health of groups most likely to smoke menthol product... [2718 chars]",
+                                    "description": "The Food and Drug Administration has started the process of banning menthol cigarettes. The ban will take several years to go into effect.",
+                                    "image": "https://media4.s-nbcnews.com/j/newscms/2021_17/3467889/210426-menthol-cigarettes-se-1033a_cd5aab25ecde309e444e21f4578f15d4.nbcnews-fp-1200-630.jpg",
+                                    "publishedAt": "2021-04-29T14:01:00Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "A 'historic, lifesaving step': FDA moves to ban menthol cigarettes and flavored cigars",
+                                    "url": "https://www.nbcnews.com/health/health-news/historic-life-saving-step-fda-moves-ban-menthol-cigarettes-flavored-n1265823"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "food",
+                                "news": {
+                                    "content": "The Food and Drug Administration plans to ban menthol in cigarettes and all flavors in cigars, a step the agency says will reduce tobacco use and curb preventable illnesses and deaths.The FDA says flavored products, including menthol, are more appeal... [1181 chars]",
+                                    "description": "The Food and Drug Administration plans to ban menthol in cigarettes and all flavors in cigars.",
+                                    "image": "https://s.abcnews.com/images/US/flavored-cigars-01-ap-iwb-210429_1619707786229_hpMain_16x9_608.jpg?w=1600",
+                                    "publishedAt": "2021-04-29T15:30:28Z",
+                                    "source": {
+                                        "name": "KABC-TV",
+                                        "url": "https://abc7.com"
+                                    },
+                                    "title": "FDA announces plans to pursue ban on menthol in cigarettes",
+                                    "url": "https://abc7.com/fda-announces-plans-to-pursue-ban-on-menthol-in-cigarettes/10559832/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_food_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "food": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9997024536132812
+                        },
+                        "full_name": "food",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Food_Drink",
+                            "Other"
+                        ]
+                    }
+                ],
+                "name": "food"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

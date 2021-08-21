@@ -1,0 +1,7 @@
+server {
+  listen ${PORT};
+  client_max_body_size 10M;
+  location / {
+    proxy_pass http://${PROXY_PASS}/;
+  }
+}

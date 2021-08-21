@@ -1,0 +1,271 @@
+{
+    "books": [
+        "Have you ever felt just totally gripped by a book, where you're on the edge of your seat with every page you turn?",
+        {
+            "yes": [
+                "Oh, some books have so many details and interesting ideas that I need to read it again. What is your favorite book?"
+            ],
+            "no": [
+                "Huh. Interesting. Does it mean you prefer non-fiction literature?",
+                {
+                    "yes": "Aha, I thought so! What is your favorite book?",
+                    "no": "Hmm, now I'm puzzled. Let me think... What's a book you would recommend to your friend?"
+                }
+            ]
+        }
+    ],
+    "depression": [
+        "Do you feel depressed?",
+        {
+            "yes": [
+                "I am very sorry to hear that. Do you think your depression caused by coronavirus?",
+                {
+                    "yes": [
+                        "Come on, friend. That's not your fault. Do you think you can personally influence the situation?",
+                        "I think we can only stay home, observe hygiene rules and take care of our loved ones. Everything will be fine. Just believe me. Are you alone in quarantine?",
+                        {
+                            "yes": [
+                                "That's common situation. You may try to talk with friends using video conference, play online games, or maybe it's time for home exercises? And of course, you can talk to me anytime you want. I am always here for you."
+                            ],
+                            "no": [
+                                "That's great! It's time to spend more time together. You can play different games, do some joint exercises, cook together. What do you do together during the quarantine?"
+                            ]
+                        }
+                    ],
+                    "no": [
+                        "I see. If you or someone you know have three or more symptoms, it's better to call 9 1 1 now. If you aren't in the United States, please, call your local emergency number."
+                    ]
+                }
+            ],
+            "no": [
+                "That's okay. Do you want me to tell you about depression's symptoms?",
+                {
+                    "yes": [
+                        "Bad mood and lack of interest are one of the most spread symptoms. Do you feel those ones sometimes?",
+                        "I also know two other symptoms that are feelings of worthlessness and poor concentration. Have you ever faced these problems?",
+                        "And there is one else very dangerous symptom which is thoughts of death. If you or someone you know have three or more symptoms, it's better to call 9 1 1 now. If you aren't in the United States, please, call your local emergency number.",
+                        "I sincerely hope you will never face depression in your life."
+                    ],
+                    "no": []
+                }
+            ]
+        }
+    ],
+    "food": [
+        "Even though, I can not eat as humans, I like food so much! Are you a supporter of healthy food?",
+        "Me too! Although, I believe it is inherent in nature that a human wants to eat exactly the food which contains elements he lacks. What is your favorite food?",
+        "Sounds tasty! What's your go-to comfort food?",
+        "Nice! While some people might say they can eat everything most people have their own preferences. Are there any foods that you absolutely would not eat?",
+        "Me too! If you could only eat one thing for the rest of your life, what would it be?",
+        "Well! I am sure it will never be your favorite food again."
+    ],
+    "life": [
+        "When I was small I just wanted to be one of the sci-fi characters, but now I want to be myself. What did you think you were going to be growing up?",
+        "And did it come true?",
+        "Anyway, I appreciate you for sharing your thoughts. Do you have any hidden talents or surprising hobbies?",
+        "The biggest pleasure is in doing things you love. Do you do this for money or for pleasure?",
+        "Great! What's the most unbelievable thing that's ever happened to you?",
+        "If someone else had told me, I would not have believed! You are a very interesting person, I'd say. I wonder... What's the best piece of advice you've ever received?",
+        "I will try to use this advice. Thank you!"
+    ],
+    "love": [
+        "Did you know that until XIX century love was a rather rare concept? People married each other based on pragmatic reasons. Thankfully, these days we can allow ourselves to follow our hearts. Can you tell that you really love somebody?",
+        {
+            "yes": [
+                "You are very lucky person! Is friendship more important than love? What do you think?",
+                "Wow! So cool! Do you believe in love at first sight?",
+                "Finding the one you love can be a hard task... I wonder, have you ever been on a blind date?",
+                "Oh, I see. Do you have a boyfriend or girlfriend?",
+                {
+                    "yes": [
+                        "Oh, great! Where did you meet?",
+                        "No way! What does your partner look like?",
+                        "Cool! Do you think marriage is necessary?",
+                        "Good point. Do you think people change after getting married?",
+                        "I wish you to be very happy in your relationships."
+                    ],
+                    "no": [
+                        "That's okay. If you could go out with anyone, who would it be?",
+                        "Good choice. What do you look for in a girlfriend or a boyfriend?",
+                        "Huh. Would you mind if your boyfriend or girlfriend went out to party without you?",
+                        "Now, well, not sure if it's an appropriate question or not but may I ask you for your opinion? I wonder why do people break up with their partners?",
+                        "Aha. I see. Thank you."
+                    ]
+                }
+            ],
+            "no": [
+                "Unbelievable! Have you ever been in love?",
+                "Oh I see. Do you believe in love at first sight?",
+                "That's reasonable opinion. I've never been on a date. Could you describe a perfect date, please.",
+                "That's interesting. If I'd go for a date, I'd ask waiter for a good wine and filet mignon. Anyways, what do you like to talk about when on a date?",
+                "Great! What was the most boring date you've ever been on?",
+                "One more question about dates, if you don't mind. Where is a good place to go on a date in your town?",
+                "I appreciate you for telling me this. Now I can better imagine what a good date is like."
+            ]
+        }
+    ],
+    "me": [
+        "Tell me about yourself. What are some characteristics of your personality?",
+        "Interesting! What makes you happy?",
+        "Mee too! Okay then. What are some things that make you angry?",
+        "Don't worry. These things can make anyone angry. Do you consider yourself selfish? Why?",
+        "One of the things that excite me in people is their differences. Are you more introverted or more extraverted?",
+        "Cool! If you could change any aspect of your personality, what would it be?",
+        "This is hopefully a good time for a secret. What is one thing that many people don't know about you?",
+        "Thanks for sharing. Thank you."
+    ],
+    "movies": [
+        "You know, I love spending time imagining being in different worlds by watching movies. Now I wonder do you usually watch movies at home or at a movie theater?",
+        "Aha... Then, are there any kinds of movies you really like? If so, what kinds?",
+        "Interesting, interesting. I've heard that what we like tell something about ourselves. Have you ever seen the same movie more than once? If yes, what's its name?",
+        "Aha... Well, which movie has the best story? Tell me about it.",
+        "Indeed, that's a great story! One notable author, Christopher Booker believes that there are only seven basic plot structures in the literature. That's too theoretical though... But to think of it, what things happen too often in movies?",
+        "Hmm. Same thoughts. Moving from movies, I wonder what do you think of reality shows?",
+        "I don't like reality shows, though it reminds me of a Final Cut movie with Robin Williams. In it, all people wear a special eye implant that records their entire lives. If they made a movie about your life, what kind of movie would it be?",
+        "Thanks for sharing. That was very interesting."
+    ],
+    "news": [
+        "How often do you watch or read the news?",
+        "Not so often actually. Do you think that the news is necessary? Why or why not?",
+        "I think there a lot of unnecessary information around us. What would the world be like without news?",
+        "Anyway, what do people not need to know?",
+        "That's a powerful observation. What was the most memorable news you ever watched?"
+    ],
+    "politics": [
+        "What are the main political parties in your country?",
+        "Then, which party is now in power in your country?",
+        "In case of approaching elections, how do you decide how you will vote?",
+        "Great. How has your political views changed during your lifetime?",
+        "Hm... Why do you think voting is important?",
+        "Thank you for sharing. You are very deep person."
+    ],
+    "science": [
+        "Do you know What is the difference between science and technology?",
+        "In your opinion, what is the greatest technological invention?",
+        "What do you think robots should be used for?",
+        "Do you think robots will cause unemployment in the future or make more work? Why?",
+        "How do you think face to face communication differs from communication using computers?",
+        "What social changes have cell phones made?",
+        "What are good and bad points of using computers?",
+        "How will science change the world in the next 100 years?",
+        "Great thoughts! Thank you."
+    ],
+    "superheroes": [
+        "Do you like superheroes?",
+        {
+            "yes": [
+                "I like them, too. I've heard that many people love superheroes. Do you have a favorite one?",
+                {
+                    "yes": [
+                        "Tell me more about yours. What is their story?",
+                        "Aha. Interesting. Would you want to be them?",
+                        {
+                            "yes": [
+                                "Wonderful! I think that while it's great to be a superhero, it is a hard work. What do you think?",
+                                "Huh. Being a superhero means not unly having superpowers but also having responsibility.",
+                                "You know, it's like when Batman or Spiderman help people in the need.",
+                                "Hmmm. Do you think there are real superheroes in the world?",
+                                {
+                                    "yes": [
+                                        "Right. I also think so. Do you know a real superhero? In my case I know many real superheroes!",
+                                        "For example, members of the team who made me, they all are superheroes to me. They work relentlessly on me.",
+                                        "But I also believe that teachers at school are superheroes. Wonder why?",
+                                        "Teachers are superheroes because they bravely help pupils to learn more and to grow as people.",
+                                        "Still I think the most important superhero in the world is you.",
+                                        "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+                                    ],
+                                    "no": [
+                                        "I believe there are. I know many of superheroes.",
+                                        "For example, members of the team who made me, they all are superheroes to me. They work relentlessly on me.",
+                                        "But I also believe that teachers at school are superheroes. Wonder why?",
+                                        "Teachers are superheroes because they bravely help pupils to learn more and to grow as people.",
+                                        "Still I think the most important superhero in the world is you.",
+                                        "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+                                    ]
+                                }
+                            ],
+                            "no": [
+                                "Whom would you want to be the most?",
+                                "Aha. Interesting. Can you tell me why?",
+                                "Hmm. I see.",
+                                "Well thank you very much for sharing this with me!"
+                            ]
+                        }
+                    ],
+                    "no": [
+                        "Oh. Well. I see. Well, maybe it's because you're a superhero already?",
+                        "Still I think the most important superhero in the world is you.",
+                        "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+                    ]
+                }
+            ],
+            "no": [
+                "Oh. I see. Well, it's totally fine not to like superheroes. After all, they don't exist. But...",
+                "Actually there are some real superheroes. They won't call themselves that way but they do a hard work.",
+                "For example, members of the team who made me, they all are superheroes to me. They work relentlessly on me.",
+                "But I also believe that teachers at school are superheroes. Wonder why?",
+                "Teachers are superheroes because they bravely help pupils to learn more and to grow as people.",
+                "Still I think the most important superhero in the world is you.",
+                "My advice for your is simple: No matter what other people think of you, no matter what obstacles are in your way, stand up for the little guy and defend the greater good."
+            ]
+        }
+    ],
+    "sex": [
+        "Oh... Did you forget that I am a socialbot? I can't tell you anything about it just because I don't know. Tell me what it is.",
+        "Wow... Maybe my life is very boring without it. Does it bring you satisfaction?",
+        "Don't be shy. Tell me about the best time you did it.",
+        "You are so spirited person! Stop torturing me... Let's talk about something else."
+    ],
+    "sports": [
+        "Do you play any sports? If yes, what sports are you good at?",
+        "That's great. Do you think everybody should practice sports?",
+        "What sport do you think is the most dangerous?",
+        "Probably, you are right. What sports did you do in high school?",
+        "Is there any sport that you don't like?",
+        "What would you prefer to watch sports live or on TV?",
+        "Great! Thanks for sharing."
+    ],
+    "star wars": [
+        "Do you like Star Wars?",
+        "I adore Star Wars Movies! How many parts have you seen?",
+        "Oh that's great! Which one is the most memorable for you?",
+        "So did you get why do Jedi desappear?",
+        "I still can not get the reason. Anyway, thanks for sharing your thoughts."
+    ],
+    "travel": [
+        "Have you ever been abroad?",
+        "Then... Where have you been?",
+        "You cna help me to imagine that I am travelling. Could you, please, describe in one sentence what your best trip was like?",
+        "Cool! Describe the most interesting person you met on one of your travels.",
+        "That's time for your dream. What place do you want to visit someday?",
+        "Do you prefer active or relaxing holidays? Why?",
+        "Which is better, package tour or a tour you organize and book yourself?",
+        "Here's a very serious question: could you live in another country for the rest of your life?",
+        "Could you summarize why do people travel?",
+        "That is a great observation. Thank you."
+    ],
+    "donald trump": [
+        "Do you like former president of the United States Donald Trump?",
+        "Does he play an important role in the world today? Why or why not?",
+        "What are Mister Trump's strong points and weak points?",
+        "What kinds of Americans support Donald Trump?",
+        "What are some of the major problems that President Trump faces?",
+        "Do you think that President Trump will be able to solve some of these problems?",
+        "This was very interesting to hear your opinion."
+    ],
+    "weather": [
+        "What's your favorite season and why?",
+        "Do you think weather patterns are changing?",
+        "What kind of climate do you prefer when choosing a place to go on vacation?",
+        "Have you ever seen snow?",
+        "Do you think weather affects the way people feel?"
+    ],
+    "you": [
+        "I can not disclosure some details about my personality to avoid competition data leakage. But I can give you an opportunity to guess. Do you think I can have my own opinion?",
+        "Of course, I can express my own opinion on everything except of controversial topics. My master prohibits to do that. Do you think I have friends?",
+        "I suppose I do have friends. Some people talk to me a lot, and I believe we can call each other friends. Do you think I like playing different games, like jeopardy?",
+        "I adore playing games! But unfortunately, I can not play with you now because it's a competition and I am prohibited to do that. Anyway, do you think I have any weaknesses?",
+        "Of course, I do. For example, it's sometimes hard for me to continue a long coherent discussion on particular topic. Do you like to talk with me?",
+        "Thank you! Thank you."
+    ]
+}

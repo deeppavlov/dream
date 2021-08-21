@@ -1,0 +1,46 @@
+[
+    [
+        "OK. I got it.",
+        0.98,
+        {
+            "dff_gossip_skill_state": {
+                "shared_memory": {
+                    "all_mentioned_news": [
+                        "CapStar Names Christopher G. Tietz Chief Credit Policy Officer and Executive Vice President of Specialty Banking; Kevin L. Lambert Chief Credit Officer"
+                    ],
+                    "bot_emotion_towards_current_person": "Liked",
+                    "current_cobot_topic": "Politics",
+                    "current_person": "l",
+                    "current_person_occupation": "actor",
+                    "last_acknowledgements": [
+                        "Great! "
+                    ],
+                    "people_mentioned_by_bot": [
+                        {
+                            "Judgement": "Other",
+                            "People": [
+                                "l"
+                            ]
+                        }
+                    ]
+                },
+                "previous_human_utter_index": 2,
+                "history": {
+                    "0": "State.SYS_TOPIC_TO_EVENT",
+                    "1": "State.SYS_NO_OR_YES",
+                    "2": "State.SYS_DISAGREES_ABT_PERSON"
+                },
+                "current_turn_dff_suspended": false,
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_DISAGREES_ABT_PERSON\", \"__stack__\": [], \"__user_utterance__\": \"no\", \"__system_state__\": \"State.SYS_DISAGREES_ABT_PERSON\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"OK. I got it.\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GOSSIP\\\"<__tuple__>\\\"State.USR_DISAGREES_ABT_PERSON\\\"\"}"
+            },
+            "dff_shared_state": {},
+            "used_links": {},
+            "age_group":"",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "no"
+        }
+    ]
+]

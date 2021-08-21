@@ -1,0 +1,38 @@
+{
+  "chainer": {
+    "in": [
+      "states_batch"
+    ],
+    "out": [
+      "skill_names"
+    ],
+    "pipe": [
+      {
+        "class_name": "intents_based_selector",
+        "in": [
+          "states_batch"
+        ],
+        "out": [
+          "skill_names"
+        ]
+      }
+    ]
+  },
+  "train": {
+    "validate_best": false,
+    "test_best": false,
+    "batch_size": 10000
+  },
+  "metadata": {
+    "imports": [
+      "skill_selectors.alexa_skill_selectors.intents_based_selector"
+    ],
+    "labels": {
+      "server_utils": "RuleBasedSkillSelector"
+    },
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads"
+    }
+  }
+}

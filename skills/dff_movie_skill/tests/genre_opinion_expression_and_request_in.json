@@ -1,0 +1,707 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673177719116
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989813566207886
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737921953201294
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.009537387639284134,
+                            "conversational": 0.990462601184845
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003737201215699315,
+                                "command": 0.014534037560224533,
+                                "comment": 0.007815582677721977,
+                                "complaint": 0.01387196034193039,
+                                "dev_command": 0.011961274780333042,
+                                "neg_answer": 0.0012791294138878584,
+                                "open_question_factual": 0.007067359518259764,
+                                "open_question_opinion": 0.0020942059345543385,
+                                "opinion": 0.02820507064461708,
+                                "other_answers": 0.002917045960202813,
+                                "pos_answer": 0.003618009854108095,
+                                "statement": 0.8965854644775391,
+                                "yes_no_question": 0.006313652731478214
+                            }
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "entity_detection": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
+                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
+                                    "publishedAt": "2021-05-15T04:31:01Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
+                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                },
+                {
+                    "text": "i like comedies. do you like them?",
+                    "annotations": {
+                        "spelling_preprocessing": "i like comedies do you like them",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0013000797480344772,
+                            "conversational": 0.9986999034881592
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9983388185501099,
+                                "Information_RequestIntent": 0.9993046522140503
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9990026354789734,
+                                "Other": 0.8845449090003967
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9989546537399292,
+                                "Phatic": 0.9992108941078186
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9992374777793884
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6495621204376221
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0019210278987884521
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "comedies"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "i like comedies. do you like them?",
+                            "segments": [
+                                "i like comedies.",
+                                "do you like them?"
+                            ]
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "comedies",
+                                "them"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "genre",
+                                    "text": "comedies"
+                                },
+                                {
+                                    "label": "anaphor",
+                                    "text": "them"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Movies_TV",
+                                "Phatic"
+                            ]
+                        },
+                        "conceptnet": {
+                            "comedies": {
+                                "Causes": [
+                                    "laughter",
+                                    "be entertain",
+                                    "entertainment"
+                                ],
+                                "CausesDesire": [
+                                    "watch television",
+                                    "watch tv",
+                                    "laugh at joke"
+                                ],
+                                "HasProperty": [
+                                    "funny",
+                                    "sad",
+                                    "stupid"
+                                ],
+                                "SymbolOf": [
+                                    "life",
+                                    "stupidity",
+                                    "comedy"
+                                ]
+                            }
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent",
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other",
+                                "Other"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.8202200531959534,
+                                    0.7005651593208313,
+                                    0.7005651593208313,
+                                    0.8570498824119568,
+                                    0.5629348754882812
+                                ],
+                                "entity_ids": [
+                                    "Q2364709",
+                                    "Q5325474",
+                                    "Q5288493",
+                                    "Q3132909",
+                                    "Q7760513"
+                                ],
+                                "entity_pages": [
+                                    "The Alice Comedies are a series of Animated/live-action shorts created by Walt Disney in the 1920s, in which a live action little girl named Alice (originally played by Virginia Davis) and an animated cat named Julius have adventures in an animated landscape.",
+                                    ":For the film Ealing Comedy, see Ealing Comedy (film)."
+                                ],
+                                "entity_pages_titles": [
+                                    "Alice Comedies",
+                                    "Ealing comedies",
+                                    "Dogville Comedies",
+                                    "The Revengers' Comedies"
+                                ],
+                                "entity_substr": "comedies",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            },
+                            {
+                                "confidences": [],
+                                "entity_ids": [],
+                                "entity_pages": [],
+                                "entity_pages_titles": [],
+                                "entity_substr": "them",
+                                "tokens_match_conf": []
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 85,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "comedies",
+                                        "start": 77,
+                                        "text": "comedies"
+                                    },
+                                    {
+                                        "end": 103,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "comedies",
+                                        "start": 99,
+                                        "text": "them"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                                "i like comedies. do you like comedies?"
+                            ]
+                        },
+                        "fact_retrieval": [
+                            "The Alice Comedies are a series of Animated/live-action shorts created by Walt Disney in the 1920s, in which a live action little girl named Alice (originally played by Virginia Davis) and an animated cat named Julius have adventures in an animated landscape.",
+                            ":For the film Ealing Comedy, see Ealing Comedy (film)."
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {
+                                "comedies": {
+                                    "conf": 0.8202200531959534,
+                                    "entity_label": "Alice Comedies",
+                                    "instance of": [
+                                        [
+                                            "Q24856",
+                                            "film series"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q2364709",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q24856",
+                                            "film series"
+                                        ],
+                                        [
+                                            "Q7725310",
+                                            "series of creative works"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q196600",
+                                            "media franchise"
+                                        ],
+                                        [
+                                            "Q838948",
+                                            "work of art"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "comedies": {
+                                    "conf": 0.8202200531959534,
+                                    "entity_label": "Alice Comedies",
+                                    "instance of": [
+                                        [
+                                            "Q24856",
+                                            "film series"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q2364709",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q24856",
+                                            "film series"
+                                        ],
+                                        [
+                                            "Q7725310",
+                                            "series of creative works"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q196600",
+                                            "media franchise"
+                                        ],
+                                        [
+                                            "Q838948",
+                                            "work of art"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements. (AP Photo/Susan Walsh, File... [6289 chars]",
+                                    "description": "FILE - In this photo March 22, 2013 file photo, the exterior of the Internal Revenue Service (IRS) building in Washington. Lawmakers are increasingly looking at boosting the IRS to help pay for infrastructure improvements.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/c34884747805457cb36ead260bcffb75/3000.jpeg",
+                                    "publishedAt": "2021-05-15T04:31:01Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "IRS to the rescue? Tax audits eyed for infrastructure cash",
+                                    "url": "https://apnews.com/article/personal-taxes-business-government-and-politics-e6151149b8fdba343a9053e5942c0679"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "comedies",
+                                "news": {
+                                    "content": "ABC has passed on three more pilots. Drama Acts of Crime and comedies Black Don\u2019t Crack and Bucktown will not be picked up to series. They join comedy pilot Adopted, whose team was notified of ABC\u2019s decision not to proceed with it Thursday night.\nPri... [2700 chars]",
+                                    "description": "ABC has passed on three more pilots. Drama Acts of Crime and comedies Black Don\u2019t Crack and Bucktown will not be picked up to series. They join comedy pilot Adopted, whose team was notified of ABC\u2019s decision not to proceed with it Thursday night.",
+                                    "image": "https://deadline.com/wp-content/uploads/2021/01/ABC-Logo-featured.jpg?w=1000",
+                                    "publishedAt": "2021-05-14T21:30:10Z",
+                                    "source": {
+                                        "name": "Deadline",
+                                        "url": "https://deadline.com"
+                                    },
+                                    "title": "ABC Pilots Update: Drama \u2018Acts Of Crime\u2019, Comedies \u2018Black Don\u2019t Crack\u2019, \u2018Bucktown\u2019 Not Moving Forward",
+                                    "url": "https://deadline.com/2021/05/abc-pilots-update-drama-acts-of-crime-comedies-black-dont-crack-bucktown-not-moving-forward-1234756614/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "alexa prize",
+                                "news": {
+                                    "content": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices.\nJoin Transform 2021 for the most important themes in enterprise AI & Data. Learn mo... [5218 chars]",
+                                    "description": "From podcasts to Clubhouse, branded audio is more important than ever. Learn how brands are increasing customer loyalty and personalization with these best practices. Join Transform 2021 for the most important themes in enterprise AI & Data.",
+                                    "image": "https://venturebeat.com/wp-content/uploads/2020/01/amazon-alexa-echo-studio-echo-flex-fire-tv-cube-2.jpg?w=1200&strip=all",
+                                    "publishedAt": "2021-03-11T14:00:34Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Multitasking chatbots are the new Amazon Alexa Prize challenge",
+                                    "url": "https://venturebeat.com/2021/03/11/multitasking-chatbots-are-the-new-amazon-alexa-prize-challenge/"
+                                },
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?",
+                            "segments": [
+                                "Hi, this is an Alexa Prize Socialbot!",
+                                "What do you do on weekdays?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "alexa prize",
+                                    "type": "MISC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! What do you do on weekdays?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_movie_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "comedy": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "comedies",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "comedy"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

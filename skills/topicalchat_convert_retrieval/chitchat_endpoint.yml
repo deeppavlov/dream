@@ -1,0 +1,35 @@
+parameters:
+  - in: body
+    name: placeholder
+    schema:
+      type: object
+      required:
+        - utterances_histories
+        - topics
+      properties:
+        personality:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        utterances_histories:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        topics:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+      example:
+        {
+          "utterances_histories": [["hello", "hi", "how are you"]],
+          "topics": [["sport", "animals", "book"]],
+        }
+responses:
+  200:
+    description: Skill response

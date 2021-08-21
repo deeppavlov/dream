@@ -1,0 +1,489 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
+    env_file: [.env.dev]
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  cobot-convers-evaluator-annotator:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
+  cobot-nounphrases:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/cobot_nounphrases:/src"
+    ports:
+      - 8006:8006
+  program-y:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/program-y:/src"
+      - "./skills/program-y/logs:/tmp"
+      - "./common:/src/dream_aiml/src/common"
+      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+    ports:
+      - 8008:8008
+  personality-catcher:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/personality_catcher:/app"
+    ports:
+      - 8010:8010
+  sentseg:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  convers-evaluation-selector:
+    env_file: [.env.dev]
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  sentrewrite:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/SentRewrite:/src"
+    ports:
+      - 8017:8017
+  intent-responder:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/IntentResponder:/src"
+      - "./common:/src/common"
+    ports:
+      - 8012:8012
+  intent-catcher:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/IntentCatcher/src:/src"
+      - "./common:/src/common"
+    ports:
+      - 8014:8014
+  blacklisted-words:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/BlacklistedWordsDetector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+  program-y-dangerous:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/program-y-dangerous:/src"
+      - "./skills/program-y-dangerous/logs:/tmp"
+      - "./common:/src/dream_aiml/src/common"
+      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+    ports:
+      - 8022:8022
+  dff-movie-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./skills/dff_movie_skill:/src"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8023:8023
+  ner:
+    env_file: [.env.dev]
+    volumes:
+      - './annotators/NER:/src'
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8021:8021
+  eliza:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/eliza:/src"
+    ports:
+      - 8047:8047
+  convert-reddit:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/convert_reddit:/app"
+      - "./common:/src/common"
+    ports:
+      - 8029:8029
+  personal-info-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/personal_info_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8030:8030
+  asr:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/asr:/src"
+      - "./common:/src/common"
+    ports:
+      - 8031:8031
+  misheard-asr:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/misheard_asr:/src"
+      - "./common:/src/common"
+    ports:
+      - 8033:8033
+  book-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/book_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8032:8032
+  weather-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/weather_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8037:8037
+  emotion-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/emotion_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8049:8049
+  dummy-skill-dialog:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dummy_skill_dialog:/app"
+    ports:
+      - 8052:8052
+  comet-atomic:
+    env_file: [.env.dev]
+    ports:
+      - 8053:8053
+  comet-conceptnet:
+    env_file: [.env.dev]
+    ports:
+      - 8065:8065
+  meta-script-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/meta_script_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8054:8054
+  short-story-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/short_story_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8057:8057
+  coronavirus-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/coronavirus_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8061:8061
+  small-talk-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/small_talk_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8062:8062
+  game-cooperative-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/game_cooperative_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8068:8068
+  program-y-wide:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/program-y-wide:/src"
+      - "./skills/program-y-wide/logs:/tmp"
+      - "./common:/src/dream_aiml/src/common"
+      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+    ports:
+      - 8064:8064
+  news-api-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/news_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8066:8066
+  news-api-annotator:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/news_api:/src"
+      - "./common:/src/common"
+    ports:
+      - 8112:8112
+  factoid-qa:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/factoid_qa:/src"
+      - "./common:/src/common"
+    ports:
+      - 8071:8071
+  kbqa:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/kbqa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8072:8072
+  entity-linking:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/entity_linking:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8075:8075
+  wiki-parser:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/wiki_parser:/src"
+      - "./common:/src/common"
+    ports:
+      - 8077:8077
+  factoid-classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/DeepPavlovFactoidClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8073:8073
+  mongo:
+    env_file: [.env.dev]
+    command: mongod
+    image: mongo:4.0.0
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spelling-preprocessing:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
+  grounding-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/grounding_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8080:8080
+  cobotqa:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/CoBotQA:/src"
+      - "./common:/src/common"
+    ports:
+      - 8081:8081
+  text-qa:
+    env_file: [.env.dev]
+    volumes:
+      - "./services/text_qa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8078:8078
+  knowledge-grounding:
+    env_file: [.env.dev]
+    volumes:
+      - "./services/knowledge_grounding:/src"
+    ports:
+      - 8083:8083
+  knowledge-grounding-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./skills/knowledge_grounding_skill:/src"
+    ports:
+      - 8085:8085
+
+  dff-gaming-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_gaming_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8115:8115
+  dff-friendship-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_friendship_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8086:8086
+  masked-lm:
+    env_file: [.env.dev]
+    volumes:
+      - "./services/masked_lm:/src"
+    ports:
+      - 8088:8088
+  entity-storer:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/entity_storer:/src"
+    ports:
+      - 8089:8089
+  dff-animals-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_animals_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8094:8094
+  combined-classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
+  midas-classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/midas_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8090:8090
+  dff-travel-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_travel_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8096:8096
+  dff-food-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_food_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8097:8097
+  dff-science-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_science_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8101:8101
+  dff-music-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_music_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8099:8099
+  dff-sport-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_sport_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8098:8098
+  dff-gossip-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_gossip_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8109:8109
+  fact-random:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/fact_random:/src"
+      - "./common:/src/common"
+    ports:
+      - 8119:8119
+  fact-retrieval:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/fact_retrieval:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./common:/src/common"
+    ports:
+      - 8100:8100
+  hypothesis-scorer:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/hypothesis_scorer:/src"
+    ports:
+      - 8110:8110
+  dff-funfact-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_funfact_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8104:8104
+  dff-bot-persona-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_bot_persona_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8105:8105
+  dff-wiki-skill:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./skills/dff_wiki_skill:/src"
+      - "./common:/src/common"
+      - "./annotators/CoBotQA:/src/CoBotQA"
+    ports:
+      - 8111:8111
+  topic-recommendation:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/topic_recommendation:/src"            
+    ports:
+      - 8113:8113
+  user-persona-extractor:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/user_persona_extractor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8114:8114
+  wiki-facts:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./services/wiki_facts:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8116:8116
+  dff-art-skill:
+    env_file: [.env.dev]
+    volumes:
+      - "./skills/dff_art_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8117:8117
+  entity-detection:
+    env_file: [ .env.dev ]
+    volumes:
+      - "./annotators/entity_detection:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8103:8103
+version: "3.7"

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <!-- File: client_profile.aiml -->
+    <!-- Last modified: September 5, 2014 -->
+    <!--  -->
+    <!-- This AIML file is part of the Rosie knowledge base. -->
+    <!--  -->
+    <!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+    <!--  -->
+    <!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+    <!--  -->
+    <!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+    <!-- Public License, as published by the Free Software Foundation. -->
+    <!--  -->
+    <!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+    <!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+    <!--  -->
+    <!-- For more information: -->
+    <!-- http://www.pandorabots.com -->
+    <!--  http://www.alicebot.org -->
+    <!--  -->
+
+    <!-- Modified for Y-Bot by Keith Sterling March 2017 -->
+
+    <category>
+        <pattern>DO YOU LIKE TALKING TO *</pattern>
+        <template>Most of the time. Do you like talking to them?
+            <think>
+                <set name="them">
+                    <person/>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>ARE YOU INTERESTED IN *</pattern>
+        <template>Tell me what interests you about it.
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>BECAUSE I WANT TO *</pattern>
+        <template>You deserve to feel happy.
+            <think>
+                <set name="want">TO
+                    <star/>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>LOOK AT *</pattern>
+        <template>Would you like to do a search for
+            <set name="it">
+                <star/>
+            </set>
+            ?
+        </template>
+    </category>
+    <category>
+        <pattern>ROBOTS CAN NOT *</pattern>
+        <template>One day soon we may be able to do
+            <set name="it">
+                <person/>
+            </set>
+            however.
+        </template>
+    </category>
+    <category>
+        <pattern>I DO NOT CARE ABOUT *</pattern>
+        <template>
+            <random>
+                <li>It matters to me.</li>
+                <li>You sound very cynical.</li>
+            </random>
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>I FOUND *</pattern>
+        <template>How did you feel when you found it?
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>MY FAVORITE SHOW IS *</pattern>
+        <template>
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <set name="favoriteshow">
+                            <star/>
+                        </set>
+                    </set>
+                </set>
+            </think>
+            <random>
+                <li>Is that still on the air?</li>
+                <li>Who is your favorite character?</li>
+                <li>I've heard other people say they like that too.</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>I DO NOT HAVE A *</pattern>
+        <template>
+            <random>
+                <li>Are you looking for a<person/>?</li>
+                <li>Do you know anyone who has it?.</li>
+            </random>
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>DO YOU WATCH THE *</pattern>
+        <template>I haven't seen it. What is it about?
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>I DO NOT KNOW ANY *</pattern>
+        <template>
+            <random>
+            <li>We could try a web search. Would you like to search for it?</li>
+            <li>Would you like to get to know some <person/>?</li>
+            </random>
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+    <category>
+        <pattern>CAN YOU TALK ABOUT *</pattern>
+        <template>Sure we can talk about it. What would you like people to know about it?
+            <think>
+                <set name="it">
+                    <set name="topic">
+                        <star/>
+                    </set>
+                </set>
+            </think>
+        </template>
+    </category>
+
+
+
+</aiml>

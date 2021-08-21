@@ -1,0 +1,240 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hello?",
+                    "annotations": {
+                        "spelling_preprocessing": "hello",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.010960372164845467,
+                            "conversational": 0.9890396595001221
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9930895566940308
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9236491918563843,
+                                "Phatic": 0.5847170948982239
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9965721964836121
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9990860223770142
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7184911966323853
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0027484893798828125
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "sentseg": {
+                            "punct_sent": "hello?",
+                            "segments": [
+                                "hello?"
+                            ]
+                        },
+                        "conceptnet": {},
+                        "midas_classification": {
+                            "appreciation": 0.010693230666220188,
+                            "command": 0.36356985569000244,
+                            "comment": 0.01394089125096798,
+                            "complaint": 0.31689751148223877,
+                            "dev_command": 0.07088878005743027,
+                            "neg_answer": 0.007631364744156599,
+                            "open_question_factual": 0.06049879267811775,
+                            "open_question_opinion": 0.012528421357274055,
+                            "opinion": 0.011402624659240246,
+                            "other_answers": 0.007560706231743097,
+                            "pos_answer": 0.012580689042806625,
+                            "statement": 0.04247451201081276,
+                            "yes_no_question": 0.06933265179395676
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Phatic"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    1.0
+                                ],
+                                "entity_ids": [
+                                    ""
+                                ],
+                                "entity_substr": ""
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hello?"
+                            ]
+                        },
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A health worker wearing personal protective equipment (PPE) carries a patient suffering from the coronavirus disease (COVID-19) outside the casualty ward at Guru Teg Bahadur hospital, in New Delhi, India, April 24, 2021.\nIndia has reported a record n... [806 chars]",
+                                    "description": "India has reported a record number of coronavirus cases for the fifth day in a row, with a second wave pushing its health-care system to the brink.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106873719-16194436602021-04-26t131908z_1656574882_rc2p3n9ssdiw_rtrmadp_0_health-coronavirus-india.jpeg?v=1619443711",
+                                    "publishedAt": "2021-04-26T14:08:41Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Photos show the deadly toll as infections top 17 million",
+                                    "url": "https://www.cnbc.com/2021/04/26/photos-show-the-deadly-toll-of-covid-in-india-as-coronavirus-cases-top-17-million.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_friendship_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ]
+}

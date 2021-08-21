@@ -1,0 +1,6 @@
+Flask==1.1.1
+sentry_sdk==0.12.2
+neuralcoref==4.0
+spacy==2.1.0
+gunicorn==19.9.0
+nltk==3.2.5

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <category>
+        <pattern> ^ MONTH ^</pattern>
+        <template>
+            MONTH_ANSWER
+        </template>
+    </category>
+
+   <category>
+        <pattern> ^ MONTHLY ^ </pattern>
+        <template>
+            <srai>MONTH</srai>
+        </template>
+    </category>
+</aiml>

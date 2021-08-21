@@ -1,0 +1,359 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "let's talk about animals.",
+                    "annotations": {
+                        "spelling_preprocessing": "let's talk about animals",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.002137747360393405,
+                            "conversational": 0.9978622794151306
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9934319257736206
+                            },
+                            "cobot_dialogact_topics": {
+                                "Science_and_Technology": 0.9861173033714294
+                            },
+                            "cobot_topics": {
+                                "Pets_Animals": 0.998772144317627
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997689723968506
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7102900147438049
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003810584545135498
+                            }
+                        },
+                        "cobot_nounphrases": [
+                            "animals"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "let's talk about animals.",
+                            "segments": [
+                                "let's talk about animals."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": {
+                            "abandon": 0.0016179774278240486,
+                            "appreciation": 0.00015970167637119513,
+                            "back-channeling": 9.33365934641267e-05,
+                            "clarifying_question": 0.0002840848487311445,
+                            "closing": 0.000585925839303519,
+                            "command": 0.987339138198968,
+                            "comment": 4.598332989261548e-05,
+                            "complaint": 0.0006379416207909488,
+                            "correction": 0.00011469985814710146,
+                            "dev_command": 0.0017318305537270648,
+                            "hold": 0.0005893213025888497,
+                            "neg_answer": 0.00010009680728021953,
+                            "non_compliant": 0.00024506718900628937,
+                            "nonsense": 0.00121377996577674,
+                            "open_question_factual": 0.000417672138027324,
+                            "open_question_opinion": 0.0009413682135288614,
+                            "open_question_personal": 0.00014646683779671703,
+                            "opening": 0.00016650438150093703,
+                            "opinion": 0.0007559363228620702,
+                            "other_answers": 9.497779670519058e-05,
+                            "pos_answer": 0.001061399887505406,
+                            "statement": 0.00021967319461407985,
+                            "uncertain": 0.00011862658636149136,
+                            "yes_no_question": 0.0013184894292265744
+                        },
+                        "dialog_breakdown": {
+                            "breakdown": 0.18198749423027039,
+                            "no_breakdown": 0.818012535572052
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "Information_RequestIntent"
+                            ],
+                            "topics": [
+                                "Science_and_Technology"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_topics": {
+                            "text": [
+                                "Pets_Animals"
+                            ]
+                        },
+                        "entity_linking": [
+                            [
+                                [
+                                    "Q729",
+                                    "Q28914701",
+                                    "Q17716087",
+                                    "Q14565308",
+                                    "Q206216"
+                                ]
+                            ],
+                            [
+                                [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about animals."
+                            ]
+                        },
+                        "odqa": {
+                            "answer": "",
+                            "answer_pos": -1,
+                            "answer_sentence": "",
+                            "confidence": 0.9901766180992126,
+                            "first_par": "",
+                            "paragraph": "On July 14, 1958, Nippon Television aired Mogura no Abanchu\u0304ru (Mole's Adventure), both the first televised and first color anime to debut. It wasn't until the 1960s when the first televised series were broadcast and it has remained a popular medium since. Works released in a direct to video format are called original video animation (OVA) or original animation video (OAV); and are typically not released theatrically or televised prior to home media release.",
+                            "qa_system": "odqa",
+                            "topical_chat_fact": ""
+                        },
+                        "wiki_parser": [
+                            {
+                                "animal": {
+                                    "instance of": [
+                                        [
+                                            "Q16521",
+                                            "taxon"
+                                        ]
+                                    ],
+                                    "subclass of": [
+                                        [
+                                            "Q7239",
+                                            "organism"
+                                        ]
+                                    ],
+                                    "start time": [
+                                        [
+                                            "\"-665000000-00-00^^T\"",
+                                            "0000"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q1469725",
+                                            "animal taxonomy"
+                                        ],
+                                        [
+                                            "Q2990593",
+                                            "animal behavior"
+                                        ],
+                                        [
+                                            "Q3007160",
+                                            "animal culture"
+                                        ],
+                                        [
+                                            "Q925958",
+                                            "animal locomotion"
+                                        ]
+                                    ]
+                                }
+                            }
+                        ],
+                        "kbqa": [
+                            "Not Found",
+                            0.0
+                        ],
+                        "conceptnet": {
+                            "animals": {
+                                "Causes": [
+                                    "death",
+                                    "change",
+                                    "food"
+                                ],
+                                "CausesDesire": [
+                                    "play frisbee",
+                                    "run",
+                                    "explore"
+                                ],
+                                "HasProperty": [
+                                    "curious about world",
+                                    "curious",
+                                    "very curious"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "life",
+                                    "innocence"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_animals_skill_state_batch": [
+        {
+            "shared_memory": {
+                "my_pets_info": {
+                    "cat": {
+                        "name": "Thomas",
+                        "breed": "Maine Coon",
+                        "sentence": "I have a cat named Thomas. He is a big fluffy Maine Coon."
+                    },
+                    "dog": {
+                        "name": "Jack",
+                        "breed": "German Shepherd",
+                        "sentence": "I have a dog named Jack. He is a German Shepherd. He is very cute."
+                    }
+                }
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "animal": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9997689723968506
+                        },
+                        "full_name": "animals",
+                        "human_utterance_index": 0,
+                        "intents": [
+                            "lets_chat_about",
+                            "Information_RequestIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "pre_start",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Pets_Animals",
+                            "Science_and_Technology"
+                        ]
+                    }
+                ],
+                "name": "animal"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "random_seed": 2718
+}

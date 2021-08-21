@@ -1,0 +1,274 @@
+{
+  "utterances": [
+    {
+      "text": "Do you like Iron Man?",
+      "annotations": {
+        "fact_retrieval": [
+          "Throughout the character\u2019s comic book series, technological advancement and national defense were constant themes for Iron Man, but later issues developed Stark into a more complex and vulnerable character as they depicted his battle with alcoholism (as in the Demon in a Bottle storyline) and other personal difficulties."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Sure do! Robert Downey Jr. is a favorite.",
+      "annotations": {
+        "fact_retrieval": [
+          "His favorite actors are Johnny Depp, Leonardo DiCaprio, Matt Damon, and Robert Downey Jr. Jesse attended St. Michael's College School in downtown Toronto.",
+          "His first marriage was to actress Elsie Ann Downey (ne\u0301e Ford), with whom he had two children: actress-writer Allyson Downey and actor Robert Downey Jr.",
+          "Robert John Downey Jr. (born April 4, 1965) is an American actor and singer."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Yes i like him too did you know he also was in Zodiac a crime fiction film.",
+      "annotations": {
+        "fact_retrieval": [
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "After his experiences working on the film, Travolta began to teach film to autistic children at camps in California, Florida, and Michigan."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "I like crime fiction! Didn't know RDJ was in there. Jake Gyllenhaal starred as well.",
+      "annotations": {
+        "fact_retrieval": [
+          "She starred as FBI Supervisory Special Agent and Medical Examiner Mae Jarvis on the CBS crime drama series .",
+          "The novel was adapted for a 1993 movie of the same name, which starred Debra Winger, Gabriel Byrne, David Strathairn, Barbara Hershey, Maggie Gyllenhaal and Jake Gyllenhaal.",
+          "In 1999, Gyllenhaal starred in the Joe Johnston-directed drama October Sky; the film was received warmly by critics, and Gyllenhaal's portrayal of the NASA engineer Homer Hickam was praised."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "So he did he also starred in End of Watch have you ever seen that movie?",
+      "annotations": {
+        "fact_retrieval": [
+          "Owing to no overseas Theatrical release, a legal online release gives the producers of the movie an additional source of income.",
+          "Mayank Shekhar of Hindustan Times gave 2 stars out of 5, saying that The movie acquires rhythms of a TV show, like so many do.",
+          "Janhavi Samant of Mid-Day gave the movie 0.5/5 stars, stating that The whole film is pretty much avoidable."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Yes I have! I like films directed by David Ayer. How about you?",
+      "annotations": {
+        "fact_retrieval": [
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "After his experiences working on the film, Travolta began to teach film to autistic children at camps in California, Florida, and Michigan."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "I have not what genre is End of Watch.",
+      "annotations": {
+        "fact_retrieval": [
+          "Hawley's first thought when looking at the genre is if we remove the genre, is there a compelling show you want to watch there?",
+          "He says, I don\u2019t believe in the brainless entertainer genre.",
+          "\u201cWe decided to make our own genre because we couldn\u2019t figure out where we fit."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "It's a thriller and crime fiction as well.",
+      "annotations": {
+        "fact_retrieval": [
+          "The Ngaio Marsh Awards (formerly Ngaio Marsh Award), popularly called the Ngaios, are literary awards presented annually in New Zealand to recognise excellence in crime fiction, mystery, and thriller writing.",
+          "Margot Bennett (1 January 1912 \u2013 6 December 1980) was a Scottish screenwriter and author of crime and thriller novels.",
+          "The Ngaio Marsh Award for Best Crime Novel was launched in 2010 by lawyer turned journalist Craig Sisterson, who wanted to create an opportunity for great New Zealand crime, mystery, and thriller writing to be recognised and celebrated."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Could you recommend any books like The Secret Life of Bees?",
+      "annotations": {
+        "fact_retrieval": [
+          "The book has also been heavily criticized by former believers and practitioners, with some claiming that the concept of the Secret was conceived by the author and that the only people generating wealth and happiness from it are the author and the publishers.",
+          "To bring joy to the world, the Secret creates life-transforming tools in the mediums of books, films, and multi-media.",
+          "To bring joy to the world, the Secret creates life-transforming tools in the mediums of books, films, and multi-media."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    }
+  ],
+  "bot_utterances": [
+    {
+      "text": "Sure do! Robert Downey Jr. is a favorite.",
+      "annotations": {
+        "fact_retrieval": [
+          "His favorite actors are Johnny Depp, Leonardo DiCaprio, Matt Damon, and Robert Downey Jr. Jesse attended St. Michael's College School in downtown Toronto.",
+          "His first marriage was to actress Elsie Ann Downey (ne\u0301e Ford), with whom he had two children: actress-writer Allyson Downey and actor Robert Downey Jr.",
+          "Robert John Downey Jr. (born April 4, 1965) is an American actor and singer."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "I like crime fiction! Didn't know RDJ was in there. Jake Gyllenhaal starred as well.",
+      "annotations": {
+        "fact_retrieval": [
+          "She starred as FBI Supervisory Special Agent and Medical Examiner Mae Jarvis on the CBS crime drama series .",
+          "The novel was adapted for a 1993 movie of the same name, which starred Debra Winger, Gabriel Byrne, David Strathairn, Barbara Hershey, Maggie Gyllenhaal and Jake Gyllenhaal.",
+          "In 1999, Gyllenhaal starred in the Joe Johnston-directed drama October Sky; the film was received warmly by critics, and Gyllenhaal's portrayal of the NASA engineer Homer Hickam was praised."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Yes I have! I like films directed by David Ayer. How about you?",
+      "annotations": {
+        "fact_retrieval": [
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "After his experiences working on the film, Travolta began to teach film to autistic children at camps in California, Florida, and Michigan."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "It's a thriller and crime fiction as well.",
+      "annotations": {
+        "fact_retrieval": [
+          "The Ngaio Marsh Awards (formerly Ngaio Marsh Award), popularly called the Ngaios, are literary awards presented annually in New Zealand to recognise excellence in crime fiction, mystery, and thriller writing.",
+          "Margot Bennett (1 January 1912 \u2013 6 December 1980) was a Scottish screenwriter and author of crime and thriller novels.",
+          "The Ngaio Marsh Award for Best Crime Novel was launched in 2010 by lawyer turned journalist Craig Sisterson, who wanted to create an opportunity for great New Zealand crime, mystery, and thriller writing to be recognised and celebrated."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    }
+  ],
+  "human_utterances": [
+    {
+      "text": "Do you like Iron Man?",
+      "annotations": {
+        "fact_retrieval": [
+          "Throughout the character\u2019s comic book series, technological advancement and national defense were constant themes for Iron Man, but later issues developed Stark into a more complex and vulnerable character as they depicted his battle with alcoholism (as in the Demon in a Bottle storyline) and other personal difficulties."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Yes i like him too did you know he also was in Zodiac a crime fiction film.",
+      "annotations": {
+        "fact_retrieval": [
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "Joey Travolta is a former special education teacher, and at the time of the film's production operated a children's film and acting workshop called Entertainment Experience.",
+          "After his experiences working on the film, Travolta began to teach film to autistic children at camps in California, Florida, and Michigan."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "So he did he also starred in End of Watch have you ever seen that movie?",
+      "annotations": {
+        "fact_retrieval": [
+          "Owing to no overseas Theatrical release, a legal online release gives the producers of the movie an additional source of income.",
+          "Mayank Shekhar of Hindustan Times gave 2 stars out of 5, saying that The movie acquires rhythms of a TV show, like so many do.",
+          "Janhavi Samant of Mid-Day gave the movie 0.5/5 stars, stating that The whole film is pretty much avoidable."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "I have not what genre is End of Watch.",
+      "annotations": {
+        "fact_retrieval": [
+          "Hawley's first thought when looking at the genre is if we remove the genre, is there a compelling show you want to watch there?",
+          "He says, I don\u2019t believe in the brainless entertainer genre.",
+          "\u201cWe decided to make our own genre because we couldn\u2019t figure out where we fit."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    },
+    {
+      "text": "Could you recommend any books like The Secret Life of Bees?",
+      "annotations": {
+        "fact_retrieval": [
+          "The book has also been heavily criticized by former believers and practitioners, with some claiming that the concept of the Secret was conceived by the author and that the only people generating wealth and happiness from it are the author and the publishers.",
+          "To bring joy to the world, the Secret creates life-transforming tools in the mediums of books, films, and multi-media.",
+          "To bring joy to the world, the Secret creates life-transforming tools in the mediums of books, films, and multi-media."
+        ],
+        "kbqa": {
+          "qa_system": "kbqa",
+          "answer": "",
+          "confidence": 0.0
+        }
+      }
+    }
+  ]
+}

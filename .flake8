@@ -1,0 +1,4 @@
+[flake8]
+max-line-length=120
+ignore=D100,D101,D102,D103,D107,F403,F405,E203,W503
+exclude=.git,__pycache__,build,dist,*.npy,env

@@ -1,0 +1,376 @@
+{
+  "AtLocation": {
+    "beams": [
+      "movie",
+      "television",
+      "movie theater",
+      "theatre",
+      "theater"
+    ],
+    "e1": "movie",
+    "relation": "AtLocation"
+  },
+  "CapableOf": {
+    "beams": [
+      "be rom - com",
+      "make person laugh",
+      "be movie",
+      "be play on reel",
+      "star actor"
+    ],
+    "e1": "movie",
+    "relation": "CapableOf"
+  },
+  "Causes": {
+    "beams": [
+      "laughter",
+      "be entertain",
+      "entertainment",
+      "fun",
+      "you see actor"
+    ],
+    "e1": "movie",
+    "relation": "Causes"
+  },
+  "CausesDesire": {
+    "beams": [
+      "watch movie",
+      "laugh at joke",
+      "watch film",
+      "watch television",
+      "watch tv"
+    ],
+    "e1": "movie",
+    "relation": "CausesDesire"
+  },
+  "CreatedBy": {
+    "beams": [
+      "programmer",
+      "media",
+      "person",
+      "programmer to make movie",
+      "television"
+    ],
+    "e1": "movie",
+    "relation": "CreatedBy"
+  },
+  "DefinedAs": {
+    "beams": [
+      "most popular movie in world",
+      "first movie of all time",
+      "best movie ever make",
+      "first movie in world",
+      "most popular movie"
+    ],
+    "e1": "movie",
+    "relation": "DefinedAs"
+  },
+  "DesireOf": {
+    "beams": [
+      "be entertain",
+      "star in movie",
+      "star trek",
+      "happen",
+      "movie"
+    ],
+    "e1": "movie",
+    "relation": "DesireOf"
+  },
+  "Desires": {
+    "beams": [
+      "be entertain",
+      "be read",
+      "be play",
+      "movie",
+      "be tell"
+    ],
+    "e1": "movie",
+    "relation": "Desires"
+  },
+  "HasA": {
+    "beams": [
+      "many character",
+      "frame",
+      "audience",
+      "plot",
+      "bad quality"
+    ],
+    "e1": "movie",
+    "relation": "HasA"
+  },
+  "HasFirstSubevent": {
+    "beams": [
+      "sit down",
+      "watch it",
+      "watch",
+      "turn on tv",
+      "buy ticket"
+    ],
+    "e1": "movie",
+    "relation": "HasFirstSubevent"
+  },
+  "HasLastSubevent": {
+    "beams": [
+      "watch it again",
+      "leave theater",
+      "applaud",
+      "rewind",
+      "watch it"
+    ],
+    "e1": "movie",
+    "relation": "HasLastSubevent"
+  },
+  "HasPainCharacter": {
+    "beams": [
+      "cry",
+      "suffer",
+      "be hurt",
+      "feel",
+      "scream"
+    ],
+    "e1": "movie",
+    "relation": "HasPainCharacter"
+  },
+  "HasPainIntensity": {
+    "beams": [
+      "it can not express",
+      "feel",
+      "it can not contain",
+      "it can not handle",
+      "bad"
+    ],
+    "e1": "movie",
+    "relation": "HasPainIntensity"
+  },
+  "HasPrerequisite": {
+    "beams": [
+      "turn on tv",
+      "turn on vcr",
+      "turn on television",
+      "buy ticket",
+      "buy popcorn"
+    ],
+    "e1": "movie",
+    "relation": "HasPrerequisite"
+  },
+  "HasProperty": {
+    "beams": [
+      "fun",
+      "good than reality",
+      "entertain",
+      "funny",
+      "good"
+    ],
+    "e1": "movie",
+    "relation": "HasProperty"
+  },
+  "HasSubevent": {
+    "beams": [
+      "you laugh",
+      "laugh",
+      "sit down",
+      "laughter",
+      "sit"
+    ],
+    "e1": "movie",
+    "relation": "HasSubevent"
+  },
+  "InheritsFrom": {
+    "beams": [
+      "movie",
+      "television",
+      "actor",
+      "film",
+      "play"
+    ],
+    "e1": "movie",
+    "relation": "InheritsFrom"
+  },
+  "InstanceOf": {
+    "beams": [
+      "movie",
+      "television show",
+      "film",
+      "tv show",
+      "television"
+    ],
+    "e1": "movie",
+    "relation": "InstanceOf"
+  },
+  "IsA": {
+    "beams": [
+      "movie",
+      "often",
+      "show",
+      "entertainment",
+      "play"
+    ],
+    "e1": "movie",
+    "relation": "IsA"
+  },
+  "LocatedNear": {
+    "beams": [
+      "theater",
+      "movie theater",
+      "movie theatre",
+      "theatre",
+      "television"
+    ],
+    "e1": "movie",
+    "relation": "LocatedNear"
+  },
+  "LocationOfAction": {
+    "beams": [
+      "movie",
+      "film",
+      "television show",
+      "show",
+      "television"
+    ],
+    "e1": "movie",
+    "relation": "LocationOfAction"
+  },
+  "MadeOf": {
+    "beams": [
+      "frame and frame",
+      "frame and frame and frame",
+      "frame and frame of frame",
+      "frame",
+      "frame picture"
+    ],
+    "e1": "movie",
+    "relation": "MadeOf"
+  },
+  "MotivatedByGoal": {
+    "beams": [
+      "entertainment",
+      "be entertain",
+      "it be funny",
+      "you be bore",
+      "have fun"
+    ],
+    "e1": "movie",
+    "relation": "MotivatedByGoal"
+  },
+  "NotCapableOf": {
+    "beams": [
+      "make person laugh",
+      "exist",
+      "happen to anyone",
+      "make person happy",
+      "happen"
+    ],
+    "e1": "movie",
+    "relation": "NotCapableOf"
+  },
+  "NotDesires": {
+    "beams": [
+      "be repeat",
+      "be cancel",
+      "bad movie",
+      "die",
+      "end"
+    ],
+    "e1": "movie",
+    "relation": "NotDesires"
+  },
+  "NotHasA": {
+    "beams": [
+      "plot yet",
+      "frame",
+      "end",
+      "plot",
+      "sound"
+    ],
+    "e1": "movie",
+    "relation": "NotHasA"
+  },
+  "NotHasProperty": {
+    "beams": [
+      "funny",
+      "good",
+      "real",
+      "original",
+      "fun"
+    ],
+    "e1": "movie",
+    "relation": "NotHasProperty"
+  },
+  "NotIsA": {
+    "beams": [
+      "movie",
+      "action movie",
+      "reality show",
+      "play",
+      "reality"
+    ],
+    "e1": "movie",
+    "relation": "NotIsA"
+  },
+  "NotMadeOf": {
+    "beams": [
+      "glass",
+      "plastic",
+      "film",
+      "metal",
+      "wood"
+    ],
+    "e1": "movie",
+    "relation": "NotMadeOf"
+  },
+  "PartOf": {
+    "beams": [
+      "movie",
+      "play",
+      "film",
+      "television",
+      "show"
+    ],
+    "e1": "movie",
+    "relation": "PartOf"
+  },
+  "ReceivesAction": {
+    "beams": [
+      "make out of plastic",
+      "store on film reel",
+      "make up of many different color",
+      "store on reel",
+      "show at cinema"
+    ],
+    "e1": "movie",
+    "relation": "ReceivesAction"
+  },
+  "RelatedTo": {
+    "beams": [
+      "movie",
+      "popcorn",
+      "television",
+      "dvd",
+      "play"
+    ],
+    "e1": "movie",
+    "relation": "RelatedTo"
+  },
+  "SymbolOf": {
+    "beams": [
+      "life",
+      "porn",
+      "space",
+      "violence",
+      "cartoon"
+    ],
+    "e1": "movie",
+    "relation": "SymbolOf"
+  },
+  "UsedFor": {
+    "beams": [
+      "entertainment",
+      "fun",
+      "watch",
+      "entertain",
+      "enjoyment"
+    ],
+    "e1": "movie",
+    "relation": "UsedFor"
+  }
+}

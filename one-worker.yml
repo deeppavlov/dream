@@ -1,0 +1,86 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && gunicorn run_http:app_factory --bind 0.0.0.0:4242 --workers 1 --worker-class aiohttp.GunicornWebWorker'
+  cobotqa:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8081 -t 15
+  personality-catcher:
+    command: uvicorn server:app --host 0.0.0.0 --port 8010
+  cobot-nounphrases:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8006 -t 60
+  sentseg:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8011 -t 100
+  convers-evaluation-selector:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8009 -t 15
+  sentrewrite:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8017 -t 60
+  intent-responder:
+    command: gunicorn --workers=1 --name=responder --bind 0.0.0.0:8012 --timeout=100 server:app
+  intent-catcher:
+    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:8014 --timeout=100 server:app
+  blacklisted-words:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8018
+  dummy-skill-dialog:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8052 -t 60
+  dff-movie-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout=300 --preload
+  ner:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8021 -t 100
+  eliza:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8047
+  book-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8032 -t 60
+  convert-reddit:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8029 -t 60
+  personal-info-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8030
+  weather-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8037
+  emotion-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8049
+  meta-script-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8054
+  coronavirus-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8061
+  small-talk-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8062
+  game-cooperative-skill:
+    command: bash server_run.sh "gunicorn --workers=1 server:app -b 0.0.0.0:8068"
+  news-api-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8066 -t 15
+  news-api-annotator:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8112 -t 15
+  factoid-qa:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8071
+  kbqa:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8072
+  spelling-preprocessing:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8074 --timeout=100
+  grounding-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --timeout=100
+  knowledge-grounding:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8083
+  knowledge-grounding-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8085
+  midas-classification:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8090
+  combined-classification:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087
+  dff-travel-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
+  dff-food-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8097
+  dff-gaming-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8115
+  dff-science-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8101
+  dff-funfact-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8104
+  dff-bot-persona-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
+  dff-gossip-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8109
+  dff-art-skill:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8117
+  hypothesis-scorer:
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
+version: '3.7'

@@ -1,0 +1,197 @@
+services:
+  agent:
+    env_file: [ .env.dev ]
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+      - ".:/dp-agent"
+    ports:
+      - ${AGENT_PORT}:4242
+  kbqa:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  factoid-classification:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  text-qa:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-atomic:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-conceptnet:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  knowledge-grounding:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  midas-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  combined-classification:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  mongo:
+    env_file: [ .env.dev ]
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  cobotqa:
+    env_file: [ .env.dev ]
+  cobot-convers-evaluator-annotator:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  cobot-nounphrases:
+    env_file: [ .env.dev ]
+  program-y:
+    env_file: [ .env.dev ]
+  personality-catcher:
+    env_file: [ .env.dev ]
+  sentseg:
+    env_file: [ .env.dev ]
+  convers-evaluation-selector:
+    env_file: [ .env.dev ]
+  sentrewrite:
+    env_file: [ .env.dev ]
+  intent-responder:
+    env_file: [ .env.dev ]
+  intent-catcher:
+    env_file: [ .env.dev ]
+  blacklisted-words:
+    env_file: [ .env.dev ]
+  program-y-dangerous:
+    env_file: [ .env.dev ]
+  dff-movie-skill:
+    env_file: [ .env.dev ]
+  dff-gaming-skill:
+    env_file: [ .env.dev ]
+  ner:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  eliza:
+    env_file: [ .env.dev ]
+  convert-reddit:
+    env_file: [ .env.dev ]
+  personal-info-skill:
+    env_file: [ .env.dev ]
+  asr:
+    env_file: [ .env.dev ]
+  misheard-asr:
+    env_file: [ .env.dev ]
+  book-skill:
+    env_file: [ .env.dev ]
+  weather-skill:
+    env_file: [ .env.dev ]
+  emotion-skill:
+    env_file: [ .env.dev ]
+  dummy-skill-dialog:
+    env_file: [ .env.dev ]
+  meta-script-skill:
+    env_file: [ .env.dev ]
+  short-story-skill:
+    env_file: [ .env.dev ]
+  coronavirus-skill:
+    env_file: [ .env.dev ]
+  small-talk-skill:
+    env_file: [ .env.dev ]
+  game-cooperative-skill:
+    env_file: [ .env.dev ]
+  program-y-wide:
+    env_file: [ .env.dev ]
+  news-api-skill:
+    env_file: [ .env.dev ]
+  news-api-annotator:
+    env_file: [ .env.dev ]
+  factoid-qa:
+    env_file: [ .env.dev ]
+  entity-linking:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  wiki-parser:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  spelling-preprocessing:
+    env_file: [ .env.dev ]
+  grounding-skill:
+    env_file: [ .env.dev ]
+  masked-lm:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-friendship-skill:
+    env_file: [ .env.dev ]
+  entity-storer:
+    env_file: [ .env.dev ]
+  knowledge-grounding-skill:
+    env_file: [ .env.dev ]
+  dff-animals-skill:
+    env_file: [ .env.dev ]
+  dff-travel-skill:
+    env_file: [ .env.dev ]
+  dff-sport-skill:
+    env_file: [ .env.dev ]
+  dff-food-skill:
+    env_file: [ .env.dev ]
+  dff-science-skill:
+    env_file: [ .env.dev ]
+  dff-music-skill:
+    env_file: [ .env.dev ]
+  fact-random:
+    env_file: [ .env.dev ]
+  fact-retrieval:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-bot-persona-skill:
+    env_file: [ .env.dev ]
+  dff-funfact-skill:
+    env_file: [ .env.dev ]
+  dff-gossip-skill:
+    env_file: [ .env.dev ]
+  hypothesis-scorer:
+    env_file: [ .env.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-wiki-skill:
+    env_file: [ .env.dev ]
+  topic-recommendation:
+    env_file: [ .env.dev ]
+  user-persona-extractor:
+    env_file: [ .env.dev ]
+  wiki-facts:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  dff-art-skill:
+    env_file: [ .env.dev ]
+  entity-detection:
+    env_file: [ .env.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+version: '3.7'

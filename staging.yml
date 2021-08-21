@@ -1,0 +1,280 @@
+services:
+  agent:
+    image: ${DOCKER_REGISTRY}/agent:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+    ports:
+      - ${DP_AGENT_PORT}:4242
+  cobotqa:
+    image: ${DOCKER_REGISTRY}/cobotqa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  sentseg:
+    image: ${DOCKER_REGISTRY}/sentseg:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  cobot-convers-evaluator-annotator:
+     image: ${DOCKER_REGISTRY}/cobot-convers-evaluator-annotator:${VERSION}
+     env_file:
+       - ${ENV_FILE}
+  sentrewrite:
+    image: ${DOCKER_REGISTRY}/sentrewrite:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  convers-evaluation-selector:
+    image: ${DOCKER_REGISTRY}/convers-evaluation-selector:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  personality-catcher:
+    image: ${DOCKER_REGISTRY}/personality-catcher:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  program-y:
+    image: ${DOCKER_REGISTRY}/program-y:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  intent-catcher:
+    image: ${DOCKER_REGISTRY}/intent-catcher:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  intent-responder:
+    image: ${DOCKER_REGISTRY}/intent-responder:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  blacklisted-words:
+    image: ${DOCKER_REGISTRY}/blacklisted-words:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  program-y-dangerous:
+    image: ${DOCKER_REGISTRY}/program-y-dangerous:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  ner:
+    image: ${DOCKER_REGISTRY}/ner:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    env_file:
+      - ${ENV_FILE}
+  dff-movie-skill:
+    image: ${DOCKER_REGISTRY}/dff-movie-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  eliza:
+    image: ${DOCKER_REGISTRY}/eliza:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  convert-reddit:
+    image: ${DOCKER_REGISTRY}/convert-reddit:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  personal-info-skill:
+    image: ${DOCKER_REGISTRY}/personal-info-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  asr:
+    image: ${DOCKER_REGISTRY}/asr:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  misheard-asr:
+    image: ${DOCKER_REGISTRY}/misheard-asr:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  short-story-skill:
+    image: ${DOCKER_REGISTRY}/short-story-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  book-skill:
+    image: ${DOCKER_REGISTRY}/book-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  weather-skill:
+    image: ${DOCKER_REGISTRY}/weather-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  emotion-skill:
+    image: ${DOCKER_REGISTRY}/emotion-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  comet-atomic:
+    image: ${DOCKER_REGISTRY}/comet-atomic:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  comet-conceptnet:
+    image: ${DOCKER_REGISTRY}/comet-conceptnet:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dummy-skill-dialog:
+    image: ${DOCKER_REGISTRY}/dummy-skill-dialog:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  meta-script-skill:
+    image: ${DOCKER_REGISTRY}/meta-script-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  coronavirus-skill:
+    image: ${DOCKER_REGISTRY}/coronavirus-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  small-talk-skill:
+    image: ${DOCKER_REGISTRY}/small-talk-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  game-cooperative-skill:
+    image: ${DOCKER_REGISTRY}/game-cooperative-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  kbqa:
+    image: ${DOCKER_REGISTRY}/kbqa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  text-qa:
+    image: ${DOCKER_REGISTRY}/text-qa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  fact-retrieval:
+    image: ${DOCKER_REGISTRY}/fact-retrieval:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  program-y-wide:
+    image: ${DOCKER_REGISTRY}/program-y-wide:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  news-api-skill:
+    image: ${DOCKER_REGISTRY}/news-api-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  news-api-annotator:
+    image: ${DOCKER_REGISTRY}/news-api-annotator:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  spelling-preprocessing:
+    image: ${DOCKER_REGISTRY}/spelling-preprocessing:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  wiki-parser:
+    image: ${DOCKER_REGISTRY}/wiki-parser:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  factoid-qa:
+    image: ${DOCKER_REGISTRY}/factoid-qa:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  factoid-classification:
+    image: ${DOCKER_REGISTRY}/factoid-classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  cobot-nounphrases:
+    image: ${DOCKER_REGISTRY}/cobot-nounphrases:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  entity-linking:
+    image: ${DOCKER_REGISTRY}/entity-linking:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  grounding-skill:
+    image: ${DOCKER_REGISTRY}/grounding-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  knowledge-grounding:
+    image: ${DOCKER_REGISTRY}/knowledge-grounding:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  knowledge-grounding-skill:
+    image: ${DOCKER_REGISTRY}/knowledge-grounding-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  midas-classification:
+    image: ${DOCKER_REGISTRY}/midas-classification:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-friendship-skill:
+    image: ${DOCKER_REGISTRY}/dff-friendship-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  masked-lm:
+    image: ${DOCKER_REGISTRY}/masked-lm:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  entity-storer:
+    image: ${DOCKER_REGISTRY}/entity-storer:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  combined-classification:
+     image: ${DOCKER_REGISTRY}/combined-classification:${VERSION}
+     env_file:
+       - ${ENV_FILE}
+  dff-animals-skill:
+    image: ${DOCKER_REGISTRY}/dff-animals-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-travel-skill:
+    image: ${DOCKER_REGISTRY}/dff-travel-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-sport-skill:
+    image: ${DOCKER_REGISTRY}/dff-sport-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-food-skill:
+    image: ${DOCKER_REGISTRY}/dff-food-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-science-skill:
+    image: ${DOCKER_REGISTRY}/dff-science-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-music-skill:
+    image: ${DOCKER_REGISTRY}/dff-music-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-funfact-skill:
+    image: ${DOCKER_REGISTRY}/dff-funfact-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-bot-persona-skill:
+    image: ${DOCKER_REGISTRY}/dff-bot-persona-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-gaming-skill:
+    image: ${DOCKER_REGISTRY}/dff-gaming-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-gossip-skill:
+    image: ${DOCKER_REGISTRY}/dff-gossip-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  hypothesis-scorer:
+    image: ${DOCKER_REGISTRY}/hypothesis-scorer:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-wiki-skill:
+    image: ${DOCKER_REGISTRY}/dff-wiki-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  topic-recommendation:
+    image: ${DOCKER_REGISTRY}/topic-recommendation:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  user-persona-extractor:
+    image: ${DOCKER_REGISTRY}/user-persona-extractor:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  wiki-facts:
+    image: ${DOCKER_REGISTRY}/wiki-facts:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  entity-detection:
+    image: ${DOCKER_REGISTRY}/entity-detection:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+  dff-art-skill:
+    image: ${DOCKER_REGISTRY}/dff-art-skill:${VERSION}
+    env_file:
+      - ${ENV_FILE}
+volumes:
+  external-logs:
+  external-deeppavlov:
+version: '3.7'

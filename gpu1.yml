@@ -1,0 +1,263 @@
+services:
+  agent:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+      - ".:/dp-agent"
+    ports:
+      - ${AGENT_PORT}:4242
+  kbqa:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  factoid-classification:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  text-qa:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-atomic:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-conceptnet:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  knowledge-grounding:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  midas-classification:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  combined-classification:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  mongo:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  cobotqa:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  cobot-convers-evaluator-annotator:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  cobot-nounphrases:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  program-y:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  personality-catcher:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  sentseg:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  convers-evaluation-selector:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  sentrewrite:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  intent-responder:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  intent-catcher:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  blacklisted-words:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  program-y-dangerous:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-movie-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-gaming-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  ner:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  eliza:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  convert-reddit:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  personal-info-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  asr:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  misheard-asr:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  book-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  weather-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  emotion-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dummy-skill-dialog:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  meta-script-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  short-story-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  coronavirus-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  small-talk-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  game-cooperative-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  program-y-wide:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  news-api-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  news-api-annotator:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  factoid-qa:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  entity-linking:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  wiki-parser:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  spelling-preprocessing:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  grounding-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  masked-lm:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-friendship-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  entity-storer:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  knowledge-grounding-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-animals-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-travel-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-sport-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-food-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-science-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-music-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  fact-retrieval:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-bot-persona-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-funfact-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  dff-gossip-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  hypothesis-scorer:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-wiki-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  topic-recommendation:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  user-persona-extractor:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  wiki-facts:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  dff-art-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  entity-detection:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+version: '3.7'

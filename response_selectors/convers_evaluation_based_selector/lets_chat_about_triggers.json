@@ -1,0 +1,140 @@
+{
+    "movies": {
+        "topics": [
+            "Movies_TV",
+            "Entertainment_Movies"
+        ],
+        "entities": [],
+        "nounphrases": [
+            "movie",
+            "movies"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "dff_movie_skill",
+            "small_talk_skill"
+        ]
+    },
+    "books": {
+        "topics": [
+            "Entertainment_Books"
+        ],
+        "entities": [],
+        "nounphrases": [
+            "book",
+            "books",
+            "reading"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "book_skill"
+        ]
+    },
+    "news": {
+        "topics": [
+            "News"
+        ],
+        "entities": [],
+        "nounphrases": [
+            "news"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "news_api_skill",
+            "small_talk_skill"
+        ]
+    },
+    "games": {
+        "topics": [
+            "Games"
+        ],
+        "entities": [],
+        "nounphrases": [],
+        "trigger_function": null,
+        "skills": [
+            "game_cooperative_skill"
+        ]
+    },
+    "coronavirus": {
+        "topics": [],
+        "entities": [],
+        "nounphrases": [
+            "corona",
+            "coronavirus",
+            "corona virus"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "coronavirus_skill"
+        ]
+    },
+    "oscar": {
+        "topics": [],
+        "entities": [
+            "oscar"
+        ],
+        "nounphrases": [
+            "oscar"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "oscar_skill"
+        ]
+    },
+    "christmas": {
+        "topics": [],
+        "entities": [
+            "christmas"
+        ],
+        "nounphrases": [
+            "christmas",
+            "new year"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "christmas_new_year_skill"
+        ]
+    },
+    "superbowl": {
+        "topics": [],
+        "entities": [
+            "superbowl",
+            "super bowl"
+        ],
+        "nounphrases": [
+            "superbowl",
+            "super bowl"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "superbowl_skill"
+        ]
+    },
+    "valentines_day": {
+        "topics": [],
+        "entities": [
+            "valentines"
+        ],
+        "nounphrases": [
+            "valentines day"
+        ],
+        "trigger_function": null,
+        "skills": [
+            "valentines_day_skill"
+        ]
+    },
+    "sensitive": {
+        "topics": [],
+        "entities": [],
+        "nounphrases": [],
+        "trigger_function": null,
+        "skills": []
+    },
+    "weather": {
+        "topics": [],
+        "entities": [],
+        "nounphrases": [],
+        "trigger_function": null,
+        "skills": []
+    }
+}
