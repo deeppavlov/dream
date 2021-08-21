@@ -245,7 +245,7 @@ def food_fact_response(vars):
     fact = ""
     berry_name = ""
     entity = ""
-    facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
+    facts = annotations.get("fact_random", [])
     if "berry" in bot_utt_text:
         berry_names = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
         if berry_names:
@@ -258,11 +258,11 @@ def food_fact_response(vars):
         elif berry_name:
             if facts:
                 fact = facts[0].get("fact", "")
-                entity = facts[0].get("entity", "")
+                entity = facts[0].get("entity_substr", "")
     else:
         if facts:
             fact = facts[0].get("fact", "")
-            entity = facts[0].get("entity", "")
+            entity = facts[0].get("entity_substr", "")
     try:
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
         if re.search(DONOTKNOW_LIKE_RE, human_utt_text):

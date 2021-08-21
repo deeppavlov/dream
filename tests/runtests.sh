@@ -91,7 +91,7 @@ echo Loading testing env..
 AGENT_PORT=${AGENT_PORT:-4242}
 
 if [[ "$MODE" == "build" ]]; then
-  dockercompose_cmd build --parallel
+  dockercompose_cmd build
   exit 0
 fi
 #dockercompose_cmd logs -f --tail="all" --timestamps &
@@ -146,7 +146,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
                      grounding-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-retrieval cobot-entities news-api-skill cobotqa-annotator hypothesis-scorer \
+                     fact-random fact-retrieval news-api-skill hypothesis-scorer \
                      dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
                      user-persona-extractor small-talk-skill wiki-facts dff-art-skill; do
 

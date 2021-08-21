@@ -54,17 +54,11 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     env_file: [ .env.dev ]
-  cobotqa-annotator:
-    env_file: [ .env.dev ]
   cobot-convers-evaluator-annotator:
     env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
-    env_file: [ .env.dev ]
-  cobot-topics:
-    env_file: [ .env.dev ]
-  cobot-dialogact:
     env_file: [ .env.dev ]
   program-y:
     env_file: [ .env.dev ]
@@ -164,6 +158,8 @@ services:
     env_file: [ .env.dev ]
   dff-music-skill:
     env_file: [ .env.dev ]
+  fact-random:
+    env_file: [ .env.dev ]
   fact-retrieval:
     env_file: [ .env.dev ]
     volumes:
@@ -171,8 +167,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=8
   dff-bot-persona-skill:
-    env_file: [ .env.dev ]
-  cobot-entities:
     env_file: [ .env.dev ]
   dff-funfact-skill:
     env_file: [ .env.dev ]

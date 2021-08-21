@@ -67,10 +67,8 @@ def respond():
     for i, dialog in enumerate(dialogs):
         curr_uttr = dialog["human_utterances"][-1]
         curr_nounphrases = get_entities(curr_uttr, only_named=False, with_labels=False)
-        cobotqa_annotations = curr_uttr.get("annotations", {}).get("cobotqa_annotator", {})
-        direct_response = cobotqa_annotations.get("response", "")
-        facts = cobotqa_annotations.get("facts", [])
-        # each fact is a dict: `{"entity": "politics", "fact": "Politics is a ..."}`
+        facts = curr_uttr.get("annotations", {}).get("fact_random", [])
+        # each fact is a dict: `{"entity_substr": "politics", "fact": "Politics is a ..."}`
         all_intents = set(get_intents(curr_uttr, which="cobot_dialogact_intents"))
         opinion_request_detected = "opinion_request" in get_intents(curr_uttr, which="intent_catcher", probs=False)
         sensitive_topics = {"Politics", "Religion", "Sex_Profanity", "Inappropriate_Content"}
@@ -87,12 +85,9 @@ def respond():
 
         hypotheses_subjects = []
         hypotheses = []
-        if direct_response:
-            hypotheses.append(direct_response)
-            hypotheses_subjects.append(None)
         for fact in facts:
             hypotheses.append(fact["fact"])
-            hypotheses_subjects.append(fact["entity"])
+            hypotheses_subjects.append(fact["entity_substr"])
 
         curr_responses = []
         curr_confidences = []

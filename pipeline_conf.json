@@ -236,50 +236,18 @@
                     "annotators.sentseg"
                 ]
             },
-            "cobot_topics": {
+            "fact_random": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-topics:8000/topics"
+                    "url": "http://fact-random:8119/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ]
-            },
-            "cobot_dialogact": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://cobot-dialogact:8002/dialogact"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:cobot_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:cobot_dialogact_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ]
-            },
-            "cobotqa_annotator": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://cobotqa-annotator:8106/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentrewrite"
-                ],
                 "previous_services": [
-                    "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.cobot_nounphrases",
+                    "annotators.entity_detection"
                 ]
             },
             "fact_retrieval": {
@@ -415,20 +383,6 @@
                 "previous_services": [
                     "annotators.combined_classification",
                     "annotators.intent_catcher"
-                ]
-            },
-            "cobot_entities": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://cobot-entities:8102/entities"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_and_nounphrases_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.cobot_nounphrases"
                 ]
             },
             "news_api_annotator": {

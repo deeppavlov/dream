@@ -579,7 +579,7 @@ def food_fact_response(vars):
                 facts = []
 
     if not facts:
-        facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
+        facts = annotations.get("fact_random", [])
 
     if black_list_check:
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -602,12 +602,12 @@ def food_fact_response(vars):
                     for facts_item in facts:
                         if all(
                             [
-                                facts_item.get("entity", "xxx") in food_item,
+                                facts_item.get("entity_substr", "xxx") in food_item,
                                 facts_item.get("fact", "") not in used_facts
                             ]
                         ):
                             fact = facts_item.get("fact", "")
-                            entity = facts_item.get("entity", "")
+                            entity = facts_item.get("entity_substr", "")
                             break
                         else:
                             fact = ""
@@ -620,12 +620,12 @@ def food_fact_response(vars):
                 for facts_item in facts:
                     if all(
                         [
-                            facts_item.get("entity", "xxx") in food_item,
+                            facts_item.get("entity_substr", "xxx") in food_item,
                             facts_item.get("fact", "") not in used_facts
                         ]
                     ):
                         fact = facts_item.get("fact", "")
-                        entity = facts_item.get("entity", "")
+                        entity = facts_item.get("entity_substr", "")
                         break
                     else:
                         fact = ""

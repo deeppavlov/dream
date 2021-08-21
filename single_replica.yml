@@ -1,0 +1,270 @@
+services:
+  agent:
+    deploy:
+      replicas: 1
+
+  cobotqa:
+    deploy:
+      replicas: 1
+
+  cobot-convers-evaluator-annotator:
+    deploy:
+      replicas: 1
+
+  cobot-nounphrases:
+    deploy:
+      replicas: 1
+
+  program-y:
+    deploy:
+      replicas: 1
+
+  personality-catcher:
+    deploy:
+      replicas: 1
+
+  sentseg:
+    deploy:
+      replicas: 1
+
+  convers-evaluation-selector:
+    deploy:
+      replicas: 1
+
+  sentrewrite:
+    deploy:
+      replicas: 1
+
+  intent-responder:
+    deploy:
+      replicas: 1
+
+  intent-catcher:
+    deploy:
+      replicas: 1
+
+  blacklisted-words:
+    deploy:
+      replicas: 1
+
+  program-y-dangerous:
+    deploy:
+      replicas: 1
+
+  dff-movie-skill:
+    deploy:
+      replicas: 1
+
+  ner:
+    deploy:
+      replicas: 1
+
+  eliza:
+    deploy:
+      replicas: 1
+
+  convert-reddit:
+    deploy:
+      replicas: 1
+
+  personal-info-skill:
+    deploy:
+      replicas: 1
+
+  asr:
+    deploy:
+      replicas: 1
+
+  misheard-asr:
+    deploy:
+      replicas: 1
+
+  book-skill:
+    deploy:
+      replicas: 1
+
+  weather-skill:
+    deploy:
+      replicas: 1
+
+  emotion-skill:
+    deploy:
+      replicas: 1
+
+  dummy-skill-dialog:
+    deploy:
+      replicas: 1
+
+  comet-atomic:
+    deploy:
+      replicas: 1
+
+  comet-conceptnet:
+    deploy:
+      replicas: 1
+
+  meta-script-skill:
+    deploy:
+      replicas: 1
+
+  short-story-skill:
+    deploy:
+      replicas: 1
+
+  coronavirus-skill:
+    deploy:
+      replicas: 1
+
+  small-talk-skill:
+    deploy:
+      replicas: 1
+
+  game-cooperative-skill:
+    deploy:
+      replicas: 1
+
+  program-y-wide:
+    deploy:
+      replicas: 1
+
+  news-api-skill:
+    deploy:
+      replicas: 1
+
+  news-api-annotator:
+    deploy:
+      replicas: 1
+
+  factoid-qa:
+    deploy:
+      replicas: 1
+
+  entity-linking:
+    deploy:
+      replicas: 1
+
+  entity-detection:
+    deploy:
+      replicas: 1
+
+  dff-art-skill:
+    deploy:
+      replicas: 1
+
+  wiki-parser:
+    deploy:
+      replicas: 1
+
+  text-qa:
+    deploy:
+      replicas: 1
+
+  kbqa:
+    deploy:
+      replicas: 1
+
+  factoid-classification:
+    deploy:
+      replicas: 1
+
+  spelling-preprocessing:
+    deploy:
+      replicas: 1
+
+  grounding-skill:
+    deploy:
+      replicas: 1
+
+  knowledge-grounding:
+    deploy:
+      replicas: 1
+
+  dff-gaming-skill:
+    deploy:
+      replicas: 1
+
+  dff-friendship-skill:
+    deploy:
+      replicas: 1
+
+  masked-lm:
+    deploy:
+      replicas: 1
+
+  entity-storer:
+    deploy:
+      replicas: 1
+
+  knowledge-grounding-skill:
+    deploy:
+      replicas: 1
+
+  combined-classification:
+    deploy:
+      replicas: 1
+
+  dff-animals-skill:
+    deploy:
+      replicas: 1
+
+  dff-travel-skill:
+    deploy:
+      replicas: 1
+
+  dff-sport-skill:
+    deploy:
+      replicas: 1
+
+  dff-food-skill:
+    deploy:
+      replicas: 1
+
+  dff-science-skill:
+    deploy:
+      replicas: 1
+
+  dff-music-skill:
+    deploy:
+      replicas: 1
+
+  dff-gossip-skill:
+    deploy:
+      replicas: 1
+
+  midas-classification:
+    deploy:
+      replicas: 1
+
+  fact-retrieval:
+    deploy:
+      replicas: 1
+
+  hypothesis-scorer:
+    deploy:
+      replicas: 1
+
+  dff-bot-persona-skill:
+    deploy:
+      replicas: 1
+
+  dff-funfact-skill:
+    deploy:
+      replicas: 1
+
+  dff-wiki-skill:
+    deploy:
+      replicas: 1
+
+  topic-recommendation:
+    deploy:
+      replicas: 1
+
+  user-persona-extractor:
+    deploy:
+      replicas: 1
+
+  wiki-facts:
+    deploy:
+      replicas: 1
+
+version: '3.7'
