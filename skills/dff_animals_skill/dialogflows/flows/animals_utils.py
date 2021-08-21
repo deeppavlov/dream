@@ -65,11 +65,11 @@ def find_in_animals_list(annotations):
     return found_animal
 
 
-def preprocess_cobotqa_facts(annotations, found_animal):
+def preprocess_fact_random_facts(annotations, found_animal):
     found_facts = []
-    facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
+    facts = annotations.get("fact_random", [])
     for fact_info in facts:
-        if fact_info.get("entity", "") == found_animal:
+        if fact_info.get("entity_substr", "") == found_animal:
             fact_text = fact_info["fact"]
             sentences = nltk.sent_tokenize(fact_text)
             if sentences:

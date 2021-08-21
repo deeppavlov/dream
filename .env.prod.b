@@ -43,3 +43,4 @@ RAWG_API_KEY=64a06a047abf433f8ec497004a594394
 TWITCH_IGDB_CLIENT_ID=oj9b2sh2a64dxsx2ix80i6nm1agbq8  # Anton Peganov
 TWITCH_IGDB_CLIENT_SECRET=lduk2tzm2o1l72qztn1mpfufvneyro  # Anton Peganov
 WIKI_FACTS_URL=http://wiki-facts:8116/respond
+FACT_RANDOM_SERVICE_URL=http://fact-random:8119/respond

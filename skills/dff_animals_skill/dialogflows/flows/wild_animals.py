@@ -12,7 +12,7 @@ from common.utils import is_no
 import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
-from dialogflows.flows.animals_utils import plural_nouns, find_in_animals_list, preprocess_cobotqa_facts
+from dialogflows.flows.animals_utils import plural_nouns, find_in_animals_list, preprocess_fact_random_facts
 from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, find_entity_conceptnet, \
     WILD_ANIMALS_Q, ANIMALS_WIKI_Q, ANIMALS_COBOT_Q, ANIMAL_MENTION_TEMPLATE, ANIMAL_BLACKLIST
 from common.fact_retrieval import get_all_facts
@@ -91,7 +91,7 @@ def animal_questions_response(vars):
         if facts:
             state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
     if animal_in_list and not facts:
-        facts = preprocess_cobotqa_facts(annotations, animal_in_list)
+        facts = preprocess_fact_random_facts(annotations, animal_in_list)
         if facts:
             state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
 

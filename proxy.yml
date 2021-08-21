@@ -1,20 +1,4 @@
 services:
-  cobot-topics:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-topics
-      - PORT=8000
-  cobot-dialogact:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-dialogact
-      - PORT=8002
   cobot-convers-evaluator-annotator:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -23,14 +7,6 @@ services:
     environment:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-convers-evaluator-annotator
       - PORT=8004
-  cobot-nounphrases:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-nounphrases
-      - PORT=8006
   program-y:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -327,14 +303,6 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobotqa
       - PORT=8081
     command: ["nginx", "-g", "daemon off;"]
-  cobotqa-annotator:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobotqa-annotator
-      - PORT=8106
-    command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding:
     build:
       context: dp/proxy/
@@ -399,14 +367,6 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/grounding-skill
       - PORT=8080
     command: [ "nginx", "-g", "daemon off;"]
-  convers-evaluation-selector:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/convers-evaluation-selector
-      - PORT=8009
-    command: [ "nginx", "-g", "daemon off;" ]
   dff-animals-skill:
     build:
       context: dp/proxy/
@@ -463,14 +423,6 @@ services:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/fact-retrieval
       - PORT=8100
     command: [ "nginx", "-g", "daemon off;" ]
-  cobot-entities:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-entities
-      - PORT=8102
-    command: ["nginx", "-g", "daemon off;"]
   hypothesis-scorer:
     build:
       context: dp/proxy/
@@ -558,5 +510,29 @@ services:
     environment:
       - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/entity-detection
       - PORT=8103
+    command: [ "nginx", "-g", "daemon off;" ]
+  fact-random:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/fact-random
+      - PORT=8119
+    command: [ "nginx", "-g", "daemon off;" ]
+  cobot-nounphrases:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-nounphrases
+      - PORT=8006
+    command: [ "nginx", "-g", "daemon off;" ]
+  convers-evaluation-selector:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/convers-evaluation-selector
+      - PORT=8009
     command: [ "nginx", "-g", "daemon off;" ]
 version: '3.7'
