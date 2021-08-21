@@ -13,23 +13,25 @@ log = getLogger(__name__)
 loop = asyncio.get_event_loop()
 
 
-@register('type_requester')
+@register("type_requester")
 class TypeRequester(Component):
     def __init__(self, *args, **kwargs):
         pass
 
-    async def request_wikidata(self, session, id: str, type_id: bool=False) -> Optional[str]:
+    async def request_wikidata(self, session, id: str, type_id: bool = False) -> Optional[str]:
         ans = None
         try:
-            async with session.get(f'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={id}', timeout=REQUEST_TIMEOUT) as resp:
+            async with session.get(
+                f"https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids={id}", timeout=REQUEST_TIMEOUT
+            ) as resp:
                 if resp.status == 200:
                     json = await resp.json()
                     if type_id:
-                        ans = json['entities'][id]['labels']['en']['value']
+                        ans = json["entities"][id]["labels"]["en"]["value"]
                     else:
-                        ans = json['entities'][id]['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
+                        ans = json["entities"][id]["claims"]["P31"][0]["mainsnak"]["datavalue"]["value"]["id"]
         except asyncio.TimeoutError:
-            log.warning(f'TimeoutError for {id}')
+            log.warning(f"TimeoutError for {id}")
         except Exception as e:
             log.error(repr(e))
         finally:

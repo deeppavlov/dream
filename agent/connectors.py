@@ -5,11 +5,10 @@ from typing import Callable, Dict
 
 import requests
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-headers = {'Content-Type': 'application/json;charset=utf-8'}
+headers = {"Content-Type": "application/json;charset=utf-8"}
 
 
 class BatchConnector:
@@ -17,13 +16,5 @@ class BatchConnector:
         self._url = url
 
     async def send(self, payload: Dict, callback: Callable):
-        emotion_result = requests.request(
-            url=self._url,
-            headers=headers,
-            json=payload['payload'],
-            method='POST'
-        ).json()
-        asyncio.create_task(callback(
-            task_id=payload['task_id'],
-            response={"batch": emotion_result}
-        ))
+        emotion_result = requests.request(url=self._url, headers=headers, json=payload["payload"], method="POST").json()
+        asyncio.create_task(callback(task_id=payload["task_id"], response={"batch": emotion_result}))

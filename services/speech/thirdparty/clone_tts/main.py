@@ -24,7 +24,7 @@ def load_embedding(file):
     return emb
 
 
-embed = load_embedding('gerty_sample.wav')
+embed = load_embedding("gerty_sample.wav")
 
 
 app = FastAPI()
@@ -65,4 +65,4 @@ async def create_upload_file(text: str):
     # Save it on the disk
     output = BytesIO()
     wavfile.write(output, synthesizer.sample_rate, generated_wav.astype(np.float32))
-    return StreamingResponse(output, media_type='audio/x-wav')
+    return StreamingResponse(output, media_type="audio/x-wav")

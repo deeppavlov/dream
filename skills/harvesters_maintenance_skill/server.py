@@ -22,7 +22,7 @@ REQUESTS = {
     "all_statuses_request": [
         # r"(what|which) (is|are)( the)? (harvesters|combines) status(es)?",
         r"(harvesters|combines) status(es)?",
-        r"status(es)?[a-z ]* (harvesters|combines)"
+        r"status(es)?[a-z ]* (harvesters|combines)",
     ],
     "status_request": [
         # r"(what|which) is( the| a)? [0-9]+ (harvester|combine) status",
@@ -34,39 +34,26 @@ REQUESTS = {
     "broken_ids_request": [
         r"(harvester|combine)s? require(s|ing)? repairs?",
         r"(harvester|combine)s? [a-z ]*(broken|stall)",
-        r"(broken|stall) (harvester|combine)s?"
+        r"(broken|stall) (harvester|combine)s?",
     ],
-    "full_ids_request": [
-        r"(harvester|combine)s? [a-z ]*full",
-        r"full (harvester|combine)s?"
-    ],
-    "working_ids_request": [
-        r"(harvester|combine)s? [a-z ]*work(ing|s)?",
-        r"work(ing|s)? (harvester|combine)s?"
-    ],
-    "inactive_ids_request": [
-        r"(harvester|combine)s? [a-z ]*inactive",
-        r"inactive (harvester|combine)s?"
-    ],
+    "full_ids_request": [r"(harvester|combine)s? [a-z ]*full", r"full (harvester|combine)s?"],
+    "working_ids_request": [r"(harvester|combine)s? [a-z ]*work(ing|s)?", r"work(ing|s)? (harvester|combine)s?"],
+    "inactive_ids_request": [r"(harvester|combine)s? [a-z ]*inactive", r"inactive (harvester|combine)s?"],
     "available_rover_ids_request": [
         r"(rover|vehicle)s? [a-z ]*(work(ing|s)?|available)",
-        r"(work(ing|s)?|available) (rover|vehicle)s?"
+        r"(work(ing|s)?|available) (rover|vehicle)s?",
     ],
     "broken_rover_ids_request": [
         r"(rover|vehicle)s? require(s|ing)? repairs?",
-        r"(rover|vehicle)s? [a-z ]*(broken|stall)"
-        r"(broken|stall) (rover|vehicle)s?"
+        r"(rover|vehicle)s? [a-z ]*(broken|stall)" r"(broken|stall) (rover|vehicle)s?",
     ],
-    "inactive_rover_ids_request": [
-        r"(rover|vehicle)s? [a-z ]*inactive",
-        r"inactive (rover|vehicle)s?"
-    ],
+    "inactive_rover_ids_request": [r"(rover|vehicle)s? [a-z ]*inactive", r"inactive (rover|vehicle)s?"],
     "trip_request": [
         # r"(want|need|prepare) (rover|vehicle) for( a| the| my)? trip",
         # r"(lets|let us|let's) have( a| the)? trip"
         r"(rover|vehicle) [a-z ]*trip",
-        r"trip [a-z ]*(rover|vehicle)"
-    ]
+        r"trip [a-z ]*(rover|vehicle)",
+    ],
 }
 for intent in REQUESTS:
     REQUESTS[intent] = [re.compile(template, re.IGNORECASE) for template in REQUESTS[intent]]
@@ -75,61 +62,54 @@ RESPONSES = {
     "all_statuses_request": [
         "Of TOTAL_N_HARVESTERS harvesters, harvester FULL_IDS is full, harvester WORKING_IDS is working,"
         " harvester BROKEN_IDS is awaiting repaires, harvester INACTIVE_IDS is inactive."
-    ],    
-    "status_request": [
-        "The harvester ID is STATUS."
     ],
+    "status_request": ["The harvester ID is STATUS."],
     "broken_ids_request": {
         "yes": "Reporting: harvester BROKEN_IDS is broken.",
         "no": "No broken harvesters found.",
-        "required": {"harvesters": "stall"}
+        "required": {"harvesters": "stall"},
     },
     "full_ids_request": {
         "yes": "Reporting: harvester FULL_IDS is full.",
         "no": "No full harvesters found.",
-        "required": {"harvesters": "full"}
+        "required": {"harvesters": "full"},
     },
     "working_ids_request": {
         "yes": "Reporting: harvester WORKING_IDS is working.",
         "no": "No working harvesters found.",
-        "required": {"harvesters": "working"}
+        "required": {"harvesters": "working"},
     },
     "inactive_ids_request": {
         "yes": "Reporting: harvester INACTIVE_IDS is inactive.",
         "no": "No inactive harvesters found.",
-        "required": {"harvesters": "inactive"}
+        "required": {"harvesters": "inactive"},
     },
     "broken_rover_ids_request": {
         "yes": "Reporting: rover BROKEN_ROVER_IDS is broken.",
         "no": "No broken rovers found.",
-        "required": {"rovers": "stall"}
+        "required": {"rovers": "stall"},
     },
     "available_rover_ids_request": {
         "yes": "Reporting: rover AVAILABLE_ROVER_IDS is available.",
         "no": "No available rovers found.",
-        "required": {"rovers": "available"}
+        "required": {"rovers": "available"},
     },
     "inactive_rover_ids_request": {
         "yes": "Reporting: rover INACTIVE_ROVER_IDS is inactive.",
         "no": "No inactive rovers found.",
-        "required": {"rovers": "inactive"}
+        "required": {"rovers": "inactive"},
     },
     "trip_request": {
         "yes": "😊 Preparing rover ROVER_FOR_TRIP_ID for a trip.",
         "no": "🙁 Can't prepare a rover for a trip, no available rovers.",
-        "required": {"rovers": "available"}
+        "required": {"rovers": "available"},
     },
-    "not_relevant": [
-        "I don't have this information.",
-        "I don't understand you.",
-        "I don't know what to answer."
-    ]
+    "not_relevant": ["I don't have this information.", "I don't understand you.", "I don't know what to answer."],
 }
 
 
 def update_database():
-    """Update database loading new version every our
-    """
+    """Update database loading new version every our"""
     with open("harvesters_status.json", "r") as f:
         db = json.load(f)
     return db, time.time()
@@ -139,8 +119,7 @@ DATABASE, PREV_UPDATE_TIME = update_database()
 
 
 def detect_intent(utterance):
-    """Detecting intents with regexp templates
-    """
+    """Detecting intents with regexp templates"""
     for intent in REQUESTS:
         for template in REQUESTS[intent]:
             if re.search(template, utterance):
@@ -149,15 +128,16 @@ def detect_intent(utterance):
 
 
 def get_ids_with_statuses(status, object="harvester"):
-    """Return ids of objects with given (inner) status
-    """
+    """Return ids of objects with given (inner) status"""
     if len(status) == 0:
         return []
     if object == "harvester":
-        status_map = {"working": ["optimal", "suboptimal"],
-                      "full": ["full"],
-                      "stall": ["stall"],
-                      "inactive": ["inactive"]}
+        status_map = {
+            "working": ["optimal", "suboptimal"],
+            "full": ["full"],
+            "stall": ["stall"],
+            "inactive": ["inactive"],
+        }
         statuses = status_map[status]
     else:
         statuses = [status]
@@ -170,19 +150,18 @@ def get_ids_with_statuses(status, object="harvester"):
 
 
 def get_statuses_with_ids(ids, object="harvester"):
-    """Return (inner) statuses of objects with given ids
-    """
+    """Return (inner) statuses of objects with given ids"""
     # harvesters statuses are out of ["full", "working", "stall", "inactive"]
     if object == "harvester":
-        status_map = {"optimal": "working",
-                      "suboptimal": "working",
-                      "full": "full",
-                      "stall": "stall",
-                      "inactive": "inactive"}
+        status_map = {
+            "optimal": "working",
+            "suboptimal": "working",
+            "full": "full",
+            "stall": "stall",
+            "inactive": "inactive",
+        }
     else:
-        status_map = {"available": "available",
-                      "stall": "stall",
-                      "inactive": "inactive"}
+        status_map = {"available": "available", "stall": "stall", "inactive": "inactive"}
 
     statuses = []
     for str_id in ids:
@@ -191,21 +170,18 @@ def get_statuses_with_ids(ids, object="harvester"):
 
 
 def fill_in_particular_status(response, ids, template_to_fill, object="harvester"):
-    """Replaces `template_to_fill` (e.g. `FULL_IDS`) in templated response to objects with given `ids`
-    """
+    """Replaces `template_to_fill` (e.g. `FULL_IDS`) in templated response to objects with given `ids`"""
     if len(ids) == 0:
         response = response.replace(f"{object} {template_to_fill} is", "none is")
     elif len(ids) == 1:
         response = response.replace(f"{template_to_fill}", str(ids[0]))
     else:
-        response = response.replace(f"{object} {template_to_fill} is",
-                                    f"{object}s {', '.join(ids)} are")
+        response = response.replace(f"{object} {template_to_fill} is", f"{object}s {', '.join(ids)} are")
     return response
 
 
 def fill_harvesters_status_templates(response, request_text):
-    """Fill all variables in the templated response
-    """
+    """Fill all variables in the templated response"""
     full_ids = get_ids_with_statuses("full")
     working_ids = get_ids_with_statuses("working")
     broken_ids = get_ids_with_statuses("stall")
@@ -241,8 +217,9 @@ def fill_harvesters_status_templates(response, request_text):
             response = response.replace("ID", required_id)
             response = response.replace("STATUS", status)
         else:
-            response = f"I can answer only about the following harvesters ids: " \
-                       f"{', '.join(DATABASE['harvesters'].keys())}."
+            response = (
+                f"I can answer only about the following harvesters ids: " f"{', '.join(DATABASE['harvesters'].keys())}."
+            )
 
     return response
 
@@ -289,10 +266,10 @@ def respond():
     confidences = []
 
     for dialog in dialogs:
-        sentence = dialog['human_utterances'][-1]['annotations'].get("spelling_preprocessing")
+        sentence = dialog["human_utterances"][-1]["annotations"].get("spelling_preprocessing")
         if sentence is None:
-            logger.warning('Not found spelling preprocessing annotation')
-            sentence = dialog['human_utterances'][-1]['text']
+            logger.warning("Not found spelling preprocessing annotation")
+            sentence = dialog["human_utterances"][-1]["text"]
         intent = detect_intent(sentence)
         logger.info(f"Found intent {intent} in user request {sentence}")
         response, confidence = generate_response_from_db(intent, sentence)
