@@ -260,4 +260,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  dff-template-skill:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
 version: '3.7'
