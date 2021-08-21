@@ -6,8 +6,13 @@ import sentry_sdk
 from requests import RequestException
 
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import CHECK_DEFINITELY_GAME_COMPILED_PATTERN, get_igdb_client_token, get_igdb_post_kwargs, \
-    load_json, find_games_in_text
+from common.gaming import (
+    CHECK_DEFINITELY_GAME_COMPILED_PATTERN,
+    get_igdb_client_token,
+    get_igdb_post_kwargs,
+    load_json,
+    find_games_in_text,
+)
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -16,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 games_igdb_search_results = load_json(os.getenv("GAMES_IGDB_SEARCH_RESULTS"))
-games_igdb_ids = load_json(os.getenv('GAMES_IGDB_IDS'))
+games_igdb_ids = load_json(os.getenv("GAMES_IGDB_IDS"))
 
 
 CLIENT_ID = os.getenv("TWITCH_IGDB_CLIENT_ID")
@@ -41,8 +46,10 @@ def get_game_description_for_first_igdb_candidate(match_names, results_sort_key)
     name = match_names[0]
     name_lower = name.lower()
     if isinstance(results_sort_key, str):
+
         def results_sort_key(x):
             return -x[results_sort_key] if results_sort_key in x else 1
+
     elif not callable(results_sort_key):
         raise ValueError("The argument `results_sort_key` has to be either `str` or callable.")
     if name_lower in games_igdb_search_results:
@@ -83,11 +90,22 @@ def get_game_description_for_first_igdb_candidate(match_names, results_sort_key)
 
 
 def search_igdb_for_game(
-        match_names,
-        results_sort_key="rating_count",
-        search_result_keys_to_keep=(
-            "url", "rating", "rating_count", "summary", "created_at", "first_release_date", "involved_companies",
-            "genres", "themes", "category", "name", "id"),
+    match_names,
+    results_sort_key="rating_count",
+    search_result_keys_to_keep=(
+        "url",
+        "rating",
+        "rating_count",
+        "summary",
+        "created_at",
+        "first_release_date",
+        "involved_companies",
+        "genres",
+        "themes",
+        "category",
+        "name",
+        "id",
+    ),
 ):
     logger.info(f"Searching for igdb game description of game {repr(match_names)}")
     igdb_game_description = get_game_description_for_first_igdb_candidate(match_names, results_sort_key)
@@ -98,7 +116,7 @@ def search_igdb_for_game(
             if k in igdb_game_description:
                 filtered_game_description[k] = igdb_game_description[k]
             else:
-                name_str = f" '{igdb_game_description['name']}'" if 'name' in igdb_game_description else ""
+                name_str = f" '{igdb_game_description['name']}'" if "name" in igdb_game_description else ""
                 logger.warning(
                     f"Required key '{k}' is missing in information about game{name_str}. "
                     f"Game info: {igdb_game_description}. Skipping..."
@@ -118,9 +136,11 @@ def search_igdb_game_description_by_user_and_bot_phrases(vars):
     user_text = state_utils.get_last_human_utterance(vars).get("text", "").lower()
     prev_bot_text = state_utils.get_last_bot_utterance(vars).get("text", "").lower()
     game_names_from_local_list_of_games = find_games_in_text(user_text) + find_games_in_text(prev_bot_text)
-    assert game_names_from_local_list_of_games, \
-        "At least one game should have been found in function `switch_to_particular_game_discussion()`"
+    assert (
+        game_names_from_local_list_of_games
+    ), "At least one game should have been found in function `switch_to_particular_game_discussion()`"
     first_match_names = game_names_from_local_list_of_games[0]
-    game_word_mentioned = does_text_contain_video_game_words(user_text) \
-        or does_text_contain_video_game_words(prev_bot_text)
+    game_word_mentioned = does_text_contain_video_game_words(user_text) or does_text_contain_video_game_words(
+        prev_bot_text
+    )
     return search_igdb_for_game(first_match_names), game_word_mentioned

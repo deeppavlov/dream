@@ -20,8 +20,14 @@ from dialogflows.flows.starter_states import State as StarterState
 import dialogflows.flows.weekend as weekend_flow
 import dialogflows.flows.starter as starter_flow
 
-from dialogflows.flows.shared import link_to_by_enity_request, link_to_by_enity_response, \
-    link_to_skill2i_like_to_talk, set_confidence_by_universal_policy, error_response, link_to_skill2key_words
+from dialogflows.flows.shared import (
+    link_to_by_enity_request,
+    link_to_by_enity_response,
+    link_to_skill2i_like_to_talk,
+    set_confidence_by_universal_policy,
+    error_response,
+    link_to_skill2key_words,
+)
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -87,8 +93,13 @@ def compose_topic_offering(vars, excluded_skills=None):
         skill_name for skill_name in link_to_skill2key_words.keys() if skill_name not in excluded_skills
     ]
     if state_utils.get_age_group(vars) == "kid":
-        available_skill_names = ["game_cooperative_skill", "dff_animals_skill", "dff_food_skill",
-                                 "superheroes", "school"]  # for small talk skill
+        available_skill_names = [
+            "game_cooperative_skill",
+            "dff_animals_skill",
+            "dff_food_skill",
+            "superheroes",
+            "school",
+        ]  # for small talk skill
     if len(available_skill_names) == 0:
         available_skill_names = link_to_skill2key_words.keys()
 
@@ -108,10 +119,12 @@ def offered_topic_choice_declined_request(ngrams, vars):
     # asked what to talk about
     shared_memory = state_utils.get_shared_memory(vars)
     greeting_step_id = shared_memory.get("greeting_step_id", 0)
-    was_linking_topic_offering = GREETING_STEPS[greeting_step_id - 1] == "what_to_talk_about" \
-        if greeting_step_id > 0 else False
-    user_asked_for_topic = any([resp.lower() in prev_bot_uttr.lower()
-                                for resp in common_greeting.GREETING_QUESTIONS["what_to_talk_about"]])
+    was_linking_topic_offering = (
+        GREETING_STEPS[greeting_step_id - 1] == "what_to_talk_about" if greeting_step_id > 0 else False
+    )
+    user_asked_for_topic = any(
+        [resp.lower() in prev_bot_uttr.lower() for resp in common_greeting.GREETING_QUESTIONS["what_to_talk_about"]]
+    )
 
     was_active = "dff_friendship_skill" == state_utils.get_last_bot_utterance(vars).get("active_skill", "")
     # offered choice between two topics
@@ -127,8 +140,9 @@ def offered_topic_choice_declined_request(ngrams, vars):
 def asked_for_events_and_got_yes_request(ngrams, vars):
     # SYS_ASKED_EVENTS_AND_YES_INTENT
     prev_bot_uttr = state_utils.get_last_bot_utterance(vars).get("text", "")
-    was_event_question = any([resp.lower() in prev_bot_uttr.lower()
-                              for resp in common_greeting.GREETING_QUESTIONS["recent_personal_events"]])
+    was_event_question = any(
+        [resp.lower() in prev_bot_uttr.lower() for resp in common_greeting.GREETING_QUESTIONS["recent_personal_events"]]
+    )
 
     agreed = condition_utils.is_yes_vars(vars)
     entities = state_utils.get_nounphrases_from_human_utterance(vars)
@@ -142,8 +156,7 @@ def clarify_event_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, MUST_CONTINUE)
-        response = random.choice(["Cool! Tell me about it.",
-                                  "Great! What is it?"])
+        response = random.choice(["Cool! Tell me about it.", "Great! What is it?"])
         state_utils.save_to_shared_memory(vars, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
         return response
 
@@ -167,6 +180,7 @@ def offer_topic_response_part(vars, excluded_skills=None):
 
     state_utils.save_to_shared_memory(vars, greeting_step_id=GREETING_STEPS.index("what_to_talk_about") + 1)
     return offer_topic_choose
+
 
 ##################################################################################################################
 # Init DialogFlow
@@ -208,6 +222,7 @@ def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
         tokens_batch += [tokens if probs_flag else list(tokens)]
     return tokens_batch
 
+
 ##################################################################################################################
 # std false positive turn on handling
 ##################################################################################################################
@@ -234,6 +249,7 @@ def bye_response(vars):
     state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
     return f"Sorry, bye. #+#exit"
 
+
 ##################################################################################################################
 # std hello
 ##################################################################################################################
@@ -257,13 +273,15 @@ def hello_response(vars):
         else:
             state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
             state_utils.set_can_continue(vars, MUST_CONTINUE)
-        which_start = random.choice([
-            # "starter_weekday",
-            # "starter_genre",
-            "how_are_you",
-            # "what_is_your_name",
-            # "what_to_talk_about"
-        ])
+        which_start = random.choice(
+            [
+                # "starter_weekday",
+                # "starter_genre",
+                "how_are_you",
+                # "what_is_your_name",
+                # "what_to_talk_about"
+            ]
+        )
         state_utils.save_to_shared_memory(vars, greeting_type=which_start)
         if which_start == "how_are_you":
             after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
@@ -294,7 +312,8 @@ def hello_response(vars):
 ##################################################################################################################
 HOW_ARE_YOU_TEMPLATE = re.compile(r"(how are you|what about you|how about you|and you|how you doing)", re.IGNORECASE)
 HOW_ARE_YOU_PRECISE_TEMPLATE = re.compile(
-    r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE)
+    r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE
+)
 ANY_YOU_TEMPLATE = re.compile(r"\b(you|your|yours|yourself)\b", re.IGNORECASE)
 
 
@@ -321,8 +340,10 @@ def how_are_you_response(vars):
         how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES)
 
         question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS["recent_personal_events"])
-        response = f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} " \
-                   f"{question_about_activities}"
+        response = (
+            f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
+            f"{question_about_activities}"
+        )
         state_utils.save_to_shared_memory(vars, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
         return response
 
@@ -343,8 +364,9 @@ def positive_or_negative_request(ngrams, vars):
     pos_temp = is_positive_regexp_based(state_utils.get_last_human_utterance(vars))
     neg_temp = is_negative_regexp_based(state_utils.get_last_human_utterance(vars))
 
-    bot_asked_how_are_you = any([resp in state_utils.get_last_bot_utterance(vars)["text"]
-                                 for resp in common_greeting.HOW_ARE_YOU_RESPONSES])
+    bot_asked_how_are_you = any(
+        [resp in state_utils.get_last_bot_utterance(vars)["text"] for resp in common_greeting.HOW_ARE_YOU_RESPONSES]
+    )
     if bot_asked_how_are_you and (usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp):
         return True
     return False
@@ -403,8 +425,10 @@ def how_human_is_doing_response(vars):
                 user_mood_acknowledgement = "Okay."
 
         question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS["recent_personal_events"])
-        response = f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} " \
-                   f"{question_about_activities}"
+        response = (
+            f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
+            f"{question_about_activities}"
+        )
         state_utils.save_to_shared_memory(vars, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
         return response
 
@@ -417,6 +441,7 @@ def how_human_is_doing_response(vars):
 ##################################################################################################################
 # bot offers topics to discuss
 ##################################################################################################################
+
 
 def offer_topics_choice_response(vars):
     # TODO
@@ -454,12 +479,15 @@ def offered_topic_choice_declined_response(vars):
 # bot asks: how do you spend your free time
 ##################################################################################################################
 
+
 def was_what_do_you_do_request(ngrams, vars):
     bot_uttr_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     if condition_utils.no_requests(vars) and any(
-            [phrase in bot_uttr_text for phrase in common_greeting.GREETING_QUESTIONS["what_do_you_do_on_weekdays"]]):
+        [phrase in bot_uttr_text for phrase in common_greeting.GREETING_QUESTIONS["what_do_you_do_on_weekdays"]]
+    ):
         return True
     return False
+
 
 ##################################################################################################################
 # bot shares list activities
@@ -482,6 +510,7 @@ def not_is_no_request(ngrams, vars):
     if not condition_utils.is_no_vars(vars):
         return True
     return False
+
 
 ##################################################################################################################
 # std greeting
@@ -511,8 +540,9 @@ def std_greeting_response(vars):
 
         greeting_step_id = shared_memory.get("greeting_step_id", 0)
 
-        _friendship_was_active = "dff_friendship_skill" == state_utils.get_last_bot_utterance(vars).get("active_skill",
-                                                                                                        "")
+        _friendship_was_active = "dff_friendship_skill" == state_utils.get_last_bot_utterance(vars).get(
+            "active_skill", ""
+        )
         _entities = state_utils.get_nounphrases_from_human_utterance(vars)
         _no_requests = condition_utils.no_requests(vars)
         _nothing_dont_know = COMPILE_SOMETHING.search(state_utils.get_last_human_utterance(vars)["text"])
@@ -521,7 +551,8 @@ def std_greeting_response(vars):
         if _nothing_dont_know or (_no_requests and len(_entities) == 0):
             if _friendship_was_active and greeting_step_id >= 1:
                 ack = random.choice(
-                    common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[GREETING_STEPS[greeting_step_id - 1]])
+                    common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[GREETING_STEPS[greeting_step_id - 1]]
+                )
                 state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
                 state_utils.set_can_continue(vars, MUST_CONTINUE)
             else:
@@ -533,7 +564,8 @@ def std_greeting_response(vars):
             # user wants to talk about something particular. We are just a dummy response, if no appropriate
             if _friendship_was_active:
                 ack = random.choice(
-                    common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY["what_do_you_do_on_weekdays"])
+                    common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY["what_do_you_do_on_weekdays"]
+                )
                 sent_ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
                 ack = f"{sent_ack} {ack}"
             else:
@@ -659,10 +691,7 @@ simplified_dialogflow.set_error_successor(State.SYS_FP, State.SYS_ERR)
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_FP,
-    {
-        State.SYS_USER_WANTS_TALK: not_is_no_request,
-        State.SYS_USER_DOESNT_WANT_TALK: is_no_request
-    },
+    {State.SYS_USER_WANTS_TALK: not_is_no_request, State.SYS_USER_DOESNT_WANT_TALK: is_no_request},
 )
 simplified_dialogflow.set_error_successor(State.USR_FP, State.SYS_ERR)
 
@@ -709,9 +738,7 @@ simplified_dialogflow.add_system_transition(
 ##################################################################################################################
 #  SYS_STD_GREETING
 
-simplified_dialogflow.add_system_transition(
-    State.SYS_STD_GREETING, State.USR_STD_GREETING, std_greeting_response
-)
+simplified_dialogflow.add_system_transition(State.SYS_STD_GREETING, State.USR_STD_GREETING, std_greeting_response)
 
 ##################################################################################################################
 #  USR_STD_GREETING
@@ -722,7 +749,7 @@ simplified_dialogflow.add_user_serial_transitions(
         # State.SYS_OFFER_TOPICS: was_what_do_you_do_request,
         State.SYS_OFFERED_TOPICS_DECLINED: offered_topic_choice_declined_request,
         State.SYS_ASKED_EVENTS_AND_YES_INTENT: asked_for_events_and_got_yes_request,
-        State.SYS_STD_GREETING: std_greeting_request
+        State.SYS_STD_GREETING: std_greeting_request,
     },
 )
 

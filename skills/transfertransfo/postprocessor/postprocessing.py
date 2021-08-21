@@ -245,7 +245,7 @@ def postprocess_text(
     heuristic=True,
     emoji_prob=0.3,
     ngram_size=3,
-    add_questions=0.3
+    add_questions=0.3,
 ):
 
     utterances_histories_str = ". ".join(utterances_histories)

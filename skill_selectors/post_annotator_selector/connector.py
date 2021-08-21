@@ -7,18 +7,12 @@ class PostAnnotatorSelectorConnector:
 
     async def send(self, payload: Dict, callback: Callable):
         try:
-            if payload['payload']['bot_utterances']:
-                existing_annotators = set(payload['payload']['bot_utterances'][-1]['annotations'].keys())
+            if payload["payload"]["bot_utterances"]:
+                existing_annotators = set(payload["payload"]["bot_utterances"][-1]["annotations"].keys())
                 response = list(self.annotator_names - existing_annotators)
             else:
                 response = []
-            await callback(
-                task_id=payload['task_id'],
-                response=response
-            )
+            await callback(task_id=payload["task_id"], response=response)
         except Exception as e:
             response = e
-            await callback(
-                task_id=payload['task_id'],
-                response=response
-            )
+            await callback(task_id=payload["task_id"], response=response)

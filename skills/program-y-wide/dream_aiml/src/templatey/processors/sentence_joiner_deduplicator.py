@@ -11,14 +11,13 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
 
         new_answers = []
         for i in range(len(answers)):
-            if not(answers[i] in new_answers):
+            if not (answers[i] in new_answers):
                 new_answers.append(answers[i])
         answers = new_answers
 
         len_after = len(answers)
         if len_after != len_before:
-            YLogger.warning(self, "Sentence DeDuplicator stripped duplicated answers: %d %d",
-                            len_before, len_after)
+            YLogger.warning(self, "Sentence DeDuplicator stripped duplicated answers: %d %d", len_before, len_after)
         final_sentences = []
         # TODO it would be better to reference to config's bot.default_response setting for
         # the IDK response, but
@@ -33,7 +32,7 @@ class SentenceJoinerDeDuplicator(SentenceJoiner):
                 # Sometimes sentence can be already merged list of answers which may contain
                 # duplicated IDKs. So we make cleaning here.
                 if IDK_SENTENCE.lower() in sentence.lower():
-                    sentence, _ = re.subn(IDK_SENTENCE, '', sentence, flags=re.IGNORECASE)
+                    sentence, _ = re.subn(IDK_SENTENCE, "", sentence, flags=re.IGNORECASE)
                     sentence = sentence.strip()
                     if not sentence:
                         # if sentence is empty after IDK removal

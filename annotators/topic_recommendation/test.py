@@ -8,26 +8,12 @@ def main():
 
     request_data = [
         {
-            "active_skills": [
-                [
-                    "dff_friendship_skill",
-                    "dff_friendship_skill"
-                    "dff_music_skill"
-                ]
-            ],
-            "cobot_topics": [
-                [
-                    "Phatic",
-                    "Phatic"
-                    "Phatic",
-                    "Music",
-                    "Phatic"
-                ]
-            ]
+            "active_skills": [["dff_friendship_skill", "dff_friendship_skill" "dff_music_skill"]],
+            "cobot_topics": [["Phatic", "Phatic" "Phatic", "Music", "Phatic"]],
         }
     ]
 
-    gold_results = [sorted(['dff_gossip_skill', 'dff_movie_skill'])]
+    gold_results = [sorted(["dff_gossip_skill", "dff_movie_skill"])]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

@@ -18,7 +18,7 @@ class QToPage(Component):
                 for entities in entities_list:
                     pages = []
                     if entities:
-                        for entity in entities[:self.entities_num]:
+                        for entity in entities[: self.entities_num]:
                             page = self.q_to_page.get(entity, "")
                             if page:
                                 pages.append(page)
@@ -43,7 +43,7 @@ class FirstParExtractor(Component):
                 first_par_list = []
                 for entities in entities_list:
                     first_par = []
-                    for entity in entities[:self.entities_num]:
+                    for entity in entities[: self.entities_num]:
                         if entity in self.wiki_first_par:
                             first_par.append(self.wiki_first_par[entity])
                     first_par_list.append(first_par)

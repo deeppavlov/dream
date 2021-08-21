@@ -14,7 +14,7 @@ def handler(requested_data):
 def run_test(handler):
     hypothesis = handler({"bot_utterance": "hi", "human_utterance": "how are you"})
     print(f"test name: {hypothesis}")
-    assert hypothesis == [{'type': 'React.Rejoinder.Support.Track.Clarify', 'confidence': 0.2331162013066703}]
+    assert hypothesis == [{"type": "React.Rejoinder.Support.Track.Clarify", "confidence": 0.2331162013066703}]
     print("Success")
 
 

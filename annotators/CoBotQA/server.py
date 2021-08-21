@@ -21,9 +21,8 @@ from common.travel import TOO_SIMPLE_TRAVEL_FACTS
 from common.utils import get_entities, COBOTQA_EXTRA_WORDS
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+sentry_sdk.init(getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -34,16 +33,16 @@ inflect_engine = inflect.engine()
 N_FACTS_TO_CHOSE = 1
 ASK_QUESTION_PROB = 0.5
 
-ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 6))
-COBOT_API_KEY = os.environ.get('COBOT_API_KEY')
-COBOT_QA_SERVICE_URL = os.environ.get('COBOT_QA_SERVICE_URL')
+ASYNC_SIZE = int(os.environ.get("ASYNC_SIZE", 6))
+COBOT_API_KEY = os.environ.get("COBOT_API_KEY")
+COBOT_QA_SERVICE_URL = os.environ.get("COBOT_QA_SERVICE_URL")
 
 if COBOT_API_KEY is None:
-    raise RuntimeError('COBOT_API_KEY environment variable is not set')
+    raise RuntimeError("COBOT_API_KEY environment variable is not set")
 if COBOT_QA_SERVICE_URL is None:
-    raise RuntimeError('COBOT_QA_SERVICE_URL environment variable is not set')
+    raise RuntimeError("COBOT_QA_SERVICE_URL environment variable is not set")
 
-headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': f'{COBOT_API_KEY}'}
+headers = {"Content-Type": "application/json;charset=utf-8", "x-api-key": f"{COBOT_API_KEY}"}
 
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines())
@@ -53,11 +52,11 @@ with open("./common_user_phrases.txt", "r") as f:
 
 
 def remove_punct_and_articles(s, lowecase=True):
-    articles = ['a', 'an', 'the']
+    articles = ["a", "an", "the"]
     if lowecase:
         s = s.lower()
-    no_punct = ''.join([c for c in s if c not in string.punctuation])
-    no_articles = ' '.join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
+    no_punct = "".join([c for c in s if c not in string.punctuation])
+    no_articles = " ".join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
     return no_articles
 
 
@@ -97,39 +96,76 @@ def lemmatize_substr(text):
     return lemm_text
 
 
-bad_answers = ['You can now put your wizarding world knowledge to the test with the official Harry Potter '
-               'quiz. Just say: "Play the Harry Potter Quiz."',
-               "I can provide information, music, news, weather, and more.",
-               'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
-               "I don't have an opinion on that.", "[GetMusicDetailsIntent:Music]",
-               "Thank you!",
-               "Thanks!",
-               "That's really nice, thanks.",
-               "That's nice of you to say.",
-               "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan"
-               " and others.", "I didn't catch that. Please say that again.", "Okay."
-               ]
-bad_subanswers = ["let's talk about", "i have lots of", "world of warcraft",
-                  " wow ", " ok is", "coolness is ", "about nice",
-                  "\"let's talk\" is a 2002 drama", "visit amazon.com/",
-                  'alexa, play my flash briefing.', "amazon alexa",
-                  "past tense", "plural form", "singular form", "present tense", "future tense", "bob cut",
-                  "movie theater", "alexa app", "more news", "be here when you need me", "the weeknd",
-                  "faktas", "fact about amazing", "also called movie or motion picture",
-                  "known as eugen warming", "select a chat program that fits your needs",
-                  "is usually defined as a humorous anecdote or remark intended to provoke laughter",
-                  "joke is a display of humour in which words are used within a specific",
-                  "didn't catch that", "say that again", "try again", "really nice to meet you too",
-                  "like to learn about how I can help", "sorry", "i don't under", "ask me whatever you like",
-                  "i don’t know that", "initialism for laughing out loud", "gamelistintent", "listintent",
-                  "try asking", "missed part", "try saying", " hey is a ", "didn't hear that", "try that again"
-                  ]
+bad_answers = [
+    "You can now put your wizarding world knowledge to the test with the official Harry Potter "
+    'quiz. Just say: "Play the Harry Potter Quiz."',
+    "I can provide information, music, news, weather, and more.",
+    'For the latest in politics and other news, try asking "Alexa, play my Flash Briefing."',
+    "I don't have an opinion on that.",
+    "[GetMusicDetailsIntent:Music]",
+    "Thank you!",
+    "Thanks!",
+    "That's really nice, thanks.",
+    "That's nice of you to say.",
+    "Kazuo Ishiguro, Gretchen Mol, Benjamin Wadsworth, Johann Mühlegg, Ramkumar Ramanathan" " and others.",
+    "I didn't catch that. Please say that again.",
+    "Okay.",
+]
+bad_subanswers = [
+    "let's talk about",
+    "i have lots of",
+    "world of warcraft",
+    " wow ",
+    " ok is",
+    "coolness is ",
+    "about nice",
+    '"let\'s talk" is a 2002 drama',
+    "visit amazon.com/",
+    "alexa, play my flash briefing.",
+    "amazon alexa",
+    "past tense",
+    "plural form",
+    "singular form",
+    "present tense",
+    "future tense",
+    "bob cut",
+    "movie theater",
+    "alexa app",
+    "more news",
+    "be here when you need me",
+    "the weeknd",
+    "faktas",
+    "fact about amazing",
+    "also called movie or motion picture",
+    "known as eugen warming",
+    "select a chat program that fits your needs",
+    "is usually defined as a humorous anecdote or remark intended to provoke laughter",
+    "joke is a display of humour in which words are used within a specific",
+    "didn't catch that",
+    "say that again",
+    "try again",
+    "really nice to meet you too",
+    "like to learn about how I can help",
+    "sorry",
+    "i don't under",
+    "ask me whatever you like",
+    "i don’t know that",
+    "initialism for laughing out loud",
+    "gamelistintent",
+    "listintent",
+    "try asking",
+    "missed part",
+    "try saying",
+    " hey is a ",
+    "didn't hear that",
+    "try that again",
+]
 
 
-@app.route("/respond", methods=['POST'])
+@app.route("/respond", methods=["POST"])
 def respond():
     st_time = time()
-    dialogs = request.json['dialogs']
+    dialogs = request.json["dialogs"]
     responses = []
 
     questions = []
@@ -143,14 +179,14 @@ def respond():
             # do not add any fact about ... and
             # replace human utterance by special string
             # cobotqa will respond with ''
-            questions.append(f'[common_phrase_replaced: {curr_uttr_clean}]')
+            questions.append(f"[common_phrase_replaced: {curr_uttr_clean}]")
             dialog_ids += [i]
             subjects.append(None)
             continue
         # fix to question what is fact, cobotqa gives random fact on such question
-        what_is_fact = 'what is fact'
-        if remove_punct_and_articles(curr_uttr_rewritten)[-len(what_is_fact):] == what_is_fact:
-            curr_uttr_rewritten = 'definition of fact'
+        what_is_fact = "what is fact"
+        if remove_punct_and_articles(curr_uttr_rewritten)[-len(what_is_fact) :] == what_is_fact:
+            curr_uttr_rewritten = "definition of fact"
         questions.append(curr_uttr_rewritten)
         dialog_ids += [i]
         subjects.append(None)  # to separate facts about entities from normal responses by Cobotqa
@@ -163,7 +199,8 @@ def respond():
         for _ in range(N_FACTS_TO_CHOSE):
             for ent in get_entities(curr_uttr, only_named=True, with_labels=True):
                 if ent["text"].lower() not in UNIGRAMS and not (
-                        ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"):
+                    ent["text"].lower() == "alexa" and curr_uttr["text"].lower()[:5] == "alexa"
+                ):
                     entities.append(ent["text"].lower())
                     facts_questions.append("Fact about {}".format(ent["text"]))
                     facts_dialog_ids += [i]
@@ -171,7 +208,7 @@ def respond():
             if len(entities) == 0:
                 for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
                     if ent.lower() not in UNIGRAMS:
-                        if ent in entities + ["I", 'i']:
+                        if ent in entities + ["I", "i"]:
                             pass
                         else:
                             facts_questions.append("Fact about {}".format(ent))
@@ -205,17 +242,21 @@ def respond():
         logger.info("Response: {}".format(response))
 
         # fix for cases when fact is about fun, but fun is not in entities
-        fun_fact_q = 'Fun fact about'
-        if fun_fact_q in questions[i] and ' fun' not in questions[i][len(fun_fact_q):].lower() \
-                and 'Fun is defined by the Oxford English Dictionary as' in response:
-            response = ''
+        fun_fact_q = "Fun fact about"
+        if (
+            fun_fact_q in questions[i]
+            and " fun" not in questions[i][len(fun_fact_q) :].lower()
+            and "Fun is defined by the Oxford English Dictionary as" in response
+        ):
+            response = ""
 
-        if len(response) > 0 and 'skill://amzn1' not in response:
+        if len(response) > 0 and "skill://amzn1" not in response:
             sentences = sent_tokenize(response.replace(".,", "."))
             full_resp = response
             response = " ".join(sentences)
-            if full_resp in bad_answers or any([bad_substr.lower() in full_resp.lower()
-                                                for bad_substr in bad_subanswers]):
+            if full_resp in bad_answers or any(
+                [bad_substr.lower() in full_resp.lower() for bad_substr in bad_subanswers]
+            ):
                 response = ""
         else:
             response = ""
@@ -266,16 +307,17 @@ def respond():
                             curr_resp["facts"].append({"entity": lemm_resp_subj, "fact": fact})
 
         # store only 5 facts maximum
-        curr_resp["facts"] = list(np.random.choice(
-            curr_resp["facts"], size=5)) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
+        curr_resp["facts"] = (
+            list(np.random.choice(curr_resp["facts"], size=5)) if len(curr_resp["facts"]) > 5 else curr_resp["facts"]
+        )
         for curr_resp_item in curr_resp["facts"]:
             curr_resp_item["fact"] = re.sub(COBOTQA_EXTRA_WORDS, "", curr_resp_item["fact"]).strip()
 
         final_responses.append(curr_resp)
     total_time = time() - st_time
-    logger.info(f'cobotqa-annotator exec time: {total_time:.3f}s')
+    logger.info(f"cobotqa-annotator exec time: {total_time:.3f}s")
     return jsonify(final_responses)
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)

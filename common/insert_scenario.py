@@ -9,13 +9,25 @@ import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
 
-from common.wiki_skill import check_condition, find_entity_by_types, check_nounphr, find_page_title, find_paragraph, \
-    delete_hyperlinks, find_all_titles, used_types_dict, NEWS_MORE, WIKI_BLACKLIST, QUESTION_TEMPLATES, \
-    QUESTION_TEMPLATES_SHORT, CONF_DICT
+from common.wiki_skill import (
+    check_condition,
+    find_entity_by_types,
+    check_nounphr,
+    find_page_title,
+    find_paragraph,
+    delete_hyperlinks,
+    find_all_titles,
+    used_types_dict,
+    NEWS_MORE,
+    WIKI_BLACKLIST,
+    QUESTION_TEMPLATES,
+    QUESTION_TEMPLATES_SHORT,
+    CONF_DICT,
+)
 from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 WIKI_FACTS_URL = os.getenv("WIKI_FACTS_URL")
 
@@ -316,8 +328,9 @@ def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_c
             if response:
                 page_content_list.append(response_dict)
         else:
-            page_content_list.append({"facts_str": facts_str,
-                                      "question": f"I was very happy to tell you more about {found_entity_substr}."})
+            page_content_list.append(
+                {"facts_str": facts_str, "question": f"I was very happy to tell you more about {found_entity_substr}."}
+            )
     logger.info(f"page_content_list {page_content_list}")
     return page_content_list
 
@@ -439,8 +452,10 @@ def check_used_subtopic_utt(vars, topic_config, subtopic):
                 total += 1
                 if num in used_utt_nums:
                     used += 1
-        logger.info(f"check_used_subtopic_utt, subtopic {subtopic} total {total} used {used} "
-                    f"used_utt_nums_dict {used_utt_nums_dict}")
+        logger.info(
+            f"check_used_subtopic_utt, subtopic {subtopic} total {total} used {used} "
+            f"used_utt_nums_dict {used_utt_nums_dict}"
+        )
         if total > 0 and total == used:
             flag = True
     return flag
@@ -592,8 +607,10 @@ def start_or_continue_scenario(vars, topic_config):
         logger.info(f"used_smalltalk {used_utt_nums}")
         if cur_topic_smalltalk and len(used_utt_nums) < len(cur_topic_smalltalk) and cur_mode == "smalltalk":
             flag = True
-        if not first_utt and ((found_topic != "music" and prev_active_skill != "dff_wiki_skill")
-                              or (found_topic == "music" and prev_active_skill != "dff_music_skill")):
+        if not first_utt and (
+            (found_topic != "music" and prev_active_skill != "dff_wiki_skill")
+            or (found_topic == "music" and prev_active_skill != "dff_music_skill")
+        ):
             flag = False
     return flag
 
@@ -685,12 +702,13 @@ def smalltalk_response(vars, topic_config):
                 cur_subtopic = subtopics[i]
                 for num, utt_info in enumerate(topic_config[found_topic]["smalltalk"]):
                     utt_key = utt_info.get("key", "")
-                    if num not in used_utt_nums \
-                            and (not available_utterances
-                                 or (available_utterances and utt_key in available_utterances)):
+                    if num not in used_utt_nums and (
+                        not available_utterances or (available_utterances and utt_key in available_utterances)
+                    ):
                         if utt_info.get("subtopic", "") == cur_subtopic and check_utt_cases(vars, utt_info):
-                            response, used_utt_nums = make_smalltalk_response(vars, topic_config, shared_memory,
-                                                                              utt_info, used_utt_nums, num)
+                            response, used_utt_nums = make_smalltalk_response(
+                                vars, topic_config, shared_memory, utt_info, used_utt_nums, num
+                            )
                             if response:
                                 add_general_ackn = utt_info.get("add_general_ackn", False)
                                 utt_can_continue = utt_info.get("can_continue", "can")
@@ -707,10 +725,15 @@ def smalltalk_response(vars, topic_config):
         if not subtopics or not response:
             for num, utt_info in enumerate(topic_config[found_topic]["smalltalk"]):
                 utt_key = utt_info.get("key", "")
-                if num not in used_utt_nums and check_utt_cases(vars, utt_info) and not utt_info.get("subtopic", "") \
-                        and (not available_utterances or (available_utterances and utt_key in available_utterances)):
-                    response, used_utt_nums = make_smalltalk_response(vars, topic_config, shared_memory, utt_info,
-                                                                      used_utt_nums, num)
+                if (
+                    num not in used_utt_nums
+                    and check_utt_cases(vars, utt_info)
+                    and not utt_info.get("subtopic", "")
+                    and (not available_utterances or (available_utterances and utt_key in available_utterances))
+                ):
+                    response, used_utt_nums = make_smalltalk_response(
+                        vars, topic_config, shared_memory, utt_info, used_utt_nums, num
+                    )
                     if response:
                         utt_can_continue = utt_info.get("can_continue", "can")
                         utt_conf = utt_info.get("conf", utt_conf)
@@ -775,8 +798,10 @@ def start_or_continue_facts(vars, topic_config):
                 used_wikihow_nums = shared_memory.get("used_wikihow_nums", {}).get(cur_wikihow_page, [])
                 used_wikipedia_nums = shared_memory.get("used_wikipedia_nums", {}).get(cur_wikipedia_page, [])
                 logger.info(f"request, used_wikihow_nums {used_wikihow_nums} used_wikipedia_nums {used_wikipedia_nums}")
-                logger.info(f"request, wikipedia_page_content_list {wikipedia_page_content_list[:3]} "
-                            f"wikihow_page_content_list {wikihow_page_content_list[:3]}")
+                logger.info(
+                    f"request, wikipedia_page_content_list {wikipedia_page_content_list[:3]} "
+                    f"wikihow_page_content_list {wikihow_page_content_list[:3]}"
+                )
                 if len(wikihow_page_content_list) > 0 and len(used_wikihow_nums) < len(wikihow_page_content_list):
                     flag = True
                 if len(wikipedia_page_content_list) > 0 and len(used_wikipedia_nums) < len(wikipedia_page_content_list):
@@ -790,8 +815,10 @@ def start_or_continue_facts(vars, topic_config):
         facts = topic_config[found_topic].get("facts", {})
         if facts:
             flag = True
-        if not first_utt and ((found_topic != "music" and prev_active_skill != "dff_wiki_skill")
-                              or (found_topic == "music" and prev_active_skill != "dff_music_skill")):
+        if not first_utt and (
+            (found_topic != "music" and prev_active_skill != "dff_wiki_skill")
+            or (found_topic == "music" and prev_active_skill != "dff_music_skill")
+        ):
             flag = False
     return flag
 
@@ -856,8 +883,9 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
                 if wikipedia_page in titles_info_elem["pages"]:
                     predefined_titles = titles_info_elem["titles"]
                     break
-            wikipedia_page_content_list = preprocess_wikipedia_page(entity_substr, entity_types, page_content,
-                                                                    predefined_titles)
+            wikipedia_page_content_list = preprocess_wikipedia_page(
+                entity_substr, entity_types, page_content, predefined_titles
+            )
             memory["wikipedia_content"] = wikipedia_page_content_list
             state_utils.save_to_shared_memory(vars, cur_wikipedia_page=wikipedia_page)
         logger.info(f"wikihow_page {wikihow_page} wikipedia_page {wikipedia_page}")
@@ -869,8 +897,10 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
         wikihow_page_content_list = memory.get("wikihow_content", [])
         wikipedia_page_content_list = memory.get("wikipedia_content", [])
         logger.info(f"response, used_wikihow_nums {used_wikihow_nums} used_wikipedia_nums {used_wikipedia_nums}")
-        logger.info(f"response, wikipedia_page_content_list {wikipedia_page_content_list[:3]} "
-                    f"wikihow_page_content_list {wikihow_page_content_list[:3]}")
+        logger.info(
+            f"response, wikipedia_page_content_list {wikipedia_page_content_list[:3]} "
+            f"wikihow_page_content_list {wikihow_page_content_list[:3]}"
+        )
         if wikihow_page and wikihow_page_content_list:
             for num, fact in enumerate(wikihow_page_content_list):
                 if num not in used_wikihow_nums:
@@ -892,8 +922,9 @@ def facts_response(vars, topic_config, wikihow_cache, wikipedia_cache):
                     state_utils.save_to_shared_memory(vars, used_wikipedia_nums=used_wikipedia_nums_dict)
                     break
         cur_mode = "facts"
-        if len(wikihow_page_content_list) == len(used_wikihow_nums) \
-                and len(wikipedia_page_content_list) == len(used_wikipedia_nums):
+        if len(wikihow_page_content_list) == len(used_wikihow_nums) and len(wikipedia_page_content_list) == len(
+            used_wikipedia_nums
+        ):
             cur_mode = "smalltalk"
             if len(wikihow_page_content_list) == len(used_wikihow_nums):
                 state_utils.save_to_shared_memory(vars, cur_wikihow_page="")

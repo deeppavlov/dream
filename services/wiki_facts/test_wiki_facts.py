@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = 'http://0.0.0.0:8116/respond'
+    url = "http://0.0.0.0:8116/respond"
     request_data = [{"wikihow_titles": [["Photograph-Pets"]]}]
     count = 0
     for data in request_data:
@@ -12,8 +12,8 @@ def main():
         else:
             print("Not found content")
     assert count == len(request_data)
-    print('Success')
+    print("Success")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

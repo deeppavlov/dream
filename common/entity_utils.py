@@ -24,13 +24,7 @@ wnl = WordNetLemmatizer()
 
 
 class HumanEntityEncounter:
-    def __init__(
-        self,
-        human_utterance_index: int,
-        full_name: List[str],
-        previous_skill_name: str = "",
-        **kwargs
-    ):
+    def __init__(self, human_utterance_index: int, full_name: List[str], previous_skill_name: str = "", **kwargs):
         self.human_utterance_index = human_utterance_index
         self.full_name = full_name
         self.previous_skill_name = previous_skill_name
@@ -41,13 +35,7 @@ class HumanEntityEncounter:
 
 
 class BotEntityEncounter:
-    def __init__(
-        self,
-        human_utterance_index: int,
-        full_name: str,
-        skill_name: str,
-        **kwargs
-    ):
+    def __init__(self, human_utterance_index: int, full_name: str, skill_name: str, **kwargs):
         self.human_utterance_index = human_utterance_index
         self.full_name = full_name
         self.skill_name = skill_name
@@ -174,43 +162,53 @@ def update_entities(dialog, human_utter_index, entities=None):
     # add/update bot entities
     if bot_utterances:
         bot_entities_with_attitude = parse_entities_with_attitude(
-            bot_utterances[-1], human_utterances[-2] if len(human_utterances) > 1 else {})
+            bot_utterances[-1], human_utterances[-2] if len(human_utterances) > 1 else {}
+        )
         for attitude in ["like", "dislike"]:
             bot_short_entities = bot_entities_with_attitude[attitude]
             bot_entities = {
                 entity_name: entities.get(entity_name, Entity(entity_name)) for entity_name in bot_short_entities
             }
             entities.update(bot_entities)
-            [ent.add_bot_encounters(human_utterances, bot_utterances, human_utter_index)
-             for ent in bot_entities.values()]
+            [
+                ent.add_bot_encounters(human_utterances, bot_utterances, human_utter_index)
+                for ent in bot_entities.values()
+            ]
             [ent.add_bot_attitude(attitude) for ent in bot_entities.values()]
 
     # add/update human entities
     human_entities_with_attitude = parse_entities_with_attitude(
-        human_utterances[-1], bot_utterances[-1] if len(bot_utterances) else {})
+        human_utterances[-1], bot_utterances[-1] if len(bot_utterances) else {}
+    )
     for attitude in ["like", "dislike"]:
         human_short_entities = human_entities_with_attitude[attitude]
         human_entities = {
             entity_name: entities.get(entity_name, Entity(entity_name)) for entity_name in human_short_entities
         }
         entities.update(human_entities)
-        [ent.add_human_encounters(human_utterances, bot_utterances, human_utter_index)
-         for ent in human_entities.values()]
+        [
+            ent.add_human_encounters(human_utterances, bot_utterances, human_utter_index)
+            for ent in human_entities.values()
+        ]
         [ent.add_human_attitude(attitude) for ent in human_entities.values()]
 
     # update previus human entities
     if len(human_utterances) == 2:
         human_entities_with_attitude = parse_entities_with_attitude(
-            human_utterances[-2], bot_utterances[-2] if len(bot_utterances) > 1 else {})
+            human_utterances[-2], bot_utterances[-2] if len(bot_utterances) > 1 else {}
+        )
         for attitude in ["like", "dislike"]:
             short_human_entities = human_entities_with_attitude[attitude]
             new_human_entities = {
                 entity_name: Entity(entity_name)
-                for entity_name in short_human_entities if entity_name not in old_entities
+                for entity_name in short_human_entities
+                if entity_name not in old_entities
             }
             entities.update(new_human_entities)
-            [ent.add_human_encounters(human_utterances, [], human_utter_index - 1)
-             for ent in new_human_entities.values()]
+            [
+                ent.add_human_encounters(human_utterances, [], human_utter_index - 1)
+                for ent in new_human_entities.values()
+            ]
             [ent.add_human_attitude(attitude) for ent in new_human_entities.values()]
             [
                 entities[entity_name].update_human_encounters(human_utterances, bot_utterances, human_utter_index)

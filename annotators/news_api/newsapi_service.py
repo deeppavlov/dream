@@ -11,16 +11,17 @@ import sentry_sdk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import sent_tokenize
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+sentry_sdk.init(getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-BLACKLIST_ANNOTATOR_URL = getenv('BLACKLIST_ANNOTATOR_URL')
+BLACKLIST_ANNOTATOR_URL = getenv("BLACKLIST_ANNOTATOR_URL")
 
-BLACKLISTED_WORDS = re.compile(r"\b(gun|shoot|die.?\b|murder|kill|victim|stolen"
-                               r"|decease|sick\b|sicken\b|sickness\b|hurt\b|hurting\b|ailing\b)", re.IGNORECASE)
+BLACKLISTED_WORDS = re.compile(
+    r"\b(gun|shoot|die.?\b|murder|kill|victim|stolen" r"|decease|sick\b|sicken\b|sickness\b|hurt\b|hurting\b|ailing\b)",
+    re.IGNORECASE,
+)
 nltk_sentiment_classifier = SentimentIntensityAnalyzer()
 
 
@@ -37,10 +38,12 @@ def get_nltk_sentiment(text):
 class CachedRequestsAPI:
     NEWS_SERVICE_URL = f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&max=20&sortby=publishedAt&token="
     ALL_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&max=20&sortby=publishedAt&token="
-    EXT_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&expand=content&max=5" \
-                           f"&sortby=publishedAt&token="
-    EXT_ALL_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&expand=content&max=5" \
-                               f"&sortby=publishedAt&token="
+    EXT_NEWS_SERVICE_URL = (
+        f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&expand=content&max=5" f"&sortby=publishedAt&token="
+    )
+    EXT_ALL_NEWS_SERVICE_URL = (
+        f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&expand=content&max=5" f"&sortby=publishedAt&token="
+    )
 
     def __init__(self, renew_freq_time=3600):
         self.renew_freq_time = renew_freq_time
@@ -48,8 +51,9 @@ class CachedRequestsAPI:
         self.prev_renew_times = {}
         self.cached = {}
         self._api_keys = self._collect_api_keys()
-        logger.info(f"CachedRequestAPI initialized with renew_freq_time: {renew_freq_time} s;"
-                    f"api keys: {self._api_keys}")
+        logger.info(
+            f"CachedRequestAPI initialized with renew_freq_time: {renew_freq_time} s;" f"api keys: {self._api_keys}"
+        )
 
     def _collect_api_keys(self):
         api_keys = [os.environ["GNEWS_API_KEY"]]
@@ -96,10 +100,12 @@ class CachedRequestsAPI:
         if resp.status_code != 200:
             logger.warning(
                 f"result status code is not 200: {resp}. result text: {resp.text}; "
-                f"result status: {resp.status_code}")
+                f"result status: {resp.status_code}"
+            )
             sentry_sdk.capture_message(
                 f"News API! result status code is not 200: {resp}. result text: {resp.text}; "
-                f"result status: {resp.status_code}")
+                f"result status: {resp.status_code}"
+            )
         else:
             response = resp.json()
             response = response.get("articles", [])
@@ -124,9 +130,10 @@ class CachedRequestsAPI:
         if return_list_of_news:
             top_news = self.get_new_topic_news(topic, return_list_of_news)
         else:
-            if len(self.cached.get(topic, [])) == 0 or \
-                    (curr_time - self.prev_renew_times.get(topic, self.first_renew_time)).seconds > \
-                    self.renew_freq_time:
+            if (
+                len(self.cached.get(topic, [])) == 0
+                or (curr_time - self.prev_renew_times.get(topic, self.first_renew_time)).seconds > self.renew_freq_time
+            ):
                 self.cached[topic] = self.get_new_topic_news(topic, return_list_of_news) + self.cached.get(topic, [])
                 self.prev_renew_times[topic] = curr_time
 
@@ -167,8 +174,9 @@ class CachedRequestsAPI:
             articles_to_check += [f"{title} {description}"]
 
         try:
-            resp = requests.request(url=BLACKLIST_ANNOTATOR_URL, json={"sentences": articles_to_check},
-                                    method="POST", timeout=0.5)
+            resp = requests.request(
+                url=BLACKLIST_ANNOTATOR_URL, json={"sentences": articles_to_check}, method="POST", timeout=0.5
+            )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             sentry_sdk.capture_exception(e)
             logger.exception("Blacklisted Annotator requests from News API Annotator Timeout")
@@ -178,18 +186,23 @@ class CachedRequestsAPI:
         if resp.status_code != 200:
             logger.warning(
                 f"result status code is not 200: {resp}. result text: {resp.text}; "
-                f"result status: {resp.status_code}")
+                f"result status: {resp.status_code}"
+            )
             result = [False] * len(articles_to_check)
             sentry_sdk.capture_message(
                 f"Blacklisted Annotator requests from News API Annotator "
                 f" result status code is not 200: {resp}. result text: {resp.text}; "
-                f"result status: {resp.status_code}")
+                f"result status: {resp.status_code}"
+            )
         else:
             # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
             result = [sum(d.values()) for d in resp.json()[0]["batch"]]
 
-        articles = [article for article, is_black in zip(articles, result)
-                    if not is_black and not BLACKLISTED_WORDS.search(
-                    f'{article.get("title", "")} {article.get("description", "")}')]
+        articles = [
+            article
+            for article, is_black in zip(articles, result)
+            if not is_black
+            and not BLACKLISTED_WORDS.search(f'{article.get("title", "")} {article.get("description", "")}')
+        ]
 
         return articles

@@ -9,16 +9,25 @@ import sentry_sdk
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
 
-from common.wiki_skill import find_page_title, find_all_titles, find_paragraph, used_types_dict, delete_hyperlinks, \
-    NEWS_MORE, QUESTION_TEMPLATES, QUESTION_TEMPLATES_SHORT, WIKI_BLACKLIST
+from common.wiki_skill import (
+    find_page_title,
+    find_all_titles,
+    find_paragraph,
+    used_types_dict,
+    delete_hyperlinks,
+    NEWS_MORE,
+    QUESTION_TEMPLATES,
+    QUESTION_TEMPLATES_SHORT,
+    WIKI_BLACKLIST,
+)
 from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 WIKI_FACTS_URL = os.getenv("WIKI_FACTS_URL")
 
-with open("/src/common/dialogflow_framework/extensions/wikihow_cache.json", 'r') as fl:
+with open("/src/common/dialogflow_framework/extensions/wikihow_cache.json", "r") as fl:
     wikihow_cache = json.load(fl)
 
 memory = {}
@@ -224,8 +233,9 @@ def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_c
             if response:
                 page_content_list.append(response_dict)
         else:
-            page_content_list.append({"facts_str": facts_str,
-                                      "question": f"I was very happy to tell you more about {found_entity_substr}."})
+            page_content_list.append(
+                {"facts_str": facts_str, "question": f"I was very happy to tell you more about {found_entity_substr}."}
+            )
     logger.info(f"page_content_list {page_content_list}")
     return page_content_list
 

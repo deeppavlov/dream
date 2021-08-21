@@ -7,10 +7,11 @@ for data_type in ["train", "dev"]:
 
     print(len(data))
 
-    df = {"text": [],
-          # "labels": [],
-          "joint_labels": []
-          }
+    df = {
+        "text": [],
+        # "labels": [],
+        "joint_labels": [],
+    }
     for row in data:
         splitted_row = row.split(" ## ")
         try:
@@ -30,35 +31,31 @@ for data_type in ["train", "dev"]:
     data.to_csv(f"midas_{data_type}.csv", index=False, sep=",")
 
     considered = [
-        'open_question_factual',
-        'open_question_opinion',
-        'open_question_personal',
-        'yes_no_question',
-        'clarifying_question',
-        'command',
-        'dev_command',
-        'appreciation',
-        'opinion',
-        'complaint',
-        'comment',
-        'statement',
-        'other_answers',
-        'pos_answer',
-        'neg_answer'
+        "open_question_factual",
+        "open_question_opinion",
+        "open_question_personal",
+        "yes_no_question",
+        "clarifying_question",
+        "command",
+        "dev_command",
+        "appreciation",
+        "opinion",
+        "complaint",
+        "comment",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer",
     ]
 
-    questions = ["open_question_factual", "open_question_opinion",
-                 "yes_no_question"]
+    questions = ["open_question_factual", "open_question_opinion", "yes_no_question"]
 
     with open(f"da_data/{data_type}.txt", "r") as f:
         data = f.read().splitlines()
 
     print(len(data))
 
-    df = {"text": [],
-          "binary_labels": [],
-          "joint_labels": []
-          }
+    df = {"text": [], "binary_labels": [], "joint_labels": []}
     for row in data:
         splitted_row = row.split(" ## ")
         try:

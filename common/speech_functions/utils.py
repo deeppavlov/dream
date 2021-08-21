@@ -146,7 +146,7 @@ def get_not_used_and_save_generic_response(proposed_sf, vars):
 
     resp = common_utils.get_not_used_template(
         used_templates=last_responses,
-        all_templates=current_templates.GENERIC_REACTION_TO_USER_SPEECH_FUNCTION[proposed_sf]
+        all_templates=current_templates.GENERIC_REACTION_TO_USER_SPEECH_FUNCTION[proposed_sf],
     )
 
     used_resp = last_responses + [resp]

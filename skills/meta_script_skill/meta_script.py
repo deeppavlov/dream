@@ -9,23 +9,45 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
-from common.utils import get_skill_outputs_from_dialog, get_user_replies_to_particular_skill, is_no, is_yes, \
-    get_outputs_with_response_from_dialog, get_entities
+from common.utils import (
+    get_skill_outputs_from_dialog,
+    get_user_replies_to_particular_skill,
+    is_no,
+    is_yes,
+    get_outputs_with_response_from_dialog,
+    get_entities,
+)
 from common.universal_templates import if_choose_topic, if_chat_about_particular_topic, is_switch_topic
 from common.news import OPINION_REQUEST_STATUS, OFFERED_NEWS_DETAILS_STATUS
 from common.greeting import GREETING_QUESTIONS
-from utils import get_starting_phrase, get_statement_phrase, get_opinion_phrase, get_comment_phrase, \
-    extract_verb_noun_phrases, is_custom_topic, WIKI_DESCRIPTIONS, \
-    get_used_attributes_by_name, check_topic_lemmas_in_sentence
-from constants import DEFAULT_DIALOG_BEGIN_CONFIDENCE, MATCHED_DIALOG_BEGIN_CONFIDENCE, FINISHED_SCRIPT, \
-    FINISHED_SCRIPT_RESPONSE, DEFAULT_STARTING_CONFIDENCE, NOUN_TOPIC_STARTING_CONFIDENCE, NP_SOURCE, \
-    PREDEFINED_SOURCE, BROKEN_DIALOG_CONTINUE_CONFIDENCE, NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT
+from utils import (
+    get_starting_phrase,
+    get_statement_phrase,
+    get_opinion_phrase,
+    get_comment_phrase,
+    extract_verb_noun_phrases,
+    is_custom_topic,
+    WIKI_DESCRIPTIONS,
+    get_used_attributes_by_name,
+    check_topic_lemmas_in_sentence,
+)
+from constants import (
+    DEFAULT_DIALOG_BEGIN_CONFIDENCE,
+    MATCHED_DIALOG_BEGIN_CONFIDENCE,
+    FINISHED_SCRIPT,
+    FINISHED_SCRIPT_RESPONSE,
+    DEFAULT_STARTING_CONFIDENCE,
+    NOUN_TOPIC_STARTING_CONFIDENCE,
+    NP_SOURCE,
+    PREDEFINED_SOURCE,
+    BROKEN_DIALOG_CONTINUE_CONFIDENCE,
+    NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT,
+)
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 WORK_DIR = pathlib.Path(__file__).parent
@@ -46,13 +68,16 @@ def extract_from_dialog(dialog):
     no_detected = is_no(dialog["human_utterances"][-1])
     nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
 
-    if prev_news_output.get("news_status", "finished") == OPINION_REQUEST_STATUS or \
-            (prev_news_output.get("news_status", "finished") == OFFERED_NEWS_DETAILS_STATUS and no_detected):
+    if prev_news_output.get("news_status", "finished") == OPINION_REQUEST_STATUS or (
+        prev_news_output.get("news_status", "finished") == OFFERED_NEWS_DETAILS_STATUS and no_detected
+    ):
         verb_noun_phrases, sources = extract_verb_noun_phrases(
-            prev_news_outputs[-1].get("text", "nothing"), only_i_do_that=False, nounphrases=nounphrases)
+            prev_news_outputs[-1].get("text", "nothing"), only_i_do_that=False, nounphrases=nounphrases
+        )
     else:
         verb_noun_phrases, sources = extract_verb_noun_phrases(
-            dialog["utterances"][-1]["text"], only_i_do_that=False, nounphrases=nounphrases)
+            dialog["utterances"][-1]["text"], only_i_do_that=False, nounphrases=nounphrases
+        )
     return verb_noun_phrases, sources
 
 
@@ -111,15 +136,18 @@ def get_statuses_and_topics(dialog):
         # if dialog is not empty
 
         used_topics = get_used_attributes_by_name(
-            dialog["utterances"], attribute_name="meta_script_topic", value_by_default="", activated=True)
+            dialog["utterances"], attribute_name="meta_script_topic", value_by_default="", activated=True
+        )
 
         # this determines how many replies back we assume active meta script skill to continue dialog.
         # let's assume we can continue if meta_scrip skill was active on up to 2 steps back
         prev_reply_output = get_skill_outputs_from_dialog(
-            dialog["utterances"][-5:], skill_name="meta_script_skill", activated=True)
+            dialog["utterances"][-5:], skill_name="meta_script_skill", activated=True
+        )
         # get last meta script output even if it was not activated but right after it was active
         last_all_meta_script_outputs = get_skill_outputs_from_dialog(
-            dialog["utterances"][-5:], skill_name="meta_script_skill", activated=False)
+            dialog["utterances"][-5:], skill_name="meta_script_skill", activated=False
+        )
         prev_topic_finished = False
         for out in last_all_meta_script_outputs:
             if out.get("meta_script_status", "") == "finished":
@@ -141,7 +169,7 @@ def get_statuses_and_topics(dialog):
             if curr_source_topics != [PREDEFINED_SOURCE]:
                 # if topic is extracted from utterances
                 pass
-            elif if_choose_topic(dialog["human_utterances"][-1], dialog['bot_utterances'][-1]):
+            elif if_choose_topic(dialog["human_utterances"][-1], dialog["bot_utterances"][-1]):
                 # len(utterances) >3 so at least 1 bot utterance exists
                 # one of the predefined topics (wiki or hand-written)
                 curr_meta_script_statuses += [dialog_flow[0]] * len(topics)
@@ -154,12 +182,15 @@ def get_statuses_and_topics(dialog):
             # we define it here as predefined because we do not care about this variable if it's not script starting
             source_topic = PREDEFINED_SOURCE
             curr_meta_script_topic = used_topics[-1]
-            logger.info(f"Found meta_script_status: `{curr_meta_script_status}` "
-                        f"on previous meta_script_topic: `{curr_meta_script_topic}`")
+            logger.info(
+                f"Found meta_script_status: `{curr_meta_script_status}` "
+                f"on previous meta_script_topic: `{curr_meta_script_topic}`"
+            )
             # getting the next dialog flow status
             if is_custom_topic(curr_meta_script_topic):
-                curr_meta_script_status = dialog_flow_user_topic[dialog_flow_user_topic.index(
-                    curr_meta_script_status) + 1]
+                curr_meta_script_status = dialog_flow_user_topic[
+                    dialog_flow_user_topic.index(curr_meta_script_status) + 1
+                ]
             else:
                 curr_meta_script_status = dialog_flow[dialog_flow.index(curr_meta_script_status) + 1]
 
@@ -171,8 +202,10 @@ def get_statuses_and_topics(dialog):
                 # randomly skip third deeper question
                 if uniform(0, 1) <= 0.5:
                     curr_meta_script_status = "opinion"
-            logger.info(f"New meta_script_status: `{curr_meta_script_status}` "
-                        f"on meta_script_topic: `{curr_meta_script_topic}`")
+            logger.info(
+                f"New meta_script_status: `{curr_meta_script_status}` "
+                f"on meta_script_topic: `{curr_meta_script_topic}`"
+            )
             curr_meta_script_statuses += [curr_meta_script_status]
             curr_meta_script_topics += [curr_meta_script_topic]
             source_topics += [source_topic]
@@ -184,8 +217,10 @@ def get_statuses_and_topics(dialog):
         else:
             curr_meta_script_statuses = [dialog_flow[0]] * len(curr_meta_script_topics)
 
-    logger.info(f"Final new meta_script_status: `{curr_meta_script_statuses}` "
-                f"on meta_script_topic: `{curr_meta_script_topics}`")
+    logger.info(
+        f"Final new meta_script_status: `{curr_meta_script_statuses}` "
+        f"on meta_script_topic: `{curr_meta_script_topics}`"
+    )
     return curr_meta_script_statuses, curr_meta_script_topics, source_topics
 
 
@@ -195,8 +230,9 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
     if len(dialog["human_utterances"]) > 0:
         user_uttr = dialog["human_utterances"][-1]
         text_user_uttr = dialog["human_utterances"][-1]["text"].lower()
-        last_user_sent_text = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {}).get(
-            "segments", [""])[-1].lower()
+        last_user_sent_text = (
+            dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {}).get("segments", [""])[-1].lower()
+        )
     else:
         user_uttr = {"text": ""}
         text_user_uttr = ""
@@ -211,20 +247,23 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         can_offer_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
         talk_about_user_topic = is_custom_topic(topic) and if_chat_about_particular_topic(user_uttr, bot_uttr)
 
-        prev_what_to_talk_about_outputs = [get_outputs_with_response_from_dialog(
-            dialog["utterances"][-3:], response=response, activated=True)
-            for response in GREETING_QUESTIONS[list(GREETING_QUESTIONS.keys())[0]]]
-        prev_what_to_talk_about_outputs = sum([list_of_outputs for list_of_outputs in prev_what_to_talk_about_outputs
-                                               if len(list_of_outputs) > 0], [])
-        prev_what_to_talk_about_greeting = (len(prev_what_to_talk_about_outputs) > 0 and bot_uttr.get(
-            "active_skill", "") in ["greeting_skill", "dff_friendship_skill", "program_y"])
+        prev_what_to_talk_about_outputs = [
+            get_outputs_with_response_from_dialog(dialog["utterances"][-3:], response=response, activated=True)
+            for response in GREETING_QUESTIONS[list(GREETING_QUESTIONS.keys())[0]]
+        ]
+        prev_what_to_talk_about_outputs = sum(
+            [list_of_outputs for list_of_outputs in prev_what_to_talk_about_outputs if len(list_of_outputs) > 0], []
+        )
+        prev_what_to_talk_about_greeting = len(prev_what_to_talk_about_outputs) > 0 and bot_uttr.get(
+            "active_skill", ""
+        ) in ["greeting_skill", "dff_friendship_skill", "program_y"]
 
         if (not prev_what_to_talk_about_greeting and can_offer_topic) or talk_about_user_topic:
             # if person wants to talk about something particular and we have extracted some topic - do that!
             confidence = MATCHED_DIALOG_BEGIN_CONFIDENCE
         elif "?" in last_user_sent_text or prev_what_to_talk_about_greeting:
             # if some question was asked by user, do not start script at all!
-            response, confidence = "", 0.
+            response, confidence = "", 0.0
         elif len(dialog["utterances"]) <= 20:
             confidence = DEFAULT_DIALOG_BEGIN_CONFIDENCE
         elif source_topic == NP_SOURCE:
@@ -233,11 +272,13 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
             confidence = DEFAULT_STARTING_CONFIDENCE
     else:
         if curr_meta_script_status == "deeper1" and "?" in last_user_sent_text and "what" not in text_user_uttr:
-            response, confidence, attr = "", 0., {}
+            response, confidence, attr = "", 0.0, {}
         elif "?" in last_user_sent_text and not check_topic_lemmas_in_sentence(text_user_uttr, topic):
-            logger.info("Question by user was detected. Without any word from topic in it. "
-                        "Don't continue the script on this turn.")
-            response, confidence, attr = "", 0., {}
+            logger.info(
+                "Question by user was detected. Without any word from topic in it. "
+                "Don't continue the script on this turn."
+            )
+            response, confidence, attr = "", 0.0, {}
         elif is_switch_topic(user_uttr) or if_chat_about_particular_topic(user_uttr):
             logger.info("Topic switching was detected. Finish script.")
             response, confidence = FINISHED_SCRIPT_RESPONSE, 0.5
@@ -282,9 +323,11 @@ def respond_meta_script(dialogs_batch):
         curr_attrs = []
 
         curr_meta_script_statuses, curr_meta_script_topics, source_topics = get_statuses_and_topics(dialog)
-        for status, topic, source in zip(curr_meta_script_statuses[:NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT],
-                                         curr_meta_script_topics[:NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT],
-                                         source_topics[:NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT]):
+        for status, topic, source in zip(
+            curr_meta_script_statuses[:NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT],
+            curr_meta_script_topics[:NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT],
+            source_topics[:NUMBER_OF_STARTING_HYPOTHESES_META_SCRIPT],
+        ):
             if topic != "":
                 response, confidence, attr = get_response_for_particular_topic_and_status(topic, status, dialog, source)
                 curr_responses.append(response)
@@ -292,7 +335,7 @@ def respond_meta_script(dialogs_batch):
                 curr_attrs.append(attr)
 
         if len(curr_responses) == 0:
-            response, confidence, attr = "", 0., {}
+            response, confidence, attr = "", 0.0, {}
             curr_responses.append(response)
             curr_confidences.append(confidence)
             curr_attrs.append(attr)

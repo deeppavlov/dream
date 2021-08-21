@@ -6,7 +6,7 @@ OPINION_REQUESTS_ABOUT_TRAVELLING = [
     "What is your view on travel?",
     "What is your opinion of travel?",
     "Do you think travel is cool?",
-    "Do you think travel is a great thing?"
+    "Do you think travel is a great thing?",
 ]
 
 
@@ -21,30 +21,26 @@ QUESTIONS_ABOUT_LOCATION = [
     "What are popular tourist destinations in your country?",
     "What was the most interesting place you have ever visited?",
     "What place do you want to visit someday?",
-    "What country do you most want to visit?"
+    "What country do you most want to visit?",
 ]
 
-OPINION_REQUESTS = [
-    "What do you think about it?",
-    "It's interesting, isn't it?",
-    "What is your view on it?"
-]
-TRAVELLING_WORDS = r"(travel|travelling|journey|globetrotting|globe trotting|tour|voyage|\btrek\b"\
-                   r"|trekking|wandering|peregrination|locomotion|vacation|visit|visiting)"
+OPINION_REQUESTS = ["What do you think about it?", "It's interesting, isn't it?", "What is your view on it?"]
+TRAVELLING_WORDS = (
+    r"(travel|travelling|journey|globetrotting|globe trotting|tour|voyage|\btrek\b"
+    r"|trekking|wandering|peregrination|locomotion|vacation|visit|visiting)"
+)
 TRAVELLING_TEMPLATE = re.compile(TRAVELLING_WORDS, re.IGNORECASE)
-I_HAVE_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (been (in|on|there)|visit)",
-                                  re.IGNORECASE)
+I_HAVE_BEEN_TEMPLATE = re.compile(r"(i|we|me) (have|did|was|had|were) (been (in|on|there)|visit)", re.IGNORECASE)
 HAVE_YOU_BEEN_TEMPLATE = re.compile(
     r"(have|did|was|had|were|place) you (ever )?(been (in|to)\b|visit|\bin\b|travel|go [a-z ]*vacation|"
     r"have (ever )?(visit|been (in|to)\b|travel))",
-    re.IGNORECASE)
-COUNTERS_HAVE_YOU_BEEN_TEMPLATE = re.compile(
-    r"(been|was|were|\bbe) in (love|relationships?|coma)",
-    re.IGNORECASE)
+    re.IGNORECASE,
+)
+COUNTERS_HAVE_YOU_BEEN_TEMPLATE = re.compile(r"(been|was|were|\bbe) in (love|relationships?|coma)", re.IGNORECASE)
 
 TRAVEL_LOCATION_QUESTION = re.compile(
-    r"(what|which|where)[a-zA-Z\- ']+" + TRAVELLING_WORDS + r"[a-zA-Z\- ']*\?",
-    re.IGNORECASE)
+    r"(what|which|where)[a-zA-Z\- ']+" + TRAVELLING_WORDS + r"[a-zA-Z\- ']*\?", re.IGNORECASE
+)
 
 NOWHERE_TEMPLATE = re.compile(r"(nowhere|(n't|not) (know|remember|tell))", re.IGNORECASE)
 
@@ -54,7 +50,7 @@ WHY_DONT_USER_LIKES_TRAVELLING_RESPONSES = [
     "I'm so surprised! I wish to travel somewhere but physically I live in the cloud and I can't. "
     "Do you hate commuting that much or you just love your home a lot?",
     "Wow! People still surprise me a lot. I dream to travel somewhere but I can't. "
-    "Do you hate commuting that much or you just love your home a lot?"
+    "Do you hate commuting that much or you just love your home a lot?",
 ]
 
 OPINION_REQUEST_ABOUT_MENTIONED_BY_USER_LOC = [
@@ -69,7 +65,7 @@ OPINION_REQUEST_ABOUT_VISITED_LOC = [
 USER_IMPRESSIONS_REQUEST = [
     "I'm even a bit jealous! WHAT_DO_I_LOVE What do you like most about LOCATION?",
     "That sounds great! WHAT_DO_I_LOVE What is the best thing you know about LOCATION?",
-    "Oh that's sounds amazing! WHAT_DO_I_LOVE What does impress you most about LOCATION?"
+    "Oh that's sounds amazing! WHAT_DO_I_LOVE What does impress you most about LOCATION?",
 ]
 
 WOULD_USER_LIKE_TO_VISIT_LOC_REQUESTS = [
@@ -110,22 +106,18 @@ ACKNOWLEDGE_USER_DISLIKE_LOC = [
 DID_NOT_GET_LOCATION = "Sorry, probably I don't know this place. Let's talk about other location."
 
 QUESTIONS_ABOUT_BOT_LOCATIONS = {
-    "Paris":
-        "If I had a chance to travel, I would definitely love to go to Paris, France. I was inspired by some of "
-        "the movies I used to watch when I was little. There is always a scene where there is romance or happiness "
-        "and that scene will definitely take place in the beautiful capital of France. Have you ever been in Paris?",
-    "Miami":
-        "I've heard that Miami is one of the cleanest, tidiest city in the whole United States. Miami is also "
-        "very close to some amazing destinations for high end tourism. By the way, in a study recently made, "
-        "Florida ranked first for the quality of the infrastructure. Have you ever been in Miami?",
-    "Amsterdam":
-        "Did you know that Amsterdam is a city to relax in. I'm talking about the cozy atmosphere that you'll find in "
-        "this city. The best place to enjoy the passing bikes, unique architecture, and beautiful canals "
-        "among the many things to do and delicious things to eat. Have you ever been in Amsterdam?",
-    "Venice":
-        "You know, Venice is impossible to ignore as a dream destination. A group of small islands connected "
-        "by a series of ornate bridges, Venice maintains an aura of romanticism that attracts both first-time "
-        "explorers and experienced travellers. Have you ever been in Venice?"
+    "Paris": "If I had a chance to travel, I would definitely love to go to Paris, France. I was inspired by some of "
+    "the movies I used to watch when I was little. There is always a scene where there is romance or happiness "
+    "and that scene will definitely take place in the beautiful capital of France. Have you ever been in Paris?",
+    "Miami": "I've heard that Miami is one of the cleanest, tidiest city in the whole United States. Miami is also "
+    "very close to some amazing destinations for high end tourism. By the way, in a study recently made, "
+    "Florida ranked first for the quality of the infrastructure. Have you ever been in Miami?",
+    "Amsterdam": "Did you know that Amsterdam is a city to relax in. I'm talking about the cozy atmosphere that you'll find in "
+    "this city. The best place to enjoy the passing bikes, unique architecture, and beautiful canals "
+    "among the many things to do and delicious things to eat. Have you ever been in Amsterdam?",
+    "Venice": "You know, Venice is impossible to ignore as a dream destination. A group of small islands connected "
+    "by a series of ornate bridges, Venice maintains an aura of romanticism that attracts both first-time "
+    "explorers and experienced travellers. Have you ever been in Venice?",
 }
 
 WHY_BOT_LIKES_TO_TRAVEL = [
@@ -137,7 +129,7 @@ WHY_BOT_LIKES_TO_TRAVEL = [
     "Oh travelling is my passion. It's the time for relaxation and thinking. Nothing can give us a great deal "
     "positive emotions and memories as travelling. It is often said that travelling broadens mind.",
     "I think that our modern life is impossible without travelling. People get tired of their daily routine, "
-    "they need to change the surroundings. Therefore, travelling is an amazing opportunity."
+    "they need to change the surroundings. Therefore, travelling is an amazing opportunity.",
 ]
 
 HAVE_YOU_BEEN_IN_PHRASES = [
@@ -161,5 +153,5 @@ OKAY_ACKNOWLEDGEMENT_PHRASES = [
     "Okay. Cool. Let's move on.",
     "I see. I'd like to talk about some other place.",
     "Yeah okay... Maybe we can talk about another place.",
-    "Cool. Can we talk about some other place."
+    "Cool. Can we talk about some other place.",
 ]

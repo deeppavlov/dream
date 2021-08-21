@@ -17,21 +17,39 @@ from common.wiki_skill import choose_title, find_paragraph, find_all_paragraphs,
 from common.wiki_skill import if_switch_wiki_skill, continue_after_topic_skill
 from common.wiki_skill import switch_wiki_skill_on_news, preprocess_news, if_must_switch
 from common.wiki_skill import CONF_DICT, NEWS_MORE
-from common.insert_scenario import get_page_content, get_wikihow_content, get_page_title, make_facts_str, get_titles, \
-    questions_by_entity_substr, wikihowq_by_substr, preprocess_wikipedia_page, preprocess_wikihow_page
-from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
-    facts_response, delete_topic_info
+from common.insert_scenario import (
+    get_page_content,
+    get_wikihow_content,
+    get_page_title,
+    make_facts_str,
+    get_titles,
+    questions_by_entity_substr,
+    wikihowq_by_substr,
+    preprocess_wikipedia_page,
+    preprocess_wikihow_page,
+)
+from common.insert_scenario import (
+    start_or_continue_scenario,
+    smalltalk_response,
+    start_or_continue_facts,
+    facts_response,
+    delete_topic_info,
+)
 from common.news import get_news_about_topic
 from common.wiki_skill_scenarios import topic_config
 
 import dialogflows.scopes as scopes
 from dialogflows.flows.wiki_states import State
-from dialogflows.flows.wiki_utils import find_entity, get_title_info, another_topic_question, \
-    save_wiki_vars, make_question
+from dialogflows.flows.wiki_utils import (
+    find_entity,
+    get_title_info,
+    another_topic_question,
+    save_wiki_vars,
+    make_question,
+)
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 nlp = en_core_web_sm.load()
@@ -46,10 +64,10 @@ ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
 found_pages_dict = {}
 facts_memory = {}
 
-with open("wikipedia_cache.json", 'r') as fl:
+with open("wikipedia_cache.json", "r") as fl:
     wikipedia_cache = json.load(fl)
 
-with open("wikihow_cache.json", 'r') as fl:
+with open("wikihow_cache.json", "r") as fl:
     wikihow_cache = json.load(fl)
 
 
@@ -96,8 +114,10 @@ def news_step_request(ngrams, vars):
                 title_num = n
         if not found_not_used_content and -1 < title_num < len(news_memory) - 1:
             found_not_used_content = True
-    logger.info(f"news_step_request, started_news {started_news} if_switch {if_switch} "
-                f"cur_news_title {cur_news_title} found_not_used_content {found_not_used_content}")
+    logger.info(
+        f"news_step_request, started_news {started_news} if_switch {if_switch} "
+        f"cur_news_title {cur_news_title} found_not_used_content {found_not_used_content}"
+    )
 
     if (not started_news and if_switch) or (started_news and cur_news_title and found_not_used_content):
         flag = True
@@ -127,8 +147,9 @@ def news_step_response(vars):
         for nounphr in nounphrases:
             result_news = []
             try:
-                result_news = get_news_about_topic(nounphr, "http://news-api-annotator:8112/respond",
-                                                   return_list_of_news=True, timeout_value=1.3)
+                result_news = get_news_about_topic(
+                    nounphr, "http://news-api-annotator:8112/respond", return_list_of_news=True, timeout_value=1.3
+                )
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
@@ -227,8 +248,9 @@ def wikihow_step_request(ngrams, vars):
     wikihow_article = shared_memory.get("wikihow_article", "")
     prev_wikihow_title = shared_memory.get("prev_wikihow_title", "")
     used_wikihow_titles = set(shared_memory.get("used_wikihow_titles", []))
-    logger.info(f"wikihow_step_request, prev_wikihow_title {prev_wikihow_title} used_wikihow_titles "
-                f"{used_wikihow_titles}")
+    logger.info(
+        f"wikihow_step_request, prev_wikihow_title {prev_wikihow_title} used_wikihow_titles " f"{used_wikihow_titles}"
+    )
     found_title = ""
     if wikihow_article:
         article_content = get_wikihow_content(wikihow_article)
@@ -255,16 +277,20 @@ def start_talk_request(ngrams, vars):
     bot_uttr = state_utils.get_last_bot_utterance(vars)
     prev_skill = bot_uttr.get("active_skill", "")
     if prev_skill != "dff_wiki_skill":
-        found_entity_substr, found_entity_id, found_entity_types, found_page_title, _ = \
-            continue_after_topic_skill(dialog)
+        found_entity_substr, found_entity_id, found_entity_types, found_page_title, _ = continue_after_topic_skill(
+            dialog
+        )
         if found_entity_substr and found_page_title:
             page_content, _ = get_page_content(found_page_title)
-            chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr, found_entity_types, "", [],
-                                                             page_content)
+            chosen_title, chosen_page_title = get_title_info(
+                vars, found_entity_substr, found_entity_types, "", [], page_content
+            )
             _, _, all_titles = get_titles(found_entity_substr, found_entity_types, page_content)
-        logger.info(f"start_talk_request, found_entity_substr {found_entity_substr} found_entity_id {found_entity_id} "
-                    f"found_entity_types {found_entity_types} found_page_title {found_page_title} "
-                    f"chosen_title {chosen_title}")
+        logger.info(
+            f"start_talk_request, found_entity_substr {found_entity_substr} found_entity_id {found_entity_id} "
+            f"found_entity_types {found_entity_types} found_page_title {found_page_title} "
+            f"chosen_title {chosen_title}"
+        )
         user_uttr = state_utils.get_last_human_utterance(vars)
         isno = is_no(state_utils.get_last_human_utterance(vars))
         if chosen_title:
@@ -312,8 +338,10 @@ def factoid_q_request(ngrams, vars):
     bot_text = " ".join(sentences)
     nounphrases = user_annotations.get("cobot_nounphrases", [])
     found_nounphr = any([nounphrase in bot_text for nounphrase in nounphrases])
-    logger.info(f"factoid_q_request, is_factoid {is_factoid} user_more_details {user_more_details} "
-                f"nounphrases {nounphrases} bot_text {bot_text}")
+    logger.info(
+        f"factoid_q_request, is_factoid {is_factoid} user_more_details {user_more_details} "
+        f"nounphrases {nounphrases} bot_text {bot_text}"
+    )
     started = shared_memory.get("start", False)
     if is_factoid and not user_more_details and found_nounphr and started:
         flag = True
@@ -374,13 +402,15 @@ def tell_fact_response(vars):
         found_entity_substr, _, found_entity_types = find_entity(vars, "current")
         state_utils.save_to_shared_memory(vars, found_entity_substr=found_entity_substr)
         state_utils.save_to_shared_memory(vars, found_entity_types=list(found_entity_types))
-        logger.info(f"tell_fact_response, found_entity_substr {found_entity_substr} "
-                    f"found_entity_types {found_entity_types}")
+        logger.info(
+            f"tell_fact_response, found_entity_substr {found_entity_substr} " f"found_entity_types {found_entity_types}"
+        )
         wikipedia_page = get_page_title(vars, found_entity_substr)
         if wikipedia_page:
             page_content, _ = get_page_content(wikipedia_page, wikipedia_cache)
-            wikipedia_page_content_list = preprocess_wikipedia_page(found_entity_substr, found_entity_types,
-                                                                    page_content)
+            wikipedia_page_content_list = preprocess_wikipedia_page(
+                found_entity_substr, found_entity_types, page_content
+            )
             facts_memory["wikipedia_content"] = wikipedia_page_content_list
             state_utils.save_to_shared_memory(vars, cur_wikipedia_page=wikipedia_page)
 
@@ -559,8 +589,9 @@ def start_talk_response(vars):
     found_entity_substr_list = [found_entity_substr]
     found_entity_types_list = [list(found_entity_types)]
     curr_pages = [found_page_title]
-    chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr, found_entity_types, "", [],
-                                                     page_content)
+    chosen_title, chosen_page_title = get_title_info(
+        vars, found_entity_substr, found_entity_types, "", [], page_content
+    )
     titles_q, titles_we_use, all_titles = get_titles(found_entity_substr, found_entity_types, page_content)
     question = ""
     if chosen_title:
@@ -569,8 +600,16 @@ def start_talk_response(vars):
     response = question.strip()
     if chosen_title:
         used_titles.append(chosen_title)
-    save_wiki_vars(vars, found_entity_substr_list, curr_pages, chosen_title, chosen_page_title, used_titles,
-                   found_entity_types_list, False)
+    save_wiki_vars(
+        vars,
+        found_entity_substr_list,
+        curr_pages,
+        chosen_title,
+        chosen_page_title,
+        used_titles,
+        found_entity_types_list,
+        False,
+    )
     cross_link = state_utils.get_cross_link(vars, service_name="dff_wiki_skill")
     from_skill = cross_link.get("from_service", "")
     if from_skill:
@@ -624,8 +663,9 @@ def more_details_response(vars):
     response = response.strip()
     if chosen_title:
         used_titles.append(chosen_title)
-    save_wiki_vars(vars, found_entity_substr_list, curr_pages, chosen_title, chosen_page_title, used_titles, [[]],
-                   new_page)
+    save_wiki_vars(
+        vars, found_entity_substr_list, curr_pages, chosen_title, chosen_page_title, used_titles, [[]], new_page
+    )
     if response:
         state_utils.set_confidence(vars, confidence=CONF_DICT["IN_SCENARIO"])
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
@@ -683,8 +723,9 @@ def factoid_q_response(vars):
     logger.info(f"factoid_q_response, used_pages {used_pages}")
     found_answer_sentence = ""
     try:
-        res = requests.post(text_qa_url, json={"question_raw": [user_uttr["text"]], "top_facts": [clean_paragraphs]},
-                            timeout=1.0)
+        res = requests.post(
+            text_qa_url, json={"question_raw": [user_uttr["text"]], "top_facts": [clean_paragraphs]}, timeout=1.0
+        )
         if res.status_code == 200:
             text_qa_output = res.json()[0]
             logger.info(f"text_qa_output {text_qa_output}")
@@ -800,21 +841,56 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
-simplified_dialog_flow.add_system_transition(State.SYS_TOPIC_SMALLTALK, State.USR_TOPIC_SMALLTALK,
-                                             special_topic_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_TOPIC_FACT, State.USR_TOPIC_FACT,
-                                             special_topic_facts_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_WIKIHOW_Q, State.USR_WIKIHOW_Q,
-                                             wikihow_question_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_WIKIHOW_STEP, State.USR_WIKIHOW_STEP,
-                                             wikihow_step_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_INTRO_Q, State.USR_INTRO_Q, intro_question_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_TELL_FACT, State.USR_TELL_FACT, tell_fact_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_FACTOID_Q, State.USR_FACTOID_Q, factoid_q_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_MORE_DETAILED, State.USR_MORE_DETAILED,
-                                             more_details_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_NEWS_STEP, State.USR_NEWS_STEP, news_step_response, )
-simplified_dialog_flow.add_system_transition(State.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
+simplified_dialog_flow.add_system_transition(
+    State.SYS_TOPIC_SMALLTALK,
+    State.USR_TOPIC_SMALLTALK,
+    special_topic_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_TOPIC_FACT,
+    State.USR_TOPIC_FACT,
+    special_topic_facts_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_WIKIHOW_Q,
+    State.USR_WIKIHOW_Q,
+    wikihow_question_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_WIKIHOW_STEP,
+    State.USR_WIKIHOW_STEP,
+    wikihow_step_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_INTRO_Q,
+    State.USR_INTRO_Q,
+    intro_question_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_TELL_FACT,
+    State.USR_TELL_FACT,
+    tell_fact_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_FACTOID_Q,
+    State.USR_FACTOID_Q,
+    factoid_q_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_MORE_DETAILED,
+    State.USR_MORE_DETAILED,
+    more_details_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_NEWS_STEP,
+    State.USR_NEWS_STEP,
+    news_step_response,
+)
+simplified_dialog_flow.add_system_transition(
+    State.SYS_ERR,
+    (scopes.MAIN, scopes.State.USR_ROOT),
+    error_response,
+)
 
 simplified_dialog_flow.set_error_successor(State.USR_START, State.SYS_ERR)
 simplified_dialog_flow.set_error_successor(State.SYS_TOPIC_SMALLTALK, State.SYS_ERR)

@@ -6,10 +6,9 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 app = Flask(__name__)
 
@@ -25,7 +24,7 @@ except Exception as e:
     raise e
 
 
-@app.route("/respond", methods=['POST'])
+@app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     inp = request.json

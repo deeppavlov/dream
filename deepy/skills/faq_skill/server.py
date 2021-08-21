@@ -1,25 +1,25 @@
 import logging
 import time
+
 # import random
 # import re
 # import json
 
 from flask import Flask, request, jsonify
+
 # from os import getenv
 
 from deeppavlov import build_model
 from deeppavlov.core.common.file import read_json
 
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
 
-class FaqWrapper():
+class FaqWrapper:
     def __init__(self, faq_config_path):
         faq_config = read_json(f"{faq_config_path}/faq_config.json")
         self.faq = build_model(faq_config, download=True)
@@ -63,12 +63,11 @@ def respond():
     confidences = []
 
     for dialog in dialogs:
-        sentence = dialog['human_utterances'][-1]['annotations'].get(
-            "spelling_preprocessing")
+        sentence = dialog["human_utterances"][-1]["annotations"].get("spelling_preprocessing")
 
         if sentence is None:
-            logger.warning('Not found spelling preprocessing annotation')
-            sentence = dialog['human_utterances'][-1]['text']
+            logger.warning("Not found spelling preprocessing annotation")
+            sentence = dialog["human_utterances"][-1]["text"]
 
         response, conf = faq(sentence)
 
@@ -76,8 +75,7 @@ def respond():
         confidences.append(conf)
 
     total_time = time.time() - st_time
-    logger.info(
-        f"faq_skill exec time = {total_time:.3f}s")
+    logger.info(f"faq_skill exec time = {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))
 
 

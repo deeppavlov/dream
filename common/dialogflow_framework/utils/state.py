@@ -218,11 +218,7 @@ def get_nounphrases_from_human_utterance(vars):
 
 
 def get_fact_random_annotations_from_human_utterance(vars):
-    return (
-        vars["agent"]["dialog"]["human_utterances"][-1]
-        .get("annotations", {})
-        .get("fact_random", [])
-    )
+    return vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get("fact_random", [])
 
 
 def get_fact_for_particular_entity_from_human_utterance(vars, entity):

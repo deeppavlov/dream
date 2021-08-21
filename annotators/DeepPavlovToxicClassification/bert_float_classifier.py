@@ -23,14 +23,13 @@ from overrides import overrides
 from deeppavlov.core.common.registry import register
 from deeppavlov.models.bert.bert_classifier import BertClassifierModel
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@register('toxic_classification')
+@register("toxic_classification")
 class BertFloatClassifierModel(BertClassifierModel):
     """
     Bert-based model for text classification with floating point values
@@ -38,15 +37,8 @@ class BertFloatClassifierModel(BertClassifierModel):
     It uses output from [CLS] token and predicts labels using linear transformation.
 
     """
-    columns = [
-        "identity_hate",
-        "insult",
-        "obscene",
-        "severe_toxic",
-        "sexual_explicit",
-        "threat",
-        "toxic"
-    ]
+
+    columns = ["identity_hate", "insult", "obscene", "severe_toxic", "sexual_explicit", "threat", "toxic"]
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)

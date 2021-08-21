@@ -17,9 +17,8 @@ from common.utils import get_topics, get_intents, get_entities, is_special_facto
 from common.factoid import FACT_REGEXP, WHAT_REGEXP
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+sentry_sdk.init(getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -29,11 +28,11 @@ ASK_QUESTION_PROB = 0.5
 
 
 def remove_punct_and_articles(s, lowecase=True):
-    articles = ['a', 'an', 'the']
+    articles = ["a", "an", "the"]
     if lowecase:
         s = s.lower()
-    no_punct = ''.join([c for c in s if c not in string.punctuation])
-    no_articles = ' '.join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
+    no_punct = "".join([c for c in s if c not in string.punctuation])
+    no_articles = " ".join([w for w in word_tokenize(no_punct) if w.lower() not in articles])
     return no_articles
 
 
@@ -57,10 +56,10 @@ def get_common_words(a: str, b: str, lemmatize: bool = True) -> set:
     return tokens_a & tokens_b
 
 
-@app.route("/respond", methods=['POST'])
+@app.route("/respond", methods=["POST"])
 def respond():
     st_time = time()
-    dialogs = request.json['dialogs']
+    dialogs = request.json["dialogs"]
     final_responses = []
     final_confidences = []
 
@@ -74,11 +73,12 @@ def respond():
         sensitive_topics = {"Politics", "Religion", "Sex_Profanity", "Inappropriate_Content"}
         # `General_ChatIntent` sensitive in case when `?` in reply
         sensitive_dialogacts = {"Opinion_RequestIntent", "General_ChatIntent"}
-        all_topics = set(get_topics(curr_uttr, which='all'))
+        all_topics = set(get_topics(curr_uttr, which="all"))
         sensitive_topics_detected = sensitive_topics & all_topics
-        sensitive_dialogacts_detected = "?" in curr_uttr['text'] and (sensitive_dialogacts & all_intents)
-        blist_topics_detected = curr_uttr.get('annotations', {}).get('blacklisted_words', {}).get(
-            "restricted_topics", False)
+        sensitive_dialogacts_detected = "?" in curr_uttr["text"] and (sensitive_dialogacts & all_intents)
+        blist_topics_detected = (
+            curr_uttr.get("annotations", {}).get("blacklisted_words", {}).get("restricted_topics", False)
+        )
         opinion_request_detected = ("Opinion_RequestIntent" in all_intents) or opinion_request_detected
         sensitive_case_request = sensitive_topics_detected and sensitive_dialogacts_detected
         sensitive_case_request = sensitive_case_request or opinion_request_detected or blist_topics_detected
@@ -123,22 +123,32 @@ def respond():
                         confidence = 0.7
                     else:
                         confidence = 0.3
-                elif any(substr in full_resp for substr in
-                         ["Here's something I found", "Here's what I found", "According to ",
-                          "This might answer your question"]):
+                elif any(
+                    substr in full_resp
+                    for substr in [
+                        "Here's something I found",
+                        "Here's what I found",
+                        "According to ",
+                        "This might answer your question",
+                    ]
+                ):
                     confidence = 0.7
                 elif "is usually defined as" in full_resp:
                     confidence = 0.3
-                elif len(full_resp.split()) > 10 and any([noun.lower() in full_resp.lower()
-                                                          for noun in curr_nounphrases]):
+                elif len(full_resp.split()) > 10 and any(
+                    [noun.lower() in full_resp.lower() for noun in curr_nounphrases]
+                ):
                     confidence = 0.7
                 else:
                     confidence = 0.95
 
                 bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
                 act_skill = bot_uttr.get("active_skill", "")
-                if confidence == 0.7 and act_skill in ["greeting_skill", "dff_friendship_skill"] and \
-                        "?" not in curr_uttr["text"]:
+                if (
+                    confidence == 0.7
+                    and act_skill in ["greeting_skill", "dff_friendship_skill"]
+                    and "?" not in curr_uttr["text"]
+                ):
                     confidence = 0.9
 
                 if sensitive_case_request and subject is not None:
@@ -169,9 +179,9 @@ def respond():
         final_confidences.append(curr_confidences)
 
     total_time = time() - st_time
-    logger.info(f'cobotqa exec time: {total_time:.3f}s')
+    logger.info(f"cobotqa exec time: {total_time:.3f}s")
     return jsonify(list(zip(final_responses, final_confidences)))
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)

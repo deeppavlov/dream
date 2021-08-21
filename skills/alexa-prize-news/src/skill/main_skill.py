@@ -10,7 +10,7 @@ from src.consts import (
     NUM_NEWS_TO_PRINT,
     SIMILARITY_THRESHOLD,
     FIRST_SIMILARITY_THRESHOLD,
-    MAX_SUBTOPICS_NUM
+    MAX_SUBTOPICS_NUM,
 )
 from src.content import *
 from src.utils import format_output_from_indices
@@ -34,11 +34,11 @@ class AlexaPrizeSkill(metaclass=ZDialog):
 
     @staticmethod
     def generate_response(
-            context: UserContext,
-            indices: Union[List[int], List[str]],
-            mode: str,
-            prefix: str,
-            to_state: Optional[str] = 'body'
+        context: UserContext,
+        indices: Union[List[int], List[str]],
+        mode: str,
+        prefix: str,
+        to_state: Optional[str] = "body",
     ) -> Response:
         message = format_output_from_indices(loader.texts, indices, mode, prefix)
         context.payload["news_id"] = list(indices)[0] if indices else None
@@ -46,8 +46,9 @@ class AlexaPrizeSkill(metaclass=ZDialog):
 
     def respond_to_headline(context: UserContext) -> Optional[Response]:
         indices, scores = score_news(loader.model, context.message)
-        if scores[0] > FIRST_SIMILARITY_THRESHOLD or \
-                (NUM_NEWS_TO_PRINT > 1 and scores[NUM_NEWS_TO_PRINT - 1] > SIMILARITY_THRESHOLD):
+        if scores[0] > FIRST_SIMILARITY_THRESHOLD or (
+            NUM_NEWS_TO_PRINT > 1 and scores[NUM_NEWS_TO_PRINT - 1] > SIMILARITY_THRESHOLD
+        ):
             prefix = HEADLINE_PREFIX(context.raw_message)
             return AlexaPrizeSkill.generate_response(context, indices, "headline", prefix)
         return None
@@ -140,13 +141,13 @@ class AlexaPrizeSkill(metaclass=ZDialog):
 
     def subtopic_by_key_phrases(context: UserContext) -> Optional[Response]:
         topic = context.payload["topic"]
-        words = re.split('[^a-zA-Z]+', context.raw_message)
+        words = re.split("[^a-zA-Z]+", context.raw_message)
 
         subtopics = loader.lda_model.get_subtopics_summaries(topic)
         scores = defaultdict(int)
         for i, key_phrases in subtopics:
             for phrase in key_phrases:
-                phrase = re.split('[^a-z]+', phrase.lower())
+                phrase = re.split("[^a-z]+", phrase.lower())
                 scores[i] += get_match_score(phrase, words)
                 scores[i] += get_match_score(get_paired(phrase), get_paired(words))
 

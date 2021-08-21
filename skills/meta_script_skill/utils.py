@@ -253,8 +253,7 @@ def get_comet_atomic(topic, relation, TOPICS=None):
         # send request to COMeT service on `topic & relation`
         try:
             comet_result = custom_request(
-                meta_script_skill_constants.COMET_SERVICE_URL, {"input": f"{topic}", "category": relation},
-                timeout=1.
+                meta_script_skill_constants.COMET_SERVICE_URL, {"input": f"{topic}", "category": relation}, timeout=1.0
             )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT Atomic result Timeout")
@@ -311,8 +310,9 @@ def get_comet_conceptnet(topic, relation, return_all=False, return_not_filtered=
     # send request to COMeT ConceptNet service on `topic & relation`
     try:
         comet_result = custom_request(
-            meta_script_skill_constants.CONCEPTNET_SERVICE_URL, {"input": f"{topic}.", "category": relation},
-            timeout=1.
+            meta_script_skill_constants.CONCEPTNET_SERVICE_URL,
+            {"input": f"{topic}.", "category": relation},
+            timeout=1.0,
         )
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         logger.error("COMeT ConceptNet result Timeout")
@@ -646,8 +646,9 @@ def clean_up_topic_list(verb_nounphrases):
             or tokens[-1] in meta_script_skill_constants.BANNED_NOUNS.union(TOP_100_FREQUENT_WORDS)
         )
         length_is_enough = len(tokens[0]) >= 2 and len(tokens[-1]) > 2
-        one_of_verb_noun_not_frequent = (tokens[0] not in TOP_1k_FREQUENT_WORDS or tokens[-1] not in
-                                         TOP_1k_FREQUENT_WORDS)
+        one_of_verb_noun_not_frequent = (
+            tokens[0] not in TOP_1k_FREQUENT_WORDS or tokens[-1] not in TOP_1k_FREQUENT_WORDS
+        )
         verb_exceptions = ["play", "practice", "be"]
 
         if vnp in verb_exceptions or (not vnp_is_frequent and length_is_enough and one_of_verb_noun_not_frequent):

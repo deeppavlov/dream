@@ -26,9 +26,8 @@ from hdt import HDTDocument
 
 from common.wiki_skill import used_types as wiki_skill_used_types
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 prefixes = {
@@ -36,12 +35,8 @@ prefixes = {
     "label": "http://wl",
     "alias": "http://wal",
     "description": "http://wd",
-    "rels": {"direct": "http://wpd",
-             "no_type": "http://wp",
-             "statement": "http://wps",
-             "qualifier": "http://wpq"
-             },
-    "statement": "http://ws"
+    "rels": {"direct": "http://wpd", "no_type": "http://wp", "statement": "http://wps", "qualifier": "http://wpq"},
+    "statement": "http://ws",
 }
 max_comb_num = 1e6
 lang = "@en"
@@ -51,27 +46,30 @@ USE_CACHE = True
 
 ANIMALS_SKILL_TYPES = {"Q55983715", "Q16521", "Q43577", "Q39367", "Q38547"}
 
-occ = {"business": [["Q131524", "enterpreneur"]],
-       "sport": [["Q937857", "football player"],
-                 ["Q2066131", "athlete"],
-                 ["Q3665646", "basketball player"],
-                 ["Q10833314", "tennis player"],
-                 ["Q19204627", "american football player"]],
-       "films": [["Q10800557", "film actor"],
-                 ["Q33999", "actor"],
-                 ["Q10798782", "television actor"],
-                 ["Q2526255", "film director"]],
-       "music": [["Q488205", "singer-songwriter"],
-                 ["Q36834", "composer"],
-                 ["Q177220", "singer"],
-                 ["Q753110", "songwriter"]],
-       "literature": [["Q49757", "poet"],
-                      ["Q6625963", "novelist"],
-                      ["Q214917", "playwright"],
-                      ["Q36180", "writer"]],
-       "politics": [["Q82955", "politician"],
-                    ["Q372436", "statesperson"]]
-       }
+occ = {
+    "business": [["Q131524", "enterpreneur"]],
+    "sport": [
+        ["Q937857", "football player"],
+        ["Q2066131", "athlete"],
+        ["Q3665646", "basketball player"],
+        ["Q10833314", "tennis player"],
+        ["Q19204627", "american football player"],
+    ],
+    "films": [
+        ["Q10800557", "film actor"],
+        ["Q33999", "actor"],
+        ["Q10798782", "television actor"],
+        ["Q2526255", "film director"],
+    ],
+    "music": [
+        ["Q488205", "singer-songwriter"],
+        ["Q36834", "composer"],
+        ["Q177220", "singer"],
+        ["Q753110", "songwriter"],
+    ],
+    "literature": [["Q49757", "poet"], ["Q6625963", "novelist"], ["Q214917", "playwright"], ["Q36180", "writer"]],
+    "politics": [["Q82955", "politician"], ["Q372436", "statesperson"]],
+}
 
 top_n = 10
 
@@ -97,7 +95,7 @@ def find_top_people():
             tr, cnt = document.search_triples(f"{man}", "http://wl", "")
             for triplet in tr:
                 if triplet[2].endswith("@en"):
-                    label = triplet[2].replace("@en", "").replace('"', '')
+                    label = triplet[2].replace("@en", "").replace('"', "")
                     break
             if label:
                 people_with_labels.append([man, label])
@@ -122,7 +120,7 @@ def find_top_people():
                 tr, cnt = document.search_triples(f"{man}", "http://wl", "")
                 for triplet in tr:
                     if triplet[2].endswith("@en"):
-                        label = triplet[2].replace("@en", "").replace('"', '')
+                        label = triplet[2].replace("@en", "").replace('"', "")
                         break
                 if label:
                     people_with_labels.append([man, label])
@@ -132,58 +130,59 @@ def find_top_people():
     return top_people
 
 
-topic_skill_types = {"Q36180",  # writer
-                     "Q49757",  # poet
-                     "Q214917",  # playwright
-                     "Q1930187",  # journalist
-                     "Q6625963",  # novelist
-                     "Q28389",  # screenwriter
-                     "Q571",  # book
-                     "Q277759",  # book series
-                     "Q8261",  # novel
-                     "Q47461344",  # written work
-                     "Q7725634",  # literary work
-                     "Q1667921",  # novel series
-                     "Q33999",  # actor
-                     "Q177220",  # singer
-                     "Q17125263",  # youtuber
-                     "Q245068",  # comedian
-                     "Q947873",  # television presenter
-                     "Q10800557",  # film actor
-                     "Q10798782",  # television actor
-                     "Q2405480",  # voice actor
-                     "Q211236",  # celebrity
-                     "Q82955",  # politician
-                     "Q372436",  # statesperson
-                     "Q488205",  # singer-songwriter
-                     "Q36834",  # composer
-                     "Q177220",  # singer
-                     "Q753110",  # songwriter
-                     "Q134556",  # single
-                     "Q7366",  # song
-                     "Q482994",  # album
-                     "Q2066131",  # athlete
-                     "Q937857",  # football player
-                     "Q4009406",  # sprinter
-                     "Q10843402",  # swimmer
-                     "Q10873124",  # chess player
-                     "Q3665646",  # basketball player
-                     "Q10833314",  # tennis player
-                     "Q19204627",  # American football player
-                     "Q10871364",  # baseball player
-                     "Q20639856",  # team
-                     "Q847017",  # sports club
-                     "Q476028",  # football club
-                     "Q4498974",  # ice hockey team
-                     "Q570116",  # tourist attraction
-                     "Q11424",  # film
-                     "Q24856",  # film series
-                     "Q82955"  # politician
-                     }
+topic_skill_types = {
+    "Q36180",  # writer
+    "Q49757",  # poet
+    "Q214917",  # playwright
+    "Q1930187",  # journalist
+    "Q6625963",  # novelist
+    "Q28389",  # screenwriter
+    "Q571",  # book
+    "Q277759",  # book series
+    "Q8261",  # novel
+    "Q47461344",  # written work
+    "Q7725634",  # literary work
+    "Q1667921",  # novel series
+    "Q33999",  # actor
+    "Q177220",  # singer
+    "Q17125263",  # youtuber
+    "Q245068",  # comedian
+    "Q947873",  # television presenter
+    "Q10800557",  # film actor
+    "Q10798782",  # television actor
+    "Q2405480",  # voice actor
+    "Q211236",  # celebrity
+    "Q82955",  # politician
+    "Q372436",  # statesperson
+    "Q488205",  # singer-songwriter
+    "Q36834",  # composer
+    "Q177220",  # singer
+    "Q753110",  # songwriter
+    "Q134556",  # single
+    "Q7366",  # song
+    "Q482994",  # album
+    "Q2066131",  # athlete
+    "Q937857",  # football player
+    "Q4009406",  # sprinter
+    "Q10843402",  # swimmer
+    "Q10873124",  # chess player
+    "Q3665646",  # basketball player
+    "Q10833314",  # tennis player
+    "Q19204627",  # American football player
+    "Q10871364",  # baseball player
+    "Q20639856",  # team
+    "Q847017",  # sports club
+    "Q476028",  # football club
+    "Q4498974",  # ice hockey team
+    "Q570116",  # tourist attraction
+    "Q11424",  # film
+    "Q24856",  # film series
+    "Q82955",  # politician
+}
 
 
 def search(self, query: List[str], unknown_elem_positions: List[Tuple[int, str]]) -> List[Dict[str, str]]:
-    query = list(map(lambda elem: "" if elem.startswith('?') else elem, query))
+    query = list(map(lambda elem: "" if elem.startswith("?") else elem, query))
     subj, rel, obj = query
     combs = []
     triplets, cnt = document.search_triples(subj, rel, obj)
@@ -209,12 +208,12 @@ def format_date(entity, question):
         else:
             entity = year
         return entity
-    entity = entity.lstrip('+-')
+    entity = entity.lstrip("+-")
     return entity
 
 
 def find_label(entity: str, question: str) -> str:
-    entity = str(entity).replace('"', '')
+    entity = str(entity).replace('"', "")
     if entity.startswith("Q") or entity.startswith("P"):
         # example: "Q5513"
         entity = f"{prefixes['entity']}/{entity}"
@@ -226,29 +225,30 @@ def find_label(entity: str, question: str) -> str:
         #                                                    '"Lake Baikal"@en'], ...]
         for label in labels:
             if label[2].endswith(lang):
-                found_label = label[2].strip(lang).replace('"', '').replace('.', ' ').replace('$', ' ').replace('  ',
-                                                                                                                ' ')
+                found_label = (
+                    label[2].strip(lang).replace('"', "").replace(".", " ").replace("$", " ").replace("  ", " ")
+                )
                 return found_label
 
     elif entity.endswith(lang):
         # entity: '"Lake Baikal"@en'
-        entity = entity[:-3].replace('.', ' ').replace('$', ' ').replace('  ', ' ')
+        entity = entity[:-3].replace(".", " ").replace("$", " ").replace("  ", " ")
         return entity
 
     elif "^^" in entity:
         """
-            examples:
-                '"1799-06-06T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>' (date)
-                '"+1642"^^<http://www.w3.org/2001/XMLSchema#decimal>' (number)
+        examples:
+            '"1799-06-06T00:00:00Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>' (date)
+            '"+1642"^^<http://www.w3.org/2001/XMLSchema#decimal>' (number)
         """
         entity = entity.split("^^")[0]
         for token in ["T00:00:00Z", "+"]:
-            entity = entity.replace(token, '')
-        entity = format_date(entity, question).replace('.', '').replace('$', '')
+            entity = entity.replace(token, "")
+        entity = format_date(entity, question).replace(".", "").replace("$", "")
         return entity
 
     elif entity.isdigit():
-        entity = str(entity).replace('.', ',')
+        entity = str(entity).replace(".", ",")
         return entity
 
     return "Not Found"
@@ -287,11 +287,11 @@ def find_object(entity: str, rel: str, direction: str) -> List[str]:
     if direction == "forw":
         triplets, cnt = document.search_triples(entity, rel, "")
         if cnt < max_comb_num:
-            objects.extend([triplet[2].split('/')[-1] for triplet in triplets])
+            objects.extend([triplet[2].split("/")[-1] for triplet in triplets])
     else:
         triplets, cnt = document.search_triples("", rel, entity)
         if cnt < max_comb_num:
-            objects.extend([triplet[0].split('/')[-1] for triplet in triplets])
+            objects.extend([triplet[0].split("/")[-1] for triplet in triplets])
 
     return objects
 
@@ -312,10 +312,10 @@ def find_types(entity: str):
     if not entity.startswith("http"):
         entity = f"{prefixes['entity']}/{entity}"
     tr, c = document.search_triples(entity, f"{prefixes['rels']['direct']}/P31", "")
-    types = [triplet[2].split('/')[-1] for triplet in tr]
+    types = [triplet[2].split("/")[-1] for triplet in tr]
     if "Q5" in types:
         tr, c = document.search_triples(entity, f"{prefixes['rels']['direct']}/P106", "")
-        types += [triplet[2].split('/')[-1] for triplet in tr]
+        types += [triplet[2].split("/")[-1] for triplet in tr]
 
     types = list(set(types))
     return types
@@ -325,7 +325,7 @@ def find_subclasses(entity: str):
     if not entity.startswith("http"):
         entity = f"{prefixes['entity']}/{entity}"
     tr, c = document.search_triples(entity, f"{prefixes['rels']['direct']}/P279", "")
-    subclasses = [triplet[2].split('/')[-1] for triplet in tr]
+    subclasses = [triplet[2].split("/")[-1] for triplet in tr]
     subclasses = list(set(subclasses))
     return subclasses
 
@@ -374,8 +374,13 @@ def find_intersection(entity1, entity2, rel, direction):
 
 
 def find_connection(person1, person2):
-    rel_info = [("P161", "films", "backw"), ("P175", "songs", "backw"), ("P50", "books", "backw"),
-                ("P102", "party", "forw"), ("P54", "team", "forw")]
+    rel_info = [
+        ("P161", "films", "backw"),
+        ("P175", "songs", "backw"),
+        ("P50", "books", "backw"),
+        ("P102", "party", "forw"),
+        ("P54", "team", "forw"),
+    ]
     entities1 = [(entity_id, n) for n, entity_id in enumerate(person1)]
     entities2 = [(entity_id, n) for n, entity_id in enumerate(person2)]
     entity_pairs = list(itertools.product(entities1, entities2))
@@ -406,15 +411,16 @@ def find_connection(person1, person2):
 
 
 def extract_info():
-    art_genres = [["film", "Q201658", "P136", ["Q11424"], "actor", "P161"],
-                  ["tv series", "Q15961987", "P136", ["Q5398426"], "tv actor", "P161"],
-                  ["song", "Q188451", "P136", ["Q134556", "Q7366"], "", ""],
-                  ["singer", "Q188451", "P136", ["Q488205", "Q36834", "Q177220", "Q753110"], "", ""],
-                  ["album", "Q188451", "P136", ["Q482994", "Q208569"], "", ""],
-                  ["book", "Q223393", "P136", ["Q7725634"], "writer", "P50"],
-                  ["athlete", "Q31629", "P641", ["Q5", "Q2066131"], "", ""],
-                  ["team", "Q31629", "P641", ["Q20639856", "Q12973014"], "", ""]
-                  ]
+    art_genres = [
+        ["film", "Q201658", "P136", ["Q11424"], "actor", "P161"],
+        ["tv series", "Q15961987", "P136", ["Q5398426"], "tv actor", "P161"],
+        ["song", "Q188451", "P136", ["Q134556", "Q7366"], "", ""],
+        ["singer", "Q188451", "P136", ["Q488205", "Q36834", "Q177220", "Q753110"], "", ""],
+        ["album", "Q188451", "P136", ["Q482994", "Q208569"], "", ""],
+        ["book", "Q223393", "P136", ["Q7725634"], "writer", "P50"],
+        ["athlete", "Q31629", "P641", ["Q5", "Q2066131"], "", ""],
+        ["team", "Q31629", "P641", ["Q20639856", "Q12973014"], "", ""],
+    ]
     art_genres_dict = {}
     people_genres_dict = {}
     banned_types = {"Q82955", "Q372436"}
@@ -476,51 +482,53 @@ def find_top_triplets(entity, entity_substr, pos=None, token_conf=None, conf=Non
     if entity.startswith("Q"):
         triplets = {}
         entity_label = find_label(entity, "")
-        triplets['plain_entity'] = entity
-        for rel_id, rel_label in [("P31", "instance of"),
-                                  ("P279", "subclass of"),
-                                  ("P131", "located in"),
-                                  ("P106", "occupation"),
-                                  ("P361", "part of"),
-                                  ("P17", "country"),
-                                  ("P27", "country of sitizenship"),
-                                  ("P569", "date of birth"),
-                                  ("P1542", "has effect"),
-                                  ("P580", "start time"),
-                                  ("P1552", "has quality"),
-                                  ("P50", "author"),
-                                  ("P136", "genre"),
-                                  ("P577", "publication date"),
-                                  ("P800", "notable work"),
-                                  ("P463", "musical group"),
-                                  ("P1303", "instrument"),
-                                  ("P166", "awards received"),
-                                  ("P571", "inception"),
-                                  ("P175", "performer"),
-                                  ("P658", "tracklist"),
-                                  ("P641", "sport"),
-                                  ("P54", "member of sport team"),
-                                  ("P1532", "country for sport"),
-                                  ("P413", "position played on team"),
-                                  ("P1344", "participant in"),
-                                  ("P1449", "nickname"),
-                                  ("P286", "head coach"),
-                                  ("P118", "league"),
-                                  ("P115", "home venue"),
-                                  ("P2522", "victory"),
-                                  ("P6364", "official color or colors"),
-                                  ("P206", "located next to body of water"),
-                                  ("P840", "narrative location"),
-                                  ("P1830", "owner of"),
-                                  ("P102", "member of political party"),
-                                  ("P26", "spouse"),
-                                  ("P451", "partner")
-                                  ]:
+        triplets["plain_entity"] = entity
+        for rel_id, rel_label in [
+            ("P31", "instance of"),
+            ("P279", "subclass of"),
+            ("P131", "located in"),
+            ("P106", "occupation"),
+            ("P361", "part of"),
+            ("P17", "country"),
+            ("P27", "country of sitizenship"),
+            ("P569", "date of birth"),
+            ("P1542", "has effect"),
+            ("P580", "start time"),
+            ("P1552", "has quality"),
+            ("P50", "author"),
+            ("P136", "genre"),
+            ("P577", "publication date"),
+            ("P800", "notable work"),
+            ("P463", "musical group"),
+            ("P1303", "instrument"),
+            ("P166", "awards received"),
+            ("P571", "inception"),
+            ("P175", "performer"),
+            ("P658", "tracklist"),
+            ("P641", "sport"),
+            ("P54", "member of sport team"),
+            ("P1532", "country for sport"),
+            ("P413", "position played on team"),
+            ("P1344", "participant in"),
+            ("P1449", "nickname"),
+            ("P286", "head coach"),
+            ("P118", "league"),
+            ("P115", "home venue"),
+            ("P2522", "victory"),
+            ("P6364", "official color or colors"),
+            ("P206", "located next to body of water"),
+            ("P840", "narrative location"),
+            ("P1830", "owner of"),
+            ("P102", "member of political party"),
+            ("P26", "spouse"),
+            ("P451", "partner"),
+        ]:
             objects = find_object(entity, rel_id, "")
             objects_info = find_objects_info(objects)
             if rel_label == "occupation":
                 is_sportsman = any(
-                    [{"Q2066131", "Q18536342"}.intersection(set(find_subclasses(occ))) for occ in objects])
+                    [{"Q2066131", "Q18536342"}.intersection(set(find_subclasses(occ))) for occ in objects]
+                )
                 if is_sportsman:
                     objects_info.append(["Q2066131", "athlete"])
             if objects_info:
@@ -640,7 +648,7 @@ def find_objects_by_category(what_to_find, category, subject):
 
 
 if USE_CACHE:
-    with open("/root/.deeppavlov/downloads/wikidata/wikidata_cache.json", 'r') as fl:
+    with open("/root/.deeppavlov/downloads/wikidata/wikidata_cache.json", "r") as fl:
         wikidata_cache = json.load(fl)
     top_people = wikidata_cache["top_people"]
     genres_dict = wikidata_cache["genres_dict"]
@@ -676,46 +684,58 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
                         tokens_match_conf_list = entity_info.get("tokens_match_conf", [1.0])
                         confidences = entity_info.get("confidences", [1.0])
                         if entity_ids:
-                            entity_triplets_info = find_top_triplets(entity_ids[0], entity_substr, 0,
-                                                                     tokens_match_conf_list[0], confidences[0])
+                            entity_triplets_info = find_top_triplets(
+                                entity_ids[0], entity_substr, 0, tokens_match_conf_list[0], confidences[0]
+                            )
                             triplets_info = {**triplets_info, **entity_triplets_info}
                         found_topic_skills_info = False
                         found_wiki_skill_info = False
-                        for n, (entity, token_conf, conf) in \
-                                enumerate(zip(entity_ids, tokens_match_conf_list, confidences)):
+                        for n, (entity, token_conf, conf) in enumerate(
+                            zip(entity_ids, tokens_match_conf_list, confidences)
+                        ):
                             types = find_types(entity)
                             types_2hop = find_types_2hop(entity)
-                            if not found_topic_skills_info and (set(types).intersection(topic_skill_types)
-                                                                or set(types_2hop).intersection(topic_skill_types)):
+                            if not found_topic_skills_info and (
+                                set(types).intersection(topic_skill_types)
+                                or set(types_2hop).intersection(topic_skill_types)
+                            ):
                                 entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 topic_skills_triplets_info = {**topic_skills_triplets_info, **entity_triplets_info}
                                 if not set(types_2hop).intersection({"Q11424", "Q24856"}):
                                     found_topic_skills_info = True
-                            if not found_wiki_skill_info and (set(types).intersection(wiki_skill_used_types)
-                                                              or set(types_2hop).intersection(wiki_skill_used_types)):
+                            if not found_wiki_skill_info and (
+                                set(types).intersection(wiki_skill_used_types)
+                                or set(types_2hop).intersection(wiki_skill_used_types)
+                            ):
                                 entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 wiki_skill_triplets_info = {**wiki_skill_triplets_info, **entity_triplets_info}
                                 if not set(types_2hop).intersection({"Q11424", "Q24856"}):
                                     found_wiki_skill_info = True
                             if found_topic_skills_info and found_wiki_skill_info:
                                 break
-                        for n, (entity, token_conf, conf) in \
-                                enumerate(zip(entity_ids, tokens_match_conf_list, confidences)):
+                        for n, (entity, token_conf, conf) in enumerate(
+                            zip(entity_ids, tokens_match_conf_list, confidences)
+                        ):
                             types = find_types(entity)
                             types_2hop = find_types_2hop(entity)
-                            if set(types).intersection(ANIMALS_SKILL_TYPES) \
-                                    or set(types_2hop).intersection(ANIMALS_SKILL_TYPES):
+                            if set(types).intersection(ANIMALS_SKILL_TYPES) or set(types_2hop).intersection(
+                                ANIMALS_SKILL_TYPES
+                            ):
                                 entity_triplets_info = find_top_triplets(entity, entity_substr, n, token_conf, conf)
                                 animals_skill_triplets_info = {**animals_skill_triplets_info, **entity_triplets_info}
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)
                 log.exception(e)
-            wiki_parser_output.append({"entities_info": triplets_info,
-                                       "topic_skill_entities_info": topic_skills_triplets_info,
-                                       "wiki_skill_entities_info": wiki_skill_triplets_info,
-                                       "animals_skill_entities_info": animals_skill_triplets_info,
-                                       "utt_num": utt_num})
+            wiki_parser_output.append(
+                {
+                    "entities_info": triplets_info,
+                    "topic_skill_entities_info": topic_skills_triplets_info,
+                    "wiki_skill_entities_info": wiki_skill_triplets_info,
+                    "animals_skill_entities_info": animals_skill_triplets_info,
+                    "utt_num": utt_num,
+                }
+            )
         elif parser_info == "find_top_people":
             top_people_list = []
             try:
@@ -801,11 +821,13 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
             triplets = []
             try:
                 triplets_forw, c = document.search_triples(f"{prefixes['entity']}/{query}", "", "")
-                triplets.extend([triplet for triplet in triplets_forw
-                                 if not triplet[2].startswith(prefixes["statement"])])
+                triplets.extend(
+                    [triplet for triplet in triplets_forw if not triplet[2].startswith(prefixes["statement"])]
+                )
                 triplets_backw, c = document.search_triples("", "", f"{prefixes['entity']}/{query}")
-                triplets.extend([triplet for triplet in triplets_backw
-                                 if not triplet[0].startswith(prefixes["statement"])])
+                triplets.extend(
+                    [triplet for triplet in triplets_backw if not triplet[0].startswith(prefixes["statement"])]
+                )
             except Exception as e:
                 log.info("Wrong arguments are passed to wiki_parser")
                 sentry_sdk.capture_exception(e)

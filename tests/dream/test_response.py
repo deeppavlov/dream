@@ -2,9 +2,9 @@ import requests
 import time
 
 
-if __name__ == '__main__':
-    url = 'http://0.0.0.0:4242'
-    user_id = 'test'
+if __name__ == "__main__":
+    url = "http://0.0.0.0:4242"
+    user_id = "test"
 
     trials = 0
     result = requests.post(url, json={"user_id": user_id, "payload": "/start"})
@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     trials = 0
     result = requests.post(url, json={"user_id": user_id, "payload": "hey", "ignore_deadline_timestamp": True})
-    while result.status_code != 200 or result.json()['active_skill'] == 'timeout':
+    while result.status_code != 200 or result.json()["active_skill"] == "timeout":
         # TODO: add such checking in the deploy prod
         time.sleep(4)
         trials += 1

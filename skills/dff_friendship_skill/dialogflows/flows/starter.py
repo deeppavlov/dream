@@ -10,20 +10,35 @@ from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE
+
 # from common.greeting import HI_THIS_IS_ALEXA
-from common.starter import INTROS, OUTROS, CATEGORIES_VERBS, \
-    PERSONA1_GENRES, GENRES_ATTITUDES, GENRE_ITEMS, WEEKDAYS_ATTITUDES, WHATS_YOUR_FAV_PHRASES, \
-    WHY_QUESTIONS, ACKNOWLEDGEMENTS, MY_FAV_ANSWERS, WONDER_WHY_QUESTIONS, OH_PHRASES, \
-    SO_YOU_SAY_PHRASES, ASSENT_YES_PHRASES, ASSENT_NO_PHRASES
+from common.starter import (
+    INTROS,
+    OUTROS,
+    CATEGORIES_VERBS,
+    PERSONA1_GENRES,
+    GENRES_ATTITUDES,
+    GENRE_ITEMS,
+    WEEKDAYS_ATTITUDES,
+    WHATS_YOUR_FAV_PHRASES,
+    WHY_QUESTIONS,
+    ACKNOWLEDGEMENTS,
+    MY_FAV_ANSWERS,
+    WONDER_WHY_QUESTIONS,
+    OH_PHRASES,
+    SO_YOU_SAY_PHRASES,
+    ASSENT_YES_PHRASES,
+    ASSENT_NO_PHRASES,
+)
 from common.music import OPINION_REQUESTS_ABOUT_MUSIC
 
 import dialogflows.scopes as scopes
+
 # from dialogflows.flows import shared
 from dialogflows.flows.starter_states import State
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 with open("common/topic_favorites.json", "r") as f:
@@ -123,15 +138,13 @@ def genre_response(vars):
         if all([category_verb, genre, attitude, item]):
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
             state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-            state_utils.save_to_shared_memory(vars, used_categories=used_categories + [
-                {
-                    "category": category,
-                    "genre": genre,
-                    "item": item
-                }
-            ])
-            return f"{random.choice(INTROS)} " + \
-                f"{category_verb} {item}. {attitude} {random.choice(OUTROS)} {genre} {category}?"
+            state_utils.save_to_shared_memory(
+                vars, used_categories=used_categories + [{"category": category, "genre": genre, "item": item}]
+            )
+            return (
+                f"{random.choice(INTROS)} "
+                + f"{category_verb} {item}. {attitude} {random.choice(OUTROS)} {genre} {category}?"
+            )
         else:
             state_utils.set_confidence(vars, 0)
             return error_response(vars)
@@ -222,8 +235,11 @@ def my_fav_response(vars):
             if item:
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
                 state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-                return f"{random.choice(ACKNOWLEDGEMENTS)}" + \
-                    random.choice(MY_FAV_ANSWERS(category, item)) + f"{random.choice(WONDER_WHY_QUESTIONS)}"
+                return (
+                    f"{random.choice(ACKNOWLEDGEMENTS)}"
+                    + random.choice(MY_FAV_ANSWERS(category, item))
+                    + f"{random.choice(WONDER_WHY_QUESTIONS)}"
+                )
         else:
             state_utils.set_confidence(vars, 0)
             return error_response(vars)
@@ -308,7 +324,7 @@ def weekday_response(vars):
         used_categories = shared_memory.get("used_categories", [])
         category = "day"
         state_utils.save_to_shared_memory(vars, used_categories=used_categories + [category])
-        weekday = weekdays[int(datetime.datetime.now(pytz.timezone('US/Mountain')).weekday()) - 1]
+        weekday = weekdays[int(datetime.datetime.now(pytz.timezone("US/Mountain")).weekday()) - 1]
         attitude = WEEKDAYS_ATTITUDES.get(weekday, "")
         if weekday and attitude:
             state_utils.set_confidence(vars, confidence=CONF_HIGH)
@@ -359,8 +375,7 @@ def my_fav_day_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return "Aha. Speaking of me, my favorite day is Friday. " \
-               "As the song says, Nothing matters like the weekend."
+        return "Aha. Speaking of me, my favorite day is Friday. " "As the song says, Nothing matters like the weekend."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -381,6 +396,7 @@ def starter_request(ngrams, vars):
     logger.info(f"starter_request {flag}")
     return flag
 
+
 ##################################################################################################################
 ##################################################################################################################
 # linking
@@ -399,8 +415,9 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_CHECK_NEGATIVE: negative_request,
         State.SYS_CHECK_NEUTRAL: neutral_request,
         # State.SYS_WEEKDAY: weekday_request,
-        State.SYS_FRIDAY: friday_request
-    })
+        State.SYS_FRIDAY: friday_request,
+    },
+)
 
 ##################################################################################################################
 #  GENRE

@@ -14,10 +14,12 @@ from requests import RequestException
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
     r"\bvideo ?game|\bgaming\b|\bplay ?station|\bx ?box\b|\bplay(?:ed|ing|s).*\b(?:tablet|pc|computer)\b|"
     r"\bgames? for (?:android|pc|computer|play ?station|x ?box|tablet|ipad)\b|\b(what|which)\b.+\bgame.+\bplay.+\?",
-    re.IGNORECASE)
+    re.IGNORECASE,
+)
 
 CHECK_DEFINITELY_GAME_COMPILED_PATTERN = re.compile(
-    VIDEO_GAME_WORDS_COMPILED_PATTERN.pattern + r'|\bgames?\b|\bplay(?:ed|ing|s)\b', re.IGNORECASE)
+    VIDEO_GAME_WORDS_COMPILED_PATTERN.pattern + r"|\bgames?\b|\bplay(?:ed|ing|s)\b", re.IGNORECASE
+)
 
 
 logger = logging.getLogger(__name__)
@@ -44,29 +46,29 @@ INT_TO_ROMAN = {
     1: "I",
 }
 ROMAN_TO_INT = {
-    'I': 1,
-    'V': 5,
-    'X': 10,
-    'L': 50,
-    'C': 100,
-    'D': 500,
-    'M': 1000,
-    'IV': 4,
-    'IX': 9,
-    'XL': 40,
-    'XC': 90,
-    'CD': 400,
-    'CM': 900
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+    "IV": 4,
+    "IX": 9,
+    "XL": 40,
+    "XC": 90,
+    "CD": 400,
+    "CM": 900,
 }
 ROMAN_NUMBER_COMPILED_PATTERN = re.compile(
     r"\b(?:M{1,4}(?:CM|CD|DC{0,3}|C{1,3})?(?:XC|XL|LX{0,3}|X{1,3})?(?:IX|IV|VI{0,3}|I{1,3})?|"
     r"(?:CM|CD|DC{0,3}|C{1,3})(?:XC|XL|LX{0,3}|X{1,3})?(?:IX|IV|VI{0,3}|I{1,3})?|"
     r"(?:XC|XL|LX{0,3}|X{1,3})(?:IX|IV|VI{0,3}|I{1,3})?|"
     r"(?:IX|IV|VI{0,3}|I{1,3}))\b",
-    re.I)
+    re.I,
+)
 INTEGER_PATTERN = re.compile(r"[1-9][0-9]*", re.I)
-NUMBER_COMPILED_PATTERN = re.compile(
-    ROMAN_NUMBER_COMPILED_PATTERN.pattern + '|' + INTEGER_PATTERN.pattern, re.I)
+NUMBER_COMPILED_PATTERN = re.compile(ROMAN_NUMBER_COMPILED_PATTERN.pattern + "|" + INTEGER_PATTERN.pattern, re.I)
 
 
 def write_roman(num):
@@ -74,9 +76,10 @@ def write_roman(num):
         for r in INT_TO_ROMAN.keys():
             x, y = divmod(num, r)
             yield INT_TO_ROMAN[r] * x
-            num -= (r * x)
+            num -= r * x
             if num <= 0:
                 break
+
     return "".join([a for a in roman_num(num)])
 
 
@@ -84,8 +87,8 @@ def roman_to_int(s):
     i = 0
     num = 0
     while i < len(s):
-        if i + 1 < len(s) and s[i:i + 2] in ROMAN_TO_INT:
-            num += ROMAN_TO_INT[s[i:i + 2]]
+        if i + 1 < len(s) and s[i : i + 2] in ROMAN_TO_INT:
+            num += ROMAN_TO_INT[s[i : i + 2]]
             i += 2
         else:
             num += ROMAN_TO_INT[s[i]]
@@ -115,7 +118,7 @@ def number_replace(match_obj):
 
 ARTICLE_PATTERN = re.compile(r"(\ba |\ban |\bthe )", re.I)
 COLON_PATTERN = re.compile(r":")
-ARTICLE_COLON_PATTERN = re.compile(ARTICLE_PATTERN.pattern + '|' + COLON_PATTERN.pattern, re.I)
+ARTICLE_COLON_PATTERN = re.compile(ARTICLE_PATTERN.pattern + "|" + COLON_PATTERN.pattern, re.I)
 
 
 def article_colon_replacement(match_obj):
@@ -131,12 +134,11 @@ def compose_game_name_re(name):
     if first_number is None:
         no_numbers_name = None
     else:
-        no_numbers_name = ARTICLE_COLON_PATTERN.sub(
-            article_colon_replacement, name[:first_number.start()]).strip()
+        no_numbers_name = ARTICLE_COLON_PATTERN.sub(article_colon_replacement, name[: first_number.start()]).strip()
         if not no_numbers_name:
             no_numbers_name = None
-    if ':' in name:
-        before_colon_name = name.split(':')[0].strip()
+    if ":" in name:
+        before_colon_name = name.split(":")[0].strip()
         if before_colon_name:
             before_colon_name = ARTICLE_COLON_PATTERN.sub(article_colon_replacement, before_colon_name)
             before_colon_name = NUMBER_COMPILED_PATTERN.sub(number_replace, before_colon_name)
@@ -187,10 +189,9 @@ def compile_re_pattern_for_list_of_strings(list_of_game_names: List[Union[str, L
         if before_number is not None:
             before_number_l = before_number.lower()
             if before_number_l in before_number_name_to_full_names:
-                before_number_name_to_full_names[before_number_l]['full_indices'].append(i)
+                before_number_name_to_full_names[before_number_l]["full_indices"].append(i)
             else:
-                before_number_name_to_full_names[before_number_l] = {
-                    "not_lowered": before_number, "full_indices": [i]}
+                before_number_name_to_full_names[before_number_l] = {"not_lowered": before_number, "full_indices": [i]}
         else:
             full_names_without_numbers.append(full)
     for full in full_names_without_numbers:
@@ -198,16 +199,16 @@ def compile_re_pattern_for_list_of_strings(list_of_game_names: List[Union[str, L
         if full in before_number_name_to_full_names:
             del before_number_name_to_full_names[full]
     for before_number_info in before_number_name_to_full_names.values():
-        for i in before_number_info['full_indices']:
-            full_name_patterns[i] += r'\b|\b' + before_number_info['not_lowered']
+        for i in before_number_info["full_indices"]:
+            full_name_patterns[i] += r"\b|\b" + before_number_info["not_lowered"]
     for alternative_name, full_name_indices in alternative_names.items():
         alternative_name_pattern = compose_game_name_re(alternative_name)[0]
         for i in full_name_indices:
-            full_name_patterns[i] += r'\b|\b' + alternative_name_pattern
+            full_name_patterns[i] += r"\b|\b" + alternative_name_pattern
     for i, name in enumerate(before_colon_names):
         if name is not None:
-            full_name_patterns[i] += r'\b|\b' + name
-    regex = '|'.join([r'(\b' + p + r'\b)' for p in full_name_patterns])
+            full_name_patterns[i] += r"\b|\b" + name
+    regex = "|".join([r"(\b" + p + r"\b)" for p in full_name_patterns])
     return re.compile(regex, flags=re.I)
 
 
@@ -220,7 +221,8 @@ def load_json(file_path):
 path = Path(__file__).parent / Path("games_with_at_least_1M_copies_sold.json")
 GAMES_WITH_AT_LEAST_1M_COPIES_SOLD = load_json(path)
 GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN = compile_re_pattern_for_list_of_strings(
-    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD)
+    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD
+)
 
 
 def find_games_in_text(text):
@@ -242,18 +244,13 @@ def find_games_in_text(text):
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
     r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b|"
     r"\bplay(ed|ing|s).*\b(tablet|pc|computer)\b)",
-    re.IGNORECASE)
+    re.IGNORECASE,
+)
 
 
 genre_and_theme_groups = {
-    "action": {
-        "genres": [2, 4, 5, 10, 11, 12, 24, 25, 31, 36],
-        "themes": [1, 23, 39]
-    },
-    "history": {
-        "genres": [11, 15, 16],
-        "themes": [22, 39]
-    }
+    "action": {"genres": [2, 4, 5, 10, 11, 12, 24, 25, 31, 36], "themes": [1, 23, 39]},
+    "history": {"genres": [11, 15, 16], "themes": [22, 39]},
 }
 
 
@@ -270,18 +267,12 @@ links_to_movies = {
             "To be honest, horror video games are not my favorite. "
             "How about movies? What is your favorite horror movie?"
         ],
-        "Thriller": [
-            "I think this game is too scary for me. What cool thriller movie do you remember?"
-        ]
+        "Thriller": ["I think this game is too scary for me. What cool thriller movie do you remember?"],
     },
     "theme_genre_group": {
-        "action": [
-            "Action games are cool but how about movies? What is your favorite action movie?"
-        ],
-        "history": [
-            "Changing topic slightly, what is your favorite historical movie?"
-        ]
-    }
+        "action": ["Action games are cool but how about movies? What is your favorite action movie?"],
+        "history": ["Changing topic slightly, what is your favorite historical movie?"],
+    },
 }
 
 
@@ -294,29 +285,21 @@ links_to_books = {
         "Science fiction": [
             "Video games are not the only way to touch fantastic worlds. What is your favorite sci-fi book?"
         ],
-        "Horror": [
-            "I never really liked horror video games. Books are less scary. What is your favorite horror book?"
-        ],
-        "Thriller": [
-            "I think this game is too scary for me. Do you read thriller books?"
-        ]
+        "Horror": ["I never really liked horror video games. Books are less scary. What is your favorite horror book?"],
+        "Thriller": ["I think this game is too scary for me. Do you read thriller books?"],
     },
     "theme_genre_group": {
         "history": [
             "History games are cool! But what about books that describe times long gone? Do you like such books?"
         ]
-    }
+    },
 }
 
 
-special_links_to_movies = {
-    "Harry Potter": ["By the way, what is your favorite Harry Potter movie?"]
-}
+special_links_to_movies = {"Harry Potter": ["By the way, what is your favorite Harry Potter movie?"]}
 
 
-special_links_to_books = {
-    "Harry Potter": ["By the way, what Harry Potter book did impress you most?"]
-}
+special_links_to_books = {"Harry Potter": ["By the way, what Harry Potter book did impress you most?"]}
 
 
 harry_potter_part_names = [
@@ -376,9 +359,11 @@ def skill_trigger_phrases():
     return ["What video game are you playing in recent days?", "What is your favorite video game?"]
 
 
-ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = "Wow, video games are cool. " \
-    "If I didn't love to chat so much, I would definitely played video games at least half a day. " \
+ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY = (
+    "Wow, video games are cool. "
+    "If I didn't love to chat so much, I would definitely played video games at least half a day. "
     "What game are you playing now?"
+)
 
 
 CAN_CONTINUE_PHRASES = [

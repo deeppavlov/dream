@@ -7,11 +7,10 @@ from os import getenv
 from flask import Flask, request, jsonify
 import sentry_sdk
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -123,7 +122,7 @@ templates += [
             r"(\b([1-9][0-9]{0,2})\b)",
             flags=re.IGNORECASE,
         ),
-        ten_power_3n_repl
+        ten_power_3n_repl,
     )
 ]
 
@@ -137,7 +136,7 @@ def preprocess(text):
     return text.strip()
 
 
-@app.route("/response", methods=['POST'])
+@app.route("/response", methods=["POST"])
 def respond():
     st_time = time.time()
 
@@ -146,9 +145,9 @@ def respond():
     corrected_sentences = [preprocess(text) for text in sentences]
 
     total_time = time.time() - st_time
-    logger.info(f'Spelling Preprocessing exec time: {total_time:.3f}s')
+    logger.info(f"Spelling Preprocessing exec time: {total_time:.3f}s")
     return jsonify(corrected_sentences)
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)

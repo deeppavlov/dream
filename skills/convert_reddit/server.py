@@ -127,7 +127,7 @@ def softmax(x, t):
 
 
 def exponential_decay(init_value, factor, num_steps):
-    return init_value * factor**num_steps
+    return init_value * factor ** num_steps
 
 
 def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperature=1):
@@ -194,8 +194,7 @@ def inference(utterances_histories, num_ongoing_utt, approximate_confidence_is_e
             )
             answers = [cand[0] for cand in selected_candidates]
             confidences = [
-                exponential_decay(float(cand[1]), CONFIDENCE_DECAY, num_ongoing_utt)
-                for cand in selected_candidates
+                exponential_decay(float(cand[1]), CONFIDENCE_DECAY, num_ongoing_utt) for cand in selected_candidates
             ]
             return answers, confidences
         except Exception:
@@ -216,10 +215,7 @@ def convert_chitchat_model():
     utterances_histories = request.json["utterances_histories"]
     approximate_confidence_is_enabled = request.json.get("approximate_confidence_is_enabled", True)
     num_ongoing_utt = request.json.get("num_ongoing_utt", [0])
-    response = [
-        inference(hist, num_ongoing_utt[0], approximate_confidence_is_enabled)
-        for hist in utterances_histories
-    ]
+    response = [inference(hist, num_ongoing_utt[0], approximate_confidence_is_enabled) for hist in utterances_histories]
     total_time = time.time() - st_time
     logger.warning(f"convert_reddit exec time: {total_time:.3f}s")
     return jsonify(response)

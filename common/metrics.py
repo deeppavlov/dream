@@ -3,26 +3,23 @@ from prometheus_client import generate_latest, Counter, Histogram, Gauge, CONTEN
 import time
 
 REQUEST_COUNT = Counter(
-    'http_request_count', 'App Request Count',
+    "http_request_count",
+    "App Request Count",
     [
-        'method',
-        'endpoint',
-        'code',
-    ]
+        "method",
+        "endpoint",
+        "code",
+    ],
 )
 
-REQUEST_LATENCY = Histogram(
-    'http_request_latency_seconds', 'Request latency',
-    [
-        'endpoint'
-    ]
-)
+REQUEST_LATENCY = Histogram("http_request_latency_seconds", "Request latency", ["endpoint"])
 
 REQUEST_IN_PROGRESS = Gauge(
-    'http_request_in_progress', 'Requests in progress',
+    "http_request_in_progress",
+    "Requests in progress",
     [
-        'endpoint',
-    ]
+        "endpoint",
+    ],
 )
 
 
@@ -34,26 +31,26 @@ def do_not_track(func):
 def setup_metrics(app):
 
     # readiness endpoint
-    @app.route("/ready", methods=['GET'])
+    @app.route("/ready", methods=["GET"])
     @do_not_track
     def ready():
         return Response("OK")
 
     # liveness endpoint
-    @app.route("/health", methods=['GET'])
+    @app.route("/health", methods=["GET"])
     @do_not_track
     def health():
         return Response("OK")
 
     # metrics endpoint
-    @app.route("/metrics", methods=['GET'])
+    @app.route("/metrics", methods=["GET"])
     @do_not_track
     def metrics():
         return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
 
     def ignore_endpoint():
         view_func = app.view_functions.get(request.endpoint)
-        return hasattr(view_func, '_do_not_track')
+        return hasattr(view_func, "_do_not_track")
 
     def before_request():
         if ignore_endpoint():

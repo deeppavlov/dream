@@ -11,21 +11,23 @@ from spacy import load
 from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
+
 # from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import get_sentiment
+
 # , get_intents
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
 import dialogflows.scopes as scopes
 from dialogflows.flows import shared
+
 # from dialogflows.flows.starter_states import State as StarterState
 from dialogflows.flows.bot_persona_states import State as BS
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -113,7 +115,7 @@ def fav_or_lets_chat_request(ngrams, vars):
     flag = any(
         [
             any(["favorite" in utt, "favourite" in utt, "do you do on weekdays" in utt]),
-            re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt)
+            re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt),
         ]
     )
     # and user_lets_chat_about
@@ -162,10 +164,7 @@ def my_fav_story_response(vars):
                     state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                     return error_response(vars)
         if not name and any(
-            [
-                ("my" not in utt) and ("favorite" in utt),
-                re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt)
-            ]
+            [("my" not in utt) and ("favorite" in utt), re.search(YOUR_FAVORITE_COMPILED_PATTERN, utt)]
         ):
             response = "Oh, I don't have one. What about you?"
             state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
@@ -186,9 +185,8 @@ def check_fav_request(ngrams, vars):
     flag = False
     annot_utt = state_utils.get_last_human_utterance(vars)
     utt = annot_utt["text"].lower()
-    if any(
-        ["favorite" in utt, "like" in utt, "love" in utt, "prefer" in utt]) and (
-        'negative' not in get_sentiment(annot_utt, probs=False)
+    if any(["favorite" in utt, "like" in utt, "love" in utt, "prefer" in utt]) and (
+        "negative" not in get_sentiment(annot_utt, probs=False)
     ):
         flag = True
     logger.info(f"check_fav_request {flag}")
@@ -256,12 +254,12 @@ def explain_fav_response(vars):
 def do_you_like_topic_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
-        used_topics = list(set(
-            shared_memory.get("used_topics", []) + [
-                "thing", "day", "book genre", "singer", "actor", "song", "color",
-                "team", "all time favorite movie"
-            ]
-        ))
+        used_topics = list(
+            set(
+                shared_memory.get("used_topics", [])
+                + ["thing", "day", "book genre", "singer", "actor", "song", "color", "team", "all time favorite movie"]
+            )
+        )
         unused_topic = random.choice([t for t in FAV_STORIES_TOPICS if t not in used_topics])
 
         state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
@@ -351,10 +349,7 @@ simplified_dialogflow.set_error_successor(BS.SYS_FAV_OR_LETS_CHAT, BS.SYS_ERR)
 
 simplified_dialogflow.add_user_serial_transitions(
     BS.USR_MY_FAV_STORY,
-    {
-        BS.SYS_WHY_FAV: why_fav_request,
-        BS.SYS_CHECK_FAV: check_fav_request
-    },
+    {BS.SYS_WHY_FAV: why_fav_request, BS.SYS_CHECK_FAV: check_fav_request},
 )
 simplified_dialogflow.set_error_successor(BS.USR_MY_FAV_STORY, BS.SYS_ERR)
 
@@ -367,8 +362,7 @@ simplified_dialogflow.add_user_transition(BS.USR_EXPLAIN_FAV, BS.SYS_CHECK_FAV, 
 simplified_dialogflow.set_error_successor(BS.USR_EXPLAIN_FAV, BS.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(BS.SYS_CHECK_FAV, BS.USR_DO_YOU_LIKE_TOPIC,
-                                            do_you_like_topic_response)
+simplified_dialogflow.add_system_transition(BS.SYS_CHECK_FAV, BS.USR_DO_YOU_LIKE_TOPIC, do_you_like_topic_response)
 simplified_dialogflow.set_error_successor(BS.SYS_CHECK_FAV, BS.SYS_ERR)
 
 

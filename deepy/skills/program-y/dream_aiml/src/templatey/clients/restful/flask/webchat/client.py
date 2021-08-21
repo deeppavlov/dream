@@ -16,13 +16,11 @@ from programy.clients.render.html import HtmlRenderer
 
 
 class WebChatBotClient(FlaskRestBotClient):
-
     def __init__(self, argument_parser=None):
         FlaskRestBotClient.__init__(self, "WebChat", argument_parser)
         # Enter you API keys, here, alternatively store in a db or file and load at startup
         # This is an exmaple, and therefore not suitable for production
-        self._api_keys = [
-        ]
+        self._api_keys = []
 
     def get_client_configuration(self):
         return WebChatConfiguration()
@@ -34,12 +32,12 @@ class WebChatBotClient(FlaskRestBotClient):
         return bool(apikey in self._api_keys)
 
     def get_api_key(self, request):
-        if 'api_key' in request.args:
-            return request.args['api_key']
+        if "api_key" in request.args:
+            return request.args["api_key"]
         return None
 
     def unauthorised_access_response(self, error_code=401):
-        return make_response(jsonify({'error': 'Unauthorized access'}), error_code)
+        return make_response(jsonify({"error": "Unauthorized access"}), error_code)
 
     def check_api_key(self, request):
         if self.configuration.client_configuration.use_api_keys is True:
@@ -55,8 +53,8 @@ class WebChatBotClient(FlaskRestBotClient):
         return None
 
     def get_question(self, request):
-        if 'question' in request.args:
-            return request.args['question']
+        if "question" in request.args:
+            return request.args["question"]
         return None
 
     def get_userid(self, request):
@@ -80,18 +78,15 @@ class WebChatBotClient(FlaskRestBotClient):
         return client_context.bot.default_response
 
     def create_error_response_data(self, client_context, question, error):
-        return {"question": question,
-                "answer": self.get_default_response(client_context),
-                "error": error
-                }
+        return {"question": question, "answer": self.get_default_response(client_context), "error": error}
 
     def create_response(self, response_data, userid, userid_expire_date):
-        response = jsonify({'response': response_data})
+        response = jsonify({"response": response_data})
         response.set_cookie(self.configuration.client_configuration.cookie_id, userid, expires=userid_expire_date)
         return response
 
     def get_answer(self, client_context, question):
-        if question == 'YINITIALQUESTION':
+        if question == "YINITIALQUESTION":
             answer = client_context.bot.get_initial_question(client_context)
         else:
             answer = client_context.bot.ask_question(client_context, question, responselogger=self)
@@ -110,7 +105,9 @@ class WebChatBotClient(FlaskRestBotClient):
 
         userid = self.get_userid(request)
 
-        userid_expire_date = self.get_userid_cookie_expirary_date(self.configuration.client_configuration.cookie_expires)
+        userid_expire_date = self.get_userid_cookie_expirary_date(
+            self.configuration.client_configuration.cookie_expires
+        )
 
         client_context = self.create_client_context(userid)
         try:
@@ -125,18 +122,18 @@ class WebChatBotClient(FlaskRestBotClient):
         return self.create_response(response_data, userid, userid_expire_date)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     WEB_CLIENT = None
 
     print("Initiating WebChat Client...")
     APP = Flask(__name__)
 
-    @APP.route('/')
+    @APP.route("/")
     def index():
-        return current_app.send_static_file('webchat.html')
+        return current_app.send_static_file("webchat.html")
 
-    @APP.route('/api/web/v1.0/ask', methods=['GET'])
+    @APP.route("/api/web/v1.0/ask", methods=["GET"])
     def receive_message():
         try:
             return WEB_CLIENT.receive_message(request)

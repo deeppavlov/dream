@@ -8,20 +8,33 @@ from common.utils import is_no, is_yes
 from common.wiki_skill import find_entity_wp, find_entity_nounphr, if_switch_wiki_skill, if_must_switch
 from common.wiki_skill import CONF_DICT, QUESTION_TEMPLATES
 from common.wiki_skill import choose_title, find_all_titles, find_paragraph
-from common.insert_scenario import get_page_content, get_page_title, get_titles, make_facts_str, titles_by_type, \
-    titles_by_entity_substr
+from common.insert_scenario import (
+    get_page_content,
+    get_page_title,
+    get_titles,
+    make_facts_str,
+    titles_by_type,
+    titles_by_entity_substr,
+)
 from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, is_any_question_sentence_in_utterance
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 GO_TO_MAIN_PAGE = True
 ANIMAL_TYPES_SET = {"Q16521", "Q55983715", "Q38547", "Q39367", "Q43577"}
 
 
-def save_wiki_vars(vars, found_entity_substr_list, curr_pages, prev_title, prev_page_title, used_titles,
-                   found_entity_types_list, new_page):
+def save_wiki_vars(
+    vars,
+    found_entity_substr_list,
+    curr_pages,
+    prev_title,
+    prev_page_title,
+    used_titles,
+    found_entity_types_list,
+    new_page,
+):
     state_utils.save_to_shared_memory(vars, found_entity_substr=found_entity_substr_list)
     state_utils.save_to_shared_memory(vars, curr_pages=curr_pages)
     state_utils.save_to_shared_memory(vars, prev_title=prev_title)
@@ -39,8 +52,9 @@ def make_question(chosen_title, titles_q, found_entity_substr, used_titles):
             question_template = QUESTION_TEMPLATES[0]
         else:
             question_template = random.choice(QUESTION_TEMPLATES)
-        if (found_entity_substr in chosen_title.lower() and question_template.endswith("of {}?")) \
-                or " of " in chosen_title.lower():
+        if (
+            found_entity_substr in chosen_title.lower() and question_template.endswith("of {}?")
+        ) or " of " in chosen_title.lower():
             question_template = question_template.split(" of {}?")[0] + "?"
             question = question_template.format(chosen_title)
         else:
@@ -72,10 +86,12 @@ def another_topic_question(vars, all_titles):
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
     nounphrases = annotations.get("cobot_nounphrases", [])
     for nounphr in nounphrases:
-        if any([nounphr in curr_page.lower() for curr_page in curr_pages]) \
-                or any([nounphr in entity_substr for entity_substr in found_entity_substr_list]) \
-                or any([nounphr in title.lower() for title in used_titles]) \
-                or any([nounphr in title.lower() for title in all_titles]):
+        if (
+            any([nounphr in curr_page.lower() for curr_page in curr_pages])
+            or any([nounphr in entity_substr for entity_substr in found_entity_substr_list])
+            or any([nounphr in title.lower() for title in used_titles])
+            or any([nounphr in title.lower() for title in all_titles])
+        ):
             flag = False
     logger.info(f"another topic question {another_topic_question}")
     return flag
@@ -182,33 +198,59 @@ def get_page_info(vars, function_type, where_to_find="current"):
             page_content, main_pages = get_page_content(page)
             page_content_list.append(page_content)
             main_pages_list.append(main_pages)
-    return found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, curr_pages, \
-        page_content_list, main_pages_list, new_page
+    return (
+        found_entity_substr_list,
+        prev_title,
+        prev_page_title,
+        found_entity_types_list,
+        used_titles,
+        curr_pages,
+        page_content_list,
+        main_pages_list,
+        new_page,
+    )
 
 
 def if_tell_fact(vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
     isno = is_no(state_utils.get_last_human_utterance(vars))
-    found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, _, page_content_list, \
-        main_pages_list, page = get_page_info(vars, "request")
-    logger.info(f"request, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
-                f"found_entity_types {found_entity_types_list} used_titles {used_titles}")
+    (
+        found_entity_substr_list,
+        prev_title,
+        prev_page_title,
+        found_entity_types_list,
+        used_titles,
+        _,
+        page_content_list,
+        main_pages_list,
+        page,
+    ) = get_page_info(vars, "request")
+    logger.info(
+        f"request, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
+        f"found_entity_types {found_entity_types_list} used_titles {used_titles}"
+    )
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
     shared_state = vars["agent"]["dff_shared_state"]
     logger.info(f"shared_state {shared_state}")
     if found_entity_substr_list and found_entity_types_list and page_content_list:
-        chosen_title, chosen_page_title = get_title_info(vars, found_entity_substr_list[-1],
-                                                         found_entity_types_list[-1], prev_title, used_titles,
-                                                         page_content_list[-1])
+        chosen_title, chosen_page_title = get_title_info(
+            vars,
+            found_entity_substr_list[-1],
+            found_entity_types_list[-1],
+            prev_title,
+            used_titles,
+            page_content_list[-1],
+        )
         _, _, all_titles = get_titles(found_entity_substr_list[-1], found_entity_types_list[-1], page_content_list[-1])
         logger.info(f"request, chosen_title {chosen_title} chosen_page_title {chosen_page_title}")
         wants_more = if_wants_more(vars, all_titles)
         not_want = re.findall(COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, user_uttr["text"])
 
-        if (chosen_title or prev_title) and ((wants_more and not not_want) or not started
-                                             or len(found_entity_substr_list) > 1):
+        if (chosen_title or prev_title) and (
+            (wants_more and not not_want) or not started or len(found_entity_substr_list) > 1
+        ):
             flag = True
         if user_uttr["text"].endswith("?") and another_topic_question(vars, all_titles):
             flag = False
@@ -221,23 +263,35 @@ def make_fact_response(vars):
     shared_memory = state_utils.get_shared_memory(vars)
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_uttr = state_utils.get_last_bot_utterance(vars)
-    found_entity_substr_list, prev_title, prev_page_title, found_entity_types_list, used_titles, curr_pages, \
-        page_content_list, main_pages_list, new_page = get_page_info(vars, "response")
-    logger.info(f"tell_fact_response, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
-                f"prev_page_title {prev_page_title} found_entity_types {found_entity_types_list} used_titles "
-                f"{used_titles} curr_pages {curr_pages}")
+    (
+        found_entity_substr_list,
+        prev_title,
+        prev_page_title,
+        found_entity_types_list,
+        used_titles,
+        curr_pages,
+        page_content_list,
+        main_pages_list,
+        new_page,
+    ) = get_page_info(vars, "response")
+    logger.info(
+        f"tell_fact_response, found_entity_substr {found_entity_substr_list} prev_title {prev_title} "
+        f"prev_page_title {prev_page_title} found_entity_types {found_entity_types_list} used_titles "
+        f"{used_titles} curr_pages {curr_pages}"
+    )
     titles_q, titles_we_use, all_titles = {}, [], []
     if found_entity_substr_list and found_entity_types_list and page_content_list:
-        titles_q, titles_we_use, all_titles = get_titles(found_entity_substr_list[-1], found_entity_types_list[-1],
-                                                         page_content_list[-1])
+        titles_q, titles_we_use, all_titles = get_titles(
+            found_entity_substr_list[-1], found_entity_types_list[-1], page_content_list[-1]
+        )
     logger.info(f"all_titles {all_titles} titles_q {titles_q} titles_we_use {titles_we_use}")
-    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles,
-                                                   curr_pages)
+    chosen_title, chosen_page_title = choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_pages)
     logger.info(f"chosen_title {chosen_title} main_pages {main_pages_list}")
     if chosen_title:
         new_page = False
-        if GO_TO_MAIN_PAGE and not any([set(found_entity_types).intersection(ANIMAL_TYPES_SET) for
-                                        found_entity_types in found_entity_types_list]):
+        if GO_TO_MAIN_PAGE and not any(
+            [set(found_entity_types).intersection(ANIMAL_TYPES_SET) for found_entity_types in found_entity_types_list]
+        ):
             chosen_main_pages = main_pages_list[-1].get(chosen_page_title, [])
             if chosen_main_pages:
                 chosen_main_page = random.choice(chosen_main_pages)
@@ -246,8 +300,16 @@ def make_fact_response(vars):
                 found_entity_substr_list.append(chosen_main_page.lower())
                 found_entity_types_list.append([])
         used_titles.append(chosen_title)
-        save_wiki_vars(vars, found_entity_substr_list, curr_pages, chosen_title, chosen_page_title, used_titles,
-                       found_entity_types_list, new_page)
+        save_wiki_vars(
+            vars,
+            found_entity_substr_list,
+            curr_pages,
+            chosen_title,
+            chosen_page_title,
+            used_titles,
+            found_entity_types_list,
+            new_page,
+        )
     else:
         save_wiki_vars(vars, [], [], "", "", [], [], False)
 

@@ -9,12 +9,11 @@ import sentry_sdk
 from dialogflows.flows.imdb_database import IMDb
 
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-KNOWLEDGE_GROUNDING_SERVICE_URL = os.getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
+KNOWLEDGE_GROUNDING_SERVICE_URL = os.getenv("KNOWLEDGE_GROUNDING_SERVICE_URL")
 
 SUPER_CONFIDENCE = 1.0
 
@@ -30,10 +29,10 @@ class MoviePlots:
         plot = None
         for n in names:
             if n in self.WikiPlots_df.index:
-                plot = self.WikiPlots_df.loc[n, 'Plot']
+                plot = self.WikiPlots_df.loc[n, "Plot"]
                 break
             if n in self.Wikipedia_Movie_Plots_df.index:
-                plot = self.Wikipedia_Movie_Plots_df.loc[n, 'Plot']
+                plot = self.Wikipedia_Movie_Plots_df.loc[n, "Plot"]
                 break
         if plot is None:
             logger.info(f"(MoviePlots.get_plot)None of movies {names} was found in movie plot dataframes")
@@ -84,11 +83,11 @@ class MoviePlots:
 
     def generate_bot_favorite_moment_in_movie(self, movie_id: str, dialog: dict) -> Tuple[str, float]:
         plot = self.get_plot(movie_id)
-        user_input_history = '\n'.join([i["text"] for i in dialog["utterances"]])
+        user_input_history = "\n".join([i["text"] for i in dialog["utterances"]])
         movie_name = self.imdb(movie_id)["title"]
         batch = self.create_what_is_your_favorite_moment_in_movie_batch(user_input_history, plot, movie_name)
         try:
-            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': batch}, timeout=1.5)
+            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={"batch": batch}, timeout=1.5)
             raw_responses = resp.json()
             response, confidence = self.select_best_favorite_moment_and_assign_confidence(raw_responses)
         except Exception as e:
@@ -99,7 +98,7 @@ class MoviePlots:
         return response, confidence
 
     def discuss_plot(self, plot, history, input_text):
-        history = '\n'.join(history)
+        history = "\n".join(history)
         batch = [
             {
                 "checked_sentence": plot,
@@ -110,7 +109,7 @@ class MoviePlots:
             }
         ]
         try:
-            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': batch}, timeout=15.0)
+            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={"batch": batch}, timeout=15.0)
             logger.info(f"(discuss_plot)resp: {repr(resp)}")
             raw_responses = resp.json()
             response = raw_responses[0]

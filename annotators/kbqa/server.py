@@ -6,10 +6,9 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 config_name = os.getenv("CONFIG")
 NER_INPUT = True
@@ -17,8 +16,9 @@ NER_INPUT = True
 try:
     kbqa = build_model(config_name, download=True)
     if NER_INPUT:
-        test_res = kbqa(["What is the capital of Russia?"],
-                        ["What is the capital of Russia?"], ["-1"], [["Russia"]], [[]])
+        test_res = kbqa(
+            ["What is the capital of Russia?"], ["What is the capital of Russia?"], ["-1"], [["Russia"]], [[]]
+        )
     else:
         test_res = kbqa(["What is the capital of Russia?"])
     logger.info("model loaded, test query processed")
@@ -30,7 +30,7 @@ except Exception as e:
 app = Flask(__name__)
 
 
-@app.route("/model", methods=['POST'])
+@app.route("/model", methods=["POST"])
 def respond():
     inp = request.json
     questions = inp.get("x_init", [" "])
@@ -54,9 +54,7 @@ def respond():
             kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_types]
         else:
             kbqa_input = [sanitized_questions]
-    default_resp = {"qa_system": "kbqa",
-                    "answer": "",
-                    "confidence": 0.0}
+    default_resp = {"qa_system": "kbqa", "answer": "", "confidence": 0.0}
     out_res = [default_resp for _ in questions]
     try:
         st_time = time.time()
@@ -71,9 +69,7 @@ def respond():
                     else:
                         if cnt_fnd < len(res):
                             answer, conf = res[cnt_fnd]
-                            out_res.append({"qa_system": "kbqa",
-                                            "answer": answer,
-                                            "confidence": float(conf)})
+                            out_res.append({"qa_system": "kbqa", "answer": answer, "confidence": float(conf)})
                             cnt_fnd += 1
         logger.info(f"kbqa exec time: {time.time() - st_time}")
     except Exception as e:

@@ -185,10 +185,10 @@ def save_mentioned_person(vars, person, judgement, share_memory_key):
             all_mentioned_people.append({"Judgement": judgement, "People": []})
             are_judgements.append(True)
         judgement_index = are_judgements.index(True)
-        people_list = all_mentioned_people[judgement_index]['People']
+        people_list = all_mentioned_people[judgement_index]["People"]
         is_this_person = people_list and people_list[-1] == person
         if not is_this_person:
-            all_mentioned_people[judgement_index]['People'].append(person)
+            all_mentioned_people[judgement_index]["People"].append(person)
         state_utils.save_to_shared_memory(vars, **{share_memory_key: all_mentioned_people})
 
 
@@ -364,9 +364,9 @@ def talk_about_gossip_request(ngrams, vars):
 def set_people_jobs(vars, celebrity_name, core_jobs, other_jobs, mentioned_jobs):
     shared_memory = state_utils.get_shared_memory(vars)
     people_jobs = shared_memory.get("people_jobs", {})
-    mentioned_jobs = people_jobs.get(celebrity_name, {}).get('Mentioned_Jobs', []) + mentioned_jobs
+    mentioned_jobs = people_jobs.get(celebrity_name, {}).get("Mentioned_Jobs", []) + mentioned_jobs
     mentioned_jobs = list(set(mentioned_jobs))
-    people_jobs[celebrity_name] = {'Jobs': core_jobs, 'Other_Jobs': other_jobs, 'Mentioned_Jobs': mentioned_jobs}
+    people_jobs[celebrity_name] = {"Jobs": core_jobs, "Other_Jobs": other_jobs, "Mentioned_Jobs": mentioned_jobs}
     state_utils.save_to_shared_memory(vars, people_jobs=people_jobs)
 
 
@@ -374,7 +374,7 @@ def get_people_jobs(vars, celebrity_name):
     shared_memory = state_utils.get_shared_memory(vars)
     people_jobs = shared_memory.get("people_jobs", {})
     celebrity_jobs = people_jobs.get(celebrity_name, {})
-    argument_names = ['Jobs', 'Other_Jobs', 'Mentioned_Jobs']
+    argument_names = ["Jobs", "Other_Jobs", "Mentioned_Jobs"]
     return [celebrity_jobs.get(argument_name, []) for argument_name in argument_names]
 
 
@@ -391,7 +391,7 @@ def get_celebrity_from_uttr(vars, exclude_types=False, use_only_last_utt=False):
 
     # we need to get all supported occupations
     celebrity_name, matching_types, mismatching_types = common_gossip.celebrity_from_uttr(human_utterance)
-    logger.warning(f'Relations {celebrity_name} {matching_types} {mismatching_types}')
+    logger.warning(f"Relations {celebrity_name} {matching_types} {mismatching_types}")
     if not celebrity_name or not matching_types:
         return None, None
     mentioned_jobs = get_mentioned_jobs(vars, celebrity_name)
@@ -418,12 +418,12 @@ def sys_celebrity_found_request(ngrams, vars, use_only_last_utt=True):
 # get occupations for current_person
 # build phrase about
 def get_celebrity_prompt(vars, person):
-    logger.debug('Celebrity branch')
+    logger.debug("Celebrity branch")
     shared_memory = state_utils.get_shared_memory(vars)
     # persons = get_mentioned_people(vars, share_memory_key="people_mentioned_by_user")
-    just_was_celebrity_prompt = shared_memory.get('celebrity_prompt', False)
-    used_celeb_prompts = shared_memory.get('used_celeb_prompts', [])
-    last_bot_uttr = state_utils.get_last_bot_utterance(vars)['text']
+    just_was_celebrity_prompt = shared_memory.get("celebrity_prompt", False)
+    used_celeb_prompts = shared_memory.get("used_celeb_prompts", [])
+    last_bot_uttr = state_utils.get_last_bot_utterance(vars)["text"]
     prompt = None
     if person:
         # logger.info(f"get_celebrity_prompt for people: {persons}")
@@ -431,28 +431,29 @@ def get_celebrity_prompt(vars, person):
         # person = persons[-1]
         logger.info(f"get_celebrity_prompt for person: {person}")
         matching_jobs, mismatching_jobs, mentioned_jobs = get_people_jobs(vars, person)
-        logger.info(f'{person} {matching_jobs} {mismatching_jobs}')
-        logger.info(f'Mismatching_jobs len {len(mismatching_jobs)}')
+        logger.info(f"{person} {matching_jobs} {mismatching_jobs}")
+        logger.info(f"Mismatching_jobs len {len(mismatching_jobs)}")
         if matching_jobs:
             logger.info(f"get_celebrity_prompt: matching jobs! just was celebrity prompt? {just_was_celebrity_prompt}")
-            is_actor = 'actor' in ' '.join(matching_jobs)
-            prompt_candidate = f'{person} is an amazing {matching_jobs[0]}! ' \
-                               'Would you like to learn more about this person?'
+            is_actor = "actor" in " ".join(matching_jobs)
+            prompt_candidate = (
+                f"{person} is an amazing {matching_jobs[0]}! " "Would you like to learn more about this person?"
+            )
             we_not_repeat_start_prompt = prompt_candidate not in used_celeb_prompts
-            actor_asking = 'What is your favourite film with this actor?'
+            actor_asking = "What is your favourite film with this actor?"
             if not just_was_celebrity_prompt and matching_jobs and we_not_repeat_start_prompt:
-                logger.debug('start prompt')
+                logger.debug("start prompt")
                 prompt = prompt_candidate
             elif just_was_celebrity_prompt and matching_jobs and mismatching_jobs and actor_asking not in last_bot_uttr:
                 logger.info("get_celebrity_prompt: just was celebrity prompt and actor:")
                 rand_job = random.choice(mismatching_jobs)
-                prompt = f'{person} is also a {rand_job}. '
-                if 'actor' in rand_job:
+                prompt = f"{person} is also a {rand_job}. "
+                if "actor" in rand_job:
                     asking = actor_asking
                 else:
                     questions = this_gossip.WANT_TO_HEAR_ANOTHER_FACT
                     asking = random.choice(questions)
-                prompt = f'{prompt} {asking}'
+                prompt = f"{prompt} {asking}"
                 mismatching_jobs.remove(rand_job)
                 mentioned_jobs.append(rand_job)
                 save_mentioned_person(vars, person, "Other", "people_mentioned_by_user")
@@ -460,14 +461,15 @@ def get_celebrity_prompt(vars, person):
             elif just_was_celebrity_prompt and matching_jobs and actor_asking not in last_bot_uttr:
                 logger.info("get_celebrity_prompt: just was celebrity prompt and actor:")
                 prompt = get_cobot_fact(person, used_celeb_prompts)
-                logger.debug(f'Cobot prompt {prompt}')
+                logger.debug(f"Cobot prompt {prompt}")
             elif just_was_celebrity_prompt and not mismatching_jobs and not is_actor:
                 logger.info("get_celebrity_prompt: just was celebrity prompt and non-actor:")
                 prompt = get_cobot_fact(person, used_celeb_prompts)
-                logger.debug(f'Cobot prompt {prompt}')
+                logger.debug(f"Cobot prompt {prompt}")
             if prompt:
-                state_utils.save_to_shared_memory(vars, celebrity_prompt=True,
-                                                  used_celeb_prompts=used_celeb_prompts + [prompt])
+                state_utils.save_to_shared_memory(
+                    vars, celebrity_prompt=True, used_celeb_prompts=used_celeb_prompts + [prompt]
+                )
     return prompt
 
 
@@ -978,7 +980,7 @@ def usr_agrees_abt_person_response(vars):
 
         elif prompt:  # put memory to zero
             # Not talking about celebrity - saving
-            logger.debug('Not in celebrity branch')
+            logger.debug("Not in celebrity branch")
             state_utils.save_to_shared_memory(vars, celebrity_prompt=False)
 
         if prompt:
@@ -1075,7 +1077,7 @@ def usr_disagrees_abt_person_response(vars):
         state_utils.set_can_continue(vars, common_constants.CAN_NOT_CONTINUE)
         # Wait but why... But a little bit smarter this time around
         # response_text = utils.get_not_used_and_save_wait_but_why_question(vars)
-        response_text = 'OK. I got it.'
+        response_text = "OK. I got it."
         return response_text
     except Exception as exc:
         logger.exception(exc)
@@ -1322,8 +1324,9 @@ def sys_mentions_another_person_request(ngrams, vars):
     current_person = str(current_person)
 
     logger.debug(f"mentioned_people: {mentioned_by_user_people}")
-    other_mentioned_people = [people for people in mentioned_by_user_people if
-                              str(people).lower() != current_person.lower()]
+    other_mentioned_people = [
+        people for people in mentioned_by_user_people if str(people).lower() != current_person.lower()
+    ]
 
     # checking if user mentioned at least one person
     if len(other_mentioned_people) > 0:
@@ -1378,9 +1381,7 @@ def usr_mentions_another_person_response(vars):
                 logger.info(f"just mentioned person {user_mentioned_person} is the current_one: {current_person}")
                 if utils.is_speech_function_demand_opinion(vars):
                     if current_person in get_mentioned_people(vars, "people_mentioned_by_bot", ["Liked"]):
-                        body = random.choice(
-                            this_gossip.SIMPLE_OPINION_ABOUT_LIKED_PERSON_PREVIOUSLY_MENTIONED_BY_BOT
-                        )
+                        body = random.choice(this_gossip.SIMPLE_OPINION_ABOUT_LIKED_PERSON_PREVIOUSLY_MENTIONED_BY_BOT)
                         fake_utterance = f"I like to learn more about {user_mentioned_person}"
                         gender, age = utils.get_gender_age_person(user_mentioned_person, fake_utterance)
                         gender_is = utils.get_human_readable_gender_statement_current_is(gender)
@@ -1399,9 +1400,7 @@ def usr_mentions_another_person_response(vars):
             elif user_mentioned_person in get_mentioned_people(vars, share_memory_key="people_mentioned_by_bot"):
                 if utils.is_speech_function_demand_opinion(vars):
                     if user_mentioned_person in get_mentioned_people(vars, "people_mentioned_by_bot", ["Liked"]):
-                        body = random.choice(
-                            this_gossip.SIMPLE_OPINION_ABOUT_LIKED_PERSON_PREVIOUSLY_MENTIONED_BY_BOT
-                        )
+                        body = random.choice(this_gossip.SIMPLE_OPINION_ABOUT_LIKED_PERSON_PREVIOUSLY_MENTIONED_BY_BOT)
                         fake_utterance = f"I like to learn more about {user_mentioned_person}"
                         gender, age = utils.get_gender_age_person(user_mentioned_person, fake_utterance)
                         gender_is = utils.get_human_readable_gender_statement_current_is(gender)

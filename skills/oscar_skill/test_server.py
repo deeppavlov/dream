@@ -50,7 +50,6 @@ true_requests = {
         "tell me something about the parasite movie",
         "tell me something about Joker on Oscors",
     ],
-
 }
 
 false_requests = [

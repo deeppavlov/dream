@@ -11,9 +11,8 @@ from common.sensitive import is_sensitive_situation
 from common.user_persona_extractor import KIDS_WORDS_RE, ADULTS_WORDS_RE, KIDS_ACTIVITIES_RE, ADULTS_ACTIVITIES_RE
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+sentry_sdk.init(getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -43,10 +42,10 @@ def extract_age_group_using_activities(dialog):
     return age_group
 
 
-@app.route("/respond", methods=['POST'])
+@app.route("/respond", methods=["POST"])
 def respond():
     st_time = time()
-    dialogs = request.json['dialogs']
+    dialogs = request.json["dialogs"]
 
     human_attributes = []
 
@@ -61,9 +60,9 @@ def respond():
         human_attributes.append({"human_attributes": curr_human_attr})
 
     total_time = time() - st_time
-    logger.info(f'user-persona-extractor exec time: {total_time:.3f}s')
+    logger.info(f"user-persona-extractor exec time: {total_time:.3f}s")
     return jsonify(human_attributes)
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)

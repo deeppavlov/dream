@@ -16,8 +16,15 @@ import dialogflows.scopes as scopes
 from common.constants import CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.universal_templates import DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_entities, join_words_in_or_pattern
-from common.food import FAST_FOOD_FACTS, FAST_FOOD_QUESTIONS, FAST_FOOD_WHAT_QUESTIONS, FOOD_WORDS, \
-    CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD
+from common.food import (
+    FAST_FOOD_FACTS,
+    FAST_FOOD_QUESTIONS,
+    FAST_FOOD_WHAT_QUESTIONS,
+    FOOD_WORDS,
+    CONCEPTNET_SYMBOLOF_FOOD,
+    CONCEPTNET_HASPROPERTY_FOOD,
+    CONCEPTNET_CAUSESDESIRE_FOOD,
+)
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -102,40 +109,23 @@ def error_response(vars):
 # let's talk about fast food
 ##################################################################################################################
 
+
 def is_question(vars):
-    annotations_sentseg = state_utils.get_last_human_utterance(vars)["annotations"].get(
-        "sentseg", {})
+    annotations_sentseg = state_utils.get_last_human_utterance(vars)["annotations"].get("sentseg", {})
     flag = "?" in annotations_sentseg.get("punct_sent", "")
     return flag
 
 
 def check_conceptnet(vars):
-    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get(
-        "conceptnet", {})
+    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get("conceptnet", {})
     conceptnet = False
     food_item = None
     for elem, triplets in annotations_conceptnet.items():
-        conceptnet_symbolof = any(
-            [
-                i in triplets.get("SymbolOf", []) for i in CONCEPTNET_SYMBOLOF_FOOD
-            ]
-        )
-        conceptnet_hasproperty = any(
-            [
-                i in triplets.get("HasProperty", []) for i in CONCEPTNET_HASPROPERTY_FOOD
-            ]
-        )
+        conceptnet_symbolof = any([i in triplets.get("SymbolOf", []) for i in CONCEPTNET_SYMBOLOF_FOOD])
+        conceptnet_hasproperty = any([i in triplets.get("HasProperty", []) for i in CONCEPTNET_HASPROPERTY_FOOD])
         causes_desire = triplets.get("CausesDesire", [])
-        conceptnet_causesdesire = any(
-            [
-                i in causes_desire for i in CONCEPTNET_CAUSESDESIRE_FOOD
-            ]
-        ) or any(
-            [
-                'eat' in i for i in causes_desire
-            ] + [
-                'cook' in i for i in causes_desire
-            ]
+        conceptnet_causesdesire = any([i in causes_desire for i in CONCEPTNET_CAUSESDESIRE_FOOD]) or any(
+            ["eat" in i for i in causes_desire] + ["cook" in i for i in causes_desire]
         )
         conceptnet = any([conceptnet_symbolof, conceptnet_hasproperty, conceptnet_causesdesire])
         if conceptnet:
@@ -202,7 +192,7 @@ def what_eat_response(vars):
         user_utt = state_utils.get_last_human_utterance(vars)["text"].lower()
         bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
         state_utils.save_to_shared_memory(vars, fast_food_what_questions=used_questions + [question])
-        if ("how often" in bot_utt):
+        if "how often" in bot_utt:
             if any([i in user_utt for i in ["times", "every"]]):
                 question = "Not so often as some people do! " + question
             else:
@@ -224,7 +214,7 @@ def fav_food_request(ngrams, vars):
         [
             any([user_fav_food, check_conceptnet(vars), food_words_search]),
             condition_utils.no_requests(vars),
-            not re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"])
+            not re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]),
         ]
     ):
         flag = True
@@ -233,10 +223,7 @@ def fav_food_request(ngrams, vars):
 
 
 def food_fact_response(vars):
-    acknowledgements = [
-        "I like it too.", "I'm not fond of it.", "It's awesome.",
-        "Fantastic.", "Loving it.", "Yummy!"
-    ]
+    acknowledgements = ["I like it too.", "I'm not fond of it.", "It's awesome.", "Fantastic.", "Loving it.", "Yummy!"]
     human_utt = state_utils.get_last_human_utterance(vars)
     annotations = human_utt["annotations"]
     human_utt_text = human_utt["text"].lower()
@@ -275,7 +262,7 @@ def food_fact_response(vars):
         elif not fact:
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
             return error_response(vars)
-        elif (fact and entity):
+        elif fact and entity:
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             return f"{entity}. {random.choice(acknowledgements)} {fact}"
         elif fact:

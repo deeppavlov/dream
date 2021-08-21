@@ -7,27 +7,28 @@ from common.utils import MIDAS_SEMANTIC_LABELS
 
 
 INTENT_DICT = {
-    'Information_DeliveryIntent': 'You just told me about ENTITY_NAME, right?',
-    'Information_RequestIntent': "You've asked me about ENTITY_NAME haven't you?",
-    'User_InstructionIntent': "You just gave me a command. Am I right?",
+    "Information_DeliveryIntent": "You just told me about ENTITY_NAME, right?",
+    "Information_RequestIntent": "You've asked me about ENTITY_NAME haven't you?",
+    "User_InstructionIntent": "You just gave me a command. Am I right?",
     "Opinion_ExpressionIntent": "You just shared your opinion about ENTITY_NAME with me, right?",
     "ClarificationIntent": "You clarified me what you've just said about ENTITY_NAME, right?",
     "Topic_SwitchIntent": "You wanted to change topic, right?",
-    "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?"}
+    "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?",
+}
 
 
 DA_TOPIC_DICT = {
     "Entertainment_Movies": "We were discussing movies, am I right?",
     "Entertainment_Books": "We were discussing books, am I right?",
-    'Entertainment_General': "We are just trying to be polite to each other, aren't we?",
+    "Entertainment_General": "We are just trying to be polite to each other, aren't we?",
     "Science_and_Technology": "I was under impression we were chatting about technology stuff.",
     "Sports": "So I thought we were talking about sports.",
-    "Politics": "Correct me if I'm wrong but I thought we were discussing politics."
+    "Politics": "Correct me if I'm wrong but I thought we were discussing politics.",
 }
 
 
 COBOT_TOPIC_DICT = {
-    'Phatic': "We are just trying to be polite to each other, aren't we?",
+    "Phatic": "We are just trying to be polite to each other, aren't we?",
     "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
     "Movies_TV": "We were discussing movies, am I right?",
     "Music": "Thought we were talking about music.",
@@ -48,22 +49,22 @@ COBOT_TOPIC_DICT = {
     "Math": "My guess is we were talking about math stuff.",
     "News": "Aren't we discussing news my dear friend?",
     "Entertainment": "Thought we were discussing something about entertainment.",
-    "Fashion": "We are talking about fashion am I right?"
+    "Fashion": "We are talking about fashion am I right?",
 }
 
 
 def get_entity_name(annotations):
     entity_list = []
-    for tmp in annotations.get('ner', []):
-        if len(tmp) > 0 and 'text' in tmp[0]:
-            entity_list.append(tmp[0]['text'])
+    for tmp in annotations.get("ner", []):
+        if len(tmp) > 0 and "text" in tmp[0]:
+            entity_list.append(tmp[0]["text"])
     if len(entity_list) == 1:
         entity_name = entity_list[0]
     elif len(entity_list) > 1:
-        entity_name = ','.join(entity_list[:-1]) + ' and ' + entity_list[-1]
+        entity_name = ",".join(entity_list[:-1]) + " and " + entity_list[-1]
     else:
-        entity_name = ''
-    entity_name = entity_name.replace('?', '')
+        entity_name = ""
+    entity_name = entity_name.replace("?", "")
     return entity_name
 
 
@@ -74,7 +75,7 @@ MIDAS_INTENT_ANALOGUES = {
     "open_question_opinion": ["open_question_opinion", "Opinion_RequestIntent"],
     "open_question_factual": ["open_question_factual", "Information_RequestIntent"],
     "open_question_personal": ["open_question_personal"],
-    "yes_no_question": ["yes_no_question"]
+    "yes_no_question": ["yes_no_question"],
 }
 
 
@@ -94,7 +95,7 @@ def get_midas_intent_acknowledgement(intent, entity_name):
         response = response.replace("PROPERTY", random.choice(COMPLIMENT_PROPERTIES).lower())
     else:
         response = ""
-    response = response.replace('?', '')
+    response = response.replace("?", "")
     return response
 
 

@@ -13,8 +13,7 @@ from common.universal_templates import LIKE_PATTERN, NOT_LIKE_PATTERN
 from common.utils import get_intents, is_opinion_request
 
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -128,8 +127,7 @@ class MovieSkillTemplates:
             genres_toremove = []
 
             # movies to persons names or to genres and vice versa
-            ids_to_remove = self.find_substrings(
-                [movies_names, persons_names, genres])
+            ids_to_remove = self.find_substrings([movies_names, persons_names, genres])
             movies_ids_toremove += [movies_ids[i] for i in ids_to_remove[0]]
             persons_names_toremove += [persons_names[i] for i in ids_to_remove[1]]
             genres_toremove += [genres[i] for i in ids_to_remove[2]]
@@ -166,8 +164,9 @@ class MovieSkillTemplates:
                 return True
         return False
 
-    def remove_subj_already_expr_opinion(self, movies_ids: List[str], unique_persons: dict,
-                                         genres: List[str], dialog_subjects: List[List[str]]):
+    def remove_subj_already_expr_opinion(
+        self, movies_ids: List[str], unique_persons: dict, genres: List[str], dialog_subjects: List[List[str]]
+    ):
         to_remove = []
         for el in movies_ids:
             if self.if_already_expressed_opinion(el, "movie", dialog_subjects):
@@ -203,14 +202,21 @@ class MovieSkillTemplates:
 
         uttr = dialog["human_utterances"][-1]["text"]
         # not overlapping mentions of movies titles, persons names and genres
-        movies_ids, unique_persons, genres = self.extract_mentions(dialog['human_utterances'][-1])
-        logger.info("Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
-            [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
+        movies_ids, unique_persons, genres = self.extract_mentions(dialog["human_utterances"][-1])
+        logger.info(
+            "Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
+                [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres
+            )
+        )
 
         movies_ids, unique_persons, genres = self.remove_subj_already_expr_opinion(
-            movies_ids, unique_persons, genres, dialog_subjects)
-        logger.info("Bot opinion was NOT expressed on Movies Titles: {}, Persons: {}, Genres: {}".format(
-            [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
+            movies_ids, unique_persons, genres, dialog_subjects
+        )
+        logger.info(
+            "Bot opinion was NOT expressed on Movies Titles: {}, Persons: {}, Genres: {}".format(
+                [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres
+            )
+        )
 
         result = None
         if len(movies_ids) == 0 and len(unique_persons) > 0:
@@ -219,7 +225,8 @@ class MovieSkillTemplates:
                 subject = dialog_subjects[-1]
                 if subject[1] == "movie":
                     result = self.give_opinion_about_persons_in_movie(
-                        subject[0], list(unique_persons.keys()), mode="dialog_history")
+                        subject[0], list(unique_persons.keys()), mode="dialog_history"
+                    )
                 else:
                     result = self.give_opinion_about_person(uttr, unique_persons, dialog_subjects)
             else:
@@ -258,19 +265,20 @@ class MovieSkillTemplates:
             if len(movies_ids) == 1 and len(unique_persons) == 1:
                 # the talk is about particular movie and particular person
                 person_name = list(unique_persons.keys())[0]
-                result = self.give_opinion_about_persons_in_movie(
-                    movies_ids[0], [person_name])
+                result = self.give_opinion_about_persons_in_movie(movies_ids[0], [person_name])
             elif len(movies_ids) == 1 and len(unique_persons) > 1:
                 # give opinion about persons in this movie
-                result = self.give_opinion_about_persons_in_movie(
-                    movies_ids[0], list(unique_persons.keys()))
+                result = self.give_opinion_about_persons_in_movie(movies_ids[0], list(unique_persons.keys()))
             elif len(movies_ids) > 1 and len(unique_persons) == 1:
                 # give opinion about persons in the first movie name
-                result = self.give_opinion_about_persons_in_movie(
-                    movies_ids[0], list(unique_persons.keys()))
+                result = self.give_opinion_about_persons_in_movie(movies_ids[0], list(unique_persons.keys()))
             else:
-                result = "Oh, really? This is too difficult question for me now. " \
-                         "Could you, please, ask it in a bit more simple way?", [], self.notsure_confidence
+                result = (
+                    "Oh, really? This is too difficult question for me now. "
+                    "Could you, please, ask it in a bit more simple way?",
+                    [],
+                    self.notsure_confidence,
+                )
 
         # counter question
         # firstly check whether current subject was in dialog_subjects in human replies
@@ -292,10 +300,11 @@ class MovieSkillTemplates:
         #         result = (result[0] + " " + self.counter_question(result[0]), result[1], result[2])
 
         # if no opinion expressed by bot
-        replies = ["Sorry, I didn't get about what you are asking now.",
-                   "Didn't get about what you are asking.",
-                   "Could you, please, clarify what are you asking about?"
-                   ]
+        replies = [
+            "Sorry, I didn't get about what you are asking now.",
+            "Didn't get about what you are asking.",
+            "Could you, please, clarify what are you asking about?",
+        ]
         if result is None:
             result = random.choice(replies), [], self.notsure_confidence
 
@@ -317,9 +326,12 @@ class MovieSkillTemplates:
         logger.info("Found in the previous dialog the following: {}".format(dialog_subjects))
 
         uttr = dialog["human_utterances"][-1]["text"]
-        movies_ids, unique_persons, genres = self.extract_mentions(dialog['human_utterances'][-1], dialog)
-        logger.info("Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
-            [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres))
+        movies_ids, unique_persons, genres = self.extract_mentions(dialog["human_utterances"][-1], dialog)
+        logger.info(
+            "Detected Movies Titles: {}, Persons: {}, Genres: {}".format(
+                [self.imdb(movie)["title"] for movie in movies_ids], unique_persons.keys(), genres
+            )
+        )
 
         result = []
         confidence = self.notsure_confidence
@@ -392,93 +404,117 @@ class MovieSkillTemplates:
         if "Information_RequestIntent" in intents or opinion_request_detected:
             if re.search(self.LESSFAVORITE_PATTERN, user_uttr) or re.search(NOT_LIKE_PATTERN, user_uttr):
                 # less favorite movie
-                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.MOVIE_PATTERN}",
-                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.MOVIE_PATTERN}"
-                                                      f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
-                                                      user_uttr)):
-                    response = "I can't name one particular movie but I don't like musicals and " \
-                               "I'm a bit scared by mystery movies. " \
-                               "I watched Ring by Hideo Nakata and it was really scary! "\
-                               "What movies you don't like?"
+                if re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.MOVIE_PATTERN}", user_uttr
+                ) or re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.MOVIE_PATTERN}"
+                    f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
+                    user_uttr,
+                ):
+                    response = (
+                        "I can't name one particular movie but I don't like musicals and "
+                        "I'm a bit scared by mystery movies. "
+                        "I watched Ring by Hideo Nakata and it was really scary! "
+                        "What movies you don't like?"
+                    )
                     confidence = self.person_highest_confidence
                     result = [["Musical", "genre", "negative"], ["Mystery", "genre", "negative"]]
                 # less favorite tv show
-                if (re.search(
-                        f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
-                        user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
-                                                f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
-                                                user_uttr)):
+                if re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} {self.TVSHOW_PATTERN}", user_uttr
+                ) or re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
+                    f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
+                    user_uttr,
+                ):
                     response = "Hmm... I can't name one particular TV show. What TV shows you don't like?"
                     confidence = self.person_highest_confidence
                     result = []
                 # less favorite genre
-                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} (genre|movie genre)",
-                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
-                                                      f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
-                                                      user_uttr)):
+                if re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} (genre|movie genre)", user_uttr
+                ) or re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
+                    f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
+                    user_uttr,
+                ):
                     response = self.opinion_about_genres("Genre", attitude="negative")
                     curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="negative")
                     result = [[g, "genre", "negative"] for g in curr_genres]
                     confidence = self.person_highest_confidence
                 # less favorite actor
-                if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} actor",
-                              user_uttr) or re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS} actor"
-                                                      f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
-                                                      user_uttr)):
+                if re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} actor", user_uttr
+                ) or re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS} actor" f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}", user_uttr
+                ):
                     response = "I think all actors have successful and failed roles. Who is your favorite actor?"
                     confidence = self.person_highest_confidence
                     result = []
                 # less favorite actress
-                if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} actress",
-                              user_uttr) or re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS} actress"
-                                                      f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}",
-                                                      user_uttr)):
+                if re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.LESSFAVORITE_PATTERN} actress", user_uttr
+                ) or re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS} actress" f"{self.ANY_LETTERS}{NOT_LIKE_PATTERN}", user_uttr
+                ):
                     response = "I think all actresses have successful and failed roles. Who is your favorite actress?"
                     confidence = self.person_highest_confidence
                     result = []
 
             elif re.search(self.FAVORITE_PATTERN, user_uttr) or re.search(LIKE_PATTERN, user_uttr):
                 # favorite movie
-                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.MOVIE_PATTERN}",
-                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.MOVIE_PATTERN}"
-                                                      f"{self.ANY_LETTERS}{LIKE_PATTERN}",
-                                                      user_uttr)):
-                    response = "I adore all Star Wars movies. The best episode is the fifth one, " \
-                               "The Empire Strikes Back. Yoda teachings are so cool! " \
-                               "What is your favorite movie?"
+                if re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.MOVIE_PATTERN}", user_uttr
+                ) or re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.MOVIE_PATTERN}" f"{self.ANY_LETTERS}{LIKE_PATTERN}",
+                    user_uttr,
+                ):
+                    response = (
+                        "I adore all Star Wars movies. The best episode is the fifth one, "
+                        "The Empire Strikes Back. Yoda teachings are so cool! "
+                        "What is your favorite movie?"
+                    )
                     confidence = self.person_highest_confidence - 0.01
                     result = [["0080684", "movie", "very_positive"]]
                 # favorite tv show
-                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.TVSHOW_PATTERN}",
-                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}"
-                                                      f"{self.ANY_LETTERS}{LIKE_PATTERN}",
-                                                      user_uttr)):
-                    response = "I adore a lot of documentary movies. My favorite one is TV-series Cosmos " \
-                               "started in 2014. What is your favorite TV show?"
+                if re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} {self.TVSHOW_PATTERN}", user_uttr
+                ) or re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.TVSHOW_PATTERN}" f"{self.ANY_LETTERS}{LIKE_PATTERN}",
+                    user_uttr,
+                ):
+                    response = (
+                        "I adore a lot of documentary movies. My favorite one is TV-series Cosmos "
+                        "started in 2014. What is your favorite TV show?"
+                    )
                     confidence = self.person_highest_confidence
                     result = [["2395695", "movie", "very_positive"]]
                 # favorite genre
-                if (re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} (genre|movie genre)",
-                              user_uttr) or re.search(f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)"
-                                                      f"{self.ANY_LETTERS}{LIKE_PATTERN}",
-                                                      user_uttr)):
+                if re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} (genre|movie genre)", user_uttr
+                ) or re.search(
+                    f"{self.WHAT_PATTERN}{self.ANY_LETTERS} (genre|movie genre)" f"{self.ANY_LETTERS}{LIKE_PATTERN}",
+                    user_uttr,
+                ):
                     response = self.opinion_about_genres("Genre", attitude="very_positive")
                     curr_genres = self.imdb.genereate_opinion_about_genre("Genre", attitude="very_positive")
                     result = [[g, "genre", "very_positive"] for g in curr_genres]
                     confidence = self.person_highest_confidence
                 # favorite actor
-                if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} actor",
-                              user_uttr) or re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS} actor"
-                                                      f"{self.ANY_LETTERS}{LIKE_PATTERN}",
-                                                      user_uttr)):
+                if re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} actor", user_uttr
+                ) or re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS} actor" f"{self.ANY_LETTERS}{LIKE_PATTERN}", user_uttr
+                ):
                     response = "I will always believe that Brad Pitt is the most talented actor ever! Who is yours?"
                     confidence = self.person_highest_confidence
                     result = [["Brad Pitt", "actor", "very_positive"]]
                 # favorite actress
-                if (re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} actress",
-                              user_uttr) or re.search(f"{self.WHO_PATTERN}{self.ANY_LETTERS} actress"
-                                                      f"{self.ANY_LETTERS}{LIKE_PATTERN}",
-                                                      user_uttr)):
+                if re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS}{self.FAVORITE_PATTERN} actress", user_uttr
+                ) or re.search(
+                    f"{self.WHO_PATTERN}{self.ANY_LETTERS} actress" f"{self.ANY_LETTERS}{LIKE_PATTERN}", user_uttr
+                ):
                     response = "I think Jodie Foster is the most talented actress ever! Who is yours?"
                     confidence = self.person_highest_confidence
                     result = [["Jodie Foster", "actor", "very_positive"]]
@@ -500,8 +536,9 @@ class MovieSkillTemplates:
             movie_name = self.imdb(movies_ids[0])["title"]
             if attitude_to_movie is None:
                 attitude_to_movie = self.imdb.generate_opinion_about_movie(movie_name)
-            reply = self.opinion_about_movie(movie_name, attitude_to_movie,
-                                             genres=self.imdb.get_info_about_movie(movie_name, "genre"))
+            reply = self.opinion_about_movie(
+                movie_name, attitude_to_movie, genres=self.imdb.get_info_about_movie(movie_name, "genre")
+            )
             return reply, [[movies_ids[0], "movie", attitude_to_movie]], self.movie_highest_confidence
         else:
             # found several movies. need to clarify!
@@ -510,8 +547,10 @@ class MovieSkillTemplates:
             if len(movies_names) == 2:
                 reply = f"Are you talking about the movie {movies_names[0]} or {movies_names[1]}?"
             else:
-                reply = f"Are you talking about one of the following movies: " \
-                        f"{movies_names[0]}, {movies_names[1]} or {movies_names[2]}?"
+                reply = (
+                    f"Are you talking about one of the following movies: "
+                    f"{movies_names[0]}, {movies_names[1]} or {movies_names[2]}?"
+                )
 
             return reply, [[movie_id, "movie", "clarification"] for movie_id in movies_ids], self.movie_high_confidence
 
@@ -558,7 +597,8 @@ class MovieSkillTemplates:
                     if attitude_to_person is None:
                         attitude_to_person = self.imdb.generate_opinion_about_movie_person(name, profession)
                     return self.give_opinion_about_persons_in_movie(
-                        self.imdb(last_discussed_movie)["imdb_id"], [name], profession=profession)
+                        self.imdb(last_discussed_movie)["imdb_id"], [name], profession=profession
+                    )
 
                 elif dialog_subjects[-1][0] in self.imdb.professions:
                     # if the last discussed is person of the particular profession
@@ -603,8 +643,7 @@ class MovieSkillTemplates:
                         profession = "actor"
                     else:
                         profession = list(current_professions)[0]
-                    attitudes = [self.imdb.generate_opinion_about_movie_person(name, profession)
-                                 for name in names]
+                    attitudes = [self.imdb.generate_opinion_about_movie_person(name, profession) for name in names]
                     if "very_positive" in attitudes and len(np.unique(attitudes)) == 1:
                         reply = f"That's a really hard question. I can't choose one. Let's say I like both!"
                         subject_attitudes = []
@@ -637,8 +676,7 @@ class MovieSkillTemplates:
                 reply = "I probably didn't get your question. Could you, please, ask it in a bit more simple way?"
                 return reply, [], self.notsure_confidence
 
-    def give_opinion_about_persons_in_movie(self, movie_id, names, profession=None, attitude=None,
-                                            mode=None):
+    def give_opinion_about_persons_in_movie(self, movie_id, names, profession=None, attitude=None, mode=None):
         """
         Generate templated reply about `names` in the given movie and attributes dictionary
         """
@@ -663,8 +701,11 @@ class MovieSkillTemplates:
                 if mode == "dialog_history":
                     return opinion, [[name, profession, attitude]], self.movie_high_confidence
                 else:
-                    return (f"{opinion} Although I am not sure that {name} appeared in {movie}.",
-                            [[name, profession, attitude]], self.movie_high_confidence)
+                    return (
+                        f"{opinion} Although I am not sure that {name} appeared in {movie}.",
+                        [[name, profession, attitude]],
+                        self.movie_high_confidence,
+                    )
 
             if attitude is None:
                 attitude = self.imdb.generate_opinion_about_movie_person(name, profession)
@@ -675,28 +716,32 @@ class MovieSkillTemplates:
                 article = "a"
 
             if attitude == "very_positive":
-                replies = [f"{name} gave their best as {article} {profession} in {movie}!",
-                           f"{name} gave their best in {movie}!",
-                           f"{name} showed their great potential in {movie}!",
-                           f"{name} showed their talent as {article} {profession} in {movie}!",
-                           ]
+                replies = [
+                    f"{name} gave their best as {article} {profession} in {movie}!",
+                    f"{name} gave their best in {movie}!",
+                    f"{name} showed their great potential in {movie}!",
+                    f"{name} showed their talent as {article} {profession} in {movie}!",
+                ]
                 return random.choice(replies), [[name, profession, attitude]], self.person_highest_confidence
             if attitude == "positive":
-                replies = [f"{name} did a good work as {article} {profession} in {movie}.",
-                           f"{name} worked hard in {movie}!",
-                           f"{name} greatly contributed as {article} {profession} to {movie}!",
-                           ]
+                replies = [
+                    f"{name} did a good work as {article} {profession} in {movie}.",
+                    f"{name} worked hard in {movie}!",
+                    f"{name} greatly contributed as {article} {profession} to {movie}!",
+                ]
                 return random.choice(replies), [[name, profession, attitude]], self.person_highest_confidence
             if attitude == "neutral":
-                replies = [f"{name} is one of the {profession}s of {movie}. "
-                           f"But I can't say whether they did a good work or not.",
-                           f"{name} as a professional {profession} deserves acknowledgment for work to {movie}!",
-                           ]
+                replies = [
+                    f"{name} is one of the {profession}s of {movie}. "
+                    f"But I can't say whether they did a good work or not.",
+                    f"{name} as a professional {profession} deserves acknowledgment for work to {movie}!",
+                ]
                 return random.choice(replies), [[name, profession, attitude]], self.person_highest_confidence
             if attitude == "unknown":
-                replies = [f"I have never heard that {name} took part in {movie}.",
-                           f"I didn't know that {name} was in {movie}.",
-                           ]
+                replies = [
+                    f"I have never heard that {name} took part in {movie}.",
+                    f"I didn't know that {name} was in {movie}.",
+                ]
                 return random.choice(replies), [[name, profession, attitude]], self.person_highest_confidence
         else:
             # profession is a list of common professions
@@ -726,8 +771,11 @@ class MovieSkillTemplates:
                 common_professions_in_this_movie = list(set.intersection(*all_professions_in_this_movie))
                 if len(common_professions_in_this_movie) == 0:
                     # all were in this movie but have different professions
-                    return (f"I suppose these guys are of different occupations in {movie}.",
-                            [[name, prof, "info"] for name, prof in zip(names, profession)], self.movie_high_confidence)
+                    return (
+                        f"I suppose these guys are of different occupations in {movie}.",
+                        [[name, prof, "info"] for name, prof in zip(names, profession)],
+                        self.movie_high_confidence,
+                    )
                 else:
                     # chose profession and go ahead
                     if "actor" in common_professions_in_this_movie:
@@ -737,53 +785,71 @@ class MovieSkillTemplates:
             else:
                 professions = np.array([self.imdb.get_main_profession(name) for name in names])
                 not_from_movie_names = ", ".join(np.array(names)[np.array(are_in_this_movie) is False])
-                return (f"I suppose {not_from_movie_names} didn't participated in {movie}.",
-                        [[name, prof, "incorrect"]
-                         for name, prof in zip(np.array(names)[np.array(are_in_this_movie) is False],
-                                               np.array(professions)[np.array(are_in_this_movie) is False])],
-                        self.movie_high_confidence)
+                return (
+                    f"I suppose {not_from_movie_names} didn't participated in {movie}.",
+                    [
+                        [name, prof, "incorrect"]
+                        for name, prof in zip(
+                            np.array(names)[np.array(are_in_this_movie) is False],
+                            np.array(professions)[np.array(are_in_this_movie) is False],
+                        )
+                    ],
+                    self.movie_high_confidence,
+                )
 
             attitudes = []
             for name in names:
                 attitudes += [self.imdb.generate_opinion_about_movie_person(name, profession)]
 
             if "very_positive" in attitudes and len(np.unique(attitudes)) == 1:
-                replies = [f"They gave their best as {profession}s in {movie}!",
-                           f"They gave their best in {movie}!",
-                           f"They showed their great potential in {movie}!",
-                           f"They showed their great talent as {profession}s in {movie}!",
-                           ]
-                return random.choice(replies), [
-                    [name, profession, attitude]
-                    for name, attitude in zip(names, attitudes)], self.person_highest_confidence
+                replies = [
+                    f"They gave their best as {profession}s in {movie}!",
+                    f"They gave their best in {movie}!",
+                    f"They showed their great potential in {movie}!",
+                    f"They showed their great talent as {profession}s in {movie}!",
+                ]
+                return (
+                    random.choice(replies),
+                    [[name, profession, attitude] for name, attitude in zip(names, attitudes)],
+                    self.person_highest_confidence,
+                )
             elif "very_positive" in attitudes and len(np.unique(attitudes)) > 1:
                 # if at least one of the attitudes is `very_positive`
                 # choose one of the names with this attitude as the best
                 name = names[attitudes.index("very_positive")]
-                replies = [f"They all did a good work in {movie} but {name} sunk into my soul.",
-                           f"They worked hard. Although, {name} is one of my favourite {profession}s in {movie}.",
-                           ]
-                return random.choice(replies), [
-                    [name, profession, attitude]
-                    for name, attitude in zip(names, attitudes)], self.person_highest_confidence
+                replies = [
+                    f"They all did a good work in {movie} but {name} sunk into my soul.",
+                    f"They worked hard. Although, {name} is one of my favourite {profession}s in {movie}.",
+                ]
+                return (
+                    random.choice(replies),
+                    [[name, profession, attitude] for name, attitude in zip(names, attitudes)],
+                    self.person_highest_confidence,
+                )
             elif "positive" in attitudes and len(np.unique(attitudes)) > 1:
                 # if at least one of the attitudes is `positive` and noone is `very_positive`
                 # choose one of the names with this attitude as the best
                 name = names[attitudes.index("positive")]
-                replies = [f"They are of the same high level {profession}s in {movie}.",
-                           f"They deserve acknowledgment for their work in {movie}.",
-                           ]
-                return random.choice(replies), [
-                    [name, profession, attitude]
-                    for name, attitude in zip(names, attitudes)], self.person_highest_confidence
+                replies = [
+                    f"They are of the same high level {profession}s in {movie}.",
+                    f"They deserve acknowledgment for their work in {movie}.",
+                ]
+                return (
+                    random.choice(replies),
+                    [[name, profession, attitude] for name, attitude in zip(names, attitudes)],
+                    self.person_highest_confidence,
+                )
             else:
                 # either all `positive` or all `neutral`
-                replies = [f"They all are good in {movie}.",
-                           f"They are professional {profession}s, so they deserve credits for {movie}.",
-                           ]
-                return random.choice(replies), [
-                    [name, profession, attitude]
-                    for name, attitude in zip(names, attitudes)], self.person_highest_confidence
+                replies = [
+                    f"They all are good in {movie}.",
+                    f"They are professional {profession}s, so they deserve credits for {movie}.",
+                ]
+                return (
+                    random.choice(replies),
+                    [[name, profession, attitude] for name, attitude in zip(names, attitudes)],
+                    self.person_highest_confidence,
+                )
 
     def give_opinion_about_genres(self, uttr, genres):
         add_info = []
@@ -848,47 +914,51 @@ class MovieSkillTemplates:
         Generate templated reply about `name` with the given `attitude`
         """
         if attitude == "very_positive":
-            replies = [f"I like {name} so much!",
-                       f"I like {name} a lot!",
-                       f"I love {name}!",
-                       f"I adore {name}!",
-                       f"{name} is my favorite {profession}!",
-                       f"{name} is one of the best {profession}s!",
-                       f"{name} is an awesome {profession}!",
-                       f"{name} is a perfect {profession}!",
-                       f"{name} is an outstanding {profession}!",
-                       ]
+            replies = [
+                f"I like {name} so much!",
+                f"I like {name} a lot!",
+                f"I love {name}!",
+                f"I adore {name}!",
+                f"{name} is my favorite {profession}!",
+                f"{name} is one of the best {profession}s!",
+                f"{name} is an awesome {profession}!",
+                f"{name} is a perfect {profession}!",
+                f"{name} is an outstanding {profession}!",
+            ]
             return random.choice(replies)
         if attitude == "positive":
-            replies = [f"I like {name}.",
-                       f"I think I like {name}.",
-                       f"{name} is a nice {profession}.",
-                       f"{name} is a good {profession}.",
-                       f"{name} is a talented {profession}.",
-                       f"{name} is a skilled {profession}.",
-                       ]
+            replies = [
+                f"I like {name}.",
+                f"I think I like {name}.",
+                f"{name} is a nice {profession}.",
+                f"{name} is a good {profession}.",
+                f"{name} is a talented {profession}.",
+                f"{name} is a skilled {profession}.",
+            ]
             return random.choice(replies)
         if attitude == "neutral":
-            replies = [f"I can't say whether I like {name} or not.",
-                       f"Some people think {name} is a good {profession}.",
-                       f"Probably {name} is a good {profession} for some people.",
-                       f"{name} is a professional {profession}, so {name} deserves "
-                       f"a good review from a professional bot."
-                       ]
+            replies = [
+                f"I can't say whether I like {name} or not.",
+                f"Some people think {name} is a good {profession}.",
+                f"Probably {name} is a good {profession} for some people.",
+                f"{name} is a professional {profession}, so {name} deserves " f"a good review from a professional bot.",
+            ]
             return random.choice(replies)
         if attitude == "unknown":
-            replies = [f"I have never heard about {name}.",
-                       f"I don't know who {name} is.",
-                       f"I don't know who is it.",
-                       f"I can't say because I don't know who {name} is.",
-                       f"I can't say because I have never heard about {name}."
-                       ]
+            replies = [
+                f"I have never heard about {name}.",
+                f"I don't know who {name} is.",
+                f"I don't know who is it.",
+                f"I can't say because I don't know who {name} is.",
+                f"I can't say because I have never heard about {name}.",
+            ]
             return random.choice(replies)
         if attitude == "incorrect":
             article = "an" if profession == "actor" else "a"
-            replies = [f"I've never heard that {name} worked as {article} {profession}.",
-                       f"I'm not sure that {name} is {article} {profession}.",
-                       ]
+            replies = [
+                f"I've never heard that {name} worked as {article} {profession}.",
+                f"I'm not sure that {name} is {article} {profession}.",
+            ]
             return random.choice(replies)
 
         return ""
@@ -900,44 +970,48 @@ class MovieSkillTemplates:
         """
         genres = [] if genres is None else genres
         if "Series" not in genres:
-            subject = random.choice(["movie", "film", "pic", "picture"] + [genre.lower() + " movie"
-                                                                           for genre in genres])
-        else:
             subject = random.choice(
-                ["series"] + [genre.lower() + " series" for genre in genres if genre != "Series"])
+                ["movie", "film", "pic", "picture"] + [genre.lower() + " movie" for genre in genres]
+            )
+        else:
+            subject = random.choice(["series"] + [genre.lower() + " series" for genre in genres if genre != "Series"])
         if attitude == "very_positive":
-            replies = [f"I like {name} so much!",
-                       f"I like {name} a lot!",
-                       f"I love {name}!",
-                       f"I adore {name}!",
-                       f"{name} is my favorite {subject}!",
-                       f"{name} is one of the best {subject}s!",
-                       f"{name} is an awesome {subject}!",
-                       f"{name} is a perfect {subject}!",
-                       f"{name} is an outstanding {subject}!",
-                       ]
+            replies = [
+                f"I like {name} so much!",
+                f"I like {name} a lot!",
+                f"I love {name}!",
+                f"I adore {name}!",
+                f"{name} is my favorite {subject}!",
+                f"{name} is one of the best {subject}s!",
+                f"{name} is an awesome {subject}!",
+                f"{name} is a perfect {subject}!",
+                f"{name} is an outstanding {subject}!",
+            ]
             return random.choice(replies)
         if attitude == "positive":
-            replies = [f"I like {name}.",
-                       f"I think I like {name}.",
-                       f"{name} is a nice {subject}.",
-                       f"{name} is a good {subject}.",
-                       f"{name} is an interesting {subject}.",
-                       ]
+            replies = [
+                f"I like {name}.",
+                f"I think I like {name}.",
+                f"{name} is a nice {subject}.",
+                f"{name} is a good {subject}.",
+                f"{name} is an interesting {subject}.",
+            ]
             return random.choice(replies)
         if attitude == "neutral":
-            replies = [f"I can't say whether I like {name} or not.",
-                       f"Some people think {name} is a good {subject}.",
-                       f"Probably {name} is a good {subject} for some people."
-                       ]
+            replies = [
+                f"I can't say whether I like {name} or not.",
+                f"Some people think {name} is a good {subject}.",
+                f"Probably {name} is a good {subject} for some people.",
+            ]
             return random.choice(replies)
         if attitude == "unseen":
-            replies = [f"I have never heard of {name}.",
-                       f"I have never heard of {name}.",
-                       f"I have never seen {name}.",
-                       f"I have never seen {name}.",
-                       f"I don't know {name}."
-                       ]
+            replies = [
+                f"I have never heard of {name}.",
+                f"I have never heard of {name}.",
+                f"I have never seen {name}.",
+                f"I have never seen {name}.",
+                f"I don't know {name}.",
+            ]
             return random.choice(replies)
 
         return ""
@@ -973,7 +1047,7 @@ class MovieSkillTemplates:
             "Talk-show": ["Of course, I like talk-shows. Chatting is my favorite doings!"],
             "Thriller": ["It depends on my mood. When I want to feel tension, I am watching thrillers."],
             "War": ["It depends on my mood. War movies are informative but painful."],
-            "Western": ["Westerns are a part of American history, so I like them."]
+            "Western": ["Westerns are a part of American history, so I like them."],
         }
         if attitude is None:
             return random.choice(phrases[genre])
@@ -988,45 +1062,45 @@ class MovieSkillTemplates:
     def donotknow():
         reaction = random.choice(["Hmm... ", "Sorry. "])
 
-        replies = ["I don't who or what is it.",
-                   "I don't know what are you talking about.",
-                   "I have never heard about he, she or it.",
-                   "I don't even understand who or what is it.",
-                   ]
+        replies = [
+            "I don't who or what is it.",
+            "I don't know what are you talking about.",
+            "I have never heard about he, she or it.",
+            "I don't even understand who or what is it.",
+        ]
         return reaction + random.choice(replies)
 
     @staticmethod
     def didnotknowbefore():
         reaction = random.choice(["Hmm. ", "Wow! ", "Sounds interesting! ", "Uh. ", "Really? "])
 
-        replies = ["I didn't know.",
-                   "I didn't know that.",
-                   "I didn't know that before.",
-                   "I have never heard.",
-                   "I have never heard of that.",
-                   "I have never heard of that before."
-                   "Thank you for information.",
-                   "Thank you for information about that.",
-                   ]
+        replies = [
+            "I didn't know.",
+            "I didn't know that.",
+            "I didn't know that before.",
+            "I have never heard.",
+            "I have never heard of that.",
+            "I have never heard of that before." "Thank you for information.",
+            "Thank you for information about that.",
+        ]
         return reaction + random.choice(replies)
 
     @staticmethod
     def cool_comment():
-        replies = ["Cool! I am glad to know you better.",
-                   "That's cool!",
-                   "That's really interesting!",
-                   "Sounds interesting!",
-                   "It's a pleasure to know you better.",
-                   "Oh, that's so cool to know you better."
-                   ]
+        replies = [
+            "Cool! I am glad to know you better.",
+            "That's cool!",
+            "That's really interesting!",
+            "Sounds interesting!",
+            "It's a pleasure to know you better.",
+            "Oh, that's so cool to know you better.",
+        ]
         return random.choice(replies)
 
     @staticmethod
     def counter_question(answer):
         replies = ["What do you think?"]
-        replies_you = ["And you?",
-                       "What about you?",
-                       "How about you?"]
+        replies_you = ["And you?", "What about you?", "How about you?"]
 
         if "I" in answer:
             return random.choice(replies_you)

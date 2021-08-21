@@ -13,17 +13,25 @@ import dialogflows.scopes as scopes
 from dialogflows.flows.wild_animals_states import State as WAS
 from dialogflows.flows.animals_states import State as AnimalsState
 from dialogflows.flows.animals_utils import plural_nouns, find_in_animals_list, preprocess_fact_random_facts
-from common.animals import PETS_TEMPLATE, stop_about_animals, find_entity_by_types, find_entity_conceptnet, \
-    WILD_ANIMALS_Q, ANIMALS_WIKI_Q, ANIMALS_COBOT_Q, ANIMAL_MENTION_TEMPLATE, ANIMAL_BLACKLIST
+from common.animals import (
+    PETS_TEMPLATE,
+    stop_about_animals,
+    find_entity_by_types,
+    find_entity_conceptnet,
+    WILD_ANIMALS_Q,
+    ANIMALS_WIKI_Q,
+    ANIMALS_COBOT_Q,
+    ANIMAL_MENTION_TEMPLATE,
+    ANIMAL_BLACKLIST,
+)
 from common.fact_retrieval import get_all_facts
 from common.universal_templates import if_chat_about_particular_topic
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-nltk.download('punkt')
+nltk.download("punkt")
 
 
 CONF_1 = 1.0
@@ -66,8 +74,17 @@ def animal_questions_request(ngrams, vars):
     found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
     used_wild_q = shared_memory.get("used_wild_q", [])
     all_facts_used = len(used_wild_q) == len(WILD_ANIMALS_Q)
-    if not found_pet and (found_bird or users_wild_animal or (found_animal and found_animal not in ANIMAL_BLACKLIST)
-                          or found_animal_in_list or found_animal_cnet) and not all_facts_used:
+    if (
+        not found_pet
+        and (
+            found_bird
+            or users_wild_animal
+            or (found_animal and found_animal not in ANIMAL_BLACKLIST)
+            or found_animal_in_list
+            or found_animal_cnet
+        )
+        and not all_facts_used
+    ):
         flag = True
     logger.info(f"animal_questions_request, found_animal {found_animal} users_wild_animal {users_wild_animal}")
     logger.info(f"animal_questions_request={flag}")
@@ -238,9 +255,21 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
-simplified_dialog_flow.add_system_transition(WAS.SYS_ANIMAL_Q, WAS.USR_ANIMAL_Q, animal_questions_response, )
-simplified_dialog_flow.add_system_transition(WAS.SYS_ANIMAL_F, WAS.USR_ANIMAL_F, animal_facts_response, )
-simplified_dialog_flow.add_system_transition(WAS.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT), error_response, )
+simplified_dialog_flow.add_system_transition(
+    WAS.SYS_ANIMAL_Q,
+    WAS.USR_ANIMAL_Q,
+    animal_questions_response,
+)
+simplified_dialog_flow.add_system_transition(
+    WAS.SYS_ANIMAL_F,
+    WAS.USR_ANIMAL_F,
+    animal_facts_response,
+)
+simplified_dialog_flow.add_system_transition(
+    WAS.SYS_ERR,
+    (scopes.MAIN, scopes.State.USR_ROOT),
+    error_response,
+)
 
 simplified_dialog_flow.set_error_successor(WAS.USR_START, WAS.SYS_ERR)
 simplified_dialog_flow.set_error_successor(WAS.SYS_ANIMAL_Q, WAS.SYS_ERR)

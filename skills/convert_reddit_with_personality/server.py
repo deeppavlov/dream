@@ -101,32 +101,34 @@ def is_unanswerable_utters(history):
 
 def clear_answer(answer):
     answer = re.sub("[^A-Za-z0-9-!,.’&?'\"’ ]+", "", answer).strip()
-    answer = re.sub(' +', ' ', answer)
+    answer = re.sub(" +", " ", answer)
     return answer
 
 
-topic_personality = {"Literature": "My favourite book is Walk in the Woods by Bill Bryson",
-                     "Art_Event": "I like visiting museums",
-                     "Celebrities": "My favorite famous person is Neil deGrasse Tyson",
-                     "Entertainment": "My hobby is 3d printing",
-                     "Fashion": "I like to wear some warm shirt or coats",
-                     "Food_Drink": "Rice and beans is my favourite food",
-                     "Games": "My favourite game is Minecraft",
-                     "Math": "I have always figure or find out why concepts and equations work",
-                     "Movies_TV": "My favorite movie is Matrix",
-                     "News": "I'm interested in news about technology",
-                     "Music": "I'm a big fan of a music band the Queen",
-                     "Pets_Animals": "I have one pet which is a dog",
-                     "SciTech": "I'm interested in physics and astronomy",
-                     "Sports": "My favourite sport game is basketball",
-                     "Travel_Geo": "I have visited Alaska, Norway, Germany, Hawaii and Poland",
-                     "Weather_Time": "",
-                     "Phatic": "",
-                     "Politics": "",
-                     "Psychology": "",
-                     "Religion": "",
-                     "Sex_Profanity": "",
-                     "Other": ""}
+topic_personality = {
+    "Literature": "My favourite book is Walk in the Woods by Bill Bryson",
+    "Art_Event": "I like visiting museums",
+    "Celebrities": "My favorite famous person is Neil deGrasse Tyson",
+    "Entertainment": "My hobby is 3d printing",
+    "Fashion": "I like to wear some warm shirt or coats",
+    "Food_Drink": "Rice and beans is my favourite food",
+    "Games": "My favourite game is Minecraft",
+    "Math": "I have always figure or find out why concepts and equations work",
+    "Movies_TV": "My favorite movie is Matrix",
+    "News": "I'm interested in news about technology",
+    "Music": "I'm a big fan of a music band the Queen",
+    "Pets_Animals": "I have one pet which is a dog",
+    "SciTech": "I'm interested in physics and astronomy",
+    "Sports": "My favourite sport game is basketball",
+    "Travel_Geo": "I have visited Alaska, Norway, Germany, Hawaii and Poland",
+    "Weather_Time": "",
+    "Phatic": "",
+    "Politics": "",
+    "Psychology": "",
+    "Religion": "",
+    "Sex_Profanity": "",
+    "Other": "",
+}
 
 
 def get_character(topics):

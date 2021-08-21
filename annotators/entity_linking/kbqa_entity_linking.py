@@ -36,50 +36,52 @@ from deeppavlov.core.common.file import load_pickle, save_pickle
 from deeppavlov.models.spelling_correction.levenshtein.levenshtein_searcher import LevenshteinSearcher
 from deeppavlov.models.kbqa.rel_ranking_infer import RelRankerInfer
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
-@register('kbqa_entity_linker')
+@register("kbqa_entity_linker")
 class KBEntityLinker(Component, Serializable):
     """
-        This class extracts from the knowledge base candidate entities for the entity mentioned in the question and then
-        extracts triplets from Wikidata for the extracted entity. Candidate entities are searched in the dictionary
-        where keys are titles and aliases of Wikidata entities and values are lists of tuples (entity_title, entity_id,
-        number_of_relations). First candidate entities are searched in the dictionary by keys where the keys are
-        entities extracted from the question, if nothing is found entities are searched in the dictionary using
-        Levenstein distance between the entity and keys (titles) in the dictionary.
+    This class extracts from the knowledge base candidate entities for the entity mentioned in the question and then
+    extracts triplets from Wikidata for the extracted entity. Candidate entities are searched in the dictionary
+    where keys are titles and aliases of Wikidata entities and values are lists of tuples (entity_title, entity_id,
+    number_of_relations). First candidate entities are searched in the dictionary by keys where the keys are
+    entities extracted from the question, if nothing is found entities are searched in the dictionary using
+    Levenstein distance between the entity and keys (titles) in the dictionary.
     """
 
-    def __init__(self, load_path: str,
-                 inverted_index_filename: str,
-                 entities_list_filename: str,
-                 q2name_filename: str,
-                 types_dict_filename: Optional[str] = None,
-                 who_entities_filename: Optional[str] = None,
-                 save_path: str = None,
-                 q2descr_filename: str = None,
-                 descr_rank_score_thres: float = 0.5,
-                 freq_dict_filename: Optional[str] = None,
-                 entity_ranker: RelRankerInfer = None,
-                 build_inverted_index: bool = False,
-                 kb_format: str = "hdt",
-                 kb_filename: str = None,
-                 label_rel: str = None,
-                 descr_rel: str = None,
-                 aliases_rels: List[str] = None,
-                 sql_table_name: str = None,
-                 sql_column_names: List[str] = None,
-                 lang: str = "en",
-                 use_descriptions: bool = False,
-                 include_mention: bool = False,
-                 num_entities_to_return: int = 5,
-                 num_entities_for_bert_ranking: int = 100,
-                 lemmatize: bool = False,
-                 use_prefix_tree: bool = False,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        load_path: str,
+        inverted_index_filename: str,
+        entities_list_filename: str,
+        q2name_filename: str,
+        types_dict_filename: Optional[str] = None,
+        who_entities_filename: Optional[str] = None,
+        save_path: str = None,
+        q2descr_filename: str = None,
+        descr_rank_score_thres: float = 0.5,
+        freq_dict_filename: Optional[str] = None,
+        entity_ranker: RelRankerInfer = None,
+        build_inverted_index: bool = False,
+        kb_format: str = "hdt",
+        kb_filename: str = None,
+        label_rel: str = None,
+        descr_rel: str = None,
+        aliases_rels: List[str] = None,
+        sql_table_name: str = None,
+        sql_column_names: List[str] = None,
+        lang: str = "en",
+        use_descriptions: bool = False,
+        include_mention: bool = False,
+        num_entities_to_return: int = 5,
+        num_entities_for_bert_ranking: int = 100,
+        lemmatize: bool = False,
+        use_prefix_tree: bool = False,
+        **kwargs,
+    ) -> None:
         """
 
         Args:
@@ -149,24 +151,27 @@ class KBEntityLinker(Component, Serializable):
         self.include_mention = include_mention
         self.num_entities_to_return = num_entities_to_return
         self.num_entities_for_bert_ranking = num_entities_for_bert_ranking
-        self.black_list_what_is = {"Q277759",  # book series
-                                   "Q11424",  # film
-                                   "Q7889",  # video game
-                                   "Q2743",  # musical theatre
-                                   "Q5398426",  # tv series
-                                   "Q506240",  # television film
-                                   "Q21191270",  # television series episode
-                                   "Q7725634",  # literary work
-                                   "Q131436",  # board game
-                                   "Q1783817"  # cooperative board game
-                                   }
+        self.black_list_what_is = {
+            "Q277759",  # book series
+            "Q11424",  # film
+            "Q7889",  # video game
+            "Q2743",  # musical theatre
+            "Q5398426",  # tv series
+            "Q506240",  # television film
+            "Q21191270",  # television series episode
+            "Q7725634",  # literary work
+            "Q131436",  # board game
+            "Q1783817",  # cooperative board game
+        }
         if self.use_descriptions and self.entity_ranker is None:
             raise ValueError("No entity ranker is provided!")
 
         if self.use_prefix_tree:
-            alphabet = r"!#%\&'()+,-./0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz½¿ÁÄ" + \
-                       "ÅÆÇÉÎÓÖ×ÚßàáâãäåæçèéêëíîïðñòóôöøùúûüýāăąćČčĐėęěĞğĩīİıŁłńňŌōőřŚśşŠšťũūůŵźŻżŽžơưșȚțəʻ" + \
-                       "ʿΠΡβγБМавдежикмностъяḤḥṇṬṭầếờợ–‘’Ⅲ−∗"
+            alphabet = (
+                r"!#%\&'()+,-./0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz½¿ÁÄ"
+                + "ÅÆÇÉÎÓÖ×ÚßàáâãäåæçèéêëíîïðñòóôöøùúûüýāăąćČčĐėęěĞğĩīİıŁłńňŌōőřŚśşŠšťũūůŵźŻżŽžơưșȚțəʻ"
+                + "ʿΠΡβγБМавдежикмностъяḤḥṇṬṭầếờợ–‘’Ⅲ−∗"
+            )
             dictionary_words = list(self.inverted_index.keys())
             self.searcher = LevenshteinSearcher(alphabet, dictionary_words)
 
@@ -177,18 +182,18 @@ class KBEntityLinker(Component, Serializable):
                 self.conn = sqlite3.connect(str(expand_path(self.kb_filename)))
                 self.cursor = self.conn.cursor()
             else:
-                raise ValueError(f'unsupported kb_format value {self.kb_format}')
+                raise ValueError(f"unsupported kb_format value {self.kb_format}")
             self.inverted_index_builder()
             self.save()
         else:
             self.load()
 
     def load_freq_dict(self, freq_dict_filename: str):
-        with open(str(expand_path(freq_dict_filename)), 'r') as fl:
+        with open(str(expand_path(freq_dict_filename)), "r") as fl:
             lines = fl.readlines()
         pos_freq_dict = defaultdict(list)
         for line in lines:
-            line_split = line.strip('\n').split('\t')
+            line_split = line.strip("\n").split("\t")
             if re.match(r"[\d]+\.[\d]+", line_split[2]):
                 pos_freq_dict[line_split[1]].append((line_split[0], float(line_split[2])))
         nouns_with_freq = pos_freq_dict["s"]
@@ -212,11 +217,14 @@ class KBEntityLinker(Component, Serializable):
         if self.q2descr_filename is not None:
             save_pickle(self.q2descr, self.save_path / self.q2descr_filename)
 
-    def __call__(self, entity_substr_batch: List[List[str]],
-                 templates_batch: List[str] = None,
-                 long_context_batch: List[str] = None,
-                 entity_types_batch: List[List[List[str]]] = None,
-                 short_context_batch: List[str] = None) -> Tuple[List[List[List[str]]], List[List[List[float]]]]:
+    def __call__(
+        self,
+        entity_substr_batch: List[List[str]],
+        templates_batch: List[str] = None,
+        long_context_batch: List[str] = None,
+        entity_types_batch: List[List[List[str]]] = None,
+        short_context_batch: List[str] = None,
+    ) -> Tuple[List[List[List[str]]], List[List[List[float]]]]:
         entity_ids_batch = []
         confidences_batch = []
         tokens_match_conf_batch = []
@@ -228,15 +236,16 @@ class KBEntityLinker(Component, Serializable):
             short_context_batch = ["" for _ in entity_substr_batch]
         if entity_types_batch is None:
             entity_types_batch = [[[] for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
-        for entity_substr_list, template_found, long_context, entity_types_list, short_context in \
-                zip(entity_substr_batch, templates_batch, long_context_batch, entity_types_batch, short_context_batch):
+        for entity_substr_list, template_found, long_context, entity_types_list, short_context in zip(
+            entity_substr_batch, templates_batch, long_context_batch, entity_types_batch, short_context_batch
+        ):
             entity_ids_list = []
             confidences_list = []
             tokens_match_conf_list = []
             for entity_substr, entity_types in zip(entity_substr_list, entity_types_list):
-                entity_ids, confidences, tokens_match_conf = self.link_entity(entity_substr, long_context,
-                                                                              short_context, template_found,
-                                                                              entity_types)
+                entity_ids, confidences, tokens_match_conf = self.link_entity(
+                    entity_substr, long_context, short_context, template_found, entity_types
+                )
                 if self.num_entities_to_return == 1:
                     if entity_ids:
                         entity_ids_list.append(entity_ids[0])
@@ -247,9 +256,9 @@ class KBEntityLinker(Component, Serializable):
                         confidences_list.append(0.0)
                         tokens_match_conf_list.append(0.0)
                 else:
-                    entity_ids_list.append(entity_ids[:self.num_entities_to_return])
-                    confidences_list.append(confidences[:self.num_entities_to_return])
-                    tokens_match_conf_list.append(tokens_match_conf[:self.num_entities_to_return])
+                    entity_ids_list.append(entity_ids[: self.num_entities_to_return])
+                    confidences_list.append(confidences[: self.num_entities_to_return])
+                    tokens_match_conf_list.append(tokens_match_conf[: self.num_entities_to_return])
             entity_ids_batch.append(entity_ids_list)
             confidences_batch.append(confidences_list)
             tokens_match_conf_batch.append(tokens_match_conf_list)
@@ -269,19 +278,28 @@ class KBEntityLinker(Component, Serializable):
             lemm_text = " ".join(processed_tokens)
         return lemm_text
 
-    def link_entity(self, entity: str, long_context: Optional[str] = None, short_context: Optional[str] = None,
-                    template_found: Optional[str] = None, entity_types: List[str] = None,
-                    cut_entity: bool = False) -> Tuple[List[str], List[float]]:
+    def link_entity(
+        self,
+        entity: str,
+        long_context: Optional[str] = None,
+        short_context: Optional[str] = None,
+        template_found: Optional[str] = None,
+        entity_types: List[str] = None,
+        cut_entity: bool = False,
+    ) -> Tuple[List[str], List[float]]:
         confidences = []
         tokens_match_conf = []
         if not entity:
-            entities_ids = ['None']
+            entities_ids = ["None"]
         else:
             entity_is_uttr = False
             lets_talk_phrases = ["let's talk", "let's chat", "what about", "do you know", "tell me about"]
             found_lets_talk_phrase = any([phrase in short_context for phrase in lets_talk_phrases])
-            if short_context and (entity == short_context or entity == short_context[:-1] or found_lets_talk_phrase) \
-                    and len(entity.split()) == 1:
+            if (
+                short_context
+                and (entity == short_context or entity == short_context[:-1] or found_lets_talk_phrase)
+                and len(entity.split()) == 1
+            ):
                 lemm_entity = self.lemmatize_substr(entity)
                 entity_is_uttr = True
             else:
@@ -291,22 +309,26 @@ class KBEntityLinker(Component, Serializable):
             if self.types_dict:
                 if entity_types:
                     entity_types = set(entity_types)
-                    candidate_entities = [ent for ent in candidate_entities if
-                                          self.types_dict.get(ent[1], set()).intersection(entity_types)]
+                    candidate_entities = [
+                        ent
+                        for ent in candidate_entities
+                        if self.types_dict.get(ent[1], set()).intersection(entity_types)
+                    ]
                 if template_found in ["what is xxx?", "what was xxx?"] or entity_is_uttr:
-                    candidate_entities_filtered = [ent for ent in candidate_entities if
-                                                   not self.types_dict.get(ent[1], set()).intersection(
-                                                       self.black_list_what_is)]
+                    candidate_entities_filtered = [
+                        ent
+                        for ent in candidate_entities
+                        if not self.types_dict.get(ent[1], set()).intersection(self.black_list_what_is)
+                    ]
                     if candidate_entities_filtered:
                         candidate_entities = candidate_entities_filtered
             if cut_entity and candidate_entities and len(lemm_entity.split()) > 1 and candidate_entities[0][3] == 1:
                 lemm_entity = self.cut_entity_substr(lemm_entity)
                 candidate_entities = self.candidate_entities_inverted_index(lemm_entity)
             candidate_entities, candidate_names = self.candidate_entities_names(lemm_entity, candidate_entities)
-            entities_ids, confidences, tokens_match_conf, srtd_cand_ent = self.sort_found_entities(candidate_entities,
-                                                                                                   candidate_names,
-                                                                                                   lemm_entity,
-                                                                                                   entity, long_context)
+            entities_ids, confidences, tokens_match_conf, srtd_cand_ent = self.sort_found_entities(
+                candidate_entities, candidate_names, lemm_entity, entity, long_context
+            )
             if template_found:
                 entities_ids = self.filter_entities(entities_ids, template_found)
 
@@ -342,15 +364,15 @@ class KBEntityLinker(Component, Serializable):
                         lemmatized_tok = self.lemmatizer.lemmatize(tok)
 
                     if lemmatized_tok != tok and lemmatized_tok in self.inverted_index:
-                        candidate_entities_for_tok = \
-                            candidate_entities_for_tok.union(set(self.inverted_index[lemmatized_tok]))
+                        candidate_entities_for_tok = candidate_entities_for_tok.union(
+                            set(self.inverted_index[lemmatized_tok])
+                        )
                         found = True
 
                 if not found and self.use_prefix_tree:
                     words_with_levens_1 = self.searcher.search(tok, d=1)
                     for word in words_with_levens_1:
-                        candidate_entities_for_tok = \
-                            candidate_entities_for_tok.union(set(self.inverted_index[word[0]]))
+                        candidate_entities_for_tok = candidate_entities_for_tok.union(set(self.inverted_index[word[0]]))
                 candidate_entities_for_tokens.append(candidate_entities_for_tok)
 
         for candidate_entities_for_tok in candidate_entities_for_tokens:
@@ -358,16 +380,21 @@ class KBEntityLinker(Component, Serializable):
         candidate_entities = Counter(candidate_entities).most_common()
         candidate_entities = sorted(candidate_entities, key=lambda x: (x[0][1], x[1]), reverse=True)
         candidate_entities = candidate_entities[:1000]
-        candidate_entities = [(entity_num, self.entities_list[entity_num], entity_freq, count) for
-                              (entity_num, entity_freq), count in candidate_entities]
+        candidate_entities = [
+            (entity_num, self.entities_list[entity_num], entity_freq, count)
+            for (entity_num, entity_freq), count in candidate_entities
+        ]
 
         return candidate_entities
 
-    def sort_found_entities(self, candidate_entities: List[Tuple[int, str, int]],
-                            candidate_names: List[List[str]],
-                            lemm_entity: str,
-                            entity: str,
-                            context: str = None) -> Tuple[List[str], List[float], List[Tuple[str, str, int, int]]]:
+    def sort_found_entities(
+        self,
+        candidate_entities: List[Tuple[int, str, int]],
+        candidate_names: List[List[str]],
+        lemm_entity: str,
+        entity: str,
+        context: str = None,
+    ) -> Tuple[List[str], List[float], List[Tuple[str, str, int, int]]]:
         entities_ratios = []
         lemm_entity = lemm_entity.lower()
         for candidate, entity_names in zip(candidate_entities, candidate_names):
@@ -375,15 +402,18 @@ class KBEntityLinker(Component, Serializable):
             fuzz_ratio = max([fuzz.ratio(name.lower(), lemm_entity) for name in entity_names])
             entity_tokens = re.findall(self.re_tokenizer, entity.lower())
             lemm_entity_tokens = re.findall(self.re_tokenizer, lemm_entity.lower())
-            entity_tokens = {word for word in entity_tokens if (len(word) > 1 and word != "'s"
-                                                                and word not in self.stopwords)}
-            lemm_entity_tokens = {word for word in lemm_entity_tokens if (len(word) > 1 and word != "'s"
-                                                                          and word not in self.stopwords)}
+            entity_tokens = {
+                word for word in entity_tokens if (len(word) > 1 and word != "'s" and word not in self.stopwords)
+            }
+            lemm_entity_tokens = {
+                word for word in lemm_entity_tokens if (len(word) > 1 and word != "'s" and word not in self.stopwords)
+            }
             match_counts = []
             for name in entity_names:
                 name_tokens = re.findall(self.re_tokenizer, name.lower())
-                name_tokens = {word for word in name_tokens if (len(word) > 1 and word != "'s"
-                                                                and word not in self.stopwords)}
+                name_tokens = {
+                    word for word in name_tokens if (len(word) > 1 and word != "'s" and word not in self.stopwords)
+                }
                 entity_inters_len = len(entity_tokens.intersection(name_tokens))
                 lemm_entity_inters_len = len(lemm_entity_tokens.intersection(name_tokens))
 
@@ -422,17 +452,29 @@ class KBEntityLinker(Component, Serializable):
         srtd_with_ratios = sorted(entities_ratios, key=lambda x: (x[2], x[3], x[4]), reverse=True)
         if self.use_descriptions:
             log.debug(f"context {context}")
-            id_to_score = {entity_id: (tokens_matched, score, num_rels) for _, entity_id, tokens_matched, score,
-                           num_rels in srtd_with_ratios[:self.num_entities_for_bert_ranking]}
-            entity_ids = [entity_id for _, entity_id, _, _, _ in srtd_with_ratios[:self.num_entities_for_bert_ranking]]
+            id_to_score = {
+                entity_id: (tokens_matched, score, num_rels)
+                for _, entity_id, tokens_matched, score, num_rels in srtd_with_ratios[
+                    : self.num_entities_for_bert_ranking
+                ]
+            }
+            entity_ids = [entity_id for _, entity_id, _, _, _ in srtd_with_ratios[: self.num_entities_for_bert_ranking]]
             scores = self.entity_ranker.rank_rels(context, entity_ids)
-            entities_with_scores = [(entity_id, id_to_score[entity_id][0], id_to_score[entity_id][1],
-                                    id_to_score[entity_id][2], score) for entity_id, score in scores]
+            entities_with_scores = [
+                (entity_id, id_to_score[entity_id][0], id_to_score[entity_id][1], id_to_score[entity_id][2], score)
+                for entity_id, score in scores
+            ]
             entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[2], x[3], x[4]), reverse=True)
 
-            entities_with_scores = [ent for ent in entities_with_scores if
-                                    (ent[4] > self.descr_rank_score_thres or ent[2] == 100.0
-                                     or (ent[1] == 1.0 and ent[2] > 92.0 and ent[3] > 20 and ent[4] > 0.2))]
+            entities_with_scores = [
+                ent
+                for ent in entities_with_scores
+                if (
+                    ent[4] > self.descr_rank_score_thres
+                    or ent[2] == 100.0
+                    or (ent[1] == 1.0 and ent[2] > 92.0 and ent[3] > 20 and ent[4] > 0.2)
+                )
+            ]
             log.debug(f"entities_with_scores {entities_with_scores[:10]}")
             entity_ids = [ent for ent, *_ in entities_with_scores]
             confidences = [score for *_, score in entities_with_scores]
@@ -444,9 +486,9 @@ class KBEntityLinker(Component, Serializable):
 
         return entity_ids, confidences, tokens_match_conf, srtd_with_ratios
 
-    def candidate_entities_names(self, entity: str,
-                                 candidate_entities: List[Tuple[int, str, int]]) -> Tuple[List[Tuple[int, str, int]],
-                                                                                          List[List[str]]]:
+    def candidate_entities_names(
+        self, entity: str, candidate_entities: List[Tuple[int, str, int]]
+    ) -> Tuple[List[Tuple[int, str, int]], List[List[str]]]:
         entity_length = len(entity)
         candidate_names = []
         candidate_entities_filter = []
@@ -486,20 +528,26 @@ class KBEntityLinker(Component, Serializable):
 
         if self.kb_format == "sqlite3":
             subject, relation, obj = self.sql_column_names
-            query = f'SELECT {subject}, {relation}, {obj} FROM {self.sql_table_name} ' \
-                    f'WHERE {relation} = "{self.label_rel}";'
+            query = (
+                f"SELECT {subject}, {relation}, {obj} FROM {self.sql_table_name} "
+                f'WHERE {relation} = "{self.label_rel}";'
+            )
             res = self.cursor.execute(query)
             label_triplets = res.fetchall()
             if self.aliases_rels is not None:
                 for alias_rel in self.aliases_rels:
-                    query = f'SELECT {subject}, {relation}, {obj} FROM {self.sql_table_name} ' \
-                            f'WHERE {relation} = "{alias_rel}";'
+                    query = (
+                        f"SELECT {subject}, {relation}, {obj} FROM {self.sql_table_name} "
+                        f'WHERE {relation} = "{alias_rel}";'
+                    )
                     res = self.cursor.execute(query)
                     alias_triplets = res.fetchall()
                     alias_triplets_list.append(alias_triplets)
             if self.descr_rel is not None:
-                query = f'SELECT {subject}, {relation}, {obj} FROM {self.sql_table_name} ' \
-                        f'WHERE {relation} = "{self.descr_rel}";'
+                query = (
+                    f"SELECT {subject}, {relation}, {obj} FROM {self.sql_table_name} "
+                    f'WHERE {relation} = "{self.descr_rel}";'
+                )
                 res = self.cursor.execute(query)
                 descr_triplets = res.fetchall()
 
@@ -507,14 +555,14 @@ class KBEntityLinker(Component, Serializable):
             for triplet in triplets:
                 entities_set.add(triplet[0])
                 if triplet[2].endswith(self.lang_str):
-                    label = triplet[2].replace(self.lang_str, '').replace('"', '')
+                    label = triplet[2].replace(self.lang_str, "").replace('"', "")
                     id_to_label_dict[triplet[0]].append(label)
                     label_to_id_dict[label] = triplet[0]
 
         for triplet in descr_triplets:
             entities_set.add(triplet[0])
             if triplet[2].endswith(self.lang_str):
-                descr = triplet[2].replace(self.lang_str, '').replace('"', '')
+                descr = triplet[2].replace(self.lang_str, "").replace('"', "")
                 id_to_descr_dict[triplet[0]].append(descr)
 
         popularities_dict = {}
@@ -535,8 +583,9 @@ class KBEntityLinker(Component, Serializable):
             tokens = re.findall(self.re_tokenizer, label.lower())
             for tok in tokens:
                 if len(tok) > 1 and tok not in self.stopwords:
-                    inverted_index[tok].append((entities_dict[label_to_id_dict[label]],
-                                                popularities_dict[label_to_id_dict[label]]))
+                    inverted_index[tok].append(
+                        (entities_dict[label_to_id_dict[label]], popularities_dict[label_to_id_dict[label]])
+                    )
         self.inverted_index = dict(inverted_index)
         self.entities_list = list(entities_set)
         self.q2name = [id_to_label_dict[entity] for entity in self.entities_list]

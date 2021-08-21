@@ -3,28 +3,28 @@ from nltk.tokenize import word_tokenize, RegexpTokenizer
 
 class yesno_question:
     def __init__(self):
-        self.tokenizer = RegexpTokenizer(r'\w+')
+        self.tokenizer = RegexpTokenizer(r"\w+")
 
         fo = open(file="yesno_dicts.txt", mode="r", encoding="utf-8")
-        self.adverbs = fo.readline().strip().split(',')
-        self.qa_converter = {k: v for k, v in [s.split(':') for s in fo.readline().strip().split(',')]}
-        self.yes_types = fo.readline().strip().split(',')
-        self.no_types = fo.readline().strip().split(',')
+        self.adverbs = fo.readline().strip().split(",")
+        self.qa_converter = {k: v for k, v in [s.split(":") for s in fo.readline().strip().split(",")]}
+        self.yes_types = fo.readline().strip().split(",")
+        self.no_types = fo.readline().strip().split(",")
 
         self.qa_dicts = {}
         for line in fo.readlines():
             if line.startswith("#") or line.strip() == "":
                 continue
-            items = line.strip().split('|')
+            items = line.strip().split("|")
             self.qa_dicts[items[0]] = [items[1], items[2], items[3], items[4]]
         fo.close()
 
     def get_answer_type(self, words):
-        ''' 0: yes short answer without adverb
-            1: no short answer without adverb
-            2: yes short answer with adverb
-            3: no short answer with adverb
-            4: long answer or unidentify '''
+        """0: yes short answer without adverb
+        1: no short answer without adverb
+        2: yes short answer with adverb
+        3: no short answer with adverb
+        4: long answer or unidentify"""
         adverb = ""
 
         if 0 < len(words) < 4:
@@ -65,11 +65,20 @@ class yesno_question:
                     second_part.pop(i)
 
         if answer_type < 2:
-            return self.qa_dicts[key][answer_type] + " " + " ".join(
-                [self.qa_converter[w] if w in self.qa_converter else w for w in second_part]) + "."
+            return (
+                self.qa_dicts[key][answer_type]
+                + " "
+                + " ".join([self.qa_converter[w] if w in self.qa_converter else w for w in second_part])
+                + "."
+            )
         else:
-            return self.qa_dicts[key][answer_type] + " " + adverb + " ".join(
-                [self.qa_converter[w] if w in self.qa_converter else w for w in second_part]) + "."
+            return (
+                self.qa_dicts[key][answer_type]
+                + " "
+                + adverb
+                + " ".join([self.qa_converter[w] if w in self.qa_converter else w for w in second_part])
+                + "."
+            )
 
     def preprocess_question(self, question):
         question = question.lower().replace(", please,", "").replace(", please", "").replace("please, ", "")

@@ -68,15 +68,21 @@ class BertFloatClassifierModel(BertClassifierModel):
         for prediction in predictions:
             answer = {key: [] for key in classes}
             index = 0
-            for key in ['emotion_classification', 'toxic_classification', 'sentiment_classification',
-                        'cobot_topics', 'cobot_dialogact_topics', 'cobot_dialogact_intents']:
+            for key in [
+                "emotion_classification",
+                "toxic_classification",
+                "sentiment_classification",
+                "cobot_topics",
+                "cobot_dialogact_topics",
+                "cobot_dialogact_intents",
+            ]:
                 # order of keys DOES matter
-                probs = prediction[index:index + len(classes[key])]
+                probs = prediction[index : index + len(classes[key])]
                 max_prob = float(max(probs))
                 index += len(classes[key])
-                answer[key] = ({class_: float(prob)
-                                for class_, prob in zip(classes[key], probs)
-                                if prob == max_prob or prob >= 0.5})
+                answer[key] = {
+                    class_: float(prob) for class_, prob in zip(classes[key], probs) if prob == max_prob or prob >= 0.5
+                }
             answer_list.append(answer)
         print_combined(answer_list)
         return answer_list

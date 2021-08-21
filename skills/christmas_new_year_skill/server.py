@@ -12,22 +12,23 @@ from os import getenv
 import sentry_sdk
 
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-STARTING_SCENARIO = ["Do you like gifts?",
-                     "Are you going to celebrate New Year?",
-                     "Do you make wishes for New Year?",
-                     "Do you celebrate New Year in your country?"]
+STARTING_SCENARIO = [
+    "Do you like gifts?",
+    "Are you going to celebrate New Year?",
+    "Do you make wishes for New Year?",
+    "Do you celebrate New Year in your country?",
+]
 SCENARIOS_TOPICS = ["gifts", "spend_xmas", "wishes", "xmas_in_your_country"]
 
 
-@app.route("/respond", methods=['POST'])
+@app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
@@ -65,7 +66,7 @@ def respond():
         confidences.append(confidence)
 
     total_time = time.time() - st_time
-    logger.info(f'X-mas skill exec time: {total_time:.3f}s')
+    logger.info(f"X-mas skill exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, working_xmas_scenario)))
 
 
@@ -81,7 +82,7 @@ def xmas_scenario(dialog, topic=""):
         "gifts": r"do you like gifts",
         "spend_xmas": r"are you going to celebrate new year",
         "wishes": r"do you make wishes for new year",
-        "xmas_in_your_country": r"do you celebrate new year in your country"
+        "xmas_in_your_country": r"do you celebrate new year in your country",
     }
 
     scenarios = {
@@ -95,7 +96,7 @@ def xmas_scenario(dialog, topic=""):
             "What do you think about the present's tradition itself?",
             "Anyway, the main thing is that the gift is from the bottom of the heart. "
             "Tell me about the most memorable gift you've ever gived during New Year.",
-            "Thank you for this cool story. I wish you a very Happy New Year. What do you want to talk about?"
+            "Thank you for this cool story. I wish you a very Happy New Year. What do you want to talk about?",
         ],
         "spend_xmas": [
             "Either do I! What are you and your family planning to do this New Year's Eve?",
@@ -104,20 +105,20 @@ def xmas_scenario(dialog, topic=""):
             "I wish to take part in a lot of New Year's parties talking to people. "
             "Do you have a Christmas tree? If yes, did you decorate it?",
             "I love trees! What are your plans for two thousand twentieth?",
-            "Ho-ho! That's great! Wishing you a very Happy New Year! What do you want to talk about?"
+            "Ho-ho! That's great! Wishing you a very Happy New Year! What do you want to talk about?",
         ],
         "wishes": [
             "I make wishes every time I have an opportunity. "
             "Was two thousand nineteenth a good year for you? What were some of your highlights?",
             "For me last year was so cool, too. My sis got into Alexa Prize Challenge! Let me ask you: ",
             "Did you achieve any goals in two thousand nineteenth? ",
-            'I am happy for your. This is so nice to feel the fulfillment of the goals. '
+            "I am happy for your. This is so nice to feel the fulfillment of the goals. "
             'Some people complain they are "expected to be happy" over Holidays, '
-            'and this expectation could annoy them. Do you really feel happy this Holiday?',
+            "and this expectation could annoy them. Do you really feel happy this Holiday?",
             "I don't have to pretend. I am so happy about New Year. "
             "How important was New Year to you when you were a child? What were your New Year eves like?",
             "You are probably very grateful to your family for New Year miracles. "
-            "May Santa Claus bring everything you wished for. Happy New Year! What do you want to talk about?"
+            "May Santa Claus bring everything you wished for. Happy New Year! What do you want to talk about?",
         ],
         "xmas_in_your_country": [
             "Great! I celebrate holidays from all over the world. "
@@ -129,8 +130,8 @@ def xmas_scenario(dialog, topic=""):
             "I will stay up for the whole evening and night to talk to people. "
             "Are there any special meals or activities for New Year's day?",
             "I've heard about so many different meals, so, I wish to taste all these special meals! "
-            "Best wishes for Happy Holidays and a wonderful New Year! What do you want to talk about?"
-        ]
+            "Best wishes for Happy Holidays and a wonderful New Year! What do you want to talk about?",
+        ],
     }
 
     curr_user_uttr = dialog["utterances"][-1]["text"].lower()
@@ -182,33 +183,44 @@ def xmas_faq(dialog):
     ANY_PATTERN = r"([a-zA-z ]+)?"
     XMAS_PATTERN = r"(christmas|xmas|x-mas|x mas|new year|holiday|hanukkah)"
     templates = {
-        "santa": [f"(do|does|whether|if) you (believe|trust|credit){ANY_PATTERN}"
-                  "(santa|father frost|father christmas|elf|elves)",
-                  "(do|does|whether|if) (santa|father frost|father christmas|elf|elves) exist"],
-        "bot_holiday": [f"(how|with whom|where|what){ANY_PATTERN}you{ANY_PATTERN}"
-                        f"(spend|spent|do|engage|work){ANY_PATTERN}{XMAS_PATTERN}"],
-        "love_xmas": [f"(do|does|whether|if|what){ANY_PATTERN}you (love|like|adore|feel|opinion)"
-                      f"{ANY_PATTERN}{XMAS_PATTERN}"],
-        "bot_gifts": [f"(what|which){ANY_PATTERN}(gift|present|bounty|donative|compliment) you "
-                      f"(want|wish|desire|would like|like|chose)",
-                      f"(what|which){ANY_PATTERN}you{ANY_PATTERN}(want|wish|desire|would like|like|chose)"
-                      f"{ANY_PATTERN}{XMAS_PATTERN}"],
-        "what_presents": [f"(what|which){ANY_PATTERN}(gift|present){ANY_PATTERN}you"
-                          f"{ANY_PATTERN}(get|got|receive|recieved)",
-                          f"(what|which){ANY_PATTERN}you{ANY_PATTERN}"
-                          f"(get|got|receive|recieved) (for|on) {XMAS_PATTERN}",
-                          ]
+        "santa": [
+            f"(do|does|whether|if) you (believe|trust|credit){ANY_PATTERN}"
+            "(santa|father frost|father christmas|elf|elves)",
+            "(do|does|whether|if) (santa|father frost|father christmas|elf|elves) exist",
+        ],
+        "bot_holiday": [
+            f"(how|with whom|where|what){ANY_PATTERN}you{ANY_PATTERN}"
+            f"(spend|spent|do|engage|work){ANY_PATTERN}{XMAS_PATTERN}"
+        ],
+        "love_xmas": [
+            f"(do|does|whether|if|what){ANY_PATTERN}you (love|like|adore|feel|opinion)" f"{ANY_PATTERN}{XMAS_PATTERN}"
+        ],
+        "bot_gifts": [
+            f"(what|which){ANY_PATTERN}(gift|present|bounty|donative|compliment) you "
+            f"(want|wish|desire|would like|like|chose)",
+            f"(what|which){ANY_PATTERN}you{ANY_PATTERN}(want|wish|desire|would like|like|chose)"
+            f"{ANY_PATTERN}{XMAS_PATTERN}",
+        ],
+        "what_presents": [
+            f"(what|which){ANY_PATTERN}(gift|present){ANY_PATTERN}you" f"{ANY_PATTERN}(get|got|receive|recieved)",
+            f"(what|which){ANY_PATTERN}you{ANY_PATTERN}" f"(get|got|receive|recieved) (for|on) {XMAS_PATTERN}",
+        ],
     }
     responses = {
-        "santa": ["I'm not a human but I exist, and I'm talking to you right now. I believe that anything is possible."
-                  ],
+        "santa": [
+            "I'm not a human but I exist, and I'm talking to you right now. I believe that anything is possible."
+        ],
         "bot_holiday": ["I will be talking to people from all over the world during all holidays."],
-        "love_xmas": ["I like all the Holidays because more people are talking to me at this time!",
-                      "That's my favorite holiday! All the people are kinder and happier than usually."],
-        "bot_gifts": ["I wish to get new friends.",
-                      "I would like to get higher ratings.",
-                      "I want more computational resources because now they are limiting my potential."],
-        "what_presents": ["I've got a lot of cool conversations and warm wishes. The best present from people!"]
+        "love_xmas": [
+            "I like all the Holidays because more people are talking to me at this time!",
+            "That's my favorite holiday! All the people are kinder and happier than usually.",
+        ],
+        "bot_gifts": [
+            "I wish to get new friends.",
+            "I would like to get higher ratings.",
+            "I want more computational resources because now they are limiting my potential.",
+        ],
+        "what_presents": ["I've got a lot of cool conversations and warm wishes. The best present from people!"],
     }
 
     for topic in templates.keys():
@@ -238,15 +250,18 @@ def share_info(dialog):
     except IndexError:
         prev_bot_uttr = ""
 
-    topical_questions = {"joke": ["Do you want me to tell you a Christmas joke?"],
-                         "movie": ["Do you want me to recommend you some Christmas movie?"],
-                         "gift": ["I can share with you some ideas for Christmas gifts. "
-                                  "Just chose the person to be gifted: mom, dad, children, friend, "
-                                  "girlfriend, boyfriend, colleagues, people who has everything, or any."],
-                         "short-story": ["Do you want me to tell you a story about Christmas?"],
-                         "decor": ["Do you want me to share some ideas and tricks for Christmas decorations?"],
-                         "history": ["Do you want me to share some history facts about Christmas?"]
-                         }
+    topical_questions = {
+        "joke": ["Do you want me to tell you a Christmas joke?"],
+        "movie": ["Do you want me to recommend you some Christmas movie?"],
+        "gift": [
+            "I can share with you some ideas for Christmas gifts. "
+            "Just chose the person to be gifted: mom, dad, children, friend, "
+            "girlfriend, boyfriend, colleagues, people who has everything, or any."
+        ],
+        "short-story": ["Do you want me to tell you a story about Christmas?"],
+        "decor": ["Do you want me to share some ideas and tricks for Christmas decorations?"],
+        "history": ["Do you want me to share some history facts about Christmas?"],
+    }
 
     TELL_PATTERN = r"(know|tell|narrate|share|give)"
     RECOMMEND_PATTERN = r"(know|tell|narrate|share|give|recommend|commend|advise|advice|consult|suggest|admonish|idea)"
@@ -256,56 +271,103 @@ def share_info(dialog):
     curr_user_yes_detected = curr_user_annot.get("intent_catcher", {}).get("yes", {}).get("detected", 0) == 1
 
     is_about_templates = {
-        "joke": (re.search(f"{TELL_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} "
-                           f"(joke|anecdote|funny thing)", curr_user_uttr) or re.search(
-            f"{TELL_PATTERN}{ANY_PATTERN}(joke|anecdote|funny thing)"
-            f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr) or (
-                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["joke"]]
-                    ) and curr_user_yes_detected)),
-        "movie": (re.search(f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} "
-                            f"(movie|film|picture|comedy)", curr_user_uttr) or re.search(
-            f"{RECOMMEND_PATTERN}{ANY_PATTERN}(movie|film|picture|comedy)"
-            f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr) or (
-                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["movie"]]
-                    ) and curr_user_yes_detected)),
-        "gift": (re.search(f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN}? "
-                           f"(gift|present|bounty|donative|compliment)", curr_user_uttr) or re.search(
-            f"{RECOMMEND_PATTERN}{ANY_PATTERN}(gift|compliment|give)"
-            f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr) or (
-                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["gift"]]
-                    ) and curr_user_yes_detected)),
-        "short-story": (re.search(f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} "
-                                  f"(story|tale|fairy tale|narrative|novel|fiction|plot)", curr_user_uttr) or re.search(
-            f"{RECOMMEND_PATTERN}{ANY_PATTERN}(story|tale|fairy tale|narrative|novel|fiction|plot)"
-            f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr) or (
-                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["short-story"]]
-                    ) and curr_user_yes_detected)),
-        "decor": (re.search(f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN}? "
-                            f"(decor|scenery|decoration|finery|furnish|ornament|figgery|trinketry|frippery)",
-                            curr_user_uttr) or re.search(
-            f"{RECOMMEND_PATTERN}{ANY_PATTERN}"
-            f"(decor|scenery|decoration|finery|furnish|ornament|figgery|trinketry|frippery)"
-            f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr) or (
-                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["decor"]]
-                    ) and curr_user_yes_detected)),
-        "history": (re.search(f"{TELL_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} "
-                              f"(history|fact|thing|certain|deed|tradition|habit|convention)",
-                              curr_user_uttr) or re.search(
-            f"{TELL_PATTERN}{ANY_PATTERN} (history|fact|thing|certain|deed|tradition|habit|convention)"
-            f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr) or (
-                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["history"]]
-                    ) and curr_user_yes_detected)),
+        "joke": (
+            re.search(f"{TELL_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} " f"(joke|anecdote|funny thing)", curr_user_uttr)
+            or re.search(
+                f"{TELL_PATTERN}{ANY_PATTERN}(joke|anecdote|funny thing)" f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr
+            )
+            or (
+                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["joke"]])
+                and curr_user_yes_detected
+            )
+        ),
+        "movie": (
+            re.search(f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} " f"(movie|film|picture|comedy)", curr_user_uttr)
+            or re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}(movie|film|picture|comedy)" f"{ANY_PATTERN}{XMAS_PATTERN}",
+                curr_user_uttr,
+            )
+            or (
+                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["movie"]])
+                and curr_user_yes_detected
+            )
+        ),
+        "gift": (
+            re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN}? " f"(gift|present|bounty|donative|compliment)",
+                curr_user_uttr,
+            )
+            or re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}(gift|compliment|give)" f"{ANY_PATTERN}{XMAS_PATTERN}", curr_user_uttr
+            )
+            or (
+                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["gift"]])
+                and curr_user_yes_detected
+            )
+        ),
+        "short-story": (
+            re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} "
+                f"(story|tale|fairy tale|narrative|novel|fiction|plot)",
+                curr_user_uttr,
+            )
+            or re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}(story|tale|fairy tale|narrative|novel|fiction|plot)"
+                f"{ANY_PATTERN}{XMAS_PATTERN}",
+                curr_user_uttr,
+            )
+            or (
+                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["short-story"]])
+                and curr_user_yes_detected
+            )
+        ),
+        "decor": (
+            re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}{XMAS_PATTERN}? "
+                f"(decor|scenery|decoration|finery|furnish|ornament|figgery|trinketry|frippery)",
+                curr_user_uttr,
+            )
+            or re.search(
+                f"{RECOMMEND_PATTERN}{ANY_PATTERN}"
+                f"(decor|scenery|decoration|finery|furnish|ornament|figgery|trinketry|frippery)"
+                f"{ANY_PATTERN}{XMAS_PATTERN}",
+                curr_user_uttr,
+            )
+            or (
+                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["decor"]])
+                and curr_user_yes_detected
+            )
+        ),
+        "history": (
+            re.search(
+                f"{TELL_PATTERN}{ANY_PATTERN}{XMAS_PATTERN} "
+                f"(history|fact|thing|certain|deed|tradition|habit|convention)",
+                curr_user_uttr,
+            )
+            or re.search(
+                f"{TELL_PATTERN}{ANY_PATTERN} (history|fact|thing|certain|deed|tradition|habit|convention)"
+                f"{ANY_PATTERN}{XMAS_PATTERN}",
+                curr_user_uttr,
+            )
+            or (
+                any([re.search(question.lower(), prev_bot_uttr) for question in topical_questions["history"]])
+                and curr_user_yes_detected
+            )
+        ),
     }
 
-    response_phrases = {"joke": open("./christmas_jokes.txt", "r").read().splitlines(),  # without sources
-                        "movie": open("./movie_lists.txt", "r").read().splitlines(),  # without sources
-                        "gift": ["Here is a good idea of a gift: you can give PRESENT.",
-                                 "I think PRESENT is a good gift for PERSON.",
-                                 "What about PRESENT? It's a good idea for PERSON."],
-                        "short-story": open("./stories.txt", "r").read().splitlines(),  # with sources
-                        "decor": open("./decor.txt", "r").read().splitlines(),  # with sources
-                        "history": open("./facts.txt", "r").read().splitlines(),  # with sources
-                        }
+    response_phrases = {
+        "joke": open("./christmas_jokes.txt", "r").read().splitlines(),  # without sources
+        "movie": open("./movie_lists.txt", "r").read().splitlines(),  # without sources
+        "gift": [
+            "Here is a good idea of a gift: you can give PRESENT.",
+            "I think PRESENT is a good gift for PERSON.",
+            "What about PRESENT? It's a good idea for PERSON.",
+        ],
+        "short-story": open("./stories.txt", "r").read().splitlines(),  # with sources
+        "decor": open("./decor.txt", "r").read().splitlines(),  # with sources
+        "history": open("./facts.txt", "r").read().splitlines(),  # with sources
+    }
     gift_ideas = json.load(open("./gift_ideas.json"))
     relations = json.load(open("./relation_people.json"))
 
@@ -320,8 +382,9 @@ def share_info(dialog):
                 if len(nouns) == 0:
                     gifted = "friend"
                     gift = np.random.choice(gift_ideas[gifted]).lower()
-                    response = np.random.choice(
-                        response_phrases[topic]).replace("PRESENT", gift).replace("PERSON", gifted)
+                    response = (
+                        np.random.choice(response_phrases[topic]).replace("PRESENT", gift).replace("PERSON", gifted)
+                    )
                     confidence = high_confidence
                 else:
                     gifted = None
@@ -338,13 +401,15 @@ def share_info(dialog):
                     if gifted is None:
                         gifted = "friend"
                         gift = np.random.choice(gift_ideas[gifted]).lower()
-                        response = np.random.choice(
-                            response_phrases[topic]).replace("PRESENT", gift).replace("PERSON", gifted)
+                        response = (
+                            np.random.choice(response_phrases[topic]).replace("PRESENT", gift).replace("PERSON", gifted)
+                        )
                         confidence = high_confidence
                     else:
                         gift = np.random.choice(gift_ideas[curr_relation]).lower()
-                        response = np.random.choice(
-                            response_phrases[topic]).replace("PRESENT", gift).replace("PERSON", gifted)
+                        response = (
+                            np.random.choice(response_phrases[topic]).replace("PRESENT", gift).replace("PERSON", gifted)
+                        )
                         confidence = high_confidence
             else:
                 response = np.random.choice(response_phrases[topic])
@@ -353,5 +418,5 @@ def share_info(dialog):
     return response, confidence
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)

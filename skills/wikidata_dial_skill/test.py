@@ -9,7 +9,7 @@ def get_input_json(fname):
 
 
 def test_one_step_responses():
-    url = 'http://0.0.0.0:8091/model'
+    url = "http://0.0.0.0:8091/model"
 
     print("test annotations")
     input_data = get_input_json("test_configs/test_annotations.json")
@@ -24,5 +24,5 @@ def test_one_step_responses():
     print("SUCCESS!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_one_step_responses()

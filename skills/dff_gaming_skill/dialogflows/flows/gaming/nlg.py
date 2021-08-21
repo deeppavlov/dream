@@ -6,8 +6,11 @@ import sentry_sdk
 
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
-from common.gaming import ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY, \
-    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN, VIDEO_GAME_WORDS_COMPILED_PATTERN
+from common.gaming import (
+    ANSWER_TO_GENERAL_WISH_TO_DISCUSS_VIDEO_GAMES_AND_QUESTION_WHAT_GAME_YOU_PLAY,
+    GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN,
+    VIDEO_GAME_WORDS_COMPILED_PATTERN,
+)
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, is_no
 
@@ -45,7 +48,7 @@ def get_igdb_id_to_name(field, name_key):
 # Load Data
 ##################################################################################################################
 
-IGDB_GAME_GENRES_FOR_REPLICAS = get_igdb_id_to_name('genre', "name_for_inserting_into_replica")
+IGDB_GAME_GENRES_FOR_REPLICAS = get_igdb_id_to_name("genre", "name_for_inserting_into_replica")
 
 
 @error_handler
@@ -69,19 +72,17 @@ def check_game_name_with_user_response(vars):
 
 @error_handler
 def confess_bot_never_played_game_and_ask_user_response(
-        vars,
-        candidate_game_id_is_already_set,
-        did_user_play=False,
-        how_long_user_played=False
+    vars, candidate_game_id_is_already_set, did_user_play=False, how_long_user_played=False
 ):
     if not (
-            isinstance(did_user_play, bool)
-            and isinstance(how_long_user_played, bool)
-            and did_user_play + how_long_user_played == 1
+        isinstance(did_user_play, bool)
+        and isinstance(how_long_user_played, bool)
+        and did_user_play + how_long_user_played == 1
     ):
         raise ValueError(
             f"One of parameters `did_user_play` and `how_long_user_played` has to be `True` and the other"
-            f"has to be `False`. did_user_play={did_user_play}, how_long_user_played={how_long_user_played}")
+            f"has to be `False`. did_user_play={did_user_play}, how_long_user_played={how_long_user_played}"
+        )
     gaming_memory.set_current_igdb_game_id_if_game_for_discussion_is_identified(vars, candidate_game_id_is_already_set)
     game = gaming_memory.get_current_igdb_game(vars, assert_not_empty=False)
     if game is None:
@@ -94,14 +95,16 @@ def confess_bot_never_played_game_and_ask_user_response(
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_0)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
     else:
-        if 'genres' not in game or not game['genres']:
+        if "genres" not in game or not game["genres"]:
             logger.warning(f"No genre for game '{game['name']}'.")
             genres = ""
-        elif len(game['genres']) == 1:
-            genres = IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]
+        elif len(game["genres"]) == 1:
+            genres = IGDB_GAME_GENRES_FOR_REPLICAS[game["genres"][0]]
         else:
-            genres = f"{IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]} "\
+            genres = (
+                f"{IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][0]]} "
                 f"and {IGDB_GAME_GENRES_FOR_REPLICAS[game['genres'][1]]}"
+            )
         response = f"I've heard it is a cool {genres}. Unfortunately, I haven't tried it out. "
         if did_user_play:
             response += f"Have you ever played {game['name']}?"
@@ -113,9 +116,11 @@ def confess_bot_never_played_game_and_ask_user_response(
         human_uttr = state_utils.get_last_human_utterance(vars)
         flags_set = False
         if not if_chat_about_particular_topic(
-                human_uttr, compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN):
+            human_uttr, compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN
+        ):
             flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
-                vars, bot_text, response)
+                vars, bot_text, response
+            )
         if not flags_set:
             state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
             state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
@@ -124,8 +129,10 @@ def confess_bot_never_played_game_and_ask_user_response(
 
 def ask_advice(vars):
     game = gaming_memory.get_current_igdb_game(vars)
-    response = f"Could you give me an advice? I like games in which I can create something and "\
+    response = (
+        f"Could you give me an advice? I like games in which I can create something and "
         f"my favorite game is Minecraft. Would you recommend me to try {game['name']}?"
+    )
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
     state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
@@ -176,8 +183,10 @@ def describe_game_to_user_response(vars, ask_if_user_wants_more=True):
 
 @error_handler
 def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
-    response = "It is known that people who play computer games too much can have health problems, "\
-               "both physical and emotional. Do you agree?"
+    response = (
+        "It is known that people who play computer games too much can have health problems, "
+        "both physical and emotional. Do you agree?"
+    )
     human_uttr = state_utils.get_last_human_utterance(vars)
     entities = get_entities(human_uttr, only_named=True)
     logger.info(f"(ask_if_user_thinks_that_gaming_is_unhealthy_response)entities: {entities}")
@@ -185,7 +194,8 @@ def ask_if_user_thinks_that_gaming_is_unhealthy_response(vars):
     flags_set = False
     if not if_chat_about_particular_topic(human_uttr, compiled_pattern=VIDEO_GAME_WORDS_COMPILED_PATTERN):
         flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
-            vars, bot_text, response)
+            vars, bot_text, response
+        )
     if not flags_set:
         if entities:
             state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
@@ -206,10 +216,12 @@ def ask_if_user_played_minecraft_response(vars):
 
 @error_handler
 def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
-    response = "You are very sensible person. There are several simple rules which help people stay healthy while " \
-               "playing video games and using computer in general. The first is to give your eyes rest regularly. " \
-               "You can use reminders for that. The second rule is to follow break schedule. And the last rule is " \
-               "to exercise regularly. By the way, what sport do you like?"
+    response = (
+        "You are very sensible person. There are several simple rules which help people stay healthy while "
+        "playing video games and using computer in general. The first is to give your eyes rest regularly. "
+        "You can use reminders for that. The second rule is to follow break schedule. And the last rule is "
+        "to exercise regularly. By the way, what sport do you like?"
+    )
     state_utils.add_acknowledgement_to_response_parts(vars)
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
     state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
@@ -219,9 +231,11 @@ def tell_about_healthy_gaming_and_ask_what_sport_user_likes_response(vars):
 
 @error_handler
 def tell_about_minecraft_animation_and_ask_what_animation_user_likes_response(vars, prefix=None):
-    response = "Minecraft is my favorite video game. In March I have seen a cool animation which was made using " \
-               "Minecraft. It was about living in quarantine and it was published on Reddit by LusinMohinder. " \
-               "By the way, what is your favorite animation?"
+    response = (
+        "Minecraft is my favorite video game. In March I have seen a cool animation which was made using "
+        "Minecraft. It was about living in quarantine and it was published on Reddit by LusinMohinder. "
+        "By the way, what is your favorite animation?"
+    )
     if prefix is not None:
         response = prefix + " " + response
     state_utils.set_confidence(vars, confidence=common_nlg.CONF_092_CAN_CONTINUE)
@@ -237,9 +251,11 @@ def ask_what_game_user_likes_response(vars):
     human_uttr = state_utils.get_last_bot_utterance(vars)
     flags_set = False
     if not if_chat_about_particular_topic(
-            human_uttr, compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN):
+        human_uttr, compiled_pattern=GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN
+    ):
         flags_set, response = common_nlg.maybe_set_confidence_and_continue_based_on_previous_bot_phrase(
-            vars, bot_text, response)
+            vars, bot_text, response
+        )
     if not flags_set:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)

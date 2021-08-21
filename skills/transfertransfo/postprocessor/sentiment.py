@@ -24,10 +24,7 @@ def get_sentiment(text):
     """
     try:
         combined_result = requests.request(
-            url=COMBINED_CLASSIFICATION_SERVICE_URL,
-            data=json.dumps({"sentences": [text]}),
-            method="POST",
-            timeout=1
+            url=COMBINED_CLASSIFICATION_SERVICE_URL, data=json.dumps({"sentences": [text]}), method="POST", timeout=1
         )
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
@@ -44,13 +41,13 @@ def get_sentiment(text):
         sentiment = ["neutral", 1]
     else:
         try:
-            sentiment_probs = combined_result['sentiment_classification']
+            sentiment_probs = combined_result["sentiment_classification"]
             for key in sentiment_probs:
                 if sentiment_probs[key] == max(sentiment_probs.values()):
                     sentiment = key
         except Exception as e:
             sentry_sdk.capture_exception(e)
-            logger.exception('Error processing results')
+            logger.exception("Error processing results")
 
     return sentiment
 

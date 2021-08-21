@@ -9,7 +9,7 @@ from src.consts import (
     TF_IDF_MODEL_CONFIG_PATH,
     TF_IDF_MODEL_READER_PATH,
     TF_IDF_MODEL_CHAINER_PATH,
-    TF_IDF_MODEL_TMP_PATH
+    TF_IDF_MODEL_TMP_PATH,
 )
 
 
@@ -34,7 +34,7 @@ class TfIdfModel(object):
         if not os.path.isdir(TF_IDF_MODEL_TMP_PATH):
             os.mkdir(TF_IDF_MODEL_TMP_PATH)
         for i, file in enumerate(texts):
-            with open(TF_IDF_MODEL_TMP_PATH + f"/{i}", "w", encoding='utf-8') as b:
+            with open(TF_IDF_MODEL_TMP_PATH + f"/{i}", "w", encoding="utf-8") as b:
                 if "headline" in file:
                     b.write(file["headline"])
 

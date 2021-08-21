@@ -58,5 +58,5 @@ class SkillUtilsTest(unittest.TestCase):
         test_phrase((0.8 + 1 + 0) / 3, "frst third none")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

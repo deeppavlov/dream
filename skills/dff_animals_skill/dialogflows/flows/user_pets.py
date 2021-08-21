@@ -14,12 +14,17 @@ import dialogflows.scopes as scopes
 from dialogflows.flows.user_pets_states import State as UserPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
 from dialogflows.flows.animals import make_my_pets_info
-from common.animals import PETS_TEMPLATE, CATS_DOGS_PHRASES, USER_PETS_Q, stop_about_animals, pet_games, \
-    breed_replace_dict
+from common.animals import (
+    PETS_TEMPLATE,
+    CATS_DOGS_PHRASES,
+    USER_PETS_Q,
+    stop_about_animals,
+    pet_games,
+    breed_replace_dict,
+)
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 CONF_1 = 1.0
@@ -30,7 +35,7 @@ breeds_dict = {}
 CATS_DOGS = {"cat", "dog", "puppy", "kitten", "kitty", "cats", "dogs", "kitties", "kittens", "puppies"}
 
 try:
-    with open("/root/.deeppavlov/downloads/wikidata/breed_facts.json", 'r') as fl:
+    with open("/root/.deeppavlov/downloads/wikidata/breed_facts.json", "r") as fl:
         breeds_dict = json.load(fl)
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -51,8 +56,9 @@ def delete_pet(vars):
     user_text = user_uttr["text"]
     shared_memory = state_utils.get_shared_memory(vars)
     users_pet = shared_memory.get("users_pet", "")
-    found_pet = re.findall("(don't|do not) have (a )?(cat|dog|rat|fish|bird|parrot|hamster|puppy|kitten|kitty)",
-                           user_text)
+    found_pet = re.findall(
+        "(don't|do not) have (a )?(cat|dog|rat|fish|bird|parrot|hamster|puppy|kitten|kitty)", user_text
+    )
     if found_pet:
         pet = found_pet[0][2]
         if pet == users_pet:
@@ -70,15 +76,18 @@ def retrieve_and_save(vars):
     found_pet_bot_uttr = []
     if not found_users_pet:
         found_users_pet = extract_pet(user_uttr)
-        found_pet_bot_uttr = re.findall(r"(do you have a )(cat|dog|rat|fish|bird|parrot|hamster|puppy|kitten|kitty)",
-                                        bot_uttr, re.IGNORECASE)
+        found_pet_bot_uttr = re.findall(
+            r"(do you have a )(cat|dog|rat|fish|bird|parrot|hamster|puppy|kitten|kitty)", bot_uttr, re.IGNORECASE
+        )
         if found_users_pet:
             state_utils.save_to_shared_memory(vars, users_pet=found_users_pet)
         elif found_pet_bot_uttr and isyes:
             state_utils.save_to_shared_memory(vars, users_pet=found_pet_bot_uttr[0][1])
             found_users_pet = found_pet_bot_uttr[0][1]
-    logger.info(f"retrieve_and_save, found_users_pet {found_users_pet} found_pet_bot_uttr {found_pet_bot_uttr}"
-                f" isyes {isyes}")
+    logger.info(
+        f"retrieve_and_save, found_users_pet {found_users_pet} found_pet_bot_uttr {found_pet_bot_uttr}"
+        f" isyes {isyes}"
+    )
     return found_users_pet
 
 
@@ -100,9 +109,12 @@ def retrieve_and_save_name(vars):
         if fnd:
             found_name = fnd[0][1]
 
-    if found_name and not shared_memory.get("users_pet_name", "") \
-            and found_name not in {"black", "white", "grey", "brown", "yellow", "cat", "dog"} \
-            and found_name not in users_pet_breed:
+    if (
+        found_name
+        and not shared_memory.get("users_pet_name", "")
+        and found_name not in {"black", "white", "grey", "brown", "yellow", "cat", "dog"}
+        and found_name not in users_pet_breed
+    ):
         state_utils.save_to_shared_memory(vars, users_pet_name=found_name)
 
     return found_name
@@ -139,8 +151,9 @@ def extract_breed(vars):
         breed_titles = set(breeds_dict.keys())
         user_uttr = state_utils.get_last_human_utterance(vars)
         annotations = user_uttr["annotations"]
-        nounphrases = annotations.get("cobot_entities", {}).get("entities", []) + \
-            annotations.get("cobot_nounphrases", [])
+        nounphrases = annotations.get("cobot_entities", {}).get("entities", []) + annotations.get(
+            "cobot_nounphrases", []
+        )
         nounphrases = list(set(nounphrases))
         nounphrases = [re.sub(r"(cat|cats|dog|dogs)", "", phr).replace("  ", " ").strip() for phr in nounphrases]
         nounphrases = [phr for phr in nounphrases if len(phr) > 2]
@@ -184,14 +197,16 @@ def make_utt_with_ack(vars, prev_what_to_ask, what_to_ask):
     shared_memory = state_utils.get_shared_memory(vars)
     make_my_pets_info(vars)
     prev_state = condition_utils.get_last_state(vars)
-    about_users_pet = str(prev_state).split('.')[-1] == "SYS_ASK_ABOUT_PET"
+    about_users_pet = str(prev_state).split(".")[-1] == "SYS_ASK_ABOUT_PET"
     isno = is_no(state_utils.get_last_human_utterance(vars))
     users_pet = shared_memory.get("users_pet", "")
     users_pet_name = shared_memory.get("users_pet_name", "")
     users_pet_breed = shared_memory.get("users_pet_breed", "")
-    logger.info(f"make_utt_with_ack users_pet {users_pet} users_pet_name {users_pet_name} "
-                f"users_pet_breed {users_pet_breed} {breeds_dict.get('users_pet_breed', '')} "
-                f"about_users_pet {about_users_pet}")
+    logger.info(
+        f"make_utt_with_ack users_pet {users_pet} users_pet_name {users_pet_name} "
+        f"users_pet_breed {users_pet_breed} {breeds_dict.get('users_pet_breed', '')} "
+        f"about_users_pet {about_users_pet}"
+    )
     my_pets_info = shared_memory.get("my_pets_info", {})
     if about_users_pet and prev_what_to_ask == "name" and users_pet_name:
         ack = "Very cool name! You have such an amusing mind!"
@@ -321,23 +336,35 @@ def ask_about_pet_request(ngrams, vars):
     delete_pet(vars)
     bot_asked_pet = re.findall(r"do you have a (cat|dog|rat|fish|bird|parrot|hamster)", bot_uttr["text"], re.IGNORECASE)
     user_has_not = (bot_asked_pet and isno) and not re.findall(PETS_TEMPLATE, user_uttr["text"])
-    user_told_pet = re.findall("(cat|dog|rat|fish|bird|parrot|hamster)", user_uttr["text"]) \
-        and re.findall(r"(do you have pets|what pets do you have)", bot_uttr["text"], re.IGNORECASE)
-    user_mentioned_pet = re.findall(r"my (cat|dog|rat|fish|bird|parrot|hamster|puppy|kitty|kitten)", user_uttr["text"],
-                                    re.IGNORECASE)
-    user_has_pet = re.findall(r"i (have |had )(a )?(cat|dog|rat|fish|bird|parrot|hamster|puppy|kitty|kitten)",
-                              user_uttr["text"], re.IGNORECASE)
+    user_told_pet = re.findall("(cat|dog|rat|fish|bird|parrot|hamster)", user_uttr["text"]) and re.findall(
+        r"(do you have pets|what pets do you have)", bot_uttr["text"], re.IGNORECASE
+    )
+    user_mentioned_pet = re.findall(
+        r"my (cat|dog|rat|fish|bird|parrot|hamster|puppy|kitty|kitten)", user_uttr["text"], re.IGNORECASE
+    )
+    user_has_pet = re.findall(
+        r"i (have |had )(a )?(cat|dog|rat|fish|bird|parrot|hamster|puppy|kitty|kitten)",
+        user_uttr["text"],
+        re.IGNORECASE,
+    )
     shared_memory = state_utils.get_shared_memory(vars)
     found_pet = re.findall(PETS_TEMPLATE, user_uttr["text"])
     used_pets_q = shared_memory.get("used_pets_q", [])
     users_pet = shared_memory.get("users_pet", "")
     my_pets = my_pets_request(ngrams, vars)
     found_question = {}
-    logger.info(f"ask_about_pet_request, my_pets {my_pets} user_has_not {user_has_not} users_pet {users_pet} "
-                f"bot_asked_pet {bot_asked_pet} isyes {isyes} user_has {user_has} user_told_pet {user_told_pet} "
-                f"user_mentioned_pet {user_mentioned_pet} user_has_pet {user_has_pet} found_pet {found_pet}")
-    if not my_pets and not user_has_not and (users_pet or (bot_asked_pet and (isyes or user_has)) or user_told_pet
-                                             or user_mentioned_pet or user_has_pet):
+    logger.info(
+        f"ask_about_pet_request, my_pets {my_pets} user_has_not {user_has_not} users_pet {users_pet} "
+        f"bot_asked_pet {bot_asked_pet} isyes {isyes} user_has {user_has} user_told_pet {user_told_pet} "
+        f"user_mentioned_pet {user_mentioned_pet} user_has_pet {user_has_pet} found_pet {found_pet}"
+    )
+    if (
+        not my_pets
+        and not user_has_not
+        and (
+            users_pet or (bot_asked_pet and (isyes or user_has)) or user_told_pet or user_mentioned_pet or user_has_pet
+        )
+    ):
         for elem in USER_PETS_Q:
             if elem["what"] not in used_pets_q:
                 found_question = elem
@@ -351,11 +378,14 @@ def ask_about_pet_request(ngrams, vars):
                     found_keywords = any([keyword in user_uttr["text"] for keyword in keywords])
                 if not found_attr and not found_keywords:
                     flag = True
-                if found_question.get("what", "") == "breed" and ((users_pet and users_pet not in CATS_DOGS)
-                                                                  or (found_pet and found_pet[0] not in CATS_DOGS)):
+                if found_question.get("what", "") == "breed" and (
+                    (users_pet and users_pet not in CATS_DOGS) or (found_pet and found_pet[0] not in CATS_DOGS)
+                ):
                     flag = False
-                logger.info(f"ask_about_pet, what {found_question.get('what', '')} found_attr {found_attr} "
-                            f"found_keywords {found_keywords}")
+                logger.info(
+                    f"ask_about_pet, what {found_question.get('what', '')} found_attr {found_attr} "
+                    f"found_keywords {found_keywords}"
+                )
             if flag:
                 break
     logger.info(f"ask_about_pet_request={flag}")
@@ -453,8 +483,11 @@ def ask_about_pet_response(vars):
                 found_keywords = any([keyword in user_uttr["text"] for keyword in keywords])
             if not found_attr and not found_keywords:
                 flag = True
-            if found_question.get("what", "") == "breed" and (users_pet and users_pet not in CATS_DOGS) \
-                    or (found_pet and found_pet[0] not in CATS_DOGS):
+            if (
+                found_question.get("what", "") == "breed"
+                and (users_pet and users_pet not in CATS_DOGS)
+                or (found_pet and found_pet[0] not in CATS_DOGS)
+            ):
                 flag = False
         if flag:
             break
@@ -541,16 +574,31 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_WHAT_PETS, UserPetsState.USR_WHAT_PETS,
-                                             what_pets_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_IS_DOG_CAT, UserPetsState.USR_ASK_ABOUT_DOG_CAT,
-                                             ask_about_dog_cat_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ANOTHER_PET, UserPetsState.USR_ANOTHER_PET,
-                                             another_pet_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_NOT_HAVE, UserPetsState.USR_NOT_HAVE,
-                                             suggest_pet_response, )
-simplified_dialog_flow.add_system_transition(UserPetsState.SYS_ASK_ABOUT_PET, UserPetsState.USR_ASK_ABOUT_PET,
-                                             ask_about_pet_response, )
+simplified_dialog_flow.add_system_transition(
+    UserPetsState.SYS_WHAT_PETS,
+    UserPetsState.USR_WHAT_PETS,
+    what_pets_response,
+)
+simplified_dialog_flow.add_system_transition(
+    UserPetsState.SYS_IS_DOG_CAT,
+    UserPetsState.USR_ASK_ABOUT_DOG_CAT,
+    ask_about_dog_cat_response,
+)
+simplified_dialog_flow.add_system_transition(
+    UserPetsState.SYS_ANOTHER_PET,
+    UserPetsState.USR_ANOTHER_PET,
+    another_pet_response,
+)
+simplified_dialog_flow.add_system_transition(
+    UserPetsState.SYS_NOT_HAVE,
+    UserPetsState.USR_NOT_HAVE,
+    suggest_pet_response,
+)
+simplified_dialog_flow.add_system_transition(
+    UserPetsState.SYS_ASK_ABOUT_PET,
+    UserPetsState.USR_ASK_ABOUT_PET,
+    ask_about_pet_response,
+)
 
 simplified_dialog_flow.set_error_successor(UserPetsState.USR_START, UserPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(UserPetsState.SYS_WHAT_PETS, UserPetsState.SYS_ERR)

@@ -1,13 +1,16 @@
 import re
 
-FUNFACT_COMPILED_PATTERN = re.compile(r"(funfact|fun fact|tell me something fun|tell something interesting|"
-                                      "tell me something interesting|^interesting fact.*)", re.IGNORECASE)
+FUNFACT_COMPILED_PATTERN = re.compile(
+    r"(funfact|fun fact|tell me something fun|tell something interesting|"
+    "tell me something interesting|^interesting fact.*)",
+    re.IGNORECASE,
+)
 
 STORY_COMPILED_PATTERN = re.compile(r"(tell a story|tell me a story|interesting story|funny story)\.?$")
 
 
 def story_requested(annotated_user_utt):
-    return bool(STORY_COMPILED_PATTERN.search(annotated_user_utt['text']))
+    return bool(STORY_COMPILED_PATTERN.search(annotated_user_utt["text"]))
 
 
 def funfact_requested(annotated_user_utt, annotated_bot_utt):

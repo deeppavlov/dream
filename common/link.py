@@ -11,12 +11,15 @@ import common.news as news
 import common.books as books
 import common.movies as movies
 import common.emotion as emotion
+
 # import common.weather as weather
 import common.personal_info as personal_info
 import common.game_cooperative_skill as game_cooperative_skill
 import common.travel as dff_travel_skill
+
 # import common.celebrities as dff_celebrity_skill
 import common.gaming as dff_gaming_skill
+
 # import common.gossip as dff_gossip_skill
 import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
@@ -25,6 +28,7 @@ import common.science as dff_science_skill
 import common.music as dff_music_skill
 from common.utils import get_not_used_template
 from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, CHANGE_TOPIC_SUBJECT, BY_THE_WAY
+
 # Each common skill module should define +skill_trigger_phrases()+ function
 # that contains all phrases to trigger specific skill
 
@@ -32,23 +36,23 @@ from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, C
 # 'book_skill': set(books.skill_trigger_phrases()),
 
 skills_phrases_map = {
-    'news_api_skill': set(news.skill_trigger_phrases()),
-    'dff_movie_skill': set(movies.skill_trigger_phrases()),
-    'book_skill': set(books.skill_trigger_phrases()),
-    'emotion_skill': set(emotion.skill_trigger_phrases()),
+    "news_api_skill": set(news.skill_trigger_phrases()),
+    "dff_movie_skill": set(movies.skill_trigger_phrases()),
+    "book_skill": set(books.skill_trigger_phrases()),
+    "emotion_skill": set(emotion.skill_trigger_phrases()),
     # 'weather_skill': set(weather.skill_trigger_phrases()),
-    'personal_info_skill': set(personal_info.skill_trigger_phrases()),
-    'game_cooperative_skill': set(game_cooperative_skill.skill_trigger_phrases()),
+    "personal_info_skill": set(personal_info.skill_trigger_phrases()),
+    "game_cooperative_skill": set(game_cooperative_skill.skill_trigger_phrases()),
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
-    'dff_travel_skill': set(dff_travel_skill.skill_trigger_phrases()),
-    'dff_animals_skill': set(dff_animals_skill.skill_trigger_phrases()),
+    "dff_travel_skill": set(dff_travel_skill.skill_trigger_phrases()),
+    "dff_animals_skill": set(dff_animals_skill.skill_trigger_phrases()),
     # 'dff_celebrity_skill': set(dff_celebrity_skill.skill_trigger_phrases()),
     # 'dff_gossip_skill': set(dff_gossip_skill.skill_trigger_phrases()),
-    'dff_food_skill': set(dff_food_skill.skill_trigger_phrases()),
-    'dff_science_skill': set(dff_science_skill.skill_trigger_phrases()),
-    'dff_sport_skill': set(dff_sport_skill.skill_trigger_phrases()),
-    'dff_music_skill': set(dff_music_skill.skill_trigger_phrases()),
-    'dff_gaming_skill': set(dff_gaming_skill.skill_trigger_phrases())
+    "dff_food_skill": set(dff_food_skill.skill_trigger_phrases()),
+    "dff_science_skill": set(dff_science_skill.skill_trigger_phrases()),
+    "dff_sport_skill": set(dff_sport_skill.skill_trigger_phrases()),
+    "dff_music_skill": set(dff_music_skill.skill_trigger_phrases()),
+    "dff_gaming_skill": set(dff_gaming_skill.skill_trigger_phrases()),
 }
 # TODO: adding new skill above, add here a conversational topic to the list, it will be used to offer topic in greeting
 LIST_OF_SCRIPTED_TOPICS = {
@@ -79,7 +83,7 @@ SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference
 # assuming that all skills weights are equal to 1 by default
 # it is used to control amount of link_to phrases to specific skills
 skills_link_to_weights = {
-    'coronavirus_skill': 0.25,
+    "coronavirus_skill": 0.25,
 }
 
 link_to_skill2key_words = {
@@ -127,15 +131,14 @@ link_to_skill2i_like_to_talk = {
     ],
     "dff_movie_skill": [
         "I felt so bored last days, so I've just finished to watch one more series. What TV series you watch?",
-        "I feel so sleepy because I watched movies all night. What is the last movie you watched?"
+        "I feel so sleepy because I watched movies all night. What is the last movie you watched?",
     ],
     "dff_music_skill": [
         "There are so many new songs released every day. I've listened music for all night. So cool! "
         "Liked everything! What music do you listen usually?",
         "I listen music every day either to calm down or to cheer myself up. "
         "What music do you listen to cheer yourself up?",
-        "I listen music every day either to calm down or to cheer myself up. "
-        "What music do you listen to calm down?",
+        "I listen music every day either to calm down or to cheer myself up. " "What music do you listen to calm down?",
     ],
     "dff_science_skill": [
         "When I start to feel sad, I think about what humanity has achieved and it inspires me. "
@@ -167,35 +170,35 @@ link_to_skill2i_like_to_talk = {
     ],
 }
 
-DFF_WIKI_LINKTO = {"space": "Have you ever thought about flights to other planets?",
-                   "smartphones": "Nowadays it is impossible to imagine world without gadgets. "
-                                  "Do you have an iPhone or Android phone?",
-                   "bitcoin": "Cryptocurrencies let you buy goods and services, or trade them for profit. "
-                              "Would you like to know more about bitcoin?",
-                   "dinosaurs": "Dinosaurs are a group of reptiles that have lived on Earth for about 245 million "
-                                "years. Are you interested in dinosaurs?",
-                   "robots": "Robotics technology influences every aspect of work and home. "
-                             "Would you like to know more about robots?",
-                   "cars": "Cars are an easy and convenient mean of transportation. Do you have a car?",
-                   "hiking": "Hiking is one of the most beneficial and healthy hobbies anyone could choose to adopt. "
-                             "Do you like hiking?",
-                   "art": "Art is a good way to express feelings. Would you like to talk about art?",
-                   "drawing": "Drawing gives you a mean to self-reflect and externalize your emotions."
-                              "Do you like drawing?",
-                   "photo": "In our increasingly busy lives it’s difficult to always be in the moment."
-                            "Taking pictures helps you to hang on to those memories a little longer."
-                            "Do you like taking photographs?",
-                   "memes": "Memes are funny artworks we can see on the Internet. Do you like memes?",
-                   "tiktok": "TikTok is known for its funny lip-syncing videos. Have you shot a video for tiktok?",
-                   "anime": "Anime is hand-drawn and computer animation originating from Japan. Do you like anime?",
-                   "friends": "A friend at hand is better than a relative at a distance. Do you have any friends?",
-                   "love": "I have a lot of friends but as a socialbot I can not fall in love with someone. Although, "
-                           "I've heard this is an amazing feeling. Are you in relationships with someone?",
-                   "hobbies": "Success is not the key to happiness. Happiness is the key to success. "
-                              "If you love what you are doing, you will be successful. Do you have any hobbies?",
-                   "politics": "I've recently learned how many different political views in our world. "
-                               "Are you interested in politics?",
-                   }
+DFF_WIKI_LINKTO = {
+    "space": "Have you ever thought about flights to other planets?",
+    "smartphones": "Nowadays it is impossible to imagine world without gadgets. "
+    "Do you have an iPhone or Android phone?",
+    "bitcoin": "Cryptocurrencies let you buy goods and services, or trade them for profit. "
+    "Would you like to know more about bitcoin?",
+    "dinosaurs": "Dinosaurs are a group of reptiles that have lived on Earth for about 245 million "
+    "years. Are you interested in dinosaurs?",
+    "robots": "Robotics technology influences every aspect of work and home. "
+    "Would you like to know more about robots?",
+    "cars": "Cars are an easy and convenient mean of transportation. Do you have a car?",
+    "hiking": "Hiking is one of the most beneficial and healthy hobbies anyone could choose to adopt. "
+    "Do you like hiking?",
+    "art": "Art is a good way to express feelings. Would you like to talk about art?",
+    "drawing": "Drawing gives you a mean to self-reflect and externalize your emotions." "Do you like drawing?",
+    "photo": "In our increasingly busy lives it’s difficult to always be in the moment."
+    "Taking pictures helps you to hang on to those memories a little longer."
+    "Do you like taking photographs?",
+    "memes": "Memes are funny artworks we can see on the Internet. Do you like memes?",
+    "tiktok": "TikTok is known for its funny lip-syncing videos. Have you shot a video for tiktok?",
+    "anime": "Anime is hand-drawn and computer animation originating from Japan. Do you like anime?",
+    "friends": "A friend at hand is better than a relative at a distance. Do you have any friends?",
+    "love": "I have a lot of friends but as a socialbot I can not fall in love with someone. Although, "
+    "I've heard this is an amazing feeling. Are you in relationships with someone?",
+    "hobbies": "Success is not the key to happiness. Happiness is the key to success. "
+    "If you love what you are doing, you will be successful. Do you have any hobbies?",
+    "politics": "I've recently learned how many different political views in our world. "
+    "Are you interested in politics?",
+}
 
 
 def link_to(skills, human_attributes, recent_active_skills=None):
@@ -259,12 +262,12 @@ def link_to(skills, human_attributes, recent_active_skills=None):
         random_phrase = choice(filtered_phrases)
     else:
         random_phrase = choice(list(skills_phrases_map[random_skill]))
-    return {'phrase': random_phrase, 'skill': random_skill}
+    return {"phrase": random_phrase, "skill": random_skill}
 
 
 def skill_was_linked(skill_name, prev_bot_utt):
     for phrase in skills_phrases_map.get(skill_name, []):
-        if phrase.lower() in prev_bot_utt.get('text', '').lower():
+        if phrase.lower() in prev_bot_utt.get("text", "").lower():
             return True
     return False
 
@@ -302,24 +305,28 @@ def get_prelinkto_topic_connection(to_skill, used_templates):
 def compose_linkto_with_connection_phrase(skills, human_attributes, recent_active_skills=None, from_skill=None):
     from_skill = "" if from_skill is None else from_skill
     linkto_dict = link_to(skills, human_attributes, recent_active_skills)
-    connection = get_prelinkto_connection(from_skill, linkto_dict["skill"],
-                                          human_attributes.get("prelinkto_connections", []))
+    connection = get_prelinkto_connection(
+        from_skill, linkto_dict["skill"], human_attributes.get("prelinkto_connections", [])
+    )
     if not connection:
-        connection = get_prelinkto_topic_connection(linkto_dict["skill"],
-                                                    human_attributes.get("prelinkto_connections", []))
+        connection = get_prelinkto_topic_connection(
+            linkto_dict["skill"], human_attributes.get("prelinkto_connections", [])
+        )
 
     if not connection:
         # not found prelinkto connection phrase AND not found prelinkto topic phrase
-        connection = get_not_used_template(human_attributes.get("prelinkto_connections", []),
-                                           COMPLETELY_CHANGING_THE_SUBJECT_PHRASES)
+        connection = get_not_used_template(
+            human_attributes.get("prelinkto_connections", []), COMPLETELY_CHANGING_THE_SUBJECT_PHRASES
+        )
 
         result = f"{connection} {linkto_dict['phrase']}"
     else:
         # we have prelinkto connection phrase OR prelinkto topic phrase
         change_topic = choice(CHANGE_TOPIC_SUBJECT).replace(
-            "SUBJECT", LIST_OF_SCRIPTED_TOPICS.get(linkto_dict["skill"], "it"))
+            "SUBJECT", LIST_OF_SCRIPTED_TOPICS.get(linkto_dict["skill"], "it")
+        )
         result = f"{choice(BY_THE_WAY)} {connection} {change_topic} {linkto_dict['phrase']}"
-    return {'phrase': result, 'skill': linkto_dict["skill"], "connection_phrase": connection}
+    return {"phrase": result, "skill": linkto_dict["skill"], "connection_phrase": connection}
 
 
 def get_linked_to_dff_skills(dff_shared_state, current_turn, prev_active_skill):
@@ -332,8 +339,10 @@ def get_linked_to_dff_skills(dff_shared_state, current_turn, prev_active_skill):
     to_skills = []
     for to_skill in dff_shared_state.get("cross_links", {}).keys():
         cross_links = dff_shared_state.get("cross_links", {})[to_skill]
-        if cross_links.get(str(current_turn - 1), {}).get("from_service", "") == prev_active_skill \
-                or cross_links.get(str(current_turn - 2), {}).get("from_service", "") == prev_active_skill:
+        if (
+            cross_links.get(str(current_turn - 1), {}).get("from_service", "") == prev_active_skill
+            or cross_links.get(str(current_turn - 2), {}).get("from_service", "") == prev_active_skill
+        ):
             to_skills.append(to_skill)
 
     return to_skills

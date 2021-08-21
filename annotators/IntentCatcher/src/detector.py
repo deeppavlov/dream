@@ -14,31 +14,30 @@ import tensorflow_hub as hub
 
 from collections import defaultdict
 
-USE_MODEL_PATH = os.environ.get('USE_MODEL_PATH', None)
+USE_MODEL_PATH = os.environ.get("USE_MODEL_PATH", None)
 if USE_MODEL_PATH is None:
-    USE_MODEL_PATH = 'https://tfhub.dev/google/universal-sentence-encoder/1'
+    USE_MODEL_PATH = "https://tfhub.dev/google/universal-sentence-encoder/1"
 
-INTENT_MODEL_PATH = os.environ.get('INTENT_MODEL_PATH', None)
+INTENT_MODEL_PATH = os.environ.get("INTENT_MODEL_PATH", None)
 if INTENT_MODEL_PATH is None:
-    INTENT_MODEL_PATH = '/data/models/linear_classifier_h3.h5'
+    INTENT_MODEL_PATH = "/data/models/linear_classifier_h3.h5"
 
-INTENT_DATA_PATH = os.environ.get('INTENT_DATA_PATH', None)
+INTENT_DATA_PATH = os.environ.get("INTENT_DATA_PATH", None)
 if INTENT_DATA_PATH is None:
-    INTENT_DATA_PATH = '/data/intent_data_h3.json'
+    INTENT_DATA_PATH = "/data/intent_data_h3.json"
 
-INTENT_PHRASES_PATH = os.environ.get('INTENT_PHRASES_PATH', None)
+INTENT_PHRASES_PATH = os.environ.get("INTENT_PHRASES_PATH", None)
 if INTENT_PHRASES_PATH is None:
-    INTENT_PHRASES_PATH = '/data/intent_phrases.json'
+    INTENT_PHRASES_PATH = "/data/intent_phrases.json"
 
-TFHUB_CACHE_DIR = os.environ.get('TFHUB_CACHE_DIR', None)
+TFHUB_CACHE_DIR = os.environ.get("TFHUB_CACHE_DIR", None)
 if TFHUB_CACHE_DIR is None:
-    os.environ['TFHUB_CACHE_DIR'] = '/root/tfhub_cache'
+    os.environ["TFHUB_CACHE_DIR"] = "/root/tfhub_cache"
 
-os.environ['TF_XLA_FLAGS'] = '--tf_xla_cpu_global_jit'  # Don't know that is
+os.environ["TF_XLA_FLAGS"] = "--tf_xla_cpu_global_jit"  # Don't know that is
 
 
 class AbstractDetector:
-
     def __init__(self, logger):
         self.logger = logger
 
@@ -56,8 +55,8 @@ class ClassifierDetector(AbstractDetector):
     def __init__(self, logger):
         super().__init__(logger)
         self.data = json.load(open(INTENT_DATA_PATH))
-        if 'random' in self.data.keys():
-            self.data.pop('random')
+        if "random" in self.data.keys():
+            self.data.pop("random")
         self.intents = sorted(list(self.data.keys()))
         self.embedder = hub.Module(USE_MODEL_PATH)
         self.model = tf.keras.models.load_model(INTENT_MODEL_PATH)
@@ -68,8 +67,7 @@ class ClassifierDetector(AbstractDetector):
         self.logger.info(f"All utterances: {utterances}")
         len_sentences = [len(utt) for utt in utterances]
         tok_sentences = list(chain.from_iterable(utterances))
-        embedded_sentences = sess.run(self.embedded_sentences, feed_dict={
-                                      self.sentences: tok_sentences})
+        embedded_sentences = sess.run(self.embedded_sentences, feed_dict={self.sentences: tok_sentences})
 
         predictions = self.model.predict(embedded_sentences)
         predictions_class = np.argmax(predictions, axis=1)
@@ -81,8 +79,7 @@ class ClassifierDetector(AbstractDetector):
         for utt, l in zip(utterances, len_sentences):
             self.logger.info(f"Utterance: {utt}\nLength: {l}")
             ans = {}
-            prediction = [(self.intents[j], conf)
-                          for j, conf in predictions[i:i + l] if j < len(self.intents)]
+            prediction = [(self.intents[j], conf) for j, conf in predictions[i : i + l] if j < len(self.intents)]
             confidences = defaultdict(int)
             detected = {intent for intent, conf in prediction}
             for intent, conf in prediction:
@@ -92,8 +89,10 @@ class ClassifierDetector(AbstractDetector):
                 logger_line += f"prediction: {round(float(confidences[intent]), 3)}, detect: {int(intent in detected)}"
                 self.logger.info(logger_line)
 
-            ans = {intent: {'detected': int(intent in detected),
-                            'confidence': float(confidences[intent])} for intent in self.intents}
+            ans = {
+                intent: {"detected": int(intent in detected), "confidence": float(confidences[intent])}
+                for intent in self.intents
+            }
             detected_confidence.append(ans)
             i += l
         return detected_confidence
@@ -109,11 +108,10 @@ class MultilabelDetector(AbstractDetector):
     def __init__(self, logger):
         super().__init__(logger)
         self.data = json.load(open(INTENT_DATA_PATH))
-        if 'random' in self.data:
-            self.data.pop('random')
+        if "random" in self.data:
+            self.data.pop("random")
         self.intents = sorted(list(self.data.keys()))
-        self.thresholds = np.array([self.data[intent]
-                                    for intent in self.intents])
+        self.thresholds = np.array([self.data[intent] for intent in self.intents])
         self.embedder = hub.Module(USE_MODEL_PATH)
         self.model = tf.keras.models.load_model(INTENT_MODEL_PATH)
         self.sentences = tf.compat.v1.placeholder(dtype=tf.string)
@@ -127,10 +125,10 @@ class MultilabelDetector(AbstractDetector):
         len_sentences = [len(utt) for utt in utterances]
         tok_sentences = list(chain.from_iterable(utterances))
         if len(tok_sentences) == 0:
-            return [{intent: {'detected': 0,
-                              'confidence': 0.0} for intent in self.intents} for i in range(len(utterances))]
-        embedded_sentences = sess.run(self.embedded_sentences, feed_dict={
-                                      self.sentences: tok_sentences})
+            return [
+                {intent: {"detected": 0, "confidence": 0.0} for intent in self.intents} for i in range(len(utterances))
+            ]
+        embedded_sentences = sess.run(self.embedded_sentences, feed_dict={self.sentences: tok_sentences})
 
         predictions = self.model.predict(embedded_sentences)
 
@@ -140,12 +138,13 @@ class MultilabelDetector(AbstractDetector):
             self.logger.info(f"Utterance: {utt}\nLength: {ls}")
             ans = {}
             if ls == 0:
-                ans = {intent: {'detected': 0,
-                                'confidence': 0.0} for intent in self.intents}
+                ans = {intent: {"detected": 0, "confidence": 0.0} for intent in self.intents}
                 detected_confidence.append(ans)
                 continue
-            prediction = [[(self.intents[j], p[j]) for j in np.argwhere(p > self.thresholds).reshape(-1)]
-                          for p in predictions[i:i + ls]]
+            prediction = [
+                [(self.intents[j], p[j]) for j in np.argwhere(p > self.thresholds).reshape(-1)]
+                for p in predictions[i : i + ls]
+            ]
             prediction = self.glue_utterances_up(prediction)
             confidences = defaultdict(float)
             detected = {intent for intent, conf in prediction}
@@ -156,8 +155,10 @@ class MultilabelDetector(AbstractDetector):
                 logger_line += f"prediction: {round(float(confidences[intent]), 3)}, detect: {int(intent in detected)}"
                 self.logger.info(logger_line)
 
-            ans = {intent: {'detected': int(intent in detected),
-                            'confidence': float(confidences[intent])} for intent in self.intents}
+            ans = {
+                intent: {"detected": int(intent in detected), "confidence": float(confidences[intent])}
+                for intent in self.intents
+            }
             detected_confidence.append(ans)
             i += ls
         return detected_confidence
@@ -173,13 +174,7 @@ class MultilabelDetectorWithIntentHierarchy(MultilabelDetector):
 
     def __init__(self, logger):
         super().__init__(logger)
-        self.intent_priorities = [
-            'exit',
-            'repeat',
-            'cant_do',
-            'dont_understand',
-            'topic_switching'
-        ]
+        self.intent_priorities = ["exit", "repeat", "cant_do", "dont_understand", "topic_switching"]
 
     def glue_utterances_up(self, prediction):
         result = []
@@ -188,8 +183,7 @@ class MultilabelDetectorWithIntentHierarchy(MultilabelDetector):
                 result = utt  # Get the last utterance with intent
         for target_intent in self.intent_priorities:  # Filter out intents by priority
             if any([intent == target_intent for intent, conf in result]) and len(result) > 1:
-                result = [(intent, conf)
-                          for intent, conf in result if intent != target_intent]
+                result = [(intent, conf) for intent, conf in result if intent != target_intent]
         return result
 
 
@@ -204,25 +198,26 @@ class RegMD(MultilabelDetector):
 
     def __init__(self, logger):
         super().__init__(logger)
-        self.regexp = {intent: list(
-            chain.from_iterable(
-                [[phrase + "\\" + punct for phrase in data['phrases']] for punct in data['punctuation']]
+        self.regexp = {
+            intent: list(
+                chain.from_iterable(
+                    [[phrase + "\\" + punct for phrase in data["phrases"]] for punct in data["punctuation"]]
+                )
             )
-        ) + [rf"^{pattern}[\.\?!]?$" for pattern in data.get('reg_phrases', [])]
-            for intent, data in json.load(open(INTENT_PHRASES_PATH))['intent_phrases'].items()}
-        self.regexp = {intent: [re.compile(phrase) for phrase in phrases]
-                       for intent, phrases in self.regexp.items()}
+            + [rf"^{pattern}[\.\?!]?$" for pattern in data.get("reg_phrases", [])]
+            for intent, data in json.load(open(INTENT_PHRASES_PATH))["intent_phrases"].items()
+        }
+        self.regexp = {intent: [re.compile(phrase) for phrase in phrases] for intent, phrases in self.regexp.items()}
 
     def unite_responses(self, responses_a, responses_b):
-        assert len(responses_a) == len(responses_b), self.logger.error(
-            "Responses have unequal lengths!")
+        assert len(responses_a) == len(responses_b), self.logger.error("Responses have unequal lengths!")
         result = []
         for a, b in zip(responses_a, responses_b):
             resp = {}
             for intent in a:
                 resp[intent] = {
-                    'detected': max(a[intent]['detected'], b[intent]['detected']),
-                    'confidence': max(a[intent]['confidence'], b[intent]['confidence'])
+                    "detected": max(a[intent]["detected"], b[intent]["detected"]),
+                    "confidence": max(a[intent]["confidence"], b[intent]["confidence"]),
                 }
             result.append(resp)
         return result
@@ -231,23 +226,17 @@ class RegMD(MultilabelDetector):
         responds = []
         not_detected_utterances = []
         for utterance in utterances:
-            resp = {
-                intent: {
-                    'detected': 0,
-                    'confidence': 0.0
-                } for intent in self.intents
-            }
+            resp = {intent: {"detected": 0, "confidence": 0.0} for intent in self.intents}
             not_detected_utterance = utterance.copy()
             for intent, regs in self.regexp.items():
                 for i, utt in enumerate(utterance):
                     for reg in regs:
                         if reg.fullmatch(utt):
-                            resp[intent]['detected'] = 1
-                            resp[intent]['confidence'] = 1.0
+                            resp[intent]["detected"] = 1
+                            resp[intent]["confidence"] = 1.0
                             not_detected_utterance[i] = None
                             break
-            not_detected_utterance = [
-                utt for utt in not_detected_utterance if utt]
+            not_detected_utterance = [utt for utt in not_detected_utterance if utt]
             not_detected_utterances.append(not_detected_utterance)
             responds.append(resp)
         use_responds = super().detect(not_detected_utterances, sess)

@@ -44,7 +44,7 @@ def respond():
     answer = get_result(contexts, curr_utterances)
 
     total_time = time.time() - st_time
-    logger.info(f'dialog breakdown exec time: {total_time:.3f}s')
+    logger.info(f"dialog breakdown exec time: {total_time:.3f}s")
     return jsonify(answer)
 
 
@@ -57,7 +57,7 @@ def batch_respond():
     answer = get_result(contexts, curr_utterances)
 
     total_time = time.time() - st_time
-    logger.info(f'dialog breakdown exec time: {total_time:.3f}s')
+    logger.info(f"dialog breakdown exec time: {total_time:.3f}s")
     return jsonify([{"batch": answer}])
 
 

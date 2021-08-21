@@ -22,13 +22,12 @@ from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
 from deeppavlov.dataset_iterators.sqlite_iterator import SQLiteDataIterator
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-@register('wiki_sqlite_vocab')
+@register("wiki_sqlite_vocab")
 class WikiSQLiteVocab(SQLiteDataIterator, Component):
     """Get content from SQLite database by document ids.
 
@@ -64,7 +63,7 @@ class WikiSQLiteVocab(SQLiteDataIterator, Component):
                 contents = [self.get_doc_content(doc_id) for doc_id in ids]
                 logger.info(f"contents {contents}")
                 if self.join_docs:
-                    contents = ' '.join(contents)
+                    contents = " ".join(contents)
                 contents_list.append(contents)
             contents_batch.append(contents_list)
         tm_end = time.time()

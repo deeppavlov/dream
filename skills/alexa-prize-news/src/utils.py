@@ -9,13 +9,13 @@ from src.content import format_headlines
 
 def load(path):
     if os.path.isfile(path):
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             return pickle.load(f)
     return None
 
 
 def save(path, obj):
-    with open(path, 'wb') as f:
+    with open(path, "wb") as f:
         pickle.dump(obj, f)
     return obj
 
@@ -27,16 +27,14 @@ def remove(path):
 
 def datetime_from_text(date_text: str):
     try:
-        return datetime.datetime.strptime(date_text, '%Y/%m/%d')
+        return datetime.datetime.strptime(date_text, "%Y/%m/%d")
     except Exception as e:
         print(f"Exception: {e}")
         return None
 
 
 def get_latest(
-        texts: List[dict],
-        return_indices: bool = False,
-        num: int = NUM_NEWS_TO_PRINT
+    texts: List[dict], return_indices: bool = False, num: int = NUM_NEWS_TO_PRINT
 ) -> Union[List[int], List[dict]]:
     dated_texts = []
     others = []
@@ -66,7 +64,7 @@ def from_indices(texts: List[dict], indices: List[Union[str, int]]) -> List[dict
 
 def format_output_from_news(latest: List[dict], mode: str, prefix: str) -> str:
     message = format_headlines(latest)
-    news = [(n['headline'], n['contenturl'], n['date']) for n in latest]
+    news = [(n["headline"], n["contenturl"], n["date"]) for n in latest]
     output = (news, mode, prefix + message)
     return str(output)
 

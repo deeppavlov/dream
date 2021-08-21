@@ -13,14 +13,15 @@ class QGTokenizer:
         return ids[:truncate_len]
 
     def __call__(self, sample):
-        src = sample['text'] + ' answer: ' + sample['answer']
+        src = sample["text"] + " answer: " + sample["answer"]
         src_tokenized = self.tokenizer(src, add_special_tokens=True)
-        if 'q' in sample:
-            tgt = 'question: ' + sample['q']
+        if "q" in sample:
+            tgt = "question: " + sample["q"]
             tgt_tokenized = self.tokenizer(tgt, add_special_tokens=True)
         else:
-            tgt_tokenized = {'input_ids': []}
+            tgt_tokenized = {"input_ids": []}
         return {
-            'input_ids': self._truncate(src_tokenized['input_ids'], self.max_src_len),
-            'attention_mask': self._truncate(src_tokenized['attention_mask'], self.max_src_len),
-            'labels': self._truncate(tgt_tokenized['input_ids'], self.max_tgt_len, from_start=False)}
+            "input_ids": self._truncate(src_tokenized["input_ids"], self.max_src_len),
+            "attention_mask": self._truncate(src_tokenized["attention_mask"], self.max_src_len),
+            "labels": self._truncate(tgt_tokenized["input_ids"], self.max_tgt_len, from_start=False),
+        }

@@ -4,7 +4,7 @@ import json
 from ahocorapy.keywordtree import KeywordTree
 
 
-class OWMCitySlot():
+class OWMCitySlot:
     def __init__(self, path_to_geo_entities="./data/openweathermap_city.list.json"):
 
         self.geonames = self._load_from_json(path_to_geo_entities)
@@ -18,7 +18,7 @@ class OWMCitySlot():
     def _load_from_json(self, path_to_geo_entities):
         with open(path_to_geo_entities, "r") as fi:
             json_data = json.load(fi)
-        geonames = [city_dict['name'] for city_dict in json_data]
+        geonames = [city_dict["name"] for city_dict in json_data]
         geonames_deduplicated = list(set(geonames))
         return geonames_deduplicated
 
@@ -34,7 +34,7 @@ class OWMCitySlot():
         puncts = string.punctuation
         for p in puncts:
             utterance = utterance.replace(p, " ")
-        utterance = re.sub(r"\s\s+", ' ', utterance.lower()).strip()
+        utterance = re.sub(r"\s\s+", " ", utterance.lower()).strip()
         results = list(self.kwtree.search_all(" %s " % utterance))
         # TODO the method could be improved if we search all geo names and then filter
         # the most precises geo entity.

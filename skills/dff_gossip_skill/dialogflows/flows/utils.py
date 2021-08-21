@@ -62,9 +62,17 @@ def request_el_wp_entities(person, utterance):
         elif isinstance(entity_info, dict):
             entity_ids = entity_info.get("entity_ids", [])
             entity_id = entity_ids and entity_ids[0]
-            wp_output = (entity_id and requests.post(WIKIDATA_URL, json={
-                "parser_info": ["find_top_triplets"],
-                "query": [[{"entity_substr": person, "entity_ids": [entity_id]}]]}, timeout=0.8).json())
+            wp_output = (
+                entity_id
+                and requests.post(
+                    WIKIDATA_URL,
+                    json={
+                        "parser_info": ["find_top_triplets"],
+                        "query": [[{"entity_substr": person, "entity_ids": [entity_id]}]],
+                    },
+                    timeout=0.8,
+                ).json()
+            )
         else:
             raise Exception(entities_info)
         entities_info = wp_output and wp_output[0].get("entities_info", {})

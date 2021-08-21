@@ -7,17 +7,16 @@ import sentry_sdk
 
 from common.animals import ANIMAL_BLACKLIST
 
-sentry_sdk.init(os.getenv('SENTRY_DSN'))
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 nlp = en_core_web_sm.load()
 p = inflect.engine()
 
-nltk.download('punkt')
+nltk.download("punkt")
 
-with open("animals_list.txt", 'r') as fl:
+with open("animals_list.txt", "r") as fl:
     lines = fl.readlines()
     animals_list = {line.strip().lower() for line in lines}
 

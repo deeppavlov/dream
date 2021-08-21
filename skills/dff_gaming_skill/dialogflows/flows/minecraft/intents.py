@@ -22,12 +22,15 @@ MINECRAFT_HOW_TOS = load_json(os.getenv("MINECRAFT_HOW_TOS"))
 
 def is_game_candidate_minecraft(ngrams, vars):
     candidate_game_id = gaming_memory.get_candidate_game_id(vars)
-    assert candidate_game_id is not None and candidate_game_id, \
-        gaming_memory.ASSERTION_ERROR_MSG_CANDIDATE_GAME_IS_NOT_SET
+    assert (
+        candidate_game_id is not None and candidate_game_id
+    ), gaming_memory.ASSERTION_ERROR_MSG_CANDIDATE_GAME_IS_NOT_SET
     candidate_game_id_str = str(candidate_game_id)
-    assert candidate_game_id_str in game_info.games_igdb_ids, f"If igdb game id {candidate_game_id_str} was set "\
-        f"as candidate for discussion, the igdb game description should have been put into global variable "\
+    assert candidate_game_id_str in game_info.games_igdb_ids, (
+        f"If igdb game id {candidate_game_id_str} was set "
+        f"as candidate for discussion, the igdb game description should have been put into global variable "
         f"`games_igdb_ids`"
+    )
     candidate_game = game_info.games_igdb_ids[candidate_game_id_str]
     result = "minecraft" in candidate_game["name"].lower()
     logger.info(f"is_game_candidate_minecraft={result}")
@@ -53,8 +56,9 @@ def user_wants_to_talk_about_minecraft_request(ngrams, vars):
             f"(user_wants_to_talk_about_minecraft_request)game_names_from_local_list_of_games: "
             f"{game_names_from_local_list_of_games}"
         )
-        assert game_names_from_local_list_of_games,\
-            "At least one game should have been found in function `switch_to_particular_game_discussion()`"
+        assert (
+            game_names_from_local_list_of_games
+        ), "At least one game should have been found in function `switch_to_particular_game_discussion()`"
         flag = any(["minecraft" in gn[0].lower() for gn in game_names_from_local_list_of_games])
     else:
         flag = False
@@ -63,8 +67,10 @@ def user_wants_to_talk_about_minecraft_request(ngrams, vars):
 
 
 def bot_will_give_another_how_to_request(ngrams, vars):
-    flag = common_intents.user_says_yes_request(ngrams, vars) \
+    flag = (
+        common_intents.user_says_yes_request(ngrams, vars)
         and len(MINECRAFT_HOW_TOS) - len(state_utils.get_shared_memory(vars).get("used_how_to_indices", [])) >= 1
+    )
     logger.info(f"bot_will_give_another_how_to={flag}")
     return flag
 
