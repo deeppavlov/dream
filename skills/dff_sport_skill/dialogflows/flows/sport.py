@@ -44,7 +44,6 @@ from common.sport import (
     SUPER_CONFIDENCE,
     HIGH_CONFIDENCE,
     ZERO_CONFIDENCE,
-    NUMBER_PROBABILITY,
     ING_FORMS,
     REVERSE_ING_FORMS
 )
@@ -172,40 +171,6 @@ def compose_topic_offering(excluded_skills=None):
 
     response = f"{ask_about_topic} {offer_topics}"
     return response
-
-
-def get_news_for_person_or_org(vars):
-    array_person = get_named_persons(state_utils.get_last_human_utterance(vars))
-    array_org = get_org_in_last_human_utterance(vars)
-    person_or_org_array = array_person + array_org
-    if person_or_org_array:
-        news_string = get_news(person_or_org_array[-1])
-        flag = True
-    else:
-        news_string = f""
-        flag = False
-    return flag, news_string
-
-
-def get_news(string):
-    try:
-        keys = [
-            f"188eea501739478981eebf0b44695e75",
-            f"1fd88e76511f4ff19ad7a2a9ee84826c",
-            f"ee51596f8c3545f3aa382932844a15a8",
-            f"7e38f3aeae164d59a05d9874dc0db852",
-        ]
-        string_for_request = string.replace(" ", "%20")
-        link = f"http://newsapi.org/v2/everything?q={string_for_request}&apiKey={random.choice(keys)}"
-        news = requests.get(link, timeout=0.5)
-        news_json = news.json()["articles"]
-        title = news_json[0]["title"]
-        news_string = f"I recently read the news that {title}. What do you think about this?"
-        return news_string
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
-        return f""
 
 
 def get_org_in_last_human_utterance(vars):
@@ -483,35 +448,28 @@ def user_like_sport_request(ngrams, vars):
 def user_like_sport_response(vars):
     # USR_WHY_LIKE_SPORT
     try:
-        number = random.randint(1, 10)
         kind_of_sport = re.search(KIND_OF_SPORTS_TEMPLATE,
                                   state_utils.get_last_human_utterance(vars)["text"]).group()
         state_utils.save_to_shared_memory(vars, kind_of_sport=kind_of_sport)
-        if number > NUMBER_PROBABILITY:
-            state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-            state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
-            passive_sport = random.choice(PASSIVE_SPORT)
-            if kind_of_sport in ING_FORMS:
-                plain_form = kind_of_sport
-                ing_form = ING_FORMS[plain_form]  # running swimming
-            elif kind_of_sport in REVERSE_ING_FORMS:  # retrieved ing form
-                ing_form = kind_of_sport
-                plain_form = REVERSE_ING_FORMS[ing_form]
-            else:
-                ing_form = kind_of_sport
-                plain_form = kind_of_sport
-            opinion = random.choice(
-                OPINION_ABOUT_PASSIVE_SPORT
-            ).replace("KIND_OF_SPORT", ing_form).replace("PASSIVE_SPORT", passive_sport)
-            if ing_form != plain_form:
-                opinion = opinion.replace(f'to play {ing_form}', f'to {plain_form}')
-            response = opinion + f" Why do you like {ing_form}?"
-            return response
+        state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
+        state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
+        passive_sport = random.choice(PASSIVE_SPORT)
+        if kind_of_sport in ING_FORMS:
+            plain_form = kind_of_sport
+            ing_form = ING_FORMS[plain_form]  # running swimming
+        elif kind_of_sport in REVERSE_ING_FORMS:  # retrieved ing form
+            ing_form = kind_of_sport
+            plain_form = REVERSE_ING_FORMS[ing_form]
         else:
-            state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            state_utils.set_confidence(vars, confidence=HIGH_CONFIDENCE)
-            news = get_news(kind_of_sport)
-            return news
+            ing_form = kind_of_sport
+            plain_form = kind_of_sport
+        opinion = random.choice(
+            OPINION_ABOUT_PASSIVE_SPORT
+        ).replace("KIND_OF_SPORT", ing_form).replace("PASSIVE_SPORT", passive_sport)
+        if ing_form != plain_form:
+            opinion = opinion.replace(f'to play {ing_form}', f'to {plain_form}')
+        response = opinion + f" Why do you like {ing_form}?"
+        return response
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -773,18 +731,13 @@ def user_like_comp_request(ngrams, vars):
 def user_like_comp_response(vars):
     # USR_WHY_LIKE_COMP
     try:
-        number = random.randint(1, 10)
         kind_of_comp = re.search(
             KIND_OF_COMPETITION_TEMPLATE, state_utils.get_last_human_utterance(vars)["text"]
         ).group()
         state_utils.save_to_shared_memory(vars, kind_of_comp=kind_of_comp)
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        if number > NUMBER_PROBABILITY:
-            return f"why do you like {kind_of_comp}?"
-        else:
-            news = get_news(kind_of_comp)
-            return news
+        return f"why do you like {kind_of_comp}?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
