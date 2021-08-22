@@ -31,6 +31,10 @@ services:
         reservations:
           memory: 2G
 
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+
   cobotqa:
     env_file: [.env]
     build:

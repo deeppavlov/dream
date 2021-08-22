@@ -223,8 +223,6 @@ services:
     ports:
       - 8073:8073
   mongo:
-    command: mongod
-    image: mongo:4.0.0
     ports:
       - 27017:27017
     # # you can use persistent local volume if you need
