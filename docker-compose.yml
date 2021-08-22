@@ -477,7 +477,7 @@ services:
         SERVICE_PORT: 8068
       context: .
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
-    command: bash server_run.sh "flask run -h 0.0.0.0 -p 8068"
+    command: flask run -h 0.0.0.0 -p 8068
     environment:
       - FLASK_APP=server
     deploy:
