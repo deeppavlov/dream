@@ -36,7 +36,6 @@ WORKDIR /src
 COPY skills/${SERVICE_NAME}/ ./
 RUN cd databases && wget https://files.deeppavlov.ai/dream/dff_movie_skill/w2_.txt
 COPY ./common/ ./common/
-COPY ./annotators/CoBotQA/ ./CoBotQA/
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
