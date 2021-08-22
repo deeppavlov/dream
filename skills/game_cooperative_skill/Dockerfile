@@ -16,15 +16,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     ./aws/install && \
     rm -rf ./aws awscliv2.zip
 
+RUN mkdir -p /data/game-cooperative-skill/ && \
+    wget https://files.deeppavlov.ai/dream/game_cooperative_skill/game_db.json -O /data/game-cooperative-skill/game_db.json
+
 COPY ./skills/game_cooperative_skill/ ./
 COPY ./common/ ./common/
-
-# cron
-COPY ./skills/game_cooperative_skill/cron/crontab /etc/cron.d/crontab
-RUN chmod 0644 /etc/cron.d/crontab && \
-    crontab /etc/cron.d/crontab && \
-    touch /var/log/cron.log
-
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}

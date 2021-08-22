@@ -5,7 +5,7 @@ from ahocorapy.keywordtree import KeywordTree
 
 
 class OWMCitySlot:
-    def __init__(self, path_to_geo_entities="./data/openweathermap_city.list.json"):
+    def __init__(self, path_to_geo_entities="/data/openweathermap_city.list.json"):
 
         self.geonames = self._load_from_json(path_to_geo_entities)
 
