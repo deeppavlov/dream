@@ -203,11 +203,7 @@
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "fact_retrieval": [],
-                        "cobotqa_annotator": {
-                            "facts": [],
-                            "response": ""
-                        }
+                        "fact_retrieval": []
                     }
                 },
                 {
@@ -408,10 +404,6 @@
                                 "Now, well, it is not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?",
                                 "no, it isn't so. "
                             ]
-                        },
-                        "cobotqa_annotator": {
-                            "facts": [],
-                            "response": ""
                         }
                     }
                 }
