@@ -9,6 +9,7 @@ RUN pip install -r requirements.txt
 #COPY ./CoBotQA/ /src/skills/CoBotQA
 ENV WEATHER_QUESTIONS_PATH='/src/data/weather_questions.json'
 COPY ./skills/weather_skill/ ./
+RUN cd data && wget https://files.deeppavlov.ai/dream/weather_skill/openweathermap_city.list.json
 COPY ./common/ ./common/
 
 CMD gunicorn --workers=1 server:app
