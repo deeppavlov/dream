@@ -24,8 +24,6 @@ services:
         user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
-      mode: replicated
-      replicas: 10
       resources:
         limits:
           memory: 4G
@@ -40,8 +38,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -53,8 +49,6 @@ services:
       context: ./annotators/CoBotConversationEvaluator/
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15 --preload
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 128M
@@ -68,8 +62,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -81,8 +73,6 @@ services:
       context: .
       dockerfile: ./skills/program-y/Dockerfile
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 768M
@@ -94,8 +84,6 @@ services:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 50M
@@ -109,8 +97,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1.5G
@@ -125,8 +111,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -140,8 +124,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 512M
@@ -156,8 +138,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -171,8 +151,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 3.5G
@@ -186,8 +164,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -199,8 +175,6 @@ services:
       context: .
       dockerfile: ./skills/program-y-dangerous/Dockerfile
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -221,8 +195,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1536M
@@ -237,8 +209,6 @@ services:
       - FLASK_APP=server
     tty: true
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1512M
@@ -252,8 +222,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 80M
@@ -267,8 +235,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1536M
@@ -283,8 +249,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 128M
@@ -299,8 +263,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 80M
@@ -315,8 +277,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -333,8 +293,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 2540M
@@ -349,8 +307,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 1152M
@@ -365,8 +321,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -382,8 +336,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 768M
@@ -405,8 +357,6 @@ services:
       - DEVICE=gpu_0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3.5G
@@ -428,8 +378,6 @@ services:
       - DEVICE=gpu_0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3.5G
@@ -444,8 +392,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -460,8 +406,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 80M
@@ -476,8 +420,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -492,8 +434,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -510,8 +450,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -523,8 +461,6 @@ services:
       context: .
       dockerfile: ./skills/program-y-wide/Dockerfile
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -539,8 +475,6 @@ services:
       - FLASK_APP=server
     command: flask run -h 0.0.0.0 -p 8066
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 128M
@@ -556,8 +490,6 @@ services:
       - FLASK_APP=server
     command: flask run -h 0.0.0.0 -p 8112
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -572,8 +504,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -592,8 +522,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 23G
@@ -617,8 +545,6 @@ services:
       - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 20
       resources:
         limits:
           memory: 256M
@@ -638,8 +564,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3G
@@ -660,8 +584,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 5G
@@ -679,8 +601,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3G
@@ -694,8 +614,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 50M
@@ -710,8 +628,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 80M
@@ -731,8 +647,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 4G
@@ -753,8 +667,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 512M
@@ -773,8 +685,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -792,8 +702,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 2.5G
@@ -811,8 +719,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 384M
@@ -828,8 +734,6 @@ services:
       - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 200M
@@ -846,8 +750,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 2G
@@ -867,8 +769,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 512M
@@ -887,8 +787,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 768M
@@ -907,8 +805,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -927,8 +823,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -947,8 +841,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -967,8 +859,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 512M
@@ -984,8 +874,6 @@ services:
       dockerfile: skills/dff_gossip_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8109
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1003,8 +891,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3G
@@ -1022,8 +908,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 256M
@@ -1046,8 +930,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 4G
@@ -1065,8 +947,6 @@ services:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 4G
@@ -1082,8 +962,6 @@ services:
       dockerfile: ./skills/dff_bot_persona_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1102,8 +980,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1123,8 +999,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1138,8 +1012,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -1154,8 +1026,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -1176,8 +1046,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 3.5G
@@ -1193,8 +1061,6 @@ services:
       dockerfile: ./skills/dff_art_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8117
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 512M
@@ -1214,8 +1080,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 2.5G
