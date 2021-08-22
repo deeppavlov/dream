@@ -76,7 +76,6 @@ services:
     volumes:
       - "./common:/src/common"
       - "./skills/dff_movie_skill:/src"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8023:8023
   ner:
@@ -118,7 +117,6 @@ services:
     volumes:
       - "./skills/book_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8032:8032
   weather-skill:
@@ -294,7 +292,6 @@ services:
     volumes:
       - "./skills/dff_animals_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8094:8094
   combined-classification:
@@ -313,14 +310,12 @@ services:
     volumes:
       - "./skills/dff_travel_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8096:8096
   dff-food-skill:
     volumes:
       - "./skills/dff_food_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8097:8097
   dff-science-skill:
@@ -339,14 +334,12 @@ services:
     volumes:
       - "./skills/dff_sport_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8098:8098
   dff-gossip-skill:
     volumes:
       - "./skills/dff_gossip_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8109:8109
   fact-random:
@@ -371,7 +364,6 @@ services:
     volumes:
       - "./skills/dff_funfact_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8104:8104
   dff-bot-persona-skill:
@@ -384,7 +376,6 @@ services:
     volumes:
       - "./skills/dff_wiki_skill:/src"
       - "./common:/src/common"
-      - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8111:8111
   topic-recommendation:
