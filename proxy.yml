@@ -1,6 +1,6 @@
 services:
 
-  cobot-convers-evaluator-annotator:
+  convers-evaluator-annotator:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
