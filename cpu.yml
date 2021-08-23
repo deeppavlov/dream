@@ -27,7 +27,10 @@ services:
   midas-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  combined-classification:
+  combined-etc-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  combined-topic-dialogact-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   masked-lm:
@@ -44,9 +47,4 @@ services:
       CUDA_VISIBLE_DEVICES: ""
   entity-detection:
     environment:
-      CUDA_VISIBLE_DEVICES: ""
-  convers-evaluator-annotator:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
-
+      CUDA_VISIBLE_DEVICES: "" 

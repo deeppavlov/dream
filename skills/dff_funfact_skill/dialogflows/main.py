@@ -30,7 +30,9 @@ simplified_dialogflow = dialogflow_extension.DFEasyFilling(dialogflow=dialogflow
 for node in [scopes.State.USR_ROOT, scopes.State.USR_ERR]:
     simplified_dialogflow.add_user_serial_transitions(
         node,
-        {(scopes.FUNFACT, funfact_flow.State.USR_START): funfact_flow.funfact_request},
+        {
+            (scopes.FUNFACT, funfact_flow.State.USR_START): funfact_flow.funfact_request
+        },
     )
 
 composite_dialogflow.set_controller("SYSTEM")

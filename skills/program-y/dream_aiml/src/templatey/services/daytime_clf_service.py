@@ -5,7 +5,7 @@ import pytz
 
 # ###########################################################
 # CONSTANTS BLOCK
-TIMEZONE = "US/Central"
+TIMEZONE = 'US/Central'
 # constants for parts of daytime:
 NIGHT_BEGINS_AT = 23
 EVENING_BEGINS_AT = 18
@@ -59,7 +59,7 @@ class DayTimeClfService(Service):
         # service adds a property with part of date for usage by greeting templates:
         # https://github.com/keiffster/program-y/issues/244
         # doesn't work unexpectedly:
-        client_context.brain.properties.add_property("time_of_day", time_of_day)
+        client_context.brain.properties.add_property('time_of_day', time_of_day)
         # http://192.168.10.188:8081/index.php/ProgramY_Overview#Setting_and_getting_dynamic_variables
 
         client_context.brain.rdf.add_entity("time_of_day", "is", time_of_day, "timeofday")

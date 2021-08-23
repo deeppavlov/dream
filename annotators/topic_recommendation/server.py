@@ -20,36 +20,17 @@ DATABASE_PATH = os.getenv("DATABASE_PATH")
 TOP_V = 3
 TOP_K = 3
 
-scenario_skills = [
-    "dff_animals_skill",
-    "news_api_skill",
-    "dff_food_skill",
-    "dff_travel_skill",
-    "dff_sport_skill",
-    "dff_science_skill",
-    "dff_music_skill",
-    "game_cooperative_skill",
-    "book_skill",
-    "dff_movie_skill",
-    "dff_gossip_skill",
-]
+scenario_skills = ['dff_animals_skill', 'news_api_skill', 'dff_food_skill', 'dff_travel_skill', 'dff_sport_skill',
+                   'dff_science_skill', 'dff_music_skill', 'game_cooperative_skill', 'book_skill', 'dff_movie_skill',
+                   'dff_gossip_skill']
 
-topic2skill = {
-    "Movies_TV": "dff_movie_skill",
-    "Music": "dff_music_skill",
-    "SciTech": "dff_science_skill",
-    "Literature": "book_skill",
-    "Travel_Geo": "dff_travel_skill",
-    "Celebrities": "dff_gossip_skill",
-    "Games": "game_cooperative_skill",
-    "Pets_Animals": "dff_animals_skill",
-    "Sports": "dff_sport_skill",
-    "Food_Drink": "dff_food_skill",
-    "News": "news_api_skill",
-}
+topic2skill = {"Movies_TV": 'dff_movie_skill', "Music": 'dff_music_skill', "SciTech": 'dff_science_skill',
+               "Literature": 'book_skill', "Travel_Geo": 'dff_travel_skill', "Celebrities": 'dff_gossip_skill',
+               "Games": 'game_cooperative_skill', "Pets_Animals": 'dff_animals_skill', "Sports": 'dff_sport_skill',
+               "Food_Drink": 'dff_food_skill', "News": "news_api_skill"}
 
 
-with open(DATABASE_PATH, "rb") as f:
+with open(DATABASE_PATH, 'rb') as f:
     database = pickle.load(f)
 
 
@@ -90,7 +71,7 @@ def handler(requested_data):
             candidate_topics = get_candidate_topics(embedding)
             candidate_topics = [skill for skill in candidate_topics if skill not in used_topics]
             if "game_cooperative_skill" in candidate_topics:
-                candidate_topics += ["dff_gaming_skill"]
+                candidate_topics += ['dff_gaming_skill']
             candidate_topics_batch.append(candidate_topics)
         except Exception as exc:
             logger.exception(exc)

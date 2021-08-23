@@ -52,7 +52,6 @@ def error_handler(f):
                 vars = kwargs["vars"]
             response = error_response(vars)
         return response
-
     return wrapper
 
 
@@ -61,7 +60,7 @@ def get_theme_and_genre_groups(themes, genres):
     genres = set(genres)
     groups = []
     for group, genres_and_themes in common_gaming.genre_and_theme_groups.items():
-        if genres & set(genres_and_themes["genres"]) or themes & set(genres_and_themes["themes"]):
+        if genres & set(genres_and_themes['genres']) or themes & set(genres_and_themes['themes']):
             groups.append(group)
     return groups
 
@@ -87,9 +86,8 @@ def get_new_linkto_response_based_on_genres_and_themes(vars):
         used_linkto_phrases_ids = gaming_memory.get_used_linkto_phrase_ids(vars)
         for response in linkto_responses_based_on_genres_and_themes:
             id_ = gaming_memory.LINKTO_RESPONSES_TO_LINKTO_IDS.get(response)
-            assert id_ is not None, (
-                f"Link phrases added to shared memory has to be from `common.gaming`. " f"Got: '{response}'"
-            )
+            assert id_ is not None, f"Link phrases added to shared memory has to be from `common.gaming`. "\
+                f"Got: '{response}'"
             if id_ not in used_linkto_phrases_ids:
                 result = response
                 break
@@ -103,7 +101,7 @@ def link_to_other_skills_response(vars, prefix="Okay.", shared_memory_actions=No
         response = ""
         state_utils.set_confidence(vars, confidence=CONF_0)
     else:
-        response = " ".join([prefix, response])
+        response = ' '.join([prefix, response])
         state_utils.set_confidence(vars, confidence=CONF_09_DONT_UNDERSTAND_DONE)
     if shared_memory_actions is not None:
         for action in shared_memory_actions:
@@ -115,76 +113,29 @@ def link_to_other_skills_response(vars, prefix="Okay.", shared_memory_actions=No
 
 def compose_strings_that_are_not_time():
     result = {
-        "me",
-        "time",
-        "on",
-        "most",
-        "more",
-        "to",
-        "an",
-        "or",
-        "be",
-        "ago",
-        "a",
-        "to get",
-        "fan",
-        "i",
-        "sit",
-        "too",
-        "day",
-        "week",
-        "month",
-        "year",
-        "days",
-        "weeks",
-        "months",
-        "years",
+        "me", "time", "on", "most", "more", "to", "an", "or", "be", "ago", "a", "to get", "fan", "i", "sit",
+        "too", "day", "week", "month", "year", "days", "weeks", "months", "years"
     }
     digits = list(string.digits)
     digit_words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
     ordinals = ["zeroth", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"]
     two_digit_number_words = [
-        "ten",
-        "eleven",
-        "twelve",
-        "thirteen",
-        "fourteen",
-        "fifteen",
-        "sixteen",
-        "seventeen",
-        "eighteen",
-        "nineteen",
-    ]
+        "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
     multiples_of_ten = ["twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"]
-    ordinals += ["tenth", "eleventh", "twelfth"] + [td + "th" for td in two_digit_number_words[3:]]
-    two_digit_number_words += [" ".join([mt, dw]) for mt in multiples_of_ten for dw in digit_words]
+    ordinals += ["tenth", "eleventh", "twelfth"] + [td + 'th' for td in two_digit_number_words[3:]]
+    two_digit_number_words += [' '.join([mt, dw]) for mt in multiples_of_ten for dw in digit_words]
     number_words = digit_words + two_digit_number_words
-    ordinals += [" ".join([mt, dw]) for mt in multiples_of_ten for dw in ordinals[1:10]]
+    ordinals += [' '.join([mt, dw]) for mt in multiples_of_ten for dw in ordinals[1:10]]
     ordinals += [mt[:-1] + "ieth" for mt in multiples_of_ten]
-    numbers = digits + ["".join(sd) for r in range(1, 4) for sd in product(digits, repeat=r)]
+    numbers = digits + [''.join(sd) for r in range(1, 4) for sd in product(digits, repeat=r)]
     all_number_strings = number_words + ordinals + numbers
     result.update(all_number_strings)
     additional_strings = [
-        " month",
-        " months",
-        " week",
-        " weeks",
-        " year",
-        " years",
-        " hour",
-        " hours",
-        " minute",
-        " minutes",
-        " second",
-        " seconds",
-        ",",
-        " of the",
-        " of",
-        ", and the",
-        ")",
+        " month", " months", " week", " weeks", " year", " years", " hour", " hours", " minute", " minutes",
+        " second", " seconds", ",", " of the", " of", ", and the", ")"
     ]
     result.update([ns + ad_s for ns in all_number_strings for ad_s in additional_strings])
-    result.update([s + "," for s in result])
+    result.update([s + ',' for s in result])
     return result
 
 
@@ -196,7 +147,7 @@ def extract_time_from_text(text):
     tokens = text.split()
     for num_tokens in range(6, 0, -1):
         for start in range(0, len(tokens) - num_tokens + 1):
-            substr = " ".join(tokens[start : start + num_tokens])
+            substr = ' '.join(tokens[start:start + num_tokens])
             if substr.lower() in NOT_TIME_STRINGS:
                 continue
             parsed = parse(substr, languages=["en"])

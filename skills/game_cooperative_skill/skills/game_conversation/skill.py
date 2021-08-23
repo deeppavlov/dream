@@ -345,10 +345,7 @@ def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
     scenario = handler_state.get("scenario", False)
 
     state.add_hypothesis(
-        skill_name=skill_attrs.skill_name,
-        text=text,
-        confidence=confidence,
-        scenario=scenario,
+        skill_name=skill_attrs.skill_name, text=text, confidence=confidence, scenario=scenario,
     )
 
     return state

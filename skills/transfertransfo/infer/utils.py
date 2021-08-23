@@ -12,7 +12,7 @@ PADDED_INPUTS = ["input_ids", "lm_labels", "token_type_ids"]
 
 
 def build_input_from_segments(persona, history, reply, tokenizer, lm_labels=False, with_eos=True):
-    """Build a sequence of input from 3 segments: persona, history and last reply"""
+    """ Build a sequence of input from 3 segments: persona, history and last reply """
     bos, eos, speaker1, speaker2 = tokenizer.convert_tokens_to_ids(SPECIAL_TOKENS[:-1])
 
     instance = {}
@@ -49,15 +49,15 @@ def get_special_tokens_ids(tokenizer):
 
 
 def top_filtering(logits, top_k=0, top_p=0.0, threshold=-float("Inf"), filter_value=-float("Inf")):
-    """Filter a distribution of logits using top-k, top-p (nucleus) and/or threshold filtering
-    Args:
-        logits: logits distribution shape (vocabulary size)
-        top_k: <=0: no filtering, >0: keep only top k tokens with highest probability.
-        top_p: <=0.0: no filtering, >0.0: keep only a subset S of candidates, where S is the smallest subset
-            whose total probability mass is greater than or equal to the threshold top_p.
-            In practice, we select the highest probability tokens whose cumulative probability mass exceeds
-            the threshold top_p.
-        threshold: a minimal threshold to keep logits
+    """ Filter a distribution of logits using top-k, top-p (nucleus) and/or threshold filtering
+        Args:
+            logits: logits distribution shape (vocabulary size)
+            top_k: <=0: no filtering, >0: keep only top k tokens with highest probability.
+            top_p: <=0.0: no filtering, >0.0: keep only a subset S of candidates, where S is the smallest subset
+                whose total probability mass is greater than or equal to the threshold top_p.
+                In practice, we select the highest probability tokens whose cumulative probability mass exceeds
+                the threshold top_p.
+            threshold: a minimal threshold to keep logits
     """
     assert logits.dim() == 1  # Only work for batch size 1 for now - could update but it would obfuscate a bit the code
     top_k = min(top_k, logits.size(-1))

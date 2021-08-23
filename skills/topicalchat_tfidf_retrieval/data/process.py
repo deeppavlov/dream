@@ -47,9 +47,9 @@ def preprocess(phrase):
     return phrase
 
 
-def get_vectorizer(vectorizer_file="new_vectorizer_2.zip"):
+def get_vectorizer(vectorizer_file='new_vectorizer_2.zip'):
     cond1 = "new_vectorizer.pkl" not in os.listdir(os.getcwd())
-    cond2 = os.path.exists("new_vectorizer.pkl") and os.path.getsize("new_vectorizer.pkl") < 8412928
+    cond2 = os.path.exists('new_vectorizer.pkl') and os.path.getsize('new_vectorizer.pkl') < 8412928
     if cond1 or cond2:
         with zipfile.ZipFile(vectorizer_file, "r") as zip_ref:
             zip_ref.extractall(os.getcwd())

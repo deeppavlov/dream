@@ -21,16 +21,18 @@ from common.movies import extract_movies_names_from_annotations
 
 from common.gossip import check_is_celebrity_mentioned
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+sentry_sdk.init(getenv('SENTRY_DSN'))
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 class RuleBasedSkillSelectorConnector:
+
     async def send(self, payload: Dict, callback: Callable):
         st_time = time.time()
         try:
-            dialog = payload["payload"]["states_batch"][0]
+            dialog = payload['payload']['states_batch'][0]
 
             skills_for_uttr = []
             user_uttr = dialog["human_utterances"][-1]
@@ -40,21 +42,20 @@ class RuleBasedSkillSelectorConnector:
             bot_uttr_text_lower = bot_uttr.get("text", "").lower()
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
-            high_priority_intent_detected = any(
-                [k for k in intent_catcher_intents if k in high_priority_intents["intent_responder"]]
-            )
-            low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
+            high_priority_intent_detected = any([k for k in intent_catcher_intents
+                                                 if k in high_priority_intents["intent_responder"]])
+            low_priority_intent_detected = any([k for k in intent_catcher_intents
+                                                if k in low_priority_intents])
 
             cobot_dialogact_topics = set(get_topics(user_uttr, which="cobot_dialogact_topics"))
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
 
-            is_factoid = user_uttr_annotations.get("factoid_classification", {}).get("factoid", 0.0) > 0.9
+            is_factoid = user_uttr_annotations.get('factoid_classification', {}).get('factoid', 0.) > 0.9
 
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
-            prev_user_uttr_hyp = (
-                dialog["human_utterances"][-2]["hypotheses"] if len(dialog["human_utterances"]) > 1 else []
-            )
+            prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(
+                dialog["human_utterances"]) > 1 else []
 
             prev_active_skill = bot_uttr.get("active_skill", "")
 
@@ -64,27 +65,20 @@ class RuleBasedSkillSelectorConnector:
 
             dialog_len = len(dialog["human_utterances"])
             if "exit" in intent_catcher_intents and (
-                dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
-            ):
+                    dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)):
                 high_priority_intent_detected = False
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["exit"] = not_detected
-            if (
-                "repeat" in intent_catcher_intents
-                and prev_active_skill in UNPREDICTABLE_SKILLS
-                and re.match(r"^what.?$", user_uttr_text)
-            ):
+            if "repeat" in intent_catcher_intents and prev_active_skill in UNPREDICTABLE_SKILLS and re.match(
+                    r"^what.?$", user_uttr_text):
                 # grounding skill will respond after UNPREDICTABLE_SKILLS on user request "what?"
                 high_priority_intent_detected = False
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
                 dialog["utterances"][-1]["annotations"]["intent_catcher"]["repeat"] = not_detected
-            if (
-                "cant_do" in intent_catcher_intents
-                and "play" in user_uttr_text
-                and any([phrase in bot_uttr_text_lower for phrase in GREETING_QUESTIONS_TEXTS])
-            ):
+            if "cant_do" in intent_catcher_intents and "play" in user_uttr_text and \
+                    any([phrase in bot_uttr_text_lower for phrase in GREETING_QUESTIONS_TEXTS]):
                 high_priority_intent_detected = False
                 not_detected = {"detected": 0, "confidence": 0.0}
                 dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["cant_do"] = not_detected
@@ -109,18 +103,10 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
 
                 skills_for_uttr += turn_on_skills(
-                    cobot_topics,
-                    cobot_dialogact_topics,
-                    user_uttr_text,
-                    bot_uttr.get("text", ""),
-                    available_skills=[
-                        "news_api_skill",
-                        "coronavirus_skill",
-                        "dff_funfact_skill",
-                        "weather_skill",
-                        # "dff_celebrity_skill",
-                    ],
-                )
+                    cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
+                    available_skills=["news_api_skill", "coronavirus_skill", "dff_funfact_skill", "weather_skill",
+                                      # "dff_celebrity_skill",
+                                      ])
 
                 if if_lets_chat_about_particular_topic_detected:
                     skills_for_uttr.append("news_api_skill")
@@ -136,40 +122,28 @@ class RuleBasedSkillSelectorConnector:
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
                     skills_for_uttr.append(skill_name)
-                skills_for_uttr.extend(
-                    get_linked_to_dff_skills(
-                        dialog["human"]["attributes"].get("dff_shared_state", {}),
-                        len(dialog["human_utterances"]),
-                        dialog["bot_utterances"][-1]["active_skill"] if dialog["bot_utterances"] else "",
-                    )
-                )
+                skills_for_uttr.extend(get_linked_to_dff_skills(
+                    dialog["human"]["attributes"].get("dff_shared_state", {}),
+                    len(dialog["human_utterances"]),
+                    dialog["bot_utterances"][-1]["active_skill"] if dialog["bot_utterances"] else ""))
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
-                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {
-                        CAN_CONTINUE_SCENARIO,
-                        MUST_CONTINUE,
-                        CAN_CONTINUE_PROMPT,
-                    }:
+                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
+                                                                     CAN_CONTINUE_PROMPT}:
                         if hyp["skill_name"] == prev_active_skill:
                             skills_for_uttr.append(hyp["skill_name"])
             else:
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
                     skills_for_uttr.append(skill_name)
-                skills_for_uttr.extend(
-                    get_linked_to_dff_skills(
-                        dialog["human"]["attributes"].get("dff_shared_state", {}),
-                        len(dialog["human_utterances"]),
-                        dialog["bot_utterances"][-1]["active_skill"] if dialog["bot_utterances"] else "",
-                    )
-                )
+                skills_for_uttr.extend(get_linked_to_dff_skills(
+                    dialog["human"]["attributes"].get("dff_shared_state", {}),
+                    len(dialog["human_utterances"]),
+                    dialog["bot_utterances"][-1]["active_skill"] if dialog["bot_utterances"] else ""))
                 # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
                 for hyp in prev_user_uttr_hyp:
-                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {
-                        CAN_CONTINUE_SCENARIO,
-                        MUST_CONTINUE,
-                        CAN_CONTINUE_PROMPT,
-                    }:
+                    if hyp.get("can_continue", CAN_NOT_CONTINUE) in {CAN_CONTINUE_SCENARIO, MUST_CONTINUE,
+                                                                     CAN_CONTINUE_PROMPT}:
                         if hyp["skill_name"] == prev_active_skill:
                             skills_for_uttr.append(hyp["skill_name"])
 
@@ -202,34 +176,19 @@ class RuleBasedSkillSelectorConnector:
                 if is_factoid:
                     skills_for_uttr.append("factoid_qa")
 
-                if "dummy_skill" in bot_uttr.get("active_skill", "") and len(dialog["utterances"]) > 4:
+                if 'dummy_skill' in bot_uttr.get("active_skill", "") and len(dialog["utterances"]) > 4:
                     skills_for_uttr.append("dummy_skill_dialog")
 
                 # turn on topical skills based on current cobot-topics, cobot-dialogact-topics & pattern matching
                 skills_for_uttr += turn_on_skills(
-                    cobot_topics,
-                    cobot_dialogact_topics,
-                    user_uttr_text,
-                    bot_uttr.get("text", ""),
-                    available_skills=[
-                        "dff_movie_skill",
-                        "book_skill",
-                        "news_api_skill",
-                        "dff_food_skill",
-                        "dff_animals_skill",
-                        "dff_sport_skill",
-                        "dff_music_skill",
-                        "dff_science_skill",
-                        "dff_gossip_skill",  # 'dff_celebrity_skill',
-                        "game_cooperative_skill",
-                        "weather_skill",
-                        "dff_funfact_skill",
-                        "dff_travel_skill",
-                        "coronavirus_skill",
-                        "dff_bot_persona_skill",
-                        "dff_gaming_skill",
-                    ],
-                )
+                    cobot_topics, cobot_dialogact_topics, user_uttr_text, bot_uttr.get("text", ""),
+                    available_skills=['dff_movie_skill', 'book_skill', 'news_api_skill', 'dff_food_skill',
+                                      'dff_animals_skill', 'dff_sport_skill', 'dff_music_skill',
+                                      'dff_science_skill', 'dff_gossip_skill',  # 'dff_celebrity_skill',
+                                      'game_cooperative_skill', 'weather_skill', 'dff_funfact_skill',
+                                      'dff_travel_skill', 'coronavirus_skill', "dff_bot_persona_skill",
+                                      'dff_gaming_skill',
+                                      ])
 
                 # if user mentions
                 if is_celebrity_mentioned:
@@ -240,7 +199,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("weather_skill")
 
                 if if_turn_on_emotion(user_uttr, bot_uttr):
-                    skills_for_uttr.append("emotion_skill")
+                    skills_for_uttr.append('emotion_skill')
 
                 if get_named_locations(user_uttr):
                     skills_for_uttr.append("dff_travel_skill")
@@ -253,10 +212,10 @@ class RuleBasedSkillSelectorConnector:
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
             #  no convert when about coronavirus
-            if "coronavirus_skill" in skills_for_uttr and "convert_reddit" in skills_for_uttr:
-                skills_for_uttr.remove("convert_reddit")
-            if "coronavirus_skill" in skills_for_uttr and "comet_dialog_skill" in skills_for_uttr:
-                skills_for_uttr.remove("comet_dialog_skill")
+            if 'coronavirus_skill' in skills_for_uttr and 'convert_reddit' in skills_for_uttr:
+                skills_for_uttr.remove('convert_reddit')
+            if 'coronavirus_skill' in skills_for_uttr and 'comet_dialog_skill' in skills_for_uttr:
+                skills_for_uttr.remove('comet_dialog_skill')
 
             if len(dialog["utterances"]) > 1:
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
@@ -270,10 +229,16 @@ class RuleBasedSkillSelectorConnector:
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+            asyncio.create_task(callback(
+                task_id=payload['task_id'],
+                response=list(set(skills_for_uttr))
+            ))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["program_y", "dummy_skill", "cobotqa"]))
+            asyncio.create_task(callback(
+                task_id=payload['task_id'],
+                response=["program_y", "dummy_skill", "cobotqa"]
+            ))

@@ -30,6 +30,7 @@ docker-compose.yml
 dev.yml
 ```yml
   dff-template:
+    env_file: [.env.dev]
     volumes:
       - "./skills/dff_template:/src"
       - "./common:/src/common"

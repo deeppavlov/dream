@@ -27,37 +27,29 @@ def recover_mentions(dialog, ner_dialog):
             for ner in sent:
                 if ner["confidence"] < 0.6:
                     continue
-                ners.append(
-                    {
-                        "confidence": ner["confidence"],
-                        "start_pos": ner["start_pos"] + pos_sent,
-                        "end_pos": ner["end_pos"] + pos_sent,
-                        "text": ner["text"],
-                        "type": ner["type"],
-                    }
-                )
+                ners.append({"confidence": ner["confidence"],
+                             "start_pos": ner["start_pos"] + pos_sent,
+                             "end_pos": ner["end_pos"] + pos_sent,
+                             "text": ner["text"],
+                             "type": ner["type"]})
             if i == j == 0:
                 pos_sent = len(dialog[0][0]) + 1
             else:
-                pos_sent += len(dialog[i][j]) + 1
+                pos_sent += (len(dialog[i][j]) + 1)
 
     discourse = " ".join([" ".join(utterance) for utterance in dialog])
     doc = nlp(discourse)
     if doc._.has_coref:
         # list of clusters: [cluster -> mention (dict: start, end, text, resolved)]
-        clusters = [
-            [
-                {
-                    "start": mention.start_char,
-                    "end": mention.end_char,
-                    "text": mention.text,
-                    "resolved": cluster.main.text,
-                    "ner": {"type": "O", "offset": 10000},
-                }
-                for mention in cluster.mentions
-            ]
-            for cluster in doc._.coref_clusters
-        ]
+        clusters = [[{"start": mention.start_char,
+                      "end": mention.end_char,
+                      "text": mention.text,
+                      "resolved": cluster.main.text,
+                      "ner": {"type": "O", "offset": 10000}
+                      }
+                     for mention in cluster.mentions]
+                    for cluster in doc._.coref_clusters
+                    ]
 
         new_clusters = []
         # find the main mention for each cluster
@@ -84,7 +76,8 @@ def recover_mentions(dialog, ner_dialog):
                     m["resolved"] = main_mention["resolved"]
             # keep cluster refer to pronouns
             else:
-                pronouns = ["i", "we", "you", "he", "she", "it", "they", "me", "us", "him", "her", "them"]
+                pronouns = ["i", "we", "you", "he", "she", "it", "they",
+                            "me", "us", "him", "her", "them"]
 
                 # check if cluster refer to pronouns
                 is_pronoun_cluster = False
@@ -111,15 +104,14 @@ def recover_mentions(dialog, ner_dialog):
         new_utter_pos = [{"start": 0, "end": len(dialog[0])}]
         for i in range(1, len(dialog)):
             new_utter_pos.append(
-                {"start": new_utter_pos[-1]["end"] + 1, "end": new_utter_pos[-1]["end"] + 1 + len(dialog[i])}
-            )
+                {"start": new_utter_pos[-1]["end"] + 1, "end": new_utter_pos[-1]["end"] + 1 + len(dialog[i])})
 
         current_utterance_idx = len(dialog) - 1
         for mention in sorted_mentions:
             while mention["start"] < new_utter_pos[current_utterance_idx]["start"]:
                 current_utterance_idx -= 1
 
-            discourse = discourse[: mention["start"]] + mention["resolved"] + discourse[mention["end"] :]
+            discourse = discourse[: mention["start"]] + mention["resolved"] + discourse[mention["end"]:]
 
             offset = len(mention["resolved"]) - len(mention["text"])
             new_utter_pos[current_utterance_idx]["end"] += offset
@@ -129,7 +121,7 @@ def recover_mentions(dialog, ner_dialog):
 
         new_dialog = []
         for i in range(len(dialog)):
-            new_dialog.append(discourse[new_utter_pos[i]["start"] : new_utter_pos[i]["end"]])
+            new_dialog.append(discourse[new_utter_pos[i]["start"]: new_utter_pos[i]["end"]])
     else:
         new_clusters = []
         new_dialog = [" ".join(utterance) for utterance in dialog]

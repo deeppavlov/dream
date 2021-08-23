@@ -24,7 +24,7 @@ from deeppavlov.core.models.component import Component
 logger = getLogger(__name__)
 
 
-@register("document_chunker")
+@register('document_chunker')
 class DocumentChunker(Component):
     """Make chunks from a document or a list of documents. Don't tear up sentences if needed.
 
@@ -43,18 +43,9 @@ class DocumentChunker(Component):
 
     """
 
-    def __init__(
-        self,
-        sentencize_fn: Callable = sent_tokenize,
-        keep_sentences: bool = True,
-        tokens_limit: int = 400,
-        flatten_result: bool = False,
-        paragraphs: bool = False,
-        number_of_paragraphs: int = -1,
-        log: bool = False,
-        *args,
-        **kwargs,
-    ) -> None:
+    def __init__(self, sentencize_fn: Callable = sent_tokenize, keep_sentences: bool = True,
+                 tokens_limit: int = 400, flatten_result: bool = False,
+                 paragraphs: bool = False, number_of_paragraphs: int = -1, log: bool = False, *args, **kwargs) -> None:
         self._sentencize_fn = sentencize_fn
         self.keep_sentences = keep_sentences
         self.tokens_limit = tokens_limit
@@ -82,21 +73,21 @@ class DocumentChunker(Component):
                 for doc in docs:
                     new_split_doc = []
                     if doc:
-                        split_doc = doc.split("\n\n")
+                        split_doc = doc.split('\n\n')
                         split_doc = [sd.strip() for sd in split_doc]
                         split_doc = list(filter(lambda x: len(x) > 40, split_doc))
                         if self.number_of_paragraphs != -1:
-                            split_doc = split_doc[: self.number_of_paragraphs]
+                            split_doc = split_doc[:self.number_of_paragraphs]
                         for par in split_doc:
                             sentences = sent_tokenize(par)
                             if len(sentences) <= 3:
-                                new_split_doc.append(" ".join(sentences))
+                                new_split_doc.append(' '.join(sentences))
                             else:
                                 num_pieces = len(sentences) // 2
                                 for i in range(num_pieces):
-                                    piece = " ".join(sentences[i * 2 : i * 2 + 3])
+                                    piece = ' '.join(sentences[i * 2:i * 2 + 3])
                                     piece_split = piece.split()
-                                    new_split_doc.append(" ".join(piece_split[:150]))
+                                    new_split_doc.append(' '.join(piece_split[:150]))
                         if new_split_doc:
                             first_par_list.append(new_split_doc[0])
 

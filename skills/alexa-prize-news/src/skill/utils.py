@@ -11,17 +11,17 @@ def clean_message(message):
     words = ["give", "tell", "me", "would", "like", "hear", "news", "about", "topic"]
     message = re.split("[^a-z]+", message)
     message = [w for w in message if w not in words]
-    message = " ".join(message)
+    message = ' '.join(message)
     return message
 
 
 def parse_entity(ner_index: dict, message: str) -> str:
-    words = re.split("[^a-zA-Z]+", message)
+    words = re.split('[^a-zA-Z]+', message)
     num = len(words) + 1
     entity = None
     for i in range(num):
         for j in range(i):
-            candidate = " ".join(words[j : num - i + j])
+            candidate = ' '.join(words[j:num - i + j])
             if candidate.lower() in ner_index:
                 entity = candidate
                 break
@@ -66,7 +66,7 @@ def parse_topic(topics: List[str], message: str) -> Optional[str]:
         if score > 0.4:
             extra_words_num = (1 - get_match_score(message, topic)) * len(message)
             if extra_words_num < 2:
-                return " ".join(topic)
+                return ' '.join(topic)
     return None
 
 

@@ -27,16 +27,8 @@ logger = getLogger(__name__)
 
 @register("pyserini_ranker")
 class PyseriniRanker(Component):
-    def __init__(
-        self,
-        index_folder: str,
-        n_threads: int = 1,
-        top_n: int = 5,
-        text_column_name: str = "contents",
-        return_scores: bool = False,
-        *args,
-        **kwargs,
-    ):
+    def __init__(self, index_folder: str, n_threads: int = 1, top_n: int = 5,
+                 text_column_name: str = "contents", return_scores: bool = False, *args, **kwargs):
         self.searcher = SimpleSearcher(str(expand_path(index_folder)))
         self.n_threads = n_threads
         self.top_n = top_n
@@ -66,7 +58,7 @@ class PyseriniRanker(Component):
         else:
             n_batches = len(questions) // self.n_threads + int(len(questions) % self.n_threads > 0)
             for i in range(n_batches):
-                questions_cur = questions[i * self.n_threads : (i + 1) * self.n_threads]
+                questions_cur = questions[i * self.n_threads:(i + 1) * self.n_threads]
                 qids_cur = list(range(len(questions_cur)))
                 res_batch = self.searcher.batch_search(questions_cur, qids_cur, self.top_n, self.n_threads)
                 for qid in qids_cur:

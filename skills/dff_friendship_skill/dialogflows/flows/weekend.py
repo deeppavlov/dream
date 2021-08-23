@@ -117,8 +117,7 @@ def std_weekend_request(ngrams, vars):
     human_text = state_utils.get_last_human_utterance(vars)["text"]
 
     prev_was_about_topic = common_universal_templates.if_utterance_requests_topic(
-        state_utils.get_last_bot_utterance(vars)
-    )
+        state_utils.get_last_bot_utterance(vars))
     anything = re.search(re_patterns_human, human_text)
 
     flag = bool(prev_was_about_topic and anything)

@@ -19,7 +19,7 @@ LOGS_PATH = ROOT_PATH + "/../AlexaPrize.log"
 UPDATER_LOGS_PATH = ROOT_PATH + "/../Updater.log"
 HISTORY_DB_PATH = ROOT_PATH + "/../AlexaPrize_chat_history.db"
 
-MODELS_PATH = ROOT_PATH + "/../news_models_files/"
+MODELS_PATH = ROOT_PATH + '/../news_models_files/'
 
 MODELS_INFO_PATH = MODELS_PATH + "models.info"
 

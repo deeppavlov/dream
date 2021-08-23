@@ -7,9 +7,10 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
 try:
     kgdg = build_model("kg_dial_generator.json", download=True)
@@ -23,7 +24,7 @@ except Exception as e:
 app = Flask(__name__)
 
 
-@app.route("/model", methods=["POST"])
+@app.route("/model", methods=['POST'])
 def respond():
     tm_st = time.time()
     sentences = request.json["sentences"]

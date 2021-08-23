@@ -4,7 +4,7 @@ import json
 
 def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, intents=None):
     human_attributes = {} if human_attributes is None else human_attributes
-    emotion = {"neutral": 0} if emotion is None else emotion
+    emotion = {'neutral': 0} if emotion is None else emotion
     intents = {"yes": {"confidence": 0, "detected": 0}} if intents is None else intents
     input_data = {
         "dialogs": [
@@ -20,32 +20,22 @@ def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, in
                         "text": curr_sent,
                         "annotations": {
                             "emotion_classification": {
-                                "text": {
-                                    "anger": 0,
-                                    "fear": 0,
-                                    "joy": 0,
-                                    "love": 0,
-                                    "sadness": 0.9,
-                                    "surprise": 0,
-                                    "neutral": 0,
-                                }
-                            },
-                            "intent_catcher": {
-                                "no": {"confidence": 0.0, "detected": 0},
-                                "yes": {"confidence": 0.0, "detected": 0},
-                            },
-                        },
+                                "text": {"anger": 0, "fear": 0,
+                                         "joy": 0, "love": 0,
+                                         "sadness": 0.9, "surprise": 0,
+                                         "neutral": 0}},
+                            "intent_catcher": {"no": {"confidence": 0.0, "detected": 0},
+                                               "yes": {"confidence": 0.0, "detected": 0}}
+                        }
                     }
                 ],
-                "bot_utterances": [{"text": bot_sent, "active_skill": "emotion_skill" if bot_sent else ""}],
+                "bot_utterances": [{"text": bot_sent, "active_skill": "emotion_skill" if bot_sent else ""}]
             }
         ],
     }
-    input_data["dialogs"][-1]["human_utterances"][-1]["annotations"]["emotion_classification"]["text"].update(emotion)
-    input_data["dialogs"][-1]["human_utterances"][-1]["annotations"]["intent_catcher"].update(intents)
+    input_data['dialogs'][-1]['human_utterances'][-1]['annotations']['emotion_classification']['text'].update(emotion)
+    input_data['dialogs'][-1]['human_utterances'][-1]['annotations']['intent_catcher'].update(intents)
     return input_data
-
-
 #
 #
 # def test_it_returns_empty_for_some_random_text():
@@ -92,21 +82,22 @@ def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, in
 #     assert response[0][1] == 1.0, print(response)
 
 
-if __name__ == "__main__":
-    url = "http://0.0.0.0:8049/respond"
+if __name__ == '__main__':
+    url = 'http://0.0.0.0:8049/respond'
     with open("tests.json") as fp:
         tests = json.load(fp)
     for test in tests:
-        expected_results = test.pop("results")
+        expected_results = test.pop('results')
         test = make_input_data(
-            test.get("curr_sent", ""),
-            test.get("bot_sent", ""),
-            test.get("human_attributes", {}),
-            test.get("emotion", {"neutral": 0}),
-            test.get("intents", {"yes": {"confidence": 0, "detected": 0}}),
+            test.get('curr_sent', ""),
+            test.get('bot_sent', ""),
+            test.get('human_attributes', {}),
+            test.get("emotion", {'neutral': 0}),
+            test.get("intents", {"yes": {"confidence": 0, "detected": 0}})
         )
         try:
-            phrase, confidence, human_attributes, bot_attributes, attributes = requests.post(url, json=test).json()[0]
+            phrase, confidence, human_attributes, \
+                bot_attributes, attributes = requests.post(url, json=test).json()[0]
         except Exception as e:
             print(f"Exception:\n test: {test}\nresult: {expected_results}")
             raise e

@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -221,7 +221,11 @@
                                 },
                                 "which": "all"
                             }
-                        ]
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
                     }
                 },
                 {
@@ -235,7 +239,7 @@
                             "factoid": 0.006642981432378292,
                             "conversational": 0.9933570027351379
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_DeliveryIntent": 0.9419320821762085
                             },

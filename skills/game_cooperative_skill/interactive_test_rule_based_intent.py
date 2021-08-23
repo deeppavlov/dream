@@ -2,7 +2,10 @@
 
 from skills.rule_based_intent import skill
 
-history = ["are you good", "yes"]
+history = [
+    "are you good",
+    "yes"
+]
 history = []
 
 while True:

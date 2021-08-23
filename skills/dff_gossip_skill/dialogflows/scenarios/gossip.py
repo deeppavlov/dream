@@ -230,6 +230,7 @@ CONFUSED_WHY_USER_MENTIONED_PEOPLE = [
 ]
 
 OPINION_TO_USER_MENTIONING_SOMEONE_NEW = [
+
     "target_gender_is a rather interesting person.",
     "target_gender_is, huh..., fascinating.",
     "target_gender_is, hmm, intriguing.",
@@ -240,10 +241,14 @@ WANT_TO_HEAR_ANOTHER_FACT = [
     "Would you want to hear an interesting fact about target_gender_im?",
     "One more fact about target_gender_im?",
     "Wanna know another interesting thing about target_gender_im?",
-    "Wanna know more about target_gender_im?",
+    "Wanna know more about target_gender_im?"
 ]
 
-WAIT_BUT_WHY_QUESTIONS = ["Wait but why?", "Oh... Why, I wonder?", "Hmmm, but why?"]
+WAIT_BUT_WHY_QUESTIONS = [
+    "Wait but why?",
+    "Oh... Why, I wonder?",
+    "Hmmm, but why?"
+]
 
 # CoBot Topics: Entertainment_Movies, Entertainment_Music, Entertainment_Books, Entertainment_General, Sports, Politics,
 # Science_and_Technology, Phatic, Interactive, Inappropriate_Content, Other

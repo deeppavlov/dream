@@ -97,16 +97,19 @@ def get_news(uttr, which):
     return result_values
 
 
-def get_fact_random(utterances):
+def get_cobotqa(utterances):
     result_values = []
     for i, uttr in enumerate(utterances):
-        values = uttr.get("annotations", {}).get("fact_random", [])
+        annotation = uttr.get("annotations", {}).get("cobotqa_annotator", {})
+        values = annotation.get("facts", [])
+        response = annotation.get("response", "")
         if values:
             for v in values:
                 value = v.get("fact", "")
                 if value:
                     result_values.append([(len(utterances) - i - 1) * 0.01, value])
-
+        if response:
+            result_values.append([(len(utterances) - i - 1) * 0.01, response])
     return result_values
 
 
@@ -384,7 +387,7 @@ def respond():
                 annotations_depths.append({})
                 dial_ids.append(d_id)
 
-            cobotqa_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1:])
+            cobotqa_facts = get_cobotqa(dialog["utterances"][-anntr_history_len * 2 - 1:])
             if cobotqa_facts:
                 user_input = {
                     'checked_sentence': cobotqa_facts[-1][1],

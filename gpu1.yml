@@ -49,11 +49,16 @@ services:
       - CUDA_VISIBLE_DEVICES=6
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  combined-classification:
+  combined-etc-classification:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
     environment:
       - CUDA_VISIBLE_DEVICES=7
+  combined-topic-dialogact-classification:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
   mongo:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
@@ -65,12 +70,21 @@ services:
   cobotqa:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
+  cobotqa-annotator:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
   cobot-convers-evaluator-annotator:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  cobot-topics:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+  cobot-dialogact:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
   program-y:
@@ -225,6 +239,9 @@ services:
   dff-bot-persona-skill:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
+  cobot-entities:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
   dff-funfact-skill:
     restart: unless-stopped
     env_file: [ .gpu1.dev ]
@@ -260,7 +277,4 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  convers-evaluator-annotator:
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
 version: '3.7'

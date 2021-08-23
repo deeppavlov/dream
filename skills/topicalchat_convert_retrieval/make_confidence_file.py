@@ -12,24 +12,14 @@ import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--url",
-    help="skill_url",
-    default="http://localhost:8060/respond",
+    "--url", help="skill_url", default="http://localhost:8060/respond",
 )
 # use data from skills/convert_reddit/tests/run_test.py
 parser.add_argument(
-    "-i",
-    "--input",
-    type=pathlib.Path,
-    help="path to a json file",
-    default="confidence_data.json",
+    "-i", "--input", type=pathlib.Path, help="path to a json file", default="confidence_data.json",
 )
 parser.add_argument(
-    "-o",
-    "--npy_file_path",
-    type=pathlib.Path,
-    help="path to npy file",
-    default="confidences.npy",
+    "-o", "--npy_file_path", type=pathlib.Path, help="path to npy file", default="confidences.npy",
 )
 args = parser.parse_args()
 data = json.load(args.input.open())

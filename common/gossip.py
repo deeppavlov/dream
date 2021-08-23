@@ -4,9 +4,8 @@ from common.universal_templates import if_chat_about_particular_topic
 
 logger = logging.getLogger(__name__)
 
-TOP_5k_FREQUENT_WORDS = set(
-    [k.strip() for k in open("common/google-10000-english-no-swears.txt", "r").readlines()[:5000]]
-)
+TOP_5k_FREQUENT_WORDS = set([k.strip()
+                             for k in open("common/google-10000-english-no-swears.txt", 'r').readlines()[:5000]])
 
 GOSSIP_COMPILED_PATTERN = re.compile(
     r"\b(celebrit|actor|actress|writer|author|entrepreneur|sportsperson|musician|gossip)", re.IGNORECASE
@@ -19,7 +18,7 @@ GOSSIP_SKILL_TRIGGER_PHRASES = [
     "Would you be interested in the latest gossip?",
 ]
 
-CELEBRITY_TRIGGER_PHRASES = ["What is your favourite celebrity?"]
+CELEBRITY_TRIGGER_PHRASES = ['What is your favourite celebrity?']
 
 TOPICS_TO_PEOPLE_MAPPINGS = [
     {
@@ -170,6 +169,7 @@ TOPICS_TO_PEOPLE_MAPPINGS = [
             "Jeff Bezos",
             "Bill Gates",
             "Tim Timberlake",
+
             # "Philip Scheinfeld",
             # "Jayson Waller",
             # "Alfredo Delgado",
@@ -204,7 +204,10 @@ TOPICS_TO_PEOPLE_MAPPINGS = [
 
 
 COBOT_TOPICS_TO_WIKI_OCCUPATIONS = {
-    "Politics": [["Q82955", "politician"], ["Q193391", "diplomat"]],
+    "Politics": [
+        ["Q82955", "politician"],
+        ["Q193391", "diplomat"]
+    ],
     "Science_and_Technology": [["Q131524", "entrepreneur"]],
     "Entertainment_Movies": [
         ["Q33999", "actor"],
@@ -304,16 +307,13 @@ def celebrity_from_uttr(human_utterance):
     raw_profession_list = get_all_supported_occupations_lists()
 
     celebrity_name, matching_types, mismatching_types = None, None, None
-    entity_dict = human_utterance["annotations"].get("wiki_parser", {}).get("topic_skill_entities_info", {})
+    entity_dict = human_utterance['annotations'].get('wiki_parser', {}).get('topic_skill_entities_info', {})
     logger.info(f"found entities: {entity_dict}")
     for celebrity_name in entity_dict:
-        if (
-            "occupation" in entity_dict[celebrity_name]
-            and entity_dict[celebrity_name]["pos"] == 0
-            and entity_dict[celebrity_name]["conf"] > 0.5
-            and celebrity_name.lower() not in TOP_5k_FREQUENT_WORDS
-        ):
-            occupation_list = entity_dict[celebrity_name]["occupation"]
+        if 'occupation' in entity_dict[celebrity_name] and entity_dict[celebrity_name]["pos"] == 0 \
+                and entity_dict[celebrity_name]["conf"] > 0.5 \
+                and celebrity_name.lower() not in TOP_5k_FREQUENT_WORDS:
+            occupation_list = entity_dict[celebrity_name]['occupation']
             matching_types = [job[1] for job in occupation_list if job[0] in raw_profession_list]
             mismatching_types = [job[1] for job in occupation_list if job[0] not in raw_profession_list]
             if matching_types:
@@ -321,7 +321,7 @@ def celebrity_from_uttr(human_utterance):
     if not matching_types:
         return None, None, None
     celebrity_name = celebrity_name.title()
-    logger.warning(f"Relations {celebrity_name} {matching_types} {mismatching_types}")
+    logger.warning(f'Relations {celebrity_name} {matching_types} {mismatching_types}')
     return celebrity_name, matching_types, mismatching_types
 
 

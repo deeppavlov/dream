@@ -8,20 +8,20 @@ from os import getenv
 import sentry_sdk
 
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 # TODO: THIS SKILL SELECTOR IS NOT WORKING NOW!
 #       USE rule_based_selector.py
-@register("intents_based_selector")
+@register('intents_based_selector')
 class RuleBasedSelector(Component):
     """
     Rule-based on intents skill selector which choosing among Alice, AIML, CoBotQA and future chit-chat TransferTransfo
     """
-
     wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
 
     def __init__(self, **kwargs):
@@ -35,7 +35,7 @@ class RuleBasedSelector(Component):
         for dialog in states_batch:
             skills_for_uttr = []
 
-            tokens = dialog["utterances"][-1]["text"].lower().split()
+            tokens = dialog['utterances'][-1]['text'].lower().split()
 
             if len(set(tokens).intersection(self.wh_words)) > 0:
                 skills_for_uttr.append("aiml")

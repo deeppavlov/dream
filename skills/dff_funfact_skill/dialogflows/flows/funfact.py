@@ -13,7 +13,7 @@ from common.utils import get_topics
 from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 
-from common.fact_random import get_facts
+from CoBotQA.cobotqa_service import send_cobotqa
 
 import dialogflows.scopes as scopes
 
@@ -58,7 +58,7 @@ def funfact_request(ngrams, vars):
     human_utterance = state_utils.get_last_human_utterance(vars)
     bot_utterance = state_utils.get_last_bot_utterance(vars)
     flag = funfact_requested(human_utterance, bot_utterance)
-    logging.info(f"funfact_request {flag}")
+    logging.info(f'funfact_request {flag}')
     return flag
 
 
@@ -67,22 +67,21 @@ def funfact_response(vars, shuffle=True):
     state_utils.set_confidence(vars, confidence=CONF_HIGH)
     state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
     shared_memory = state_utils.get_shared_memory(vars)
-    given_funfacts = shared_memory.get("given_funfacts", [])
+    given_funfacts = shared_memory.get('given_funfacts', [])
     funfact_list = copy.deepcopy(FUNFACT_LIST)
     if shuffle:
         random.shuffle(funfact_list)
     answer = ""
     human_utterance = state_utils.get_last_human_utterance(vars)
     funfacts_to_iterate = funfact_list
-    entity = ""
+    entity = ''
     if story_requested(human_utterance):
-        answer = (
-            "Unfortunately, rules of the competition forbid me to tell you a story, " "but I can tell you a fun fact."
-        )
-    elif "fact about" in human_utterance["text"]:  # entity requested
-        entity = human_utterance["text"].split("fact about")[1]
-        topic = get_topics(human_utterance, which="cobot_topics")[0]
-        funfact = get_facts(f"fact about {entity}")
+        answer = "Unfortunately, rules of the competition forbid me to tell you a story, " \
+                 "but I can tell you a fun fact."
+    elif 'fact about' in human_utterance['text']:  # entity requested
+        entity = human_utterance['text'].split('fact about')[1]
+        topic = get_topics(human_utterance, which='cobot_topics')[0]
+        funfact = send_cobotqa(f'fact about {entity}')
         funfacts_to_iterate = [(funfact, topic)] + funfacts_to_iterate
     for funfact, topic in funfacts_to_iterate:
         if given_funfacts:
@@ -91,10 +90,10 @@ def funfact_response(vars, shuffle=True):
             link_question = make_question(topic)
         if funfact not in given_funfacts:
             state_utils.save_to_shared_memory(vars, given_funfacts=given_funfacts + [funfact])
-        answer = f"{answer} {funfact} {link_question}"
+        answer = f'{answer} {funfact} {link_question}'
         return answer
     state_utils.set_confidence(vars, confidence=0)
-    answer = ""
+    answer = ''
     return answer
 
 
@@ -114,7 +113,9 @@ def error_response(vars):
 # ######### transition State.USR_START -> State.SYS_HI if hi_request==True (request returns only bool values) ####
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_START,
-    {State.SYS_OFFERS_FACT: funfact_request},
+    {
+        State.SYS_OFFERS_FACT: funfact_request
+    },
 )
 simplified_dialogflow.add_system_transition(State.SYS_OFFERS_FACT, State.USR_START, funfact_response)
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)

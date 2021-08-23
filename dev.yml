@@ -7,10 +7,31 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
+  cobotqa-annotator:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotQA:/src"
+      - "./common:/src/common"
+    ports:
+      - 8106:8106
+  cobot-topics:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotTopicClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8001:8000
+  cobot-dialogact:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotDialogActClassification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8002:8002
   cobot-convers-evaluator-annotator:
     env_file: [.env.dev]
     volumes:
-      - "./annotators/ConversationEvaluator:/src"
+      - "./annotators/CoBotConversationEvaluator:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
@@ -347,11 +368,11 @@ services:
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8094:8094
-  combined-classification:
+  combined-etc-classification:
     env_file: [.env.dev]
     volumes:
       - "./common:/src/common"
-      - "./annotators/combined_classification:/src"
+      - "./annotators/combined_etc_classification:/src"
     ports:
       - 8087:8087
   midas-classification:
@@ -407,13 +428,6 @@ services:
       - "./annotators/CoBotQA:/src/CoBotQA"
     ports:
       - 8109:8109
-  fact-random:
-    env_file: [ .env.dev ]
-    volumes:
-      - "./annotators/fact_random:/src"
-      - "./common:/src/common"
-    ports:
-      - 8119:8119
   fact-retrieval:
     env_file: [ .env.dev ]
     volumes:
@@ -422,6 +436,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8100:8100
+  cobot-entities:
+    env_file: [.env.dev]
+    volumes:
+      - "./annotators/CoBotNER:/src"
+    ports:
+      - 8102:8102
   hypothesis-scorer:
     env_file: [.env.dev]
     volumes:
@@ -486,4 +506,12 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
+  combined-topic-dialogact-classification:
+    env_file: [.env.dev]
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_topic_dialogact_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8118:8118
 version: "3.7"

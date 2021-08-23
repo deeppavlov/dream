@@ -23,8 +23,7 @@ def test_skill():
     url = "http://localhost:8029/convert_reddit"
     for utterances, checked_cand_num in zip(history_gen(dialog), checked_cand_nums):
         res = requests.post(
-            url,
-            json={"utterances_histories": [utterances], "approximate_confidence_is_enabled": False},
+            url, json={"utterances_histories": [utterances], "approximate_confidence_is_enabled": False},
         )
         assert str(res.status_code) == "200"
         print(res.json())

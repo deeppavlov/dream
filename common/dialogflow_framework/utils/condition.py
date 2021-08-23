@@ -86,17 +86,15 @@ def is_begin_of_dialog(vars, begin_dialog_n=10):
 
 
 def is_interrupted(vars):
-    flag = (
-        state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
-    ) != 1 and not was_clarification_request(vars)
+    flag = (state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
+            ) != 1 and not was_clarification_request(vars)
     logging.debug(f"is_interrupted = {flag}")
     return flag
 
 
 def is_long_interrupted(vars, how_long=3):
-    flag = (
-        state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
-    ) > how_long and not was_clarification_request(vars)
+    flag = (state_utils.get_human_utter_index(vars) - state_utils.get_previous_human_utter_index(vars)
+            ) > how_long and not was_clarification_request(vars)
     logging.debug(f"is_long_interrupted = {flag}")
     return flag
 
@@ -175,9 +173,9 @@ def is_no_human_abandon(vars):
 
 def no_special_switch_off_requests(vars):
     """Function to determine if
-    - user didn't asked to switch topic,
-    - user didn't ask to talk about something particular,
-    - user didn't requested high priority intents (like what_is_your_name)
+        - user didn't asked to switch topic,
+        - user didn't ask to talk about something particular,
+        - user didn't requested high priority intents (like what_is_your_name)
     """
     intents_by_catcher = common_utils.get_intents(
         state_utils.get_last_human_utterance(vars), probs=False, which="intent_catcher"
@@ -193,11 +191,11 @@ def no_special_switch_off_requests(vars):
 
 def no_requests(vars):
     """Function to determine if
-    - user didn't asked to switch topic,
-    - user didn't ask to talk about something particular,
-    - user didn't requested high priority intents (like what_is_your_name)
-    - user didn't requested any special intents
-    - user didn't ask questions
+        - user didn't asked to switch topic,
+        - user didn't ask to talk about something particular,
+        - user didn't requested high priority intents (like what_is_your_name)
+        - user didn't requested any special intents
+        - user didn't ask questions
     """
     contain_no_special_requests = no_special_switch_off_requests(vars)
 

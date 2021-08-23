@@ -24,7 +24,7 @@ class TestWeatherSKillPolicy(unittest.TestCase):
         # works for dummy weather service:
         # self.assertEqual(responses[0], 'Weather in boston is good. 5 above zero')
         # works for openweather map:
-        self.assertIn("It is", responses[0])
+        self.assertIn('It is', responses[0])
 
     def test_missed_location_case(self):
         """
@@ -39,7 +39,7 @@ class TestWeatherSKillPolicy(unittest.TestCase):
         dialogs = json_data
         # print(self.ws(dialogs))
         responses, confidences, _, _, _ = self.ws(dialogs)
-        self.assertEqual(responses[0], "Hmm. Which particular city would you like a weather forecast for?")
+        self.assertEqual(responses[0], 'Hmm. Which particular city would you like a weather forecast for?')
 
     def test_response_to_location_question_with_next_forecast(self):
         """Test case when user answers with city entity after question about
@@ -56,7 +56,7 @@ class TestWeatherSKillPolicy(unittest.TestCase):
         # self.assertEqual('Weather in boston is good. 5 above zero', responses[0])
 
         # works for openweather map:
-        self.assertIn("It is", responses[0])
+        self.assertIn('It is', responses[0])
 
     def test_response_to_location_question_with_ignorance_and_forgetting(self):
         """Test case when question asked by answer contains no entity"""
@@ -68,8 +68,8 @@ class TestWeatherSKillPolicy(unittest.TestCase):
 
         dialogs = json_data
         responses, confidences, _, _, _ = self.ws(dialogs)
-        self.assertIn(responses[0], ["", "Sorry, I have no weather for the place. I didn't recognize the city..."])
+        self.assertIn(responses[0], ['', "Sorry, I have no weather for the place. I didn't recognize the city..."])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

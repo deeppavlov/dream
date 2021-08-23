@@ -12,22 +12,13 @@ import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--url",
-    help="skill_url",
-    default="http://localhost:8029/convert_reddit",
+    "--url", help="skill_url", default="http://localhost:8029/convert_reddit",
 )
 parser.add_argument(
-    "--questions_json_file",
-    type=pathlib.Path,
-    help="path to a json file",
-    default="tests/test_question_tasks.json",
+    "--questions_json_file", type=pathlib.Path, help="path to a json file", default="tests/test_question_tasks.json",
 )
 parser.add_argument(
-    "-o",
-    "--npy_file_path",
-    type=pathlib.Path,
-    help="path to npy file",
-    default="confidences.npy",
+    "-o", "--npy_file_path", type=pathlib.Path, help="path to npy file", default="confidences.npy",
 )
 args = parser.parse_args()
 data = json.load(args.questions_json_file.open())

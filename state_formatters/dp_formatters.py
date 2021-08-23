@@ -283,7 +283,27 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     return [{"sentences": [sent], "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]]}]
 
 
-def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
+def cobot_conv_eval_formatter_dialog(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog, total_last_turns=4)
+    payload = utils.stop_formatter_dialog(dialog)
+    # print(f"formatter {payload}", flush=True)
+    return payload
+
+
+def combined_topic_dialogact_formatter_dialog(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    answer = dict()
+    answer['phrase'] = [dialog["human_utterances"][-1]["text"]]
+    history = []
+    for human_uttr, bot_uttr in zip(dialog['human_utterances'][:-1], dialog['bot_utterances']):
+        history.append(human_uttr['text'])
+        history.append(bot_uttr['text'])
+    answer['history'] = ['[SEP]'.join(history)]
+    return [answer]
+
+
+def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     conv = dict()
@@ -769,8 +789,8 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
         hypotheses.append({
             "text": hyp["text"],
             "confidence": hyp.get("confidence", 0),
-            "convers_evaluator_annotator": hyp.get("annotations", {}).get(
-                "convers_evaluator_annotator", {}),
+            "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                "cobot_convers_evaluator_annotator", {}),
         })
 
     contexts = len(hypotheses) * [[uttr["text"] for uttr in dialog["utterances"]]]

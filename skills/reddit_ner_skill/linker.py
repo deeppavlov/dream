@@ -9,17 +9,15 @@ from itertools import chain
 
 
 class Linker:
-    def __init__(
-        self,
-        entity_database,
-        posts_database,
-        phrases,
-        entity_resolution_url,
-        api_key,
-        status_constants,
-        logger,
-        expired_days=8,
-    ):
+    def __init__(self,
+                 entity_database,
+                 posts_database,
+                 phrases,
+                 entity_resolution_url,
+                 api_key,
+                 status_constants,
+                 logger,
+                 expired_days=8):
         self.logger = logger
         self.entity_database = entity_database
         self.posts_database = posts_database
@@ -29,12 +27,21 @@ class Linker:
         self.status_constants = status_constants
         self.expired_days = expired_days  # Filter news by days
         self.prev_entities = []  # Keep track of entities
-        self.prev_posts = []  # and posts
+        self.prev_posts = []    # and posts
         self.classConstraintsTypes = {  # Constrains to types (nikola tesla != telsa company)
-            "PER": [{"dataType": "aio:Entity", "value": "aio:HumanBeing"}],
-            "ORG": [{"dataType": "aio:Entity", "value": "aio:Organisation"}],
-            "LOC": [{"dataType": "aio:Entity", "value": "aio:GeographicalArea"}],
-            "MISC": [],
+            'PER': [{
+                "dataType": "aio:Entity",
+                "value": "aio:HumanBeing"
+            }],
+            'ORG': [{
+                "dataType": "aio:Entity",
+                "value": "aio:Organisation"
+            }],
+            'LOC': [{
+                "dataType": "aio:Entity",
+                "value": "aio:GeographicalArea"
+            }],
+            'MISC': []
         }
 
     def _reinit(self):
@@ -57,83 +64,82 @@ class Linker:
         positive - (positive sentiment)/(yes intent)
         negative - (negative sentiment)/(no intent)
         """
-        sentiment = reaction["sentiment"]
-        intent = reaction["intent"]
-        if sentiment == "positive" or sentiment == "negative":
+        sentiment = reaction['sentiment']
+        intent = reaction['intent']
+        if sentiment == 'positive' or sentiment == 'negative':
             return sentiment
-        elif intent == "yes" or intent == "no":
+        elif intent == 'yes' or intent == 'no':
             return intent
         else:
-            return "neutral"
+            return 'neutral'
 
     def _react_to_user(self, user_reaction):
         """
         Get a bot reaction phrase to user phrase
         """
-        return random.choice(self.phrases["reaction_phrases"][user_reaction])
+        return random.choice(self.phrases['reaction_phrases'][user_reaction])
 
     def _status(self, user_reaction, entity, continuation):
         """
         Calculate status (can/must/cannot/etc.)
         """
-        if user_reaction == "negative" or user_reaction == "no" and continuation:
-            return self.status_constants["cannot"]
+        if user_reaction == 'negative' or user_reaction == 'no' and continuation:
+            return self.status_constants['cannot']
         candidates = self._get_related_entities(entity)
         next_entity, _, _ = self._choose_entity_and_post(candidates)
         if next_entity is None:
-            return self.status_constants["cannot"]
+            return self.status_constants['cannot']
         else:
-            return self.status_constants["can"]
+            return self.status_constants['can']
 
     def _get_start_phrase(self, post):
         """
         Get starting phrase based on entity and post
         """
-        subreddit = self.posts_database[post]["subreddit"]
-        return random.choice(self.phrases["subreddit_phrases"][subreddit]["start_phrase"])
+        subreddit = self.posts_database[post]['subreddit']
+        return random.choice(self.phrases['subreddit_phrases'][subreddit]['start_phrase'])
 
     def _get_content_phrase(self, post):
         """
         Get content-related phrase based on post for middle-conversation
         """
-        subreddit = self.posts_database[post]["subreddit"]
-        return random.choice(self.phrases["subreddit_phrases"][subreddit]["content_phrase"])
+        subreddit = self.posts_database[post]['subreddit']
+        return random.choice(self.phrases['subreddit_phrases'][subreddit]['content_phrase'])
 
     def _get_engaging_phrase(self, post):
         """
         Get engaging phrase based on post for the end of phrase
         """
-        subreddit = self.posts_database[post]["subreddit"]
-        return random.choice(self.phrases["subreddit_phrases"][subreddit]["engaging_phrase"])
+        subreddit = self.posts_database[post]['subreddit']
+        return random.choice(self.phrases['subreddit_phrases'][subreddit]['engaging_phrase'])
 
     def _get_linking_phrase(self, link_type):
         """
         Get connection phrase between two entities
         """
-        return random.choice(self.phrases["linking_phrases"][link_type])
+        return random.choice(self.phrases['linking_phrases'][link_type])
 
     def _get_related_entities(self, entity):
         """
         Get related entities and type of connections from database
         """
-        return self.entity_database[entity]["related"]
+        return self.entity_database[entity]['related']
 
     def _resolve_entity(self, entity):
         """
         Resolve entity by using the key
         """
-        headers = {"Content-Type": "application/json;charset=utf-8", "x-api-key": self.api_key}
-        mention = {"text": entity["text"]}
+        headers = {'Content-Type': 'application/json;charset=utf-8', 'x-api-key': self.api_key}
+        mention = {'text': entity['text']}
         # Change class constrains in case of poor resolution perfomance
-        classConstraints = self.classConstraintsTypes.get(entity["type"], [])
+        classConstraints = self.classConstraintsTypes.get(entity['type'], [])
         try:
             resp = requests.request(
                 url=self.entity_resolution_url,
                 headers=headers,
-                data=json.dumps({"mention": mention, "classConstraints": classConstraints}),
-                method="POST",
-                timeout=1,
-            )
+                data=json.dumps({'mention': mention, 'classConstraints': classConstraints}),
+                method='POST',
+                timeout=1)
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             sentry_sdk.capture_exception(e)
             self.logger.exception("Entity Linker service Timeout")
@@ -143,12 +149,12 @@ class Linker:
             self.logger.error(f"Request error: status_code={resp.status_code} while resolving entity.")
             return None
         try:
-            result = resp.json()["resolvedEntities"]
+            result = resp.json()['resolvedEntities']
         except JSONDecodeError:
             self.logger.error("JSONDecodeError while resolving entity.")
             return None
         if len(result) > 0:
-            return result[0]["value"]
+            return result[0]['value']
         else:
             return None
 
@@ -171,17 +177,15 @@ class Linker:
         if entity is None:
             return None
         else:
-            posts = list(self.entity_database[entity]["posts"])
+            posts = list(self.entity_database[entity]['posts'])
             return random.choice(posts)
 
     def _choose_entity_and_post(self, candidates):
         """
         Choose entity, connection type and post from list of candidate entities
         """
-        posts = [
-            [(entity, conn, post) for post in self.entity_database[entity]["posts"] if post not in self.prev_posts]
-            for entity, conn in candidates
-        ]
+        posts = [[(entity, conn, post) for post in self.entity_database[entity]['posts'] if post not in self.prev_posts]
+                 for entity, conn in candidates]
         posts = list(chain(posts))
         if len(posts) == 0:
             return None, None, None
@@ -195,12 +199,12 @@ class Linker:
         if prev_entity is None:
             prev_entity_label = ""
         else:
-            prev_entity_label = self.entity_database[prev_entity]["prefLabel"]
+            prev_entity_label = self.entity_database[prev_entity]['prefLabel']
         post = self.posts_database[post]
-        entity_label = self.entity_database[entity]["prefLabel"]
-        phrase = phrase.replace("{prev_entity}", prev_entity_label)
-        phrase = phrase.replace("{entity}", entity_label)
-        phrase = phrase.replace("{post}", post["title"])
+        entity_label = self.entity_database[entity]['prefLabel']
+        phrase = phrase.replace('{prev_entity}', prev_entity_label)
+        phrase = phrase.replace('{entity}', entity_label)
+        phrase = phrase.replace('{post}', post['title'])
         return phrase
 
     def construct_phrase(self, reaction, entity_candidates, continuation):
@@ -219,7 +223,7 @@ class Linker:
             if post is None:
                 self.logger.info("No entities were found in KG or database, or not resolved.")
                 phrase = ""
-                status = self.status_constants["cannot"]
+                status = self.status_constants['cannot']
                 return phrase, status
             phrase += self._get_start_phrase(post) + " "
             phrase += self._get_engaging_phrase(post)
@@ -232,7 +236,7 @@ class Linker:
             if entity is None:
                 self.logger.error("Conversation continuation -> No related entity found (???)")
                 phrase = ""
-                status = self.status_constants["cannot"]
+                status = self.status_constants['cannot']
                 return phrase, status
             phrase += self._get_connection_phrase(link) + " "  # Connect to next entity
             phrase += self._get_content_phrase(post) + " "

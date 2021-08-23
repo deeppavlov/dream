@@ -21,14 +21,15 @@ import sentry_sdk
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.estimator import Component
 
-sentry_sdk.init(os.getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+sentry_sdk.init(os.getenv('SENTRY_DSN'))
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 def split_page(page):
     if isinstance(page, str):
-        page_split = page.split("\n")
+        page_split = page.split('\n')
     else:
         page_split = page
     titles = []
@@ -39,7 +40,7 @@ def split_page(page):
         for elem in page_split:
             find_title = re.findall(r"^([=]{1,4})", elem)
             if elem.startswith("{{"):
-                main_pages = elem.strip()[2:-2].split("|")[1:]
+                main_pages = elem.strip()[2:-2].split('|')[1:]
                 if titles:
                     main_page_dict[titles[-1][0]] = main_pages
             if find_title:
@@ -60,10 +61,8 @@ def split_page(page):
                                         last_title, last_level = titles.pop()
                                     if dict_level.get(last_level + 1, {}):
                                         if last_title in dict_level[last_level]:
-                                            dict_level[last_level][last_title] = {
-                                                **dict_level[last_level + 1],
-                                                **dict_level[last_level][last_title],
-                                            }
+                                            dict_level[last_level][last_title] = {**dict_level[last_level + 1],
+                                                                                  **dict_level[last_level][last_title]}
                                         else:
                                             dict_level[last_level][last_title] = dict_level[last_level + 1]
                                         dict_level[last_level + 1] = {}
@@ -90,10 +89,8 @@ def split_page(page):
                         last_title, last_level = titles.pop()
                         if last_level + 1 in dict_level and dict_level[last_level + 1]:
                             if last_title in dict_level[last_level]:
-                                dict_level[last_level][last_title] = {
-                                    **dict_level[last_level + 1],
-                                    **dict_level[last_level][last_title],
-                                }
+                                dict_level[last_level][last_title] = {**dict_level[last_level + 1],
+                                                                      **dict_level[last_level][last_title]}
                             else:
                                 dict_level[last_level][last_title] = dict_level[last_level + 1]
                             dict_level[last_level + 1] = {}

@@ -65,7 +65,6 @@ def has_entities(entity_types):
                     flag = True
                     break
         return flag
-
     return has_entities_func
 
 
@@ -85,7 +84,6 @@ def entities(**kwargs):
                     if extracted_entity:
                         slot_values[slot_name] = extracted_entity
                         state_utils.save_to_shared_memory(vars, slot_values=slot_values)
-
     return extract_entities
 
 
@@ -96,13 +94,11 @@ def speech_functions(*args):
         annotations = user_uttr["annotations"]
         speech_functions = set(annotations.get("speech_function_classifier", []))
         for elem in args:
-            if (isinstance(elem, str) and elem in speech_functions) or (
-                isinstance(elem, list) and set(elem).intersection(speech_functions)
-            ):
+            if (isinstance(elem, str) and elem in speech_functions) or \
+                    (isinstance(elem, list) and set(elem).intersection(speech_functions)):
                 flag = True
         logger.info(f"check_speech_functions: {args}, {flag}")
         return flag
-
     return check_speech_function
 
 

@@ -10,9 +10,10 @@ import sentry_sdk
 from flask import Flask, jsonify, request
 from nltk.tokenize import word_tokenize
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
@@ -20,14 +21,11 @@ ner = ner_model.load_model()
 logger.info("ner model is loaded.")
 
 nltk_stopwords_file = "nltk_stopwords.txt"
-NLTK_STOPWORDS = set([line.strip() for line in open(nltk_stopwords_file, "r").readlines()])
-BANNED_ENTITIES = re.compile(
-    r"\b(okay|ok|name|ocean|hey|cool|corona|pop|rap|bo+"
-    r"|hmph|oops|ouch|sh+|hush|whew|whoa|uhu|huh|wow|ya+y|yip+e+|yahoo|hurray"
-    r"|[aeou]+[mhrw]+[aeou]*|[mhrw]+[aeou]+[mhrw]+|[mhrw]+|nowhere|nice|good"
-    r"|somewhere|anywhere|honey)\b",
-    re.IGNORECASE,
-)
+NLTK_STOPWORDS = set([line.strip() for line in open(nltk_stopwords_file, 'r').readlines()])
+BANNED_ENTITIES = re.compile(r"\b(okay|ok|name|ocean|hey|cool|corona|pop|rap|bo+"
+                             r"|hmph|oops|ouch|sh+|hush|whew|whoa|uhu|huh|wow|ya+y|yip+e+|yahoo|hurray"
+                             r"|[aeou]+[mhrw]+[aeou]*|[mhrw]+[aeou]+[mhrw]+|[mhrw]+|nowhere|nice|good"
+                             r"|somewhere|anywhere|honey)\b", re.IGNORECASE)
 
 EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-]")
 DOUBLE_SPACES = re.compile(r"\s+")
@@ -102,21 +100,21 @@ def get_result(request):
 
     logger.info(f"NER output: {ret}")
     total_time = time.time() - st_time
-    logger.info(f"NER exec time: {total_time: .3f}s")
+    logger.info(f'NER exec time: {total_time: .3f}s')
     return ret
 
 
-@app.route("/ner", methods=["POST"])
+@app.route('/ner', methods=['POST'])
 def respond():
     result = get_result(request)
     return jsonify(result)
 
 
-@app.route("/ner_batch", methods=["POST"])
+@app.route("/ner_batch", methods=['POST'])
 def respond_batch():
     result = get_result(request)
     return jsonify([{"batch": result}])
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8021)
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=8021)

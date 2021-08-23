@@ -8,13 +8,14 @@ import numpy as np
 
 def main_test():
     loops = 20
-    url = "http://0.0.0.0:8014/detect"
-    tests = json.load(open("tests.json"))
+    url = 'http://0.0.0.0:8014/detect'
+    tests = json.load(open('tests.json'))
     times = []
     for i in range(loops):
         for test in tests:
             start = time.time()
-            requests.post(url=url, json={"sentences": [[test["sentence"]]]})
+            requests.post(
+                url=url, json={'sentences': [[test['sentence']]]})
             times.append(time.time() - start)
     print(f"Mean time for {loops} loops: {np.mean(times)}")
 

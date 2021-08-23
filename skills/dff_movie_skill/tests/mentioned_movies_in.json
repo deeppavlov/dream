@@ -17,7 +17,7 @@
                             "conversational": 0.990462601184845
                         },
                         "cobot_nounphrases": [],
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -212,6 +212,10 @@
                             "topic_skill_entities_info": {},
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
                         }
                     }
                 },
@@ -222,7 +226,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_DeliveryIntent": 0.9853994250297546
                             },
@@ -508,6 +512,10 @@
                             "topic_skill_entities_info": {},
                             "utt_num": 2,
                             "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
                         }
                     }
                 }

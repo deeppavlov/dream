@@ -32,8 +32,7 @@ def main_test():
         pred_best_hyp_id = np.argmax(curr_responses)
 
         assert sample["hyp"][pred_best_hyp_id], print(
-            f"Current responses: {curr_responses}, pred best resp id: {pred_best_hyp_id}"
-        )
+            f"Current responses: {curr_responses}, pred best resp id: {pred_best_hyp_id}")
 
     logger.info("Success!")
 

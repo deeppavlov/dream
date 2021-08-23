@@ -16,7 +16,7 @@ def exit_respond(dialog, response_phrases):
         "Sorry for interrupting you. Talk to you soon.",
         "Terribly sorry. Have a great day!",
         "Thought you wanted to chat. My bad. See you soon!",
-        "Oh, sorry. Have a great day!",
+        "Oh, sorry. Have a great day!"
     ]
     utt = dialog["utterances"][-1]
     response = random.choice(response_phrases).strip()  # Neutral response
@@ -46,10 +46,10 @@ def exit_respond(dialog, response_phrases):
 
 
 def repeat_respond(dialog, response_phrases):
-    WHAT_BOT_PHRASES = ["did i say something confusing", "you sound shocked", "if you want me to repeat"]
-    bot_phrases = [utt.get("text", "") if isinstance(utt, dict) else utt for utt in dialog["bot_utterances"]]
+    WHAT_BOT_PHRASES = ['did i say something confusing', 'you sound shocked', 'if you want me to repeat']
+    bot_phrases = [utt.get('text', '') if isinstance(utt, dict) else utt for utt in dialog['bot_utterances']]
     if len(dialog["utterances"]) >= 2:
-        responder_phrase = dialog["utterances"][-2]["text"].lower()
+        responder_phrase = dialog['utterances'][-2]['text'].lower()
         if any([j in responder_phrase for j in WHAT_BOT_PHRASES]):
             bot_utt = ""
             for bot_phrase in bot_phrases[::-1]:
@@ -78,29 +78,29 @@ def where_are_you_from_respond(dialog, response_phrases):
 
 def random_respond(dialog, response_phrases):
     if isinstance(response_phrases, dict):
-        if dialog["seen"]:
-            response = random.choice(response_phrases["last"]).strip()
+        if dialog['seen']:
+            response = random.choice(response_phrases['last']).strip()
         else:
-            response = random.choice(response_phrases["first"]).strip()
+            response = random.choice(response_phrases['first']).strip()
     else:
         response = random.choice(response_phrases).strip()
 
     # TODO: somehow response sometimes is dict
     if type(response) == dict:
-        if dialog["seen"]:
-            response = random.choice(response["last"]).strip()
+        if dialog['seen']:
+            response = random.choice(response['last']).strip()
         else:
-            response = random.choice(response["first"]).strip()
+            response = random.choice(response['first']).strip()
     return response
 
 
 def random_respond_with_question_asking(dialog, response_phrases):
     utt = dialog["utterances"][-1]["text"]
     response = random_respond(dialog, response_phrases)
-    if "you" in utt:
-        you = "you"
+    if 'you' in utt:
+        you = 'you'
     else:
-        you = "yours"
+        you = 'yours'
     response = f"{response}. And {you}?"
     return response
 
@@ -132,5 +132,5 @@ def get_respond_funcs():
         "choose_topic": random_respond,
         "cant_do": random_respond,
         "tell_me_a_story": random_respond,
-        "get_dialog_id": what_is_current_dialog_id_respond,
+        "get_dialog_id": what_is_current_dialog_id_respond
     }

@@ -7,59 +7,58 @@ import numpy as np
 
 from dialogflows.flows.utils import GENRES, ALL_GENRES
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class IMDb:
     professions = ["actor", "director"]
 
-    pairs = [
-        (re.compile(r"\s?\-\s?"), " "),
-        (re.compile(r"\s?\+\s?"), " plus "),
-        (re.compile(r"\s?\*\s?"), " star "),
-        (re.compile(r"\s?\&\s?"), " and "),
-        (re.compile(r"\s?\'\s?"), " "),
-        (re.compile(r"\s?:\s?"), " "),
-        (re.compile(r"\bii\b"), "2"),
-        (re.compile(r"\biii\b"), "3"),
-        (re.compile(r"\bII\b"), "2"),
-        (re.compile(r"\bIII\b"), "3"),
-        (re.compile(r"\bIV\b"), "4"),
-        (re.compile(r"\bV\b"), "5"),
-        (re.compile(r"\bVI\b"), "6"),
-        (re.compile(r"\bVII\b"), "7"),
-        (re.compile(r"\bVII\b"), "8"),
-        (re.compile(r"\bIX\b"), "9"),
-        (re.compile(r"\bfirst part\b"), "part 1"),
-        (re.compile(r"\bsecond part\b"), "part 2"),
-        (re.compile(r"\bthird part\b"), "part 3"),
-        (re.compile(r"\bfourth part\b"), "part 4"),
-        (re.compile(r"\bfifth part\b"), "part 5"),
-        (re.compile(r"\bsixth part\b"), "part 6"),
-        (re.compile(r"\bseventh part\b"), "part 7"),
-        (re.compile(r"\beighth part\b"), "part 8"),
-        (re.compile(r"\bninth part\b"), "part 9"),
-        (re.compile(r"\bthe\b"), ""),
-        (re.compile(r"\ba\b"), ""),
-        (re.compile(r"\ban\b"), ""),
-        (re.compile(r"\W"), " "),
-        (re.compile(r"\bvs\b"), "versus"),
-        (re.compile(r"\bv\b"), "versus"),
-        (re.compile(r"\s\s+"), " "),
-    ]
+    pairs = [(re.compile(r"\s?\-\s?"), " "),
+             (re.compile(r"\s?\+\s?"), " plus "),
+             (re.compile(r"\s?\*\s?"), " star "),
+             (re.compile(r"\s?\&\s?"), " and "),
+             (re.compile(r"\s?\'\s?"), " "),
+             (re.compile(r"\s?:\s?"), " "),
+             (re.compile(r"\bii\b"), "2"),
+             (re.compile(r"\biii\b"), "3"),
+             (re.compile(r"\bII\b"), "2"),
+             (re.compile(r"\bIII\b"), "3"),
+             (re.compile(r"\bIV\b"), "4"),
+             (re.compile(r"\bV\b"), "5"),
+             (re.compile(r"\bVI\b"), "6"),
+             (re.compile(r"\bVII\b"), "7"),
+             (re.compile(r"\bVII\b"), "8"),
+             (re.compile(r"\bIX\b"), "9"),
+             (re.compile(r"\bfirst part\b"), "part 1"),
+             (re.compile(r"\bsecond part\b"), "part 2"),
+             (re.compile(r"\bthird part\b"), "part 3"),
+             (re.compile(r"\bfourth part\b"), "part 4"),
+             (re.compile(r"\bfifth part\b"), "part 5"),
+             (re.compile(r"\bsixth part\b"), "part 6"),
+             (re.compile(r"\bseventh part\b"), "part 7"),
+             (re.compile(r"\beighth part\b"), "part 8"),
+             (re.compile(r"\bninth part\b"), "part 9"),
+             (re.compile(r"\bthe\b"), ""),
+             (re.compile(r"\ba\b"), ""),
+             (re.compile(r"\ban\b"), ""),
+             (re.compile(r'\W'), " "),
+             (re.compile(r"\bvs\b"), "versus"),
+             (re.compile(r"\bv\b"), "versus"),
+             (re.compile(r"\s\s+"), " "),
+             ]
 
-    number_pairs = [
-        (re.compile(r"\b1\b"), "one"),
-        (re.compile(r"\b2\b"), "two"),
-        (re.compile(r"\b3\b"), "three"),
-        (re.compile(r"\b4\b"), "four"),
-        (re.compile(r"\b5\b"), "five"),
-        (re.compile(r"\b6\b"), "six"),
-        (re.compile(r"\b7\b"), "seven"),
-        (re.compile(r"\b8\b"), "eight"),
-        (re.compile(r"\b9\b"), "nine"),
-    ]
+    number_pairs = [(re.compile(r"\b1\b"), "one"),
+                    (re.compile(r"\b2\b"), "two"),
+                    (re.compile(r"\b3\b"), "three"),
+                    (re.compile(r"\b4\b"), "four"),
+                    (re.compile(r"\b5\b"), "five"),
+                    (re.compile(r"\b6\b"), "six"),
+                    (re.compile(r"\b7\b"), "seven"),
+                    (re.compile(r"\b8\b"), "eight"),
+                    (re.compile(r"\b9\b"), "nine")
+                    ]
 
     def __init__(self, db_path="./databases/database_most_popular_main_info.json"):
         t0 = time.time()
@@ -122,11 +121,9 @@ class IMDb:
                 self.preprocessed_movies_names[alt_title] = self.process_movie_name(alt_title)
 
         # dictionary mapping processed ORIGINAL movie title to list of imdb ids of movies
-        self.preprocessed_original = {
-            self.preprocessed_movies_names.get(movie, ""): []
-            for movie in self.movies_names.keys()
-            if self.preprocessed_movies_names.get(movie, "")
-        }
+        self.preprocessed_original = {self.preprocessed_movies_names.get(movie, ""): []
+                                      for movie in self.movies_names.keys()
+                                      if self.preprocessed_movies_names.get(movie, "")}
         # dictionary mapping processed ALTERNATIVE movie title to list of imdb ids of movies
         self.preprocessed_alternative = {}
 
@@ -149,107 +146,19 @@ class IMDb:
 
         # TOTALLY REMOVED MOVIES
         for proc_title in [
-            "movie",
-            "tragedy",
-            "favorite",
-            "favourite",
-            "attitude",
-            "do you believe",
-            "no matter what",
-            "talk to me",
-            "you",
-            "lets talk",
-            "lets chat",
-            "in",
-            "if",
-            "can",
-            "o",
-            "ok",
-            "one",
-            "two",
-            "film",
-            "new",
-            "next",
-            "out",
-            "love",
-            "like",
-            "watch",
-            "actress",
-            "less",
-            "want",
-            "alexa",
-            "you tell me",
-            "movie movie",
-            "movies",
-            "yes",
-            "action",
-            "i",
-            "maybe",
-            "do you know",
-            "something",
-            "no",
-            "i am",
-            "what",
-            "is",
-            "it",
-            "what",
-            "i did not know that",
-            "games",
-            "see",
-            "really",
-            "my favorite movie",
-            "i do",
-            "what happened",
-            "me",
-            "off",
-            "nothing",
-            "talk to her",
-            "boy a",
-            "play",
-            "i feel",
-            "question",
-            "thank you",
-            "singing",
-            "program",
-            "other",
-            "lets talk about",
-            "conversation",
-            "good",
-            "they",
-            "hello",
-            "make",
-            "pretty good",
-            "talk",
-            "ok",
-            "okay",
-            "tell me something",
-            "different",
-            "day",
-            "seen",
-            "i like",
-            "wij",
-            "because",
-            "me too",
-            "horror",
-            "will",
-            "character",
-            "more",
-            "show",
-            "coming out",
-            "remember",
-            "again",
-            "time",
-            "news",
-            "comics",
-            "life",
-            "playing",
-            "weekend",
-            "gays",
-            "live",
-            "travelling",
-            "abortion",
-            "foster",
-            "kites",
+                "movie", "tragedy", "favorite", "favourite", "attitude", "do you believe",
+                "no matter what", "talk to me", "you", "lets talk", "lets chat", "in", "if", "can", "o", "ok", "one",
+                "two", "film", "new", "next", "out", "love", "like", "watch", "actress", "less", "want",
+                "alexa", "you tell me", "movie movie", "movies", "yes", "action", "i", "maybe", "do you know",
+                "something", 'no', 'i am', "what", "is", "it", "what", "i did not know that",
+                "games", "see", "really", "my favorite movie", "i do", "what happened",
+                "me", "off", "nothing", "talk to her", "boy a", "play",
+                "i feel", "question", "thank you", "singing", "program", "other", "lets talk about",
+                "conversation", "good", "they", "hello", "make", "pretty good", "talk", "ok", "okay",
+                "tell me something", "different", "day", "seen", "i like", "wij", "because", "me too",
+                "horror", "will", "character", "more", "show", "coming out", "remember", "again", "time",
+                "news", "comics", "life", "playing", "weekend", "gays", "live", "travelling", "abortion", "foster",
+                "kites"
         ]:
             try:
                 self.preprocessed_original.pop(proc_title)
@@ -279,16 +188,14 @@ class IMDb:
             for profession in self.professions:
                 if f"{profession}s" in self.database[imdb_id]:
                     self.database[imdb_id][f"lowercased_{profession}s"] = [
-                        self.process_person_name(name)
-                        for name in self.database[imdb_id][f"{profession}s"]
-                        if len(name.split()) > 1
-                    ]
+                        self.process_person_name(name) for name in self.database[imdb_id][f"{profession}s"]
+                        if len(name.split()) > 1]
                 else:
                     self.database[imdb_id][f"lowercased_{profession}s"] = []
                     self.database[imdb_id][f"{profession}s"] = []
             self.database[imdb_id]["characters"] = [
-                json.loads(char_list)[0] for char_list in self.database[imdb_id]["characters"] if json.loads(char_list)
-            ]
+                json.loads(char_list)[0]
+                for char_list in self.database[imdb_id]["characters"] if json.loads(char_list)]
         # `self.professionals` is a dictionary with keys from `self.professions`
         # and ['lowercased_prof` for prof in `self.professions`].
         # Each field is a dictionary where key is a name of person and value is a list of movies imdb_ids
@@ -301,10 +208,10 @@ class IMDb:
 
         for prof in self.professions:
             self.names_pattern[prof] = re.compile(
-                "(" + "|".join([r"\b%s\b" % name for name in self.professionals[f"lowercased_{prof}s"]]) + ")",
-                re.IGNORECASE,
-            )
-        self.genres_pattern = re.compile("(" + "|".join([r"\b%s" % genre for genre in ALL_GENRES]) + ")", re.IGNORECASE)
+                "(" + "|".join([r'\b%s\b' % name for name in self.professionals[f"lowercased_{prof}s"]]) + ")",
+                re.IGNORECASE)
+        self.genres_pattern = re.compile(
+            "(" + "|".join([r'\b%s' % genre for genre in ALL_GENRES]) + ")", re.IGNORECASE)
 
         logger.info(f"Created db in {time.time() - t0} sec")
 
@@ -327,12 +234,10 @@ class IMDb:
         return name.strip()
 
     def get_processed_movies_titles_to_ignore(self):
-        to_ignore = list(
-            set(self.preprocessed_original.keys()).intersection(set(self.frequent_unigrams + self.frequent_bigrams))
-        )
-        to_ignore += list(
-            set(self.preprocessed_alternative.keys()).intersection(set(self.frequent_unigrams + self.frequent_bigrams))
-        )
+        to_ignore = list(set(self.preprocessed_original.keys()).intersection(
+            set(self.frequent_unigrams + self.frequent_bigrams)))
+        to_ignore += list(set(self.preprocessed_alternative.keys()).intersection(
+            set(self.frequent_unigrams + self.frequent_bigrams)))
 
         return to_ignore
 
@@ -611,9 +516,9 @@ class IMDb:
         else:
             rating = np.mean([float(self.get_info_about_movie(imdb_id, "imdb_rating")) for imdb_id in movies])
 
-            if rating >= 7.0:
+            if rating >= 7.:
                 return "very_positive"
-            elif rating >= 6.0:
+            elif rating >= 6.:
                 return "positive"
             else:
                 return "neutral"
@@ -659,10 +564,10 @@ class IMDb:
             "Talk-show": "positive",
             "Thriller": "neutral",
             "War": "neutral",
-            "Western": "positive",
+            "Western": "positive"
         }
         if genre == "Genre":
-            if not (attitude is None):
+            if not(attitude is None):
                 res = []
                 for k in genres:
                     if genres[k] == attitude:
@@ -676,10 +581,10 @@ class IMDb:
     def get_movie_names(self, imdb_id):
         names = []
         if "title" in self.database[imdb_id]:
-            names.append(self.database[imdb_id]["title"])
+            names.append(self.database[imdb_id]['title'])
         if "original_title" in self.database[imdb_id]:
-            if self.database[imdb_id]["original_title"] not in names:
-                names.append(self.database[imdb_id]["original_title"])
+            if self.database[imdb_id]['original_title'] not in names:
+                names.append(self.database[imdb_id]['original_title'])
         if "all_titles" in self.database[imdb_id]:
             for n in self.database[imdb_id]["all_titles"]:
                 if n not in names:

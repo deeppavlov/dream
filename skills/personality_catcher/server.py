@@ -8,7 +8,7 @@ from os import getenv
 import sentry_sdk
 
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
 
 CMD_NAME = "/new_persona"
@@ -20,7 +20,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
-
 
 class Input_placeholders(BaseModel):
     personality: List[str] = Body(
@@ -46,5 +45,5 @@ def change_personality(placeholders: Input_placeholders):
         for per in placeholders.personality
     ]
     total_time = time.time() - st_time
-    logger.info(f"personality_catcher exec time: {total_time:.3f}s")
+    logger.info(f'personality_catcher exec time: {total_time:.3f}s')
     return response

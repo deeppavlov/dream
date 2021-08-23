@@ -98,7 +98,7 @@
                             "I like Michael Jordan , Michael Jordan is a cool basebal player."
                         ]
                     },
-                    "combined_classification": {
+                    "combined_etc_classification": {
                         "cobot_dialogact_intents": {
                             "Information_DeliveryIntent": 0.9991974830627441
                         },
@@ -371,7 +371,7 @@
                             "I like Michael Jordan , Michael Jordan is a cool basebal player."
                         ]
                     },
-                    "combined_classification": {
+                    "combined_etc_classification": {
                         "cobot_dialogact_intents": {
                             "Information_DeliveryIntent": 0.9991974830627441
                         },

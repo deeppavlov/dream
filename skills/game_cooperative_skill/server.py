@@ -123,15 +123,11 @@ def respond():
             text = response.get("text", "Sorry")
             if not response.get("confidence"):
                 confidence = 0
-            elif (
-                not is_active_last_answer
-                and if_chat_about_particular_topic(
-                    dialog["human_utterances"][-1],
-                    bot_utterance,
-                    compiled_pattern=GAMES_COMPILED_PATTERN,
-                )
-                and find_games_in_text(last_utter_text)
-            ):
+            elif not is_active_last_answer and if_chat_about_particular_topic(
+                dialog["human_utterances"][-1],
+                bot_utterance,
+                compiled_pattern=GAMES_COMPILED_PATTERN,
+            ) and find_games_in_text(last_utter_text):
                 confidence = 0
             elif not is_active_last_answer and if_chat_about_particular_topic(
                 dialog["human_utterances"][-1],

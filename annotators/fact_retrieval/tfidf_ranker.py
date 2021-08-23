@@ -31,16 +31,11 @@ logger = getLogger(__name__)
 
 @register("par_tfidf_ranker")
 class ParTfidfRanker(Component):
-    def __init__(
-        self,
-        tokenizer: Component,
-        np_facts_filename: str,
-        facts_map_filename: str,
-        unigrams_filename: str,
-        top_n: int = 10,
-        log: bool = False,
-        **kwargs,
-    ):
+    def __init__(self, tokenizer: Component,
+                 np_facts_filename: str,
+                 facts_map_filename: str,
+                 unigrams_filename: str,
+                 top_n: int = 10, log: bool = False, **kwargs):
         self.tokenizer = tokenizer
         self.np_facts = read_json(expand_path(np_facts_filename))
         self.facts_map = read_json(expand_path(facts_map_filename))
@@ -50,16 +45,15 @@ class ParTfidfRanker(Component):
             freq_unigrams = f.read().splitlines()[:1000]
 
         self.np_ignore_expr = re.compile(
-            "(" + "|".join([r"\b%s\b" % word for word in NP_IGNORE_LIST + freq_unigrams]) + ")", re.IGNORECASE
-        )
-        self.np_remove_expr = re.compile(
-            "(" + "|".join([r"\b%s\b" % word for word in NP_REMOVE_LIST]) + ")", re.IGNORECASE
-        )
-        self.rm_spaces_expr = re.compile(r"\s\s+")
+            "(" + "|".join([r'\b%s\b' % word for word in NP_IGNORE_LIST + freq_unigrams]) + ")",
+            re.IGNORECASE)
+        self.np_remove_expr = re.compile("(" + "|".join([r'\b%s\b' % word for word in NP_REMOVE_LIST]) + ")",
+                                         re.IGNORECASE)
+        self.rm_spaces_expr = re.compile(r'\s\s+')
 
-    def __call__(
-        self, questions_batch: List[str], paragraphs_batch: List[List[str]], nounphrases_batch: List[List[str]]
-    ) -> Tuple[List[Any], List[float]]:
+    def __call__(self, questions_batch: List[str],
+                 paragraphs_batch: List[List[str]],
+                 nounphrases_batch: List[List[str]]) -> Tuple[List[Any], List[float]]:
         batch_top_paragraphs = []
         batch_top_facts = []
         tm_st = time.time()
@@ -84,16 +78,15 @@ class ParTfidfRanker(Component):
             sentences_list += [sentence for sentence in sentences if len(sentence.split()) < 150]
         for sentence in sentences_list:
             ngrams_counts = [len(re.findall(rf"{ngram}\W", sentence, re.IGNORECASE)) for ngram in ngrams]
-            non_zero_counts = [
-                (ngram, ngram_count) for ngram, ngram_count in zip(ngrams, ngrams_counts) if ngram_count > 0
-            ]
+            non_zero_counts = [(ngram, ngram_count)
+                               for ngram, ngram_count in zip(ngrams, ngrams_counts) if ngram_count > 0]
             if non_zero_counts:
                 par_ngrams, ngrams_counts = zip(*non_zero_counts)
                 idf_scores.append(sum(ngrams_counts))
             else:
                 idf_scores.append(0.0)
 
-        indices = np.argsort(idf_scores)[::-1][: self.top_n]
+        indices = np.argsort(idf_scores)[::-1][:self.top_n]
         top_sentences = [sentences_list[ind] for ind in indices]
         return top_sentences
 

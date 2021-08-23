@@ -18,12 +18,8 @@ from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_
 from common.utils import is_yes, is_no
 
 from common.wiki_skill import dff_wiki_phrases
-from common.insert_scenario import (
-    start_or_continue_scenario,
-    smalltalk_response,
-    start_or_continue_facts,
-    facts_response,
-)
+from common.insert_scenario import start_or_continue_scenario, smalltalk_response, start_or_continue_facts, \
+    facts_response
 from common.music_skill_scenarios import topic_config
 
 
@@ -45,16 +41,12 @@ music_words_re = re.compile(
     r"jazz|\bfunk\b|blues|hip hop|\bfolk\b|trance|reggae|artist|heavy metal)",
     re.IGNORECASE,
 )
-like_re = re.compile(
-    r"(what|which|what kind of) (songs?|music|artists?|singers?|musicians?|bands?) "
-    r"do you (like|listen|love|prefer)",
-    re.IGNORECASE,
-)
+like_re = re.compile(r"(what|which|what kind of) (songs?|music|artists?|singers?|musicians?|bands?) "
+                     r"do you (like|listen|love|prefer)", re.IGNORECASE)
 what_fav_re = re.compile(
     r"((what|who)( is|'s)?|tell me( about)?)( your)? favou?rite "
     r"(artist|singer|musician|song ?writer|perfomer|band|song|album|music|kind of music)",
-    re.IGNORECASE,
-)
+    re.IGNORECASE)
 dont_know_re = re.compile(r"(not|n't) know", re.IGNORECASE)
 i_like_re = re.compile(r"(like|love|adore|listen to|prefer)", re.IGNORECASE)
 music_request_re = re.compile(r"(alexa\, )?(play )?music(\.|$)", re.IGNORECASE)
@@ -64,8 +56,7 @@ band_re = re.compile(r"(singer|artist|perfomer|band|orchestra)", re.IGNORECASE)
 what_listen_re = re.compile(
     r"what( music| kind of music| songs?| artists?)? "
     r"((should|can|may) I listen|(would |do |are )?you (suggest|recommend|offer) (listening|to listen))",
-    re.IGNORECASE,
-)
+    re.IGNORECASE)
 eighties_re = re.compile(r"(80s|eighties)", re.IGNORECASE)
 seventies_re = re.compile(r"(70s|seventies)", re.IGNORECASE)
 
@@ -201,10 +192,8 @@ def error_response(vars):
 
 def lets_talk_about_request(ngrams, vars):
     user_lets_chat_about_music = if_chat_about_particular_topic(
-        state_utils.get_last_human_utterance(vars),
-        state_utils.get_last_bot_utterance(vars),
-        compiled_pattern=music_words_re,
-    )
+        state_utils.get_last_human_utterance(vars), state_utils.get_last_bot_utterance(vars),
+        compiled_pattern=music_words_re)
     flag = bool(user_lets_chat_about_music)
     logger.info(f"lets_talk_about_request {flag}")
     return flag
@@ -374,7 +363,7 @@ def taste_response(vars):
 
 def get_genre(vars):
     genres = MUSIC_DATA.get("genres", [])
-    human_utt = state_utils.get_last_human_utterance(vars)["text"]
+    human_utt = state_utils.get_last_human_utterance(vars)['text']
     if re.search(eighties_re, human_utt):
         return "80s"
     elif re.search(seventies_re, human_utt):
@@ -390,20 +379,20 @@ def get_genre(vars):
                 logger.info(f"Entity: {entities_info[entity]}")
                 if "genre" in entities_info[entity]:
                     for genre in genres:
-                        for entity_genre in entities_info[entity]["genre"]:
+                        for entity_genre in entities_info[entity]['genre']:
                             if genre in entity_genre[1]:
                                 logger.info(f"Genre: {genre}")
                                 return True, genre
-                for i in entities_info[entity].get("instance of", []):
+                for i in entities_info[entity].get('instance of', []):
                     label = i[1]
-                    if label == "music genre" or label == "genre":
+                    if label == 'music genre' or label == 'genre':
                         for genre in genres:
                             if genre in entity:
                                 logger.info(f"Genre: {genre}")
                                 return True, genre
-                    elif label in {"music band", "musical band", "ensemble", "musical group", "artist", "rock band"}:
+                    elif label in {'music band', 'musical band', 'ensemble', 'musical group', 'artist', 'rock band'}:
                         for genre in genres:
-                            for entity_genre in entities_info[entity].get("genre", []):
+                            for entity_genre in entities_info[entity].get('genre', []):
                                 if genre in entity_genre[1]:
                                     logger.info(f"Genre: {genre}")
                                     return True, genre
@@ -467,28 +456,24 @@ def genre_specific_response(vars):
             return f"Oh, cool! I really like Bob Dylan, if you ask me. \
             Do you like him?"
         elif genre == "reggae":
-            return f'Reggae is very cool, it always sound sunny bright. \
-            Did you know that "Don\'t worry, be happy" initially was written \
-            by Bobby McFerrin and not Bob Marley?'
+            return f"Reggae is very cool, it always sound sunny bright. \
+            Did you know that \"Don't worry, be happy\" initially was written \
+            by Bobby McFerrin and not Bob Marley?"
         elif genre == "country":
-            return f'I love "Country Roads" by John Denver. \
+            return f"I love \"Country Roads\" by John Denver. \
             It gives me feel like I am returning home from a long trip. \
-            Do you feel the same?'
+            Do you feel the same?"
         elif genre == "alternative":
             return f"When I was younger, I used to listen to Linkin Park a lot. \
             Oh boy, what a legendary band that was. Have you heard about them?"
         elif genre == "80s":
-            return (
-                "I adore 80s music, especially AC/DC. "
-                "Their heavy metal album Back in Black is truly fantastic!"
-                "Do you know that it's hardcover was black in memory to the Bon Scott?"
-            )
+            return "I adore 80s music, especially AC/DC. " \
+                   "Their heavy metal album Back in Black is truly fantastic!" \
+                   "Do you know that it's hardcover was black in memory to the Bon Scott?"
         elif genre == "70s":
-            return (
-                "Ah, ABBA group was so cool in the 70s, "
-                "I truly enjoy their disco hit Dancing Queen, it makes me feel like dancing. "
-                "Do you know that they have sold over 300 million albums and singles worldwide?"
-            )
+            return "Ah, ABBA group was so cool in the 70s, " \
+                   "I truly enjoy their disco hit Dancing Queen, it makes me feel like dancing. " \
+                   "Do you know that they have sold over 300 million albums and singles worldwide?"
         elif genre == "indie":
             return f"Indie music is so diverse! I like MGMT, and I am a fan of \
             the Pixies. Did you know that David Bowie was their fan too?"
@@ -571,9 +556,9 @@ def genre_advice_response(vars):
             return f"To me, that is crazy. Though they are not very popular in \
             the United States, they even were an inspiration to Kurt Cobain."
         elif genre == "all" or genre == "everything":
-            return f'You should check him out, especially "Space oddity". \
+            return f"You should check him out, especially \"Space oddity\". \
             It is really something special. \
-            They even played it on a real Space Station!'
+            They even played it on a real Space Station!"
         elif genre == "nineties":
             return "Yea, I guess I share your opinion on that point."
         elif genre == "eighties":
@@ -695,7 +680,6 @@ def entity_mention_request(ngrams, vars):
     logger.info(f"entity_mention_request {flag}")
     return flag
 
-
 # def i_give_up_response(vars):
 #     try:
 #         state_utils.set_can_continue(vars)
@@ -766,7 +750,6 @@ def heard_latest_response(vars):
 #         sentry_sdk.capture_exception(exc)
 #         state_utils.set_confidence(vars, CANNOT_CONTINUE_CONFIDENCE)
 #         return error_response(vars)
-
 
 def end_request(ngrams, vars):
     flag = True
@@ -860,7 +843,6 @@ def what_listen_request(ngrams, vars):
     logger.info(f"what_listen_request {flag}")
     return flag
 
-
 ##################################################################################################################
 # extension
 ##################################################################################################################
@@ -905,8 +887,10 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_MENTION: music_mention_request,
         State.SYS_MUSIC: music_request,
         State.SYS_ASKS: what_music_request,
-        State.SYS_KNOWN: known_request,
-    },
+        State.SYS_KNOWN: known_request
+    }
+
+
 )
 
 simplified_dialogflow.add_user_serial_transitions(
@@ -941,7 +925,11 @@ simplified_dialogflow.set_error_successor(State.SYS_ASKS, State.SYS_ERR)
 #  USR_MUSIC
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_MUSIC, {State.SYS_MUSIC_YES: yes_request, State.SYS_MUSIC_NO: no_request}
+    State.USR_MUSIC,
+    {
+        State.SYS_MUSIC_YES: yes_request,
+        State.SYS_MUSIC_NO: no_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_MUSIC, State.SYS_ERR)
@@ -956,7 +944,11 @@ simplified_dialogflow.set_error_successor(State.SYS_MUSIC_NO, State.SYS_ERR)
 #  USR_TALK_MUSIC
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_TALK_MUSIC, {State.SYS_MENTION_YES: yes_request, State.SYS_MENTION_NO: no_request}
+    State.USR_TALK_MUSIC,
+    {
+        State.SYS_MENTION_YES: yes_request,
+        State.SYS_MENTION_NO: no_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_TALK_MUSIC, State.SYS_ERR)
@@ -970,13 +962,21 @@ simplified_dialogflow.set_error_successor(State.SYS_MENTION_NO, State.SYS_ERR)
 ##################################################################################################################
 #  USR_MUSIC_YES
 
-simplified_dialogflow.add_user_transition(State.USR_MUSIC_YES, State.SYS_END, end_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_MUSIC_YES,
+    State.SYS_END,
+    end_request
+)
 simplified_dialogflow.set_error_successor(State.USR_MUSIC_YES, State.SYS_ERR)
 
 ##################################################################################################################
 #  USR_SORRY
 
-simplified_dialogflow.add_user_transition(State.USR_SORRY, State.SYS_END, end_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_SORRY,
+    State.SYS_END,
+    end_request
+)
 simplified_dialogflow.set_error_successor(State.USR_SORRY, State.SYS_ERR)
 
 ##################################################################################################################
@@ -984,7 +984,11 @@ simplified_dialogflow.set_error_successor(State.USR_SORRY, State.SYS_ERR)
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_FAV,
-    {State.SYS_FAV_YES: yes_request, State.SYS_FAV_NO: no_request, State.SYS_FAV_UNKNOWN: dont_know_request},
+    {
+        State.SYS_FAV_YES: yes_request,
+        State.SYS_FAV_NO: no_request,
+        State.SYS_FAV_UNKNOWN: dont_know_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_FAV, State.SYS_ERR)
@@ -1000,7 +1004,11 @@ simplified_dialogflow.set_error_successor(State.SYS_FAV_UNKNOWN, State.SYS_ERR)
 ##################################################################################################################
 #  USR_FAV_COOL
 
-simplified_dialogflow.add_user_transition(State.USR_FAV_COOL, State.SYS_FAV_ANY, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_FAV_COOL,
+    State.SYS_FAV_ANY,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_FAV_COOL, State.SYS_ERR)
 
@@ -1009,7 +1017,11 @@ simplified_dialogflow.add_system_transition(State.SYS_FAV_ANY, State.USR_WHAT_MU
 ##################################################################################################################
 #  USR_CHECK_OUT
 
-simplified_dialogflow.add_user_transition(State.USR_CHECK_OUT, State.SYS_FAV_ANY, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_CHECK_OUT ,
+    State.SYS_FAV_ANY,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_CHECK_OUT, State.SYS_ERR)
 
@@ -1021,8 +1033,8 @@ simplified_dialogflow.add_user_serial_transitions(
     {
         State.SYS_TOPIC_SMALLTALK: special_topic_request,
         State.SYS_KNOWN: known_request,
-        State.SYS_UNKNOWN: unknown_request,
-    },
+        State.SYS_UNKNOWN: unknown_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_WHAT_MUSIC, State.SYS_ERR)
@@ -1037,7 +1049,11 @@ simplified_dialogflow.set_error_successor(State.SYS_UNKNOWN, State.SYS_ERR)
 #  USR_GENRE_SPECIFIC
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_GENRE_SPECIFIC, {State.SYS_GENRE_YES: yes_request, State.SYS_GENRE_NO: no_request}
+    State.USR_GENRE_SPECIFIC,
+    {
+        State.SYS_GENRE_YES: yes_request,
+        State.SYS_GENRE_NO: no_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_GENRE_SPECIFIC, State.SYS_ERR)
@@ -1051,7 +1067,11 @@ simplified_dialogflow.set_error_successor(State.SYS_GENRE_NO, State.SYS_ERR)
 ##################################################################################################################
 #  USR_ADVICE
 
-simplified_dialogflow.add_user_transition(State.USR_ADVICE, State.SYS_ADVICE_ANY, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_ADVICE ,
+    State.SYS_ADVICE_ANY,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_ADVICE, State.SYS_ERR)
 
@@ -1064,7 +1084,12 @@ simplified_dialogflow.set_error_successor(State.SYS_ADVICE_ANY, State.SYS_ERR)
 #  USR_DONT_KNOW
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_DONT_KNOW, {State.SYS_BAND: band_request, State.SYS_SONG: song_request, State.SYS_GENRE: genre_request}
+    State.USR_DONT_KNOW,
+    {
+        State.SYS_BAND: band_request,
+        State.SYS_SONG: song_request,
+        State.SYS_GENRE: genre_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_DONT_KNOW, State.SYS_ERR)
@@ -1080,7 +1105,11 @@ simplified_dialogflow.set_error_successor(State.SYS_GENRE, State.SYS_ERR)
 ##################################################################################################################
 #  USR_CHECK_LATER
 
-simplified_dialogflow.add_user_transition(State.USR_CHECK_LATER, State.SYS_ADVICE_ANY, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_CHECK_LATER ,
+    State.SYS_ADVICE_ANY,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_CHECK_LATER, State.SYS_ERR)
 
@@ -1088,7 +1117,11 @@ simplified_dialogflow.set_error_successor(State.USR_CHECK_LATER, State.SYS_ERR)
 #  USR_CONCERT
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_CONCERT, {State.SYS_CONCERT_YES: yes_request, State.SYS_CONCERT_NO: no_request}
+    State.USR_CONCERT,
+    {
+        State.SYS_CONCERT_YES: yes_request,
+        State.SYS_CONCERT_NO: no_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_CONCERT, State.SYS_ERR)
@@ -1102,7 +1135,11 @@ simplified_dialogflow.set_error_successor(State.SYS_CONCERT_NO, State.SYS_ERR)
 ##################################################################################################################
 #  USR_CONCERT_WHO
 
-simplified_dialogflow.add_user_transition(State.USR_CONCERT_WHO, State.SYS_CONCERT_KNOWN, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_CONCERT_WHO ,
+    State.SYS_CONCERT_KNOWN,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_CHECK_LATER, State.SYS_ERR)
 
@@ -1113,7 +1150,11 @@ simplified_dialogflow.set_error_successor(State.SYS_CONCERT_KNOWN, State.SYS_ERR
 ##################################################################################################################
 #  USR_CONCERT_COVID
 
-simplified_dialogflow.add_user_transition(State.USR_CONCERT_COVID, State.SYS_CONCERT_ANY, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_CONCERT_COVID ,
+    State.SYS_CONCERT_ANY,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_CONCERT_COVID, State.SYS_ERR)
 
@@ -1124,7 +1165,11 @@ simplified_dialogflow.set_error_successor(State.SYS_CONCERT_ANY, State.SYS_ERR)
 ##################################################################################################################
 #  USR_CONCERT_KNOWN
 
-simplified_dialogflow.add_user_transition(State.USR_CONCERT_KNOWN, State.SYS_CONCERT_ANY, any_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_CONCERT_KNOWN ,
+    State.SYS_CONCERT_ANY,
+    any_request
+)
 
 simplified_dialogflow.set_error_successor(State.USR_CONCERT_KNOWN, State.SYS_ERR)
 
@@ -1132,7 +1177,11 @@ simplified_dialogflow.set_error_successor(State.USR_CONCERT_KNOWN, State.SYS_ERR
 #  USR_CONCERT
 
 simplified_dialogflow.add_user_serial_transitions(
-    State.USR_ASK_ADVICE, {State.SYS_ADVICE_DONT_KNOW: dont_know_request, State.SYS_GOT_ADVICE: entity_mention_request}
+    State.USR_ASK_ADVICE,
+    {
+        State.SYS_ADVICE_DONT_KNOW: dont_know_request,
+        State.SYS_GOT_ADVICE: entity_mention_request
+    }
 )
 
 simplified_dialogflow.set_error_successor(State.USR_ASK_ADVICE, State.SYS_ERR)
@@ -1146,28 +1195,29 @@ simplified_dialogflow.set_error_successor(State.SYS_GOT_ADVICE, State.SYS_ERR)
 ##################################################################################################################
 #  USR_ADVICE_OK
 
-simplified_dialogflow.add_user_transition(State.USR_ADVICE_OK, State.SYS_END, end_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_ADVICE_OK,
+    State.SYS_END,
+    end_request
+)
 simplified_dialogflow.set_error_successor(State.USR_ADVICE_OK, State.SYS_ERR)
 
 ##################################################################################################################
 #  USR_THANKS
 
-simplified_dialogflow.add_user_transition(State.USR_THANKS, State.SYS_END, end_request)
+simplified_dialogflow.add_user_transition(
+    State.USR_THANKS,
+    State.SYS_END,
+    end_request
+)
 simplified_dialogflow.set_error_successor(State.USR_THANKS, State.SYS_ERR)
 
 ##################################################################################################################
 #  EXTENSION
 
-simplified_dialogflow.add_system_transition(
-    State.SYS_TOPIC_SMALLTALK,
-    State.USR_TOPIC_SMALLTALK,
-    special_topic_response,
-)
-simplified_dialogflow.add_system_transition(
-    State.SYS_TOPIC_FACT,
-    State.USR_TOPIC_FACT,
-    special_topic_facts_response,
-)
+simplified_dialogflow.add_system_transition(State.SYS_TOPIC_SMALLTALK, State.USR_TOPIC_SMALLTALK,
+                                            special_topic_response, )
+simplified_dialogflow.add_system_transition(State.SYS_TOPIC_FACT, State.USR_TOPIC_FACT, special_topic_facts_response, )
 
 simplified_dialogflow.set_error_successor(State.SYS_TOPIC_SMALLTALK, State.SYS_ERR)
 simplified_dialogflow.set_error_successor(State.USR_TOPIC_SMALLTALK, State.SYS_ERR)

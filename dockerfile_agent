@@ -40,4 +40,10 @@ COPY . /dp-agent/.
 COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
 #RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
 
+# cronjobs
+RUN mkdir /cron_env
+COPY ./utils/agent_cronjobs /etc/cron.d/agent_cronjobs
+RUN chmod 0644 /etc/cron.d/agent_cronjobs
+RUN crontab /etc/cron.d/agent_cronjobs
+RUN touch /var/log/cron.log
 

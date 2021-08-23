@@ -38,7 +38,7 @@ class BertFloatClassifierModel(BertClassifierModel):
 
     """
 
-    all_columns = ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"]
+    all_columns = ['anger', 'fear', 'joy', 'love', 'sadness', 'surprise', 'neutral']
     used_columns = all_columns  # ["neutral", "very_positive", "very_negative"]
 
     # map2base_sentiment = []  # {"neutral": "neutral", "very_positive": "positive", "very_negative": "negative"}
@@ -77,5 +77,7 @@ class BertFloatClassifierModel(BertClassifierModel):
             pred = self.sess.run(self.y_predictions, feed_dict=feed_dict)
         else:
             pred = self.sess.run(self.y_probas, feed_dict=feed_dict)
-        batch_predictions = [{column: prob for column, prob in zip(self.used_columns, curr_pred)} for curr_pred in pred]
+        batch_predictions = [{column: prob
+                              for column, prob in zip(self.used_columns, curr_pred)}
+                             for curr_pred in pred]
         return batch_predictions

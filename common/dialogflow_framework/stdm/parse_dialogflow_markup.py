@@ -9,17 +9,8 @@ from dff import CompositeDialogueFlow, DialogueFlow
 from dff import dialogflow_extension
 from common.dialogflow_framework.extensions import intents
 from common.dialogflow_framework.extensions import priorities
-from common.dialogflow_framework.stdm.key_words import (
-    TRANSITIONS,
-    GLOBAL_TRANSITIONS,
-    GRAPH,
-    RESPONSE,
-    PROCESSING,
-    forward,
-    back,
-    repeat,
-    previous,
-)
+from common.dialogflow_framework.stdm.key_words import TRANSITIONS, GLOBAL_TRANSITIONS, GRAPH, RESPONSE, \
+    PROCESSING, forward, back, repeat, previous
 from common.utils import is_yes
 
 logger = logging.getLogger(__name__)
@@ -62,7 +53,6 @@ def general_request(complex_condition, destination_state):
         flag = check_complex_condition(vars, complex_condition)
         logger.info(f"{destination_state} request={flag}")
         return flag
-
     return request
 
 
@@ -72,16 +62,13 @@ def general_request_to_prev(previous_cond, cur_state):
         last_state = condition_utils.get_last_state(vars)
         second_last_state = condition_utils.get_n_last_state(vars, 2)
         for state, condition in previous_cond.items():
-            if (
-                str(last_state).split(".")[-1].lower() == state
-                and str(second_last_state).split(".")[-1].lower() == cur_state
-            ):
+            if str(last_state).split(".")[-1].lower() == state \
+                    and str(second_last_state).split(".")[-1].lower() == cur_state:
                 flag = check_complex_condition(vars, condition)
             if flag:
                 break
         logger.info(f"{cur_state} to_previous_state_request={flag}")
         return flag
-
     return request
 
 
@@ -118,7 +105,6 @@ def general_response(state, state_info):
         logger.info(f"{state} response, {response}")
         set_attr(vars, 1.0, common_constants.MUST_CONTINUE)
         return response
-
     return response_func
 
 
@@ -222,7 +208,8 @@ def parse_dialogflow(df_name, scenario, df_global_to_states, previous_cond):
 
         simplified_dialog_flow.add_user_serial_transitions(sys_usr_states[state][1], transitions_dict)
         response_func = general_response(state, graph[state])
-        simplified_dialog_flow.add_system_transition(sys_usr_states[state][0], sys_usr_states[state][1], response_func)
+        simplified_dialog_flow.add_system_transition(sys_usr_states[state][0],
+                                                     sys_usr_states[state][1], response_func)
 
         simplified_dialog_flow.set_error_successor(sys_usr_states[state][0], "State.SYS_ERR")
         simplified_dialog_flow.set_error_successor(sys_usr_states[state][1], "State.SYS_ERR")

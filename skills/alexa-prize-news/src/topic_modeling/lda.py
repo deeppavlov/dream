@@ -22,7 +22,7 @@ from src.consts import (
     MAX_SUBTOPICS_NUM,
     SUBTOPIC_SUMMARY_TYPE,
     N_BASE_UNIGRAMS,
-    N_PARAMETER,
+    N_PARAMETER
 )
 from src.topic_modeling.utils import (
     check_parameters,
@@ -31,7 +31,7 @@ from src.topic_modeling.utils import (
     get_parameters,
     original_topic2topic,
     paired,
-    preprocess,
+    preprocess
 )
 from src.utils import load, save
 
@@ -51,7 +51,7 @@ class LDA(object):
             "dictionary": load(LDA_DICT_PATH),
             "subtopics_news_indices": load(LDA_SUBTOPICS_PATH),
             "subtopic_summaries": load_subtopic_summaries(),
-            "subtopic_parameters": check_parameters(load(LDA_PARAMETERS_PATH)),
+            "subtopic_parameters": check_parameters(load(LDA_PARAMETERS_PATH))
         }
         if None not in fields.values():
             self.model = fields["model"]
@@ -88,7 +88,7 @@ class LDA(object):
             self.dictionary,
             self.subtopics_news_indices,
             self.subtopic_summaries,
-            self.subtopic_parameters,
+            self.subtopic_parameters
         ]
         if None not in fields:
             save(LDA_MODEL_PATH, self.model)
@@ -123,8 +123,8 @@ class LDA(object):
         index = defaultdict(list)
         sections = defaultdict(list)
         for i, text in enumerate(texts):
-            if "primarysection" in text:
-                topic = text["primarysection"]
+            if 'primarysection' in text:
+                topic = text['primarysection']
                 if topic in original_topic2topic:
                     topic = original_topic2topic[topic]
                 else:
@@ -137,7 +137,7 @@ class LDA(object):
 
                 if topic:
                     index[topic].append(i)
-                    sections[topic].append(text["body"])
+                    sections[topic].append(text['body'])
         not_found = sorted(not_found.items(), key=lambda x: x[1], reverse=True)
         for k, v in not_found:
             self._log(f"Topic `{k}` was not found {v} times. Replaced with `other`.")
@@ -145,7 +145,8 @@ class LDA(object):
 
     @staticmethod
     def __preprocess_sentences(
-        index: Dict[str, List[int]], sections: Dict[str, List[str]]
+            index: Dict[str, List[int]],
+            sections: Dict[str, List[str]]
     ) -> Tuple[Dict[str, Dict[int, List[List[str]]]], Dict[str, Dict[int, List[List[str]]]]]:
         sentences = {topic: defaultdict(list) for topic in sections}
         processed_sentences = {topic: defaultdict(list) for topic in sections}
@@ -162,7 +163,9 @@ class LDA(object):
         return sentences, processed_sentences
 
     @staticmethod
-    def __preprocess_docs(processed_sentences: Dict[str, Dict[int, List[List[str]]]]) -> Dict[str, List[List[str]]]:
+    def __preprocess_docs(
+            processed_sentences: Dict[str, Dict[int, List[List[str]]]]
+    ) -> Dict[str, List[List[str]]]:
         processed_docs = defaultdict(list)
         for topic in processed_sentences:
             for doc in processed_sentences[topic].values():
@@ -206,7 +209,11 @@ class LDA(object):
                 continue
 
             model[topic] = LdaModel(
-                corpus=corpus[topic], id2word=dictionary[topic], num_topics=num_topics, iterations=100, passes=3
+                corpus=corpus[topic],
+                id2word=dictionary[topic],
+                num_topics=num_topics,
+                iterations=100,
+                passes=3
             )
         return model
 
@@ -225,11 +232,11 @@ class LDA(object):
         return subtopics
 
     @staticmethod
-    def __get_original_subtopic_phrases(
-        sentences: List[List[str]], stemmed_sentences: List[List[str]], stemmed_grams: List[str]
-    ) -> str:
+    def __get_original_subtopic_phrases(sentences: List[List[str]],
+                                        stemmed_sentences: List[List[str]],
+                                        stemmed_grams: List[str]) -> str:
         stemmed_grams = stemmed_grams[:N_PARAMETER]
-        result = ["" for _ in stemmed_grams]
+        result = ['' for _ in stemmed_grams]
 
         words, stemmed = [], []
         for sentence, stemmed_sentence in zip(sentences, stemmed_sentences):
@@ -246,27 +253,27 @@ class LDA(object):
 
                 for k, p in enumerate(stemmed_grams):
                     if p == pair:
-                        phrase = words[-(j + 1) : last_j + 1]
-                        phrase = " ".join(phrase)
+                        phrase = words[-(j + 1):last_j + 1]
+                        phrase = ' '.join(phrase)
                         if not result[k] or len(result[k]) > len(phrase):
                             result[k] = phrase
             last_j = len(stemmed) - (j + 1)
 
         result = [r if r else p for r, p in zip(result, stemmed_grams)]
-        result = ", ".join(result)
+        result = ', '.join(result)
         return result
 
     @staticmethod
-    def __get_subtopic_n_words_summary(
-        sentences: List[List[str]], stemmed_sentences: List[List[str]], stemmed_grams: List[str]
-    ) -> str:
+    def __get_subtopic_n_words_summary(sentences: List[List[str]],
+                                       stemmed_sentences: List[List[str]],
+                                       stemmed_grams: List[str]) -> str:
         max_count = 0
         result = ""
         for sentence, stemmed_sentence in zip(sentences, stemmed_sentences):
             if len(sentence) > N_PARAMETER:
                 for i in range(len(sentence) - N_PARAMETER + 1):
-                    text = " ".join(sentence[i : i + N_PARAMETER])
-                    stemmed = stemmed_sentence[i : i + N_PARAMETER]
+                    text = ' '.join(sentence[i:i + N_PARAMETER])
+                    stemmed = stemmed_sentence[i:i + N_PARAMETER]
                     current = sum([w in stemmed_grams for w in stemmed])
                     if current > max_count:
                         max_count = current
@@ -275,29 +282,28 @@ class LDA(object):
                 current = sum([w in stemmed_grams for w in stemmed_sentence])
                 if current > max_count:
                     max_count = current
-                    result = " ".join(sentence)
+                    result = ' '.join(sentence)
         return result
 
     @staticmethod
-    def __get_subtopic_sentence_summary(
-        sentences: List[List[str]], stemmed_sentences: List[List[str]], stemmed_grams: List[str]
-    ) -> str:
+    def __get_subtopic_sentence_summary(sentences: List[List[str]],
+                                        stemmed_sentences: List[List[str]],
+                                        stemmed_grams: List[str]) -> str:
         max_count = 0
         result = ""
         for sentence, stemmed in zip(sentences, stemmed_sentences):
             current = sum([w in stemmed_grams for w in stemmed])
             if current > max_count:
                 max_count = current
-                result = " ".join(sentence)
+                result = ' '.join(sentence)
         return result
 
-    def __subtopics_summaries_with(
-        self,
-        sentences: Dict[str, Dict[int, List[List[str]]]],
-        processed_sentences: Dict[str, Dict[int, List[List[str]]]],
-        get_summary: Callable[[List[List[str]], List[List[str]], List[str]], str],
-        desc: str,
-    ) -> Dict[str, List[Tuple[int, str]]]:
+    def __subtopics_summaries_with(self,
+                                   sentences: Dict[str, Dict[int, List[List[str]]]],
+                                   processed_sentences: Dict[str, Dict[int, List[List[str]]]],
+                                   get_summary: Callable[[List[List[str]], List[List[str]], List[str]], str],
+                                   desc: str
+                                   ) -> Dict[str, List[Tuple[int, str]]]:
         result = {}
         for topic in tqdm(self.model, desc=f"Compute {desc} summaries"):
             result[topic] = []
@@ -319,16 +325,15 @@ class LDA(object):
         return result
 
     def __subtopics_summaries(
-        self,
-        sentences: Dict[str, Dict[int, List[List[str]]]],
-        processed_sentences: Dict[str, Dict[int, List[List[str]]]],
+            self,
+            sentences: Dict[str, Dict[int, List[List[str]]]],
+            processed_sentences: Dict[str, Dict[int, List[List[str]]]]
     ) -> Dict[SubtopicSummaryType, Dict[str, List[Tuple[int, str]]]]:
         subtopic_summary_with = partial(self.__subtopics_summaries_with, sentences, processed_sentences)
 
         key_phrases = subtopic_summary_with(LDA.__get_original_subtopic_phrases, "Key Phrases")
-        key_words = subtopic_summary_with(
-            lambda _1, _2, stemmed_grams: ", ".join(stemmed_grams[:N_PARAMETER]), "Key Words"
-        )
+        key_words = subtopic_summary_with(lambda _1, _2, stemmed_grams:
+                                          ', '.join(stemmed_grams[:N_PARAMETER]), "Key Words")
         n_words = subtopic_summary_with(LDA.__get_subtopic_n_words_summary, "N Words")
         sentence = subtopic_summary_with(LDA.__get_subtopic_sentence_summary, "Sentence")
 
@@ -336,6 +341,6 @@ class LDA(object):
             SubtopicSummaryType.KEY_PHRASES: key_phrases,
             SubtopicSummaryType.KEY_WORDS: key_words,
             SubtopicSummaryType.N_WORDS: n_words,
-            SubtopicSummaryType.SENTENCE: sentence,
+            SubtopicSummaryType.SENTENCE: sentence
         }
         return type2summaries

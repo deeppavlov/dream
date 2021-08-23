@@ -21,7 +21,7 @@ def train(log: Callable[[str], None]):
     log("Finishing training.")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     logger = logging.getLogger()
     formatter = logging.Formatter("%(asctime)s %(message)s")
     fh = logging.FileHandler(UPDATER_LOGS_PATH)

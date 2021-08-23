@@ -8,14 +8,15 @@ from wiki_parser import wp_call
 from common.utils import remove_punctuation_from_dict_keys
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
 app = Flask(__name__)
 
 
-@app.route("/model", methods=["POST"])
+@app.route("/model", methods=['POST'])
 def respond():
     st_time = time.time()
     inp = request.json
@@ -23,7 +24,7 @@ def respond():
     query = inp.get("query", [("Q0", "P0", "forw")])
     utt_num = inp.get("utt_num", 0)
     res = [[] for _ in query]
-    logger.debug("Calling wp")
+    logger.debug('Calling wp')
     try:
         res = wp_call(parser_info, query, utt_num)
         res = remove_punctuation_from_dict_keys(res)

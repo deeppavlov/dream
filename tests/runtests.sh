@@ -54,7 +54,7 @@ function logger() {
 
 function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
-    #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml -f s3.yml -p test"
+    #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
         DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream-alexa${WORKER} -f docker-compose.yml -f test.yml"
     # fi
@@ -91,7 +91,7 @@ echo Loading testing env..
 AGENT_PORT=${AGENT_PORT:-4242}
 
 if [[ "$MODE" == "build" ]]; then
-  dockercompose_cmd build
+  dockercompose_cmd build --parallel
   exit 0
 fi
 #dockercompose_cmd logs -f --tail="all" --timestamps &
@@ -142,11 +142,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa text-qa wiki-parser convert-reddit \
-                     convers-evaluator-annotator \
-                     book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
+                     cobot-convers-evaluator-annotator \
+                     book-skill combined-etc-classification knowledge-grounding knowledge-grounding-skill \
                      grounding-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-random fact-retrieval news-api-skill hypothesis-scorer \
+                     fact-retrieval cobot-entities news-api-skill cobotqa-annotator hypothesis-scorer \
                      dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
                      user-persona-extractor small-talk-skill wiki-facts dff-art-skill; do
 

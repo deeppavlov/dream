@@ -15,15 +15,16 @@ from common.metrics import setup_metrics
 from common.news import extract_topics
 from newsapi_service import CachedRequestsAPI
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+sentry_sdk.init(getenv('SENTRY_DSN'))
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 setup_metrics(app)
 
 N_FACTS_TO_CHOSE = 3
-ASYNC_SIZE = int(os.environ.get("ASYNC_SIZE", 5))
+ASYNC_SIZE = int(os.environ.get('ASYNC_SIZE', 5))
 
 NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=3600)  # time in seconds
 
@@ -76,11 +77,11 @@ def collect_topics_and_statuses(dialogs):
     return topics, which_topics, dialog_ids, prev_news_samples
 
 
-@app.route("/respond", methods=["POST"])
+@app.route("/respond", methods=['POST'])
 def respond():
     st_time = time()
-    dialogs = request.json["dialogs"]
-    return_list_of_news = request.json.get("return_list_of_news", False)
+    dialogs = request.json['dialogs']
+    return_list_of_news = request.json.get('return_list_of_news', False)
 
     try:
         topics, which_topics, dialog_ids, prev_news_samples_urls = collect_topics_and_statuses(dialogs)
@@ -95,13 +96,13 @@ def respond():
         # run asynchronous news requests
         results = []
         executor = ThreadPoolExecutor(max_workers=ASYNC_SIZE)
-        for i, result in enumerate(
-            executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples_urls, return_info_list)
-        ):
+        for i, result in enumerate(executor.map(NEWS_API_REQUESTOR.send, topics, statuses, prev_news_samples_urls,
+                                                return_info_list)):
             # result is a list of articles. the first one is top rated news.
             # curr_topic = topics[i]
             # which_topic = which_topics[i]  # all, human or bot
-            result = [news if (news and news.get("title") and news.get("description")) else {} for news in result]
+            result = [news if (news and news.get("title") and news.get("description")) else {}
+                      for news in result]
             logger.info(f"Resulting list of news: {result}.")
             results.append(result)
 
@@ -139,14 +140,14 @@ def respond():
             responses.append([{}])
 
     total_time = time() - st_time
-    logger.info(f"news_api_annotator exec time: {total_time:.3f}s")
+    logger.info(f'news_api_annotator exec time: {total_time:.3f}s')
     return jsonify(responses)
 
 
-@app.route("/healthz", methods=["GET"])
+@app.route("/healthz", methods=['GET'])
 def healthz():
     return "OK", 200
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=3000)

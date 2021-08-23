@@ -16,9 +16,10 @@ from common.utils import get_sentiment
 from common.greeting import GREETING_QUESTIONS, dont_tell_you_answer
 
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -29,19 +30,19 @@ DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.9
 MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 
 GREETING_STEPS = list(GREETING_QUESTIONS.keys())
-COMMENTS = {
-    "neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
-    "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
-    "negative": ["Huh... ", "Sounds sad... ", "Sorry... "],
-}
+COMMENTS = {"neutral": ["Ok. ", "Oh. ", "Huh. ", "Well. ", "Gotcha. ", "Hmm. ", "Aha. "],
+            "positive": ["Sounds cool! ", "Great! ", "Wonderful! "],
+            "negative": ["Huh... ", "Sounds sad... ", "Sorry... "]
+            }
 
 
 def get_next_step(user_utterance, next_step_id, last_comments=None):
     last_comments = [] if last_comments is None else last_comments
-    response, confidence, attr = "", 0.0, {}
+    response, confidence, attr = "", 0., {}
     if next_step_id < len(GREETING_STEPS):
         sentiment = get_sentiment(user_utterance, probs=False)[0]
-        comment = get_not_used_template(used_templates=last_comments, all_templates=COMMENTS[sentiment])
+        comment = get_not_used_template(used_templates=last_comments,
+                                        all_templates=COMMENTS[sentiment])
         response = comment + choice(GREETING_QUESTIONS[GREETING_STEPS[next_step_id]])
         if next_step_id == 0:
             confidence = DIALOG_BEGINNING_START_CONFIDENCE
@@ -51,15 +52,12 @@ def get_next_step(user_utterance, next_step_id, last_comments=None):
         else:
             confidence = DIALOG_BEGINNING_CONTINUE_CONFIDENCE
 
-        attr = {
-            "can_continue": CAN_CONTINUE_SCENARIO,
-            "greeting_step": GREETING_STEPS[next_step_id],
-            "greeting_comment": comment,
-        }
+        attr = {"can_continue": CAN_CONTINUE_SCENARIO, "greeting_step": GREETING_STEPS[next_step_id],
+                "greeting_comment": comment}
     return response, confidence, attr
 
 
-@app.route("/greeting_skill", methods=["POST"])
+@app.route("/greeting_skill", methods=['POST'])
 def respond():
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
@@ -81,22 +79,16 @@ def respond():
         lets_chat_about_particular_topic = if_chat_about_particular_topic(user_utterance)
 
         # skill gets full dialog, so we can take into account length_of_the dialog
-        if (
-            len(dialog["utterances"]) <= 20
-            and "?" not in user_utterance["text"]
-            and not lets_chat_about_particular_topic
-        ):
+        if len(dialog["utterances"]) <= 20 and "?" not in user_utterance["text"] and \
+                not lets_chat_about_particular_topic:
             logger.info(f"Dialog beginning.")
             prev_skill_outputs = get_skill_outputs_from_dialog(
-                dialog["utterances"], skill_name="greeting_skill", activated=True
-            )
-            prev_response_outputs = [
-                get_outputs_with_response_from_dialog(dialog["utterances"], response=response, activated=True)
-                for response in GREETING_QUESTIONS[GREETING_STEPS[0]]
-            ]
-            prev_response_outputs = [
-                list_of_outputs for list_of_outputs in prev_response_outputs if len(list_of_outputs) > 0
-            ]
+                dialog["utterances"], skill_name="greeting_skill", activated=True)
+            prev_response_outputs = [get_outputs_with_response_from_dialog(
+                dialog["utterances"], response=response, activated=True)
+                for response in GREETING_QUESTIONS[GREETING_STEPS[0]]]
+            prev_response_outputs = [list_of_outputs for list_of_outputs in prev_response_outputs
+                                     if len(list_of_outputs) > 0]
             # 2d list to 1d list of dictionaries with hypotheses
             prev_response_outputs = sum(prev_response_outputs, [])
 
@@ -116,7 +108,7 @@ def respond():
         # TODO: turn on in the middle of the dialog
 
         if len(response) == 0:
-            confidence = 0.0
+            confidence = 0.
 
         responses.append(response)
         confidences.append(confidence)
@@ -125,9 +117,9 @@ def respond():
         attributes.append(attr)
 
     total_time = time.time() - st_time
-    logger.info(f"greeting_skill exec time: {total_time:.3f}s")
+    logger.info(f'greeting_skill exec time: {total_time:.3f}s')
     return jsonify(list(zip(responses, confidences, human_attributes, bot_attributes, attributes)))
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=3000)

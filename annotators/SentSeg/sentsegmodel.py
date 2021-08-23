@@ -35,50 +35,41 @@ class model:
         self.tf_raw_word = tf.placeholder(dtype=tf.string, shape=[None, None], name="raw_word")
 
         with tf.variable_scope("word_embedding"):
-            tf_word_embeddings = tf.Variable(
-                self.pretrained_emb, dtype=tf.float32, trainable=True, name="word_embedding"
-            )
+            tf_word_embeddings = tf.Variable(self.pretrained_emb, dtype=tf.float32,
+                                             trainable=True, name="word_embedding")
             self.input = tf.nn.embedding_lookup(tf_word_embeddings, self.tf_word_ids, name="embedded_words")
 
         with tf.variable_scope("char_cnn"):
-            tf_char_embeddings = tf.get_variable(
-                name="char_embeddings",
-                dtype=tf.float32,
-                shape=[len(self.char2id), self.params.char_dim],
-                trainable=True,
-                initializer=xavier_initializer(),
-            )
-            embedded_cnn_chars = tf.nn.embedding_lookup(tf_char_embeddings, self.tf_char_ids, name="embedded_cnn_chars")
-            conv1 = tf.layers.conv2d(
-                inputs=embedded_cnn_chars,
-                filters=self.params.nb_filters_1,
-                kernel_size=(1, 3),
-                strides=(1, 1),
-                padding="same",
-                name="conv1",
-                kernel_initializer=xavier_initializer_conv2d(),
-            )
-            conv2 = tf.layers.conv2d(
-                inputs=conv1,
-                filters=self.params.nb_filters_2,
-                kernel_size=(1, 3),
-                strides=(1, 1),
-                padding="same",
-                name="conv2",
-                kernel_initializer=xavier_initializer_conv2d(),
-            )
+            tf_char_embeddings = tf.get_variable(name="char_embeddings",
+                                                 dtype=tf.float32,
+                                                 shape=[len(self.char2id), self.params.char_dim],
+                                                 trainable=True,
+                                                 initializer=xavier_initializer())
+            embedded_cnn_chars = tf.nn.embedding_lookup(tf_char_embeddings,
+                                                        self.tf_char_ids,
+                                                        name="embedded_cnn_chars")
+            conv1 = tf.layers.conv2d(inputs=embedded_cnn_chars,
+                                     filters=self.params.nb_filters_1,
+                                     kernel_size=(1, 3),
+                                     strides=(1, 1),
+                                     padding="same",
+                                     name="conv1",
+                                     kernel_initializer=xavier_initializer_conv2d())
+            conv2 = tf.layers.conv2d(inputs=conv1,
+                                     filters=self.params.nb_filters_2,
+                                     kernel_size=(1, 3),
+                                     strides=(1, 1),
+                                     padding="same",
+                                     name="conv2",
+                                     kernel_initializer=xavier_initializer_conv2d())
             char_cnn = tf.reduce_max(conv2, axis=2)
             self.input = tf.concat([self.input, char_cnn], axis=-1)
 
         with tf.variable_scope("elmo_emb"):
             elmo = hub.Module("/elmo2", trainable=False)
-            embeddings = elmo(
-                inputs={"tokens": self.tf_raw_word, "sequence_len": self.tf_sentence_lengths},
-                signature="tokens",
-                as_dict=True,
-            )[
-                "elmo"
-            ]  # num_sent, max_sent_len, 1024
+            embeddings = \
+                elmo(inputs={"tokens": self.tf_raw_word, "sequence_len": self.tf_sentence_lengths}, signature="tokens",
+                     as_dict=True)["elmo"]  # num_sent, max_sent_len, 1024
             elmo_emb = tf.layers.dense(inputs=embeddings, units=self.params.elmo_dim, activation=None)
             self.input = tf.concat([self.input, elmo_emb], axis=-1)
 
@@ -87,30 +78,22 @@ class model:
         with tf.variable_scope("bi_lstm_words"):
             cell_fw = tf.contrib.rnn.LSTMCell(self.params.word_hidden_size)
             cell_bw = tf.contrib.rnn.LSTMCell(self.params.word_hidden_size)
-            (output_fw, output_bw), _ = tf.nn.bidirectional_dynamic_rnn(
-                cell_fw, cell_bw, self.input, sequence_length=self.tf_sentence_lengths, dtype=tf.float32
-            )
+            (output_fw, output_bw), _ = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, self.input,
+                                                                        sequence_length=self.tf_sentence_lengths,
+                                                                        dtype=tf.float32)
             self.output = tf.concat([output_fw, output_bw], axis=-1)
             ntime_steps = tf.shape(self.output)[1]
             self.output = tf.reshape(self.output, [-1, 2 * params.word_hidden_size])
-            layer1 = tf.nn.dropout(
-                tf.layers.dense(
-                    inputs=self.output,
-                    units=params.word_hidden_size,
-                    activation=None,
-                    kernel_initializer=xavier_initializer(),
-                ),
-                self.tf_dropout,
-            )
-            pred = tf.layers.dense(
-                inputs=layer1, units=len(self.tag2id), activation=None, kernel_initializer=xavier_initializer()
-            )
+            layer1 = tf.nn.dropout(tf.layers.dense(inputs=self.output, units=params.word_hidden_size, activation=None,
+                                                   kernel_initializer=xavier_initializer()), self.tf_dropout)
+            pred = tf.layers.dense(inputs=layer1, units=len(self.tag2id), activation=None,
+                                   kernel_initializer=xavier_initializer())
             self.logits = tf.reshape(pred, [-1, ntime_steps, len(self.tag2id)])
 
             # compute loss value using crf
-            log_likelihood, self.transition_params = tf.contrib.crf.crf_log_likelihood(
-                self.logits, self.tf_labels, self.tf_sentence_lengths
-            )
+            log_likelihood, self.transition_params = tf.contrib.crf.crf_log_likelihood(self.logits,
+                                                                                       self.tf_labels,
+                                                                                       self.tf_sentence_lengths)
         with tf.variable_scope("loss_and_opt"):
             self.tf_loss = tf.reduce_mean(-log_likelihood)
             optimizer = tf.train.AdamOptimizer(learning_rate=self.tf_learning_rate)
@@ -156,10 +139,8 @@ class model:
         if "tag" in raw_data:
             indexed_tag = [[self.tag2id[t] for t in s] for s in raw_data["tag"]]
             indexed_data["indexed_tag"] = indexed_tag
-        indexed_char = [
-            [[self.char2id[c] if c in self.char2id else self.char2id["<UNK>"] for c in zer(w)] for w in s]
-            for s in raw_data["word"]
-        ]
+        indexed_char = [[[self.char2id[c] if c in self.char2id else self.char2id["<UNK>"] for c in zer(w)] for w in s]
+                        for s in raw_data["word"]]
         indexed_data["indexed_char"] = indexed_char
         return indexed_data
 
@@ -170,41 +151,25 @@ class model:
         end_idx = start_idx + self.params.batch_size
         if end_idx > nb_sentences:
             end_idx = nb_sentences
-        batch_word = data["indexed_word"][start_idx:end_idx]
+        batch_word = data["indexed_word"][start_idx: end_idx]
         if "indexed_tag" in data:
-            batch_tag = data["indexed_tag"][start_idx:end_idx]
-        batch_char = data["indexed_char"][start_idx:end_idx]
-        batch_raw_word = data["raw_word"][start_idx:end_idx]
+            batch_tag = data["indexed_tag"][start_idx: end_idx]
+        batch_char = data["indexed_char"][start_idx: end_idx]
+        batch_raw_word = data["raw_word"][start_idx: end_idx]
         real_sentence_lengths = [len(sent) for sent in batch_word]
         max_len_sentences = max(real_sentence_lengths)
 
-        padded_word = [
-            np.lib.pad(
-                sent,
-                (0, max_len_sentences - len(sent)),
-                "constant",
-                constant_values=(self.word2id["<PAD>"], self.word2id["<PAD>"]),
-            )
-            for sent in batch_word
-        ]
+        padded_word = [np.lib.pad(sent, (0, max_len_sentences - len(sent)), 'constant',
+                                  constant_values=(self.word2id["<PAD>"], self.word2id["<PAD>"])) for sent in
+                       batch_word]
 
-        batch = {
-            "batch_word": batch_word,
-            "padded_word": padded_word,
-            "real_sentence_lengths": real_sentence_lengths,
-            "padded_raw_word": [sent + [""] * (max_len_sentences - len(sent)) for sent in batch_raw_word],
-        }
+        batch = {"batch_word": batch_word, "padded_word": padded_word, "real_sentence_lengths": real_sentence_lengths,
+                 "padded_raw_word": [sent + [''] * (max_len_sentences - len(sent)) for sent in batch_raw_word]}
 
         if "indexed_tag" in data:
-            padded_tag = [
-                np.lib.pad(
-                    sent,
-                    (0, max_len_sentences - len(sent)),
-                    "constant",
-                    constant_values=(self.tag2id["<PAD>"], self.tag2id["<PAD>"]),
-                )
-                for sent in batch_tag
-            ]
+            padded_tag = [np.lib.pad(sent, (0, max_len_sentences - len(sent)), 'constant',
+                                     constant_values=(self.tag2id["<PAD>"], self.tag2id["<PAD>"])) for sent in
+                          batch_tag]
             batch["padded_tag"] = padded_tag
             batch["batch_tag"] = batch_tag
 
@@ -223,14 +188,8 @@ class model:
 
             for word in sentence:
                 length_of_word_in_sentence.append(len(word))
-                padded_sentence.append(
-                    np.lib.pad(
-                        word,
-                        (0, max_len_of_word - len(word)),
-                        "constant",
-                        constant_values=(self.char2id["<PAD>"], self.char2id["<PAD>"]),
-                    )
-                )
+                padded_sentence.append(np.lib.pad(word, (0, max_len_of_word - len(word)), 'constant',
+                                                  constant_values=(self.char2id["<PAD>"], self.char2id["<PAD>"])))
 
             for i in range(max_len_of_sentence - len(padded_sentence)):
                 padded_sentence.append(padding_word)
@@ -277,16 +236,12 @@ class model:
                 current_idx = 0
                 while current_idx < len(data["indexed_word"]):
                     batch, current_idx = self.get_batch(data, current_idx)
-                    feed_dict = {
-                        self.tf_word_ids: batch["padded_word"],
-                        self.tf_sentence_lengths: batch["real_sentence_lengths"],
-                        self.tf_labels: batch["padded_tag"],
-                        self.tf_learning_rate: self.params.learning_rate,
-                        self.tf_dropout: self.params.dropout,
-                        self.tf_char_ids: batch["padded_char"],
-                        self.tf_word_lengths: batch["lengths_of_word"],
-                        self.tf_raw_word: batch["padded_raw_word"],
-                    }
+                    feed_dict = {self.tf_word_ids: batch["padded_word"],
+                                 self.tf_sentence_lengths: batch["real_sentence_lengths"],
+                                 self.tf_labels: batch["padded_tag"], self.tf_learning_rate: self.params.learning_rate,
+                                 self.tf_dropout: self.params.dropout, self.tf_char_ids: batch["padded_char"],
+                                 self.tf_word_lengths: batch["lengths_of_word"],
+                                 self.tf_raw_word: batch["padded_raw_word"]}
 
                     _, train_loss = sess.run([self.tf_train_op, self.tf_loss], feed_dict=feed_dict)
                     losses_of_batches.append(train_loss)
@@ -299,41 +254,29 @@ class model:
                     best_f1 = f1
                     if output_model_path is not None:
                         saver.save(sess, output_model_path)
-                        print(
-                            "Epoch {:2d}: Train: mean loss: {:.4f} | Val. set: acc: {:.4f}, f1: {:.4f} (*).".format(
-                                epoch, mean_loss, acc, f1
-                            )
-                        )
+                        print("Epoch {:2d}: Train: mean loss: {:.4f} | Val. set: acc: {:.4f}, f1: {:.4f} (*).".format(
+                            epoch, mean_loss, acc, f1))
                     else:
-                        print(
-                            "Epoch {:2d}: Train: mean loss: {:.4f} | Val. set: acc: {:.4f}, f1: {:.4f} (*).".format(
-                                epoch, mean_loss, acc, f1
-                            )
-                        )
+                        print("Epoch {:2d}: Train: mean loss: {:.4f} | Val. set: acc: {:.4f}, f1: {:.4f} (*)."
+                              .format(epoch, mean_loss, acc, f1))
                 else:
-                    print(
-                        "Epoch {:2d}: Train: mean loss: {:.4f} | Val. set: acc: {:.4f}, f1: {:.4f}".format(
-                            epoch, mean_loss, acc, f1
-                        )
-                    )
+                    print("Epoch {:2d}: Train: mean loss: {:.4f} | Val. set: acc: {:.4f}, f1: {:.4f}".format(epoch,
+                                                                                                             mean_loss,
+                                                                                                             acc, f1))
         print("Training finished.")
 
     def evaluate(self, sess, data):
         accs = []
-        correct_preds, total_correct, total_preds = 0.0, 0.0, 0.0
+        correct_preds, total_correct, total_preds = 0., 0., 0.
         current_idx = 0
         while current_idx < len(data["indexed_word"]):
             batch, current_idx = self.get_batch(data, current_idx)
             # decode using Viterbi algorithm
             viterbi_sequences = []
-            feed_dict = {
-                self.tf_word_ids: batch["padded_word"],
-                self.tf_sentence_lengths: batch["real_sentence_lengths"],
-                self.tf_dropout: 1.0,
-                self.tf_char_ids: batch["padded_char"],
-                self.tf_word_lengths: batch["lengths_of_word"],
-                self.tf_raw_word: batch["padded_raw_word"],
-            }
+            feed_dict = {self.tf_word_ids: batch["padded_word"],
+                         self.tf_sentence_lengths: batch["real_sentence_lengths"], self.tf_dropout: 1.0,
+                         self.tf_char_ids: batch["padded_char"], self.tf_word_lengths: batch["lengths_of_word"],
+                         self.tf_raw_word: batch["padded_raw_word"]}
             _logits, _transition_params = sess.run([self.logits, self.transition_params], feed_dict=feed_dict)
 
             # iterate over the sentences
@@ -357,9 +300,8 @@ class model:
         acc = np.mean(accs)
         return acc, f1
 
-    def evaluate_using_conlleval(
-        self, model_path, testing_file_path, output_folder, min_length_of_sentence=0, show_score_file=True
-    ):
+    def evaluate_using_conlleval(self, model_path, testing_file_path, output_folder,
+                                 min_length_of_sentence=0, show_score_file=True):
         output_file = os.path.join(output_folder, "result.txt")
         score_file = os.path.join(output_folder, "score.txt")
 
@@ -376,14 +318,10 @@ class model:
 
                 # decode using Viterbi algorithm
                 viterbi_sequences = []
-                feed_dict = {
-                    self.tf_word_ids: batch["padded_word"],
-                    self.tf_sentence_lengths: batch["real_sentence_lengths"],
-                    self.tf_dropout: 1.0,
-                    self.tf_char_ids: batch["padded_char"],
-                    self.tf_word_lengths: batch["lengths_of_word"],
-                    self.tf_raw_word: batch["padded_raw_word"],
-                }
+                feed_dict = {self.tf_word_ids: batch["padded_word"],
+                             self.tf_sentence_lengths: batch["real_sentence_lengths"], self.tf_dropout: 1.0,
+                             self.tf_char_ids: batch["padded_char"], self.tf_word_lengths: batch["lengths_of_word"],
+                             self.tf_raw_word: batch["padded_raw_word"]}
                 _logits, _transition_params = sess.run([self.logits, self.transition_params], feed_dict=feed_dict)
 
                 # iterate over the sentences
@@ -395,11 +333,13 @@ class model:
 
                 for words, labs, lab_preds in zip(batch["batch_word"], batch["batch_tag"], viterbi_sequences):
                     for word, lab, lab_pred in zip(words, labs, lab_preds):
-                        f_out.write("{:} {:} {:}\n".format(self.id2word[word], self.id2tag[lab], self.id2tag[lab_pred]))
+                        f_out.write("{:} {:} {:}\n".format(self.id2word[word],
+                                                           self.id2tag[lab],
+                                                           self.id2tag[lab_pred]))
                     f_out.write("\n")
 
         f_out.close()
-        os.system('perl "%s" < "%s" > "%s"' % ("conlleval", output_file, score_file))
+        os.system("perl \"%s\" < \"%s\" > \"%s\"" % ("conlleval", output_file, score_file))
         print("Tagging output and testing results were written to " + output_file + " and " + score_file)
 
         if show_score_file:
@@ -414,7 +354,7 @@ class model:
         if inp_sent == "":
             return ""
 
-        for p in [".", "?", "!"]:
+        for p in ['.', '?', '!']:
             if p in inp_sent:
                 return inp_sent
 
@@ -430,14 +370,10 @@ class model:
 
             # decode using Viterbi algorithm
             viterbi_sequences = []
-            feed_dict = {
-                self.tf_word_ids: batch["padded_word"],
-                self.tf_sentence_lengths: batch["real_sentence_lengths"],
-                self.tf_dropout: 1.0,
-                self.tf_char_ids: batch["padded_char"],
-                self.tf_word_lengths: batch["lengths_of_word"],
-                self.tf_raw_word: batch["padded_raw_word"],
-            }
+            feed_dict = {self.tf_word_ids: batch["padded_word"],
+                         self.tf_sentence_lengths: batch["real_sentence_lengths"], self.tf_dropout: 1.0,
+                         self.tf_char_ids: batch["padded_char"], self.tf_word_lengths: batch["lengths_of_word"],
+                         self.tf_raw_word: batch["padded_raw_word"]}
             _logits, _transition_params = sess.run([self.logits, self.transition_params], feed_dict=feed_dict)
 
             # iterate over the sentences
@@ -460,7 +396,7 @@ class model:
                 if tag != "O":
                     sent += punctuation
                     punctuation = tag2text[tag]
-                sent += " " + word
+                sent += (" " + word)
             sent += punctuation
 
             return sent

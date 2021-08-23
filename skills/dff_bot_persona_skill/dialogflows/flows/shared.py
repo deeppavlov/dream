@@ -25,7 +25,10 @@ def get_genre_top_wiki_parser(category, genre):
     wp_output = []
     wp_output = requests.post(
         WIKIDATA_URL,
-        json={"parser_info": ["find_topic_info"], "query": [{"category": category, "genre": genre}]},
+        json={
+            "parser_info": ["find_topic_info"],
+            "query": [{"category": category, "genre": genre}]
+        },
     ).json()
 
     if wp_output:
@@ -64,10 +67,8 @@ def get_team_players_top_wiki_parser(team, utterance):
                     timeout=0.8,
                 ).json()
             )
-            logger.info(
-                f"get_team_players_top_wiki_parser: wp_input: entity_substr: {team},"
-                f"subject: {entity_id}, wp_output = {wp_output}"
-            )
+            logger.info(f"get_team_players_top_wiki_parser: wp_input: entity_substr: {team},"
+                        f"subject: {entity_id}, wp_output = {wp_output}")
 
         top = [i[1] for i in wp_output[0][0][:TOP_NUMBER]] if wp_output[0] else []
     except Exception as exc:
@@ -94,10 +95,9 @@ def get_object_top_wiki_parser(item, objects, category, utterance):
             entity_id = entity_ids[0]
             wp_output = requests.post(
                 WIKIDATA_URL,
-                json={
-                    "parser_info": ["find_topic_info"],
-                    "query": [{"what_to_find": objects, "category": category, "subject": entity_id}],
-                },
+                json={"parser_info": ["find_topic_info"], "query": [
+                    {"what_to_find": objects, "category": category, "subject": entity_id}
+                ]},
                 timeout=0.8,
             ).json()
         elif isinstance(entity_info, dict):
@@ -107,17 +107,14 @@ def get_object_top_wiki_parser(item, objects, category, utterance):
                 entity_id
                 and requests.post(
                     WIKIDATA_URL,
-                    json={
-                        "parser_info": ["find_topic_info"],
-                        "query": [{"what_to_find": objects, "category": category, "subject": entity_id}],
-                    },
+                    json={"parser_info": ["find_topic_info"], "query": [
+                        {"what_to_find": objects, "category": category, "subject": entity_id}
+                    ]},
                     timeout=0.8,
                 ).json()
             )
-            logger.info(
-                f"get_object_top_wiki_parser: wp_input: what_to_find: {objects},"
-                f"category: {category}, subject: {entity_id}, wp_output = {wp_output}"
-            )
+            logger.info(f"get_object_top_wiki_parser: wp_input: what_to_find: {objects},"
+                        f"category: {category}, subject: {entity_id}, wp_output = {wp_output}")
 
         top = [i[1] for i in wp_output[0][0][:TOP_NUMBER]] if wp_output[0] else []
     except Exception as exc:

@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9984753727912903
                             },

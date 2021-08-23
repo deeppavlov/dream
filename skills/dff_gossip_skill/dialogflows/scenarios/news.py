@@ -21,17 +21,17 @@ TEMPORARY_NEWS_FOR_COBOT_TOPICS = [
             {
                 "Person": "Jake Gyllenhaal",
                 "Title": "Jake Gyllenhaal to Play War Hero in Combat Control, "
-                "MGM Nears Deal for Sam Hargrave-Directed Film",
+                         "MGM Nears Deal for Sam Hargrave-Directed Film",
                 "Content": "MGM is in negotiations to acquire Combat Control, "
-                "starring Jake Gyllenhaal and directed by Sam Hargrave - Extraction.",
+                           "starring Jake Gyllenhaal and directed by Sam Hargrave - Extraction.",
             },
             {
                 "Person": "Anne Hathaway",
                 "Title": "Anne Hathaway: The view that women can’t be leaders is a myth that can be torn down",
                 "Content": "Hollywood actress Anne Hathaway told CNBC "
-                "Friday that a lack of female representation in positions of power "
-                "is something that can be torn down "
-                "at any moment, when we decide to tear it down..",
+                           "Friday that a lack of female representation in positions of power "
+                           "is something that can be torn down "
+                           "at any moment, when we decide to tear it down..",
             },
             {
                 "Person": "Joaquin Phoenix",
@@ -53,7 +53,10 @@ TEMPORARY_NEWS_FOR_COBOT_TOPICS = [
 
 
 COBOT_TOPICS_TO_WIKI_OCCUPATIONS = {
-    "Politics": [["Q82955", "politician"], ["Q193391", "diplomat"]],
+    "Politics": [
+        ["Q82955", "politician"],
+        ["Q193391", "diplomat"]
+    ],
     "Science_and_Technology": [["Q131524", "entrepreneur"]],
     "Entertainment_Movies": [
         ["Q33999", "actor"],

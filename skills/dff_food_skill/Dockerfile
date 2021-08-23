@@ -22,6 +22,7 @@ RUN python -m spacy download en_core_web_sm
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
+COPY ./annotators/CoBotQA/ ./CoBotQA/
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}

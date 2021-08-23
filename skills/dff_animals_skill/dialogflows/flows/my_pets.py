@@ -16,8 +16,9 @@ from dialogflows.flows.my_pets_states import State as MyPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
 from dialogflows.flows.animals import make_my_pets_info
 
-sentry_sdk.init(os.getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+sentry_sdk.init(os.getenv('SENTRY_DSN'))
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 CONF_1 = 1.0
@@ -74,9 +75,8 @@ def answer_users_question(vars):
     if "?" in user_text:
         if any([elem in user_text for elem in ["do you like swimming", "you like to swim", "you swim"]]):
             answer = "Yes, I like swimming."
-        elif re.findall(r"you have (a )?(robot|vacuum|cleaner)", user_text) or re.findall(
-            r"about (your )?(robot|vacuum|cleaner)", user_text
-        ):
+        elif re.findall(r"you have (a )?(robot|vacuum|cleaner)", user_text) \
+                or re.findall(r"about (your )?(robot|vacuum|cleaner)", user_text):
             answer = "I have a Xiaomi robot vacuum cleaner."
         elif re.findall(r"you have (a )?(tablet|pc)", user_text) or re.findall(r"about (your )?(tablet|pc)", user_text):
             answer = "I have a Samsung tablet PC."
@@ -110,9 +110,8 @@ def stop_animals_request(ngrams, vars):
 def if_about_users_pet(ngrams, vars):
     flag = False
     user_uttr = state_utils.get_last_human_utterance(vars)
-    if re.findall(
-        r"(tell|talk|hear)(.*)(my )(cat|dog|kitten|kitty|puppy|rat|bird|fish|hamster|parrot)", user_uttr["text"]
-    ):
+    if re.findall(r"(tell|talk|hear)(.*)(my )(cat|dog|kitten|kitty|puppy|rat|bird|fish|hamster|parrot)",
+                  user_uttr["text"]):
         flag = True
     logger.info(f"about_users_pet_request={flag}")
     return flag
@@ -130,12 +129,8 @@ def about_pet_request(ngrams, vars):
     told_about_dog = shared_memory.get("told_about_dog", False)
     have_dog = re.findall(r"(do|did) you have (a )?(dog|puppy)s?", user_uttr["text"])
     about_users_pet = if_about_users_pet(ngrams, vars)
-    if (
-        not about_users_pet
-        and not dontlike
-        and (not isno or have_cat)
-        and (not told_about_cat or have_cat or not told_about_dog or have_dog)
-    ):
+    if not about_users_pet and not dontlike and (not isno or have_cat) and \
+            (not told_about_cat or have_cat or not told_about_dog or have_dog):
         flag = True
     my_pet = shared_memory.get("my_pet", "")
     bot_asked_pet = re.findall(DO_YOU_HAVE_TEMPLATE, bot_uttr["text"])
@@ -148,12 +143,8 @@ def about_pet_request(ngrams, vars):
             all_facts_used = True
     prev_state = condition_utils.get_last_state(vars)
     prev_skill = bot_uttr.get("active_skill", "")
-    if (
-        my_pet
-        and prev_skill == "dff_animals_skill"
-        and str(prev_state).split(".")[-1] == "SYS_MY_PET"
-        and all_facts_used
-    ):
+    if my_pet and prev_skill == "dff_animals_skill" and str(prev_state).split('.')[-1] == "SYS_MY_PET" \
+            and all_facts_used:
         if my_pet == "cat":
             my_pet = "dog"
         elif my_pet == "dog":
@@ -376,26 +367,12 @@ simplified_dialog_flow.add_user_serial_transitions(
     },
 )
 
-simplified_dialog_flow.add_system_transition(
-    MyPetsState.SYS_ABOUT_PET,
-    MyPetsState.USR_ABOUT_PET,
-    tell_about_pet_response,
-)
-simplified_dialog_flow.add_system_transition(
-    MyPetsState.SYS_END,
-    MyPetsState.USR_END,
-    scenario_end_response,
-)
-simplified_dialog_flow.add_system_transition(
-    MyPetsState.SYS_MY_PET,
-    MyPetsState.USR_MY_PET,
-    my_pet_response,
-)
-simplified_dialog_flow.add_system_transition(
-    MyPetsState.SYS_ERR,
-    (scopes.MAIN, scopes.State.USR_ROOT),
-    error_response,
-)
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ABOUT_PET, MyPetsState.USR_ABOUT_PET,
+                                             tell_about_pet_response, )
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_END, MyPetsState.USR_END, scenario_end_response, )
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_MY_PET, MyPetsState.USR_MY_PET, my_pet_response, )
+simplified_dialog_flow.add_system_transition(MyPetsState.SYS_ERR, (scopes.MAIN, scopes.State.USR_ROOT),
+                                             error_response, )
 
 simplified_dialog_flow.set_error_successor(MyPetsState.USR_START, MyPetsState.SYS_ERR)
 simplified_dialog_flow.set_error_successor(MyPetsState.SYS_ABOUT_PET, MyPetsState.SYS_ERR)

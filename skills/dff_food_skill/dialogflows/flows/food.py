@@ -5,7 +5,7 @@ import os
 import random
 import re
 
-from common.fact_random import get_facts
+from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
@@ -18,18 +18,9 @@ import dialogflows.scopes as scopes
 from common.universal_templates import if_chat_about_particular_topic, DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no, get_entities, join_words_in_or_pattern
-from common.food import (
-    TRIGGER_PHRASES,
-    FOOD_WORDS,
-    WHAT_COOK,
-    FOOD_UTTERANCES_RE,
-    CUISINE_UTTERANCES_RE,
-    CONCEPTNET_SYMBOLOF_FOOD,
-    CONCEPTNET_HASPROPERTY_FOOD,
-    CONCEPTNET_CAUSESDESIRE_FOOD,
-    ACKNOWLEDGEMENTS,
-    FOOD_FACT_ACKNOWLEDGEMENTS,
-)
+from common.food import TRIGGER_PHRASES, FOOD_WORDS, WHAT_COOK, FOOD_UTTERANCES_RE, CUISINE_UTTERANCES_RE, \
+    CONCEPTNET_SYMBOLOF_FOOD, CONCEPTNET_HASPROPERTY_FOOD, CONCEPTNET_CAUSESDESIRE_FOOD, \
+    ACKNOWLEDGEMENTS, FOOD_FACT_ACKNOWLEDGEMENTS
 from common.link import link_to_skill2i_like_to_talk
 from dialogflows.flows.fast_food import State as FFState
 from dialogflows.flows.fast_food import fast_food_request
@@ -76,7 +67,7 @@ CUISINES_COUNTRIES = {
     "mediterranean": "Italy",
     "thai": "Thailand",
     "indian": "India",
-    "mexican": "Mexico",
+    "mexican": "Mexico"
 }
 CONF_HIGH = 1.0
 CONF_MIDDLE = 0.95
@@ -181,30 +172,44 @@ def error_response(vars):
 # let's talk about food
 ##################################################################################################################
 
-
 def is_question(vars):
-    annotations_sentseg = state_utils.get_last_human_utterance(vars)["annotations"].get("sentseg", {})
+    annotations_sentseg = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "sentseg", {})
     flag = "?" in annotations_sentseg.get("punct_sent", "")
     return flag
 
 
 def check_conceptnet(vars):
-    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get("conceptnet", {})
+    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get(
+        "conceptnet", {})
     conceptnet = False
     food_item = None
     for elem, triplets in annotations_conceptnet.items():
         symbol_of = triplets.get("SymbolOf", [])
         conceptnet_symbolof = any(
-            [i in symbol_of for i in CONCEPTNET_SYMBOLOF_FOOD] + ["chicken" in i for i in symbol_of]
+            [
+                i in symbol_of for i in CONCEPTNET_SYMBOLOF_FOOD
+            ] + [
+                'chicken' in i for i in symbol_of
+            ]
         )
         has_property = triplets.get("HasProperty", [])
-        conceptnet_hasproperty = any([i in has_property for i in CONCEPTNET_HASPROPERTY_FOOD])
+        conceptnet_hasproperty = any(
+            [
+                i in has_property for i in CONCEPTNET_HASPROPERTY_FOOD
+            ]
+        )
         causes_desire = triplets.get("CausesDesire", [])
         conceptnet_causesdesire = any(
-            [i in causes_desire for i in CONCEPTNET_CAUSESDESIRE_FOOD]
-            + ["eat" in i for i in causes_desire]
-            + ["cook" in i for i in causes_desire]
-            + ["food" in i for i in causes_desire]
+            [
+                i in causes_desire for i in CONCEPTNET_CAUSESDESIRE_FOOD
+            ] + [
+                'eat' in i for i in causes_desire
+            ] + [
+                'cook' in i for i in causes_desire
+            ] + [
+                'food' in i for i in causes_desire
+            ]
         )
         conceptnet = any([conceptnet_symbolof, conceptnet_hasproperty, conceptnet_causesdesire])
         if conceptnet:
@@ -259,7 +264,11 @@ def what_cuisine_response(vars):
     user_utt = state_utils.get_last_human_utterance(vars)
     bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
     banned_words = ["water"]
-    linkto_food_skill_agreed = any([req.lower() in bot_utt for req in TRIGGER_PHRASES])
+    linkto_food_skill_agreed = any(
+        [
+            req.lower() in bot_utt for req in TRIGGER_PHRASES
+        ]
+    )
     lets_talk_about_asked = bool(lets_talk_about_check(vars))
     try:
         if not any([i in user_utt["text"].lower() for i in banned_words]):
@@ -292,11 +301,14 @@ def cuisine_request(ngrams, vars):
     # flag = bool(nounphr)
     utt = state_utils.get_last_human_utterance(vars)["text"].lower()
     spacy_utt = spacy_nlp(utt)
-    utt_adj = any([w.pos_ == "ADJ" for w in spacy_utt])
+    utt_adj = any([w.pos_ == 'ADJ' for w in spacy_utt])
     all_words = any([i in utt for i in ["all", "many", "multiple"]])
-    flag = any([utt_adj, check_conceptnet(vars)[0], all_words]) and (
-        not any([bool(re.search(NO_WORDS_RE, utt)), dont_want_talk(vars)])
-    )
+    flag = any([utt_adj, check_conceptnet(vars)[0], all_words]) and (not any(
+        [
+            bool(re.search(NO_WORDS_RE, utt)),
+            dont_want_talk(vars)
+        ]
+    ))
     logger.info(f"cuisine_request {flag}")
     return flag
 
@@ -308,7 +320,7 @@ def cuisine_fact_response(vars):
         last_utt = state_utils.get_last_human_utterance(vars)
         last_utt_lower = last_utt["text"].lower()
         conceptnet_flag, food_item = check_conceptnet(vars)
-        if any([w.pos_ == "ADJ" for w in spacy_nlp(last_utt_lower)]):
+        if any([w.pos_ == 'ADJ' for w in spacy_nlp(last_utt_lower)]):
             for cuisine in list(CUISINES_FACTS.keys()):
                 if cuisine in last_utt_lower:
                     cuisine_fact = CUISINES_FACTS.get(cuisine, "")
@@ -334,16 +346,12 @@ def cuisine_fact_response(vars):
                     return ""
             else:
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-                return (
-                    "My favorite cuisine is French. I'm just in love "
-                    "with pastry, especially with profiteroles! How about you?"
-                )
+                return "My favorite cuisine is French. I'm just in love " \
+                       "with pastry, especially with profiteroles! How about you?"
         else:
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
-            return (
-                "My favorite cuisine is French. I'm just in love "
-                "with pastry, especially with profiteroles! How about you?"
-            )
+            return "My favorite cuisine is French. I'm just in love " \
+                   "with pastry, especially with profiteroles! How about you?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -389,39 +397,39 @@ def what_fav_food_response(vars):
             "This cake is delicious, decadent, addicting, divine, just so incredibly good!!!"
             " Soft warm chocolate cake outside giving way to a creamy, smooth stream of warm "
             "liquid chocolate inside, ensuring every forkful is bathed in velvety chocolate. "
-            "It is my love at first bite.",
+            "It is my love at first bite."
         ],
         "drink": [
             "orange juice",
             "Isually I drink it at breakfast - it’s sweet with natural sugar for quick energy."
             " Oranges have lots of vitamins and if you drink it with pulp, it has fiber. Also,"
-            " oranges are rich in vitamin C that keeps your immune system healthy.",
+            " oranges are rich in vitamin C that keeps your immune system healthy."
         ],
         "fruit": [
             "mango",
             "Every year I wait for the summers so that I can lose myself in the aroma of perfectly"
             " ripened mangoes and devour its heavenly sweet taste. Some people prefer mangoes which"
-            " are tangy and sour. However, I prefer sweet ones that taste like honey.",
+            " are tangy and sour. However, I prefer sweet ones that taste like honey."
         ],
         "dessert": [
             "profiteroles",
             "Cream puffs of the size of a hamburger on steroids, the two pate a choux ends"
             " showcased almost two cups of whipped cream - light, fluffy, and fresh. "
-            "There is nothing better than choux pastry!",
+            "There is nothing better than choux pastry!"
         ],
         "vegetable": [
             "broccoli",
             "This hearty and tasty vegetable is rich in dozens of nutrients. It is said "
             "to pack the most nutritional punch of any vegetable. When I think about green"
             " vegetables to include in my diet, broccoli is one of the foremost veggies to "
-            "come to my mind.",
+            "come to my mind."
         ],
         "berry": [
             "blueberry",
             "Fresh blueberries are delightful and have a slightly sweet taste that is mixed"
             " with a little bit of acid from the berry. When I bite down on a blueberry,"
             " I enjoy a burst of juice as the berry pops, and this juice is very sweet. "
-            "Blueberries are the blues that make you feel good!",
+            "Blueberries are the blues that make you feel good!"
         ],
         "snack": [
             "peanut butter",
@@ -429,8 +437,8 @@ def what_fav_food_response(vars):
             "among my taste receptors for that signature peanutty flavor. I always gravitate"
             " toward foods like peanut butter chocolate cheesecake, and peanut butter cottage"
             " cookies. There are so many peanut butter flavored items for all kinds of food products!"
-            " Still, sometimes it’s best delivered on a spoon.",
-        ],
+            " Still, sometimes it’s best delivered on a spoon."
+        ]
     }
     user_utt = state_utils.get_last_human_utterance(vars)
     bot_utt = state_utils.get_last_bot_utterance(vars)["text"].lower()
@@ -439,7 +447,10 @@ def what_fav_food_response(vars):
     used_food = shared_memory.get("used_food", [])
     unused_food = []
     linkto_food_skill_agreed = any(
-        [req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower() for req in TRIGGER_PHRASES]
+        [
+            req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+            for req in TRIGGER_PHRASES
+        ]
     )
     lets_talk_about_asked = lets_talk_about_check(vars)
     try:
@@ -527,7 +538,7 @@ def fav_food_check(vars):
             any([user_fav_food, check_conceptnet(vars), food_words_search]),
             # condition_utils.no_requests(vars),
             not bool(re.search(NO_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"])),
-            not dont_want_talk(vars),
+            not dont_want_talk(vars)
         ]
     ):
         flag = True
@@ -568,7 +579,7 @@ def food_fact_response(vars):
                 facts = []
 
     if not facts:
-        facts = annotations.get("fact_random", [])
+        facts = annotations.get("cobotqa_annotator", {}).get("facts", [])
 
     if black_list_check:
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -581,7 +592,7 @@ def food_fact_response(vars):
 
             if all(["berr" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
                 berry_name += "berry"
-                fact = get_facts(f"fact about {berry_name}")
+                fact = send_cobotqa(f"fact about {berry_name}")
                 entity = berry_name
             elif berry_name:
                 if facts and entity:
@@ -591,12 +602,12 @@ def food_fact_response(vars):
                     for facts_item in facts:
                         if all(
                             [
-                                facts_item.get("entity_substr", "xxx") in food_item,
-                                facts_item.get("fact", "") not in used_facts,
+                                facts_item.get("entity", "xxx") in food_item,
+                                facts_item.get("fact", "") not in used_facts
                             ]
                         ):
                             fact = facts_item.get("fact", "")
-                            entity = facts_item.get("entity_substr", "")
+                            entity = facts_item.get("entity", "")
                             break
                         else:
                             fact = ""
@@ -609,12 +620,12 @@ def food_fact_response(vars):
                 for facts_item in facts:
                     if all(
                         [
-                            facts_item.get("entity_substr", "xxx") in food_item,
-                            facts_item.get("fact", "") not in used_facts,
+                            facts_item.get("entity", "xxx") in food_item,
+                            facts_item.get("fact", "") not in used_facts
                         ]
                     ):
                         fact = facts_item.get("fact", "")
-                        entity = facts_item.get("entity_substr", "")
+                        entity = facts_item.get("entity", "")
                         break
                     else:
                         fact = ""
@@ -626,7 +637,9 @@ def food_fact_response(vars):
         state_utils.save_to_shared_memory(vars, used_facts=used_facts + [fact])
 
         try:
-            if bot_persona_fav_food_check(vars) or len(state_utils.get_last_human_utterance(vars)["text"].split()) == 1:
+            if bot_persona_fav_food_check(vars) or len(
+                state_utils.get_last_human_utterance(vars)['text'].split()
+            ) == 1:
                 state_utils.set_confidence(vars, confidence=CONF_HIGH)
             else:
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
@@ -634,7 +647,12 @@ def food_fact_response(vars):
                 state_utils.set_confidence(vars, confidence=CONF_MIDDLE)
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 return "Well, as for me, I am a fan of pizza despite I cannot eat as humans."
-            elif any([dont_want_talk(vars), bool(re.search(NO_WORDS_RE, human_utt_text))]):
+            elif any(
+                [
+                    dont_want_talk(vars),
+                    bool(re.search(NO_WORDS_RE, human_utt_text))
+                ]
+            ):
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return error_response(vars)
             elif (not fact) and conceptnet_flag:
@@ -643,7 +661,7 @@ def food_fact_response(vars):
             elif not fact:
                 state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
                 return error_response(vars)
-            elif fact and entity:
+            elif (fact and entity):
                 state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
                 if len(used_facts):
                     return f"{fact} Do you want me to tell you more about {entity}?"
@@ -681,7 +699,13 @@ def more_facts_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     used_facts = shared_memory.get("used_facts", [])
 
-    flag = all([bool(len(used_facts)), condition_utils.no_special_switch_off_requests(vars), yes_request(ngrams, vars)])
+    flag = all(
+        [
+            bool(len(used_facts)),
+            condition_utils.no_special_switch_off_requests(vars),
+            yes_request(ngrams, vars)
+        ]
+    )
     logger.info(f"more_facts_request {flag}")
     return flag
 
@@ -732,7 +756,7 @@ def recipe_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         used_meal = shared_memory.get("used_meals", "")
-        recipe = get_facts(f"how to cook {used_meal}")
+        recipe = send_cobotqa(f"how to cook {used_meal}")
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         if not (used_meal and recipe):
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
@@ -787,7 +811,10 @@ def suggest_cook_response(vars):
     user_utt = state_utils.get_last_human_utterance(vars)
     try:
         linkto_food_skill_agreed = any(
-            [req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower() for req in TRIGGER_PHRASES]
+            [
+                req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+                for req in TRIGGER_PHRASES
+            ]
         )
         if linkto_food_skill_agreed:
             if is_yes(user_utt) or bool(re.search(LIKE_RE, user_utt["text"].lower())):
@@ -817,13 +844,19 @@ def what_fav_food_request(ngrams, vars):
     food_topic_checked = lets_talk_about_check(vars)
     food_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_FAV_FOOD)
     cuisine_1st_time = condition_utils.is_first_time_of_state(vars, State.SYS_WHAT_CUISINE)
-    if any([not bool(food_topic_checked), food_topic_checked == "CUISINE_UTTERANCES_RE", dont_want_talk(vars)]):
+    if any(
+        [
+            not bool(food_topic_checked),
+            food_topic_checked == "CUISINE_UTTERANCES_RE",
+            dont_want_talk(vars)
+        ]
+    ):
         flag = False
     elif (food_topic_checked == "FOOD_UTTERANCES_RE") or (food_topic_checked == "if_chat_about_particular_topic"):
         flag = True
-    elif food_1st_time and cuisine_1st_time:
+    elif (food_1st_time and cuisine_1st_time):
         flag = random.choice([True, False])
-    elif food_1st_time or (not cuisine_1st_time):
+    elif (food_1st_time or (not cuisine_1st_time)):
         flag = True
     else:
         flag = False
@@ -833,12 +866,15 @@ def what_fav_food_request(ngrams, vars):
 
 def check_cooking_request(ngrams, vars):
     linkto_food_skill_agreed = any(
-        [req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower() for req in TRIGGER_PHRASES]
+        [
+            req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+            for req in TRIGGER_PHRASES
+        ]
     ) and any(
         [
             is_yes(state_utils.get_last_human_utterance(vars)),
             not is_no(state_utils.get_last_human_utterance(vars)),
-            bool(re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower())),
+            bool(re.search(LIKE_RE, state_utils.get_last_human_utterance(vars)["text"].lower()))
         ]
     )
     if linkto_food_skill_agreed:
@@ -855,13 +891,18 @@ def said_fav_food_request(ngrams, vars):
     bot_utt_text = state_utils.get_last_bot_utterance(vars)["text"]
     food_topic_checked = lets_talk_about_check(vars)
     # fav_in_bot_utt = bool(re.search(FAV_RE, state_utils.get_last_bot_utterance(vars)["text"]))
-    food_checked = any([bool(re.search(FOOD_WORDS_RE, user_utt_text)), check_conceptnet(vars)[0]])
+    food_checked = any(
+        [
+            bool(re.search(FOOD_WORDS_RE, user_utt_text)),
+            check_conceptnet(vars)[0]
+        ]
+    )
     linkto_check = any([linkto in bot_utt_text for linkto in link_to_skill2i_like_to_talk["dff_food_skill"]])
     if any(
         [
             dont_want_talk(vars),
             food_topic_checked == "FOOD_UTTERANCES_RE",
-            food_topic_checked == "if_chat_about_particular_topic",
+            food_topic_checked == "if_chat_about_particular_topic"
         ]
     ):
         flag = False
@@ -879,7 +920,7 @@ def bot_persona_fav_food_check(vars):
     if all(
         [
             "my favorite food is lava cake" in state_utils.get_last_bot_utterance(vars)["text"].lower(),
-            fav_food_check(vars),
+            fav_food_check(vars)
         ]
     ):
         flag = True
@@ -895,9 +936,15 @@ def bot_persona_fav_food_request(ngrams, vars):
 
 def what_cuisine_request(ngrams, vars):
     linkto_food_skill_agreed = any(
-        [req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower() for req in TRIGGER_PHRASES]
+        [
+            req.lower() in state_utils.get_last_bot_utterance(vars)["text"].lower()
+            for req in TRIGGER_PHRASES
+        ]
     ) and any(
-        [is_yes(state_utils.get_last_human_utterance(vars)), not is_no(state_utils.get_last_human_utterance(vars))]
+        [
+            is_yes(state_utils.get_last_human_utterance(vars)),
+            not is_no(state_utils.get_last_human_utterance(vars))
+        ]
     )
     flag = (bool(lets_talk_about_check(vars)) or linkto_food_skill_agreed) and (not dont_want_talk(vars))
     logger.info(f"what_cuisine_request {flag}")
@@ -937,7 +984,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_CHECK_COOKING: check_cooking_request,
         State.SYS_SAID_FAV_FOOD: said_fav_food_request,
         State.SYS_WHAT_FAV_FOOD: what_fav_food_request,
-        State.SYS_WHAT_CUISINE: what_cuisine_request,
+        State.SYS_WHAT_CUISINE: what_cuisine_request
     },
 )
 simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
@@ -954,7 +1001,11 @@ simplified_dialogflow.set_error_successor(State.SYS_CHECK_COOKING, State.SYS_ERR
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_SUGGEST_COOK,
-    {State.SYS_YES_COOK: yes_request, State.SYS_NO_COOK: no_request, State.SYS_LINKTO_PLUS_NO: linkto_plus_no_request},
+    {
+        State.SYS_YES_COOK: yes_request,
+        State.SYS_NO_COOK: no_request,
+        State.SYS_LINKTO_PLUS_NO: linkto_plus_no_request
+    },
 )
 simplified_dialogflow.set_error_successor(State.USR_SUGGEST_COOK, State.SYS_ERR)
 
@@ -981,20 +1032,25 @@ simplified_dialogflow.set_error_successor(State.SYS_WHAT_CUISINE, State.SYS_ERR)
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_FAV_FOOD,
-    {State.SYS_FAV_FOOD: fav_food_request, State.SYS_LINKTO_PLUS_NO_RECIPE: linkto_plus_no_request},
+    {
+        State.SYS_FAV_FOOD: fav_food_request,
+        State.SYS_LINKTO_PLUS_NO_RECIPE: linkto_plus_no_request
+    },
 )
 simplified_dialogflow.set_error_successor(State.USR_WHAT_FAV_FOOD, State.SYS_ERR)
 
 
-simplified_dialogflow.add_system_transition(
-    State.SYS_LINKTO_PLUS_NO_RECIPE, State.USR_SUGGEST_COOK, suggest_cook_response
-)
+simplified_dialogflow.add_system_transition(State.SYS_LINKTO_PLUS_NO_RECIPE, State.USR_SUGGEST_COOK,
+                                            suggest_cook_response)
 simplified_dialogflow.set_error_successor(State.SYS_LINKTO_PLUS_NO_RECIPE, State.SYS_ERR)
 
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_WHAT_CUISINE,
-    {State.SYS_CUISINE: cuisine_request, State.SYS_LINKTO_PLUS_NO: linkto_plus_no_request},
+    {
+        State.SYS_CUISINE: cuisine_request,
+        State.SYS_LINKTO_PLUS_NO: linkto_plus_no_request
+    },
 )
 simplified_dialogflow.set_error_successor(State.USR_WHAT_CUISINE, State.SYS_ERR)
 
@@ -1009,7 +1065,10 @@ simplified_dialogflow.set_error_successor(State.SYS_LINKTO_PLUS_NO, State.SYS_ER
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_CUISINE_FACT,
-    {State.SYS_TO_TRAVEL_SKILL: to_travel_skill_request, State.USR_WHAT_FAV_FOOD: what_fav_food_response},
+    {
+        State.SYS_TO_TRAVEL_SKILL: to_travel_skill_request,
+        State.USR_WHAT_FAV_FOOD: what_fav_food_response
+    },
 )
 simplified_dialogflow.set_error_successor(State.USR_CUISINE_FACT, State.SYS_ERR)
 
@@ -1079,7 +1138,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_MORE_FACTS: more_facts_request,
         State.SYS_SOMETHING: smth_random_request,
         (scopes.FAST_FOOD, FFState.USR_START): fast_food_request,
-    },
+    }
 )
 simplified_dialogflow.set_error_successor(State.USR_FOOD_FACT, State.SYS_ERR)
 

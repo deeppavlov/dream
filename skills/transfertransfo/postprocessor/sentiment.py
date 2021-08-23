@@ -9,8 +9,8 @@ import numpy as np
 import sentry_sdk
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
-COMBINED_CLASSIFICATION_SERVICE_URL = os.getenv(
-    "COMBINED_CLASSIFICATION_SERVICE_URL", "http://combined-classification:8087/model"
+COMBINED_ETC_CLASSIFICATION_SERVICE_URL = os.getenv(
+    "combined_etc_classification_SERVICE_URL", "http://combined-etc-classification:8087/model"
 )
 
 sentry_sdk.init(SENTRY_DSN)
@@ -24,7 +24,10 @@ def get_sentiment(text):
     """
     try:
         combined_result = requests.request(
-            url=COMBINED_CLASSIFICATION_SERVICE_URL, data=json.dumps({"sentences": [text]}), method="POST", timeout=1
+            url=COMBINED_ETC_CLASSIFICATION_SERVICE_URL,
+            data=json.dumps({"sentences": [text]}),
+            method="POST",
+            timeout=1
         )
     except (requests.ConnectTimeout, requests.ReadTimeout) as e:
         sentry_sdk.capture_exception(e)
@@ -41,13 +44,13 @@ def get_sentiment(text):
         sentiment = ["neutral", 1]
     else:
         try:
-            sentiment_probs = combined_result["sentiment_classification"]
+            sentiment_probs = combined_result['sentiment_classification']
             for key in sentiment_probs:
                 if sentiment_probs[key] == max(sentiment_probs.values()):
                     sentiment = key
         except Exception as e:
             sentry_sdk.capture_exception(e)
-            logger.exception("Error processing results")
+            logger.exception('Error processing results')
 
     return sentiment
 

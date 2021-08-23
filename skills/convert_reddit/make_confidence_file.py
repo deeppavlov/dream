@@ -15,31 +15,17 @@ import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--url",
-    help="skill_url",
-    default="http://localhost:8029/convert_reddit",
+    "--url", help="skill_url", default="http://localhost:8029/convert_reddit",
 )
 # use data from skills/convert_reddit/tests/run_test.py
 parser.add_argument(
-    "-i",
-    "--input",
-    type=pathlib.Path,
-    help="path to a json file",
-    default="dialogs_file.json",
+    "-i", "--input", type=pathlib.Path, help="path to a json file", default="dialogs_file.json",
 )
 parser.add_argument(
-    "-o",
-    "--npy_file_path",
-    type=pathlib.Path,
-    help="path to npy file",
-    default="confidences.npy",
+    "-o", "--npy_file_path", type=pathlib.Path, help="path to npy file", default="confidences.npy",
 )
 parser.add_argument(
-    "-c",
-    "--cache_file_path",
-    type=pathlib.Path,
-    help="path to cache file",
-    default="dialog_cache.pkl",
+    "-c", "--cache_file_path", type=pathlib.Path, help="path to cache file", default="dialog_cache.pkl",
 )
 args = parser.parse_args()
 data = json.load(args.input.open())
@@ -76,8 +62,7 @@ for dialog in tqdm.tqdm(data):
         if glob_counter < cached_counter:
             continue
         res = requests.post(
-            args.url,
-            json={"utterances_histories": [utterances], "approximate_confidence_is_enabled": False},
+            args.url, json={"utterances_histories": [utterances], "approximate_confidence_is_enabled": False},
         )
         assert str(res.status_code) == "200"
         res = res.json()

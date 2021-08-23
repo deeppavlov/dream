@@ -14,9 +14,10 @@ from flask import Flask, request, jsonify
 from spacy.tokens import Doc, Token
 
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -80,15 +81,15 @@ class Blacklist:
         Args:
             path: Path object to blacklist file, one blacklisted phrase per line
         """
-        self.name = path.name.split("_blacklist")[0]
+        self.name = path.name.split('_blacklist')[0]
         self.blacklist = set()
         with path.open() as f:
             for phrase in f:
                 tokenized = en_nlp(phrase.strip().lower())
-                self.blacklist.add(" ".join([str(token) for token in tokenized]))
+                self.blacklist.add(' '.join([str(token) for token in tokenized]))
                 lemmatized_variants = lemmatize(tokenized)
                 for lemmatized in lemmatized_variants:
-                    self.blacklist.add(" ".join(lemmatized))
+                    self.blacklist.add(' '.join(lemmatized))
         self.max_ngram = max([len(x) for x in self.blacklist])
 
     def check_set_of_strings(self, ngrams: Set[str]):
@@ -125,14 +126,15 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
     lemmatized_variants = lemmatize(utterance)
     all_ngrams = set(orig_words) | set([t.lemma_ for t in utterance])
     for n_gram_len in range(2, max_ngram):
-        orig_ngrams = set([" ".join(orig_words[i : i + n_gram_len]) for i in range(len(orig_words) - n_gram_len + 1)])
+        orig_ngrams = set(
+            [' '.join(orig_words[i: i + n_gram_len]) for i in range(len(orig_words) - n_gram_len + 1)])
         all_ngrams |= orig_ngrams
     if lemmatized_variants[0] != orig_words:
         for lemmatized_words in lemmatized_variants:
             for n_gram_len in range(1, max_ngram):
                 lemmatized_ngrams = set(
                     [
-                        " ".join(lemmatized_words[i : i + n_gram_len])
+                        ' '.join(lemmatized_words[i: i + n_gram_len])
                         for i in range(len(lemmatized_words) - n_gram_len + 1)
                     ]
                 )
@@ -140,13 +142,13 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
     return all_ngrams
 
 
-en_nlp = spacy.load("en_core_web_sm", exclude=["senter", "ner"])
+en_nlp = spacy.load('en_core_web_sm', exclude=["senter", "ner"])
 
-blacklists_dir = Path("./blacklists")
-blacklist_files = [f for f in blacklists_dir.iterdir() if f.is_file() and f.suffix == ".txt" and "_blacklist" in f.name]
+blacklists_dir = Path('./blacklists')
+blacklist_files = [f for f in blacklists_dir.iterdir() if f.is_file() and f.suffix == '.txt' and '_blacklist' in f.name]
 
 blacklists = [Blacklist(file) for file in blacklist_files]
-logger.info(f"blacklisted_words initialized with following blacklists: {blacklists}")
+logger.info(f'blacklisted_words initialized with following blacklists: {blacklists}')
 
 
 def check_for_blacklisted_phrases(sentences):
@@ -160,14 +162,14 @@ def check_for_blacklisted_phrases(sentences):
 
 def get_result(request):
     st_time = time.time()
-    sentences = request.json["sentences"]
+    sentences = request.json['sentences']
     result = check_for_blacklisted_phrases(sentences)
     total_time = time.time() - st_time
-    logger.info(f"blacklisted_words exec time: {total_time:.3f}s")
+    logger.info(f'blacklisted_words exec time: {total_time:.3f}s')
     return result
 
 
-@app.route("/blacklisted_words", methods=["POST"])
+@app.route("/blacklisted_words", methods=['POST'])
 def respond():
     """
     responses with  [{blacklist_1_name: true}, ] if at least one blacklisted phrase is in utterance
@@ -176,7 +178,7 @@ def respond():
     return jsonify(result)
 
 
-@app.route("/blacklisted_words_batch", methods=["POST"])
+@app.route("/blacklisted_words_batch", methods=['POST'])
 def respond_batch():
     """
     responses with [{"batch": [{blacklist_1_name: true}, ]}]
@@ -185,5 +187,5 @@ def respond_batch():
     return jsonify([{"batch": result}])
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=3000)

@@ -40,27 +40,19 @@ import string
 from templatey.processors.pre.normalizer import PreProcessor
 from state_formatters.utils import programy_post_formatter_dialog
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 ignore_logger("root")
 # TODO: Get if from config.sanic.yml
 NULL_RESPONSE = "Sorry, I don't have an answer for that!"
 
 
 def remove_punct(s):
-    return "".join([c for c in s if c not in string.punctuation])
+    return ''.join([c for c in s if c not in string.punctuation])
 
 
 tags_map = [
-    (
-        re.compile("AMAZON_EMOTION_DISAPPOINTED_MEDIUM"),
-        "",
-        '<amazon:emotion name="disappointed" intensity="medium">',
-    ),
-    (
-        re.compile("AMAZON_EMOTION_EXCITED_MEDIUM"),
-        "",
-        '<amazon:emotion name="excited" intensity="medium">',
-    ),
+    (re.compile("AMAZON_EMOTION_DISAPPOINTED_MEDIUM"), "", '<amazon:emotion name="disappointed" intensity="medium">',),
+    (re.compile("AMAZON_EMOTION_EXCITED_MEDIUM"), "", '<amazon:emotion name="excited" intensity="medium">',),
     (re.compile("AMAZON_EMOTION_CLOSE."), "", "</amazon:emotion>"),
     (re.compile("AMAZON_EMOTION_CLOSE"), "", "</amazon:emotion>"),
 ]
@@ -76,6 +68,7 @@ def create_amazon_ssml_markup(text):
 
 
 class SanicRestBotClient(RestBotClient):
+
     def __init__(self, id, argument_parser=None):
         RestBotClient.__init__(self, id, argument_parser)
         self.preprocesser = PreProcessor(fpath="../../storage/lookups/normal.txt")
@@ -84,9 +77,9 @@ class SanicRestBotClient(RestBotClient):
         return SanicRestConfiguration("rest")
 
     def get_api_key(self, rest_request):
-        if "apikey" not in rest_request.raw_args or rest_request.raw_args["apikey"] is None:
+        if 'apikey' not in rest_request.raw_args or rest_request.raw_args['apikey'] is None:
             return None
-        return rest_request.raw_args["apikey"]
+        return rest_request.raw_args['apikey']
 
     def server_abort(self, message, status_code):
         raise ServerError(message, status_code=status_code)
@@ -106,10 +99,10 @@ class SanicRestBotClient(RestBotClient):
                 user_sentences = programy_post_formatter_dialog(dialog).get("sentences_batch")
                 user_sentences = user_sentences[0] if user_sentences else [""]
 
-                replace_phrases = ["thanks.", "thank you.", "please."]
+                replace_phrases = ['thanks.', 'thank you.', 'please.']
                 for phrase in replace_phrases:
                     if user_sentences[-1] != phrase:
-                        user_sentences[-1] = user_sentences[-1].replace(phrase, "").strip()
+                        user_sentences[-1] = user_sentences[-1].replace(phrase, '').strip()
 
                 userid = uuid.uuid4().hex
                 # if user said let's chat at beginning of a dialogue, that we should response with greeting
@@ -153,40 +146,30 @@ class SanicRestBotClient(RestBotClient):
 
     def run(self, sanic):
 
-        print(
-            "%s Client running on %s:%s"
-            % (self.id, self.configuration.client_configuration.host, self.configuration.client_configuration.port)
-        )
+        print("%s Client running on %s:%s" % (self.id, self.configuration.client_configuration.host,
+                                              self.configuration.client_configuration.port))
 
         self.startup()
 
         if self.configuration.client_configuration.debug is True:
             print("%s Client running in debug mode" % self.id)
 
-        if (
-            self.configuration.client_configuration.ssl_cert_file is not None
-            and self.configuration.client_configuration.ssl_key_file is not None
-        ):
-            context = (
-                self.configuration.client_configuration.ssl_cert_file,
-                self.configuration.client_configuration.ssl_key_file,
-            )
+        if self.configuration.client_configuration.ssl_cert_file is not None and \
+                self.configuration.client_configuration.ssl_key_file is not None:
+            context = (self.configuration.client_configuration.ssl_cert_file,
+                       self.configuration.client_configuration.ssl_key_file)
 
             print("%s Client running in https mode" % self.id)
-            sanic.run(
-                host=self.configuration.client_configuration.host,
-                port=self.configuration.client_configuration.port,
-                debug=self.configuration.client_configuration.debug,
-                ssl_context=context,
-            )
+            sanic.run(host=self.configuration.client_configuration.host,
+                      port=self.configuration.client_configuration.port,
+                      debug=self.configuration.client_configuration.debug,
+                      ssl_context=context)
         else:
             print("%s Client running in http mode, careful now !" % self.id)
-            sanic.run(
-                host=self.configuration.client_configuration.host,
-                port=self.configuration.client_configuration.port,
-                debug=self.configuration.client_configuration.debug,
-                workers=self.configuration.client_configuration.workers,
-            )
+            sanic.run(host=self.configuration.client_configuration.host,
+                      port=self.configuration.client_configuration.port,
+                      debug=self.configuration.client_configuration.debug,
+                      workers=self.configuration.client_configuration.workers)
 
         self.shutdown()
 
@@ -194,7 +177,7 @@ class SanicRestBotClient(RestBotClient):
         pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     REST_CLIENT = None
 
@@ -202,12 +185,12 @@ if __name__ == "__main__":
 
     APP = Sanic()
 
-    @APP.route("/api/rest/v1.0/ask", methods=["GET", "POST"])
+    @APP.route('/api/rest/v1.0/ask', methods=['GET', 'POST'])
     async def ask(request):
         response, status = REST_CLIENT.process_request(request)
         return REST_CLIENT.create_response(response, status=status)
 
-    @APP.route("/metrics", methods=["GET"])
+    @APP.route('/metrics', methods=['GET'])
     async def metrics(request):
         return json({}, status=200)
 

@@ -9,9 +9,10 @@ import time
 from os import getenv
 import sentry_sdk
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -33,16 +34,16 @@ logger.info("sentseg model is loaded.")
 app = Flask(__name__)
 
 
-@app.route("/sentseg", methods=["POST"])
+@app.route('/sentseg', methods=['POST'])
 def respond():
     st_time = time.time()
-    user_sentences = request.json["sentences"]
+    user_sentences = request.json['sentences']
     session_id = uuid.uuid4().hex
 
     sentseg_result = []
     # Only for user response delete alexa from sentence TRELLO#275
     if len(user_sentences) % 2 == 1:
-        user_sent_without_alexa = re.sub(r"(^alexa\b)", "", user_sentences[-1], flags=re.I).strip()
+        user_sent_without_alexa = re.sub(r'(^alexa\b)', '', user_sentences[-1], flags=re.I).strip()
         if len(user_sent_without_alexa) > 1:
             user_sentences[-1] = user_sent_without_alexa
 
@@ -50,7 +51,7 @@ def respond():
         if text.strip():
             logger.info(f"user text: {text}, session_id: {session_id}")
             sentseg = model.predict(sess, text)
-            sentseg = sentseg.replace(" '", "'")
+            sentseg = sentseg.replace(' \'', '\'')
             sentseg = preprocessing(sentseg)
             segments = split_segments(sentseg)
             sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
@@ -59,7 +60,7 @@ def respond():
             sentseg_result += [{"punct_sent": "", "segments": [""]}]
             logger.warning(f"empty sentence {text}")
     total_time = time.time() - st_time
-    logger.info(f"sentseg exec time: {total_time:.3f}s")
+    logger.info(f'sentseg exec time: {total_time:.3f}s')
     return jsonify(sentseg_result)
 
 
@@ -86,23 +87,23 @@ def split_segments(sentence):
 
 
 def preprocessing(sentence):
-    sentence = sentence.replace(" ai n't", " is not")
-    sentence = sentence.replace(" n't", " not")
-    sentence = sentence.replace("'m ", " am ")
-    sentence = sentence.replace("'re ", " are ")
-    sentence = sentence.replace("'ve ", " have ")
-    sentence = sentence.replace("'ll ", " will ")
-    sentence = sentence.replace("she's ", "she is ")
-    sentence = sentence.replace("he's ", "he is ")
-    sentence = sentence.replace("it's ", "it is ")
-    sentence = sentence.replace("that's ", "that is ")
-    sentence = sentence.replace("y'all ", "you all ")
-    sentence = sentence.replace("yall ", "you all ")
-    sentence = sentence.replace("'d like ", " would like ")
-    sentence = sentence.replace(" gon na ", " going to ")
-    sentence = sentence.replace(" wan na ", " want to ")
+    sentence = sentence.replace(' ai n\'t', ' is not')
+    sentence = sentence.replace(' n\'t', ' not')
+    sentence = sentence.replace('\'m ', ' am ')
+    sentence = sentence.replace('\'re ', ' are ')
+    sentence = sentence.replace('\'ve ', ' have ')
+    sentence = sentence.replace('\'ll ', ' will ')
+    sentence = sentence.replace('she\'s ', 'she is ')
+    sentence = sentence.replace('he\'s ', 'he is ')
+    sentence = sentence.replace('it\'s ', 'it is ')
+    sentence = sentence.replace('that\'s ', 'that is ')
+    sentence = sentence.replace('y\'all ', 'you all ')
+    sentence = sentence.replace('yall ', 'you all ')
+    sentence = sentence.replace('\'d like ', ' would like ')
+    sentence = sentence.replace(' gon na ', ' going to ')
+    sentence = sentence.replace(' wan na ', ' want to ')
     return sentence
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=3000)

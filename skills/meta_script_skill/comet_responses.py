@@ -12,37 +12,19 @@ from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import join_words_in_or_pattern
 from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_entities, get_toxic
 from common.greeting import dont_tell_you_answer
-from utils import (
-    get_used_attributes_by_name,
-    get_comet_atomic,
-    TOP_100_FREQUENT_WORDS,
-    get_all_not_used_templates,
-    get_comet_conceptnet,
-    get_nltk_sentiment,
-    get_not_used_template,
-)
-from constants import (
-    idopattern,
-    DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE,
-    DEFAULT_ATOMIC_CONTINUE_CONFIDENCE,
-    ATOMIC_PAST_QUESTION_TEMPLATES,
-    ATOMIC_FUTURE_QUESTION_TEMPLATES,
-    ATOMIC_COMMENT_TEMPLATES,
-    CONCEPTNET_OPINION_TEMPLATES,
-    OPINION_EXPRESSION_TEMPLATES,
-    REQUESTED_CONCEPTNET_OPINION_CONFIDENCE,
-    NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE,
-    NUMBER_OF_HYPOTHESES_COMET_DIALOG,
-    possessive_pronouns,
-    BANNED_NOUNS_FOR_OPINION_EXPRESSION,
-    BANNED_PROPERTIES,
-    NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG,
-    BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION,
-)
+from utils import get_used_attributes_by_name, get_comet_atomic, TOP_100_FREQUENT_WORDS, get_all_not_used_templates, \
+    get_comet_conceptnet, get_nltk_sentiment, get_not_used_template
+from constants import idopattern, DEFAULT_ASK_ATOMIC_QUESTION_CONFIDENCE, DEFAULT_ATOMIC_CONTINUE_CONFIDENCE, \
+    ATOMIC_PAST_QUESTION_TEMPLATES, ATOMIC_FUTURE_QUESTION_TEMPLATES, \
+    ATOMIC_COMMENT_TEMPLATES, CONCEPTNET_OPINION_TEMPLATES, OPINION_EXPRESSION_TEMPLATES, \
+    REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE, \
+    NUMBER_OF_HYPOTHESES_COMET_DIALOG, possessive_pronouns, BANNED_NOUNS_FOR_OPINION_EXPRESSION, BANNED_PROPERTIES, \
+    NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG, BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 nlp = spacy.load("en_core_web_sm")
@@ -87,13 +69,12 @@ def fill_comet_atomic_template(curr_user_uttr, template, relation):
     return response
 
 
-grammar_compiled = [
-    [re.compile("did you not be", re.IGNORECASE), "were not you"],
-    [re.compile("did you be", re.IGNORECASE), "were you"],
-    [re.compile(r"(\bhis\b|\bher\b|\btheir\b)", re.IGNORECASE), "your"],
-    [re.compile(r"\bdo n't\b", re.IGNORECASE), "don't"],
-    [re.compile("'d don't", re.IGNORECASE), "'b not"],
-]
+grammar_compiled = [[re.compile("did you not be", re.IGNORECASE), "were not you"],
+                    [re.compile("did you be", re.IGNORECASE), "were you"],
+                    [re.compile(r"(\bhis\b|\bher\b|\btheir\b)", re.IGNORECASE), "your"],
+                    [re.compile(r"\bdo n't\b", re.IGNORECASE), "don't"],
+                    [re.compile("'d don't", re.IGNORECASE), "'b not"]
+                    ]
 
 
 def grammar_fixes(uttr):
@@ -112,7 +93,7 @@ def ask_question_using_atomic(dialog):
     idosents = re.findall(idopattern, dialog["human_utterances"][-1]["text"].lower())
     logger.info(f"Found `I do` - like sentences: {idosents}")
     best_sent = ""
-    best_freq_portion = 0.0
+    best_freq_portion = 0.
     # if len(idosents) == 0:
     #     if not dont_tell_you_answer(dialog["human_utterances"][-1]) and len(dialog["bot_utterances"]) > 0 and \
     #             dialog["bot_utterances"][-1]["active_skill"] in ["greeting_skill", "dff_friendship_skill"]:
@@ -126,11 +107,8 @@ def ask_question_using_atomic(dialog):
         best_freq_portion = 0.75
         for sent in idosents:
             words = sent.split()
-            freq_words_portion = (
-                sum([1 if word in TOP_100_FREQUENT_WORDS or word in ["did", "know", "knew"] else 0 for word in words])
-                * 1.0
-                / len(words)
-            )
+            freq_words_portion = sum([1 if word in TOP_100_FREQUENT_WORDS or word in ["did", "know", "knew"]
+                                      else 0 for word in words]) * 1. / len(words)
             if freq_words_portion <= best_freq_portion:
                 best_freq_portion = freq_words_portion
                 best_sent = sent
@@ -140,12 +118,8 @@ def ask_question_using_atomic(dialog):
         return default_return
 
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"],
-        attribute_name="atomic_question_template",
-        value_by_default=None,
-        activated=True,
-        skill_name="comet_dialog_skill",
-    )[-4:]
+        dialog["utterances"], attribute_name="atomic_question_template", value_by_default=None, activated=True,
+        skill_name="comet_dialog_skill")[-4:]
     tense = get_main_verb_tense_for_user_doings(best_sent)
     if tense:
         logger.info(f"Found user action of {tense} tense.")
@@ -158,7 +132,7 @@ def ask_question_using_atomic(dialog):
         return default_return
 
     for template in comet_question_templates[:NUMBER_OF_HYPOTHESES_COMET_DIALOG]:
-        confidence, attr = 0.0, {}
+        confidence, attr = 0., {}
         if tense == "past":
             attr["atomic_question_template"] = template
             relation = ATOMIC_PAST_QUESTION_TEMPLATES[template]["attribute"]
@@ -189,24 +163,19 @@ def ask_question_using_atomic(dialog):
 def comment_using_atomic(dialog):
     responses, confidences, attrs = [], [], []
     if get_toxic(dialog["human_utterances"][-1], probs=False):
-        return [""], [0.0], [{}]
+        return [""], [0.], [{}]
 
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"],
-        attribute_name="atomic_comment_template",
-        value_by_default=None,
-        activated=True,
-        skill_name="comet_dialog_skill",
-    )[-3:]
+        dialog["utterances"], attribute_name="atomic_comment_template",
+        value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-3:]
 
     prev_comet_outputs = get_skill_outputs_from_dialog(
-        dialog["utterances"][-3:], skill_name="comet_dialog_skill", activated=True
-    )
+        dialog["utterances"][-3:], skill_name="comet_dialog_skill", activated=True)
     prev_best_sent = prev_comet_outputs[-1].get("atomic_best_sent", "") if len(prev_comet_outputs) > 0 else ""
     comet_comment_templates = get_all_not_used_templates(used_templates, ATOMIC_COMMENT_TEMPLATES)
 
     for template in comet_comment_templates[:NUMBER_OF_HYPOTHESES_COMET_DIALOG]:
-        confidence, attr = 0.0, {}
+        confidence, attr = 0., {}
 
         attr["atomic_comment_template"] = template
         relation = ATOMIC_COMMENT_TEMPLATES[template]["attribute"]
@@ -222,7 +191,7 @@ def comment_using_atomic(dialog):
 
         if get_nltk_sentiment(response) == "negative":
             response = ""
-            confidence = 0.0
+            confidence = 0.
             attr = {}
 
         responses.append(response)
@@ -233,13 +202,12 @@ def comment_using_atomic(dialog):
 
 
 BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED = join_words_in_or_pattern(
-    BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION
-)
+    BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION)
 
 
 def del_list_inplace(l, id_to_del):
     for i in sorted(id_to_del, reverse=True):
-        del l[i]
+        del(l[i])
 
 
 def remove_intersections_of_entities(entity, subjects):
@@ -255,11 +223,8 @@ def filter_nouns_for_conceptnet(annotated_phrase):
     subjects = [re.sub(possessive_pronouns, "", noun) for noun in subjects]
     subjects = [re.sub(r"(\bthe\b|\ba\b|\ban\b)", "", noun) for noun in subjects]
     subjects = [noun for noun in subjects if noun not in BANNED_NOUNS_FOR_OPINION_EXPRESSION]
-    subjects = [
-        noun
-        for noun in subjects
-        if not re.search(BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED, annotated_phrase["text"])
-    ]
+    subjects = [noun for noun in subjects if not re.search(BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED,
+                                                           annotated_phrase["text"])]
     for ent in get_entities(annotated_phrase, only_named=True, with_labels=True):
         subjects = remove_intersections_of_entities(ent["text"], subjects)
 
@@ -289,22 +254,17 @@ def express_opinion_using_conceptnet(dialog):
         return default_return
 
     used_templates = get_used_attributes_by_name(
-        dialog["utterances"],
-        attribute_name="conceptnet_opinion_template",
-        value_by_default=None,
-        activated=True,
-        skill_name="comet_dialog_skill",
-    )[-4:]
+        dialog["utterances"], attribute_name="conceptnet_opinion_template", value_by_default=None, activated=True,
+        skill_name="comet_dialog_skill")[-4:]
     comet_templates = get_all_not_used_templates(used_templates, CONCEPTNET_OPINION_TEMPLATES)
     shuffle(comet_templates)
 
     for template in comet_templates[:NUMBER_OF_HYPOTHESES_OPINION_COMET_DIALOG]:
-        confidence, attr = 0.0, {}
+        confidence, attr = 0., {}
         attr["conceptnet_opinion_template"] = template
         relation = CONCEPTNET_OPINION_TEMPLATES[template]["attribute"]
-        predictions = [
-            el for el in get_comet_conceptnet(nounphrase, relation, return_all=True) if el not in BANNED_PROPERTIES
-        ]
+        predictions = [el for el in get_comet_conceptnet(nounphrase, relation, return_all=True)
+                       if el not in BANNED_PROPERTIES]
         if len(predictions) == 0:
             continue
         prediction = choice(predictions)
@@ -317,15 +277,11 @@ def express_opinion_using_conceptnet(dialog):
         sentiment = get_nltk_sentiment(prediction)
         logger.info(f"Prediction `{prediction}` has sentiment `{sentiment}`")
         used_templates = get_used_attributes_by_name(
-            dialog["utterances"],
-            attribute_name="conceptnet_opinion_expr_template",
-            value_by_default=None,
-            activated=True,
-            skill_name="comet_dialog_skill",
-        )[-2:]
+            dialog["utterances"], attribute_name="conceptnet_opinion_expr_template",
+            value_by_default=None, activated=True, skill_name="comet_dialog_skill")[-2:]
         opinion_expr_template = get_not_used_template(used_templates, OPINION_EXPRESSION_TEMPLATES[sentiment])
         attr["conceptnet_opinion_expr_template"] = opinion_expr_template
-        response = f"{opinion_expr_template} {response}"
+        response = f'{opinion_expr_template} {response}'
         response = response.replace("OBJECT", nounphrase)
 
         if response == "":
@@ -337,7 +293,7 @@ def express_opinion_using_conceptnet(dialog):
             confidence = NOT_REQUESTED_CONCEPTNET_OPINION_CONFIDENCE
         else:
             response = ""
-            confidence = 0.0
+            confidence = 0.
 
         attr["conceptnet_dialog"] = "express_opinion"
         attr["conceptnet_opinion_object"] = nounphrase

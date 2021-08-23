@@ -6,27 +6,14 @@ from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+sentry_sdk.init(dsn=os.getenv('SENTRY_DSN'), integrations=[FlaskIntegration()])
 
-intent_responder_intents = set(
-    [
-        "exit",
-        "repeat",
-        "where_are_you_from",
-        "who_made_you",
-        "what_is_your_name",
-        "what_is_your_job",
-        "what_can_you_do",
-        "what_time",
-        "dont_understand",
-        "choose_topic",
-        "cant_do",
-        "tell_me_a_story",
-        "get_dialog_id",
-    ]
-)
+intent_responder_intents = set(["exit", "repeat", "where_are_you_from", "who_made_you", "what_is_your_name",
+                                "what_is_your_job", "what_can_you_do", "what_time", "dont_understand", "choose_topic",
+                                "cant_do", "tell_me_a_story", "get_dialog_id"])
 
 app = Flask(__name__)
 
@@ -34,7 +21,7 @@ WIKIDATA_DIALOGUE_SERVICE_URL = os.getenv("WIKIDATA_DIALOGUE_SERVICE_URL")
 LOWER_LIMIT = 0.6
 
 
-@app.route("/model", methods=["POST"])
+@app.route("/model", methods=['POST'])
 def respond():
     dialogs_batch = request.json["dialogs"]
     sentences = []
@@ -43,7 +30,7 @@ def respond():
     for dialog in dialogs_batch:
         uttr = dialog["human_utterances"][-1]
         annotations = uttr["annotations"]
-        intents = set(annotations.get("intent_catcher", {}).keys())
+        intents = set(annotations.get('intent_catcher', {}).keys())
         if intents.intersection(intent_responder_intents):
             sentence = ""
         else:
@@ -74,9 +61,8 @@ def respond():
         generated_utterances = [""]
         confidences = [0.0]
     try:
-        res = requests.post(
-            WIKIDATA_DIALOGUE_SERVICE_URL, json={"sentences": sentences, "entities": entities}, timeout=1.5
-        )
+        res = requests.post(WIKIDATA_DIALOGUE_SERVICE_URL,
+                            json={"sentences": sentences, "entities": entities}, timeout=1.5)
         if res.status_code == 200:
             generated_utterances, confidences = res.json()
             for i in range(len(confidences)):

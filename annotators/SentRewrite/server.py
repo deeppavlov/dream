@@ -6,15 +6,16 @@ import sentry_sdk
 from flask import Flask, jsonify, request
 from sentrewrite import recover_mentions
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(getenv('SENTRY_DSN'))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
 
-@app.route("/sentrewrite", methods=["POST"])
+@app.route('/sentrewrite', methods=['POST'])
 def respond():
     st_time = time.time()
     # utterances_histories: list of dialogs, each dialog is a list of utterances, each utterance is a list of sentences.
@@ -43,10 +44,10 @@ def respond():
 
     logger.info(f"output: {ret}")
     total_time = time.time() - st_time
-    logger.info(f"sent. rewrite exec time: {total_time: .3f}s")
+    logger.info(f'sent. rewrite exec time: {total_time: .3f}s')
 
     return jsonify(ret)
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0', port=3000)

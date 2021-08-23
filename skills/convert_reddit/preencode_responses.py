@@ -37,10 +37,7 @@ parser.add_argument(
     default="score_filtered_comments.json",
 )
 parser.add_argument(
-    "--store_file_path",
-    type=pathlib.Path,
-    help="Store to a file of pickle format",
-    default="replies.pkl",
+    "--store_file_path", type=pathlib.Path, help="Store to a file of pickle format", default="replies.pkl",
 )
 parser.add_argument("--tfhub_model_dir_path", type=pathlib.Path, help="Path of a tfhub model dir", default="convert")
 parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
