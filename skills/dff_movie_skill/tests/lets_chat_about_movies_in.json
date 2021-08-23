@@ -212,11 +212,7 @@
                                 },
                                 "which": "all"
                             }
-                        ],
-                        "cobotqa_annotator": {
-                            "facts": [],
-                            "response": ""
-                        }
+                        ]
                     }
                 },
                 {
