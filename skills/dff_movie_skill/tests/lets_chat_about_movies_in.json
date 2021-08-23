@@ -16,7 +16,7 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -212,7 +212,11 @@
                                 },
                                 "which": "all"
                             }
-                        ]
+                        ],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
                     }
                 },
                 {
@@ -226,7 +230,7 @@
                             "factoid": 0.0012974474811926484,
                             "conversational": 0.9987025260925293
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9817681312561035
                             },
@@ -535,6 +539,10 @@
                             },
                             "utt_num": 2,
                             "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
                         }
                     }
                 }

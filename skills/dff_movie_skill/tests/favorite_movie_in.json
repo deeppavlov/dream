@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -212,6 +212,10 @@
                             "topic_skill_entities_info": {},
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
                         }
                     }
                 },
@@ -226,7 +230,7 @@
                             "factoid": 0.0008228594670072198,
                             "conversational": 0.9991771578788757
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9868978261947632
                             },

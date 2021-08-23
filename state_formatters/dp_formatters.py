@@ -290,6 +290,19 @@ def cobot_conv_eval_formatter_dialog(dialog: Dict) -> List[Dict]:
     return payload
 
 
+def combined_topic_dialogact_formatter_dialog(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    answer = dict()
+    answer['phrase'] = [dialog["human_utterances"][-1]["text"]]
+    history = []
+    for human_uttr, bot_uttr in zip(dialog['human_utterances'][:-1], dialog['bot_utterances']):
+        history.append(human_uttr['text'])
+        history.append(bot_uttr['text'])
+    answer['history'] = ['[SEP]'.join(history)]
+    return [answer]
+
+
 def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
@@ -486,19 +499,13 @@ def wp_formatter_dialog(dialog: Dict):
     input_entity_info_list = []
     if entity_info_list:
         for entity_info in entity_info_list:
-            if (
-                entity_info
-                and "entity_substr" in entity_info
-                and "entity_ids" in entity_info
-                and "tokens_match_conf" in entity_info
-            ):
+            if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info \
+                    and "tokens_match_conf" in entity_info:
                 input_entity_info_list.append(
-                    {
-                        "entity_substr": entity_info["entity_substr"],
-                        "entity_ids": entity_info["entity_ids"][:5],
-                        "confidences": entity_info["confidences"][:5],
-                        "tokens_match_conf": entity_info["tokens_match_conf"][:5],
-                    }
+                    {"entity_substr": entity_info["entity_substr"],
+                     "entity_ids": entity_info["entity_ids"][:5],
+                     "confidences": entity_info["confidences"][:5],
+                     "tokens_match_conf": entity_info["tokens_match_conf"][:5]}
                 )
     parser_info = ["find_top_triplets"]
     if not input_entity_info_list:
@@ -583,7 +590,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
             "entity_substr": [entity_substr_list],
             "entity_pages": [entity_pages_list],
             "entity_ids": [entity_ids_list],
-            "entity_pages_titles": [entity_pages_titles_list],
+            "entity_pages_titles": [entity_pages_titles_list]
         }
     ]
 
@@ -612,7 +619,7 @@ def intent_responder_formatter_dialog(dialog: Dict):
         for intent in called:
             called_intents[intent] = True
     dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
+    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1):]
     for utt in dialog["utterances"]:
         if "sentseg" in utt["annotations"]:
             utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
@@ -728,19 +735,10 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_wiki_skill"
-    return utils.dff_formatter(
-        dialog,
-        service_name,
-        used_annotations=[
-            "cobot_entities",
-            "cobot_nounphrases",
-            "entity_linking",
-            "factoid_classification",
-            "wiki_parser",
-            "cobot_topics",
-            "news_api_annotator",
-        ],
-    )
+    return utils.dff_formatter(dialog, service_name,
+                               used_annotations=["cobot_entities", "cobot_nounphrases", "entity_linking",
+                                                 "factoid_classification", "wiki_parser", "cobot_topics",
+                                                 "news_api_annotator"])
 
 
 def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
@@ -788,15 +786,12 @@ def game_cooperative_skill_formatter(dialog: Dict):
 def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
     hypotheses = []
     for hyp in dialog["human_utterances"][-1]["hypotheses"]:
-        hypotheses.append(
-            {
-                "text": hyp["text"],
-                "confidence": hyp.get("confidence", 0),
-                "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
-                    "cobot_convers_evaluator_annotator", {}
-                ),
-            }
-        )
+        hypotheses.append({
+            "text": hyp["text"],
+            "confidence": hyp.get("confidence", 0),
+            "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                "cobot_convers_evaluator_annotator", {}),
+        })
 
     contexts = len(hypotheses) * [[uttr["text"] for uttr in dialog["utterances"]]]
 
@@ -809,6 +804,7 @@ def topic_recommendation_formatter(dialog: Dict):
     active_skills, topics = [], []
     for utt in dialog["utterances"]:
         active_skills.append(utt.get("active_skill", ""))
-        topics += utt.get("annotations", {}).get("cobot_topics", {}).get("text", [])
+        topics += utt.get("annotations", {}).get('cobot_topics', {}).get("text", [])
     active_skills = [skill for skill in active_skills if skill]
-    return [{"active_skills": [active_skills], "cobot_topics": [topics]}]
+    return [{"active_skills": [active_skills],
+             "cobot_topics": [topics]}]

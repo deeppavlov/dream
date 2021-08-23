@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.5455584526062012,
                                 "Information_DeliveryIntent": 0.6853394508361816
@@ -203,7 +203,11 @@
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "fact_retrieval": []
+                        "fact_retrieval": [],
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
+                        }
                     }
                 },
                 {
@@ -218,7 +222,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_classification": {
+                        "combined_etc_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_DeliveryIntent": 0.7071337103843689
                             },
@@ -404,6 +408,10 @@
                                 "Now, well, it is not in my habit to talk about people but... this l, yeah, is a rather Great actor. Isn't it so?",
                                 "no, it isn't so. "
                             ]
+                        },
+                        "cobotqa_annotator": {
+                            "facts": [],
+                            "response": ""
                         }
                     }
                 }
