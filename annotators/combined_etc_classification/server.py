@@ -38,7 +38,7 @@ def get_result(sentences):
         logger.exception(e)
 
     total_time = time.time() - st_time
-    logger.info(f'cobot_topics exec time: {total_time:.3f}s')
+    logger.info(f"cobot_topics exec time: {total_time:.3f}s")
     return res
 
 
