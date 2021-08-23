@@ -295,6 +295,7 @@ def combined_topic_dialogact_formatter_dialog(dialog: Dict) -> List[Dict]:
     answer['history'] = ['[SEP]'.join(history)]
     return [answer]
 
+
 def cobot_conv_eval_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, total_last_turns=4)
     payload = utils.stop_formatter_dialog(dialog)
