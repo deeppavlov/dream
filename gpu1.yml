@@ -261,6 +261,10 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=9
   convers-evaluator-annotator:
+    restart: unless-stopped
+    env_file: [ .gpu1.dev ]
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=6    
 version: '3.7'
