@@ -4,18 +4,101 @@
         1.0,
         {
             "dff_art_skill_state": {
-                "shared_memory": {
-                },
+                "shared_memory": {},
                 "previous_human_utter_index": 0,
-                "history": {
-                    "0": "State.SYS_DRAWING_Q"
+                "history": {},
+                "current_turn_dff_suspended": false
+            },
+            "dff_art_skill_ctx": {
+                "id": "4eb186e3-952f-48f3-900d-406952f3b3a3",
+                "node_label_history": {
+                    "0": [
+                        "art",
+                        "drawing_q"
+                    ]
                 },
-                "current_turn_dff_suspended": false,
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_DRAWING_Q\", \"__stack__\": [], \"__user_utterance__\": \"lets talk about art\", \"__system_state__\": \"State.SYS_DRAWING_Q\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Do you like drawing?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"WIKI\\\"<__tuple__>\\\"State.USR_DRAWING_Q\\\"\"}"
+                "human_utterances": {
+                    "0": "lets talk about art"
+                },
+                "human_annotations": {
+                    "0": null
+                },
+                "actor_utterances": {
+                    "0": "Do you like drawing?"
+                },
+                "actor_annotations": {},
+                "previous_history_index": 0,
+                "current_history_index": 0,
+                "shared_memory": {
+                    "vars": {
+                        "agent": {
+                            "previous_human_utter_index": -1,
+                            "human_utter_index": 0,
+                            "dialog": {
+                                "human_utterances": [
+                                    {
+                                        "text": "let's talk about art.",
+                                        "annotations": {
+                                            "cobot_nounphrases": [],
+                                            "sentseg": {
+                                                "punct_sent": "let's talk about art.",
+                                                "segments": [
+                                                    "let's talk about art."
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "bot_utterances": []
+                            },
+                            "entities": {
+                                "animal": {
+                                    "bot_encounters": [],
+                                    "human_encounters": [
+                                        {
+                                            "emotions": {
+                                                "neutral": 0.9997689723968506
+                                            },
+                                            "full_name": "art",
+                                            "human_utterance_index": 0,
+                                            "intents": [
+                                                "lets_chat_about",
+                                                "Information_RequestIntent"
+                                            ],
+                                            "next_skill_name": "",
+                                            "pos": [
+                                                "NOUN"
+                                            ],
+                                            "previous_skill_name": "pre_start",
+                                            "sentiment": "neutral",
+                                            "topics": [
+                                                "Science_and_Technology"
+                                            ]
+                                        }
+                                    ],
+                                    "name": "art"
+                                }
+                            },
+                            "shared_memory": {},
+                            "previous_turn_dff_suspended": false,
+                            "current_turn_dff_suspended": false,
+                            "response": {},
+                            "dff_shared_state": {},
+                            "cache": {},
+                            "history": {},
+                            "used_links": {},
+                            "age_group": "",
+                            "disliked_skills": {},
+                            "clarification_request_flag": false
+                        }
+                    },
+                    "confidence": 1.0,
+                    "continue_flag": "must"
+                }
             },
             "dff_shared_state": {},
             "used_links": {},
-            "age_group":"",
+            "age_group": "",
             "disliked_skills": {}
         },
         {},

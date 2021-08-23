@@ -6,9 +6,9 @@ import re
 import nltk
 import requests
 import sentry_sdk
+from dff import Context, Actor
 import common.constants as common_constants
 import common.dialogflow_framework.utils.state as state_utils
-
 from common.wiki_skill import (
     find_page_title,
     find_all_titles,
@@ -240,15 +240,15 @@ def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_c
     return page_content_list
 
 
-def provide_facts_request(vars):
+def provide_facts_request(ctx: Context, actor: Actor, *args, **kwargs):
     flag = False
-    shared_memory = state_utils.get_shared_memory(vars)
+    vars = ctx.shared_memory.get("vars", {})
     user_uttr = state_utils.get_last_human_utterance(vars)
     isno = is_no(user_uttr)
-    cur_wiki_page = shared_memory.get("cur_wiki_page", "")
+    cur_wiki_page = ctx.shared_memory.get("cur_wiki_page", "")
     if cur_wiki_page:
         wiki_page_content_list = memory.get("wiki_page_content", [])
-        used_wiki_page_nums = shared_memory.get("used_wiki_page_nums", {}).get(cur_wiki_page, [])
+        used_wiki_page_nums = ctx.shared_memory.get("used_wiki_page_nums", {}).get(cur_wiki_page, [])
         logger.info(f"request, used_wiki_page_nums {used_wiki_page_nums}")
         logger.info(f"request, wiki_page_content_list {wiki_page_content_list[:3]}")
         if len(wiki_page_content_list) > 0 and len(used_wiki_page_nums) < len(wiki_page_content_list) and not isno:
@@ -256,56 +256,60 @@ def provide_facts_request(vars):
     return flag
 
 
-def provide_facts_response(vars, page_source, wiki_page):
-    shared_memory = state_utils.get_shared_memory(vars)
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    isyes = is_yes(user_uttr) or re.findall(CONTINUE_PATTERN, user_uttr["text"])
-    response = ""
-    cur_wiki_page = shared_memory.get("cur_wiki_page", "")
-    if not cur_wiki_page:
-        cur_wiki_page = wiki_page
-        state_utils.save_to_shared_memory(vars, cur_wiki_page=wiki_page)
-        if page_source == "wikiHow":
-            page_content = get_wikihow_content(wiki_page, wikihow_cache)
-            wiki_page_content_list = preprocess_wikihow_page(page_content)
-            memory["wiki_page_content"] = wiki_page_content_list
-        elif page_source == "wikipedia":
-            page_content = get_wikipedia_content(wiki_page)
-            wiki_page_content_list = preprocess_wikipedia_page(wiki_page.lower(), [], page_content)
-            memory["wiki_page_content"] = wiki_page_content_list
-        logger.info(f"wiki_page {wiki_page}")
+def fact_provider(page_source, wiki_page):
+    def provide_facts_response(ctx: Context, actor: Actor, *args, **kwargs):
+        page_source = "wikiHow"
+        wiki_page = "Improve-Your-Drawing-Skills"
+        vars = ctx.shared_memory.get("vars", {})
+        user_uttr = state_utils.get_last_human_utterance(vars)
+        isyes = is_yes(user_uttr) or re.findall(CONTINUE_PATTERN, user_uttr["text"])
+        response = ""
+        cur_wiki_page = ctx.shared_memory.get("cur_wiki_page", "")
+        if not cur_wiki_page:
+            cur_wiki_page = wiki_page
+            ctx.shared_memory["cur_wiki_page"] = wiki_page
+            if page_source == "wikiHow":
+                page_content = get_wikihow_content(wiki_page, wikihow_cache)
+                wiki_page_content_list = preprocess_wikihow_page(page_content)
+                memory["wiki_page_content"] = wiki_page_content_list
+            elif page_source == "wikipedia":
+                page_content = get_wikipedia_content(wiki_page)
+                wiki_page_content_list = preprocess_wikipedia_page(wiki_page.lower(), [], page_content)
+                memory["wiki_page_content"] = wiki_page_content_list
+            logger.info(f"wiki_page {wiki_page}")
 
-    used_wiki_page_nums_dict = shared_memory.get("used_wiki_page_nums", {})
-    used_wiki_page_nums = used_wiki_page_nums_dict.get(wiki_page, [])
-    wiki_page_content_list = memory.get("wiki_page_content", [])
-    logger.info(f"response, used_wiki_page_nums {used_wiki_page_nums}")
-    logger.info(f"response, wiki_page_content_list {wiki_page_content_list[:3]}")
+        used_wiki_page_nums_dict = ctx.shared_memory.get("used_wiki_page_nums", {})
+        used_wiki_page_nums = used_wiki_page_nums_dict.get(wiki_page, [])
+        wiki_page_content_list = memory.get("wiki_page_content", [])
+        logger.info(f"response, used_wiki_page_nums {used_wiki_page_nums}")
+        logger.info(f"response, wiki_page_content_list {wiki_page_content_list[:3]}")
 
-    if wiki_page_content_list:
-        for num, fact in enumerate(wiki_page_content_list):
-            if num not in used_wiki_page_nums:
-                facts_str = fact.get("facts_str", "")
-                question = fact.get("question", "")
-                response = f"{facts_str} {question}".strip().replace("  ", " ")
-                used_wiki_page_nums.append(num)
-                used_wiki_page_nums_dict[wiki_page] = used_wiki_page_nums
-                state_utils.save_to_shared_memory(vars, used_wiki_page_nums=used_wiki_page_nums_dict)
-                break
+        if wiki_page_content_list:
+            for num, fact in enumerate(wiki_page_content_list):
+                if num not in used_wiki_page_nums:
+                    facts_str = fact.get("facts_str", "")
+                    question = fact.get("question", "")
+                    response = f"{facts_str} {question}".strip().replace("  ", " ")
+                    used_wiki_page_nums.append(num)
+                    used_wiki_page_nums_dict[wiki_page] = used_wiki_page_nums
+                    ctx.shared_memory["used_wiki_page_nums"] = used_wiki_page_nums_dict
+                    break
 
-        if len(wiki_page_content_list) == len(used_wiki_page_nums):
             if len(wiki_page_content_list) == len(used_wiki_page_nums):
-                state_utils.save_to_shared_memory(vars, wiki_page="")
-                memory["wiki_page_content"] = []
-
-    if response:
-        if isyes:
-            state_utils.set_confidence(vars, confidence=1.0)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+                if len(wiki_page_content_list) == len(used_wiki_page_nums):
+                    ctx.shared_memory["wiki_page"] = ""
+                    memory["wiki_page_content"] = []
+        if response:
+            if isyes:
+                ctx.shared_memory["confidence"] = 1.0
+                ctx.shared_memory["continue_flag"] = common_constants.MUST_CONTINUE
+            else:
+                ctx.shared_memory["confidence"] = 0.99
+                ctx.shared_memory["continue_flag"] = common_constants.CAN_CONTINUE_SCENARIO
         else:
-            state_utils.set_confidence(vars, confidence=0.99)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
-    else:
-        state_utils.set_confidence(vars, confidence=0.0)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
-    state_utils.add_acknowledgement_to_response_parts(vars)
-    return response
+            ctx.shared_memory["confidence"] = 0.0
+            ctx.shared_memory["continue_flag"] = common_constants.CAN_NOT_CONTINUE
+
+        return response
+
+    return provide_facts_response

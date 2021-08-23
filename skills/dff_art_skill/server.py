@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 
+import json
 import logging
 import time
 import os
 import random
 
+import sentry_sdk
+from dff import Context
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
-import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-
+import common.constants as common_constants
 import common.dialogflow_framework.utils.dialogflow as dialogflow_utils
 import common.dialogflow_framework.programy.text_preprocessing as text_utils
-import dialogflows.main as main_dialogflow
 import test_server
+from dialogflows.main import actor
 
 ignore_logger("root")
 
@@ -23,7 +25,7 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -31,14 +33,13 @@ app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-DF = main_dialogflow.composite_dialogflow
-
 
 def handler(requested_data, random_seed=None):
     st_time = time.time()
     dialog_batch = requested_data.get("dialog_batch", [])
     human_utter_index_batch = requested_data.get("human_utter_index_batch", [0] * len(dialog_batch))
     state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
+    ctx_batch = requested_data.get(f"{SERVICE_NAME}_ctx_batch", [{}] * len(dialog_batch))
     dff_shared_state_batch = requested_data.get(f"dff_shared_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
@@ -54,6 +55,7 @@ def handler(requested_data, random_seed=None):
         human_utter_index,
         dialog,
         state,
+        ctx,
         dff_shared_state,
         entities,
         used_links,
@@ -64,6 +66,7 @@ def handler(requested_data, random_seed=None):
         human_utter_index_batch,
         dialog_batch,
         state_batch,
+        ctx_batch,
         dff_shared_state_batch,
         entities_batch,
         used_links_batch,
@@ -79,8 +82,7 @@ def handler(requested_data, random_seed=None):
             text = dialog["human_utterances"][-1]["text"]
             text = text_utils.clean_text(text)
 
-            dialogflow_utils.load_into_dialogflow(
-                DF,
+            agent = dialogflow_utils.load_into_dialogflow(
                 human_utter_index,
                 dialog,
                 state,
@@ -91,7 +93,20 @@ def handler(requested_data, random_seed=None):
                 disliked_skills,
                 clarification_request_flag,
             )
-            text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
+
+            if ctx:
+                ctx = Context.parse_obj(ctx)
+            else:
+                ctx = Context()
+            ctx.add_human_utterance(text)
+            shared_memory = ctx.shared_memory
+            shared_memory["vars"] = {"agent": agent}
+            ctx.shared_memory = shared_memory
+            ctx = actor(ctx)
+            text = ctx.actor_text_response
+            vars = ctx.shared_memory.get("vars", {})
+            confidence = ctx.shared_memory.get("confidence", 1.0)
+            can_continue = ctx.shared_memory.get("continue_flag", common_constants.CAN_CONTINUE_SCENARIO)
             (
                 state,
                 dff_shared_state,
@@ -99,16 +114,19 @@ def handler(requested_data, random_seed=None):
                 age_group,
                 disliked_skills,
                 response_parts,
-            ) = dialogflow_utils.get_dialog_state(DF)
+            ) = dialogflow_utils.get_dialog_state(vars)
 
             human_attr = {
                 f"{SERVICE_NAME}_state": state,
+                f"{SERVICE_NAME}_ctx": json.loads(ctx.json()),
                 "dff_shared_state": dff_shared_state,
                 "used_links": used_links,
                 "age_group": age_group,
                 "disliked_skills": disliked_skills,
             }
+
             hype_attr = {"can_continue": can_continue}
+
             if response_parts:
                 hype_attr["response_parts"] = response_parts
 
@@ -124,7 +142,7 @@ def handler(requested_data, random_seed=None):
 
 
 try:
-    test_server.run_test(handler)
+    # test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
