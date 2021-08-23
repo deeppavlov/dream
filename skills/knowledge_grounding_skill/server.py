@@ -14,14 +14,12 @@ from nltk import pos_tag, tokenize
 
 from common.constants import CAN_NOT_CONTINUE
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
-from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, \
-    get_topics, get_entities
+from common.utils import get_intents, join_sentences_in_or_pattern, join_words_in_or_pattern, get_topics, get_entities
 from common.response_selection import ACTIVE_SKILLS
 
-sentry_sdk.init(getenv('SENTRY_DSN'))
+sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -36,23 +34,37 @@ HIGHEST_CONFIDENCE = 0.99
 KG_ACTIVE_DEPTH = 2
 LETS_CHAT_ABOUT_CONFIDENDENCE = 0.6
 NOUNPHRASE_ENTITY_CONFIDENCE = 0.95
-KNOWLEDGE_GROUNDING_SERVICE_URL = getenv('KNOWLEDGE_GROUNDING_SERVICE_URL')
+KNOWLEDGE_GROUNDING_SERVICE_URL = getenv("KNOWLEDGE_GROUNDING_SERVICE_URL")
 ACTIVE_SKILLS.remove("personal_info_skill")
 DFF_SKILLS = deepcopy(ACTIVE_SKILLS)
 DFF_ANNTR_HISTORY_LEN = 1
 
-special_char_re = re.compile(r'[^0-9a-zA-Z \-\.\'\?,!]+')
-greetings_farewells_re = re.compile(join_words_in_or_pattern(["have .* day", "have .* night", ".* bye",
-                                                              r"\bbye", "goodbye", "hello",
-                                                              "(it|its|it's|nice|thank you|thanks).* chatting.*",
-                                                              "(it|its|it's|nice|thank you|thanks).* talking.*",
-                                                              ".* chatting with you.*",
-                                                              "hi", "good morning",
-                                                              "good afternoon",
-                                                              "good luck", "great chat",
-                                                              "get off.*", "thanks for the chat",
-                                                              "thank.* for .* chat"]), re.IGNORECASE)
-tokenizer = tokenize.RegexpTokenizer(r'\w+')
+special_char_re = re.compile(r"[^0-9a-zA-Z \-\.\'\?,!]+")
+greetings_farewells_re = re.compile(
+    join_words_in_or_pattern(
+        [
+            "have .* day",
+            "have .* night",
+            ".* bye",
+            r"\bbye",
+            "goodbye",
+            "hello",
+            "(it|its|it's|nice|thank you|thanks).* chatting.*",
+            "(it|its|it's|nice|thank you|thanks).* talking.*",
+            ".* chatting with you.*",
+            "hi",
+            "good morning",
+            "good afternoon",
+            "good luck",
+            "great chat",
+            "get off.*",
+            "thanks for the chat",
+            "thank.* for .* chat",
+        ]
+    ),
+    re.IGNORECASE,
+)
+tokenizer = tokenize.RegexpTokenizer(r"\w+")
 
 with open("./google-english-no-swears.txt", "r") as f:
     UNIGRAMS = set(f.read().splitlines())
@@ -90,10 +102,7 @@ def get_news(uttr, which):
             title = news_item.get("news", {}).get("title", "")
             text = news_item.get("news", {}).get("description", "")
             if text:
-                result_values.append({
-                    "title": title,
-                    "description": text
-                })
+                result_values.append({"title": title, "description": text})
     return result_values
 
 
@@ -114,12 +123,10 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     """
     Extract list of strings with values of specific key <key_name>
     from annotator <annotator_name> dict from given dialog utterances.
-
     Args:
         utterances: utterances, the first one is user's reply
         annotator_name: name of target annotator
         key_name: name of target field from annotation dict
-
     Returns:
         list of strings with values of specific key from specific annotator
     """
@@ -158,9 +165,16 @@ def get_cobot_nounphrases(utt):
 
 def get_intents_flags(utt):
     special_intents = [
-        "cant_do", "repeat", "weather_forecast_intent", "what_are_you_talking_about",
-        "what_can_you_do", "what_is_your_job", "what_is_your_name", "what_time",
-        "where_are_you_from", "who_made_you"
+        "cant_do",
+        "repeat",
+        "weather_forecast_intent",
+        "what_are_you_talking_about",
+        "what_can_you_do",
+        "what_is_your_job",
+        "what_is_your_name",
+        "what_time",
+        "where_are_you_from",
+        "who_made_you",
     ]
     detected_intents = get_intents(utt, which="intent_catcher")
     lets_chat_about_flag = if_chat_about_particular_topic(utt)
@@ -171,21 +185,21 @@ def get_intents_flags(utt):
 def get_lets_chat_topic(lets_chat_about_flag, utt):
     lets_chat_topic = ""
     COBOT_DA_FILE_TOPICS_MATCH = {
-        'Entertainment_Movies': 'movies',
-        'Entertainment_Music': 'music',
-        'Science_and_Technology': 'science',
-        'Sports': 'sports',
-        'Games': 'games',
-        'Movies_TV': 'movies',
-        'SciTech': 'science',
-        'Psychology': 'emotions',
-        'Music': 'music',
-        'Food_Drink': 'food',
-        'Weather_Time': 'weather',
-        'Entertainment': 'activities',
-        'Celebrities': 'celebrities',
-        'Travel_Geo': 'travel',
-        'Art_Event': 'art'
+        "Entertainment_Movies": "movies",
+        "Entertainment_Music": "music",
+        "Science_and_Technology": "science",
+        "Sports": "sports",
+        "Games": "games",
+        "Movies_TV": "movies",
+        "SciTech": "science",
+        "Psychology": "emotions",
+        "Music": "music",
+        "Food_Drink": "food",
+        "Weather_Time": "weather",
+        "Entertainment": "activities",
+        "Celebrities": "celebrities",
+        "Travel_Geo": "travel",
+        "Art_Event": "art",
     }
     if lets_chat_about_flag:
         _get_topics = get_topics(utt, which="all")
@@ -217,11 +231,7 @@ def get_knowledge_from_annotators(annotators, uttrs, anntr_history_len):
     # look for kbqa/odqa text in anntr_history_len previous human utterances
     annotations_depth = {}
     for anntr_name, anntr_key in annotators.items():
-        prev_anntr_outputs = get_annotations_from_dialog(
-            uttrs[-anntr_history_len * 2 - 1:],
-            anntr_name,
-            anntr_key
-        )
+        prev_anntr_outputs = get_annotations_from_dialog(uttrs[-anntr_history_len * 2 - 1 :], anntr_name, anntr_key)
         logger.debug(f"Prev {anntr_name} {anntr_key}s: {prev_anntr_outputs}")
         # add final dot to kbqa answer to make it a sentence
         if prev_anntr_outputs and anntr_name == "kbqa":
@@ -231,7 +241,7 @@ def get_knowledge_from_annotators(annotators, uttrs, anntr_history_len):
             anntrs_knowledge += prev_anntr_outputs[-1][1] + " "
             annotations_depth[anntr_name] = prev_anntr_outputs[-1][0]
     if anntrs_knowledge:
-        user_input_knowledge += '\n'.join(tokenize.sent_tokenize(anntrs_knowledge))
+        user_input_knowledge += "\n".join(tokenize.sent_tokenize(anntrs_knowledge))
     return user_input_knowledge, annotations_depth
 
 
@@ -243,17 +253,16 @@ def get_penalties(bot_uttrs, curr_response):
     already_was_active = 0
     if bot_uttrs:
         for bu in range(1, 1 + min(KG_ACTIVE_DEPTH, len(bot_uttrs))):
-            already_was_active += int(bot_uttrs[-bu].get(
-                "active_skill", "") == "knowledge_grounding_skill")
+            already_was_active += int(bot_uttrs[-bu].get("active_skill", "") == "knowledge_grounding_skill")
     already_was_active *= AA_FACTOR
     resp_tokens_len = len(tokenizer.tokenize(curr_response))
     short_long_response = 0.5 * int(resp_tokens_len > 20 or resp_tokens_len < 4)
     return already_was_active, short_long_response
 
 
-@app.route("/respond", methods=['POST'])
+@app.route("/respond", methods=["POST"])
 def respond():
-    print('response generation started')
+    print("response generation started")
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
     # following 3 lists have len = number of samples going to the model
@@ -273,12 +282,12 @@ def respond():
             switch_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
             # cobot_nounphrases
             cobot_nounphrases = get_cobot_nounphrases(dialog["human_utterances"][-1])
-            nounphrases.append(re.compile(join_sentences_in_or_pattern(cobot_nounphrases),
-                                          re.IGNORECASE) if cobot_nounphrases else "")
+            nounphrases.append(
+                re.compile(join_sentences_in_or_pattern(cobot_nounphrases), re.IGNORECASE) if cobot_nounphrases else ""
+            )
             # entities
             curr_ents = get_named_entities(dialog["human_utterances"][-1])
-            entities.append(re.compile(join_sentences_in_or_pattern(curr_ents),
-                                       re.IGNORECASE) if curr_ents else "")
+            entities.append(re.compile(join_sentences_in_or_pattern(curr_ents), re.IGNORECASE) if curr_ents else "")
             # intents
             lets_chat_about_flag, special_intents_flag = get_intents_flags(dialog["human_utterances"][-1])
             lets_chat_about_flags.append(lets_chat_about_flag)
@@ -292,15 +301,13 @@ def respond():
             elif dffs_flag:
                 anntr_history_len = DFF_ANNTR_HISTORY_LEN
             # if detected lets_chat is about topic from the file
-            lets_chat_topic = get_lets_chat_topic(
-                lets_chat_about_flag, dialog["human_utterances"][-1]
-            )
+            lets_chat_topic = get_lets_chat_topic(lets_chat_about_flag, dialog["human_utterances"][-1])
             # if prev skill == news_api_skill get news description and create knowledge fact
             news_api_fact = get_news_api_fact(
                 bot_uttr, dialog["human_utterances"], not (switch_choose_topic or lets_chat_about_flag)
             )
             # start creating data for kg service
-            user_input_history = '\n'.join([i["text"] for i in dialog["utterances"]])
+            user_input_history = "\n".join([i["text"] for i in dialog["utterances"]])
 
             annotators = {
                 # "odqa": "answer_sentence",
@@ -315,33 +322,35 @@ def respond():
                 annotations_depth = {}
             # add nounphrases and entities to the knowledge
             if user_input_knowledge:
-                user_input_checked_sentence = space_join(cobot_nounphrases) + space_join(
-                    curr_ents) + tokenize.sent_tokenize(user_input_knowledge)[0]
+                user_input_checked_sentence = (
+                    space_join(cobot_nounphrases)
+                    + space_join(curr_ents)
+                    + tokenize.sent_tokenize(user_input_knowledge)[0]
+                )
             else:
                 user_input_checked_sentence = ""
 
             if user_input_knowledge:
                 user_input = {
-                    'checked_sentence': user_input_checked_sentence,
-                    'knowledge': user_input_knowledge,
-                    'text': user_input_text,
-                    'history': user_input_history
+                    "checked_sentence": user_input_checked_sentence,
+                    "knowledge": user_input_knowledge,
+                    "text": user_input_text,
+                    "history": user_input_history,
                 }
                 annotations_depths.append(annotations_depth)
                 dial_ids.append(d_id)
                 input_batch.append(user_input)
 
             retrieved_facts = get_annotations_from_dialog(
-                dialog["utterances"][-anntr_history_len * 2 - 1:],
-                "fact_retrieval"
+                dialog["utterances"][-anntr_history_len * 2 - 1 :], "fact_retrieval"
             )
             if retrieved_facts:
                 for depth, fact in retrieved_facts[-TOP_N_FACTS:]:
                     user_input = {
-                        'checked_sentence': fact,
-                        'knowledge': fact,
-                        'text': user_input_text,
-                        'history': user_input_history
+                        "checked_sentence": fact,
+                        "knowledge": fact,
+                        "text": user_input_text,
+                        "history": user_input_history,
                     }
                     input_batch.append(user_input)
                     annotations_depths.append({"retrieved_fact": depth})
@@ -351,22 +360,21 @@ def respond():
                 if lets_chat_topic:
                     fact = random.sample(TOPICS_FACTS[lets_chat_topic], 1)[0]
                     chosen_topics[d_id] = lets_chat_topic
-                    _chosen_topic_fact = 'lets_chat_cobot_da'
-                elif not get_entities(dialog["human_utterances"][-1],
-                                      only_named=False, with_labels=False):
+                    _chosen_topic_fact = "lets_chat_cobot_da"
+                elif not get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False):
                     topic = random.sample(TOPICS_FACTS.keys(), 1)[0]
                     fact = random.sample(TOPICS_FACTS[topic], 1)[0]
                     chosen_topics[d_id] = topic
-                    _chosen_topic_fact = 'switch_random'
+                    _chosen_topic_fact = "switch_random"
                 else:
                     fact = ""
                 if fact:
                     user_input = {
-                        'checked_sentence': fact,
-                        'knowledge': fact,
-                        'text': user_input_text,
-                        'history': user_input_history,
-                        'chosen_topic_fact': _chosen_topic_fact
+                        "checked_sentence": fact,
+                        "knowledge": fact,
+                        "text": user_input_text,
+                        "history": user_input_history,
+                        "chosen_topic_fact": _chosen_topic_fact,
                     }
                     input_batch.append(user_input)
                     annotations_depths.append({})
@@ -374,24 +382,24 @@ def respond():
 
             if news_api_fact:
                 user_input = {
-                    'checked_sentence': news_api_fact,
-                    'knowledge': news_api_fact,
-                    'text': user_input_text,
-                    'history': user_input_history,
-                    'news_api_fact': True
+                    "checked_sentence": news_api_fact,
+                    "knowledge": news_api_fact,
+                    "text": user_input_text,
+                    "history": user_input_history,
+                    "news_api_fact": True,
                 }
                 input_batch.append(user_input)
                 annotations_depths.append({})
                 dial_ids.append(d_id)
 
-            cobotqa_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1:])
+            cobotqa_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1 :])
             if cobotqa_facts:
                 user_input = {
-                    'checked_sentence': cobotqa_facts[-1][1],
-                    'knowledge': cobotqa_facts[-1][1],
-                    'text': user_input_text,
-                    'history': user_input_history,
-                    'cobotqa_fact': True
+                    "checked_sentence": cobotqa_facts[-1][1],
+                    "knowledge": cobotqa_facts[-1][1],
+                    "text": user_input_text,
+                    "history": user_input_history,
+                    "cobotqa_fact": True,
                 }
                 input_batch.append(user_input)
                 annotations_depths.append({"cobotqa": cobotqa_facts[-1][0]})
@@ -404,11 +412,11 @@ def respond():
                 news_desc = user_news[-1].get("decsription", "")
                 if news_desc:
                     user_input = {
-                        'checked_sentence': news_desc,
-                        'knowledge': news_desc,
-                        'text': user_input_text,
-                        'history': user_input_history,
-                        'news_fact': "human "
+                        "checked_sentence": news_desc,
+                        "knowledge": news_desc,
+                        "text": user_input_text,
+                        "history": user_input_history,
+                        "news_fact": "human ",
                     }
                     input_batch.append(user_input)
                     annotations_depths.append({})
@@ -417,11 +425,11 @@ def respond():
                 news_desc = bot_news[-1].get("decsription", "")
                 if news_desc:
                     user_input = {
-                        'checked_sentence': news_desc,
-                        'knowledge': news_desc,
-                        'text': user_input_text,
-                        'history': user_input_history,
-                        'news_fact': "bot "
+                        "checked_sentence": news_desc,
+                        "knowledge": news_desc,
+                        "text": user_input_text,
+                        "history": user_input_history,
+                        "news_fact": "bot ",
                     }
                     input_batch.append(user_input)
                     annotations_depths.append({})
@@ -447,12 +455,12 @@ def respond():
         raw_responses = []
         if input_batch:
             logger.info(f"skill sends to service: {input_batch}")
-            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={'batch': input_batch}, timeout=1.5)
+            resp = requests.post(KNOWLEDGE_GROUNDING_SERVICE_URL, json={"batch": input_batch}, timeout=1.5)
             raw_responses = resp.json()
             logger.info(f"skill receives from service: {raw_responses}")
         else:
             responses = [[""]]
-            confidences = [[0.]]
+            confidences = [[0.0]]
             attributes = [[{}]]
             logger.info(f"Collected no hypotheses, exiting with {list(zip(responses, confidences, attributes))}")
             return jsonify(list(zip(responses, confidences, attributes)))
@@ -471,13 +479,10 @@ def respond():
                     "knowledge_paragraph": input_batch[curr_i]["knowledge"],
                     "knowledge_checked_sentence": input_batch[curr_i]["checked_sentence"],
                     "can_continue": CAN_NOT_CONTINUE,
-                    "confidence_case": ""
+                    "confidence_case": "",
                 }
 
-                already_was_active, short_long_response = get_penalties(
-                    dialog["bot_utterances"],
-                    raw_responses[curr_i]
-                )
+                already_was_active, short_long_response = get_penalties(dialog["bot_utterances"], raw_responses[curr_i])
                 curr_nounphrase_search = nounphrases[i].search(raw_responses[curr_i]) if nounphrases[i] else False
                 curr_entities_search = entities[i].search(raw_responses[curr_i]) if entities[i] else False
                 no_penalties = False
@@ -497,9 +502,13 @@ def respond():
                 elif input_batch[curr_i].get("news_api_fact", ""):
                     add_intro = random.choice(
                         [
-                            "Sounds like ", "Seems like ", "Makes sense. ",
+                            "Sounds like ",
+                            "Seems like ",
+                            "Makes sense. ",
                             # "Here's what I've heard: ", "Here's something else I've heard: ",
-                            "It reminds me that", "This comes to my mind: ", ""
+                            "It reminds me that",
+                            "This comes to my mind: ",
+                            "",
                         ]
                     )
                     no_penalties = True
@@ -553,13 +562,22 @@ def respond():
                     attr["confidence_case"] += "greetings_farewells "
                     logger.debug(f"KG skill: found greetings_farewells: {greetings_farewells_flag}")
 
-                penalties = annotations_depths[curr_i].get("retrieved_fact", 0.0) + cobotqa_penalty + \
-                    already_was_active + short_long_response if not no_penalties else 0.
+                penalties = (
+                    annotations_depths[curr_i].get("retrieved_fact", 0.0)
+                    + cobotqa_penalty
+                    + already_was_active
+                    + short_long_response
+                    if not no_penalties
+                    else 0.0
+                )
                 confidence -= penalties
                 if any(
                     [
-                        acronym_flag, special_char_flag, special_intents_flags[i],
-                        greetings_farewells_flag, short_long_response
+                        acronym_flag,
+                        special_char_flag,
+                        special_intents_flags[i],
+                        greetings_farewells_flag,
+                        short_long_response,
                     ]
                 ):
                     logger.debug(f"KG skill: found penalties in response: {raw_responses[curr_i]}, skipping it")
@@ -568,8 +586,7 @@ def respond():
                     curr_attributes.append(attr)
                     curr_confidences.append(max(0.0, confidence))
                     curr_responses.append(
-                        re.sub(r'\s([?.!",;:](?:\s|$))', r'\1',
-                               add_intro + raw_responses[curr_i]).replace(" ' t", "'t")
+                        re.sub(r'\s([?.!",;:](?:\s|$))', r"\1", add_intro + raw_responses[curr_i]).replace(" ' t", "'t")
                     )
             attributes.append(curr_attributes)
             confidences.append(curr_confidences)
@@ -579,12 +596,12 @@ def respond():
         sentry_sdk.capture_exception(ex)
         logger.exception(ex)
         responses = [[""]]
-        confidences = [[0.]]
+        confidences = [[0.0]]
         attributes = [[{}]]
 
     logger.info(f"knowledge_grounding_skill exec time: {time.time() - st_time}")
     return jsonify(list(zip(responses, confidences, attributes)))
 
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=3000)
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)
