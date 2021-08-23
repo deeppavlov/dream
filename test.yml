@@ -127,7 +127,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=9
   convers-evaluator-annotator:
-    env_file: [ .env.dev ]
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
