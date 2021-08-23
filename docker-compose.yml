@@ -51,6 +51,7 @@ services:
           memory: 256M
 
   convers-evaluator-annotator:
+    env_file: [.env]
     build:
       args:
         CONFIG: conveval.json
