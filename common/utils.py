@@ -323,7 +323,7 @@ yes_templates = re.compile(
 
 def is_yes(annotated_phrase):
     yes_detected = "yes" in get_intents(annotated_phrase, which="intent_catcher", probs=False)
-    midas_yes_detected = "pos_answer" in get_intents(annotated_phrase, which='midas', probs=False)
+    midas_yes_detected = "pos_answer" in get_intents(annotated_phrase, which="midas", probs=False)
     # TODO: intent catcher not catches 'yes thanks!'
     if yes_detected or midas_yes_detected or re.search(yes_templates, annotated_phrase.get("text", "").lower()):
         return True
@@ -1171,7 +1171,7 @@ def is_special_factoid_question(annotated_utterance):
     found = FACTOID_PATTERNS.search(uttr_text)
     if found and not COUNTER_FACTOID_PATTERNS.search(uttr_text):
         # remove first question like part
-        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]):].strip()
+        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]) :].strip()
         if PERSONAL_PRONOUNS.search(rest_string):
             # if any personal pronouns - not our case
             return False
