@@ -535,10 +535,6 @@
                             },
                             "utt_num": 2,
                             "wiki_skill_entities_info": {}
-                        },
-                        "cobotqa_annotator": {
-                            "facts": [],
-                            "response": ""
                         }
                     }
                 }
