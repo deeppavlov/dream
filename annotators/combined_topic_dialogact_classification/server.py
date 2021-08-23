@@ -40,7 +40,7 @@ def get_result(histories, phrases):
         logger.exception(e)
 
     total_time = time.time() - st_time
-    logger.info(f'combined_cobot_classifier exec time: {total_time:.3f}s')
+    logger.info(f"combined_cobot_classifier exec time: {total_time:.3f}s")
     return res
 
 
