@@ -123,10 +123,12 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     """
     Extract list of strings with values of specific key <key_name>
     from annotator <annotator_name> dict from given dialog utterances.
+
     Args:
         utterances: utterances, the first one is user's reply
         annotator_name: name of target annotator
         key_name: name of target field from annotation dict
+
     Returns:
         list of strings with values of specific key from specific annotator
     """
