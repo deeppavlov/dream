@@ -89,6 +89,7 @@ def categorize_candidate(
         - if has at least one of the same topic/named entity/noun phrase
         - is dialog breakdown or not
         - if contains required dialog act (required by user)
+
     Categories in priority order:
         = in terms of appropriateness when required dialog act:
             - reqda_same_topic_entity_no_db
