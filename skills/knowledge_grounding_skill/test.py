@@ -9,7 +9,7 @@ def get_input_json(fname):
 
 
 def test_one_step_responses():
-    url = 'http://0.0.0.0:8085/respond'
+    url = "http://0.0.0.0:8085/respond"
 
     print("test annotations")
     input_data = get_input_json("test_configs/test_annotations.json")
@@ -24,10 +24,10 @@ def test_one_step_responses():
     print("test no annotations")
     input_data = get_input_json("test_configs/test_no_annotations.json")
     response = requests.post(url, json=input_data).json()[0]
-    assert response[0][0] == '', print(response)
+    assert response[0][0] == "", print(response)
 
     print("SUCCESS!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_one_step_responses()
