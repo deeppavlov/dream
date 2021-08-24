@@ -1,0 +1,48 @@
+{
+    "dialogs": [
+        {
+            "bot_utterances": [
+                {
+                    "text": "hi",
+                    "user": {
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "wanna chat",
+                    "user": {
+                        "user_type": "human"
+                    }
+                }
+            ],
+            "human_utterances": [
+                {
+                    "text": "hi",
+                    "user": {
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "wanna chat",
+                    "user": {
+                        "user_type": "human"
+                    }
+                }
+            ],
+            "utterances": [
+                {
+                    "text": "hi",
+                    "user": {
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "wanna chat",
+                    "user": {
+                        "user_type": "human"
+                    }
+                }
+            ]
+        }
+    ]
+}

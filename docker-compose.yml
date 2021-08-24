@@ -1,11 +1,12 @@
 services:
   agent:
+    env_file: [.env]
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
     build:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081, cobot-convers-evaluator-annotator:8004,
+      WAIT_HOSTS: "cobotqa:8081,
         cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
@@ -21,18 +22,22 @@ services:
         midas-classification:8090, fact-random:8119, fact-retrieval:8100,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
         dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
-        user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117"
+        user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
+        dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
-      mode: replicated
-      replicas: 10
       resources:
         limits:
           memory: 4G
         reservations:
           memory: 2G
 
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+
   cobotqa:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/CoBotQA/Dockerfile
@@ -40,36 +45,32 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
         reservations:
           memory: 256M
 
-  cobot-convers-evaluator-annotator:
-    build:
-      context: ./annotators/CoBotConversationEvaluator/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15 --preload
-    deploy:
-      mode: replicated
-      replicas: 8
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
+#  cobot-convers-evaluator-annotator:
+#    env_file: [.env]
+#    build:
+#      context: ./annotators/CoBotConversationEvaluator/
+#    command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15 --preload
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 128M
+#        reservations:
+#          memory: 128M
 
   cobot-nounphrases:
+    env_file: [.env]
     build:
       context: ./annotators/cobot_nounphrases/
     command: flask run -h 0.0.0.0 -p 8006
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -77,12 +78,14 @@ services:
           memory: 256M
 
   program-y:
+    env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: program-y
       context: .
       dockerfile: ./skills/program-y/Dockerfile
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 768M
@@ -90,12 +93,11 @@ services:
           memory: 768M
 
   personality-catcher:
+    env_file: [.env]
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 50M
@@ -103,14 +105,13 @@ services:
           memory: 50M
 
   sentseg:
+    env_file: [.env]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1.5G
@@ -118,6 +119,7 @@ services:
           memory: 1.5G
 
   convers-evaluation-selector:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
@@ -125,8 +127,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -134,14 +134,13 @@ services:
           memory: 256M
 
   sentrewrite:
+    env_file: [.env]
     build:
       context: ./annotators/SentRewrite/
     command: flask run -h 0.0.0.0 -p 8017
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 512M
@@ -149,6 +148,7 @@ services:
           memory: 512M
 
   intent-responder:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/IntentResponder/Dockerfile
@@ -156,8 +156,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -165,14 +163,13 @@ services:
           memory: 128M
 
   intent-catcher:
+    env_file: [.env]
     build:
       context: ./annotators/IntentCatcher/
     command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 3.5G
@@ -180,14 +177,13 @@ services:
           memory: 3.5G
 
   blacklisted-words:
+    env_file: [.env]
     build:
       context: ./annotators/BlacklistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -195,12 +191,11 @@ services:
           memory: 256M
 
   program-y-dangerous:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/program-y-dangerous/Dockerfile
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -208,6 +203,7 @@ services:
           memory: 256M
 
   dff-movie-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8023
@@ -221,8 +217,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1536M
@@ -230,6 +224,7 @@ services:
           memory: 1536M
 
   ner:
+    env_file: [.env]
     build:
       context: ./annotators/NER/
     command: flask run -h 0.0.0.0 -p 8021
@@ -237,8 +232,6 @@ services:
       - FLASK_APP=server
     tty: true
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1512M
@@ -246,14 +239,13 @@ services:
           memory: 1512M
 
   eliza:
+    env_file: [.env]
     build:
       context: ./skills/eliza/
     command: flask run -h 0.0.0.0 -p 8047
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 80M
@@ -261,14 +253,13 @@ services:
           memory: 80M
 
   convert-reddit:
+    env_file: [.env]
     build:
       context: ./skills/convert_reddit/
     command: flask run -h 0.0.0.0 -p 8029
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 1536M
@@ -276,6 +267,7 @@ services:
           memory: 1536M
 
   personal-info-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
@@ -283,8 +275,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 128M
@@ -292,6 +282,7 @@ services:
           memory: 128M
 
   asr:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./annotators/asr/Dockerfile
@@ -299,8 +290,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 80M
@@ -308,6 +297,7 @@ services:
           memory: 80M
 
   misheard-asr:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/misheard_asr/Dockerfile
@@ -315,8 +305,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -324,6 +312,7 @@ services:
           memory: 128M
 
   book-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
@@ -333,8 +322,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 2540M
@@ -342,6 +329,7 @@ services:
           memory: 2540M
 
   weather-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/weather_skill/Dockerfile
@@ -349,8 +337,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 1152M
@@ -358,6 +344,7 @@ services:
           memory: 1152M
 
   emotion-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
@@ -365,8 +352,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -374,6 +359,7 @@ services:
           memory: 80M
 
   dummy-skill-dialog:
+    env_file: [.env]
     build:
       args:
         DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
@@ -382,8 +368,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 768M
@@ -391,6 +375,7 @@ services:
           memory: 768M
 
   comet-atomic:
+    env_file: [.env]
     build:
       context: ./annotators/COMeT/
       args:
@@ -405,8 +390,6 @@ services:
       - DEVICE=gpu_0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3.5G
@@ -414,6 +397,7 @@ services:
           memory: 3.5G
 
   comet-conceptnet:
+    env_file: [.env]
     build:
       context: ./annotators/COMeT/
       args:
@@ -428,8 +412,6 @@ services:
       - DEVICE=gpu_0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3.5G
@@ -437,6 +419,7 @@ services:
           memory: 3.5G
 
   meta-script-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
@@ -444,8 +427,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -453,6 +434,7 @@ services:
           memory: 256M
 
   short-story-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/short_story_skill/Dockerfile
@@ -460,8 +442,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 80M
@@ -469,6 +449,7 @@ services:
           memory: 80M
 
   coronavirus-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/coronavirus_skill/Dockerfile
@@ -476,8 +457,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
@@ -485,6 +464,7 @@ services:
           memory: 128M
 
   small-talk-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
@@ -492,8 +472,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -501,17 +479,16 @@ services:
           memory: 80M
 
   game-cooperative-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8068
       context: .
       dockerfile: ./skills/game_cooperative_skill/Dockerfile
-    command: bash server_run.sh "flask run -h 0.0.0.0 -p 8068"
+    command: flask run -h 0.0.0.0 -p 8068
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -519,12 +496,11 @@ services:
           memory: 256M
 
   program-y-wide:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/program-y-wide/Dockerfile
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -532,6 +508,7 @@ services:
           memory: 256M
 
   news-api-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/news_api_skill/Dockerfile
@@ -539,8 +516,6 @@ services:
       - FLASK_APP=server
     command: flask run -h 0.0.0.0 -p 8066
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 128M
@@ -548,6 +523,7 @@ services:
           memory: 128M
 
   news-api-annotator:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./annotators/news_api/Dockerfile
@@ -556,8 +532,6 @@ services:
       - FLASK_APP=server
     command: flask run -h 0.0.0.0 -p 8112
     deploy:
-      mode: replicated
-      replicas: 8
       resources:
         limits:
           memory: 256M
@@ -565,6 +539,7 @@ services:
           memory: 256M
 
   factoid-qa:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
@@ -572,8 +547,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -581,6 +554,7 @@ services:
           memory: 256M
 
   entity-linking:
+    env_file: [.env]
     build:
       args:
         CONFIG: kbqa_entity_linking_page.json
@@ -592,8 +566,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=''
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 23G
@@ -601,6 +573,7 @@ services:
           memory: 23G
 
   wiki-parser:
+    env_file: [.env]
     build:
       args:
         WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt
@@ -617,8 +590,6 @@ services:
       - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 20
       resources:
         limits:
           memory: 256M
@@ -626,6 +597,7 @@ services:
           memory: 256M
 
   text-qa:
+    env_file: [.env]
     build:
       args:
         CONFIG: qa.json
@@ -638,8 +610,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3G
@@ -647,6 +617,7 @@ services:
           memory: 3G
 
   kbqa:
+    env_file: [.env]
     build:
       args:
         CONFIG: kbqa_cq_mt_bert_lite.json
@@ -660,8 +631,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 5G
@@ -669,6 +638,7 @@ services:
           memory: 5G
 
   factoid-classification:
+    env_file: [.env]
     build:
       args:
         CONFIG: factoid_classification.json
@@ -679,8 +649,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3G
@@ -688,14 +656,13 @@ services:
           memory: 3G
 
   spelling-preprocessing:
+    env_file: [.env]
     build:
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 50M
@@ -703,6 +670,7 @@ services:
           memory: 50M
 
   grounding-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/grounding_skill/Dockerfile
@@ -710,8 +678,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 80M
@@ -719,6 +685,7 @@ services:
           memory: 80M
 
   knowledge-grounding:
+    env_file: [.env]
     build:
       args:
         MODEL_CKPT: 3_sent_62_epochs
@@ -731,8 +698,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 4G
@@ -740,6 +705,7 @@ services:
           memory: 4G
 
   dff-gaming-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8115
@@ -753,8 +719,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 512M
@@ -762,6 +726,7 @@ services:
           memory: 512M
 
   dff-friendship-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8086
@@ -773,8 +738,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -782,6 +745,7 @@ services:
           memory: 256M
 
   masked-lm:
+    env_file: [.env]
     build:
       context: ./services/masked_lm/
       args:
@@ -792,8 +756,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 2.5G
@@ -801,6 +763,7 @@ services:
           memory: 2.5G
 
   entity-storer:
+    env_file: [.env]
     build:
       context: .
       dockerfile: annotators/entity_storer/Dockerfile
@@ -811,8 +774,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 384M
@@ -820,6 +781,7 @@ services:
           memory: 384M
 
   knowledge-grounding-skill:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./skills/knowledge_grounding_skill/Dockerfile
@@ -828,8 +790,6 @@ services:
       - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 200M
@@ -837,6 +797,7 @@ services:
           memory: 200M
 
   combined-classification:
+    env_file: [.env]
     build:
       args:
         CONFIG: combined_classifier.json
@@ -846,8 +807,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 2G
@@ -855,6 +814,7 @@ services:
           memory: 2G
 
   dff-animals-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8094
@@ -867,8 +827,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 512M
@@ -876,6 +834,7 @@ services:
           memory: 512M
 
   dff-travel-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8096
@@ -887,8 +846,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 768M
@@ -896,6 +853,7 @@ services:
           memory: 768M
 
   dff-sport-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8098
@@ -907,8 +865,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -916,6 +872,7 @@ services:
           memory: 256M
 
   dff-food-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8097
@@ -927,8 +884,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -936,6 +891,7 @@ services:
           memory: 256M
 
   dff-science-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8101
@@ -947,8 +903,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -956,6 +910,7 @@ services:
           memory: 256M
 
   dff-music-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8099
@@ -967,8 +922,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 512M
@@ -976,6 +929,7 @@ services:
           memory: 512M
 
   dff-gossip-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8109
@@ -984,8 +938,6 @@ services:
       dockerfile: skills/dff_gossip_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8109
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -994,6 +946,7 @@ services:
 
 
   midas-classification:
+    env_file: [.env]
     build:
       args:
         CONFIG: midas_conv_bert.json
@@ -1003,8 +956,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 3G
@@ -1012,6 +963,7 @@ services:
           memory: 3G
 
   fact-random:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8119
@@ -1022,8 +974,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 256M
@@ -1031,6 +981,7 @@ services:
           memory: 256M
 
   fact-retrieval:
+    env_file: [.env]
     build:
       args:
         CONFIG: fact_retrieval_page.json
@@ -1046,8 +997,6 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 4G
@@ -1055,6 +1004,7 @@ services:
           memory: 4G
 
   hypothesis-scorer:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8110
@@ -1065,8 +1015,6 @@ services:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 4G
@@ -1074,6 +1022,7 @@ services:
           memory: 4G
 
   dff-bot-persona-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8105
@@ -1082,8 +1031,6 @@ services:
       dockerfile: ./skills/dff_bot_persona_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8105
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1091,6 +1038,7 @@ services:
           memory: 256M
 
   dff-funfact-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8104
@@ -1102,8 +1050,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1111,6 +1057,7 @@ services:
           memory: 256M
 
   dff-wiki-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8111
@@ -1123,8 +1070,6 @@ services:
     # environment:
     #   - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 256M
@@ -1132,14 +1077,13 @@ services:
           memory: 256M
 
   topic-recommendation:
+    env_file: [.env]
     build:
       context: ./annotators/topic_recommendation/
     command: flask run -h 0.0.0.0 -p 8113
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 256M
@@ -1147,6 +1091,7 @@ services:
           memory: 256M
 
   user-persona-extractor:
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./annotators/user_persona_extractor/Dockerfile
@@ -1154,8 +1099,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 4
       resources:
         limits:
           memory: 80M
@@ -1163,6 +1106,7 @@ services:
           memory: 80M
 
   wiki-facts:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8116
@@ -1176,8 +1120,6 @@ services:
     environment:
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 3.5G
@@ -1185,6 +1127,7 @@ services:
           memory: 3.5G
 
   dff-art-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8117
@@ -1193,14 +1136,13 @@ services:
       dockerfile: ./skills/dff_art_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8117
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 512M
         reservations:
           memory: 512M
   entity-detection:
+    env_file: [.env]
     build:
       args:
         CONFIG: dialog_entity_detection.json
@@ -1214,11 +1156,25 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 2.5G
         reservations:
           memory: 2.5G
+
+  dff-template-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8120
+        SERVICE_NAME: dff_template_skill
+      context: .
+      dockerfile: ./skills/dff_template_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 version: '3.7'
