@@ -1,4 +1,5 @@
-programy==3.8.5
-sanic==19.6.3
-sentry-sdk==0.12.3
+fastapi==0.61.1
+gunicorn==19.9.0
+programy==5.0.1
 requests==2.22.0
+sentry-sdk==0.12.3

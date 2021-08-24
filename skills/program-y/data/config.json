@@ -1,0 +1,20 @@
+{
+    "program-y": {
+        "aiml_dirs": ["/src/data/storage/categories"],
+        "sets_dirs": ["/src/data/storage/sets"],
+        "maps_dirs": ["/src/data/storage/maps"],
+        "rdfs_dirs": ["/src/data/storage/rdfs"],
+        "denormals_txt_file": "/src/data/storage/lookups/denormal.txt",
+        "normals_txt_file": "/src/data/storage/lookups/normal.txt",
+        "genders_txt_file": "/src/data/storage/lookups/gender.txt",
+        "persons_txt_file": "/src/data/storage/lookups/person.txt",
+        "person2s_txt_file": "/src/data/storage/lookups/person2.txt",
+        "spellings_txt_file": "/src/data/storage/spelling/corpus.txt",
+        "licenses_keys_file": "/src/data/storage/licenses/license.keys",
+        "usergroups_yaml_file": "/src/data/storage/security/usergroups.yaml",
+        "preprocessors_conf_file": "/src/data/storage/processing/preprocessors.conf",
+        "postprocessors_conf_file": "/src/data/storage/processing/postprocessors.conf"
+    },
+    "null_response": "Sorry, I don't have an answer for that!",
+    "preprocessor": "/src/data/storage/lookups/normal.txt"
+}

@@ -1,12 +1,23 @@
-FROM python:3.7.4
+FROM python:3.8
+
+ARG SERVICE_NAME
+ENV SERVICE_NAME ${SERVICE_NAME}
+
+ARG RANDOM_SEED
+ENV RANDOM_SEED ${RANDOM_SEED}
+
+ARG SERVICE_PORT
+ENV SERVICE_PORT ${SERVICE_PORT}
 
 WORKDIR /src
 
-COPY ./skills/program-y/requirements.txt .
+COPY ./skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./skills/program-y/ ./
-COPY ./common/ ./dream_aiml/src/common/
-COPY ./state_formatters/ ./dream_aiml/src/state_formatters/
+COPY ./skills/${SERVICE_NAME}/ ./
+COPY ./common/ ./common
+COPY ./state_formatters ./state_formatters
 
-CMD cd /src/dream_aiml/scripts/xnix && ./sanic.sh
+HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
+
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
