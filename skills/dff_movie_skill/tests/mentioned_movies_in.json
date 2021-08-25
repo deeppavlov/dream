@@ -212,10 +212,6 @@
                             "topic_skill_entities_info": {},
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
-                        },
-                        "cobotqa_annotator": {
-                            "facts": [],
-                            "response": ""
                         }
                     }
                 },
@@ -512,10 +508,6 @@
                             "topic_skill_entities_info": {},
                             "utt_num": 2,
                             "wiki_skill_entities_info": {}
-                        },
-                        "cobotqa_annotator": {
-                            "facts": [],
-                            "response": ""
                         }
                     }
                 }

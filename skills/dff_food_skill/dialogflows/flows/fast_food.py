@@ -4,7 +4,7 @@ import os
 import random
 import re
 
-from CoBotQA.cobotqa_service import send_cobotqa
+from common.fact_random import get_facts
 from enum import Enum, auto
 
 import sentry_sdk
@@ -240,7 +240,7 @@ def food_fact_response(vars):
 
         if all(["berry" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
             berry_name += "berry"
-            fact = send_cobotqa(f"fact about {berry_name}")
+            fact = get_facts(f"fact about {berry_name}")
             entity = berry_name
         elif berry_name:
             if facts:
