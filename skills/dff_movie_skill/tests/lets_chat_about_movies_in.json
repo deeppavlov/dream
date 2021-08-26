@@ -16,7 +16,7 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -226,7 +226,7 @@
                             "factoid": 0.0012974474811926484,
                             "conversational": 0.9987025260925293
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9817681312561035
                             },

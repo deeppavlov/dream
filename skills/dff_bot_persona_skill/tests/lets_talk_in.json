@@ -20,7 +20,7 @@
                         "cobot_nounphrases": [
                             "ruth"
                         ],
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9983882904052734
                             },
@@ -322,7 +322,7 @@
                         "cobot_nounphrases": [
                             "your favorite number"
                         ],
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_DeliveryIntent": 0.6583560705184937
                             },

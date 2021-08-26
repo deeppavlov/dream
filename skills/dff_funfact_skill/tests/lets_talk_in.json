@@ -12,7 +12,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9988415241241455
                             },
@@ -282,7 +282,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9988415241241455
                             },

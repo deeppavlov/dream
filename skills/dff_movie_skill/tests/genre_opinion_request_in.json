@@ -12,7 +12,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "hi",
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -234,7 +234,7 @@
                             "factoid": 0.000652097281999886,
                             "conversational": 0.9993478655815125
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Opinion_RequestIntent": 0.9910891652107239
                             },

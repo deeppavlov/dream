@@ -18,7 +18,7 @@
                             "restricted_topics": false
                         },
                         "cobot_nounphrases": [],
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
                             },
@@ -226,7 +226,7 @@
                             "factoid": 0.0013000797480344772,
                             "conversational": 0.9986999034881592
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_DeliveryIntent": 0.9983388185501099,
                                 "Information_RequestIntent": 0.9993046522140503

@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.5455584526062012,
                                 "Information_DeliveryIntent": 0.6853394508361816
@@ -218,7 +218,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_DeliveryIntent": 0.7071337103843689
                             },

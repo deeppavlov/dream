@@ -24,7 +24,7 @@
                         "cobot_nounphrases": [
                             "traveling"
                         ],
-                        "combined_etc_classification": {
+                        "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9998614192008972
                             },
