@@ -13,7 +13,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8008
+      - PROXY_PASS=10.11.1.1:8008
       - PORT=8008
 
   personality-catcher:
@@ -22,7 +22,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8010
+      - PROXY_PASS=10.11.1.1:8010
       - PORT=8010
 
   sentseg:
@@ -31,7 +31,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8011
+      - PROXY_PASS=10.11.1.1:8011
       - PORT=8011
 
   sentrewrite:
@@ -40,7 +40,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8017
+      - PROXY_PASS=10.11.1.1:8017
       - PORT=8017
 
   intent-responder:
@@ -49,7 +49,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8012
+      - PROXY_PASS=10.11.1.1:8012
       - PORT=8012
 
   intent-catcher:
@@ -58,7 +58,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8014
+      - PROXY_PASS=10.11.1.1:8014
       - PORT=8014
 
   blacklisted-words:
@@ -67,7 +67,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8018
+      - PROXY_PASS=10.11.1.1:8018
       - PORT=8018
 
   program-y-dangerous:
@@ -76,7 +76,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8022
+      - PROXY_PASS=10.11.1.1:8022
       - PORT=8022
 
   dff-movie-skill:
@@ -85,7 +85,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8023
+      - PROXY_PASS=10.11.1.1:8023
       - PORT=8023
 
   ner:
@@ -94,7 +94,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8021
+      - PROXY_PASS=10.11.1.1:8021
       - PORT=8021
 
   eliza:
@@ -103,7 +103,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8047
+      - PROXY_PASS=10.11.1.1:8047
       - PORT=8047
 
   convert-reddit:
@@ -112,7 +112,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8029
+      - PROXY_PASS=10.11.1.1:8029
       - PORT=8029
 
   personal-info-skill:
@@ -121,7 +121,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8030
+      - PROXY_PASS=10.11.1.1:8030
       - PORT=8030
 
   asr:
@@ -130,7 +130,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8031
+      - PROXY_PASS=10.11.1.1:8031
       - PORT=8031
 
   misheard-asr:
@@ -139,7 +139,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8033
+      - PROXY_PASS=10.11.1.1:8033
       - PORT=8033
 
   book-skill:
@@ -148,7 +148,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8032
+      - PROXY_PASS=10.11.1.1:8032
       - PORT=8032
 
   weather-skill:
@@ -157,7 +157,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8037
+      - PROXY_PASS=10.11.1.1:8037
       - PORT=8037
 
   emotion-skill:
@@ -166,7 +166,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8049
+      - PROXY_PASS=10.11.1.1:8049
       - PORT=8049
 
   dummy-skill-dialog:
@@ -175,7 +175,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8052
+      - PROXY_PASS=10.11.1.1:8052
       - PORT=8052
 
   comet-atomic:
@@ -184,7 +184,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8053
+      - PROXY_PASS=10.11.1.1:8053
       - PORT=8053
 
   comet-conceptnet:
@@ -193,7 +193,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8065
+      - PROXY_PASS=10.11.1.1:8065
       - PORT=8065
 
   meta-script-skill:
@@ -202,7 +202,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8054
+      - PROXY_PASS=10.11.1.1:8054
       - PORT=8054
 
   short-story-skill:
@@ -211,7 +211,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8057
+      - PROXY_PASS=10.11.1.1:8057
       - PORT=8057
 
   coronavirus-skill:
@@ -220,7 +220,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8061
+      - PROXY_PASS=10.11.1.1:8061
       - PORT=8061
 
   small-talk-skill:
@@ -229,7 +229,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8062
+      - PROXY_PASS=10.11.1.1:8062
       - PORT=8062
 
   game-cooperative-skill:
@@ -238,7 +238,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8068
+      - PROXY_PASS=10.11.1.1:8068
       - PORT=8068
 
   program-y-wide:
@@ -247,7 +247,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8064
+      - PROXY_PASS=10.11.1.1:8064
       - PORT=8064
 
   news-api-skill:
@@ -256,7 +256,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8066
+      - PROXY_PASS=10.11.1.1:8066
       - PORT=8066
 
   news-api-annotator:
@@ -265,7 +265,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8112
+      - PROXY_PASS=10.11.1.1:8112
       - PORT=8112
 
   factoid-qa:
@@ -274,7 +274,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8071
+      - PROXY_PASS=10.11.1.1:8071
       - PORT=8071
 
   text-qa:
@@ -282,7 +282,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8078
+      - PROXY_PASS=10.11.1.1:8078
       - PORT=8078
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -292,7 +292,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8072
+      - PROXY_PASS=10.11.1.1:8072
       - PORT=8072
 
   factoid-classification:
@@ -301,7 +301,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8073
+      - PROXY_PASS=10.11.1.1:8073
       - PORT=8073
 
   spelling-preprocessing:
@@ -309,7 +309,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8074
+      - PROXY_PASS=10.11.1.1:8074
       - PORT=8074
 
     command: ["nginx", "-g", "daemon off;"]
@@ -318,7 +318,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8075
+      - PROXY_PASS=10.11.1.1:8075
       - PORT=8075
 
     command: ["nginx", "-g", "daemon off;"]
@@ -327,7 +327,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8077
+      - PROXY_PASS=10.11.1.1:8077
       - PORT=8077
 
     command: ["nginx", "-g", "daemon off;"]
@@ -336,7 +336,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8081
+      - PROXY_PASS=10.11.1.1:8081
       - PORT=8081
 
     command: ["nginx", "-g", "daemon off;"]
@@ -345,7 +345,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8083
+      - PROXY_PASS=10.11.1.1:8083
       - PORT=8083
 
     command: ["nginx", "-g", "daemon off;"]
@@ -354,7 +354,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8086
+      - PROXY_PASS=10.11.1.1:8086
       - PORT=8086
 
     command: ["nginx", "-g", "daemon off;"]
@@ -363,7 +363,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8088
+      - PROXY_PASS=10.11.1.1:8088
       - PORT=8088
 
     command: ["nginx", "-g", "daemon off;"]
@@ -372,7 +372,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8089
+      - PROXY_PASS=10.11.1.1:8089
       - PORT=8089
 
     command: ["nginx", "-g", "daemon off;"]
@@ -381,7 +381,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8085
+      - PROXY_PASS=10.11.1.1:8085
       - PORT=8085
 
     command: ["nginx", "-g", "daemon off;"]
@@ -390,7 +390,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8090
+      - PROXY_PASS=10.11.1.1:8090
       - PORT=8090
 
     command: ["nginx", "-g", "daemon off;"]
@@ -399,7 +399,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8087
+      - PROXY_PASS=10.11.1.1:8087
       - PORT=8087
 
     command: ["nginx", "-g", "daemon off;"]
@@ -408,7 +408,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8080
+      - PROXY_PASS=10.11.1.1:8080
       - PORT=8080
 
     command: [ "nginx", "-g", "daemon off;"]
@@ -417,7 +417,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8094
+      - PROXY_PASS=10.11.1.1:8094
       - PORT=8094
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -426,7 +426,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8096
+      - PROXY_PASS=10.11.1.1:8096
       - PORT=8096
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -435,7 +435,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8098
+      - PROXY_PASS=10.11.1.1:8098
       - PORT=8098
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -444,7 +444,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8097
+      - PROXY_PASS=10.11.1.1:8097
       - PORT=8097
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -453,7 +453,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8101
+      - PROXY_PASS=10.11.1.1:8101
       - PORT=8101
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -462,7 +462,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8099
+      - PROXY_PASS=10.11.1.1:8099
       - PORT=8099
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -471,7 +471,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8100
+      - PROXY_PASS=10.11.1.1:8100
       - PORT=8100
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -480,7 +480,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8110
+      - PROXY_PASS=10.11.1.1:8110
       - PORT=8110
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -489,7 +489,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8104
+      - PROXY_PASS=10.11.1.1:8104
       - PORT=8104
 
     command: ["nginx", "-g", "daemon off;"]
@@ -498,7 +498,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8105
+      - PROXY_PASS=10.11.1.1:8105
       - PORT=8105
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -507,7 +507,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8115
+      - PROXY_PASS=10.11.1.1:8115
       - PORT=8115
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -516,7 +516,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8109
+      - PROXY_PASS=10.11.1.1:8109
       - PORT=8109
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -525,7 +525,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8111
+      - PROXY_PASS=10.11.1.1:8111
       - PORT=8111
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -534,7 +534,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8113
+      - PROXY_PASS=10.11.1.1:8113
       - PORT=8113
 
     command: ["nginx", "-g", "daemon off;"]
@@ -543,7 +543,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8114
+      - PROXY_PASS=10.11.1.1:8114
       - PORT=8114
 
     command: ["nginx", "-g", "daemon off;"]
@@ -552,7 +552,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8116
+      - PROXY_PASS=10.11.1.1:8116
       - PORT=8116
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -561,7 +561,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8117
+      - PROXY_PASS=10.11.1.1:8117
       - PORT=8117
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -570,7 +570,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8103
+      - PROXY_PASS=10.11.1.1:8103
       - PORT=8103
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -579,7 +579,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8119
+      - PROXY_PASS=10.11.1.1:8119
       - PORT=8119
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -588,7 +588,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8006
+      - PROXY_PASS=10.11.1.1:8006
       - PORT=8006
 
     command: [ "nginx", "-g", "daemon off;" ]
@@ -597,7 +597,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8009
+      - PROXY_PASS=10.11.1.1:8009
       - PORT=8009
 
     command: [ "nginx", "-g", "daemon off;" ]
