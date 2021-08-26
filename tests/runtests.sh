@@ -142,7 +142,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa text-qa wiki-parser convert-reddit \
-                     book-skill combined-etc-classification combined-topic-dialogact-classification \
+                     book-skill combined-etc-classification topic-dialogact-classification \
                      knowledge-grounding knowledge-grounding-skill \
                      grounding-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
