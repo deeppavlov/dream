@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 try:
-    model = build_model("combined_cobot_classifier.json", download=False)
+    model = build_model("classifier.json", download=False)
     test_res = model(["a"], ['b'])
     logger.info("model loaded, test query processed")
 except Exception as e:

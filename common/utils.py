@@ -510,7 +510,9 @@ def _get_combined_annotations(annotated_utterance, model_name):
     answer_probs, answer_labels = {}, []
     try:
         annotations = annotated_utterance["annotations"]
-        if 'cobot' in model_name:
+        if 'combined_classification' in annotations:
+            combined_model_name = "combined_classification"
+        elif 'dialogact' in model_name or 'topics' in model_name:
             combined_model_name = 'combined_topic_dialogact_classification'
         else:
             combined_model_name = 'combined_etc_classification'
@@ -710,7 +712,7 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     if "cobot_topics" in annotations:
         cobot_topics_labels = _process_text(annotations.get("cobot_topics", {}))
         cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes.get("cobot_topics", {}))
-    if "combined_topic_dialogact_classification" in annotations and not cobot_topics_labels:
+    if not cobot_topics_labels:
         cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="cobot_topics"
         )
@@ -724,7 +726,7 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     elif "cobot_dialogact_topics" in annotations:
         cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact_topics"]
 
-    if "combined_topic_dialogact_classification" in annotations and not cobot_da_topics_labels:
+    if not cobot_da_topics_labels:
         cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="cobot_dialogact_topics"
         )
@@ -748,7 +750,8 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         annotations_to_log = {
             key: value
             for key, value in annotations.items()
-            if key in ["cobot_dialogact", "combined_topic_dialogact_classification", "cobot_topics"]
+            if key in ["cobot_dialogact", "topic_dialogact_classification", "cobot_topics",
+                       "combined_classification"]
         }
         logger.warning(f"Not answer_labels with payload {annotations_to_log} which {which}")
         answer_probs, answer_labels = default_probs, default_labels
@@ -824,7 +827,7 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     elif "cobot_dialogact_intents" in annotations:
         cobot_da_intent_labels = annotated_utterance["annotations"]["cobot_dialogact_intents"]
 
-    if "combined_topic_dialogact_classification" in annotations and not cobot_da_intent_labels:
+    if not cobot_da_intent_labels:
         cobot_da_intent_probs, cobot_da_intent_labels = _get_combined_annotations(
             annotated_utterance, model_name="cobot_dialogact_intents"
         )
@@ -857,7 +860,8 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
                     "intent_catcher",
                     "cobot_dialogact",
                     "cobot_dialogact_intents",
-                    "combined_topic_dialogact_classification",
+                    "topic_dialogact_classification",
+                    "combined_classification",
                     "midas_classification",
                 ]
             }

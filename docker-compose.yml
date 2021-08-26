@@ -1160,13 +1160,13 @@ services:
         reservations:
           memory: 2.5G
 
-  combined-topic-dialogact-classification:
+  topic-dialogact-classification:
     build:
       args:
-        CONFIG: combined_cobot_classifier.json
+        CONFIG: classifier.json
         PORT: 8118
       context: .
-      dockerfile: ./annotators/combined_topic_dialogact_classification/Dockerfile
+      dockerfile: ./annotators/topic_dialogact_classification/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
