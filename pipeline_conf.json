@@ -371,11 +371,11 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "combined_topic_dialogact_classification": {
+            "topic_dialogact_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://combined-topic-dialogact-classification:8118/model"
+                    "url": "http://topic-dialogact-classification:8118/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -1050,11 +1050,11 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "combined_topic_dialogact_classification": {
+            "topic_dialogact_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://combined-topic-dialogact-classification:8118/batch_model"
+                    "url": "http://topic-dialogact-classification:8118/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

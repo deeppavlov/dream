@@ -406,10 +406,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
-  combined-topic-dialogact-classification:
+  topic-dialogact-classification:
     volumes:
       - "./common:/src/common"
-      - "./annotators/combined_topic_dialogact_classification:/src"
+      - "./annotators/topic_dialogact_classification:/src"
     ports:
       - 8118:8118
 version: "3.7"

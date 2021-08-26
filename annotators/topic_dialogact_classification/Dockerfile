@@ -13,10 +13,10 @@ RUN tar -xvzf /tmp/*.tar.gz -C /tmp/
 WORKDIR /src
 RUN mkdir common
 
-COPY annotators/combined_topic_dialogact_classification/requirements.txt .
+COPY annotators/topic_dialogact_classification/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY annotators/combined_topic_dialogact_classification/ ./
+COPY annotators/topic_dialogact_classification/ ./
 COPY common/ common/
 
 RUN python -m deeppavlov install $CONFIG

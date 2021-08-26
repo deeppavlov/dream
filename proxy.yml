@@ -601,7 +601,7 @@ services:
       - PORT=8009
 
     command: [ "nginx", "-g", "daemon off;" ]
-  combined-topic-dialogact-classification:
+  topic-dialogact-classification:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile

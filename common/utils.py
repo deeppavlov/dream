@@ -513,7 +513,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
         if 'combined_classification' in annotations:
             combined_model_name = "combined_classification"
         elif 'dialogact' in model_name or 'topics' in model_name:
-            combined_model_name = 'combined_topic_dialogact_classification'
+            combined_model_name = 'topic_dialogact_classification'
         else:
             combined_model_name = 'combined_etc_classification'
         combined_annotations = annotations.get(combined_model_name, {})

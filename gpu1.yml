@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  combined-topic-dialogact-classification:
+  topic-dialogact-classification:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=5
