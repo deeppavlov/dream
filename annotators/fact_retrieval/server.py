@@ -25,12 +25,12 @@ config_name = os.getenv("CONFIG")
 
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
-with open("google-10000-english-no-swears.txt", "r") as fl:
+with open("data/google-10000-english-no-swears.txt", "r") as fl:
     lines = fl.readlines()
     freq_words = [line.strip() for line in lines]
     freq_words = set(freq_words[:800])
 
-with open("sentences.pickle", "rb") as fl:
+with open("data/sentences.pickle", "rb") as fl:
     test_sentences = pickle.load(fl)
 
 try:
