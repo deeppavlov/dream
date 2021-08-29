@@ -40,9 +40,9 @@ try:
         test_res = fact_retrieval([utt], [utt], [["moscow"]], [[["Moscow"]]])
     with open("/root/.deeppavlov/downloads/wikidata/entity_types_sets.pickle", "rb") as fl:
         entity_types_sets = pickle.load(fl)
-    page_extractor = build_model("page_extractor.json", download=True)
+    page_extractor = build_model("configs/page_extractor.json", download=True)
     logger.info("model loaded, test query processed")
-    whow_page_extractor = build_model("whow_page_extractor.json", download=True)
+    whow_page_extractor = build_model("configs/whow_page_extractor.json", download=True)
     with open("/root/.deeppavlov/downloads/wikihow/wikihow_topics.json", "r") as fl:
         wikihow_topics = json.load(fl)
 except Exception as e:
