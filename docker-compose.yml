@@ -1157,7 +1157,7 @@ services:
         limits:
           memory: 2.5G
         reservations:
-          memory: 2.
+          memory: 2.5G
 
   dff-template-skill:
     build:
