@@ -36,7 +36,8 @@ flows = {
             "start": {RESPONSE: ""},
             "beatles_q": {
                 RESPONSE: "Do you like the Beatles?",
-                # PROCESSING: set_confidence_and_continue_flag(1.0, common_constants.MUST_CONTINUE),
+                # PROCESSING: set_confidence_and_continue_flag(1.0, common_constants.MUST_CONTINUE,
+                # ),
                 TRANSITIONS: {
                     ("beatles_fact", "name"): int_cnd.is_yes_vars,
                     trn.forward(): cnd.true,
@@ -95,7 +96,7 @@ flows = {
                 "The album was recorded within 13 hours and the studio cost 400£. "
                 "The album hit the top of the British chart and stayed there for 30 weeks just to be replaced "
                 "by 'With the Beatles'. Quite unexpected for a debut, right?",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "with_the_beatles"): loc_cnd.not_visited_album,
@@ -107,7 +108,7 @@ flows = {
                 "'With the Beatles' was recorded in only 7 non-consecutive days, but overall its recording "
                 "took almost three months. Between the recording sessions the band was busy with radio, "
                 "TV and live performances. Do you remember the title of the Beatles' third studio album?",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "a_hard_days_night_corr"): loc_cnd.has_correct_answer,
@@ -124,7 +125,7 @@ flows = {
                 "contrasting it to the later recordings: 'The early stuff – the Hard Day’s Night period, "
                 "I call it – was the seхual equivalent of the beginning hysteria of a relationship. "
                 "And the Sgt Pepper–Abbey Road period was the mature part of the relationship'.",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
@@ -140,7 +141,7 @@ flows = {
                 "contrasting it to the later recordings: 'The early stuff – the Hard Day’s Night period, "
                 "I call it – was the seхual equivalent of the beginning hysteria of a relationship. "
                 "And the Sgt Pepper–Abbey Road period was the mature part of the relationship'.",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
@@ -156,7 +157,7 @@ flows = {
                 "'the Beatles were rather war-weary during Beatles for Sale', "
                 "the album came out on the peak of Beatlemania and was a true hit: "
                 "it stayed on top of the charts for 7 weeks.",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "help"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "w2gnmmg1f34rkh"},
             },
@@ -166,7 +167,7 @@ flows = {
                 "The other side included several famous songs, such as Yesterday, officially the most "
                 "covered song in the history of music. John Lennon later said that the title song "
                 "really was a cry for help: 'I was fat and depressed and I was crying out for 'Help'.'",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "rubber_soul"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "xg3xm6mhb81m6c"},
             },
@@ -176,7 +177,7 @@ flows = {
                 "'Finally we took over the studio. In the early days, we had to take what we were given, "
                 "we didn't know how you could get more bass. We were learning the technique on Rubber Soul. "
                 "We took over the cover and everything.'",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "sgt_peppers"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "9wqs15r56psr2q"},
             },
@@ -187,6 +188,7 @@ flows = {
                 "By the way, Revolver is Pope Benedict XVI's favourite album of all times. "
                 "One of the songs from it, Yellow Submarine, became an inspiration for an animated film! "
                 "Have you seen it?",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "yellow_submarine"): int_cnd.is_yes_vars,
@@ -198,7 +200,7 @@ flows = {
                 RESPONSE: "{first_album} {yellow_submarine} One side of the album contains Beatles' song, "
                 "while the other one consists of symphonic film score composed by George Martin, "
                 "the Beatles' producer and the so-called fifth Beatle. Have you ever heard of this man?",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "sgt_peppers"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "ht5p6z4rs7zf65"},
             },
@@ -211,7 +213,7 @@ flows = {
                 "of all times. More than 32 million copies of "
                 "Sgt. Pepper's Lonely Hearts Club Band were sold all over the world! "
                 "A stunning number, isn't it?",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "white_album"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "n0kgrcdqqqfpqq"},
             },
@@ -223,7 +225,7 @@ flows = {
                 "was not critically acclaimed, Lennon said: 'I think it’s the best music we’ve ever made', "
                 "however adding: 'But as a Beatles thing, as a whole, it just doesn’t work'."
                 "What do you think about this album?",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "abbey_road"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "h8fxrqh4611dg3"},
             },
@@ -233,7 +235,7 @@ flows = {
                 "going to Mount Everest to do a photoshoot for the cover. So they invented another title "
                 "- Abbey Road, after the street where most of the band's material was recorded. By the way, "
                 "do you remember what the album's cover looks like?",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "abbey_road_cover"): int_cnd.is_no_vars,
@@ -245,6 +247,7 @@ flows = {
                 RESPONSE: "Then let me show it to you! The photoshoot was Paul McCartney's idea. "
                 "It happened right outside the bands' "
                 "recording studio and took less than half an hour.",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "let_it_be"): loc_cnd.not_visited_album},
                 MISC: {"command": "goto", "objectId": "z3nfvv0r06v3kx"},
             },
@@ -255,7 +258,7 @@ flows = {
                 "but at last the recording took place in a studio. The album spent more than a year unreleased "
                 "as the relations between the Beatles had become so tense "
                 "that none of them wanted to sort the songs out.",
-                PROCESSING: [loc_prs.slot_filling_albums],
+                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "please_please_me"): loc_cnd.not_visited_album,
@@ -273,6 +276,7 @@ flows = {
             "abbey_road": {
                 RESPONSE: """Here! It's the only original Beatles album cover to show neither the artist name nor"""
                 """the album title. Do you remember the name of this album?""",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("photos", "fact_ar"): loc_cnd.has_correct_answer, ("photos", "info_ar"): cnd.true},
                 MISC: {"command": "goto", "objectId": "b9d08nbdvh8vsb"},
             },
@@ -292,6 +296,7 @@ flows = {
                 RESPONSE: """This photo is from Whitaker photo session, where he assembled different scary props such"""
                 """as doll parts and trays of meat. One of the photos was used for the cover of Yesterday """
                 """and Today album. We have some more photos of The Beatles, so be sure to check them out 🙂 """,
+                PROCESSING: [loc_prs.add_misc_to_response],
                 MISC: {"command": "goto", "objectId": "pv2qgzk51vmgq6"},
             },
         },
@@ -304,7 +309,7 @@ flows = {
             },
             "fav_song": {
                 RESPONSE: "Oh, have you seen the music video for this song?",
-                # PROCESSING: [extract_song_id,],
+                # PROCESSING: [extract_song_id, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("album", "who_beatle"): int_cnd.is_yes_vars, ("song", "watch_video"): cnd.true},
             },
             "watch_video": {
@@ -313,6 +318,7 @@ flows = {
             },
             "show_video": {
                 RESPONSE: "Great! You can watch it 🙂 " "Just text me when you're done",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("album", "who_beatle"): cnd.true},
                 MISC: {"command": "goto", "objectId": "{video}"},
             },
@@ -320,6 +326,7 @@ flows = {
             "yellow_submarine": {
                 RESPONSE: "Then let's watch a short video and after that you can watch the entire movie if you want! "
                 "Just text me when you're done.",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("album", "yellow_submarine"): cnd.true},
                 MISC: {"command": "goto", "objectId": "86hcq66wcfgszf"},
             },
@@ -329,7 +336,7 @@ flows = {
         GRAPH: {
             "name": {
                 RESPONSE: "Yeah, I like {beatles_member} too! Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, ],
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },
             "bio": {
@@ -341,7 +348,7 @@ flows = {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that John Lennon’s father"
                 " was absent for much of his early life but showed up when his son became famous?"
                 " Sounds kind of sad... Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, ],
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },
             "fact_mccartney": {
@@ -349,21 +356,21 @@ flows = {
                 " to what's believed to be the largest paid audience in recorded history? In 1989,"
                 " he played a solo concert to a crowd of 350,000-plus in Brazil. That's amazing!"
                 "Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, ],
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },
             "fact_harrison": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that"
                 " the song ‘CRACKERBOX PALACE’ is about his mansion?  Modest as he was - he did live"
                 " in a 120 room mansion on a 66 acre estate. Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, ],
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },
             "fact_starr": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that due to his allergy"
                 " he has never had pizza, curry, or onions? That didn’t stop him from doing a pizza"
                 " commercial in 1995, though. Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, ],
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },
         },
@@ -389,7 +396,7 @@ flows = {
                 "so he traded it for Zenith Model 17 acoustic. Let's have a look at it. "
                 "At first, Paul couldn't figure out how to play it, but then he realized that "
                 "he had to hold the guitar differently as he was left-handed. Isn't it beautiful?",
-                PROCESSING: [loc_prs.extract_inst, loc_prs.fill_slots, ],
+                PROCESSING: [loc_prs.extract_inst, loc_prs.fill_slots, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("instruments", "guitar_paul_2"): cnd.true},
                 MISC: {"command": "goto", "objectId": "f47z2rzm0tt4b8"},
             },
@@ -400,6 +407,7 @@ flows = {
                 "so he traded it for Zenith Model 17 acoustic. Let's have a look at it. "
                 "At first, Paul couldn't figure out how to play it, but then he realized that "
                 "he had to hold the guitar differently as he was left-handed. Isn't it beautiful?",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("instruments", "guitar_paul_2"): cnd.true},
                 MISC: {"command": "goto", "objectId": "f47z2rzm0tt4b8"},
             },
@@ -407,11 +415,13 @@ flows = {
                 RESPONSE: " And here is Paul's Hofner 500/1 bass. "
                 """He went with this Hofner from "I Want to Hold Your Hand" through "Let It Be" and beyond. """
                 "Do you want to take a look at one of John Lennon's guitars?",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("instruments", "guitar_lennon"): int_cnd.is_yes_vars, ("photos", "photos_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "r369t7g5cw3x0h"},
             },
             "guitar_lennon": {
                 RESPONSE: "Look! It's Lennon's Rickenbacker 325! He had four models of this guitar. Do you like it?",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("instruments", "drum_kit"): cnd.true},
                 MISC: {"command": "goto", "objectId": "07ptwckzth85qz"},
             },
@@ -419,6 +429,7 @@ flows = {
                 RESPONSE: "Well, now that you've seen the guitars it's time to look at Ringo Starr's "
                 "drum kit. During his time in The Beatles, he played six different drum kits, "
                 "five of which were from Ludwig.",
+                PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("photos", "photos_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "vx6bwczc94mtpq"},
             },

@@ -1,7 +1,7 @@
 import logging
 import re
+import json
 
-import nltk
 from dff.core import Node, Context, Actor
 
 
@@ -146,3 +146,8 @@ def extract_song_id(ctx: Context, actor: Actor, *args, **kwargs):
                 id = songs_ids[k]
 
     return id
+
+
+def add_misc_to_response(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+    node.response = f"{node.response} {json.dumps(node.misc)}"
+    return node_label, node
