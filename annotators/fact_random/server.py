@@ -23,17 +23,17 @@ ALL_FACTS = {**FACTS_ANIMALS, **FACTS_CITIES, **FACTS_COUNTRIES, **FACTS_FOOD}
 
 
 def find_facts(entity_substr_batch):
-    facts_list = []
+    facts_batch = []
     for entity_substr_list in entity_substr_batch:
-        current_facts = []
+        facts_list = []
         for entity_substr in entity_substr_list:
             facts_for_entity = ALL_FACTS.get(entity_substr)
             if facts_for_entity:
                 fact = random.choice(facts_for_entity)
                 fact_data = {"entity_substr": entity_substr, "fact": fact}
-                current_facts.append(fact_data)
-        facts_list.append(current_facts)
-    return facts_list
+                facts_list.append(fact_data)
+        facts_batch.append(facts_list)
+    return facts_batch
 
 
 @app.route("/respond", methods=["POST"])
@@ -42,11 +42,11 @@ def respond():
     cur_utt = request.json.get("human_sentences", [" "])
     cur_utt = [utt.lstrip("alexa") for utt in cur_utt]
 
-    entity_substr = request.json.get("entity_substr")
-    if not entity_substr:
-        entity_substr = [[] for _ in cur_utt]
+    entity_substr_batch = request.json.get("entity_substr")
+    if not entity_substr_batch:
+        entity_substr_batch = [[] for _ in cur_utt]
 
-    response = find_facts(entity_substr)
+    response = find_facts(entity_substr_batch)
 
     total_time = time.time() - st_time
     logger.info(f"fact_random exec time: {total_time:.3f}s")
