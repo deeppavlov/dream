@@ -49,7 +49,7 @@ def _request_fact_service(entity_substr_list: list, question_list: list) -> list
         logger.warning(
             f"result status code is not 200: {resp}. result text: {resp.text}; result status: {resp.status_code}"
         )
-        response = ""
+        response = []
         sentry_sdk.capture_message(
             f"Fact-Random result status code is not 200: {resp}. result text: {resp.text}; "
             f"result status: {resp.status_code}"
@@ -60,7 +60,9 @@ def _request_fact_service(entity_substr_list: list, question_list: list) -> list
             facts_for_entity = [f.get("fact") for f in entity_fact_list]
             flat_fact_list += facts_for_entity
 
-        return flat_fact_list
+        response = flat_fact_list
+
+    return response
 
 
 def get_fact(entity_substr: str, question: str) -> str:
