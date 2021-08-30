@@ -75,7 +75,7 @@ flows = {
                 TRANSITIONS: {("node7", 0.1): cnd.true},
             },
             "node6": {
-                RESPONSE: "I do known science too",
+                RESPONSE: "I have no opinion about science too",
                 TRANSITIONS: {("node7", 0.1): cnd.true},
             },
             "node7": {
