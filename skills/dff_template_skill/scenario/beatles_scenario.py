@@ -15,40 +15,6 @@ from common.wiki_skill import find_entity_by_types
 from dff import Context, Actor, Node
 
 
-def has_correct_answer(ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    a = ["Abbey Road", "A Hard Day's Night"]
-    ar = "|".join(a)
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_ar = re.findall(ar, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_ar:
-        flag = True
-
-    return flag
-
-
-def has_album(ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    albums = ["Please Please Me", "With the Beatles", "Introducing... The Beatles", "Meet the Beatles!",
-              "Twist and Shout", "The Beatles' Second Album", "The Beatles' Long Tall Sally", "A Hard Day's Night",
-              "Something New", "Help!", "Sgt. Pepper's Lonely Hearts Club Band", "White Album", "The Beatles Beat",
-              "Another Beatles Christmas Record", "Beatles '65", "Beatles VI", "Five Nights In A Judo Arena",
-              "The Beatles at the Hollywood Bowl", "Live! at the Star-Club in Hamburg, German; 1962",
-              "The Black Album", "20 Exitos De Oro", "A Doll's House", "The Complete Silver Beatles",
-              "Rock 'n' Roll Music Vol. 1", "Yellow Submarine", "Let It Be", "Beatles for Sale",
-              "Revolver", "Abbey Road", "Rubber Soul"]
-
-    albums_re = "|".join(albums)
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_album = re.findall(albums_re, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_album:
-        flag = True
-
-    return flag
-
-
 def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slot_values = ctx.shared_memory.get("slot_values", {})
     albums = ["Please Please Me", "With the Beatles", "Introducing... The Beatles", "Meet the Beatles!",
@@ -70,69 +36,6 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
     return node_label, node
 
-
-def has_songs(ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    songs = ["Hey Jude", "Don't Let Me Down", "We Can Work it Out", "Come Together",
-             "Yellow Submarine", "Revolution", "Imagine", "Something", "Hello, Goodbye",
-             "A Day In The Life", "Help!", "Penny Lane"]
-
-    songs_re = "|".join(songs)
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_song = re.findall(songs_re, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_song:
-        flag = True
-
-    return flag
-
-
-def has_lennon(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    member = "John Lennon"
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_member = re.findall(member, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_member:
-        flag = True
-
-    return flag
-
-
-def has_mccartney(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    member = "Paul McCartney"
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_member = re.findall(member, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_member:
-        flag = True
-
-    return flag
-
-
-def has_starr(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    member = "Ringo Starr"
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_member = re.findall(member, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_member:
-        flag = True
-
-    return flag
-
-
-def has_harrison(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    member = "George Harrison"
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_member = re.findall(member, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_member:
-        flag = True
-
-    return flag
 
 
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
@@ -164,29 +67,6 @@ def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args,
     return node_label, node
 
 
-def move_on(ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    move_on = "move on"
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_mo = re.findall(move_on, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_mo:
-        flag = True
-
-    return flag
-
-
-counter = 0
-
-
-def not_visited_album(ctx: Context, actor: Actor, *args, **kwargs):
-    flag = True
-    counter += 1
-    if counter == 12:
-        flag = False
-    return flag
-
-
 def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slot_values = ctx.shared_memory.get("slot_values", {})
     albums = ["Please Please Me", "With the Beatles", "Introducing... The Beatles", "Meet the Beatles!",
@@ -208,15 +88,6 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
     return node_label, node
 
-
-def enter_album(album_name: str, node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    flag = False
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    extracted_album = re.findall(album_name, user_uttr.get("text", ""), re.IGNORECASE)
-    if extracted_album:
-        flag = True
-    return flag
 
 
 def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):

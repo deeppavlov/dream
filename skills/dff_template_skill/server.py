@@ -24,7 +24,7 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -49,7 +49,7 @@ def handler(requested_data, random_seed=None):
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("123", 1.0, {}, {}, {}))
+            responses.append(("", 1.0, {}, {}, {}))
 
     total_time = time.time() - st_time
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
