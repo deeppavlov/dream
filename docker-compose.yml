@@ -1160,6 +1160,7 @@ services:
           memory: 2.5G
 
   dff-template-skill:
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8119

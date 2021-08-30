@@ -407,7 +407,6 @@ services:
     ports:
       - 8103:8103
   dff-template-skill:
-    env_file: [.env.dev]
     volumes:
       - "./skills/dff_template_skill:/src"
       - "./common:/src/common"

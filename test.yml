@@ -127,5 +127,4 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
-    env_file: [ .env.dev ]
 version: '3.7'
