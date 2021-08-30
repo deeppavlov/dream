@@ -26,11 +26,16 @@ def load_fact_file(path):
 
 
 def _request_fact_service(entity_substr_list: list, question_list: list) -> list:
-    """
-    Put entities in a batch and send to fact-random service
+    """Put entities in a batch and send to fact-random service
 
-    :return Flattened list of facts
+    Args:
+        entity_substr_list: list of entities
+        question_list: list of questions
+
+    Returns: Flattened list of facts
+
     """
+
     request_body = {
         "human_sentences": question_list,
         "entity_substr": [[entity_substr] for entity_substr in entity_substr_list],
@@ -66,13 +71,16 @@ def _request_fact_service(entity_substr_list: list, question_list: list) -> list
 
 
 def get_fact(entity_substr: str, question: str) -> str:
-    """
-    Interface method of fact-random service for a single fact
+    """Interface method of fact-random service for a single fact
 
-    :param entity_substr: entity which is used to find facts
-    :param question: string with question in Natural Language
-    :return: answer as string in natural language
+    Args:
+        entity_substr: entity which is used to find facts
+        question: string with question in natural language
+
+    Returns: answer as string in natural language
+
     """
+
     facts = _request_fact_service([entity_substr], [question])
     try:
         fact = facts[0]
@@ -83,13 +91,16 @@ def get_fact(entity_substr: str, question: str) -> str:
 
 
 def get_facts(entity_substr_list: list, question_list: list) -> list:
-    """
-    Interface method of fact-random service for multiple facts
+    """Interface method of fact-random service for multiple facts
 
-    :param entity_substr_list: list of entities which are used to find facts
-    :param question_list: string with question in Natural Language
-    :return: answer as string in natural language
+    Args:
+        entity_substr_list: list of entities which are used to find facts
+        question_list: string with question in Natural Language
+
+    Returns: answer as list of strings in natural language
+
     """
+
     facts = _request_fact_service(entity_substr_list, question_list)
 
     return facts
