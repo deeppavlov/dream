@@ -19,15 +19,23 @@ NEWS_API_ANNOTATOR_URL = os.getenv("NEWS_API_ANNOTATOR_URL")
 
 def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor):
     return (
-        ctx.misc["agent"]["dialog"]["human_utterances"][-1]
-        .get("annotations", {})
-        .get("cobot_entities", {})
-        .get("entities", [])
+        []
+        if ctx.validation
+        else (
+            ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+            .get("annotations", {})
+            .get("cobot_entities", {})
+            .get("entities", [])
+        )
     )
 
 
 def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, positive_threshold=0.333):
-    sentiment_probs = common_utils.get_sentiment(ctx.misc["agent"]["dialog"]["human_utterances"][-1], probs=True)
+    sentiment_probs = (
+        None
+        if ctx.validation
+        else common_utils.get_sentiment(ctx.misc["agent"]["dialog"]["human_utterances"][-1], probs=True)
+    )
     if sentiment_probs and isinstance(sentiment_probs, dict):
         max_sentiment_prob = max(sentiment_probs.values())
         max_sentiments = [
@@ -43,15 +51,16 @@ def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, posi
 
 
 def get_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")):
-    return ctx.misc["agent"]["dff_shared_state"]["cross_states"].get(service_name, {})
+    return {} if ctx.validation else ctx.misc["agent"]["dff_shared_state"]["cross_states"].get(service_name, {})
 
 
 def save_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_"), new_state={}):
-    ctx.misc["agent"]["dff_shared_state"]["cross_states"][service_name] = new_state
+    if not ctx.validation:
+        ctx.misc["agent"]["dff_shared_state"]["cross_states"][service_name] = new_state
 
 
 def get_cross_link(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")):
-    links = ctx.misc["agent"]["dff_shared_state"]["cross_links"].get(service_name, {})
+    links = {} if ctx.validation else ctx.misc["agent"]["dff_shared_state"]["cross_links"].get(service_name, {})
     cur_human_index = get_human_utter_index(ctx, actor)
     cross_link = [cross_link for human_index, cross_link in links.items() if (cur_human_index - int(human_index)) == 1]
     cross_link = cross_link[0] if cross_link else {}
@@ -59,29 +68,32 @@ def get_cross_link(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace
 
 
 def set_cross_link(
-    ctx: Context, actor: Actor,
+    ctx: Context,
+    actor: Actor,
     to_service_name,
     cross_link_additional_data={},
     from_service_name=SERVICE_NAME.replace("-", "_"),
 ):
     cur_human_index = get_human_utter_index(ctx, actor)
-    ctx.misc["agent"]["dff_shared_state"]["cross_links"][to_service_name] = {
-        cur_human_index: {
-            "from_service": from_service_name,
-            **cross_link_additional_data,
+    if not ctx.validation:
+        ctx.misc["agent"]["dff_shared_state"]["cross_links"][to_service_name] = {
+            cur_human_index: {
+                "from_service": from_service_name,
+                **cross_link_additional_data,
+            }
         }
-    }
 
 
 def reset_response_parts(ctx: Context, actor: Actor):
-    if "response_parts" in ctx.misc["agent"]:
+    if not ctx.validation and "response_parts" in ctx.misc["agent"]:
         del ctx.misc["agent"]["response_parts"]
 
 
 def add_parts_to_response_parts(ctx: Context, actor: Actor, parts=[]):
-    response_parts = set(ctx.misc["agent"].get("response_parts", []))
+    response_parts = set([] if ctx.validation else ctx.misc["agent"].get("response_parts", []))
     response_parts.update(parts)
-    ctx.misc["agent"]["response_parts"] = list(response_parts)
+    if not ctx.validation:
+        ctx.misc["agent"]["response_parts"] = list(response_parts)
 
 
 def set_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
@@ -90,7 +102,7 @@ def set_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
 
 
 def add_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
-    if ctx.misc["agent"].get("response_parts") is None:
+    if not ctx.validation and ctx.misc["agent"].get("response_parts") is None:
         add_parts_to_response_parts(ctx, actor, parts=["body"])
     add_parts_to_response_parts(ctx, actor, parts=["acknowledgement"])
 
@@ -114,54 +126,56 @@ def add_prompt_to_response_parts(ctx: Context, actor: Actor):
 
 
 def get_shared_memory(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["shared_memory"]
+    return {} if ctx.validation else ctx.misc["agent"]["shared_memory"]
 
 
 def get_used_links(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["used_links"]
+    return {} if ctx.validation else ctx.misc["agent"]["used_links"]
 
 
 def get_age_group(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["age_group"]
+    return {} if ctx.validation else ctx.misc["agent"]["age_group"]
 
 
 def set_age_group(ctx: Context, actor: Actor, set_age_group):
-    ctx.misc["agent"]["age_group"] = set_age_group
+    if not ctx.validation:
+        ctx.misc["agent"]["age_group"] = set_age_group
 
 
 def get_disliked_skills(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["disliked_skills"]
+    return [] if ctx.validation else ctx.misc["agent"]["disliked_skills"]
 
 
 def get_human_utter_index(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["human_utter_index"]
+    return 0 if ctx.validation else ctx.misc["agent"]["human_utter_index"]
 
 
 def get_previous_human_utter_index(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["previous_human_utter_index"]
+    return 0 if ctx.validation else ctx.misc["agent"]["previous_human_utter_index"]
 
 
 def get_dialog(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["dialog"]
+    return {} if ctx.validation else ctx.misc["agent"]["dialog"]
 
 
 def get_last_human_utterance(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+    return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1]
 
 
 def get_bot_utterances(ctx: Context, actor: Actor):
-    return ctx.misc["agent"]["dialog"]["bot_utterances"]
+    return [] if ctx.validation else ctx.misc["agent"]["dialog"]["bot_utterances"]
 
 
 def get_last_bot_utterance(ctx: Context, actor: Actor):
-    if ctx.misc["agent"]["dialog"]["bot_utterances"]:
+    if not ctx.validation and ctx.misc["agent"]["dialog"]["bot_utterances"]:
         return ctx.misc["agent"]["dialog"]["bot_utterances"][-1]
     else:
         return {"text": "", "annotations": {}}
 
 
 def save_to_shared_memory(ctx: Context, actor: Actor, **kwargs):
-    ctx.misc["agent"]["shared_memory"].update(kwargs)
+    if not ctx.validation:
+        ctx.misc["agent"]["shared_memory"].update(kwargs)
 
 
 def update_used_links(ctx: Context, actor: Actor, linked_skill_name, linking_phrase):
@@ -181,15 +195,18 @@ def get_new_link_to(ctx: Context, actor: Actor, skill_names):
 
 
 def set_dff_suspension(ctx: Context, actor: Actor):
-    ctx.misc["agent"]["current_turn_dff_suspended"] = True
+    if not ctx.validation:
+        ctx.misc["agent"]["current_turn_dff_suspended"] = True
 
 
 def reset_dff_suspension(ctx: Context, actor: Actor):
-    ctx.misc["agent"]["current_turn_dff_suspended"] = False
+    if not ctx.validation:
+        ctx.misc["agent"]["current_turn_dff_suspended"] = False
 
 
 def set_confidence(ctx: Context, actor: Actor, confidence=1.0):
-    ctx.misc["agent"]["response"].update({"confidence": confidence})
+    if not ctx.validation:
+        ctx.misc["agent"]["response"].update({"confidence": confidence})
     if confidence == 0.0:
         reset_can_continue(ctx, actor)
 
@@ -199,31 +216,38 @@ def set_can_continue(ctx: Context, actor: Actor, continue_flag=common_constants.
 
 
 def reset_can_continue(ctx: Context, actor: Actor):
-    if "can_continue" in ctx.misc["agent"]["response"]:
+    if not ctx.validation and "can_continue" in ctx.misc["agent"]["response"]:
         del ctx.misc["agent"]["response"]["can_continue"]
 
 
 def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
     entities = common_utils.get_entities(
-        ctx.misc["agent"]["dialog"]["human_utterances"][-1], only_named=True, with_labels=True
+        {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1],
+        only_named=True,
+        with_labels=True,
     )
     return entities
 
 
 def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
     nps = common_utils.get_entities(
-        ctx.misc["agent"]["dialog"]["human_utterances"][-1], only_named=False, with_labels=False
+        {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1],
+        only_named=False,
+        with_labels=False,
     )
     return nps
 
 
 def get_cobotqa_annotations_from_human_utterance(ctx: Context, actor: Actor):
-    return (
-        ctx.misc["agent"]["dialog"]["human_utterances"][-1]
-        .get("annotations", {})
-        .get("cobotqa_annotator", {"facts": [], "response": ""})
-    )
+    if not ctx.validation:
+        return (
+            ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+            .get("annotations", {})
+            .get("cobotqa_annotator", {"facts": [], "response": ""})
+        )
+    else:
+        return {"facts": [], "response": ""}
 
 
 def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity):
@@ -251,7 +275,7 @@ def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: A
 
 
 def get_facts_from_fact_retrieval(ctx: Context, actor: Actor):
-    annotations = ctx.misc["agent"]["dialog"]["human_utterances"][-1].get("annotations", {})
+    annotations = {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1].get("annotations", {})
     if "fact_retrieval" in annotations:
         if isinstance(annotations["fact_retrieval"], dict):
             return annotations["fact_retrieval"].get("facts", [])

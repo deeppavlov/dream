@@ -81,10 +81,9 @@ def get_ctx(
     clarification_request_flag,
 ):
     context = state.get("context", {})
-    logger.error(f"{context=}")
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
     current_turn_dff_suspended = state.get("current_turn_dff_suspended", False)
-    interrupted_flag = (human_utter_index - previous_human_utter_index) != 1 and not clarification_request_flag
+    # interrupted_flag = (human_utter_index - previous_human_utter_index) != 1 and not clarification_request_flag
     # if context and (not interrupted_flag or current_turn_dff_suspended):
     #     context = {}
     agent = {
@@ -132,6 +131,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
     text = ctx.last_response
     ctx.clear(1, ["requests", "responses", "node_labels"])
+    del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
 
     human_attr = {

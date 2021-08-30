@@ -10,11 +10,10 @@ from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-from dff.core import Actor
 
 from common.dff.integration.actor import load_ctxs, get_response
 
-import scenario.main as scenario
+from scenario.main import actor
 import test_server
 
 
@@ -32,12 +31,6 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
-
-actor = Actor(
-    scenario.flows,
-    start_node_label=("greeting_flow", "start_node"),
-    fallback_node_label=("greeting_flow", "fallback_node"),
-)
 
 
 def handler(requested_data, random_seed=None):

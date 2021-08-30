@@ -7,7 +7,7 @@ from dff.core import Context, Actor
 
 import common.utils as common_utils
 import common.universal_templates as universal_templates
-import common.dialogflow_framework.utils.state as state_utils
+import common.dff.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 
 logger = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ def is_switch_topic(ctx: Context, actor: Actor):
 
 
 def is_question(ctx: Context, actor: Actor):
-    text = state_utils.get_last_human_utterance(ctx, actor)["text"]
+    text = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     flag = common_utils.is_question(text)
     logging.debug(f"is_question = {flag}")
     return flag
@@ -64,7 +64,7 @@ def is_question(ctx: Context, actor: Actor):
 
 def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor):
     flag = universal_templates.if_chat_about_particular_topic(
-        state_utils.get_last_human_utterance(ctx, actor), state_utils.get_last_bot_utterance(ctx, actor)
+        int_ctx.get_last_human_utterance(ctx, actor), int_ctx.get_last_bot_utterance(ctx, actor)
     )
     logging.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
     return flag
@@ -73,8 +73,8 @@ def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor):
 def is_lets_chat_about_topic(ctx: Context, actor: Actor):
     flag = is_lets_chat_about_topic_human_initiative(ctx, actor)
 
-    last_human_uttr = state_utils.get_last_human_utterance(ctx, actor)
-    last_bot_uttr_text = state_utils.get_last_bot_utterance(ctx, actor)["text"]
+    last_human_uttr = int_ctx.get_last_human_utterance(ctx, actor)
+    last_bot_uttr_text = int_ctx.get_last_bot_utterance(ctx, actor)["text"]
     is_bot_initiative = bool(re.search(universal_templates.COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text))
     flag = flag or (is_bot_initiative and not common_utils.is_no(last_human_uttr))
     logging.debug(f"is_lets_chat_about_topic = {flag}")
@@ -82,27 +82,27 @@ def is_lets_chat_about_topic(ctx: Context, actor: Actor):
 
 
 def is_begin_of_dialog(ctx: Context, actor: Actor, begin_dialog_n=10):
-    flag = state_utils.get_human_utter_index(ctx, actor) < begin_dialog_n
+    flag = int_ctx.get_human_utter_index(ctx, actor) < begin_dialog_n
     logging.debug(f"is_begin_of_dialog = {flag}")
     return flag
 
 
 def is_interrupted(ctx: Context, actor: Actor):
-    flag = (state_utils.get_human_utter_index(ctx, actor) - state_utils.get_previous_human_utter_index(ctx, actor)
+    flag = (int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
             ) != 1 and not was_clarification_request(ctx, actor)
     logging.debug(f"is_interrupted = {flag}")
     return flag
 
 
 def is_long_interrupted(ctx: Context, actor: Actor, how_long=3):
-    flag = (state_utils.get_human_utter_index(ctx, actor) - state_utils.get_previous_human_utter_index(ctx, actor)
+    flag = (int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
             ) > how_long and not was_clarification_request(ctx, actor)
     logging.debug(f"is_long_interrupted = {flag}")
     return flag
 
 
 def is_new_human_entity(ctx: Context, actor: Actor):
-    new_entities = state_utils.get_new_human_labeled_noun_phrase(ctx, actor)
+    new_entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
     flag = bool(new_entities)
     logging.debug(f"is_new_human_entity = {flag}")
     return flag
@@ -167,7 +167,7 @@ def is_first_our_response(ctx: Context, actor: Actor):
 
 def is_no_human_abandon(ctx: Context, actor: Actor):
     """Is dialog breakdown in human utterance or no. Uses MIDAS hold/abandon classes."""
-    midas_classes = common_utils.get_intents(state_utils.get_last_human_utterance(ctx, actor), which="midas")
+    midas_classes = common_utils.get_intents(int_ctx.get_last_human_utterance(ctx, actor), which="midas")
     if "abandon" not in midas_classes:
         return True
     return False
@@ -180,7 +180,7 @@ def no_special_switch_off_requests(ctx: Context, actor: Actor):
         - user didn't requested high priority intents (like what_is_your_name)
     """
     intents_by_catcher = common_utils.get_intents(
-        state_utils.get_last_human_utterance(ctx, actor), probs=False, which="intent_catcher"
+        int_ctx.get_last_human_utterance(ctx, actor), probs=False, which="intent_catcher"
     )
     is_high_priority_intent = any([intent not in common_utils.service_intents for intent in intents_by_catcher])
     is_switch = is_switch_topic(ctx, actor)
@@ -210,9 +210,9 @@ def no_requests(ctx: Context, actor: Actor):
         "Topic_SwitchIntent",
         "Opinion_RequestIntent",
     ]
-    intents = common_utils.get_intents(state_utils.get_last_human_utterance(ctx, actor), which="all")
+    intents = common_utils.get_intents(int_ctx.get_last_human_utterance(ctx, actor), which="all")
     is_not_request_intent = all([intent not in request_intents for intent in intents])
-    is_no_question = "?" not in state_utils.get_last_human_utterance(ctx, actor)["text"]
+    is_no_question = "?" not in int_ctx.get_last_human_utterance(ctx, actor)["text"]
 
     if contain_no_special_requests and is_not_request_intent and is_no_question:
         return True
@@ -221,19 +221,19 @@ def no_requests(ctx: Context, actor: Actor):
 
 def is_yes_vars(ctx: Context, actor: Actor):
     flag = True
-    flag = flag and common_utils.is_yes(state_utils.get_last_human_utterance(ctx, actor))
+    flag = flag and common_utils.is_yes(int_ctx.get_last_human_utterance(ctx, actor))
     return flag
 
 
 def is_no_vars(ctx: Context, actor: Actor):
     flag = True
-    flag = flag and common_utils.is_no(state_utils.get_last_human_utterance(ctx, actor))
+    flag = flag and common_utils.is_no(int_ctx.get_last_human_utterance(ctx, actor))
     return flag
 
 
 def is_do_not_know_vars(ctx: Context, actor: Actor):
     flag = True
-    flag = flag and common_utils.is_donot_know(state_utils.get_last_human_utterance(ctx, actor))
+    flag = flag and common_utils.is_donot_know(int_ctx.get_last_human_utterance(ctx, actor))
     return flag
 
 
@@ -251,11 +251,11 @@ def is_passive_user(ctx: Context, actor: Actor, history_len=2):
 
 
 def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor):
-    sentiment = state_utils.get_human_sentiment(ctx, actor)
+    sentiment = int_ctx.get_human_sentiment(ctx, actor)
     if is_yes_vars(ctx, actor) or is_no_vars(ctx, actor):
         sentiment = "neutral"
 
-    shared_memory = state_utils.get_shared_memory(ctx, actor)
+    shared_memory = int_ctx.get_shared_memory(ctx, actor)
     last_acknowledgements = shared_memory.get("last_acknowledgements", [])
 
     ack = common_utils.get_not_used_template(
@@ -263,5 +263,5 @@ def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor):
     )
 
     used_acks = last_acknowledgements + [ack]
-    state_utils.save_to_shared_memory(ctx, actor, last_acknowledgements=used_acks[-2:])
+    int_ctx.save_to_shared_memory(ctx, actor, last_acknowledgements=used_acks[-2:])
     return ack
