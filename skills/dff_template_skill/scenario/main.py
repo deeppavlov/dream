@@ -100,6 +100,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "with_the_beatles"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "1vqwhwcpmh4t5k"},
             },
@@ -112,7 +113,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "a_hard_days_night_corr"): loc_cnd.has_correct_answer,
-                    ("album", "a_hard_days_night_wrong"): loc_cnd.has_any_album,
+                    ("album", "a_hard_days_night_wrong"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "80nrsg1xgqk8ch"},
             },
@@ -129,6 +130,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "2mm0prqv0rq7dh"},
             },
@@ -145,6 +147,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "2mm0prqv0rq7dh"},
             },
@@ -158,7 +161,11 @@ flows = {
                 "the album came out on the peak of Beatlemania and was a true hit: "
                 "it stayed on top of the charts for 7 weeks.",
                 PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "help"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "help"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "w2gnmmg1f34rkh"},
             },
             "help": {
@@ -168,7 +175,11 @@ flows = {
                 "covered song in the history of music. John Lennon later said that the title song "
                 "really was a cry for help: 'I was fat and depressed and I was crying out for 'Help'.'",
                 PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "rubber_soul"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "rubber_soul"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "xg3xm6mhb81m6c"},
             },
             "rubber_soul": {
@@ -178,7 +189,11 @@ flows = {
                 "we didn't know how you could get more bass. We were learning the technique on Rubber Soul. "
                 "We took over the cover and everything.'",
                 PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "sgt_peppers"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "revolver"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "9wqs15r56psr2q"},
             },
             "revolver": {
@@ -201,7 +216,11 @@ flows = {
                 "while the other one consists of symphonic film score composed by George Martin, "
                 "the Beatles' producer and the so-called fifth Beatle. Have you ever heard of this man?",
                 PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "sgt_peppers"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "sgt_peppers"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "ht5p6z4rs7zf65"},
             },
             "sgt_peppers": {
@@ -214,7 +233,11 @@ flows = {
                 "Sgt. Pepper's Lonely Hearts Club Band were sold all over the world! "
                 "A stunning number, isn't it?",
                 PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "white_album"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "white_album"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "n0kgrcdqqqfpqq"},
             },
             "white_album": {
@@ -226,7 +249,11 @@ flows = {
                 "however adding: 'But as a Beatles thing, as a whole, it just doesn’t work'."
                 "What do you think about this album?",
                 PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "abbey_road"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "abbey_road"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "h8fxrqh4611dg3"},
             },
             "abbey_road": {
@@ -239,7 +266,8 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "abbey_road_cover"): int_cnd.is_no_vars,
-                    ("album", "let_it_be"): cnd.true,
+                    ("album", "let_it_be"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "665x7hc4s22wpv"},
             },
@@ -248,7 +276,11 @@ flows = {
                 "It happened right outside the bands' "
                 "recording studio and took less than half an hour.",
                 PROCESSING: [loc_prs.add_misc_to_response],
-                TRANSITIONS: {("song", "song_q"): loc_cnd.move_on, ("album", "let_it_be"): loc_cnd.not_visited_album},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "let_it_be"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "z3nfvv0r06v3kx"},
             },
             "let_it_be": {
@@ -262,6 +294,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "please_please_me"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "4n02cf8h4qx00c"},
             },
@@ -327,7 +360,11 @@ flows = {
                 RESPONSE: "Then let's watch a short video and after that you can watch the entire movie if you want! "
                 "Just text me when you're done.",
                 PROCESSING: [loc_prs.add_misc_to_response],
-                TRANSITIONS: {("album", "yellow_submarine"): cnd.true},
+                TRANSITIONS: {
+                    ("song", "song_q"): loc_cnd.move_on,
+                    ("album", "yellow_submarine"): loc_cnd.not_visited_album,
+                    ("song", "song_q"): cnd.true,
+                },
                 MISC: {"command": "goto", "objectId": "86hcq66wcfgszf"},
             },
         },

@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 # ....
 
 
+counter = 0
+
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     members = ["John Lennon", "Ringo Starr", "Paul McCartney", "George Harrison"]
@@ -84,7 +86,7 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
         "Let's begin our trip here. I will show you some albums first. " "If you get tired, just text me 'MOVE ON'"
     )
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
-    slots["a_hard_days_noght_wrong"] = "It was Hard Day's Night!"
+    slots["a_hard_days_night_wrong"] = "It was Hard Day's Night!"
     slots["rubber_soul"] = "However, it was after this cry for 'Help' that the Beatles became the Beatles."
     slots["yellow_submarine"] = "Then let's take a look at the album."
     slots["abbey_road"] = (
@@ -96,14 +98,44 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
         "last released album took place?"
     )
 
-    for slot_name, slot_value in slots.items():
-        node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
-    return node_label, node
+    response = node.response
+    utt_list = nltk.sent_tokenize(response)
+    resp_list = []
+    all_slots = []
+    spec_list = []
+    resp_1 = []
 
+    for utt in utt_list:
+        utt_slots = re.findall(r"{(.*?)}", utt)
+        if len(utt_slots) == 0:
+            spec_list.append(utt_list.index(utt))
+        for u in utt_slots:
+            all_slots.append(u)
 
-def fill_slots(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    for slot_name, slot_value in ctx.misc.get("slots", {}).items():
-        node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
+    if counter == 0:
+        slot_value = slots.get(all_slots[0], "")
+        slot_repl = "{" + all_slots[0] + "}"
+        utt = all_slots[0].replace(slot_repl, slot_value)
+        resp_1.append(utt)
+
+    if len(all_slots) != 1:
+        slot_value = slots.get(all_slots[1], "")
+        slot_repl = "{" + all_slots[1] + "}"
+        utt = all_slots[0].replace(slot_repl, slot_value)
+        resp_1.append(utt)
+
+    c = 0
+    for i in range(len(utt_list)):
+        if i in spec_list:
+            resp_list.append(utt_list[i])
+        else:
+            resp_list.append(resp_1[c])
+            c += 1
+
+    counter += 1
+
+    node.response = " ".join(resp_list)
+
     return node_label, node
 
 
@@ -151,3 +183,4 @@ def extract_song_id(ctx: Context, actor: Actor, *args, **kwargs):
 def add_misc_to_response(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     node.response = f"{node.response} {json.dumps(node.misc)}"
     return node_label, node
+
