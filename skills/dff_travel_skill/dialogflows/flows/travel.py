@@ -42,7 +42,7 @@ from common.travel import (
 )
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_named_locations, COBOTQA_EXTRA_WORDS, get_entities
-from common.fact_random import get_facts
+from common.fact_random import get_fact
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -791,7 +791,7 @@ def collect_and_save_facts_about_location(location, vars):
         if location in LOCATION_FACTS_BUFFER:
             facts_about_location = deepcopy(LOCATION_FACTS_BUFFER[location])
         else:
-            facts_about_location = [get_facts(f"fact about {location}")]
+            facts_about_location = [get_fact(location, f"fact about {location}")]
             if len(LOCATION_FACTS_BUFFER) == 100:
                 LOCATION_FACTS_BUFFER = {}
             LOCATION_FACTS_BUFFER[location] = facts_about_location
