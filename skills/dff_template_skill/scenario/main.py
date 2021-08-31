@@ -65,6 +65,7 @@ flows = {
         GRAPH: {
             "what_album": {
                 RESPONSE: "What's your favorite Beatles album?",
+                PROCESSING: [loc_prs.increment_album_counter],
                 TRANSITIONS: {
                     ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
                     ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
@@ -96,7 +97,11 @@ flows = {
                 "The album was recorded within 13 hours and the studio cost 400£. "
                 "The album hit the top of the British chart and stayed there for 30 weeks just to be replaced "
                 "by 'With the Beatles'. Quite unexpected for a debut, right?",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "with_the_beatles"): loc_cnd.not_visited_album,
@@ -109,7 +114,11 @@ flows = {
                 "'With the Beatles' was recorded in only 7 non-consecutive days, but overall its recording "
                 "took almost three months. Between the recording sessions the band was busy with radio, "
                 "TV and live performances. Do you remember the title of the Beatles' third studio album?",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "a_hard_days_night_corr"): loc_cnd.has_correct_answer,
@@ -126,7 +135,11 @@ flows = {
                 "contrasting it to the later recordings: 'The early stuff – the Hard Day’s Night period, "
                 "I call it – was the seхual equivalent of the beginning hysteria of a relationship. "
                 "And the Sgt Pepper–Abbey Road period was the mature part of the relationship'.",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
@@ -143,7 +156,11 @@ flows = {
                 "contrasting it to the later recordings: 'The early stuff – the Hard Day’s Night period, "
                 "I call it – was the seхual equivalent of the beginning hysteria of a relationship. "
                 "And the Sgt Pepper–Abbey Road period was the mature part of the relationship'.",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
@@ -160,7 +177,11 @@ flows = {
                 "'the Beatles were rather war-weary during Beatles for Sale', "
                 "the album came out on the peak of Beatlemania and was a true hit: "
                 "it stayed on top of the charts for 7 weeks.",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "help"): loc_cnd.not_visited_album,
@@ -174,7 +195,11 @@ flows = {
                 "The other side included several famous songs, such as Yesterday, officially the most "
                 "covered song in the history of music. John Lennon later said that the title song "
                 "really was a cry for help: 'I was fat and depressed and I was crying out for 'Help'.'",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "rubber_soul"): loc_cnd.not_visited_album,
@@ -188,7 +213,11 @@ flows = {
                 "'Finally we took over the studio. In the early days, we had to take what we were given, "
                 "we didn't know how you could get more bass. We were learning the technique on Rubber Soul. "
                 "We took over the cover and everything.'",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "revolver"): loc_cnd.not_visited_album,
@@ -203,7 +232,7 @@ flows = {
                 "By the way, Revolver is Pope Benedict XVI's favourite album of all times. "
                 "One of the songs from it, Yellow Submarine, became an inspiration for an animated film! "
                 "Have you seen it?",
-                PROCESSING: [loc_prs.add_misc_to_response],
+                PROCESSING: [loc_prs.increment_album_counter, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "yellow_submarine"): int_cnd.is_yes_vars,
@@ -215,7 +244,11 @@ flows = {
                 RESPONSE: "{first_album} {yellow_submarine} One side of the album contains Beatles' song, "
                 "while the other one consists of symphonic film score composed by George Martin, "
                 "the Beatles' producer and the so-called fifth Beatle. Have you ever heard of this man?",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "sgt_peppers"): loc_cnd.not_visited_album,
@@ -232,7 +265,11 @@ flows = {
                 "of all times. More than 32 million copies of "
                 "Sgt. Pepper's Lonely Hearts Club Band were sold all over the world! "
                 "A stunning number, isn't it?",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "white_album"): loc_cnd.not_visited_album,
@@ -248,7 +285,11 @@ flows = {
                 "was not critically acclaimed, Lennon said: 'I think it’s the best music we’ve ever made', "
                 "however adding: 'But as a Beatles thing, as a whole, it just doesn’t work'."
                 "What do you think about this album?",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "abbey_road"): loc_cnd.not_visited_album,
@@ -262,7 +303,11 @@ flows = {
                 "going to Mount Everest to do a photoshoot for the cover. So they invented another title "
                 "- Abbey Road, after the street where most of the band's material was recorded. By the way, "
                 "do you remember what the album's cover looks like?",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "abbey_road_cover"): int_cnd.is_no_vars,
@@ -275,7 +320,7 @@ flows = {
                 RESPONSE: "Then let me show it to you! The photoshoot was Paul McCartney's idea. "
                 "It happened right outside the bands' "
                 "recording studio and took less than half an hour.",
-                PROCESSING: [loc_prs.add_misc_to_response],
+                PROCESSING: [loc_prs.increment_album_counter, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "let_it_be"): loc_cnd.not_visited_album,
@@ -290,7 +335,11 @@ flows = {
                 "but at last the recording took place in a studio. The album spent more than a year unreleased "
                 "as the relations between the Beatles had become so tense "
                 "that none of them wanted to sort the songs out.",
-                PROCESSING: [loc_prs.slot_filling_albums, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response,
+                ],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "please_please_me"): loc_cnd.not_visited_album,

@@ -97,7 +97,8 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
     )
 
     for slot_name, slot_value in slots.items():
-        if ctx.misc.get("counter", 0) != 0 and slot_name == "first_album":
+        if ctx.misc.get("first_album") is None and slot_name == "first_album":
+            ctx.misc["first_album"] = True
             continue
         node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
 
@@ -150,6 +151,11 @@ def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
 def fill_slots(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     for slot_name, slot_value in ctx.misc.get("slots", {}).items():
         node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
+    return node_label, node
+
+
+def increment_album_counter(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+    ctx.misc["album_counter"] = ctx.misc.get("album_counter", 0) + 1
     return node_label, node
 
 

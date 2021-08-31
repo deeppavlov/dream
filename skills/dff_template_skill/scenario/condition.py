@@ -16,8 +16,7 @@ def has_album(album_name: str):
 
 
 def not_visited_album(ctx: Context, actor: Actor, *args, **kwargs):
-    ctx.misc["counter"] = ctx.misc.get("counter", 0) + 1
-    return ctx.misc["counter"] != 12
+    return ctx.misc.get("album_counter", 0) != 12
 
 
 def move_on(ctx: Context, actor: Actor, *args, **kwargs):
