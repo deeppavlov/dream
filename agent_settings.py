@@ -25,7 +25,7 @@ BASE_PARAMETERS = {
     "output_formatter": http_api_output_formatter,
     "debug_output_formatter": http_debug_output_formatter,
     "port": 4242,
-    "cors": False,
+    "cors": True,
     "telegram_token": "",
     "telegram_proxy": "",
 }

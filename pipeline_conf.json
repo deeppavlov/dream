@@ -456,7 +456,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://dff-template-skill:8119/respond"
+                    "url": "http://dff-template-skill:8120/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
