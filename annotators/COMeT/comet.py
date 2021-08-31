@@ -1,0 +1,158 @@
+import re
+from typing import Dict, Sequence, Optional
+
+import src.interactive.functions as interactive
+import src.data.config as cfg
+
+import schemas
+
+postprocessing_regexp = re.compile(r"[^a-zA-Z0-9\- ]|\bnone\b", re.IGNORECASE)
+
+
+def cleanup(text):
+    cleaned = re.sub(postprocessing_regexp, "", text)
+    return cleaned.strip()
+
+
+class COMeTBaseEngine:
+    def __init__(self, graph, model_path, device, decoding_algorithm):
+        self.graph = graph
+        self.model_path = model_path
+        self.device = device
+        self.decoding_algorithm = decoding_algorithm
+
+        self._opt, self._state_dict = interactive.load_model_file(self.model_path)
+        self._data_loader, self._text_encoder = interactive.load_data(self.graph, self._opt)
+        self._sampler = interactive.set_sampler(self._opt, self.decoding_algorithm, self._data_loader)
+        self._n_ctx = self._calc_n_ctx()
+        self._n_vocab = len(self._text_encoder.encoder) + self._n_ctx
+
+        self._model = interactive.make_model(self._opt, self._n_vocab, self._n_ctx, self._state_dict)
+        cfg.device = self.device
+        self._model.to(device=cfg.device)
+
+        self._input_event_model = None
+        self._response_model = None
+        self._annotator_input_model = None
+        self._annotator_response_model = None
+
+    @property
+    def input_event_model(self) -> Optional[schemas.BaseModel]:
+        return self._input_event_model
+
+    @property
+    def response_model(self) -> Optional[schemas.BaseModel]:
+        return self._response_model
+
+    @property
+    def annotator_input_model(self) -> Optional[schemas.BaseModel]:
+        return self._annotator_input_model
+
+    @property
+    def annotator_response_model(self) -> Optional[schemas.BaseModel]:
+        return self._annotator_response_model
+
+    def _calc_n_ctx(self) -> int:
+        pass
+
+    def process_request(self, *args, **kwargs):
+        pass
+
+    def _get_result(self, *args, **kwargs):
+        pass
+
+    def annotator(self, *args, **kwargs):
+        pass
+
+
+class COMeTAtomic(COMeTBaseEngine):
+    def __init__(self, model_path, device, decoding_algorithm):
+        super().__init__(graph="atomic", model_path=model_path, device=device, decoding_algorithm=decoding_algorithm)
+        self._input_event_model = schemas.AtomicInputEventModel
+        self._response_model = schemas.AtomicResponseModel
+
+    def _calc_n_ctx(self):
+        return self._data_loader.max_event + self._data_loader.max_effect
+
+    def process_request(self, input_event: schemas.AtomicInputEventModel) -> Dict:
+        return self._get_result(input_event.event, input_event.category)
+
+    def _get_result(self, event: str, category: Sequence[str]) -> Dict:
+        raw_result = interactive.get_atomic_sequence(
+            event,
+            self._model,
+            self._sampler,
+            self._data_loader,
+            self._text_encoder,
+            category
+        )
+        for rel in raw_result:
+            raw_result[rel]["beams"] = [cleanup(b) for b in raw_result[rel].get("beams", []) if len(cleanup(b)) > 0]
+        return raw_result
+
+    def annotator(self, *args, **kwargs):
+        raise NotImplementedError("No annotator for atomic graph is available!")
+
+
+class COMeTConceptNet(COMeTBaseEngine):
+    def __init__(self, model_path, device, decoding_algorithm):
+        super().__init__(graph="conceptnet", model_path=model_path, device=device,
+                         decoding_algorithm=decoding_algorithm)
+        self._input_event_model = schemas.ConceptNetInputEventModel
+        self._response_model = schemas.ConceptNetResponseModel
+        self._annotator_input_model = schemas.ConceptNetAnnotatorEventModel
+        self._annotator_response_model = schemas.ConceptNetAnnotatorResponseModel
+
+    def _calc_n_ctx(self):
+        return self._data_loader.max_e1 + self._data_loader.max_e2 + self._data_loader.max_r
+
+    def process_request(self, input_event: schemas.ConceptNetInputEventModel) -> Dict:
+        return self._get_result(input_event.event, input_event.category)
+
+    def _get_result(self, event, category):
+        raw_result = interactive.get_conceptnet_sequence(
+            event,
+            self._model,
+            self._sampler,
+            self._data_loader,
+            self._text_encoder,
+            category
+        )
+        for rel in raw_result:
+            raw_result[rel]["beams"] = [cleanup(b) for b in raw_result[rel].get("beams", []) if len(cleanup(b)) > 0]
+        return raw_result
+
+    def annotator(self, input_event: schemas.ConceptNetAnnotatorEventModel):
+        batch = []
+        for nounphrases in input_event.nounphrases:
+            result = {}
+            for np in nounphrases:
+                cn_result = self._get_result(np, input_event.category)
+                np_conceptnet_rels = {}
+                for rel in cn_result:
+                    np_conceptnet_rels[rel] = [cleanup(b) for b in cn_result[rel].get("beams", []) if
+                                               len(cleanup(b)) > 0]
+                result[np] = np_conceptnet_rels
+            batch += [result]
+        return batch
+
+
+class COMeTFactory:
+    def __init__(self, graph):
+        self.graph = graph
+
+    def __call__(self, model_path, device, decoding_algorithm):
+        if self.graph == "atomic":
+            return COMeTAtomic(
+                model_path=model_path,
+                device=device,
+                decoding_algorithm=decoding_algorithm
+            )
+        elif self.graph == "conceptnet":
+            return COMeTConceptNet(
+                model_path=model_path,
+                device=device,
+                decoding_algorithm=decoding_algorithm
+            )
+        else:
+            raise ValueError(f"Graph {self.graph} does not exist!")
