@@ -39,12 +39,8 @@ def find_facts(entity_substr_batch):
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    cur_utt = request.json.get("human_sentences", [" "])
-    cur_utt = [utt.lstrip("alexa") for utt in cur_utt]
 
-    entity_substr_batch = request.json.get("entity_substr")
-    if not entity_substr_batch:
-        entity_substr_batch = [[] for _ in cur_utt]
+    entity_substr_batch = request.json
 
     response = find_facts(entity_substr_batch)
 

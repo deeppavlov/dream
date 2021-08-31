@@ -36,10 +36,7 @@ def _request_fact_service(entity_substr_list: list, question_list: list) -> list
 
     """
 
-    request_body = {
-        "human_sentences": question_list,
-        "entity_substr": [[entity_substr] for entity_substr in entity_substr_list],
-    }
+    request_body = [entity_substr_list]
     try:
         resp = requests.request(
             url=FACT_RANDOM_SERVICE_URL, headers=HEADERS, data=json.dumps(request_body), method="POST", timeout=TIMEOUT
