@@ -65,7 +65,6 @@ flows = {
         GRAPH: {
             "what_album": {
                 RESPONSE: "What's your favorite Beatles album?",
-                PROCESSING: [loc_prs.increment_album_counter],
                 TRANSITIONS: {
                     ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
                     ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
