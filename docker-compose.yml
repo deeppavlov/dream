@@ -1169,8 +1169,6 @@ services:
       dockerfile: ./skills/dff_template_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
     deploy:
-      mode: replicated
-      replicas: 2
       resources:
         limits:
           memory: 128M
