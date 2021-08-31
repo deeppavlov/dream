@@ -15,7 +15,7 @@ import common.dialogflow_framework.utils.condition as condition_utils
 
 import dialogflows.scopes as scopes
 
-from common.fact_random import get_facts
+from common.fact_random import get_fact
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.gaming import get_harry_potter_part_name_if_special_link_was_used
 from common.movies import (
@@ -800,7 +800,7 @@ def check_answer_to_do_you_know_question_response(vars):
             if result is not None:
                 result = f"The leading actors are {', '.join(result)}."
             else:
-                result = get_facts(f"who stars in {movie_type} {movie_title}?")
+                result = get_fact(movie_title, f"who stars in {movie_type} {movie_title}?")
             if len(unique_persons) > 0 and all([name in result for name in list(unique_persons.keys())]):
                 if len(unique_persons) > 1:
                     response = "Great! All those people are from main cast."
@@ -829,7 +829,7 @@ def check_answer_to_do_you_know_question_response(vars):
                 else:
                     result = f"The genres of the {movie_type} are {', '.join(result)}."
             else:
-                result = get_facts(f"genre of {movie_type} {movie_title}?")
+                result = get_fact(movie_title, f"genre of {movie_type} {movie_title}?")
             if len(mentioned_genres) > 0 and any([name in result for name in mentioned_genres]):
                 response = f"Great! {result}"
             elif is_yes:
@@ -891,7 +891,7 @@ def collect_and_save_facts_about_location(movie_id, vars):
                     facts_about_movies += [fact]
 
         if len(movie_title) > 0 and len(facts_about_movies) == 0:
-            facts_about_movies = [get_facts(f"fact about {movie_type} {movie_title}")]
+            facts_about_movies = [get_fact(movie_title, f"fact about {movie_type} {movie_title}")]
 
         used_facts = shared_memory.get("used_facts", [])
         facts_about_movies = get_all_not_used_templates(used_facts, facts_about_movies)
