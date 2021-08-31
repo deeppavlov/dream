@@ -99,6 +99,7 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
     for slot_name, slot_value in slots.items():
         if ctx.misc.get("first_album") is None and slot_name == "first_album":
             ctx.misc["first_album"] = True
+        else:
             slot_value = ""
         node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
 
