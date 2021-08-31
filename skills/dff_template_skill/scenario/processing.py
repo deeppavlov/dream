@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 # ....
 
 
-counter = 0
 
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
@@ -112,7 +111,8 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
         for u in utt_slots:
             all_slots.append(u)
 
-    if counter == 0:
+    ctx.misc["counter_2"] = ctx.misc.get("counter_2", 0) + 1
+    if ctx.misc["counter_2"] == 1:
         slot_value = slots.get(all_slots[0], "")
         slot_repl = "{" + all_slots[0] + "}"
         utt = all_slots[0].replace(slot_repl, slot_value)
@@ -132,7 +132,6 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
             resp_list.append(resp_1[c])
             c += 1
 
-    counter += 1
 
     node.response = " ".join(resp_list)
 
@@ -180,7 +179,12 @@ def extract_song_id(ctx: Context, actor: Actor, *args, **kwargs):
     return id
 
 
+def fill_slots(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+    for slot_name, slot_value in ctx.misc.get("slots", {}).items():
+        node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
+    return node_label, node
+
+
 def add_misc_to_response(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     node.response = f"{node.response} {json.dumps(node.misc)}"
     return node_label, node
-
