@@ -554,6 +554,21 @@ def kbqa_formatter_dialog(dialog: Dict):
     return [{"x_init": sentences, "entities": entities}]
 
 
+def fact_random_formatter_dialog(dialog: Dict):
+    # Used by: fact-random annotator
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list = []
+
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+    return [[entity_substr_list]]
+
+
 def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
