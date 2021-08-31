@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 # ....
 
 
-
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     members = ["John Lennon", "Ringo Starr", "Paul McCartney", "George Harrison"]
@@ -97,48 +96,15 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
         "last released album took place?"
     )
 
-    response = node.response
-    utt_list = nltk.sent_tokenize(response)
-    resp_list = []
-    all_slots = []
-    spec_list = []
-    resp_1 = []
-
-    for utt in utt_list:
-        utt_slots = re.findall(r"{(.*?)}", utt)
-        if len(utt_slots) == 0:
-            spec_list.append(utt_list.index(utt))
-        for u in utt_slots:
-            all_slots.append(u)
-
-    ctx.misc["counter_2"] = ctx.misc.get("counter_2", 0) + 1
-    if ctx.misc["counter_2"] == 1:
-        slot_value = slots.get(all_slots[0], "")
-        slot_repl = "{" + all_slots[0] + "}"
-        utt = all_slots[0].replace(slot_repl, slot_value)
-        resp_1.append(utt)
-
-    if len(all_slots) != 1:
-        slot_value = slots.get(all_slots[1], "")
-        slot_repl = "{" + all_slots[1] + "}"
-        utt = all_slots[0].replace(slot_repl, slot_value)
-        resp_1.append(utt)
-
-    c = 0
-    for i in range(len(utt_list)):
-        if i in spec_list:
-            resp_list.append(utt_list[i])
-        else:
-            resp_list.append(resp_1[c])
-            c += 1
-
-
-    node.response = " ".join(resp_list)
+    for slot_name, slot_value in slots.items():
+        if ctx.misc.get("counter", 0) != 0 and slot_name == "first_album":
+            continue
+        node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
 
     return node_label, node
 
 
-def extract_song_id(ctx: Context, actor: Actor, *args, **kwargs):
+def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     songs = [
         "Hey Jude",
         "Don't Let Me Down",
@@ -176,7 +142,9 @@ def extract_song_id(ctx: Context, actor: Actor, *args, **kwargs):
             if extracted_song[0].lower() == k.lower():
                 id = songs_ids[k]
 
-    return id
+    node.misc = {"command": "goto", "objectId": id}
+
+    return node_label, node
 
 
 def fill_slots(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):

@@ -100,7 +100,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "with_the_beatles"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "1vqwhwcpmh4t5k"},
             },
@@ -130,7 +130,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "2mm0prqv0rq7dh"},
             },
@@ -147,7 +147,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "2mm0prqv0rq7dh"},
             },
@@ -164,7 +164,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "help"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "w2gnmmg1f34rkh"},
             },
@@ -178,7 +178,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "rubber_soul"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "xg3xm6mhb81m6c"},
             },
@@ -192,7 +192,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "revolver"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "9wqs15r56psr2q"},
             },
@@ -219,7 +219,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "sgt_peppers"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "ht5p6z4rs7zf65"},
             },
@@ -236,7 +236,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "white_album"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "n0kgrcdqqqfpqq"},
             },
@@ -252,7 +252,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "abbey_road"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "h8fxrqh4611dg3"},
             },
@@ -267,7 +267,7 @@ flows = {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "abbey_road_cover"): int_cnd.is_no_vars,
                     ("album", "let_it_be"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "665x7hc4s22wpv"},
             },
@@ -279,7 +279,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "let_it_be"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "z3nfvv0r06v3kx"},
             },
@@ -294,7 +294,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "please_please_me"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "4n02cf8h4qx00c"},
             },
@@ -342,7 +342,7 @@ flows = {
             },
             "fav_song": {
                 RESPONSE: "Oh, have you seen the music video for this song?",
-                # PROCESSING: [extract_song_id, loc_prs.add_misc_to_response],
+                PROCESSING: [loc_prs.extract_song_id, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("album", "who_beatle"): int_cnd.is_yes_vars, ("song", "watch_video"): cnd.true},
             },
             "watch_video": {
@@ -363,7 +363,7 @@ flows = {
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
                     ("album", "yellow_submarine"): loc_cnd.not_visited_album,
-                    ("song", "song_q"): cnd.true,
+                    ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "86hcq66wcfgszf"},
             },
