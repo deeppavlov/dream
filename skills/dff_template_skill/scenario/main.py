@@ -92,7 +92,7 @@ flows = {
                 },
             },
             "please_please_me": {
-                RESPONSE: "{first_album} Please Please Me is the first studio  album by the Beatles!"
+                RESPONSE: "{first_album} Please Please Me is the first studio album by the Beatles! "
                 "The album was recorded within 13 hours and the studio cost 400£. "
                 "The album hit the top of the British chart and stayed there for 30 weeks just to be replaced "
                 "by 'With the Beatles'. Quite unexpected for a debut, right?",
@@ -355,7 +355,7 @@ flows = {
                 TRANSITIONS: {("photos", "abbey_road"): int_cnd.is_yes_vars},
             },
             "abbey_road": {
-                RESPONSE: """Here! It's the only original Beatles album cover to show neither the artist name nor"""
+                RESPONSE: """Here! It's the only original Beatles album cover to show neither the artist name nor """
                 """the album title. Do you remember the name of this album?""",
                 PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("photos", "fact_ar"): loc_cnd.has_correct_answer, ("photos", "info_ar"): cnd.true},
@@ -363,7 +363,7 @@ flows = {
             },
             "fact_ar": {
                 RESPONSE: """Yes, it's Abbey Road!! Did you know that after the album was released, the number plate """
-                """"(LMW 281F) was repeatedly stolen from the white Volkswagen Beetle from the picture? Poor owner"""
+                """"(LMW 281F) was repeatedly stolen from the white Volkswagen Beetle from the picture? Poor owner """
                 """of the car...""",
                 TRANSITIONS: {("photos", "yesterday&today"): cnd.true},
             },
@@ -374,7 +374,7 @@ flows = {
                 TRANSITIONS: {("photos", "yesterday&today"): cnd.true},
             },
             "yesterday&today": {
-                RESPONSE: """This photo is from Whitaker photo session, where he assembled different scary props such"""
+                RESPONSE: """This photo is from Whitaker photo session, where he assembled different scary props such """
                 """as doll parts and trays of meat. One of the photos was used for the cover of Yesterday """
                 """and Today album. We have some more photos of The Beatles, so be sure to check them out 🙂 """,
                 PROCESSING: [loc_prs.add_misc_to_response],
@@ -471,11 +471,7 @@ flows = {
                 },
             },
             "guitar_paul_1": {
-                RESPONSE: "Cool! We have a lot of {guitar}s here. "
-                "Let's begin with a story about Paul McCartney's first {guitar}. "
-                "I have a funny story about {trumpet}s for you. "
-                "If you like {drums}, you must like Ringo Starr! We will see his {drums} later, "
-                "let's begin with the guitars. "
+                RESPONSE: "{instrument_intro}"
                 "In 1956, McCartney's father gave him a trumpet for his birthday. "
                 """But, as Paul said later, "you couldn't sing with a trumpet stuck in your mouth", """
                 "so he traded it for Zenith Model 17 acoustic. Let's have a look at it. "
@@ -486,7 +482,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "f47z2rzm0tt4b8"},
             },
             "guitar_paul_1_2": {
-                RESPONSE: "I can show you Paul McCartney's guitar!"
+                RESPONSE: "I can show you Paul McCartney's guitar! "
                 "In 1956, McCartney's father gave him a trumpet for his birthday. "
                 """But, as Paul said later, "you couldn't sing with a trumpet stuck in your mouth", """
                 "so he traded it for Zenith Model 17 acoustic. Let's have a look at it. "

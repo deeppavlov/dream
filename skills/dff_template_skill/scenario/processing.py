@@ -27,8 +27,14 @@ def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args,
     insts = ["trumpet", "drums", "guitar"]
     insts_re = "|".join(insts)
     extracted_inst = re.findall(insts_re, ctx.last_request, re.IGNORECASE)
-    if extracted_inst:
-        slots[extracted_inst[0]] = extracted_inst[0]
+    if "guitar" in extracted_inst:
+        slots["instrument_intro"] = "Cool! We have a lot of guitars here. Let's begin with a story about Paul McCartney's first guitar."
+        ctx.misc["slots"] = slots
+    elif "drums" in extracted_instr:
+        slots["instrument_intro"] = "Then I have a funny story about trumpets for you!"
+        ctx.misc["slots"] = slots
+    elif "trumpet" in extracted_instr:
+        slots["instrument_intro"] = "If you like drums, you must like Ringo Starr! Let's save his his drumkit for last and begin with the guitars."
         ctx.misc["slots"] = slots
 
     return node_label, node
