@@ -11,12 +11,20 @@ logger = logging.getLogger(__name__)
 
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    members = ["John Lennon", "Ringo Starr", "Paul McCartney", "George Harrison"]
-
+    members = ["John", "Len*on", "Ringo", "Star*", "Paul", "McCartn*y", "George", "Har*ison"]
     members_re = "|".join(members)
     extracted_member = re.findall(members_re, ctx.last_request, re.IGNORECASE)
-    if extracted_member:
-        slots["beatles_member"] = extracted_member[0]
+    if "john" in extracted_member[0] or "lennon" in extracted_member[0]:
+        slots["beatles_member"] = "John Lennon"
+        ctx.misc["slots"] = slots
+    elif "paul" in extracted_member[0] or "mccartney" in extracted_member[0]:
+        slots["beatles_member"] = "Paul McCartney"
+        ctx.misc["slots"] = slots
+    elif "ringo" in extracted_member[0] or "starr" in extracted_member[0]:
+        slots["beatles_member"] = "Ringo Starr"
+        ctx.misc["slots"] = slots
+    elif "george" in extracted_member[0] or "harrison" in extracted_member[0]:
+        slots["beatles_member"] = "George Harrison"
         ctx.misc["slots"] = slots
 
     return node_label, node
@@ -28,13 +36,13 @@ def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args,
     insts_re = "|".join(insts)
     extracted_inst = re.findall(insts_re, ctx.last_request, re.IGNORECASE)
     if "guitar" in extracted_inst:
-        slots["instrument_intro"] = "Cool! We have a lot of guitars here. Let's begin with a story about Paul McCartney's first guitar."
+        slots["instrument_intro"] = "Cool! We have a lot of guitars here. Let's begin with a story about Paul McCartney's first guitar. "
         ctx.misc["slots"] = slots
-    elif "drums" in extracted_instr:
-        slots["instrument_intro"] = "Then I have a funny story about trumpets for you!"
+    elif "trumpet" in extracted_inst:
+        slots["instrument_intro"] = "Then I have a funny story about trumpets for you! "
         ctx.misc["slots"] = slots
-    elif "trumpet" in extracted_instr:
-        slots["instrument_intro"] = "If you like drums, you must like Ringo Starr! Let's save his his drumkit for last and begin with the guitars."
+    elif "drums" in extracted_inst:
+        slots["instrument_intro"] = "If you like drums, you must like Ringo Starr! Let's save his his drumkit for last and begin with the guitars. "
         ctx.misc["slots"] = slots
 
     return node_label, node
@@ -86,11 +94,10 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
 def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    slots["first_album"] = (
-        "Let's begin our trip here. I will show you some albums first. " "If you get tired, just text me 'MOVE ON'"
-    )
+    slots["first_album"] = "Let's begin our trip here. I will show you some albums first.If you get tired, just text me 'MOVE ON'. "
+    slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club."
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
-    slots["a_hard_days_night_wrong"] = "It was Hard Day's Night!"
+    slots["a_hard_days_night_wrong"] = "It was A Hard Day's Night!"
     slots["rubber_soul"] = "However, it was after this cry for 'Help' that the Beatles became the Beatles."
     slots["yellow_submarine"] = "Then let's take a look at the album."
     slots["abbey_road"] = (
@@ -105,7 +112,7 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
     for slot_name, slot_value in slots.items():
         if ctx.misc.get("first_album") is None and slot_name == "first_album":
             ctx.misc["first_album"] = True
-        else:
+        elif ctx.misc["first_album"] == True and slot_name == "first_album":
             slot_value = ""
         node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
 

@@ -78,16 +78,16 @@ flows = {
                     ("album", "white_album"): loc_cnd.has_album(album_name="White Album"),
                     ("album", "abbey_road"): loc_cnd.has_album(album_name="Abbey Road"),
                     ("album", "let_it_be"): loc_cnd.has_album(album_name="Let It Be"),
-                    ("album", "please_please_me", 0): cnd.true,
+                    ("album", "please_please_me", 0.1): cnd.true,
                 },
             },
             "who_beatle": {
                 RESPONSE: "By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
-                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John Lennon"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul McCartney"),
-                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo Starr"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George Harrison"),
+                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
+                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Ha*rison"),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
@@ -192,7 +192,7 @@ flows = {
                 RESPONSE: "{first_album}"
                 "Just like A Hard Day's Night, one side of Help! consisted the soundtrack songs for the movie. "
                 "The other side included several famous songs, such as Yesterday, officially the most "
-                "covered song in the history of music. John Lennon later said that the title song "
+                "covered song in the history of music. John Lennon later said that the title song of the album "
                 "really was a cry for help: 'I was fat and depressed and I was crying out for 'Help'.'",
                 PROCESSING: [
                     loc_prs.increment_album_counter,
@@ -208,7 +208,7 @@ flows = {
             },
             "rubber_soul": {
                 RESPONSE: "{first_album}"
-                "{rubber_soul} As John Lennon said, "
+                "{rubber_soul} As John Lennon said about this album, "
                 "'Finally we took over the studio. In the early days, we had to take what we were given, "
                 "we didn't know how you could get more bass. We were learning the technique on Rubber Soul. "
                 "We took over the cover and everything.'",
@@ -256,7 +256,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "ht5p6z4rs7zf65"},
             },
             "sgt_peppers": {
-                RESPONSE: "{first_album} "
+                RESPONSE: "{first_album} {sgt_peppers} "
                 "Called 'a decisive moment in the history of Western civilisation', "
                 "'the most important and influential rock and roll album ever recorded' and "
                 "'a historic departure in the progress of music', "
@@ -278,7 +278,7 @@ flows = {
             },
             "white_album": {
                 RESPONSE: "{first_album} Unlike the earlier period, "
-                "the idea of the band's The Beatles, or the White Album, "
+                "the idea of the band's 'The Beatles', or the White Album, "
                 "was almost entirely conceived far from London. The group went to an ashram in Rishikesh, India, "
                 "for a meditation course, where they only had an acoustic guitar available! Even though the album "
                 "was not critically acclaimed, Lennon said: 'I think it’s the best music we’ve ever made', "
@@ -398,7 +398,7 @@ flows = {
                 TRANSITIONS: {("song", "show_video"): int_cnd.is_yes_vars, ("album", "who_beatle"): cnd.true},
             },
             "show_video": {
-                RESPONSE: "Great! You can watch it 🙂 " "Just text me when you're done",
+                RESPONSE: "Great! You can watch it 🙂 Just text me when you're done",
                 PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("album", "who_beatle"): cnd.true},
                 MISC: {"command": "goto", "objectId": "{video}"},
