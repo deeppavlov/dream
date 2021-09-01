@@ -35,7 +35,7 @@ flows = {
         GRAPH: {
             "start": {RESPONSE: ""},
             "beatles_q": {
-                RESPONSE: "Do you like the Beatles?",
+                RESPONSE: "Well, hello. I am the Doorman and I will be your guide here today. Do you like the Beatles?",
                 # PROCESSING: set_confidence_and_continue_flag(1.0, common_constants.MUST_CONTINUE,
                 # ),
                 TRANSITIONS: {
@@ -55,7 +55,7 @@ flows = {
     "beatles_fact": {
         GRAPH: {
             "name": {
-                RESPONSE: "Beatles... Sound like a wordplay, doesn’t it? Beetles making the beat. "
+                RESPONSE: "Beatles... Sounds like a wordplay, doesn’t it? Beetles making the beat. "
                 "That’s how they meant it",
                 TRANSITIONS: {("album", "what_album"): cnd.true},
             }
@@ -83,6 +83,16 @@ flows = {
             },
             "who_beatle": {
                 RESPONSE: "By the way, who is your favorite Beatle?",
+                TRANSITIONS: {
+                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
+                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Ha*rison"),
+                    ("beatles", "instruments_q"): cnd.true,
+                },
+            },
+	    "who_beatle_1": {
+                RESPONSE: "Well, I am not sure that this song is The Beatles' song... By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
                     ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
@@ -231,11 +241,14 @@ flows = {
                 "By the way, Revolver is Pope Benedict XVI's favourite album of all times. "
                 "One of the songs from it, Yellow Submarine, became an inspiration for an animated film! "
                 "Have you seen it?",
-                PROCESSING: [loc_prs.increment_album_counter, loc_prs.add_misc_to_response],
+                PROCESSING: [
+                    loc_prs.increment_album_counter,
+                    loc_prs.slot_filling_albums,
+                    loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
-                    ("album", "yellow_submarine"): int_cnd.is_yes_vars,
                     ("song", "yellow_submarine"): int_cnd.is_no_vars,
+                    ("album", "yellow_submarine"): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "86npm1z4m5mftr"},
             },
@@ -386,7 +399,8 @@ flows = {
         GRAPH: {
             "song_q": {
                 RESPONSE: "All right, let's finish the albums here. What's your favorite Beatles song?",
-                TRANSITIONS: {("song", "fav_song"): loc_cnd.has_songs, ("song", "why_song"): cnd.true},
+                TRANSITIONS: {("song", "fav_song"): loc_cnd.has_songs, ("song", "why_song"): loc_cnd.is_beatles_song,
+                ("album", "who_beatle_1"): cnd.true},
             },
             "fav_song": {
                 RESPONSE: "Oh, have you seen the music video for this song?",
@@ -398,7 +412,7 @@ flows = {
                 TRANSITIONS: {("song", "show_video"): int_cnd.is_yes_vars, ("album", "who_beatle"): cnd.true},
             },
             "show_video": {
-                RESPONSE: "Great! You can watch it 🙂 Just text me when you're done",
+                RESPONSE: "Great! You can watch it 🙂 Just let me know when you're done",
                 PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("album", "who_beatle"): cnd.true},
                 MISC: {"command": "goto", "objectId": "{video}"},
@@ -406,7 +420,7 @@ flows = {
             "why_song": {RESPONSE: "Why do you like this song?", TRANSITIONS: {("album", "who_beatle"): cnd.true}},
             "yellow_submarine": {
                 RESPONSE: "Then let's watch a short video and after that you can watch the entire movie if you want! "
-                "Just text me when you're done.",
+                "Just let me know when you're done.",
                 PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
@@ -425,7 +439,7 @@ flows = {
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },
             "bio": {
-                RESPONSE: "Here! Text me when you're done :)",
+                RESPONSE: "Here! Let me know when you're done :)",
                 TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "{beatles_member}"},
             },
@@ -440,7 +454,7 @@ flows = {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that Paul McCartney played"
                 " to what's believed to be the largest paid audience in recorded history? In 1989,"
                 " he played a solo concert to a crowd of 350,000-plus in Brazil. That's amazing!"
-                "Do you want to take a look at his biography?",
+                " Do you want to take a look at his biography?",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
                 TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
             },

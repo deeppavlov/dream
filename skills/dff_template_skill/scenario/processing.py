@@ -14,16 +14,16 @@ def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
     members = ["John", "Len*on", "Ringo", "Star*", "Paul", "McCartn*y", "George", "Har*ison"]
     members_re = "|".join(members)
     extracted_member = re.findall(members_re, ctx.last_request, re.IGNORECASE)
-    if "john" in extracted_member[0] or "lennon" in extracted_member[0]:
+    if re.findall(r'john|len*on', ctx.last_request, re.IGNORECASE) != []:
         slots["beatles_member"] = "John Lennon"
         ctx.misc["slots"] = slots
-    elif "paul" in extracted_member[0] or "mccartney" in extracted_member[0]:
+    elif re.findall(r'paul|mccartne*y', ctx.last_request, re.IGNORECASE) != []:
         slots["beatles_member"] = "Paul McCartney"
         ctx.misc["slots"] = slots
-    elif "ringo" in extracted_member[0] or "starr" in extracted_member[0]:
+    elif re.findall(r'ringo|star*s*', ctx.last_request, re.IGNORECASE) != []:
         slots["beatles_member"] = "Ringo Starr"
         ctx.misc["slots"] = slots
-    elif "george" in extracted_member[0] or "harrison" in extracted_member[0]:
+    elif re.findall(r'george|har*ison', ctx.last_request, re.IGNORECASE) != []:
         slots["beatles_member"] = "George Harrison"
         ctx.misc["slots"] = slots
 
@@ -44,7 +44,9 @@ def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args,
     elif "drums" in extracted_inst:
         slots["instrument_intro"] = "If you like drums, you must like Ringo Starr! Let's save his his drumkit for last and begin with the guitars. "
         ctx.misc["slots"] = slots
-
+    else:
+        slots["instrument_intro"] = "Well, let me show you the collection of instruments that we have here. "
+        ctx.misc["slots"] = slots
     return node_label, node
 
 
@@ -94,19 +96,19 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
 def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    slots["first_album"] = "Let's begin our trip here. I will show you some albums first.If you get tired, just text me 'MOVE ON'. "
+    slots["first_album"] = "Let's begin our trip here. I will show you some albums first. If you get tired, just say 'MOVE ON'. "
     slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club."
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
-    slots["a_hard_days_night_wrong"] = "It was A Hard Day's Night!"
-    slots["rubber_soul"] = "However, it was after this cry for 'Help' that the Beatles became the Beatles."
-    slots["yellow_submarine"] = "Then let's take a look at the album."
+    slots["a_hard_days_night_wrong"] = "It was A Hard Day's Night! "
+    slots["rubber_soul"] = "However, it was after this cry for 'Help' that the Beatles became the Beatles. "
+    slots["yellow_submarine"] = "Then let's take a look at the album. "
     slots["abbey_road"] = (
-        "By the way, The White Album' recording sessions lasted 137 days! Abbey Road, on the opposite,"
+        "By the way, The White Album' recording sessions lasted 137 days! Abbey Road, on the opposite, "
         "was recorded in one 12-hour session -- even faster than Please Please Me! "
     )
     slots["let_it_be"] = (
         "Did you know that Abbey Road was created and issued after the recording of the Beatles' "
-        "last released album took place?"
+        "last released album took place? "
     )
 
     for slot_name, slot_value in slots.items():
