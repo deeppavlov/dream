@@ -13,7 +13,7 @@ from common.utils import get_topics
 from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 
-from common.fact_random import get_facts
+from common.fact_random import get_fact
 
 import dialogflows.scopes as scopes
 
@@ -82,7 +82,7 @@ def funfact_response(vars, shuffle=True):
     elif "fact about" in human_utterance["text"]:  # entity requested
         entity = human_utterance["text"].split("fact about")[1]
         topic = get_topics(human_utterance, which="cobot_topics")[0]
-        funfact = get_facts(f"fact about {entity}")
+        funfact = get_fact(entity, f"fact about {entity}")
         funfacts_to_iterate = [(funfact, topic)] + funfacts_to_iterate
     for funfact, topic in funfacts_to_iterate:
         if given_funfacts:
