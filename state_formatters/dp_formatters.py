@@ -661,7 +661,6 @@ def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_template_formatter(dialog: Dict) -> List[Dict]:
-    # , bot_last_turns = 3, human_last_turns = 3
     return utils.dff_formatter(dialog, "dff_template")
 
 
