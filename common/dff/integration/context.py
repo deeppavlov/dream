@@ -212,7 +212,8 @@ def set_confidence(ctx: Context, actor: Actor, confidence=1.0):
 
 
 def set_can_continue(ctx: Context, actor: Actor, continue_flag=common_constants.CAN_CONTINUE_SCENARIO):
-    ctx.misc["agent"]["response"].update({"can_continue": continue_flag})
+    if not ctx.validation:
+        ctx.misc["agent"]["response"].update({"can_continue": continue_flag})
 
 
 def reset_can_continue(ctx: Context, actor: Actor):
