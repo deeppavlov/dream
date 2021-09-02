@@ -18,7 +18,7 @@ def has_album(album_name: str):
 def wants_to_see(item_name: str):
     def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
         flag = False
-        match = re.search(r'((i\swant\sto\ssee\s)|(please\sshow\sme\s)|(tell\sme\sabout\s))(?P<item>.*)', ctx.last_request, re.I)
+        match = re.search(r'((i\swant\sto\ssee\s)|(i\swanna\ssee\s)|(.*show\sme\s)|(tell\sme\sabout\s))(?P<item>.*)', ctx.last_request, re.I)
         item = match.group('item')
         if re.findall(item_name, item, re.I):
             flag = True
@@ -162,3 +162,7 @@ def is_beatles_song(ctx: Context, actor: Actor, *args, **kwargs):
     ]
     songs_re = "|".join(songs)
     return bool(re.findall(songs_re, ctx.last_request, re.IGNORECASE))
+
+
+
+

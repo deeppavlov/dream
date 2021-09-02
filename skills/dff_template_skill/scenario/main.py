@@ -35,9 +35,9 @@ flows = {
     "beatles": {
         GLOBAL_TRANSITIONS: {("beatles", "beatles_q"): cnd.regexp(r"\bbeatles\b", re.I),
                              ("beatles_reset", "intro_reset", 1.2): cnd.regexp(r"\breset\b", re.I),
-                             ("album", "what_album", 1.2): loc_cnd.wants_to_see(item_name="album*"),
-                             ("instruments", "play_q", 1.2): loc_cnd.wants_to_see(item_name="instrument*"),
-                             ("album", "who_beatle", 1.2): loc_cnd.wants_to_see(item_name="beatles|band\smembers|artists"),
+                             ("album", "what_album_res", 1.2): loc_cnd.wants_to_see(item_name="album*"),
+                             ("instruments", "play_q_res", 1.2): loc_cnd.wants_to_see(item_name="instrument*"),
+                             ("album", "who_beatle_res", 1.2): loc_cnd.wants_to_see(item_name="beatles|band\smembers|artists"),
                              trn.previous(1.2): cnd.regexp(r".*sorry|repeat|go\sback.*", re.I)},
         GRAPH: {
             "start": {RESPONSE: ""},
@@ -101,8 +101,36 @@ flows = {
                     ("album", "please_please_me", 0.1): cnd.true,
                 },
             },
+            "what_album_res": {
+                RESPONSE: "What album do you want to begin with?",
+                TRANSITIONS: {
+                    ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
+                    ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
+                    ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="A Hard Day's Night"),
+                    ("album", "beatles_for_sale"): loc_cnd.has_album(album_name="Beatles For Sale"),
+                    ("album", "help"): loc_cnd.has_album(album_name="Help!"),
+                    ("album", "rubber_soul"): loc_cnd.has_album(album_name="Rubber Soul"),
+                    ("album", "revolver"): loc_cnd.has_album(album_name="revolver"),
+                    ("album", "yellow_submarine"): loc_cnd.has_album(album_name="Yellow Submarine"),
+                    ("album", "sgt_peppers"): loc_cnd.has_album(album_name="Sgt. Pepper's Lonely Hearts Club Band"),
+                    ("album", "white_album"): loc_cnd.has_album(album_name="White Album"),
+                    ("album", "abbey_road"): loc_cnd.has_album(album_name="Abbey Road"),
+                    ("album", "let_it_be"): loc_cnd.has_album(album_name="Let It Be"),
+                    ("album", "please_please_me", 0.1): cnd.true,
+                },
+            },
             "who_beatle": {
                 RESPONSE: "By the way, who is your favorite Beatle?",
+                TRANSITIONS: {
+                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
+                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Ha*rison"),
+                    ("beatles", "instruments_q"): cnd.true,
+                },
+            },
+            "who_beatle_res": {
+                RESPONSE: "Who do you want to discuss: John, Paul, Ringo or George?",
                 TRANSITIONS: {
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
                     ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
@@ -433,14 +461,14 @@ flows = {
             },
             "show_video": {
                 RESPONSE: "Great! You can watch it 🙂 Just let me know when you're done",
-                PROCESSING: [loc_prs.add_misc_to_response],
+                PROCESSING: [loc_prs.add_misc_to_response], #кажется эта строка дает null
                 TRANSITIONS: {("album", "who_beatle"): cnd.true},
-                MISC: {"command": "goto", "objectId": "{video}"},
+                # MISC: {"command": "goto", "objectId": "{video}"},
             },
             "why_song": {RESPONSE: "Why do you like this song?", TRANSITIONS: {("album", "who_beatle"): cnd.true}},
             "yellow_submarine": {
                 RESPONSE: "Then let's watch a short video and after that you can watch the entire movie if you want! "
-                "Just let me know when you're done.",
+                          "Just let me know when you're done.",
                 PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("song", "song_q"): loc_cnd.move_on,
@@ -453,44 +481,38 @@ flows = {
     },
     "people": {
         GRAPH: {
-            "name": {
-                RESPONSE: "Yeah, I like {beatles_member} too! Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
-                TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
-            },
-            "bio": {
-                RESPONSE: "Here! Let me know when you're done :)",
-                TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
-                MISC: {"command": "goto", "objectId": "{beatles_member}"},
-            },
             "fact_lennon": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that John Lennon’s father"
                 " was absent for much of his early life but showed up when his son became famous?"
-                " Sounds kind of sad... Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
-                TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
+                " Sounds kind of sad... Let's take a look at his biography. Just text me when you're done:)",
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
+                TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
+                MISC: {"command": "goto", "objectId": "w6mdvshkg95p4r"},
             },
             "fact_mccartney": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that Paul McCartney played"
                 " to what's believed to be the largest paid audience in recorded history? In 1989,"
                 " he played a solo concert to a crowd of 350,000-plus in Brazil. That's amazing!"
-                " Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
-                TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
+                " Let's take a look at his biography. Just text me when you're done:)",
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
+                TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
+                MISC: {"command": "goto", "objectId": "0fzh0phwszmzb1"},
             },
             "fact_harrison": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that"
                 " the song ‘CRACKERBOX PALACE’ is about his mansion?  Modest as he was - he did live"
-                " in a 120 room mansion on a 66 acre estate. Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
-                TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
+                " in a 120 room mansion on a 66 acre estate. Let's take a look at his biography. Just text me when you're done:)",
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
+                TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
+                MISC: {"command": "goto", "objectId": "gg1cr8v40rv13x"},
             },
             "fact_starr": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that due to his allergy"
                 " he has never had pizza, curry, or onions? That didn’t stop him from doing a pizza"
-                " commercial in 1995, though. Do you want to take a look at his biography?",
-                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots],
-                TRANSITIONS: {("people", "bio"): int_cnd.is_yes_vars, ("beatles", "instruments_q"): cnd.true},
+                " commercial in 1995, though. Let's take a look at his biography. Just text me when you're done:)",
+                PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
+                TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
+                MISC: {"command": "goto", "objectId": "q07q698tfsb8hh"},
             },
         },
     },
@@ -502,6 +524,17 @@ flows = {
                 TRANSITIONS: {
                     ("instruments", "guitar_paul_1"): int_cnd.is_yes_vars,
                     ("instruments", "guitar_paul_1_2"): cnd.true,
+                },
+            },
+            "play_q_res": {
+                RESPONSE: "What do you want to see: Paul's Zenith Model 17 acoustic, his Hofner 500/1 bass, "
+                          "John's Rickenbacker 325 or Ringo's drum kit?",
+                TRANSITIONS: {
+                    ("instruments", "guitar_paul_1"): loc_cnd.has_member(member_name="zenith"),
+                    ("instruments", "guitar_paul_2"): loc_cnd.has_member(member_name="hofner"),
+                    ("instruments", "guitar_lennon"): loc_cnd.has_member(member_name="rickenbacker"),
+                    ("instruments", "drum_kit"): loc_cnd.has_member(member_name="drum\skit"),
+                    trn.repeat(): cnd.true
                 },
             },
             "guitar_paul_1": {
@@ -527,7 +560,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "f47z2rzm0tt4b8"},
             },
             "guitar_paul_2": {
-                RESPONSE: " And here is Paul's Hofner 500/1 bass. "
+                RESPONSE: "Here is Paul's Hofner 500/1 bass. "
                 """He went with this Hofner from "I Want to Hold Your Hand" through "Let It Be" and beyond. """
                 "Do you want to take a look at one of John Lennon's guitars?",
                 PROCESSING: [loc_prs.add_misc_to_response],
@@ -541,8 +574,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "07ptwckzth85qz"},
             },
             "drum_kit": {
-                RESPONSE: "Well, now that you've seen the guitars it's time to look at Ringo Starr's "
-                "drum kit. During his time in The Beatles, he played six different drum kits, "
+                RESPONSE: "It is Ringo Starr's drum kit. During his time in The Beatles, he played six different drum kits, "
                 "five of which were from Ludwig.",
                 PROCESSING: [loc_prs.add_misc_to_response],
                 TRANSITIONS: {("photos", "photos_q"): cnd.true},
