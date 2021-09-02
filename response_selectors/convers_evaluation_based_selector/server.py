@@ -44,9 +44,7 @@ CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
 MOST_DUMMY_RESPONSES = [
-    "I really do not know what to answer.",
-    "Sorry, probably, I didn't get what you mean.",
-    "I didn't get it. Sorry",
+    "Ok. Feel free to walk around and do not hesitate to ask me questions about albums, musical instruments, or the artists themselves. I'm happy to help!",
 ]
 
 

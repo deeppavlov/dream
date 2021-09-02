@@ -57,7 +57,7 @@ def respond():
 
     for dialog in dialogs_batch:
 
-        bot_response = "I really do not know what to answer."
+        bot_response = "------PHRASE------------"
         confidence = 0.0
         dialog_position, dialog_id, dialog_type = -1, "", ""
         attr = {}

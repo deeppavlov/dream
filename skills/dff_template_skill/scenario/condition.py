@@ -2,6 +2,18 @@ import logging
 import re
 
 from dff.core import Context, Actor
+# import Levenshtein
+
+#
+# def small_levenshtein(desired_item: str):
+#     flag = False
+#     desired_item = [str(x).replace(' ', '') for x in desired_item]
+#     user_uttr = [str(x).replace(' ', '') for x in ctx.last_request]
+#     lev_dist = Levenshtein.distance(desired_item, user_uttr)
+#     if lev_dist < 4:
+#         flag = True
+#
+#     return flag
 
 
 logger = logging.getLogger(__name__)
@@ -10,6 +22,9 @@ logger = logging.getLogger(__name__)
 
 def has_album(album_name: str):
     def has_album_condition(ctx: Context, actor: Actor, *args, **kwargs):
+        # match = re.findall(album_name, ctx.last_request, re.IGNORECASE)
+        # if match:
+        #     small_levenshtein()
         return bool(re.findall(album_name, ctx.last_request, re.IGNORECASE))
 
     return has_album_condition
@@ -18,7 +33,8 @@ def has_album(album_name: str):
 def wants_to_see(item_name: str):
     def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
         flag = False
-        match = re.search(r'((i\swant\sto\ssee\s)|(i\swanna\ssee\s)|(.*show\sme\s)|(tell\sme\sabout\s))(?P<item>.*)', ctx.last_request, re.I)
+        match = re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
+                          r"(.*show\sme\s)|(.*tell\sme\sabout\s))(?P<item>.*)", ctx.last_request, re.I)
         item = match.group('item')
         if re.findall(item_name, item, re.I):
             flag = True
