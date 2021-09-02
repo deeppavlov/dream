@@ -8,6 +8,28 @@ import state_formatters.utils as utils
 logger = logging.getLogger(__name__)
 
 
+def user_emotion_formatter(dialog: Dict) -> List:
+    user_emotion = dialog['human_utterances'][-1]['annotations'].get(
+                    "user_emotion_classifier", ["neutral"])
+    try:
+        bot_mood = dialog['human_utterances'][-2]['annotations'].get(
+                    "bot_emotion_classifier", [])
+    except:  # IndexError?
+        logger.info('Setting default mood manually...')
+        extraversion = 0.89
+        agreeableness = 0.92
+        conscientiousness = 0.86
+        neuroticism = 0.11
+        openness = 0.23
+        pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
+        arousal = openness * 0.23 + 0.3 * agreeableness - 0.57 * neuroticism
+        dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
+        bot_mood = [pleasure, arousal, dominance]
+    return [{'sentences': [dialog['utterances'][-1]['text']],
+             'user_emotion': [user_emotion],
+             'bot_mood': [bot_mood]}]
+
+
 def alice_formatter_dialog(dialog: Dict) -> List:
     # Used by: alice
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=4)
@@ -80,7 +102,7 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: personality_catcher_formatter
+    # Used by: personality_catcher, personality_detection
     return [
         {
             "personality": [
@@ -554,21 +576,6 @@ def kbqa_formatter_dialog(dialog: Dict):
     return [{"x_init": sentences, "entities": entities}]
 
 
-def fact_random_formatter_dialog(dialog: Dict):
-    # Used by: fact-random annotator
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    last_human_utt = dialog["human_utterances"][-1]
-
-    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
-    entity_substr_list = []
-
-    for entity_info in entity_info_list:
-        if "entity_pages" in entity_info and entity_info["entity_pages"]:
-            entity_substr_list.append(entity_info["entity_substr"])
-    return [[entity_substr_list]]
-
-
 def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
@@ -774,30 +781,55 @@ def game_cooperative_skill_formatter(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
-# def speech_function_formatter(dialog: Dict):
-#     resp = {"human_utterance": dialog["human_utterances"][-1]["text"]}
-#     try:
-#         resp["bot_utterance"] = dialog["bot_utterances"][-1]["text"]
-#     except IndexError:
-#         pass
-#     return [resp]
+def speech_function_formatter(dialog: Dict):
+    human_sentseg = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {})
+    resp = {"phrase": human_sentseg.get("segments", [dialog["human_utterances"][-1]["text"]])}
+    try:
+        bot_sentseg = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {})
+        resp["prev_phrase"] = bot_sentseg.get("segments", [dialog["bot_utterances"][-1]["text"]])[-1]
+        bot_function = dialog["bot_utterances"][-1].get("annotations", {}).get("speech_function_classifier", [""])[-1]
+        resp["prev_speech_function"] = bot_function
+    except IndexError:
+        resp["prev_phrase"] = None
+        resp["prev_speech_function"] = None
+    return [resp]
 
 
-# def speech_function_annotation(dialog: Dict):
-#     hypotheses = dialog["utterances"][-1]["hypotheses"]
-#     hypots = [h["text"] for h in hypotheses]
-#     human_utterance = dialog["human_utterances"][-1]["text"]
-#     return [[{"human_utterance": human_utterance, "bot_utterance": h} for h in hypots]]
+def speech_function_bot_formatter(dialog: Dict):
+    bot_sentseg = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {})
+    resp = {"phrase": bot_sentseg.get("segments", [dialog["bot_utterances"][-1]["text"]])}
+    if len(dialog["human_utterances"]) > 1:
+        human_sentseg = dialog["human_utterances"][-2].get("annotations", {}).get("sentseg", {})
+        resp["prev_phrase"] = human_sentseg.get("segments", [dialog["human_utterances"][-2]["text"]])[-1]
+        human_function = (
+            dialog["human_utterances"][-2].get("annotations", {}).get("speech_function_classifier", [""])[-1]
+        )
+        resp["prev_speech_function"] = human_function
+    else:
+        resp["prev_phrase"] = None
+        resp["prev_speech_function"] = None
+    return [resp]
 
 
-# def speech_function_predictor_formatter(dialog: Dict):
-#     return [[dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", {}).get("type", "")]]
+def speech_function_annotation(dialog: Dict):
+    human_sentseg = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {})
+    prev_phrase = human_sentseg.get("segments", [dialog["human_utterances"][-1]["text"]])[-1]
+    human_function = dialog["human_utterances"][-1].get("annotations", {}).get("speech_function_classifier", [""])[-1]
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    resp = [
+        {"prev_phrase": prev_phrase, "prev_speech_function": human_function, "phrase": h["text"]} for h in hypotheses
+    ]
+    return [resp]
 
 
-# def speech_function_hypotheses_predictor_formatter(dialog: Dict):
-#     hypotheses = dialog["utterances"][-1]["hypotheses"]
-#     ans = [[h["annotations"].get("speech_function_classifier").get("type", "") for h in hypotheses]]
-#     return ans
+def speech_function_predictor_formatter(dialog: Dict):
+    return [dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])]
+
+
+def speech_function_hypotheses_predictor_formatter(dialog: Dict):
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    ans = [h["annotations"].get("speech_function_classifier", [""]) for h in hypotheses]
+    return ans
 
 
 def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:

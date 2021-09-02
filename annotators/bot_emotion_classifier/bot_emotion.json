@@ -1,0 +1,40 @@
+{
+  "chainer": {
+    "in": [
+      "sentences"
+    ],
+    "out": [
+      "user_emotion_classifier"
+    ],
+    "pipe": [
+      {
+        "class_name": "user_emotion_classifier",
+        "in": [
+          "sentences"
+        ],
+        "out": [
+          "user_emotion_classifier"
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "imports": [
+      "user_emotion_classifier"
+    ],
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
+      "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
+      "GoEmotions/requirements.txt"
+    ],
+    "variables": {
+      "ROOT_PATH": "~/deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/classifiers"
+    },
+    "labels": {
+      "server_utils": "EmotionClassificationModel2"
+    }
+  }
+}
