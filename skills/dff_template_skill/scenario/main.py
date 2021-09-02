@@ -3,8 +3,10 @@ import re
 
 from dff.core.keywords import TRANSITIONS, GRAPH, RESPONSE, GLOBAL_TRANSITIONS, PROCESSING, MISC
 from dff.core import Actor
+from dff.core import Context
 import dff.conditions as cnd
 import dff.transitions as trn
+from typing import Optional
 
 import common.dff.integration.condition as int_cnd
 from . import condition as loc_cnd
@@ -31,11 +33,13 @@ logger = logging.getLogger(__name__)
 #      - the condition under which to make the transition
 flows = {
     "beatles": {
-        GLOBAL_TRANSITIONS: {("beatles", "beatles_q"): cnd.regexp(r"\bbeatles\b", re.I)},
+        GLOBAL_TRANSITIONS: {("beatles", "beatles_q"): cnd.regexp(r"\bbeatles\b", re.I),
+                             ("beatles_reset", "intro_reset", 1.2): cnd.regexp(r"\breset\b", re.I),
+                             trn.previous(1.2): cnd.regexp(r".*sorry|repeat|go\sback.*", re.I)},
         GRAPH: {
             "start": {RESPONSE: ""},
             "beatles_q": {
-                RESPONSE: "Well, hello. I am the Doorman and I will be your guide here today. Do you like the Beatles?",
+                RESPONSE: "Hello! I am the Doorman and I will be your guide here today. Do you like the Beatles?",
                 # PROCESSING: set_confidence_and_continue_flag(1.0, common_constants.MUST_CONTINUE,
                 # ),
                 TRANSITIONS: {
@@ -48,6 +52,19 @@ flows = {
                 TRANSITIONS: {
                     ("instruments", "play_q"): int_cnd.is_yes_vars,
                     ("photos", "photos_q"): cnd.true,
+                },
+            },
+        },
+    },
+    "beatles_reset": {
+        GRAPH: {
+            "intro_reset": {
+                RESPONSE: "Hello, again! What do you want to discuss about the Beatles? "
+                          "Ask me to tell about albums, instruments or artists themselves.",
+                TRANSITIONS: {
+                    ("album", "what_album"): cnd.regexp(r".*album.*", re.I),
+                    ("instruments", "play_q"): cnd.regexp(r".*instrument.*", re.I),
+                    ("album", "who_beatle"): cnd.regexp(r".*artist.*", re.I)
                 },
             },
         },
@@ -91,7 +108,7 @@ flows = {
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
-	    "who_beatle_1": {
+	        "who_beatle_1": {
                 RESPONSE: "Well, I am not sure that this song is The Beatles' song... By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
