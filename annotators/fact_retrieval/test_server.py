@@ -1,76 +1,36 @@
+import os
+from typing import List
+
 import requests
 
-use_paragraphs = True
+import common.test_utils as test_utils
 
 
-def main():
-    url = "http://0.0.0.0:8100/model"
-    if use_paragraphs:
-        request_data = [
-            {
-                "human_sentences": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                "dialog_history": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                "nounphrases": [["Sheldon Cooper", "The Big Bang Theory"]],
-                "entity_pages": [
-                    [
-                        [
-                            "Sheldon Lee Cooper is a fictional character in the CBS television series "
-                            "The Big Bang Theory."
-                        ],
-                        [
-                            "The Big Bang Theory is an American television sitcom created by Chuck "
-                            "Lorre and Bill Prady"
-                        ],
-                    ]
-                ],
-            },
-            {
-                "human_sentences": ["What is the capital of Germany?"],
-                "dialog_history": ["What is the capital of Germany?"],
-                "nounphrases": [["the capital", "Germany"]],
-                "entity_pages": [[["Germany is a country in Central Europe."]]],
-            },
-            {"human_sentences": ["/alexa_stop_handler."], "dialog_history": [""], "nounphrases": [[]]},
-            {"human_sentences": [" "], "dialog_history": [""], "nounphrases": [[]]},
-        ]
-    else:
-        request_data = [
-            {
-                "human_sentences": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                "dialog_history": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                "entity_substr": [["Sheldon Cooper", "The Big Bang Theory"]],
-                "entity_pages": [[["Sheldon Cooper"], ["The Big Bang Theory"]]],
-            },
-            {
-                "human_sentences": ["What is the capital of Germany?"],
-                "dialog_history": ["What is the capital of Germany?"],
-                "entity_substr": [["the capital", "Germany"]],
-                "entity_pages": [[["Capital"], ["Germany"]]],
-            },
-            {"human_sentences": ["/alexa_stop_handler."], "dialog_history": [""], "entity_substr": [[]]},
-            {"human_sentences": [" "], "dialog_history": [""], "entity_substr": [[]]},
-        ]
+PORT = int(os.getenv("PORT"))
+URL = f"http://0.0.0.0:{PORT}/model"
 
-    gold_results = [
-        [
-            "Sheldon Lee Cooper is a fictional character in the CBS television series The Big Bang Theory.",
-            "The Big Bang Theory is an American television sitcom created by Chuck Lorre and Bill Prady",
-        ],
-        ["Germany is a country in Central Europe."],
-        [],
-        [],
-    ]
-    count = 0
-    for data, gold_result in zip(request_data, gold_results):
-        result = requests.post(url, json=data).json()
-        if result[0]["facts"] == gold_result:
-            count += 1
-        else:
-            print(f"Got {result}, but expected: {gold_result}")
 
-    assert count == len(request_data)
+def handler(requested_data) -> List[str]:
+    response = requests.post(URL, json=requested_data).json()
+    facts = response[0]["facts"]
+
+    return facts
+
+
+def run_test(handler) -> None:
+    in_data, out_data = test_utils.get_dataset()
+    for test_name in in_data:
+        print(f"test name: {test_name}")
+        cur_in_test = in_data[test_name]
+        cur_out_test = out_data[test_name]
+        for cur_in_data, cur_out_data in zip(cur_in_test, cur_out_test):
+            cur_real_out_data = handler(cur_in_data)
+
+            assert cur_real_out_data == cur_out_data, \
+                f"expect out: {cur_out_data}\n real out: {cur_real_out_data}"
+
     print("Success")
 
 
 if __name__ == "__main__":
-    main()
+    run_test(handler)
