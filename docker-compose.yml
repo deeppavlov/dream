@@ -668,7 +668,8 @@ services:
   user_emotion_classifier:
     env_file: [.env]
     build:
-      context: annotators/user_emotion_classifier/
+      context: .
+      dockerfile: annotators/user_emotion_classifier/Dockerfile
       args:
         PORT: 8091
     command: flask run -h 0.0.0.0 -p 8091
@@ -686,7 +687,8 @@ services:
   bot_emotion_classifier:
     env_file: [.env]
     build:
-      context: annotators/bot_emotion_classifier/
+      context: .
+      dockerfile: annotators/bot_emotion_classifier/Dockerfile
       args:
         PORT: 8092
     command: flask run -h 0.0.0.0 -p 8092
