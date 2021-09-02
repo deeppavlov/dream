@@ -15,8 +15,21 @@ def has_album(album_name: str):
     return has_album_condition
 
 
+def wants_to_see(item_name: str):
+    def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
+        flag = False
+        match = re.search(r'((i\swant\sto\ssee\s)|(please\sshow\sme\s)|(tell\sme\sabout\s))(?P<item>.*)', ctx.last_request, re.I)
+        item = match.group('item')
+        if re.findall(item_name, item, re.I):
+            flag = True
+        return flag
+
+    return has_cond
+
+
+
 def not_visited_album(ctx: Context, actor: Actor, *args, **kwargs):
-    return ctx.misc.get("album_counter", 0) != 12
+    return ctx.misc.get("album_counter", 0) < 12
 
 
 def move_on(ctx: Context, actor: Actor, *args, **kwargs):

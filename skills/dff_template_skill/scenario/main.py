@@ -35,6 +35,9 @@ flows = {
     "beatles": {
         GLOBAL_TRANSITIONS: {("beatles", "beatles_q"): cnd.regexp(r"\bbeatles\b", re.I),
                              ("beatles_reset", "intro_reset", 1.2): cnd.regexp(r"\breset\b", re.I),
+                             ("album", "what_album", 1.2): loc_cnd.wants_to_see(item_name="album*"),
+                             ("instruments", "play_q", 1.2): loc_cnd.wants_to_see(item_name="instrument*"),
+                             ("album", "who_beatle", 1.2): loc_cnd.wants_to_see(item_name="beatles|band\smembers|artists"),
                              trn.previous(1.2): cnd.regexp(r".*sorry|repeat|go\sback.*", re.I)},
         GRAPH: {
             "start": {RESPONSE: ""},
