@@ -66,6 +66,7 @@ FACT_LIST = [
     "does not pose a risk of coronavirus infection to other people. "
     "Can you tell me what people love doing  when people are self-isolating?",
 ]
+
 #  NOTE!!!! YOU SHOULD CHECK THAT FACTS ARE NOT BEING CHANGED BY SENTREWRITE!
 #  FORMULATE FACTS IN THIS WAY THAT THEY ARE NOT CHANGED!!! OTHERWISE THERE WILL BE BUG!!!!
 VACCINE_SAFETY_PHRASE = (
@@ -73,13 +74,13 @@ VACCINE_SAFETY_PHRASE = (
     "of course, if your doctor does not mind against using them."
     "I can't say the same about getting infected, however, "
     "so vaccines are necessary to prevent people from that.."
-)
+)  # dff ported
 
 QUARANTINE_END_PHRASE = (
     "Although most American states are easing the restrictions, "
     "the Coronavirus pandemics in the majority of the states hasn't been reached yet. "
     "If you want to help ending it faster, please continue social distancing as much as you can. "
-)
+)  # dff ported
 ORIGIN_PHRASE = (
     "According to the scientific data, coronavirus COVID 19 is a product of natural evolution. "
     "The first place where it caused an outbreak is the city of Wuhan, China."
