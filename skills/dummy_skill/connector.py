@@ -525,6 +525,11 @@ class DummySkillConnector:
                 human_attrs += [{}]
                 bot_attrs += [{}]
 
+            cands = ["----------PHRASE--------------"]
+            confs = [0.5]
+            attrs = [{"type": "nounphrase_fact"}]
+            human_attrs = [{}]
+            bot_attrs = [{}]
             total_time = time.time() - st_time
             logger.info(f"dummy_skill exec time: {total_time:.3f}s")
             asyncio.create_task(

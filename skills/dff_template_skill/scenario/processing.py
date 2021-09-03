@@ -96,7 +96,7 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
 def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    slots["first_album"] = "Let's begin our trip here. I will show you some albums first. If you get tired, just say 'MOVE ON'. "
+    slots["first_album"] = "Let's begin our trip here. I will show you some albums first. If you get tired, just say 'move on'. "
     slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club."
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
     slots["a_hard_days_night_wrong"] = "It was A Hard Day's Night! "
@@ -114,8 +114,9 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
     for slot_name, slot_value in slots.items():
         if ctx.misc.get("first_album") is None and slot_name == "first_album":
             ctx.misc["first_album"] = True
-        elif ctx.misc["first_album"] == True and slot_name == "first_album":
-            slot_value = ""
+        elif ctx.misc.get("first_album") is not None:
+            if ctx.misc["first_album"] == True and slot_name == "first_album":
+                slot_value = ""
         node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
 
     return node_label, node
@@ -177,4 +178,48 @@ def increment_album_counter(node_label: str, node: Node, ctx: Context, actor: Ac
 
 def add_misc_to_response(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     node.response = f"{node.response} {json.dumps(node.misc)}"
+    return node_label, node
+
+
+
+def extract_members_id(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+    members = [
+        "Paul McCartney",
+        "Ringo Starr",
+        "John Lennon",
+        "George Harrison",
+        "Paul",
+        "McCartney",
+        "Ringo",
+        "Starr",
+        "John",
+        "Lennon",
+        "George",
+        "Harrison"
+    ]
+
+    members_ids = {
+        "Paul McCartney": "0fzh0phwszmzb1",
+        "Ringo Starr" : "q07q698tfsb8hh",
+        "John Lennon": "w6mdvshkg95p4r",
+        "George Harrison": "gg1cr8v40rv13x",
+        "Paul": "0fzh0phwszmzb1",
+        "McCartney": "0fzh0phwszmzb1",
+        "Ringo": "q07q698tfsb8hh",
+        "Starr": "q07q698tfsb8hh",
+        "John": "w6mdvshkg95p4r",
+        "Lennon": "w6mdvshkg95p4r",
+        "George": "gg1cr8v40rv13x",
+        "Harrison": "gg1cr8v40rv13x"
+    }
+
+    members_re = "|".join(members)
+    extracted_member = re.findall(members_re, ctx.last_request, re.IGNORECASE)
+    if extracted_member:
+        for k in members_ids.keys():
+            if extracted_member[0].lower() == k.lower():
+                id = members_ids[k]
+
+    node.misc = {"command": "goto", "objectId": id}
+
     return node_label, node
