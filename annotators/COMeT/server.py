@@ -9,8 +9,8 @@ import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
 
-from comet import COMeTFactory
-from config import settings
+from comet_commonsense.interface import COMeTFactory
+from comet_commonsense.config import settings
 
 ignore_logger("root")
 
@@ -22,6 +22,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sys.stdout.write = logger.debug
 
+logger.info(f"Loading model for {settings.GRAPH} graph...")
 comet_engine = COMeTFactory(settings.GRAPH)(settings.PRETRAINED_MODEL,
                                             settings.CUDA_VISIBLE_DEVICES,
                                             settings.DECODING_ALGO)

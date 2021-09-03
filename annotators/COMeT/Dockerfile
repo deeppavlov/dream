@@ -13,6 +13,7 @@ ARG DECODING_ALGO
 ENV DECODING_ALGO ${DECODING_ALGO}
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
+ENV PYTHONPATH /comet/comet_commonsense/
 
 WORKDIR /comet
 
@@ -30,3 +31,5 @@ RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz \
 
 RUN pip install -r requirements.txt
 RUN python -m spacy download en
+
+CMD python3 server.py

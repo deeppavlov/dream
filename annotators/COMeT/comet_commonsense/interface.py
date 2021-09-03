@@ -2,9 +2,9 @@ import re
 from typing import Dict, Sequence, Optional
 
 import src.interactive.functions as interactive
-import src.data.config as cfg
 
 import schemas
+from config import settings
 
 postprocessing_regexp = re.compile(r"[^a-zA-Z0-9\- ]|\bnone\b", re.IGNORECASE)
 
@@ -28,8 +28,7 @@ class COMeTBaseEngine:
         self._n_vocab = len(self._text_encoder.encoder) + self._n_ctx
 
         self._model = interactive.make_model(self._opt, self._n_vocab, self._n_ctx, self._state_dict)
-        cfg.device = self.device
-        self._model.to(device=cfg.device)
+        self._model.to(device=settings.CUDA_VISIBLE_DEVICES)
 
         self._input_event_model = None
         self._response_model = None
@@ -75,7 +74,7 @@ class COMeTAtomic(COMeTBaseEngine):
         return self._data_loader.max_event + self._data_loader.max_effect
 
     def process_request(self, input_event: schemas.AtomicInputEventModel) -> Dict:
-        return self._get_result(input_event.event, input_event.category)
+        return self._get_result(input_event.input, input_event.category)
 
     def _get_result(self, event: str, category: Sequence[str]) -> Dict:
         raw_result = interactive.get_atomic_sequence(
@@ -107,7 +106,7 @@ class COMeTConceptNet(COMeTBaseEngine):
         return self._data_loader.max_e1 + self._data_loader.max_e2 + self._data_loader.max_r
 
     def process_request(self, input_event: schemas.ConceptNetInputEventModel) -> Dict:
-        return self._get_result(input_event.event, input_event.category)
+        return self._get_result(input_event.input, input_event.category)
 
     def _get_result(self, event, category):
         raw_result = interactive.get_conceptnet_sequence(

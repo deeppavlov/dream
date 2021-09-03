@@ -1,10 +1,13 @@
 from typing import Dict, List, Sequence
 from pydantic import BaseModel, validator
-from config import ATOMIC_VALID_EFFECTS, CONCEPTNET_VALID_RELATIONS
+from src.data.conceptnet import conceptnet_relations
+
+ATOMIC_VALID_EFFECTS = {"all", "oEffect", "oReact", "oWant", "xAttr", "xEffect", "xIntent", "xNeed", "xReact", "xWant"}
+CONCEPTNET_VALID_RELATIONS = {"all"}.union(conceptnet_relations)
 
 
 class AtomicInputEventModel(BaseModel):
-    event: str
+    input: str
     category: Sequence[str] = ("xReact", "xNeed", "xAttr", "xWant", "oEffect", "xIntent", "oReact")
 
     @validator("category")
@@ -39,11 +42,12 @@ class ConceptNetInputBaseModel(BaseModel):
 
 
 class ConceptNetInputEventModel(ConceptNetInputBaseModel):
-    event: str
+    input: str
 
 
 class ConceptNetAnnotatorEventModel(ConceptNetInputBaseModel):
-    nounphrases: Sequence[Sequence[str]] = [["basketball", "unicorn"], ["pancakes"], ["ieaundy karianne rania tecca dot"]]
+    nounphrases: Sequence[Sequence[str]] = [["basketball", "unicorn"], ["pancakes"],
+                                            ["ieaundy karianne rania tecca dot"]]
 
 
 class ConceptNetResponseModelPerCategory(BaseModel):
