@@ -654,7 +654,8 @@ services:
   spelling-preprocessing:
     env_file: [.env]
     build:
-      context: ./annotators/spelling_preprocessing/
+      context: .
+      dockerfile: /annotators/spelling_preprocessing/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server

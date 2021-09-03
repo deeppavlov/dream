@@ -140,7 +140,7 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 10,
                     "url": "http://spelling-preprocessing:8074/response"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
@@ -224,7 +224,7 @@
             "asr": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 10,
                     "url": "http://asr:8031/asr_check"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:asr_formatter_dialog",
