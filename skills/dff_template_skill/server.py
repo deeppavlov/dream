@@ -14,7 +14,7 @@ from sentry_sdk.integrations.logging import ignore_logger
 from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
-import test_server
+# import test_server
 
 
 ignore_logger("root")
