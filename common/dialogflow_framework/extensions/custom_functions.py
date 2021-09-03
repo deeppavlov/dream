@@ -72,7 +72,7 @@ def has_entities(entity_types):
 def entities(**kwargs):
     def extract_entities(vars):
         shared_memory = state_utils.get_shared_memory(vars)
-        slot_values = shared_memory.get("slots", {})
+        slot_values = shared_memory.get("slot_values", {})
         for slot_name, slot_types in kwargs.items():
             if isinstance(slot_types, str):
                 extracted_entity = extract_entity(vars, slot_types)
@@ -108,7 +108,7 @@ def speech_functions(*args):
 
 def slot_filling(vars, response):
     shared_memory = state_utils.get_shared_memory(vars)
-    slot_values = shared_memory.get("slots", {})
+    slot_values = shared_memory.get("slot_values", {})
     utt_list = nltk.sent_tokenize(response)
     resp_list = []
     for utt in utt_list:
