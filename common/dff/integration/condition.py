@@ -19,50 +19,50 @@ wnl = WordNetLemmatizer()
 #  vars is described in README.md
 
 
-def was_clarification_request(ctx: Context, actor: Actor):
+def was_clarification_request(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"]["clarification_request_flag"]
     logging.debug(f"was_clarification_request = {flag}")
     return flag
 
 
-def is_opinion_request(ctx: Context, actor: Actor):
+def is_opinion_request(ctx: Context, actor: Actor) -> bool:
     flag = common_utils.is_opinion_request(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
     logging.debug(f"is_opinion_request = {flag}")
     return flag
 
 
-def is_opinion_expression(ctx: Context, actor: Actor):
+def is_opinion_expression(ctx: Context, actor: Actor) -> bool:
     flag = common_utils.is_opinion_expression(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
     logging.debug(f"is_opinion_expression = {flag}")
     return flag
 
 
-def is_previous_turn_dff_suspended(ctx: Context, actor: Actor):
+def is_previous_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False)
     logging.debug(f"is_previous_turn_dff_suspended = {flag}")
     return flag
 
 
-def is_current_turn_dff_suspended(ctx: Context, actor: Actor):
+def is_current_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"].get("current_turn_dff_suspended", False)
     logging.debug(f"is_current_turn_dff_suspended = {flag}")
     return flag
 
 
-def is_switch_topic(ctx: Context, actor: Actor):
+def is_switch_topic(ctx: Context, actor: Actor) -> bool:
     flag = universal_templates.is_switch_topic(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
     logging.debug(f"is_switch_topic = {flag}")
     return flag
 
 
-def is_question(ctx: Context, actor: Actor):
+def is_question(ctx: Context, actor: Actor) -> bool:
     text = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     flag = common_utils.is_question(text)
     logging.debug(f"is_question = {flag}")
     return flag
 
 
-def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor):
+def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor) -> bool:
     flag = universal_templates.if_chat_about_particular_topic(
         int_ctx.get_last_human_utterance(ctx, actor), int_ctx.get_last_bot_utterance(ctx, actor)
     )
@@ -70,7 +70,7 @@ def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor):
     return flag
 
 
-def is_lets_chat_about_topic(ctx: Context, actor: Actor):
+def is_lets_chat_about_topic(ctx: Context, actor: Actor) -> bool:
     flag = is_lets_chat_about_topic_human_initiative(ctx, actor)
 
     last_human_uttr = int_ctx.get_last_human_utterance(ctx, actor)
@@ -81,53 +81,37 @@ def is_lets_chat_about_topic(ctx: Context, actor: Actor):
     return flag
 
 
-def is_begin_of_dialog(ctx: Context, actor: Actor, begin_dialog_n=10):
+def is_begin_of_dialog(ctx: Context, actor: Actor, begin_dialog_n=10) -> bool:
     flag = int_ctx.get_human_utter_index(ctx, actor) < begin_dialog_n
     logging.debug(f"is_begin_of_dialog = {flag}")
     return flag
 
 
-def is_interrupted(ctx: Context, actor: Actor):
-    flag = (int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
-            ) != 1 and not was_clarification_request(ctx, actor)
+def is_interrupted(ctx: Context, actor: Actor) -> bool:
+    flag = (
+        int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
+    ) != 1 and not was_clarification_request(ctx, actor)
     logging.debug(f"is_interrupted = {flag}")
     return flag
 
 
-def is_long_interrupted(ctx: Context, actor: Actor, how_long=3):
-    flag = (int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
-            ) > how_long and not was_clarification_request(ctx, actor)
+def is_long_interrupted(ctx: Context, actor: Actor, how_long=3) -> bool:
+    flag = (
+        int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
+    ) > how_long and not was_clarification_request(ctx, actor)
     logging.debug(f"is_long_interrupted = {flag}")
     return flag
 
 
-def is_new_human_entity(ctx: Context, actor: Actor):
+def is_new_human_entity(ctx: Context, actor: Actor) -> bool:
     new_entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
     flag = bool(new_entities)
     logging.debug(f"is_new_human_entity = {flag}")
     return flag
 
 
-def get_last_state(ctx: Context, actor: Actor):
-    last_state = ""
-    history = list(ctx.misc["agent"]["history"].items())
-    if history:
-        history_sorted = sorted(history, key=lambda x: x[0])
-        last_state = history_sorted[-1][1]
-    return last_state
 
-
-def get_n_last_state(ctx: Context, actor: Actor, n):
-    last_state = ""
-    history = list(ctx.misc["agent"]["history"].items())
-    if history:
-        history_sorted = sorted(history, key=lambda x: x[0])
-        if len(history_sorted) >= n:
-            last_state = history_sorted[-n][1]
-    return last_state
-
-
-def is_last_state(ctx: Context, actor: Actor, state):
+def is_last_state(ctx: Context, actor: Actor, state) -> bool:
     flag = False
     history = list(ctx.misc["agent"]["history"].items())
     if history:
@@ -138,13 +122,13 @@ def is_last_state(ctx: Context, actor: Actor, state):
     return flag
 
 
-def is_first_time_of_state(ctx: Context, actor: Actor, state):
+def is_first_time_of_state(ctx: Context, actor: Actor, state) -> bool:
     flag = state not in list(ctx.misc["agent"]["history"].values())
     logging.debug(f"is_first_time_of_state {state} = {flag}")
     return flag
 
 
-def if_was_prev_active(ctx: Context, actor: Actor):
+def if_was_prev_active(ctx: Context, actor: Actor) -> bool:
     flag = False
     skill_uttr_indices = set(ctx.misc["agent"]["history"].keys())
     human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
@@ -153,19 +137,19 @@ def if_was_prev_active(ctx: Context, actor: Actor):
     return flag
 
 
-def is_plural(word):
+def is_plural(word) -> bool:
     lemma = wnl.lemmatize(word, "n")
     plural = True if word is not lemma else False
     return plural
 
 
-def is_first_our_response(ctx: Context, actor: Actor):
+def is_first_our_response(ctx: Context, actor: Actor) -> bool:
     flag = len(list(ctx.misc["agent"]["history"].values())) == 0
     logging.debug(f"is_first_our_response = {flag}")
     return flag
 
 
-def is_no_human_abandon(ctx: Context, actor: Actor):
+def is_no_human_abandon(ctx: Context, actor: Actor) -> bool:
     """Is dialog breakdown in human utterance or no. Uses MIDAS hold/abandon classes."""
     midas_classes = common_utils.get_intents(int_ctx.get_last_human_utterance(ctx, actor), which="midas")
     if "abandon" not in midas_classes:
@@ -173,11 +157,11 @@ def is_no_human_abandon(ctx: Context, actor: Actor):
     return False
 
 
-def no_special_switch_off_requests(ctx: Context, actor: Actor):
+def no_special_switch_off_requests(ctx: Context, actor: Actor) -> bool:
     """Function to determine if
-        - user didn't asked to switch topic,
-        - user didn't ask to talk about something particular,
-        - user didn't requested high priority intents (like what_is_your_name)
+    - user didn't asked to switch topic,
+    - user didn't ask to talk about something particular,
+    - user didn't requested high priority intents (like what_is_your_name)
     """
     intents_by_catcher = common_utils.get_intents(
         int_ctx.get_last_human_utterance(ctx, actor), probs=False, which="intent_catcher"
@@ -191,13 +175,13 @@ def no_special_switch_off_requests(ctx: Context, actor: Actor):
     return False
 
 
-def no_requests(ctx: Context, actor: Actor):
+def no_requests(ctx: Context, actor: Actor) -> bool:
     """Function to determine if
-        - user didn't asked to switch topic,
-        - user didn't ask to talk about something particular,
-        - user didn't requested high priority intents (like what_is_your_name)
-        - user didn't requested any special intents
-        - user didn't ask questions
+    - user didn't asked to switch topic,
+    - user didn't ask to talk about something particular,
+    - user didn't requested high priority intents (like what_is_your_name)
+    - user didn't requested any special intents
+    - user didn't ask questions
     """
     contain_no_special_requests = no_special_switch_off_requests(ctx, actor)
 
@@ -219,25 +203,25 @@ def no_requests(ctx: Context, actor: Actor):
     return False
 
 
-def is_yes_vars(ctx: Context, actor: Actor):
+def is_yes_vars(ctx: Context, actor: Actor) -> bool:
     flag = True
     flag = flag and common_utils.is_yes(int_ctx.get_last_human_utterance(ctx, actor))
     return flag
 
 
-def is_no_vars(ctx: Context, actor: Actor):
+def is_no_vars(ctx: Context, actor: Actor) -> bool:
     flag = True
     flag = flag and common_utils.is_no(int_ctx.get_last_human_utterance(ctx, actor))
     return flag
 
 
-def is_do_not_know_vars(ctx: Context, actor: Actor):
+def is_do_not_know_vars(ctx: Context, actor: Actor) -> bool:
     flag = True
     flag = flag and common_utils.is_donot_know(int_ctx.get_last_human_utterance(ctx, actor))
     return flag
 
 
-def is_passive_user(ctx: Context, actor: Actor, history_len=2):
+def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
     """Check history_len last human utterances on the number of tokens.
     If number of tokens in ALL history_len uterances is <= 3 tokens, then consider user passive - return True.
     """

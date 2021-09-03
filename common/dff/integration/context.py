@@ -17,7 +17,7 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 NEWS_API_ANNOTATOR_URL = os.getenv("NEWS_API_ANNOTATOR_URL")
 
 
-def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor):
+def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor) -> list:
     return (
         []
         if ctx.validation
@@ -30,7 +30,7 @@ def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor):
     )
 
 
-def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, positive_threshold=0.333):
+def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, positive_threshold=0.333) -> str:
     sentiment_probs = (
         None
         if ctx.validation
@@ -50,7 +50,7 @@ def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, posi
     return "neutral"
 
 
-def get_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")):
+def get_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dff_shared_state"]["cross_states"].get(service_name, {})
 
 
@@ -59,7 +59,7 @@ def save_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.repla
         ctx.misc["agent"]["dff_shared_state"]["cross_states"][service_name] = new_state
 
 
-def get_cross_link(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")):
+def get_cross_link(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")) -> dict:
     links = {} if ctx.validation else ctx.misc["agent"]["dff_shared_state"]["cross_links"].get(service_name, {})
     cur_human_index = get_human_utter_index(ctx, actor)
     cross_link = [cross_link for human_index, cross_link in links.items() if (cur_human_index - int(human_index)) == 1]
@@ -125,15 +125,15 @@ def add_prompt_to_response_parts(ctx: Context, actor: Actor):
     add_parts_to_response_parts(ctx, actor, parts=["prompt"])
 
 
-def get_shared_memory(ctx: Context, actor: Actor):
+def get_shared_memory(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["shared_memory"]
 
 
-def get_used_links(ctx: Context, actor: Actor):
+def get_used_links(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["used_links"]
 
 
-def get_age_group(ctx: Context, actor: Actor):
+def get_age_group(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["age_group"]
 
 
@@ -142,31 +142,31 @@ def set_age_group(ctx: Context, actor: Actor, set_age_group):
         ctx.misc["agent"]["age_group"] = set_age_group
 
 
-def get_disliked_skills(ctx: Context, actor: Actor):
+def get_disliked_skills(ctx: Context, actor: Actor) -> list:
     return [] if ctx.validation else ctx.misc["agent"]["disliked_skills"]
 
 
-def get_human_utter_index(ctx: Context, actor: Actor):
+def get_human_utter_index(ctx: Context, actor: Actor) -> int:
     return 0 if ctx.validation else ctx.misc["agent"]["human_utter_index"]
 
 
-def get_previous_human_utter_index(ctx: Context, actor: Actor):
+def get_previous_human_utter_index(ctx: Context, actor: Actor) -> int:
     return 0 if ctx.validation else ctx.misc["agent"]["previous_human_utter_index"]
 
 
-def get_dialog(ctx: Context, actor: Actor):
+def get_dialog(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]
 
 
-def get_last_human_utterance(ctx: Context, actor: Actor):
+def get_last_human_utterance(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1]
 
 
-def get_bot_utterances(ctx: Context, actor: Actor):
+def get_bot_utterances(ctx: Context, actor: Actor) -> list:
     return [] if ctx.validation else ctx.misc["agent"]["dialog"]["bot_utterances"]
 
 
-def get_last_bot_utterance(ctx: Context, actor: Actor):
+def get_last_bot_utterance(ctx: Context, actor: Actor) -> dict:
     if not ctx.validation and ctx.misc["agent"]["dialog"]["bot_utterances"]:
         return ctx.misc["agent"]["dialog"]["bot_utterances"][-1]
     else:
@@ -240,7 +240,7 @@ def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
     return nps
 
 
-def get_cobotqa_annotations_from_human_utterance(ctx: Context, actor: Actor):
+def get_cobotqa_annotations_from_human_utterance(ctx: Context, actor: Actor) -> dict:
     if not ctx.validation:
         return (
             ctx.misc["agent"]["dialog"]["human_utterances"][-1]
@@ -251,7 +251,7 @@ def get_cobotqa_annotations_from_human_utterance(ctx: Context, actor: Actor):
         return {"facts": [], "response": ""}
 
 
-def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity):
+def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity) -> list:
     cobotqa_annotations = get_cobotqa_annotations_from_human_utterance(ctx, actor)
     facts_for_entity = []
     for fact in cobotqa_annotations["facts"]:
@@ -261,7 +261,7 @@ def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Act
     return facts_for_entity
 
 
-def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity):
+def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity) -> dict:
     last_uttr = get_last_human_utterance(ctx, actor)
     last_uttr_entities_news = last_uttr.get("annotations", {}).get("news_api_annotator", [])
     curr_news = {}
@@ -275,7 +275,7 @@ def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: A
     return curr_news
 
 
-def get_facts_from_fact_retrieval(ctx: Context, actor: Actor):
+def get_facts_from_fact_retrieval(ctx: Context, actor: Actor) -> list:
     annotations = {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1].get("annotations", {})
     if "fact_retrieval" in annotations:
         if isinstance(annotations["fact_retrieval"], dict):
@@ -285,7 +285,9 @@ def get_facts_from_fact_retrieval(ctx: Context, actor: Actor):
     return []
 
 
-def get_unrepeatable_index_from_rand_seq(ctx: Context, actor: Actor, seq_name, seq_max, renew_seq_if_empty=False):
+def get_unrepeatable_index_from_rand_seq(
+    ctx: Context, actor: Actor, seq_name, seq_max, renew_seq_if_empty=False
+) -> int:
     """Return a unrepeatable index from RANDOM_SEQUENCE.
     RANDOM_SEQUENCE is stored in shared merory by name `seq_name`.
     RANDOM_SEQUENCE is shuffled [0..`seq_max`].
@@ -298,3 +300,22 @@ def get_unrepeatable_index_from_rand_seq(ctx: Context, actor: Actor, seq_name, s
         next_index = seq[-1] if seq else None
         save_to_shared_memory(ctx, **{seq_name: seq[:-1]})
         return next_index
+
+
+def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
+    last_state = ""
+    history = list(ctx.misc["agent"]["history"].items())
+    if history:
+        history_sorted = sorted(history, key=lambda x: x[0])
+        if len(history_sorted) >= n:
+            last_state = history_sorted[-n][1]
+    return last_state
+
+
+def get_last_state(ctx: Context, actor: Actor) -> str:
+    last_state = ""
+    history = list(ctx.misc["agent"]["history"].items())
+    if history:
+        history_sorted = sorted(history, key=lambda x: x[0])
+        last_state = history_sorted[-1][1]
+    return last_state
