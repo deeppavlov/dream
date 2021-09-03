@@ -1,6 +1,6 @@
 from transformers import BertTokenizer
-from GoEmotions.model import BertForMultiLabelClassification
-from GoEmotions.multilabel_pipeline import MultiLabelPipeline
+from .GoEmotions.model import BertForMultiLabelClassification
+from .GoEmotions.multilabel_pipeline import MultiLabelPipeline
 import numpy as np
 
 import logging
