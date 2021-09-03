@@ -2,7 +2,6 @@ pipeline {
   agent {
     label 'dream'
   }
-
   environment {
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
