@@ -109,7 +109,6 @@ def is_new_human_entity(ctx: Context, actor: Actor) -> bool:
     return flag
 
 
-
 def is_last_state(ctx: Context, actor: Actor, state) -> bool:
     flag = False
     history = list(ctx.misc["agent"]["history"].items())

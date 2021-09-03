@@ -150,7 +150,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
             conf = conf if conf else confidence
             h_a = human_attr | h_a
             attr = hype_attr | attr
-            responses += [(reply, conf, h_a,b_a, attr)]
+            responses += [(reply, conf, h_a, b_a, attr)]
         return list(zip(*responses))
     else:
         return (response, confidence, human_attr, {}, hype_attr)
