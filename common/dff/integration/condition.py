@@ -11,7 +11,6 @@ import common.dff.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 wnl = WordNetLemmatizer()
 
@@ -21,44 +20,44 @@ wnl = WordNetLemmatizer()
 
 def was_clarification_request(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"]["clarification_request_flag"]
-    logging.debug(f"was_clarification_request = {flag}")
+    logger.debug(f"was_clarification_request = {flag}")
     return flag
 
 
 def is_opinion_request(ctx: Context, actor: Actor) -> bool:
     flag = common_utils.is_opinion_request(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
-    logging.debug(f"is_opinion_request = {flag}")
+    logger.debug(f"is_opinion_request = {flag}")
     return flag
 
 
 def is_opinion_expression(ctx: Context, actor: Actor) -> bool:
     flag = common_utils.is_opinion_expression(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
-    logging.debug(f"is_opinion_expression = {flag}")
+    logger.debug(f"is_opinion_expression = {flag}")
     return flag
 
 
 def is_previous_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False)
-    logging.debug(f"is_previous_turn_dff_suspended = {flag}")
+    logger.debug(f"is_previous_turn_dff_suspended = {flag}")
     return flag
 
 
 def is_current_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"].get("current_turn_dff_suspended", False)
-    logging.debug(f"is_current_turn_dff_suspended = {flag}")
+    logger.debug(f"is_current_turn_dff_suspended = {flag}")
     return flag
 
 
 def is_switch_topic(ctx: Context, actor: Actor) -> bool:
     flag = universal_templates.is_switch_topic(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
-    logging.debug(f"is_switch_topic = {flag}")
+    logger.debug(f"is_switch_topic = {flag}")
     return flag
 
 
 def is_question(ctx: Context, actor: Actor) -> bool:
     text = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     flag = common_utils.is_question(text)
-    logging.debug(f"is_question = {flag}")
+    logger.debug(f"is_question = {flag}")
     return flag
 
 
@@ -66,7 +65,7 @@ def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor) -> boo
     flag = universal_templates.if_chat_about_particular_topic(
         int_ctx.get_last_human_utterance(ctx, actor), int_ctx.get_last_bot_utterance(ctx, actor)
     )
-    logging.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
+    logger.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
     return flag
 
 
@@ -77,13 +76,13 @@ def is_lets_chat_about_topic(ctx: Context, actor: Actor) -> bool:
     last_bot_uttr_text = int_ctx.get_last_bot_utterance(ctx, actor)["text"]
     is_bot_initiative = bool(re.search(universal_templates.COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text))
     flag = flag or (is_bot_initiative and not common_utils.is_no(last_human_uttr))
-    logging.debug(f"is_lets_chat_about_topic = {flag}")
+    logger.debug(f"is_lets_chat_about_topic = {flag}")
     return flag
 
 
 def is_begin_of_dialog(ctx: Context, actor: Actor, begin_dialog_n=10) -> bool:
     flag = int_ctx.get_human_utter_index(ctx, actor) < begin_dialog_n
-    logging.debug(f"is_begin_of_dialog = {flag}")
+    logger.debug(f"is_begin_of_dialog = {flag}")
     return flag
 
 
@@ -91,7 +90,7 @@ def is_interrupted(ctx: Context, actor: Actor) -> bool:
     flag = (
         int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
     ) != 1 and not was_clarification_request(ctx, actor)
-    logging.debug(f"is_interrupted = {flag}")
+    logger.debug(f"is_interrupted = {flag}")
     return flag
 
 
@@ -99,14 +98,14 @@ def is_long_interrupted(ctx: Context, actor: Actor, how_long=3) -> bool:
     flag = (
         int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
     ) > how_long and not was_clarification_request(ctx, actor)
-    logging.debug(f"is_long_interrupted = {flag}")
+    logger.debug(f"is_long_interrupted = {flag}")
     return flag
 
 
 def is_new_human_entity(ctx: Context, actor: Actor) -> bool:
     new_entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
     flag = bool(new_entities)
-    logging.debug(f"is_new_human_entity = {flag}")
+    logger.debug(f"is_new_human_entity = {flag}")
     return flag
 
 
@@ -124,7 +123,7 @@ def is_last_state(ctx: Context, actor: Actor, state) -> bool:
 
 def is_first_time_of_state(ctx: Context, actor: Actor, state) -> bool:
     flag = state not in list(ctx.misc["agent"]["history"].values())
-    logging.debug(f"is_first_time_of_state {state} = {flag}")
+    logger.debug(f"is_first_time_of_state {state} = {flag}")
     return flag
 
 
@@ -145,7 +144,7 @@ def is_plural(word) -> bool:
 
 def is_first_our_response(ctx: Context, actor: Actor) -> bool:
     flag = len(list(ctx.misc["agent"]["history"].values())) == 0
-    logging.debug(f"is_first_our_response = {flag}")
+    logger.debug(f"is_first_our_response = {flag}")
     return flag
 
 

@@ -10,7 +10,6 @@ import common.utils as common_utils
 import common.link as common_link
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 
 
