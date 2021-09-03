@@ -1,6 +1,6 @@
 pipeline {
   agent none
- 
+
   environment {
     WAIT_TIMEOUT=2400
     WAIT_INTERVAL=10
