@@ -10,7 +10,6 @@ import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
 import common.dff.integration.response as int_rsp
 
-
 import common.constants as common_constants
 
 from . import condition as loc_cnd
