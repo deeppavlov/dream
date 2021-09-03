@@ -1,4 +1,4 @@
-from dscript_scheme_classifier import get_dsript_type, neg_type_expl, pos_type_expl
+from .dscript_scheme_classifier import get_dsript_type, neg_type_expl, pos_type_expl
 import logging
 from flask import Flask, request, jsonify
 import os
