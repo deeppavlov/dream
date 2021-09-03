@@ -133,18 +133,18 @@ pipeline {
         }
       }
     }
-    post {
-      aborted {
-        script {
-          notify('aborted')
-        }
+  }
+  post {
+    aborted {
+      script {
+        notify('aborted')
       }
-      cleanup {
-        script {
-          if (started) {
-            notify('cleanup')
-            sh './tests/runtests.sh MODE=clean'
-          }
+    }
+    cleanup {
+      script {
+        if (started) {
+          notify('cleanup')
+          sh './tests/runtests.sh MODE=clean'
         }
       }
     }
