@@ -601,4 +601,12 @@ services:
       - PORT=8009
 
     command: [ "nginx", "-g", "daemon off;" ]
+  dff-template-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8120
+      - PORT=8120
+    command: [ "nginx", "-g", "daemon off;" ]
 version: '3.7'

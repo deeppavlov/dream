@@ -126,4 +126,5 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  dff-template-skill:
 version: '3.7'
