@@ -21,22 +21,26 @@ from . import processing as loc_prs
 
 logger = logging.getLogger(__name__)
 
-std_prs = [int_prs.set_confidence(1.0), int_prs.set_can_continue()]
+offered_more = cnd.any([
+    cnd.negation(loc_cnd.covid_facts_exhausted),
+    cnd.negation(loc_cnd.asked_about_age)
+])
 
-offer_more = {
-    ("covid_fact", "learn_more"): cnd.negation(loc_cnd.covid_facts_exhausted),
-    ("covid_resilience", "ask_age"): cnd.negation(loc_cnd.asked_about_age)
+replied_to_offer = {
+    ("covid_fact", "replied_no"): cnd.all([offered_more, int_cnd.is_no_vars]),
+    ("covid_fact", "feel_fear"): cnd.all([offered_more, loc_cnd.emotion_detected("fear", 0.9)]),
+    ("covid_fact", "replied_yes"): cnd.all([offered_more, int_cnd.is_yes_vars])
 }
 
 about_virus = cnd.regexp(
-    r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|" r"kroner)", re.IGNORECASE
+    r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|kroner)", re.IGNORECASE
 )
 
 about_coronavirus = cnd.all([
     about_virus,
     cnd.any([
         cnd.regexp(r"(corona|corana|corono|clone a|colonel|chrono|quran|corvette|current|kroner|corolla|"
-                   r"crown|volume|karuna|toronow|chrome|code nineteen|covid)", re.IGNORECASE),
+                   r"crown|volume|karuna|toronow|chrome|code nineteen|covids)", re.IGNORECASE),
         cnd.regexp(r"(outbreak|pandemy|epidemy|pandemi|epidemi)", re.IGNORECASE)
     ])
 ])
@@ -65,11 +69,14 @@ flows = {
                 r"don't want to listen)",
                 re.IGNORECASE,
             ),
-            "bot_has_covid": cnd.regexp(
-                r"(do you have|have you got|are you getting|have you ever got|are you sick with|"
-                r"have you come down with)",
-                re.IGNORECASE,
-            ),
+            "bot_has_covid": cnd.all([
+                cnd.regexp(
+                    r"(do you have|have you got|are you getting|have you ever got|are you sick with|"
+                    r"have you come down with)",
+                    re.IGNORECASE,
+                ),
+                about_virus
+            ]),
             "vaccine_safety": cnd.all([
                 cnd.regexp(r"(vaccine|vaccination)", re.IGNORECASE),
                 cnd.regexp(r"(should i|safe)", re.IGNORECASE)
@@ -93,7 +100,7 @@ flows = {
         GRAPH: {
             "quarantine_end": {
                 RESPONSE: "Although most American states are easing the restrictions, "
-                          "the Coronavirus pandemics in the majority of the states hasn't been reached yet."
+                          "the Coronavirus pandemics in the majority of the states hasn't been reached yet. "
                           "If you want to help ending it faster, please continue social distancing as much as you can.",
                 PROCESSING: [int_prs.set_confidence(0.95)]
             },
@@ -109,7 +116,7 @@ flows = {
             },
             "vaccine_safety": {
                 RESPONSE: "All CDC-approved vaccines are safe enough for you - "
-                          "of course, if your doctor does not mind against using them."
+                          "of course, if your doctor does not mind against using them. "
                           "I can't say the same about getting infected, however, "
                           "so vaccines are necessary to prevent people from that..",
                 PROCESSING: [int_prs.set_confidence(0.95)]
@@ -133,52 +140,44 @@ flows = {
                 RESPONSE: "According to the CDC website, "
                           "The main warning signs of coronavirus are: "
                           "difficulty breathing or shortness of breath, "
-                          "persistent pain or pressure in the chest , "
+                          "persistent pain or pressure in the chest, "
                           "new confusion or inability to arouse, "
-                          "bluish lips or face. If you develop any of these signs,"
+                          "bluish lips or face. If you develop any of these signs, "
                           "get a medical attention.",
-                PROCESSING: [int_prs.set_confidence(1)],
-                TRANSITIONS: offer_more
+                PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
+                TRANSITIONS: replied_to_offer
             },
             "covid_treatment": {
                 RESPONSE: "There is no cure designed for COVID-19 yet. "
                           "You can consult with CDC.gov website for detailed "
                           "information about the ongoing work on the cure.",
-                PROCESSING: [int_prs.set_confidence(0.9)],
-                TRANSITIONS: offer_more
+                PROCESSING: [int_prs.set_confidence(0.9), loc_prs.offer_more],
+                TRANSITIONS: replied_to_offer
             },
             "asthma_mentioned": {
                 RESPONSE: "As you have asthma, I know that you should be especially "
                           "cautious about coronavirus. Unfortunately, I am not allowed to "
                           "give any recommendations about coronavirus. You can check the CDC "
                           "website for more info.",
-                PROCESSING: [int_prs.set_confidence(1)],
-                TRANSITIONS: offer_more
+                PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
+                TRANSITIONS: replied_to_offer
             },
             "covid_advice": {
                 RESPONSE: "Unfortunately, I am not allowed to give any recommendations "
                           "about coronavirus. You can check the CDC website for more info.",
-                PROCESSING: [int_prs.set_confidence(1)],
-                TRANSITIONS: offer_more
+                PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
+                TRANSITIONS: replied_to_offer
             }
         }
     },
     "covid_fact": {
         GRAPH: {
-            "learn_more": {
-                RESPONSE: "Would you want to learn more?",
-                TRANSITIONS: {
-                    "reply_no": int_cnd.is_no_vars,
-                    "feel_fear": loc_cnd.emotion_detected("fear", 0.9),
-                    "reply_yes": int_cnd.is_yes_vars
-                }
-            },
-            "reply_no": {
-                # human_attr["coronavirus_skill"]["stop"] = True ???
+            "replied_no": {
                 RESPONSE: "Okay! I hope that this coronavirus will disappear! Now it is better to stay home.",
+                # human_attr["coronavirus_skill"]["stop"] = True ???
                 PROCESSING: [
                     int_prs.set_confidence(0.98),
-                    loc_prs.add_from_choice([
+                    loc_prs.add_from_options([
                         common_books.SWITCH_BOOK_SKILL_PHRASE,
                         common_movies.SWITCH_MOVIE_SKILL_PHRASE
                     ])
@@ -188,10 +187,10 @@ flows = {
                 RESPONSE: "Just stay home, wash your hands and you will be fine. We will get over it.",
                 PROCESSING: [int_prs.set_confidence(0.95)]
             },
-            "reply_yes": {
+            "replied_yes": {
                 RESPONSE: loc_rsp.get_covid_fact,
-                PROCESSING: [int_prs.set_confidence(1)],
-                TRANSITIONS: offer_more
+                PROCESSING: [int_prs.set_confidence(1), loc_prs.execute_response, loc_prs.offer_more],
+                TRANSITIONS: replied_to_offer
             }
             # reply <empty> string otherwise (fallback)
         }
@@ -199,8 +198,7 @@ flows = {
     "covid_resilience": {
         GRAPH: {
             "ask_age": {
-                RESPONSE: "Anyway, I can approximately tell you how likely you are to recover from "
-                          "coronavirus if you get it. What is your age?"
+                RESPONSE: ""
             }
         }
     }

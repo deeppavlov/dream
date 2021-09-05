@@ -7,8 +7,9 @@ from dff.core import Context, Actor, Node
 logger = logging.getLogger(__name__)
 
 
-def add_from_choice(options):
-    def add_from_choice_handler(
+
+def add_from_options(options):
+    def add_from_options_handler(
             node_label: str,
             node: Node,
             ctx: Context,
@@ -19,8 +20,10 @@ def add_from_choice(options):
         node.response = f"{node.response} {random.choice(options)}"
         return node_label, node
 
+    return add_from_options_handler
 
-def add_catch_question(
+
+def execute_response(
         node_label: str,
         node: Node,
         ctx: Context,
@@ -28,20 +31,42 @@ def add_catch_question(
         *args,
         **kwargs,
 ) -> Optional[tuple[str, Node]]:
-    facts_exhausted = ctx.misc.get("facts_exhausted", True)
-    asked_about_age = ctx.misc.get("asked_about_age", True)
+    if callable(node.response):
+        node.response = node.response(ctx, actor)
+
+    return node_label, node
+
+
+def offer_more(
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+) -> Optional[tuple[str, Node]]:
+    facts_exhausted = ctx.misc.get("covid_facts_exhausted", False)
+    asked_about_age = ctx.misc.get("asked_about_age", False)
+
+    # because node.response can be empty string
+    # (for example, when all covid facts are exhausted)
+    def add_space(string: str):
+        if string:
+            return f"{string} "
+        else:
+            return string
 
     if facts_exhausted and asked_about_age:
         # do nothing
         return node_label, node
 
     if not facts_exhausted:
-        node.response = f"{node.response} Would you want to learn more?"
+        node.response = f"{add_space(node.response)}Would you want to learn more?"
         return node_label, node
 
     if not asked_about_age:
-        node.response = f"{node.response} Anyway, I can approximately tell you how likely you are to recover from " \
-                        f"coronavirus if you get it. What is your age?"
+        node.response = f"{add_space(node.response)}Anyway, I can approximately tell you how likely you are to " \
+                        f"recover from coronavirus if you get it. What is your age?"
         return node_label, node
 
     logger.critical("add_catch_question processor has reached an unreachable end in coronavirus_skill")
