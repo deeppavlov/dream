@@ -9,10 +9,6 @@ from config import settings
 POSTPROCESSING_REGEXP = re.compile(r"[^a-zA-Z0-9\- ]|\bnone\b", re.IGNORECASE)
 
 
-def cleanup(text):
-    return re.sub(POSTPROCESSING_REGEXP, "", text).strip()
-
-
 class COMeTBaseEngine:
     def __init__(self, graph, model_path, device, decoding_algorithm):
         self.graph = graph
