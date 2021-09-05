@@ -21,28 +21,38 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 FILTER_FREQ = False
 
-config_name = os.getenv("CONFIG")
+CONFIG = os.getenv("CONFIG")
+CONFIG_PAGE_EXTRACTOR = os.getenv("CONFIG_WIKI")
+CONFIG_WOW_PAGE_EXTRACTOR = os.getenv("CONFIG_WHOW")
+
+DATA_GOOGLE_1K_ENG_NO_SWEARS = "data/google-10000-english-no-swears.txt"
+DATA_SENTENCES = "data/sentences.pickle"
+
 
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
-with open("data/google-10000-english-no-swears.txt", "r") as fl:
+with open(DATA_GOOGLE_1K_ENG_NO_SWEARS, "r") as fl:
     lines = fl.readlines()
     freq_words = [line.strip() for line in lines]
     freq_words = set(freq_words[:800])
 
-with open("data/sentences.pickle", "rb") as fl:
+with open("%s" % DATA_SENTENCES, "rb") as fl:
     test_sentences = pickle.load(fl)
 
 try:
-    fact_retrieval = build_model(config_name, download=True)
+    fact_retrieval = build_model(CONFIG, download=True)
     for i in range(50):
         utt = random.choice(test_sentences)
         test_res = fact_retrieval([utt], [utt], [["moscow"]], [[["Moscow"]]])
+
     with open("/root/.deeppavlov/downloads/wikidata/entity_types_sets.pickle", "rb") as fl:
         entity_types_sets = pickle.load(fl)
-    page_extractor = build_model("configs/page_extractor.json", download=True)
+
+    page_extractor = build_model(CONFIG_PAGE_EXTRACTOR, download=True)
     logger.info("model loaded, test query processed")
-    whow_page_extractor = build_model("configs/whow_page_extractor.json", download=True)
+
+    whow_page_extractor = build_model(CONFIG_WOW_PAGE_EXTRACTOR, download=True)
+
     with open("/root/.deeppavlov/downloads/wikihow/wikihow_topics.json", "r") as fl:
         wikihow_topics = json.load(fl)
 except Exception as e:
