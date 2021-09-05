@@ -45,24 +45,16 @@ class PyseriniRanker(Component):
 
     def __call__(self, questions: List[str]) -> Tuple[List[Any], List[float]]:
         docs_batch = []
-        doc_ids_batch = []
         scores_batch = []
+        _doc_ids_batch = []
+
         if len(questions) == 1:
             for question in questions:
-                docs = []
-                doc_ids = []
-                scores = []
                 res = self.searcher.search(question, self.top_n)
-                for elem in res:
-                    doc = json.loads(elem.raw)
-                    score = elem.score
-                    if doc and isinstance(doc, dict):
-                        docs.append(doc.get("contents", ""))
-                        doc_ids.append(doc.get("id", ""))
-                        scores.append(score)
+                docs, doc_ids, scores = self._processing_search_result(res)
                 docs_batch.append(docs)
-                doc_ids_batch.append(doc_ids)
                 scores_batch.append(scores)
+                _doc_ids_batch.append(doc_ids)
         else:
             n_batches = len(questions) // self.n_threads + int(len(questions) % self.n_threads > 0)
             for i in range(n_batches):
@@ -70,23 +62,30 @@ class PyseriniRanker(Component):
                 qids_cur = list(range(len(questions_cur)))
                 res_batch = self.searcher.batch_search(questions_cur, qids_cur, self.top_n, self.n_threads)
                 for qid in qids_cur:
-                    docs = []
-                    doc_ids = []
-                    scores = []
                     res = res_batch.get(qid)
-                    for elem in res:
-                        doc = json.loads(elem.raw)
-                        score = elem.score
-                        if doc and isinstance(doc, dict):
-                            docs.append(doc.get("contents", ""))
-                            doc_ids.append(doc.get("id", ""))
-                            scores.append(score)
+                    docs, doc_ids, scores = self._processing_search_result(res)
                     docs_batch.append(docs)
-                    doc_ids_batch.append(doc_ids)
                     scores_batch.append(scores)
-        logger.debug(f"found docs {doc_ids_batch}")
+                    _doc_ids_batch.append(doc_ids)
+
+        logger.debug(f"found docs {_doc_ids_batch}")
 
         if self.return_scores:
             return docs_batch, scores_batch
         else:
             return docs_batch
+
+    @staticmethod
+    def _processing_search_result(res):
+        docs = []
+        doc_ids = []
+        scores = []
+        for elem in res:
+            doc = json.loads(elem.raw)
+            score = elem.score
+            if doc and isinstance(doc, dict):
+                docs.append(doc.get("contents", ""))
+                doc_ids.append(doc.get("id", ""))
+                scores.append(score)
+
+        return docs, doc_ids, scores
