@@ -28,7 +28,6 @@ CONFIG_WOW_PAGE_EXTRACTOR = os.getenv("CONFIG_WHOW")
 DATA_GOOGLE_1K_ENG_NO_SWEARS = "data/google-10000-english-no-swears.txt"
 DATA_SENTENCES = "data/sentences.pickle"
 
-
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 with open(DATA_GOOGLE_1K_ENG_NO_SWEARS, "r") as fl:
@@ -89,36 +88,6 @@ def get_wikihow_content(page_title):
         logger.exception(e)
 
     return page_content
-
-
-def check_utterance(question, bot_sentence):
-    question = question.lower()
-    bot_sentence = bot_sentence.lower()
-    check = False
-    lets_talk_phrases = [
-        "let's talk about",
-        "let us talk about",
-        "let's discuss",
-        "let us discuss",
-        "what do you think about",
-        "what's your opinion about",
-        "do you know",
-    ]
-    for phrase in lets_talk_phrases:
-        if phrase in question:
-            return True
-    greeting_phrases = [
-        "what do you wanna talk about",
-        "what do you want to talk about",
-        "what would you like to chat about",
-        "what are we gonna talk about",
-        "what are your hobbies",
-        "what are your interests",
-    ]
-    for phrase in greeting_phrases:
-        if phrase in bot_sentence:
-            return True
-    return check
 
 
 def find_sentences(paragraphs):
