@@ -45,7 +45,7 @@ def text_standardize(text):
     text = text.replace('―', '-')
     text = text.replace('…', '...')
     text = text.replace('´', "'")
-    text = re.sub(r'''(-+|~+|!+|"+|;+|\?+|\++|,+|\)+|\(+|\\+|\/+|\*+|\[+|\]+|}+|{+|\|+|_+)''', r' \1 ', text)
+    text = re.sub(r'(-+|~+|!+|"+|;+|\?+|\++|,+|\)+|\(+|\\+|\/+|\*+|\[+|\]+|}+|{+|\|+|_+)', r' \1 ', text)
     text = re.sub(r'\s*\n\s*', ' \n ', text)
     text = re.sub(r'[^\S\n]+', ' ', text)
     return text.strip()
@@ -114,21 +114,13 @@ class TextEncoder(object):
     def encode(self, texts, verbose=True):
         texts_tokens = []
         if verbose:
-            for text in tqdm(texts, ncols=80, leave=False):
-                text = self.nlp(text_standardize(ftfy.fix_text(text)))
-                text_tokens = []
-                for token in text:
-                    text_tokens.extend(
-                        [self.encoder.get(t, 0) for t in
-                         self.bpe(token.text.lower()).split(' ')])
-                texts_tokens.append(text_tokens)
-        else:
-            for text in texts:
-                text = self.nlp(text_standardize(ftfy.fix_text(text)))
-                text_tokens = []
-                for token in text:
-                    text_tokens.extend(
-                        [self.encoder.get(t, 0) for t in
-                         self.bpe(token.text.lower()).split(' ')])
-                texts_tokens.append(text_tokens)
+            texts = tqdm(texts, ncols=80, leave=False)
+        for text in texts:
+            text = self.nlp(text_standardize(ftfy.fix_text(text)))
+            text_tokens = []
+            for token in text:
+                text_tokens.extend(
+                    [self.encoder.get(t, 0) for t in
+                     self.bpe(token.text.lower()).split(' ')])
+            texts_tokens.append(text_tokens)
         return texts_tokens

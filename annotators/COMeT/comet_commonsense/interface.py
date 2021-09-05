@@ -6,12 +6,11 @@ import src.interactive.functions as interactive
 import schemas
 from config import settings
 
-postprocessing_regexp = re.compile(r"[^a-zA-Z0-9\- ]|\bnone\b", re.IGNORECASE)
+POSTPROCESSING_REGEXP = re.compile(r"[^a-zA-Z0-9\- ]|\bnone\b", re.IGNORECASE)
 
 
 def cleanup(text):
-    cleaned = re.sub(postprocessing_regexp, "", text)
-    return cleaned.strip()
+    return re.sub(POSTPROCESSING_REGEXP, "", text).strip()
 
 
 class COMeTBaseEngine:
@@ -51,6 +50,21 @@ class COMeTBaseEngine:
     def annotator_response_model(self) -> Optional[schemas.BaseModel]:
         return self._annotator_response_model
 
+    @staticmethod
+    def beams_cleanup(preprocessed_beams):
+        postprocessed_beams = []
+        for beam in preprocessed_beams:
+            postprocessed_beam = re.sub(POSTPROCESSING_REGEXP, "", beam).strip()
+            if len(postprocessed_beam):
+                postprocessed_beams.append(postprocessed_beam)
+        return postprocessed_beams
+
+    def all_beams_cleanup(self, raw_result):
+        for relation_or_category in raw_result:
+            preprocessed_beams = raw_result[relation_or_category].get("beams", [])
+            raw_result[relation_or_category]["beams"] = self.beams_cleanup(preprocessed_beams)
+        return raw_result
+
     def _calc_n_ctx(self) -> int:
         pass
 
@@ -85,9 +99,7 @@ class COMeTAtomic(COMeTBaseEngine):
             self._text_encoder,
             category
         )
-        for rel in raw_result:
-            raw_result[rel]["beams"] = [cleanup(b) for b in raw_result[rel].get("beams", []) if len(cleanup(b)) > 0]
-        return raw_result
+        return self.all_beams_cleanup(raw_result)
 
     def annotator(self, *args, **kwargs):
         raise NotImplementedError("No annotator for atomic graph is available!")
@@ -117,21 +129,19 @@ class COMeTConceptNet(COMeTBaseEngine):
             self._text_encoder,
             category
         )
-        for rel in raw_result:
-            raw_result[rel]["beams"] = [cleanup(b) for b in raw_result[rel].get("beams", []) if len(cleanup(b)) > 0]
-        return raw_result
+        return self.all_beams_cleanup(raw_result)
 
     def annotator(self, input_event: schemas.ConceptNetAnnotatorEventModel):
         batch = []
         for nounphrases in input_event.nounphrases:
             result = {}
-            for np in nounphrases:
-                cn_result = self._get_result(np, input_event.category)
-                np_conceptnet_rels = {}
-                for rel in cn_result:
-                    np_conceptnet_rels[rel] = [cleanup(b) for b in cn_result[rel].get("beams", []) if
-                                               len(cleanup(b)) > 0]
-                result[np] = np_conceptnet_rels
+            for nounphrase in nounphrases:
+                conceptnet_result = self._get_result(nounphrase, input_event.category)
+                nounphrase_relations_beams = {}
+                for relation in conceptnet_result:
+                    preprocessed_beams = conceptnet_result[relation].get("beams", [])
+                    nounphrase_relations_beams[relation] = self.beams_cleanup(preprocessed_beams)
+                result[nounphrase] = nounphrase_relations_beams
             batch += [result]
         return batch
 
