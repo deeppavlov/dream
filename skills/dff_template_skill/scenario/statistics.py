@@ -25,8 +25,8 @@ class CovidFetcher(threading.Thread):
     def __init__(self):
         super().__init__()
         self.data = None
-        self.state_data = None  # dict[state, (confirmed, deaths)]
-        self.county_data = None  # dict[(state, county), (confirmed, deaths)]
+        self.state_data = None  # USA ONLY # dict[state, (confirmed, deaths)]
+        self.county_data = None  # USA ONLY # dict[(state, county), (confirmed, deaths)]
         self.country_data = None  # dict[country, (confirmed, deaths)]
 
     def run(self) -> None:
@@ -66,21 +66,21 @@ class CovidFetcher(threading.Thread):
                 except Exception:
                     pass
 
-                global_confirmed = pd.read_csv(GLOBAL_CONFIRMED_URL, error_bad_lines=False)
-                global_deaths = pd.read_csv(GLOBAL_DEATHS_URL, error_bad_lines=False)
-                global_confirmed = global_confirmed.groupby("Country/Region").sum()
-                global_deaths = global_deaths.groupby("Country/Region").sum()
+            global_confirmed = pd.read_csv(GLOBAL_CONFIRMED_URL, error_bad_lines=False)
+            global_deaths = pd.read_csv(GLOBAL_DEATHS_URL, error_bad_lines=False)
+            global_confirmed = global_confirmed.groupby("Country/Region").sum()
+            global_deaths = global_deaths.groupby("Country/Region").sum()
 
-                for country in global_confirmed.index:
-                    confirmed = global_confirmed[global_confirmed.columns[-1]][country]
-                    deaths = global_deaths[global_deaths.columns[-1]][country]
-                    country_data[country.lower()] = (confirmed, deaths)
+            for country in global_confirmed.index:
+                confirmed = global_confirmed[global_confirmed.columns[-1]][country]
+                deaths = global_deaths[global_deaths.columns[-1]][country]
+                country_data[country.lower()] = (confirmed, deaths)
 
-                self.country_data = country_data
-                self.state_data = state_data
-                self.county_data = county_data
+            self.country_data = country_data
+            self.state_data = state_data
+            self.county_data = county_data
         
-                time.sleep(UPDATE_INTERVAL)
+            time.sleep(UPDATE_INTERVAL)
 
 
 @dataclass(frozen=True)
@@ -89,10 +89,12 @@ class CovidData:
     deaths: int = 0
 
 
-class DataHandler:
+class CovidDataServer:
     def __init__(self, fetcher: CovidFetcher):
         self.fetcher = fetcher
-        self.fetcher.start()
+
+        if not fetcher.is_alive():
+            fetcher.start()
 
     def state(self, state: str) -> CovidData:
         data = self.fetcher.state_data[state.lower()]
@@ -105,3 +107,12 @@ class DataHandler:
     def country(self, country: str) -> CovidData:
         data = self.fetcher.country_data[country.lower()]
         return CovidData(data[0], data[1])
+
+    def states(self) -> list[str]:
+        return self.fetcher.state_data.keys()
+
+    def counties(self) -> list[tuple[str, str]]:
+        return self.fetcher.county_data.keys()
+
+    def countries(self) -> list[str]:
+        return self.fetcher.country_data.keys()
