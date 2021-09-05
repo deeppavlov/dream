@@ -25,12 +25,12 @@ CONFIG = os.getenv("CONFIG")
 CONFIG_PAGE_EXTRACTOR = os.getenv("CONFIG_WIKI")
 CONFIG_WOW_PAGE_EXTRACTOR = os.getenv("CONFIG_WHOW")
 
-DATA_GOOGLE_1K_ENG_NO_SWEARS = "data/google-10000-english-no-swears.txt"
+DATA_GOOGLE_10K_ENG_NO_SWEARS = "common/google-10000-english-no-swears.txt"
 DATA_SENTENCES = "data/sentences.pickle"
 
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
-with open(DATA_GOOGLE_1K_ENG_NO_SWEARS, "r") as fl:
+with open(DATA_GOOGLE_10K_ENG_NO_SWEARS, "r") as fl:
     lines = fl.readlines()
     freq_words = [line.strip() for line in lines]
     freq_words = set(freq_words[:800])
