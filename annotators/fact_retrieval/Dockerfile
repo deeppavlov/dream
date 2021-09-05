@@ -23,7 +23,6 @@ RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 COPY $SRC_DIR /src
 
 WORKDIR /src
-COPY ./common/ ./common/
 RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
