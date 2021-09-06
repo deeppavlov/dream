@@ -43,9 +43,21 @@ class Database:
     def county_cities(self, state, county) -> list[str]:
         return self._cities[(state.lower(), county.lower())]
 
+    def cities(self) -> list[tuple[str, str, str]]:
+        result = []
+        for subject, cities in self._cities.items():
+            for city in cities:
+                result.append((subject[0], subject[1], city))  # tuple[state, county, city]
+        return result
+
+    def counties(self) -> list[tuple[str, str]]:
+        return [*self._counties.keys()]  # tuple[state, county]
+
     def states(self) -> list[str]:
         return [*self._states.keys()]
 
     def countries(self) -> list[str]:
         return [*self._countries.keys()]
 
+
+database = Database()

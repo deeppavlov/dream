@@ -116,3 +116,6 @@ class CovidDataServer:
 
     def countries(self) -> list[str]:
         return self.fetcher.country_data.keys()
+
+
+covid_data_server = CovidDataServer(CovidFetcher())

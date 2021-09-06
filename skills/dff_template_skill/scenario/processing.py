@@ -4,8 +4,9 @@ from typing import Optional
 
 from dff.core import Context, Actor, Node
 
-logger = logging.getLogger(__name__)
+from .utils import get_subject
 
+logger = logging.getLogger(__name__)
 
 
 def add_from_options(options):
@@ -70,4 +71,42 @@ def offer_more(
         return node_label, node
 
     logger.critical("add_catch_question processor has reached an unreachable end in coronavirus_skill")
+    return node_label, node
+
+
+def insert_subject(
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+) -> Optional[tuple[str, Node]]:
+    # see condition.subject_detected
+    subject = ctx.misc.get("subject", {
+        "type": "country",
+        "city": "undetected",
+        "state": "undetected",
+        "county": "undetected",
+        "country": "undetected"
+    })
+
+    node.response = node.response.format(subject[subject["type"]])
+    return node_label, node
+
+
+# see condition.subject_detected
+def detect_subject(
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+) -> Optional[tuple[str, Node]]:
+    subject = get_subject(ctx)
+
+    if subject and subject["type"] != "undetected":
+        ctx.misc["subject"] = subject
+
     return node_label, node

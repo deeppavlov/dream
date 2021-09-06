@@ -5,6 +5,9 @@ from dff.core import Context, Actor
 from common.dff.integration import condition as int_cnd
 from common.utils import is_yes, is_no, get_emotions
 
+from .utils import get_subject
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,3 +31,23 @@ def asked_about_age(ctx: Context, actor: Actor, *args, **kwargs):
     # function becomes useless with it
     # (see coronavirus_skill.scenario: 375)
     return ctx.misc.get("asked_about_age", False)
+
+
+def subject_detected(ctx: Context, actor: Actor, *args, **kwargs):
+    # in order to increase performance
+    # we need to cache value and use it
+    # across all condition checks in the same 'turn'.
+    # HOWEVER, there is no way to access 'context' object,
+    # because it is just deepcopy, but not actual 'context'.
+    # MOREOVER, we should to perform subject detection
+    # again in 'processing', because we cannot just
+    # save detected state into context here.
+
+    subject = get_subject(ctx)
+
+    if subject and subject["type"] != "undetected":
+        return True
+
+    return False
+
+

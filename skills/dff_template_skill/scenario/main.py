@@ -36,6 +36,7 @@ about_virus = cnd.regexp(
     r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|kroner)", re.IGNORECASE
 )
 
+
 about_coronavirus = cnd.all([
     about_virus,
     cnd.any([
@@ -95,7 +96,16 @@ flows = {
             "covid_advice": cnd.all([
                 cnd.regexp(r"(what if|to do| should i do)", re.IGNORECASE),
                 about_coronavirus
-            ])
+            ]),
+            ("subject_detected", "clarify_intention"): cnd.all([
+                loc_cnd.subject_detected,
+                cnd.all([about_virus, cnd.negation(about_coronavirus)])
+            ]),
+            ("subject_detected", "subject_stats"): cnd.all([
+                loc_cnd.subject_detected,
+                about_coronavirus
+            ]),
+            ("subject_undetected", "clarify_intention"): cnd.negation(loc_cnd.subject_detected)
         },
         GRAPH: {
             "quarantine_end": {
@@ -199,6 +209,38 @@ flows = {
         GRAPH: {
             "ask_age": {
                 RESPONSE: ""
+            }
+        }
+    },
+    "subject_detected": {
+        GRAPH: {
+            "clarify_intention": {
+                RESPONSE: "I suppose you are asking about coronavirus in {0}. Is it right?",
+                PROCESSING: [
+                    int_prs.set_confidence(0.99),
+                    loc_prs.detect_subject,
+                    loc_prs.insert_subject
+                ],
+                TRANSITIONS: {
+                    "subject_stats": int_cnd.is_yes_vars
+                }
+            },
+            "subject_stats": {
+                RESPONSE: loc_rsp.tell_subject_stats,
+                PROCESSING: [
+                    int_prs.set_confidence(0.95),
+                    loc_prs.detect_subject,
+                    loc_prs.execute_response,
+                    loc_prs.offer_more
+                ],
+                TRANSITIONS: replied_to_offer
+            }
+        }
+    },
+    "subject_undetected": {
+        GRAPH: {
+            "clarify_intention": {
+                RESPONSE: "subject undetected"
             }
         }
     }
