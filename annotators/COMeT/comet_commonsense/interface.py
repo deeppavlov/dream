@@ -55,10 +55,13 @@ class COMeTBaseEngine:
                 postprocessed_beams.append(postprocessed_beam)
         return postprocessed_beams
 
-    def all_beams_cleanup(self, raw_result):
+    def all_beams_cleanup(self, raw_result, include_beams_key=True):
         for relation_or_category in raw_result:
             preprocessed_beams = raw_result[relation_or_category].get("beams", [])
-            raw_result[relation_or_category]["beams"] = self.beams_cleanup(preprocessed_beams)
+            if include_beams_key:
+                raw_result[relation_or_category]["beams"] = self.beams_cleanup(preprocessed_beams)
+            else:
+                raw_result[relation_or_category] = self.beams_cleanup(preprocessed_beams)
         return raw_result
 
     def _calc_n_ctx(self) -> int:
@@ -133,11 +136,7 @@ class COMeTConceptNet(COMeTBaseEngine):
             result = {}
             for nounphrase in nounphrases:
                 conceptnet_result = self._get_result(nounphrase, input_event.category)
-                nounphrase_relations_beams = {}
-                for relation in conceptnet_result:
-                    preprocessed_beams = conceptnet_result[relation].get("beams", [])
-                    nounphrase_relations_beams[relation] = self.beams_cleanup(preprocessed_beams)
-                result[nounphrase] = nounphrase_relations_beams
+                result[nounphrase] = self.all_beams_cleanup(conceptnet_result, include_beams_key=False)
             batch += [result]
         return batch
 
