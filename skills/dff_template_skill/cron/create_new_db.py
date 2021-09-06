@@ -12,7 +12,7 @@ import requests
 import sentry_sdk
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
-RAWG_API_KEY = os.getenv("RAWG_API_KEY")
+RAWG_API_KEY = 'd5373eac9d4545fb8b7e257a90088252'
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
