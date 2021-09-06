@@ -26,8 +26,7 @@ def run_test(handler) -> None:
         for cur_in_data, cur_out_data in zip(cur_in_test, cur_out_test):
             cur_real_out_data = handler(cur_in_data)
 
-            assert cur_real_out_data == cur_out_data, \
-                f"expect out: {cur_out_data}\n real out: {cur_real_out_data}"
+            assert cur_real_out_data == cur_out_data, f"expect out: {cur_out_data}\n real out: {cur_real_out_data}"
 
     print("Success")
 
