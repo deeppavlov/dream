@@ -2,6 +2,8 @@ from string import punctuation
 from typing import Union
 
 from dff.core import Context
+from word2number.w2n import word_to_num
+
 from .database import database as db
 
 
@@ -56,3 +58,24 @@ def get_subject(ctx: Context) -> Union[dict[str, str], None]:
                 return subject
 
     return None
+
+
+def get_age(ctx: Context) -> Union[int, None]:
+    age_num = None
+    request = ctx.last_request
+
+    for sym in punctuation:
+        request = request.replace(sym, " ")
+
+    words = request.split(" ")
+
+    for word in words:
+        if word.isdigit():
+            age_num = int(word)
+
+    try:
+        if age_num is None:
+            age_num = word_to_num(request)
+        return age_num
+    except Exception:
+        return None

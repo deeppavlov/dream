@@ -24,7 +24,8 @@ GLOBAL_CONFIRMED_URL = f"{GLOBAL_BASE_URL}/time_series_covid19_confirmed_global.
 class CovidFetcher(threading.Thread):
     def __init__(self):
         super().__init__()
-        self.data = None
+        self.global_deaths = None
+        self.global_confirmed = None
         self.state_data = None  # USA ONLY # dict[state, (confirmed, deaths)]
         self.county_data = None  # USA ONLY # dict[(state, county), (confirmed, deaths)]
         self.country_data = None  # dict[country, (confirmed, deaths)]
@@ -68,6 +69,10 @@ class CovidFetcher(threading.Thread):
 
             global_confirmed = pd.read_csv(GLOBAL_CONFIRMED_URL, error_bad_lines=False)
             global_deaths = pd.read_csv(GLOBAL_DEATHS_URL, error_bad_lines=False)
+
+            self.global_confirmed = global_confirmed[global_confirmed.columns[-1]].sum()
+            self.global_deaths = global_deaths[global_deaths.columns[-1]].sum()
+
             global_confirmed = global_confirmed.groupby("Country/Region").sum()
             global_deaths = global_deaths.groupby("Country/Region").sum()
 
@@ -116,6 +121,9 @@ class CovidDataServer:
 
     def countries(self) -> list[str]:
         return self.fetcher.country_data.keys()
+
+    def overall(self) -> CovidData:
+        return CovidData(self.fetcher.global_confirmed, self.fetcher.global_deaths)
 
 
 covid_data_server = CovidDataServer(CovidFetcher())

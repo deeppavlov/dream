@@ -23,13 +23,15 @@ logger = logging.getLogger(__name__)
 
 offered_more = cnd.any([
     cnd.negation(loc_cnd.covid_facts_exhausted),
-    cnd.negation(loc_cnd.asked_about_age)
+    cnd.negation(loc_cnd.asked_about_age),
 ])
 
 replied_to_offer = {
     ("covid_fact", "replied_no"): cnd.all([offered_more, int_cnd.is_no_vars]),
     ("covid_fact", "feel_fear"): cnd.all([offered_more, loc_cnd.emotion_detected("fear", 0.9)]),
-    ("covid_fact", "replied_yes"): cnd.all([offered_more, int_cnd.is_yes_vars])
+    ("covid_fact", "replied_yes"): cnd.all([offered_more, int_cnd.is_yes_vars]),
+    ("simple", "age_covid_risks"): cnd.all([offered_more, loc_cnd.age_detected]),
+    ("covid_fact", "core_fact_2"): cnd.all([offered_more, cnd.negation(loc_cnd.age_detected)])
 }
 
 about_virus = cnd.regexp(
@@ -97,6 +99,11 @@ flows = {
                 cnd.regexp(r"(what if|to do| should i do)", re.IGNORECASE),
                 about_coronavirus
             ]),
+            "covid_origin": cnd.all([
+                cnd.regexp(r"(origin|come from|where did it start)", re.IGNORECASE),
+                about_coronavirus
+            ]),
+            "what_is_covid": cnd.regexp(r"(what is corona|what's corona|what is the pandemic)", re.IGNORECASE),
             ("subject_detected", "clarify_intention"): cnd.all([
                 loc_cnd.subject_detected,
                 cnd.all([about_virus, cnd.negation(about_coronavirus)])
@@ -105,7 +112,14 @@ flows = {
                 loc_cnd.subject_detected,
                 about_coronavirus
             ]),
-            ("subject_undetected", "clarify_intention"): cnd.negation(loc_cnd.subject_detected)
+            ("subject_undetected", "clarify_intention"): cnd.all([
+                cnd.negation(loc_cnd.subject_detected),
+                cnd.all([about_virus, cnd.negation(about_coronavirus)])
+            ]),
+            ("covid_fact", "core_fact_2"): cnd.regexp(
+                r"(death|\bdie\b|\bdied\b|\bdying\b|mortality|how many desk)", re.IGNORECASE
+            ),
+            ("covid_fact", "replied_yes"): cnd.true
         },
         GRAPH: {
             "quarantine_end": {
@@ -177,6 +191,33 @@ flows = {
                           "about coronavirus. You can check the CDC website for more info.",
                 PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
                 TRANSITIONS: replied_to_offer
+            },
+            "covid_origin": {
+                RESPONSE: "According to the scientific data, coronavirus COVID 19 is a product of natural evolution. "
+                          "The first place where it caused an outbreak is the city of Wuhan, China.",
+                PROCESSING: [int_prs.set_confidence(0.98)]
+            },
+            "what_is_covid": {
+                RESPONSE: "Coronavirus COVID 19 is an infectious disease. "
+                          "Its common symptoms include fever, cough, shortness of breath, and many others."
+                          "Anyone can have mild to severe symptoms. While the majority of cases result in mild "
+                          "symptoms, some cases can be lethal. Older adults and people who have severe underlying "
+                          "medical conditions like heart or lung disease or diabetes seem to be at higher risk for "
+                          "developing more serious complications from COVID-19 illness.",
+                PROCESSING: [int_prs.set_confidence(0.98), loc_prs.offer_more],
+                TRANSITIONS: replied_to_offer
+            },
+            "age_covid_risks": {
+                RESPONSE: loc_rsp.tell_age_risks,
+                PROCESSING: [
+                    int_prs.set_confidence(1),
+                    loc_prs.detect_age,
+                    loc_prs.execute_response,
+                    loc_prs.add_from_options([
+                        "While staying at home, you may use a lot of different online cinema.",
+                        "While staying at home, you may read a lot of different books."
+                    ])
+                ]
             }
         }
     },
@@ -201,14 +242,30 @@ flows = {
                 RESPONSE: loc_rsp.get_covid_fact,
                 PROCESSING: [int_prs.set_confidence(1), loc_prs.execute_response, loc_prs.offer_more],
                 TRANSITIONS: replied_to_offer
-            }
-            # reply <empty> string otherwise (fallback)
-        }
-    },
-    "covid_resilience": {
-        GRAPH: {
-            "ask_age": {
-                RESPONSE: ""
+            },
+            "core_fact_1": {
+                RESPONSE: "According to the recent data, there are {0} confirmed cases of coronavirus. "
+                          "Shall I tell you more?",
+                PROCESSING: [
+                    int_prs.set_confidence(1),
+                    loc_prs.insert_global_confirmed,
+                    loc_prs.set_flag("core_fact_1", True)
+                ],
+                TRANSITIONS: {
+                    "replied_no": int_cnd.is_no_vars,
+                    "feel_fear": loc_cnd.emotion_detected("fear", 0.9),
+                    "replied_yes": int_cnd.is_yes_vars
+                }
+            },
+            "core_fact_2": {
+                RESPONSE: "According to the recent data, there are {0} confirmed deaths from coronavirus.",
+                PROCESSING: [
+                    int_prs.set_confidence(1),
+                    loc_prs.insert_global_deaths,
+                    loc_prs.offer_more,
+                    loc_prs.set_flag("core_fact_2", True)
+                ],
+                TRANSITIONS: replied_to_offer
             }
         }
     },
@@ -240,7 +297,17 @@ flows = {
     "subject_undetected": {
         GRAPH: {
             "clarify_intention": {
-                RESPONSE: "subject undetected"
+                RESPONSE: "I suppose you are asking about coronavirus. Is it right?",
+                PROCESSING: [int_prs.set_confidence(1)],
+                TRANSITIONS: {
+                    ("covid_fact", "core_fact_1"): cnd.all([
+                        cnd.negation(loc_cnd.check_flag("core_fact_1")),
+                        cnd.any([
+                            int_cnd.is_yes_vars,
+                            about_coronavirus
+                        ])
+                    ])
+                }
             }
         }
     }

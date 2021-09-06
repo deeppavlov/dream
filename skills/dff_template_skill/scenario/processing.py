@@ -4,7 +4,8 @@ from typing import Optional
 
 from dff.core import Context, Actor, Node
 
-from .utils import get_subject
+from .utils import get_subject, get_age
+from .statistics import covid_data_server as cds
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,21 @@ def add_from_options(options):
         return node_label, node
 
     return add_from_options_handler
+
+
+def set_flag(flag: str, value: bool):
+    def set_flag_handler(
+            node_label: str,
+            node: Node,
+            ctx: Context,
+            actor: Actor,
+            *args,
+            **kwargs,
+    ) -> Optional[tuple[str, Node]]:
+        ctx.misc[flag] = value
+        return node_label, node
+
+    return set_flag_handler
 
 
 def execute_response(
@@ -68,6 +84,7 @@ def offer_more(
     if not asked_about_age:
         node.response = f"{add_space(node.response)}Anyway, I can approximately tell you how likely you are to " \
                         f"recover from coronavirus if you get it. What is your age?"
+        ctx.misc["asked_about_age"] = True
         return node_label, node
 
     logger.critical("add_catch_question processor has reached an unreachable end in coronavirus_skill")
@@ -95,7 +112,31 @@ def insert_subject(
     return node_label, node
 
 
-# see condition.subject_detected
+def insert_global_deaths(
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+) -> Optional[tuple[str, Node]]:
+    node.response = node.response.format(cds.overall().deaths)
+    return node_label, node
+
+
+def insert_global_confirmed(
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+) -> Optional[tuple[str, Node]]:
+    node.response = node.response.format(cds.overall().confirmed)
+    return node_label, node
+
+
+# see condition.subject_detected for note
 def detect_subject(
         node_label: str,
         node: Node,
@@ -110,3 +151,21 @@ def detect_subject(
         ctx.misc["subject"] = subject
 
     return node_label, node
+
+
+# see condition.subject_detected for note
+def detect_age(
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+) -> Optional[tuple[str, Node]]:
+    age = get_age(ctx)
+
+    if age:
+        ctx.misc["age"] = age
+
+    return node_label, node
+

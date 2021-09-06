@@ -5,7 +5,7 @@ from dff.core import Context, Actor
 from common.dff.integration import condition as int_cnd
 from common.utils import is_yes, is_no, get_emotions
 
-from .utils import get_subject
+from .utils import get_subject, get_age
 
 
 logger = logging.getLogger(__name__)
@@ -26,6 +26,13 @@ def covid_facts_exhausted(ctx: Context, actor: Actor, *args, **kwargs):
     return ctx.misc.get("covid_facts_exhausted", False)
 
 
+def check_flag(flag: str, default: bool = False):
+    def check_flag_handler(ctx: Context, actor: Actor, *args, **kwargs):
+        return ctx.misc.get(flag, default)
+
+    return check_flag_handler
+
+
 def asked_about_age(ctx: Context, actor: Actor, *args, **kwargs):
     # in legacy version of code default value is "True", however
     # function becomes useless with it
@@ -42,10 +49,19 @@ def subject_detected(ctx: Context, actor: Actor, *args, **kwargs):
     # MOREOVER, we should to perform subject detection
     # again in 'processing', because we cannot just
     # save detected state into context here.
-
     subject = get_subject(ctx)
 
     if subject and subject["type"] != "undetected":
+        return True
+
+    return False
+
+
+def age_detected(ctx: Context, actor: Actor, *args, **kwargs):
+    # see note in subject_detected
+    age = get_age(ctx)
+
+    if age:
         return True
 
     return False
