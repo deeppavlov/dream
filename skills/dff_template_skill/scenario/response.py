@@ -1,7 +1,7 @@
 import logging
 
 from dff.core import Context, Actor
-from .statistics import covid_data_server as cds
+from tools.statistics import covid_data_server as cds
 
 logger = logging.getLogger(__name__)
 

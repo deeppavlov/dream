@@ -5,7 +5,7 @@ from dff.core import Context, Actor
 from common.dff.integration import condition as int_cnd
 from common.utils import is_yes, is_no, get_emotions
 
-from .utils import get_subject, get_age
+from tools.detectors import get_subject, get_age
 
 
 logger = logging.getLogger(__name__)

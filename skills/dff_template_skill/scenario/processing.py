@@ -4,8 +4,8 @@ from typing import Optional
 
 from dff.core import Context, Actor, Node
 
-from .utils import get_subject, get_age
-from .statistics import covid_data_server as cds
+from tools.detectors import get_subject, get_age
+from tools.statistics import covid_data_server as cds
 
 logger = logging.getLogger(__name__)
 

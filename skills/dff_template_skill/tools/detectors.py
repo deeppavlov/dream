@@ -4,7 +4,7 @@ from typing import Union
 from dff.core import Context
 from word2number.w2n import word_to_num
 
-from .database import database as db
+from tools.database import database as db
 
 
 def get_subject(ctx: Context) -> Union[dict[str, str], None]:
