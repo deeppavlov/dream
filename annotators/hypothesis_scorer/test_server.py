@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 URL = f"http://0.0.0.0:8110/batch_model"
 
-dialogs_path = "test_data.json"
+dialogs_path = "tests/test_data.json"
 with open(dialogs_path) as f:
     dialogs = json.load(f)
 

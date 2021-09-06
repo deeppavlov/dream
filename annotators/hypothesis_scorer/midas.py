@@ -6,6 +6,7 @@
 # simpletransformers==0.60.6
 # numpy==1.20.0
 # pytorch=1.15
+from typing import List, Dict
 
 import numpy as np
 from scipy.special import softmax
@@ -60,10 +61,10 @@ label_to_act = {
 }
 
 
-def predict(inputs):
+def predict(inputs) -> List[Dict]:
     predictions, raw_outputs = model.predict(inputs)
     raw_outputs = [raw_output.astype(np.float64) for raw_output in raw_outputs]
-    pred_probas = list(map(softmax, raw_outputs))
+    pred_probas = map(softmax, raw_outputs)
     responses = [dict(zip(label_to_act.values(), pred[0])) for pred in pred_probas]
     assert len(responses) == len(inputs)
     return responses

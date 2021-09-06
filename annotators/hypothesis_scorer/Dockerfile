@@ -27,4 +27,4 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 
 WORKDIR /src
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD uvicorn server:app --reload --host 0.0.0.0 --port ${SERVICE_PORT}

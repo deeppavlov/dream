@@ -1,4 +1,5 @@
-Flask==1.1.1
+fastapi==0.68.1
+uvicorn==0.15.0
 simpletransformers==0.60.6
 sentry_sdk==0.13.3
 tensorflow_text==0.1.0
