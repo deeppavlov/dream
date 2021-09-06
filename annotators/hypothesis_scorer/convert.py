@@ -49,7 +49,7 @@ def encode_contexts(dialog_history_batch):
     """Encode the dialog context to the response ranking vector space.
 
     Args:
-        dialog_history: a list of strings, the dialog history, in
+        dialog_history_batch: a list of strings, the dialog history, in
             chronological order.
     """
 

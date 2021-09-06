@@ -1,10 +1,13 @@
 import logging
-import time
 import os
+import time
 
 import sentry_sdk
+import uvicorn as uvicorn
 from catboost import CatBoostClassifier
-from flask import Flask, request, jsonify
+from fastapi import FastAPI
+from pydantic import BaseModel, conlist
+
 from score import get_features
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
@@ -13,7 +16,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-app = Flask(__name__)
+app: FastAPI = FastAPI()
 
 
 def get_probas(contexts, hypotheses):
@@ -56,22 +59,31 @@ except Exception as e:
     raise e
 
 
-@app.route("/batch_model", methods=["POST"])
-def batch_respond():
+class HypothesesSchema(BaseModel):
+    is_best: bool
+    text: str
+    confidence: float
+
+
+class RequestSchema(BaseModel):
+    contexts: conlist(item_type=conlist(item_type=str, min_items=0), min_items=0)
+    hypotheses: conlist(item_type=HypothesesSchema, min_items=0)
+
+
+@app.post("/batch_model")
+async def batch_respond(request: RequestSchema):
     st_time = time.time()
-    contexts = request.json["contexts"]
-    hypotheses = request.json["hypotheses"]
 
     try:
-        responses = get_probas(contexts, hypotheses).tolist()
+        responses = get_probas(request.contexts, request.hypotheses).tolist()
     except Exception as e:
-        responses = [0] * len(hypotheses)
+        responses = [0] * len(request.hypotheses)
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
     logging.warning(f"hypothesis_scorer exec time {time.time() - st_time}")
-    return jsonify([{"batch": responses}])
+    return [{"batch": responses}]
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+    uvicorn.run(app, debug=False, host="0.0.0.0", port=3000)
