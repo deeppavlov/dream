@@ -3,18 +3,27 @@ Changes can only be made in the `dialogflows` directory.
 
 Template has dialog flows based on programy (`repeating`) and based on valila python (`greeting`).
 
+```bash
+python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector 
+
+docker-compose -f docker-compose.yml -f local.yml up -d --build
+
+docker-compose -f docker-compose.yml -f local.yml exec agent python -m deeppavlov_agent.run
+docker-compose -f docker-compose.yml -f local.yml logs -f dff-template-skill
+docker-compose -f docker-compose.yml -f local.yml exec dff-template-skill bash test.sh
+```
 
 
 # Importan changes in files of the agent
 docker-compose.yml
 ```yml
-  dff-template:
+  dff-template-skill:
     build:
       args:
         SERVICE_PORT: 8095
-        SERVICE_NAME: dff_template # has to be the same with skill dir name
+        SERVICE_NAME: dff_template_skill # has to be the same with skill dir name
       context: .
-      dockerfile: ./skills/dff_template/Dockerfile
+      dockerfile: ./skills/dff_template_skill/Dockerfile
     command:  gunicorn --workers=1 server:app -b 0.0.0.0:8095 --reload
     deploy:
       mode: replicated
@@ -29,7 +38,8 @@ docker-compose.yml
 
 dev.yml
 ```yml
-  dff-template:
+  dff-template-skill:
+    env_file: [.env.dev]
     volumes:
       - "./skills/dff_template:/src"
       - "./common:/src/common"
