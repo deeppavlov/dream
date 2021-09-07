@@ -1,7 +1,7 @@
 import logging
 
 from dff.core import Context, Actor
-from common.utils import is_yes, is_no, get_emotions
+from common.utils import get_emotions
 from tools.detectors import get_subject, get_age
 
 
