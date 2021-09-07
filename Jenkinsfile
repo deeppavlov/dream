@@ -42,7 +42,7 @@ pipeline {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
               sh '''
-                echo asdf
+                printf "asdf=${PATH}" >> .env
                 tests/runtests.sh MODE=build
               '''
             }
