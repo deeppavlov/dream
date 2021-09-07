@@ -42,7 +42,7 @@ pipeline {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
               sh '''
-                printf "asdf=${PATH}" >> .env
+                cat /home/ignatov/secrets.txt >> .env
                 tests/runtests.sh MODE=build
               '''
             }
