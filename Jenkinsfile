@@ -41,7 +41,10 @@ pipeline {
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh 'tests/runtests.sh MODE=build'
+              sh '''
+                echo asdf
+                tests/runtests.sh MODE=build
+              '''
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
