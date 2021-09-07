@@ -5,7 +5,7 @@ import os
 import random
 import re
 
-from common.fact_random import get_facts
+from common.fact_random import get_fact
 from enum import Enum, auto
 
 import sentry_sdk
@@ -581,7 +581,7 @@ def food_fact_response(vars):
 
             if all(["berr" not in human_utt_text, len(human_utt_text.split()) == 1, berry_name]):
                 berry_name += "berry"
-                fact = get_facts(f"fact about {berry_name}")
+                fact = get_fact(berry_name, f"fact about {berry_name}")
                 entity = berry_name
             elif berry_name:
                 if facts and entity:
@@ -732,7 +732,7 @@ def recipe_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         used_meal = shared_memory.get("used_meals", "")
-        recipe = get_facts(f"how to cook {used_meal}")
+        recipe = get_fact(used_meal, f"how to cook {used_meal}")
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         if not (used_meal and recipe):
             state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)

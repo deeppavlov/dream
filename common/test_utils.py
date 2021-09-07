@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def compare_structs(ground_truth, hypothesis, stack_track="hypothesis"):
+def compare_structs(ground_truth, hypothesis, stack_track="hypothesis", ignored_keys=[]):
     ground_truth = json.loads(json.dumps(ground_truth))
     hypothesis = json.loads(json.dumps(hypothesis))
     if type(ground_truth) != type(hypothesis):
@@ -23,9 +23,15 @@ def compare_structs(ground_truth, hypothesis, stack_track="hypothesis"):
                 f":: ground_truth keys ({list(ground_truth.keys())}) != hypothesis keys ({list(hypothesis.keys())})",
             )
         for key in ground_truth.keys():
-            is_equal_flag, msg = compare_structs(ground_truth[key], hypothesis[key], f"{stack_track}[{key}]")
-            if not is_equal_flag:
-                return is_equal_flag, msg
+            if key not in ignored_keys:
+                is_equal_flag, msg = compare_structs(
+                    ground_truth[key],
+                    hypothesis[key],
+                    f"{stack_track}[{key}]",
+                    ignored_keys,
+                )
+                if not is_equal_flag:
+                    return is_equal_flag, msg
     if isinstance(ground_truth, list):
         if len(ground_truth) != len(hypothesis):
             return (
@@ -34,7 +40,12 @@ def compare_structs(ground_truth, hypothesis, stack_track="hypothesis"):
                 f":: ground_truth len ({len(ground_truth)}) != hypothesis len ({len(hypothesis)})",
             )
         for index, (ground_truth_item, hypothesis_item) in enumerate(zip(ground_truth, hypothesis)):
-            is_equal_flag, msg = compare_structs(ground_truth_item, hypothesis_item, f"{stack_track}[{index}]")
+            is_equal_flag, msg = compare_structs(
+                ground_truth_item,
+                hypothesis_item,
+                f"{stack_track}[{index}]",
+                ignored_keys,
+            )
             if not is_equal_flag:
                 return is_equal_flag, msg
     if ground_truth != hypothesis:

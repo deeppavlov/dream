@@ -412,4 +412,10 @@ services:
       - "./annotators/topic_dialogact_classification:/src"
     ports:
       - 8118:8118
+  dff-template-skill:
+    volumes:
+      - "./skills/dff_template_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8120:8120
 version: "3.7"
