@@ -55,5 +55,3 @@ def age_detected(ctx: Context, actor: Actor, *args, **kwargs):
         return True
 
     return False
-
-

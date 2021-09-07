@@ -11,11 +11,13 @@ logger = logging.getLogger(__name__)
 
 UPDATE_INTERVAL = 60 * 60 * 12  # 12 hours
 
-GLOBAL_BASE_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/" \
-                  "master/csse_covid_19_data/csse_covid_19_time_series"
+GLOBAL_BASE_URL = (
+    "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/" "master/csse_covid_19_data/csse_covid_19_time_series"
+)
 
-DAILY_BASE_URL = "http://raw.githubusercontent.com/CSSEGISandData/COVID-19/" \
-                 "master/csse_covid_19_data/csse_covid_19_daily_reports"
+DAILY_BASE_URL = (
+    "http://raw.githubusercontent.com/CSSEGISandData/COVID-19/" "master/csse_covid_19_data/csse_covid_19_daily_reports"
+)
 
 GLOBAL_DEATHS_URL = f"{GLOBAL_BASE_URL}/time_series_covid19_deaths_global.csv"
 GLOBAL_CONFIRMED_URL = f"{GLOBAL_BASE_URL}/time_series_covid19_confirmed_global.csv"
@@ -84,7 +86,7 @@ class CovidFetcher(threading.Thread):
             self.country_data = country_data
             self.state_data = state_data
             self.county_data = county_data
-        
+
             time.sleep(UPDATE_INTERVAL)
 
 

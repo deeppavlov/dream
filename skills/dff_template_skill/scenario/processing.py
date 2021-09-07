@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 
 def add_from_options(options):
     def add_from_options_handler(
-            node_label: str,
-            node: Node,
-            ctx: Context,
-            actor: Actor,
-            *args,
-            **kwargs,
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
     ) -> Optional[tuple[str, Node]]:
         node.response = f"{node.response} {random.choice(options)}"
         return node_label, node
@@ -25,12 +25,12 @@ def add_from_options(options):
 
 def set_flag(flag: str, value: bool):
     def set_flag_handler(
-            node_label: str,
-            node: Node,
-            ctx: Context,
-            actor: Actor,
-            *args,
-            **kwargs,
+        node_label: str,
+        node: Node,
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
     ) -> Optional[tuple[str, Node]]:
         ctx.misc[flag] = value
         return node_label, node
@@ -39,12 +39,12 @@ def set_flag(flag: str, value: bool):
 
 
 def execute_response(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     if callable(node.response):
         node.response = node.response(ctx, actor)
@@ -53,12 +53,12 @@ def execute_response(
 
 
 def offer_more(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     facts_exhausted = ctx.misc.get("covid_facts_exhausted", False)
     asked_about_age = ctx.misc.get("asked_about_age", False)
@@ -80,8 +80,10 @@ def offer_more(
         return node_label, node
 
     if not asked_about_age:
-        node.response = f"{add_space(node.response)}Anyway, I can approximately tell you how likely you are to " \
-                        f"recover from coronavirus if you get it. What is your age?"
+        node.response = (
+            f"{add_space(node.response)}Anyway, I can approximately tell you how likely you are to "
+            f"recover from coronavirus if you get it. What is your age?"
+        )
         return node_label, node
 
     logger.critical("add_catch_question processor has reached an unreachable end in coronavirus_skill")
@@ -89,45 +91,48 @@ def offer_more(
 
 
 def insert_subject(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     # See condition.subject_detected for more details
-    subject = ctx.misc.get("subject", {
-        "type": "country",
-        "city": "undetected",
-        "state": "undetected",
-        "county": "undetected",
-        "country": "undetected"
-    })
+    subject = ctx.misc.get(
+        "subject",
+        {
+            "type": "country",
+            "city": "undetected",
+            "state": "undetected",
+            "county": "undetected",
+            "country": "undetected",
+        },
+    )
 
     node.response = node.response.format(subject[subject["type"]])
     return node_label, node
 
 
 def insert_global_deaths(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     node.response = node.response.format(cds.overall().deaths)
     return node_label, node
 
 
 def insert_global_confirmed(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     node.response = node.response.format(cds.overall().confirmed)
     return node_label, node
@@ -135,12 +140,12 @@ def insert_global_confirmed(
 
 # See condition.subject_detected for performance note.
 def detect_subject(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     subject = get_subject(ctx)
 
@@ -152,12 +157,12 @@ def detect_subject(
 
 # See condition.subject_detected for performance note.
 def detect_age(
-        node_label: str,
-        node: Node,
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
+    node_label: str,
+    node: Node,
+    ctx: Context,
+    actor: Actor,
+    *args,
+    **kwargs,
 ) -> Optional[tuple[str, Node]]:
     age = get_age(ctx)
 

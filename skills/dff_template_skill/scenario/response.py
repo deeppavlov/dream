@@ -53,8 +53,10 @@ def get_covid_fact(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def tell_subject_stats(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     template1 = "The total number of registered coronavirus cases in {0} is {1} including {2} deaths."
-    template2 = "{0} is located in {1}. In this county, the total number of registered coronavirus " \
-                "cases is {2} including {3} deaths."
+    template2 = (
+        "{0} is located in {1}. In this county, the total number of registered coronavirus "
+        "cases is {2} including {3} deaths."
+    )
     template3 = "In the {0}, {1}, the total number of registered coronavirus cases is {2} including {3} deaths."
 
     response = ""
@@ -143,6 +145,3 @@ def tell_age_risks(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_cross_link(ctx, actor, skill)
 
     return response
-
-
-

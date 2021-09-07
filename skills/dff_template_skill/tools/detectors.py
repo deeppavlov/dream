@@ -19,7 +19,7 @@ def get_subject(ctx: Context) -> Union[dict[str, str], None]:
         "city": "undetected",
         "state": "undetected",
         "county": "undetected",
-        "country": "undetected"
+        "country": "undetected",
     }
 
     for request in reversed(ctx.requests.values()):
