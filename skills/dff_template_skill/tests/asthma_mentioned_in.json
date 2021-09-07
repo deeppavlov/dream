@@ -6,48 +6,49 @@
         {
             "human_utterances": [
                 {
-                    "text": "hi.",
+                    "text": "What to do if i have asthma?",
                     "annotations": {
+                        "spelling_preprocessing": "What to do if i have asthma?",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "hi",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
-                        "factoid_classification": {
-                            "factoid": 0.009537393227219582,
-                            "conversational": 0.990462601184845
+                        "sentseg": {
+                            "punct_sent": "What to do if i have asthma?",
+                            "segments": [
+                                "What to do if i have asthma?"
+                            ]
                         },
-                        "conceptnet": {},
+                        "cobot_nounphrases": [
+                            "asthma"
+                        ],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9982210397720337
+                                "General_ChatIntent": 0.9912816286087036
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9222673773765564
+                                "Other": 0.9951781034469604
                             },
                             "cobot_topics": {
-                                "Phatic": 0.9989814758300781
+                                "Celebrities": 0.9999444484710693
                             },
                             "emotion_classification": {
-                                "neutral": 0.9996328353881836
+                                "neutral": 0.9985609650611877
                             },
                             "sentiment_classification": {
-                                "positive": 0.737922191619873
+                                "neutral": 0.6447229385375977
                             },
                             "toxic_classification": {
-                                "toxic": 0.0014452040195465088
+                                "toxic": 0.0016062259674072266
                             }
                         },
-                        "sentseg": {
-                            "punct_sent": "hi.",
-                            "segments": [
-                                "hi."
-                            ]
+                        "factoid_classification": {
+                            "factoid": 0.9976872205734253,
+                            "conversational": 0.002312743104994297
                         },
                         "topic_recommendation": [
                             "dff_movie_skill",
@@ -146,31 +147,71 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0037371967919170856,
-                                "command": 0.014534023590385914,
-                                "comment": 0.007815568707883358,
-                                "complaint": 0.013871942646801472,
-                                "dev_command": 0.011961258016526699,
-                                "neg_answer": 0.0012791282497346401,
-                                "open_question_factual": 0.00706735672429204,
-                                "open_question_opinion": 0.0020942040719091892,
-                                "opinion": 0.028205107897520065,
-                                "other_answers": 0.0029170422349125147,
-                                "pos_answer": 0.003618006594479084,
-                                "statement": 0.8965855836868286,
-                                "yes_no_question": 0.006313641089946032
+                                "appreciation": 0.007438253611326218,
+                                "command": 0.008693899028003216,
+                                "comment": 0.0027251848950982094,
+                                "complaint": 0.004904500208795071,
+                                "dev_command": 0.007161188870668411,
+                                "neg_answer": 0.003904198296368122,
+                                "open_question_factual": 0.08377619832754135,
+                                "open_question_opinion": 0.8317700624465942,
+                                "opinion": 0.028603501617908478,
+                                "other_answers": 0.006154440809041262,
+                                "pos_answer": 0.002846685703843832,
+                                "statement": 0.002264260547235608,
+                                "yes_no_question": 0.00975764263421297
                             }
                         ],
+                        "entity_detection": {
+                            "entities": [
+                                "asthma"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        21,
+                                        27
+                                    ],
+                                    "text": "asthma"
+                                }
+                            ]
+                        },
                         "ner": [
                             []
                         ],
-                        "entity_linking": [],
+                        "fact_random": [],
+                        "conceptnet": {
+                            "asthma": {
+                                "Causes": [
+                                    "death",
+                                    "heart attack",
+                                    "cancer"
+                                ],
+                                "CausesDesire": [
+                                    "take aspirin",
+                                    "go to doctor",
+                                    "have shower"
+                                ],
+                                "HasProperty": [
+                                    "bad",
+                                    "common in most person",
+                                    "fatal"
+                                ],
+                                "SymbolOf": [
+                                    "asthma",
+                                    "fear",
+                                    "pain"
+                                ]
+                            }
+                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hi."
+                                "What to do if i have asthma?"
                             ]
                         },
+                        "entity_linking": [],
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
@@ -180,7 +221,6 @@
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "entity_detection": {},
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
@@ -188,23 +228,38 @@
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
                         },
-                        "fact_random": [],
                         "news_api_annotator": [
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours. The companies also will not be allowed to provide services to users who haven't logged in with real-n... [3065 chars]",
-                                    "description": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours.",
-                                    "image": "https://image.cnbcfm.com/api/v1/image/106924433-GettyImages-1234392254.jpg?v=1630329277",
-                                    "publishedAt": "2021-08-30T13:52:58Z",
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
                                     "source": {
                                         "name": "CNBC",
                                         "url": "https://www.cnbc.com"
                                     },
-                                    "title": "China to ban kids from playing online games for more than three hours per week",
-                                    "url": "https://www.cnbc.com/2021/08/30/china-to-ban-kids-from-playing-online-games-for-more-than-three-hours-per-week.html"
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
                                 },
                                 "which": "all"
+                            },
+                            {
+                                "entity": "asthma",
+                                "news": {
+                                    "content": "Elena Fomina/Getty\nFor the most up-to-date news and information about the coronavirus pandemic, visit the WHO and CDC websites.\nEditors' note, Aug. 24, 2021: An earlier version of this story implied that Eli Lilly doesn't have emergency use authoriza... [8430 chars]",
+                                    "description": "Elena Fomina/Getty\nFor the most up-to-date news and information about the coronavirus pandemic, visit the WHO and CDC websites.",
+                                    "image": "https://www.cnet.com/a/img/-x-9jYA071K7xH8TjvszHJ-X0yI=/1200x630/2021/08/23/42f0c0c7-002a-4f6d-bc9a-36bc38f63905/gettyimages-1311974802.jpg",
+                                    "publishedAt": "2021-09-01T23:43:10Z",
+                                    "source": {
+                                        "name": "CNET",
+                                        "url": "https://www.cnet.com"
+                                    },
+                                    "title": "Treating COVID-19 with monoclonal antibodies: How it works and who is eligible",
+                                    "url": "https://www.cnet.com/health/monoclonal-antibodies-for-covid-19-how-they-work-and-who-is-eligible/"
+                                },
+                                "which": "human"
                             }
                         ]
                     }

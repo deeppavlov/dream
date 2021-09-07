@@ -1,0 +1,49 @@
+[
+    [
+        "As you have asthma, I know that you should be especially cautious about coronavirus. Unfortunately, I am not allowed to give any recommendations about coronavirus. You can check the CDC website for more info. Would you want to learn more?",
+        1,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "simple",
+                        "asthma_mentioned"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "514178ca-8c3c-4cdb-9706-a7d7f872cfb2",
+                    "node_labels": {
+                        "0": [
+                            "simple",
+                            "asthma_mentioned"
+                        ]
+                    },
+                    "requests": {
+                        "0": "What to do if i have asthma?"
+                    },
+                    "responses": {
+                        "0": "As you have asthma, I know that you should be especially cautious about coronavirus. Unfortunately, I am not allowed to give any recommendations about coronavirus. You can check the CDC website for more info. Would you want to learn more?"
+                    },
+                    "previous_index": 0,
+                    "current_index": 0,
+                    "misc": {},
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

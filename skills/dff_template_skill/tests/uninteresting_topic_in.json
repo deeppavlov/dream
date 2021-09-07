@@ -1,0 +1,429 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "a promise",
+                            "that thing",
+                            "coronavirus",
+                            "1 very specific thing",
+                            "information",
+                            "just 1 good thing"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!",
+                            "segments": [
+                                "I am very interested in 1 very specific thing.",
+                                "That thing is very important for me, because i am full of information about it.",
+                                "So, make a promise and do just 1 good thing.",
+                                "Stop talking about coronavirus!"
+                            ]
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.007251111324876547,
+                            "conversational": 0.9927489161491394
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9935780763626099,
+                                "Information_DeliveryIntent": 0.980742871761322
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9956275820732117
+                            },
+                            "cobot_topics": {
+                                "Other": 0.9994966983795166
+                            },
+                            "emotion_classification": {
+                                "joy": 0.6216831207275391,
+                                "neutral": 0.9913384318351746
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8138501644134521
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0005407929420471191
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.010903410613536835,
+                                "command": 0.38167446851730347,
+                                "comment": 0.012155606411397457,
+                                "complaint": 0.014227669686079025,
+                                "dev_command": 0.024730728939175606,
+                                "neg_answer": 0.0024679924827069044,
+                                "open_question_factual": 0.007111488375812769,
+                                "open_question_opinion": 0.010378807783126831,
+                                "opinion": 0.3682229816913605,
+                                "other_answers": 0.005640822928398848,
+                                "pos_answer": 0.005384998396039009,
+                                "statement": 0.15266729891300201,
+                                "yes_no_question": 0.0044336700811982155
+                            },
+                            {
+                                "appreciation": 0.0018010467756539583,
+                                "command": 0.011460062116384506,
+                                "comment": 0.0038991624023765326,
+                                "complaint": 0.002155536785721779,
+                                "dev_command": 0.003560695331543684,
+                                "neg_answer": 0.0010404943022876978,
+                                "open_question_factual": 0.001800401951186359,
+                                "open_question_opinion": 0.0011684040073305368,
+                                "opinion": 0.10943038761615753,
+                                "other_answers": 0.0013577723875641823,
+                                "pos_answer": 0.0018011087086051702,
+                                "statement": 0.8585094213485718,
+                                "yes_no_question": 0.002015403937548399
+                            },
+                            {
+                                "appreciation": 0.010082566179335117,
+                                "command": 0.7658851742744446,
+                                "comment": 0.007653529290109873,
+                                "complaint": 0.019577883183956146,
+                                "dev_command": 0.10162010788917542,
+                                "neg_answer": 0.0018512640381231904,
+                                "open_question_factual": 0.0065073915757238865,
+                                "open_question_opinion": 0.0084002073854208,
+                                "opinion": 0.010201852768659592,
+                                "other_answers": 0.004030211828649044,
+                                "pos_answer": 0.007684003561735153,
+                                "statement": 0.04540685564279556,
+                                "yes_no_question": 0.011098810471594334
+                            },
+                            {
+                                "appreciation": 0.013140582479536533,
+                                "command": 0.30207720398902893,
+                                "comment": 0.016612349078059196,
+                                "complaint": 0.4684467613697052,
+                                "dev_command": 0.09478583186864853,
+                                "neg_answer": 0.0370185524225235,
+                                "open_question_factual": 0.013960426673293114,
+                                "open_question_opinion": 0.01207798346877098,
+                                "opinion": 0.006199974101036787,
+                                "other_answers": 0.008394783362746239,
+                                "pos_answer": 0.006947420071810484,
+                                "statement": 0.005791328381747007,
+                                "yes_no_question": 0.014546827413141727
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            [],
+                            [],
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "coronavirus"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        19,
+                                        30
+                                    ],
+                                    "text": "coronavirus"
+                                }
+                            ]
+                        },
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "1 very specific thing": {
+                                "Causes": [
+                                    "change in world",
+                                    "one to get sick",
+                                    "one to get very angry"
+                                ],
+                                "CausesDesire": [
+                                    "play chess",
+                                    "play game",
+                                    "watch television"
+                                ],
+                                "HasProperty": [
+                                    "very important to understand",
+                                    "unique",
+                                    "very important"
+                                ],
+                                "SymbolOf": [
+                                    "math",
+                                    "mathematical equation",
+                                    "japanese"
+                                ]
+                            },
+                            "a promise": {
+                                "Causes": [
+                                    "promise make",
+                                    "obligation",
+                                    "promise"
+                                ],
+                                "CausesDesire": [
+                                    "break it",
+                                    "break promise",
+                                    "promise"
+                                ],
+                                "HasProperty": [
+                                    "important",
+                                    "keep",
+                                    "binding"
+                                ],
+                                "SymbolOf": [
+                                    "promise",
+                                    "love",
+                                    "commitment"
+                                ]
+                            },
+                            "coronavirus": {
+                                "Causes": [
+                                    "death",
+                                    "die",
+                                    "illness"
+                                ],
+                                "CausesDesire": [
+                                    "have checkup",
+                                    "die",
+                                    "take vitamin"
+                                ],
+                                "HasProperty": [
+                                    "fatal",
+                                    "contagious",
+                                    "deadly"
+                                ],
+                                "SymbolOf": [
+                                    "bacteria",
+                                    "disease",
+                                    "virus"
+                                ]
+                            },
+                            "information": {
+                                "Causes": [
+                                    "knowledge",
+                                    "you learn something new",
+                                    "you learn something"
+                                ],
+                                "CausesDesire": [
+                                    "find information",
+                                    "learn",
+                                    "think"
+                                ],
+                                "HasProperty": [
+                                    "useful",
+                                    "important",
+                                    "helpful"
+                                ],
+                                "SymbolOf": [
+                                    "knowledge",
+                                    "language",
+                                    "information"
+                                ]
+                            },
+                            "just 1 good thing": {
+                                "Causes": [
+                                    "happiness",
+                                    "2 good thing",
+                                    "win"
+                                ],
+                                "CausesDesire": [
+                                    "celebrate",
+                                    "play tennis",
+                                    "eat"
+                                ],
+                                "HasProperty": [
+                                    "good",
+                                    "good than 2 bad thing",
+                                    "good than 2 bad"
+                                ],
+                                "SymbolOf": [
+                                    "good luck",
+                                    "life",
+                                    "good"
+                                ]
+                            },
+                            "that thing": {
+                                "Causes": [
+                                    "pain",
+                                    "you to feel sick",
+                                    "damage"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "climb mountain",
+                                    "play game"
+                                ],
+                                "HasProperty": [
+                                    "dangerous",
+                                    "heavy",
+                                    "alive"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "power",
+                                    "beauty"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

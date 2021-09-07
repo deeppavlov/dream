@@ -1,0 +1,336 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "What do you know about the coronavirus? Where did it start?",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "What do you know about the coronavirus? Where did it start?",
+                        "sentseg": {
+                            "punct_sent": "What do you know about the coronavirus? Where did it start?",
+                            "segments": [
+                                "What do you know about the coronavirus?",
+                                "Where did it start?"
+                            ]
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "the coronavirus"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.027276260778307915,
+                            "conversational": 0.9727237224578857
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9840736985206604
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9928745031356812
+                            },
+                            "cobot_topics": {
+                                "Games": 0.9956223368644714,
+                                "Religion": 0.9008245468139648
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995971322059631
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7167721390724182
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0016984939575195312
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0073349615558981895,
+                                "command": 0.5649353265762329,
+                                "comment": 0.003371665021404624,
+                                "complaint": 0.014857534319162369,
+                                "dev_command": 0.021431976929306984,
+                                "neg_answer": 0.0032064039260149,
+                                "open_question_factual": 0.15206992626190186,
+                                "open_question_opinion": 0.15495245158672333,
+                                "opinion": 0.004008130636066198,
+                                "other_answers": 0.003535664174705744,
+                                "pos_answer": 0.004826250020414591,
+                                "statement": 0.006831305101513863,
+                                "yes_no_question": 0.05863843485713005
+                            },
+                            {
+                                "appreciation": 0.0027918783016502857,
+                                "command": 0.00876576267182827,
+                                "comment": 0.003140843939036131,
+                                "complaint": 0.01246916688978672,
+                                "dev_command": 0.005554055329412222,
+                                "neg_answer": 0.005154263228178024,
+                                "open_question_factual": 0.9047291278839111,
+                                "open_question_opinion": 0.021309681236743927,
+                                "opinion": 0.014064893126487732,
+                                "other_answers": 0.0032398311886936426,
+                                "pos_answer": 0.0027041910216212273,
+                                "statement": 0.009185743518173695,
+                                "yes_no_question": 0.006890418007969856
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "coronavirus"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        27,
+                                        38
+                                    ],
+                                    "text": "coronavirus"
+                                }
+                            ]
+                        },
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 38,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "the coronavirus",
+                                        "start": 23,
+                                        "text": "the coronavirus"
+                                    },
+                                    {
+                                        "end": 52,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "the coronavirus",
+                                        "start": 50,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "What do you know about the coronavirus? Where did the coronavirus start?"
+                            ]
+                        },
+                        "conceptnet": {
+                            "the coronavirus": {
+                                "Causes": [
+                                    "death",
+                                    "death and destruction",
+                                    "death and decay"
+                                ],
+                                "CausesDesire": [
+                                    "have checkup",
+                                    "kill someone",
+                                    "kill person"
+                                ],
+                                "HasProperty": [
+                                    "fatal",
+                                    "contagious",
+                                    "deadly"
+                                ],
+                                "SymbolOf": [
+                                    "disease",
+                                    "bacteria",
+                                    "hiv"
+                                ]
+                            }
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": " coronavirus",
+                                "news": {
+                                    "content": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus.\nCurrently, 1 in 7 patients in the hospital is being treated for COVID-19.\nA week ago, that number was 1 in 8.\nTo ... [734 chars]",
+                                    "description": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus. Currently, 1 in 7 patients in the hospital is being treated for COVID-19.",
+                                    "image": "https://fox8.com/wp-content/uploads/sites/12/2021/09/GettyImages-523533754.jpg?w=1280",
+                                    "publishedAt": "2021-09-07T13:23:24Z",
+                                    "source": {
+                                        "name": "WJW FOX 8 News Cleveland",
+                                        "url": "https://fox8.com"
+                                    },
+                                    "title": "Ohio coronavirus hospitalizations",
+                                    "url": "https://fox8.com/news/coronavirus/coronavirus-in-ohio-hospitalizations-on-the-rise-in-every-age-group/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

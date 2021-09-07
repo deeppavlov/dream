@@ -1,0 +1,49 @@
+[
+    [
+        "",
+        0,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "simple",
+                        "uninteresting_topic"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "4b29fc33-72c1-4639-ab27-dae273f10791",
+                    "node_labels": {
+                        "0": [
+                            "simple",
+                            "uninteresting_topic"
+                        ]
+                    },
+                    "requests": {
+                        "0": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!"
+                    },
+                    "responses": {
+                        "0": ""
+                    },
+                    "previous_index": 0,
+                    "current_index": 0,
+                    "misc": {},
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "no"
+        }
+    ]
+]

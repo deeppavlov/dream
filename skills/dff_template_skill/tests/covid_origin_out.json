@@ -1,0 +1,49 @@
+[
+    [
+        "According to the scientific data, coronavirus COVID 19 is a product of natural evolution. The first place where it caused an outbreak is the city of Wuhan, China.",
+        0.98,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "simple",
+                        "covid_origin"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "d22c480f-a804-4f1a-9987-fbb89d176102",
+                    "node_labels": {
+                        "0": [
+                            "simple",
+                            "covid_origin"
+                        ]
+                    },
+                    "requests": {
+                        "0": "What do you know about the coronavirus? Where did it start?"
+                    },
+                    "responses": {
+                        "0": "According to the scientific data, coronavirus COVID 19 is a product of natural evolution. The first place where it caused an outbreak is the city of Wuhan, China."
+                    },
+                    "previous_index": 0,
+                    "current_index": 0,
+                    "misc": {},
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
