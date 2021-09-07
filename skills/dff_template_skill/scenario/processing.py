@@ -1,9 +1,7 @@
 import logging
 import random
 from typing import Optional
-
 from dff.core import Context, Actor, Node
-
 from tools.detectors import get_subject, get_age
 from tools.statistics import covid_data_server as cds
 
@@ -65,7 +63,7 @@ def offer_more(
     facts_exhausted = ctx.misc.get("covid_facts_exhausted", False)
     asked_about_age = ctx.misc.get("asked_about_age", False)
 
-    # because node.response can be empty string
+    # Because node.response can be empty string
     # (for example, when all covid facts are exhausted)
     def add_space(string: str):
         if string:
@@ -84,7 +82,6 @@ def offer_more(
     if not asked_about_age:
         node.response = f"{add_space(node.response)}Anyway, I can approximately tell you how likely you are to " \
                         f"recover from coronavirus if you get it. What is your age?"
-        ctx.misc["asked_about_age"] = True
         return node_label, node
 
     logger.critical("add_catch_question processor has reached an unreachable end in coronavirus_skill")
@@ -99,7 +96,7 @@ def insert_subject(
         *args,
         **kwargs,
 ) -> Optional[tuple[str, Node]]:
-    # see condition.subject_detected
+    # See condition.subject_detected for more details
     subject = ctx.misc.get("subject", {
         "type": "country",
         "city": "undetected",
@@ -136,7 +133,7 @@ def insert_global_confirmed(
     return node_label, node
 
 
-# see condition.subject_detected for note
+# See condition.subject_detected for performance note.
 def detect_subject(
         node_label: str,
         node: Node,
@@ -153,7 +150,7 @@ def detect_subject(
     return node_label, node
 
 
-# see condition.subject_detected for note
+# See condition.subject_detected for performance note.
 def detect_age(
         node_label: str,
         node: Node,
@@ -168,4 +165,3 @@ def detect_age(
         ctx.misc["age"] = age
 
     return node_label, node
-

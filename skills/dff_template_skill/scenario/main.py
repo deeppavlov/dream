@@ -4,12 +4,10 @@ import re
 from dff.core.keywords import PROCESSING, TRANSITIONS, GRAPH, RESPONSE, GLOBAL_TRANSITIONS
 from dff.core import Actor
 import dff.conditions as cnd
-import dff.transitions as trn
 import dff.response as rsp
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
-import common.dff.integration.response as int_rsp
 
 import common.books as common_books
 import common.movies as common_movies
@@ -19,11 +17,21 @@ from . import condition as loc_cnd
 from . import response as loc_rsp
 from . import processing as loc_prs
 
+# !WARNING!WARNING!WARNING!
+# Flow for skill_trigger_phrases
+# is NOT implemented in this dff version of skill.
+# This decision was made because these phrases are NEVER used.
+# Are they deprecated?
+# Related lines:
+# - coronavirus_skill:14 (skill_trigger_phrases)
+# - coronavirus_skill:547 - 549 (transition condition: bot said phrase + user asked why)
+# - coronavirus_skill:110 (reply to user question "why")
+
 logger = logging.getLogger(__name__)
 
 offered_more = cnd.any([
     cnd.negation(loc_cnd.covid_facts_exhausted),
-    cnd.negation(loc_cnd.asked_about_age),
+    cnd.negation(loc_cnd.check_flag("asked_about_age")),
 ])
 
 replied_to_offer = {
@@ -37,7 +45,6 @@ replied_to_offer = {
 about_virus = cnd.regexp(
     r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|kroner)", re.IGNORECASE
 )
-
 
 about_coronavirus = cnd.all([
     about_virus,
@@ -208,15 +215,15 @@ flows = {
                 TRANSITIONS: replied_to_offer
             },
             "age_covid_risks": {
+                # !WARNING!
+                # See function implementation
+                # for more details about linking issue
                 RESPONSE: loc_rsp.tell_age_risks,
                 PROCESSING: [
                     int_prs.set_confidence(1),
                     loc_prs.detect_age,
                     loc_prs.execute_response,
-                    loc_prs.add_from_options([
-                        "While staying at home, you may use a lot of different online cinema.",
-                        "While staying at home, you may read a lot of different books."
-                    ])
+                    loc_prs.set_flag("asked_about_age", True)
                 ]
             }
         }
@@ -225,7 +232,11 @@ flows = {
         GRAPH: {
             "replied_no": {
                 RESPONSE: "Okay! I hope that this coronavirus will disappear! Now it is better to stay home.",
-                # human_attr["coronavirus_skill"]["stop"] = True ???
+                # !WARNING!
+                # This line presented in original scenario:
+                # 'human_attr["coronavirus_skill"]["stop"] = True'.
+                # Is it still required?
+                # See coronavirus_skill.scenario: 578 for more details.
                 PROCESSING: [
                     int_prs.set_confidence(0.98),
                     loc_prs.add_from_options([

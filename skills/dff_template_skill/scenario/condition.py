@@ -1,10 +1,7 @@
 import logging
 
 from dff.core import Context, Actor
-
-from common.dff.integration import condition as int_cnd
 from common.utils import is_yes, is_no, get_emotions
-
 from tools.detectors import get_subject, get_age
 
 
@@ -20,7 +17,7 @@ def emotion_detected(name="fear", threshold=0.8):
 
 
 def covid_facts_exhausted(ctx: Context, actor: Actor, *args, **kwargs):
-    # in legacy version of code default value is "True", however
+    # In legacy version of code default value is "True", however
     # function becomes useless with it
     # (see coronavirus_skill.scenario: 375)
     return ctx.misc.get("covid_facts_exhausted", False)
@@ -33,15 +30,8 @@ def check_flag(flag: str, default: bool = False):
     return check_flag_handler
 
 
-def asked_about_age(ctx: Context, actor: Actor, *args, **kwargs):
-    # in legacy version of code default value is "True", however
-    # function becomes useless with it
-    # (see coronavirus_skill.scenario: 375)
-    return ctx.misc.get("asked_about_age", False)
-
-
 def subject_detected(ctx: Context, actor: Actor, *args, **kwargs):
-    # in order to increase performance
+    # In order to increase performance
     # we need to cache value and use it
     # across all condition checks in the same 'turn'.
     # HOWEVER, there is no way to access 'context' object,
@@ -58,7 +48,7 @@ def subject_detected(ctx: Context, actor: Actor, *args, **kwargs):
 
 
 def age_detected(ctx: Context, actor: Actor, *args, **kwargs):
-    # see note in subject_detected
+    # See note in subject_detected
     age = get_age(ctx)
 
     if age:
