@@ -1,3 +1,7 @@
+#!groovy
+
+def isPullRequest = env.CHANGE_ID ? true : false
+
 pipeline {
 
   agent {
