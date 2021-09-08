@@ -91,6 +91,7 @@ def tell_subject_stats(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def tell_age_risks(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    template = "According to the statistical data, {non_vaccinated} persons from {non_vaccinated_per} in your age recover after contacting coronavirus if they are non-vaccinated and {vaccinated} from {vaccinated_per} if they are vaccinated."
     response = ""
 
     age = ctx.misc.get("age", None)
@@ -98,35 +99,31 @@ def tell_age_risks(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not age:
         return response
 
-    if age < 20:
-        response = (
-            "According to the statistical data, 999 persons from 1000 in your age recover after contacting coronavirus."
-        )
-    elif age < 40:  # prob = 0.2
-        response = (
-            "According to the statistical data, 499 persons from 500 in your age recover after contacting coronavirus."
-        )
-    elif age < 50:  # prob = 0.4
-        response = (
-            "According to the statistical data, 249 persons from 250 in your age recover after contacting coronavirus."
-        )
-    elif age < 60:  # prob = 1.3
-        response = (
-            "According to the statistical data, 76 persons from 77 in your age recover after contacting coronavirus."
-        )
-    elif age < 70:  # prob = 3.6
-        response = (
-            "According to the statistical data, 27 persons from 28 in your age recover after contacting coronavirus."
-        )
-    elif age < 80:  # prob = 8
-        response = (
-            "According to the statistical data, 12 persons from 13 of your age recover after contacting coronavirus."
-        )
-    else:  # prob = 13.6
-        response = (
-            "According to the statistical data, 7 persons from 8 of your age recover after contacting coronavirus."
-        )
+    # Tuple is (x, y), where 'x' from 'y' persons are recovered from covid
+    data = {"non_vaccinated": (0, 0), "vaccinated": (0, 0)}
 
+    if age < 18:
+        data = {"non_vaccinated": (999998, 100000), "vaccinated": (100000, 100000)}
+    elif age < 20:
+        data = {"non_vaccinated": (999998, 100000), "vaccinated": (99999, 100000)}
+    elif age < 40:
+        data = {"non_vaccinated": (9999, 10000), "vaccinated": (99999, 100000)}
+    elif age < 60:
+        data = {"non_vaccinated": (996, 1000), "vaccinated": (99999, 100000)}
+    elif age < 70:
+        data = {"non_vaccinated": (986, 1000), "vaccinated": (99999, 100000)}
+    elif age < 80:
+        data = {"non_vaccinated": (95, 100), "vaccinated": (99999, 100000)}
+    else:
+        data = {"non_vaccinated": (85, 100), "vaccinated": (99999, 100000)}
+
+    _data = {}
+    # Unpack tuples into separate dict keys
+    for key, value in data.items():
+        _data[key] = value[0]
+        _data[key + "_per"] = value[1]
+
+    response = template.format(**_data)
     response = f"{response} However, it is better to stay at home as much as you can to make older people safer."
 
     skill = ""
