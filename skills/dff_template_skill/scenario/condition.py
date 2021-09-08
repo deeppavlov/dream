@@ -1,8 +1,11 @@
 import logging
+import re
 
+import dff.conditions as cnd
 from dff.core import Context, Actor
 from common.utils import get_emotions
 from tools.detectors import get_subject, get_age
+import common.dff.integration.condition as int_cnd
 
 
 logger = logging.getLogger(__name__)
@@ -55,3 +58,37 @@ def age_detected(ctx: Context, actor: Actor, *args, **kwargs):
         return True
 
     return False
+
+
+offered_more = cnd.any(
+    [
+        cnd.negation(covid_facts_exhausted),
+        cnd.negation(check_flag("asked_about_age")),
+    ]
+)
+
+replied_to_offer = {
+    ("covid_fact", "replied_no"): cnd.all([offered_more, int_cnd.is_no_vars]),
+    ("covid_fact", "feel_fear"): cnd.all([offered_more, emotion_detected("fear", 0.9)]),
+    ("covid_fact", "replied_yes"): cnd.all([offered_more, int_cnd.is_yes_vars]),
+    ("simple", "age_covid_risks"): cnd.all([offered_more, age_detected]),
+    ("covid_fact", "core_fact_2"): cnd.all([offered_more, cnd.negation(age_detected)]),
+}
+
+about_virus = cnd.regexp(r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|kroner)", re.IGNORECASE)
+
+about_coronavirus = cnd.all(
+    [
+        about_virus,
+        cnd.any(
+            [
+                cnd.regexp(
+                    r"(corona|corana|corono|clone a|colonel|chrono|quran|corvette|current|kroner|corolla|"
+                    r"crown|volume|karuna|toronow|chrome|code nineteen|covids)",
+                    re.IGNORECASE,
+                ),
+                cnd.regexp(r"(outbreak|pandemy|epidemy|pandemi|epidemi)", re.IGNORECASE),
+            ]
+        ),
+    ]
+)

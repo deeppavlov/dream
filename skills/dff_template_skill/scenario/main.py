@@ -29,38 +29,6 @@ from . import processing as loc_prs
 
 logger = logging.getLogger(__name__)
 
-offered_more = cnd.any(
-    [
-        cnd.negation(loc_cnd.covid_facts_exhausted),
-        cnd.negation(loc_cnd.check_flag("asked_about_age")),
-    ]
-)
-
-replied_to_offer = {
-    ("covid_fact", "replied_no"): cnd.all([offered_more, int_cnd.is_no_vars]),
-    ("covid_fact", "feel_fear"): cnd.all([offered_more, loc_cnd.emotion_detected("fear", 0.9)]),
-    ("covid_fact", "replied_yes"): cnd.all([offered_more, int_cnd.is_yes_vars]),
-    ("simple", "age_covid_risks"): cnd.all([offered_more, loc_cnd.age_detected]),
-    ("covid_fact", "core_fact_2"): cnd.all([offered_more, cnd.negation(loc_cnd.age_detected)]),
-}
-
-about_virus = cnd.regexp(r"(virus|\bcovid\b|\bill\b|infect|code nineteen|corona|corana|corono|kroner)", re.IGNORECASE)
-
-about_coronavirus = cnd.all(
-    [
-        about_virus,
-        cnd.any(
-            [
-                cnd.regexp(
-                    r"(corona|corana|corono|clone a|colonel|chrono|quran|corvette|current|kroner|corolla|"
-                    r"crown|volume|karuna|toronow|chrome|code nineteen|covids)",
-                    re.IGNORECASE,
-                ),
-                cnd.regexp(r"(outbreak|pandemy|epidemy|pandemi|epidemi)", re.IGNORECASE),
-            ]
-        ),
-    ]
-)
 
 flows = {
     "global": {
@@ -87,7 +55,7 @@ flows = {
                         r"have you come down with)",
                         re.IGNORECASE,
                     ),
-                    about_virus,
+                    loc_cnd.about_virus,
                 ]
             ),
             "vaccine_safety": cnd.all(
@@ -101,22 +69,25 @@ flows = {
             ),
             "user_resilience_to_covid": cnd.regexp(r"(what are my chances|will i die)", re.IGNORECASE),
             "covid_symptoms": cnd.all(
-                [cnd.regexp(r"(symptoms|do i have|tell from|if i get)", re.IGNORECASE), about_coronavirus]
+                [cnd.regexp(r"(symptoms|do i have|tell from|if i get)", re.IGNORECASE), loc_cnd.about_coronavirus]
             ),
             "covid_treatment": cnd.regexp(r"(cure|treatment|vaccine)", re.IGNORECASE),
             "asthma_mentioned": cnd.regexp(r"(asthma)"),
-            "covid_advice": cnd.all([cnd.regexp(r"(what if|to do| should i do)", re.IGNORECASE), about_coronavirus]),
+            "covid_advice": cnd.all(
+                [cnd.regexp(r"(what if|to do| should i do)", re.IGNORECASE), loc_cnd.about_coronavirus]
+            ),
             "covid_origin": cnd.all(
-                [cnd.regexp(r"(origin|come from|where did it start)", re.IGNORECASE), about_coronavirus]
+                [cnd.regexp(r"(origin|come from|where did it start)", re.IGNORECASE), loc_cnd.about_coronavirus]
             ),
             "what_is_covid": cnd.regexp(r"(what is corona|what's corona|what is the pandemic)", re.IGNORECASE),
             ("subject_detected", "clarify_intention"): cnd.all(
-                [loc_cnd.subject_detected, cnd.all([about_virus, cnd.negation(about_coronavirus)])]
+                [loc_cnd.subject_detected, cnd.all([loc_cnd.about_virus, cnd.negation(loc_cnd.about_coronavirus)])]
             ),
-            ("subject_detected", "subject_stats"): cnd.all([loc_cnd.subject_detected, about_coronavirus]),
-            ("subject_undetected", "clarify_intention"): cnd.all(
-                [cnd.negation(loc_cnd.subject_detected), cnd.all([about_virus, cnd.negation(about_coronavirus)])]
-            ),
+            ("subject_detected", "subject_stats"): cnd.all([loc_cnd.subject_detected, loc_cnd.about_coronavirus]),
+            ("subject_undetected", "clarify_intention"): cnd.all([
+                cnd.negation(loc_cnd.subject_detected),
+                cnd.all([loc_cnd.about_virus, cnd.negation(loc_cnd.about_coronavirus)])
+            ]),
             ("covid_fact", "core_fact_2"): cnd.regexp(
                 r"(death|\bdie\b|\bdied\b|\bdying\b|mortality|how many desk)", re.IGNORECASE
             ),
@@ -169,14 +140,14 @@ flows = {
                 "bluish lips or face. If you develop any of these signs, "
                 "get a medical attention.",
                 PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "covid_treatment": {
                 RESPONSE: "There is no cure designed for COVID-19 yet. "
                 "You can consult with CDC.gov website for detailed "
                 "information about the ongoing work on the cure.",
                 PROCESSING: [int_prs.set_confidence(0.9), loc_prs.offer_more],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "asthma_mentioned": {
                 RESPONSE: "As you have asthma, I know that you should be especially "
@@ -184,13 +155,13 @@ flows = {
                 "give any recommendations about coronavirus. You can check the CDC "
                 "website for more info.",
                 PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "covid_advice": {
                 RESPONSE: "Unfortunately, I am not allowed to give any recommendations "
                 "about coronavirus. You can check the CDC website for more info.",
                 PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "covid_origin": {
                 RESPONSE: "According to the scientific data, coronavirus COVID 19 is a product of natural evolution. "
@@ -205,7 +176,7 @@ flows = {
                 "medical conditions like heart or lung disease or diabetes seem to be at higher risk for "
                 "developing more serious complications from COVID-19 illness.",
                 PROCESSING: [int_prs.set_confidence(0.98), loc_prs.offer_more],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "age_covid_risks": {
                 # !WARNING!
@@ -244,7 +215,7 @@ flows = {
             "replied_yes": {
                 RESPONSE: loc_rsp.get_covid_fact,
                 PROCESSING: [int_prs.set_confidence(1), loc_prs.execute_response, loc_prs.offer_more],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "core_fact_1": {
                 RESPONSE: "According to the recent data, there are {0} confirmed cases of coronavirus. "
@@ -268,7 +239,7 @@ flows = {
                     loc_prs.offer_more,
                     loc_prs.set_flag("core_fact_2", True),
                 ],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
         }
     },
@@ -287,7 +258,7 @@ flows = {
                     loc_prs.execute_response,
                     loc_prs.offer_more,
                 ],
-                TRANSITIONS: replied_to_offer,
+                TRANSITIONS: loc_cnd.replied_to_offer,
             },
         }
     },
@@ -300,7 +271,7 @@ flows = {
                     ("covid_fact", "core_fact_1"): cnd.all(
                         [
                             cnd.negation(loc_cnd.check_flag("core_fact_1")),
-                            cnd.any([int_cnd.is_yes_vars, about_coronavirus]),
+                            cnd.any([int_cnd.is_yes_vars, loc_cnd.about_coronavirus]),
                         ]
                     )
                 },
