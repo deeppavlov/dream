@@ -24,9 +24,8 @@ services:
     env_file: [.env.dev]
     volumes:
       - "./skills/program-y:/src"
-      - "./skills/program-y/logs:/tmp"
-      - "./common:/src/dream_aiml/src/common"
-      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+      - "./common:/src/common"
+      - "./state_formatters:/src/state_formatters"
     ports:
       - 8008:8008
   personality-catcher:
