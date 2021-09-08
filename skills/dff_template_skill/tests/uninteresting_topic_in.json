@@ -6,65 +6,54 @@
         {
             "human_utterances": [
                 {
-                    "text": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!",
+                    "text": "What is corona?",
                     "annotations": {
+                        "spelling_preprocessing": "What is corona?",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!",
+                        "sentseg": {
+                            "punct_sent": "What is corona?",
+                            "segments": [
+                                "What is corona?"
+                            ]
+                        },
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
-                            "a promise",
-                            "that thing",
-                            "coronavirus",
-                            "1 very specific thing",
-                            "information",
-                            "just 1 good thing"
-                        ],
-                        "sentseg": {
-                            "punct_sent": "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!",
-                            "segments": [
-                                "I am very interested in 1 very specific thing.",
-                                "That thing is very important for me, because i am full of information about it.",
-                                "So, make a promise and do just 1 good thing.",
-                                "Stop talking about coronavirus!"
-                            ]
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.007251111324876547,
-                            "conversational": 0.9927489161491394
-                        },
+                        "cobot_nounphrases": [],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9935780763626099,
-                                "Information_DeliveryIntent": 0.980742871761322
+                                "General_ChatIntent": 0.9005724191665649
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9956275820732117
+                                "Other": 0.963884711265564
                             },
                             "cobot_topics": {
-                                "Other": 0.9994966983795166
+                                "Food_Drink": 0.9673930406570435
                             },
                             "emotion_classification": {
-                                "joy": 0.6216831207275391,
-                                "neutral": 0.9913384318351746
+                                "neutral": 0.9995616674423218
                             },
                             "sentiment_classification": {
-                                "positive": 0.8138501644134521
+                                "neutral": 0.7167532444000244
                             },
                             "toxic_classification": {
-                                "toxic": 0.0005407929420471191
+                                "toxic": 0.0013474822044372559
                             }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9995326995849609,
+                            "conversational": 0.0004673534131143242
                         },
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
+                        "conceptnet": {},
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -157,103 +146,55 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.010903410613536835,
-                                "command": 0.38167446851730347,
-                                "comment": 0.012155606411397457,
-                                "complaint": 0.014227669686079025,
-                                "dev_command": 0.024730728939175606,
-                                "neg_answer": 0.0024679924827069044,
-                                "open_question_factual": 0.007111488375812769,
-                                "open_question_opinion": 0.010378807783126831,
-                                "opinion": 0.3682229816913605,
-                                "other_answers": 0.005640822928398848,
-                                "pos_answer": 0.005384998396039009,
-                                "statement": 0.15266729891300201,
-                                "yes_no_question": 0.0044336700811982155
-                            },
-                            {
-                                "appreciation": 0.0018010467756539583,
-                                "command": 0.011460062116384506,
-                                "comment": 0.0038991624023765326,
-                                "complaint": 0.002155536785721779,
-                                "dev_command": 0.003560695331543684,
-                                "neg_answer": 0.0010404943022876978,
-                                "open_question_factual": 0.001800401951186359,
-                                "open_question_opinion": 0.0011684040073305368,
-                                "opinion": 0.10943038761615753,
-                                "other_answers": 0.0013577723875641823,
-                                "pos_answer": 0.0018011087086051702,
-                                "statement": 0.8585094213485718,
-                                "yes_no_question": 0.002015403937548399
-                            },
-                            {
-                                "appreciation": 0.010082566179335117,
-                                "command": 0.7658851742744446,
-                                "comment": 0.007653529290109873,
-                                "complaint": 0.019577883183956146,
-                                "dev_command": 0.10162010788917542,
-                                "neg_answer": 0.0018512640381231904,
-                                "open_question_factual": 0.0065073915757238865,
-                                "open_question_opinion": 0.0084002073854208,
-                                "opinion": 0.010201852768659592,
-                                "other_answers": 0.004030211828649044,
-                                "pos_answer": 0.007684003561735153,
-                                "statement": 0.04540685564279556,
-                                "yes_no_question": 0.011098810471594334
-                            },
-                            {
-                                "appreciation": 0.013140582479536533,
-                                "command": 0.30207720398902893,
-                                "comment": 0.016612349078059196,
-                                "complaint": 0.4684467613697052,
-                                "dev_command": 0.09478583186864853,
-                                "neg_answer": 0.0370185524225235,
-                                "open_question_factual": 0.013960426673293114,
-                                "open_question_opinion": 0.01207798346877098,
-                                "opinion": 0.006199974101036787,
-                                "other_answers": 0.008394783362746239,
-                                "pos_answer": 0.006947420071810484,
-                                "statement": 0.005791328381747007,
-                                "yes_no_question": 0.014546827413141727
+                                "appreciation": 0.0026648922357708216,
+                                "command": 0.008758030831813812,
+                                "comment": 0.002409746404737234,
+                                "complaint": 0.007643893826752901,
+                                "dev_command": 0.004679771605879068,
+                                "neg_answer": 0.0038797997403889894,
+                                "open_question_factual": 0.9065764546394348,
+                                "open_question_opinion": 0.03304518386721611,
+                                "opinion": 0.013296815566718578,
+                                "other_answers": 0.002938095945864916,
+                                "pos_answer": 0.0023175119422376156,
+                                "statement": 0.006367524154484272,
+                                "yes_no_question": 0.005422457121312618
                             }
-                        ],
-                        "ner": [
-                            [],
-                            [],
-                            [],
-                            []
                         ],
                         "entity_detection": {
                             "entities": [
-                                "coronavirus"
+                                "corona"
                             ],
                             "labelled_entities": [
                                 {
                                     "label": "misc",
                                     "offsets": [
-                                        19,
-                                        30
+                                        8,
+                                        14
                                     ],
-                                    "text": "coronavirus"
+                                    "text": "corona"
                                 }
                             ]
                         },
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
                         "entity_linking": [],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "I am very interested in 1 very specific thing. That thing is very important for me, because i am full of information about it. So, make a promise and do just 1 good thing. Stop talking about coronavirus!"
+                                "What is corona?"
                             ]
                         },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "fact_random": [],
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
                         },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
@@ -262,140 +203,40 @@
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
                         },
-                        "conceptnet": {
-                            "1 very specific thing": {
-                                "Causes": [
-                                    "change in world",
-                                    "one to get sick",
-                                    "one to get very angry"
-                                ],
-                                "CausesDesire": [
-                                    "play chess",
-                                    "play game",
-                                    "watch television"
-                                ],
-                                "HasProperty": [
-                                    "very important to understand",
-                                    "unique",
-                                    "very important"
-                                ],
-                                "SymbolOf": [
-                                    "math",
-                                    "mathematical equation",
-                                    "japanese"
-                                ]
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
                             },
-                            "a promise": {
-                                "Causes": [
-                                    "promise make",
-                                    "obligation",
-                                    "promise"
-                                ],
-                                "CausesDesire": [
-                                    "break it",
-                                    "break promise",
-                                    "promise"
-                                ],
-                                "HasProperty": [
-                                    "important",
-                                    "keep",
-                                    "binding"
-                                ],
-                                "SymbolOf": [
-                                    "promise",
-                                    "love",
-                                    "commitment"
-                                ]
-                            },
-                            "coronavirus": {
-                                "Causes": [
-                                    "death",
-                                    "die",
-                                    "illness"
-                                ],
-                                "CausesDesire": [
-                                    "have checkup",
-                                    "die",
-                                    "take vitamin"
-                                ],
-                                "HasProperty": [
-                                    "fatal",
-                                    "contagious",
-                                    "deadly"
-                                ],
-                                "SymbolOf": [
-                                    "bacteria",
-                                    "disease",
-                                    "virus"
-                                ]
-                            },
-                            "information": {
-                                "Causes": [
-                                    "knowledge",
-                                    "you learn something new",
-                                    "you learn something"
-                                ],
-                                "CausesDesire": [
-                                    "find information",
-                                    "learn",
-                                    "think"
-                                ],
-                                "HasProperty": [
-                                    "useful",
-                                    "important",
-                                    "helpful"
-                                ],
-                                "SymbolOf": [
-                                    "knowledge",
-                                    "language",
-                                    "information"
-                                ]
-                            },
-                            "just 1 good thing": {
-                                "Causes": [
-                                    "happiness",
-                                    "2 good thing",
-                                    "win"
-                                ],
-                                "CausesDesire": [
-                                    "celebrate",
-                                    "play tennis",
-                                    "eat"
-                                ],
-                                "HasProperty": [
-                                    "good",
-                                    "good than 2 bad thing",
-                                    "good than 2 bad"
-                                ],
-                                "SymbolOf": [
-                                    "good luck",
-                                    "life",
-                                    "good"
-                                ]
-                            },
-                            "that thing": {
-                                "Causes": [
-                                    "pain",
-                                    "you to feel sick",
-                                    "damage"
-                                ],
-                                "CausesDesire": [
-                                    "fly kite",
-                                    "climb mountain",
-                                    "play game"
-                                ],
-                                "HasProperty": [
-                                    "dangerous",
-                                    "heavy",
-                                    "alive"
-                                ],
-                                "SymbolOf": [
-                                    "love",
-                                    "power",
-                                    "beauty"
-                                ]
+                            {
+                                "entity": "corona",
+                                "news": {
+                                    "content": "In high school, Roger Cuadra, now 40, played football and baseball and tried wrestling and track \u2014 but he wasn't a star student. \"High school was an adventure,\" he says. \"I didn't take it seriously, to be completely honest. Even though I was trying t... [5752 chars]",
+                                    "description": "In high school, Roger Cuadra, now 40, played football and baseball and tried wrestling and track \u2014 but he wasn't a star student. \"High school was an adventure,\" he says.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106933801-1629997940243-Roger_Cuadra.jpg?v=1629997975",
+                                    "publishedAt": "2021-08-28T13:00:01Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "What it takes to earn $80,000 as an HVAC tech in Corona, California",
+                                    "url": "https://www.cnbc.com/2021/08/28/what-it-takes-to-earn-80000-as-an-hvac-tech-in-corona-california.html"
+                                },
+                                "which": "human"
                             }
-                        }
+                        ]
                     }
                 }
             ],
@@ -425,5 +266,6 @@
     ],
     "clarification_request_flag_batch": [
         false
-    ]
+    ],
+    "random_seed": 2718
 }

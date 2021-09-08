@@ -6,17 +6,16 @@
         {
             "human_utterances": [
                 {
-                    "text": "What do you know about the coronavirus? Where did it start?",
+                    "text": "Do i have coronavirus?",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "What do you know about the coronavirus? Where did it start?",
+                        "spelling_preprocessing": "Do i have coronavirus?",
                         "sentseg": {
-                            "punct_sent": "What do you know about the coronavirus? Where did it start?",
+                            "punct_sent": "Do i have coronavirus?",
                             "segments": [
-                                "What do you know about the coronavirus?",
-                                "Where did it start?"
+                                "Do i have coronavirus?"
                             ]
                         },
                         "blacklisted_words": {
@@ -25,33 +24,38 @@
                             "restricted_topics": false
                         },
                         "cobot_nounphrases": [
-                            "the coronavirus"
+                            "coronavirus"
                         ],
-                        "factoid_classification": {
-                            "factoid": 0.027276260778307915,
-                            "conversational": 0.9727237224578857
-                        },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.9840736985206604
+                                "General_ChatIntent": 0.9936700463294983
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9928745031356812
+                                "Other": 0.9405723810195923
                             },
                             "cobot_topics": {
-                                "Games": 0.9956223368644714,
-                                "Religion": 0.9008245468139648
+                                "Celebrities": 0.759209394454956,
+                                "Movies_TV": 0.6485699415206909
                             },
                             "emotion_classification": {
-                                "neutral": 0.9995971322059631
+                                "neutral": 0.9983924627304077
                             },
                             "sentiment_classification": {
-                                "neutral": 0.7167721390724182
+                                "neutral": 0.7288170456886292
                             },
                             "toxic_classification": {
-                                "toxic": 0.0016984939575195312
+                                "toxic": 0.0014078319072723389
                             }
                         },
+                        "factoid_classification": {
+                            "factoid": 0.9995551705360413,
+                            "conversational": 0.00044480839278548956
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -142,46 +146,46 @@
                                 "detected": 0
                             }
                         },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
+                        "conceptnet": {
+                            "coronavirus": {
+                                "Causes": [
+                                    "death",
+                                    "die",
+                                    "illness"
+                                ],
+                                "CausesDesire": [
+                                    "have checkup",
+                                    "die",
+                                    "take vitamin"
+                                ],
+                                "HasProperty": [
+                                    "fatal",
+                                    "contagious",
+                                    "deadly"
+                                ],
+                                "SymbolOf": [
+                                    "bacteria",
+                                    "disease",
+                                    "virus"
+                                ]
+                            }
+                        },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0073349615558981895,
-                                "command": 0.5649353265762329,
-                                "comment": 0.003371665021404624,
-                                "complaint": 0.014857534319162369,
-                                "dev_command": 0.021431976929306984,
-                                "neg_answer": 0.0032064039260149,
-                                "open_question_factual": 0.15206992626190186,
-                                "open_question_opinion": 0.15495245158672333,
-                                "opinion": 0.004008130636066198,
-                                "other_answers": 0.003535664174705744,
-                                "pos_answer": 0.004826250020414591,
-                                "statement": 0.006831305101513863,
-                                "yes_no_question": 0.05863843485713005
-                            },
-                            {
-                                "appreciation": 0.0027918783016502857,
-                                "command": 0.00876576267182827,
-                                "comment": 0.003140843939036131,
-                                "complaint": 0.01246916688978672,
-                                "dev_command": 0.005554055329412222,
-                                "neg_answer": 0.005154263228178024,
-                                "open_question_factual": 0.9047291278839111,
-                                "open_question_opinion": 0.021309681236743927,
-                                "opinion": 0.014064893126487732,
-                                "other_answers": 0.0032398311886936426,
-                                "pos_answer": 0.0027041910216212273,
-                                "statement": 0.009185743518173695,
-                                "yes_no_question": 0.006890418007969856
+                                "appreciation": 0.0036327948328107595,
+                                "command": 0.024864859879016876,
+                                "comment": 0.0034744911827147007,
+                                "complaint": 0.003772718831896782,
+                                "dev_command": 0.013761177659034729,
+                                "neg_answer": 0.0016145999543368816,
+                                "open_question_factual": 0.0278079304844141,
+                                "open_question_opinion": 0.013138622045516968,
+                                "opinion": 0.0025028912350535393,
+                                "other_answers": 0.00296209123916924,
+                                "pos_answer": 0.0032182505819946527,
+                                "statement": 0.013029119931161404,
+                                "yes_no_question": 0.8862205147743225
                             }
-                        ],
-                        "ner": [
-                            [],
-                            []
                         ],
                         "entity_detection": {
                             "entities": [
@@ -191,83 +195,23 @@
                                 {
                                     "label": "misc",
                                     "offsets": [
-                                        27,
-                                        38
+                                        10,
+                                        21
                                     ],
                                     "text": "coronavirus"
                                 }
                             ]
                         },
-                        "entity_linking": [],
+                        "ner": [
+                            []
+                        ],
                         "fact_random": [],
+                        "entity_linking": [],
                         "sentrewrite": {
-                            "clusters": [
-                                [
-                                    {
-                                        "end": 38,
-                                        "ner": {
-                                            "offset": 10000,
-                                            "type": "O"
-                                        },
-                                        "resolved": "the coronavirus",
-                                        "start": 23,
-                                        "text": "the coronavirus"
-                                    },
-                                    {
-                                        "end": 52,
-                                        "ner": {
-                                            "offset": 10000,
-                                            "type": "O"
-                                        },
-                                        "resolved": "the coronavirus",
-                                        "start": 50,
-                                        "text": "it"
-                                    }
-                                ]
-                            ],
+                            "clusters": [],
                             "modified_sents": [
-                                "What do you know about the coronavirus? Where did the coronavirus start?"
+                                "Do i have coronavirus?"
                             ]
-                        },
-                        "conceptnet": {
-                            "the coronavirus": {
-                                "Causes": [
-                                    "death",
-                                    "death and destruction",
-                                    "death and decay"
-                                ],
-                                "CausesDesire": [
-                                    "have checkup",
-                                    "kill someone",
-                                    "kill person"
-                                ],
-                                "HasProperty": [
-                                    "fatal",
-                                    "contagious",
-                                    "deadly"
-                                ],
-                                "SymbolOf": [
-                                    "disease",
-                                    "bacteria",
-                                    "hiv"
-                                ]
-                            }
-                        },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 1,
-                            "wiki_skill_entities_info": {}
                         },
                         "news_api_annotator": [
                             {
@@ -287,7 +231,7 @@
                                 "which": "all"
                             },
                             {
-                                "entity": " coronavirus",
+                                "entity": "coronavirus",
                                 "news": {
                                     "content": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus.\nCurrently, 1 in 7 patients in the hospital is being treated for COVID-19.\nA week ago, that number was 1 in 8.\nTo ... [734 chars]",
                                     "description": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus. Currently, 1 in 7 patients in the hospital is being treated for COVID-19.",
@@ -302,7 +246,23 @@
                                 },
                                 "which": "human"
                             }
-                        ]
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
                     }
                 }
             ],
@@ -332,5 +292,6 @@
     ],
     "clarification_request_flag_batch": [
         false
-    ]
+    ],
+    "random_seed": 2718
 }

@@ -27,14 +27,29 @@ from . import processing as loc_prs
 # - coronavirus_skill:547 - 549 (transition condition: bot said phrase + user asked why)
 # - coronavirus_skill:110 (reply to user question "why")
 
-logger = logging.getLogger(__name__)
+SUPER_CONFIDENCE = 1.0
+HIGH_CONFIDENCE = 0.98
+DEFAULT_CONFIDENCE = 0.95
+BIT_LOWER_CONFIDENCE = 0.90
+ZERO_CONFIDENCE = 0.0
 
+# Intention to know something about covid but not in specific subject
+CLARIFY_INTENTION_ABOUT_COVID_CONFIDENCE = 1
+# Intention to know covid incidence statistics in specific city/county/state/country
+CLARIFY_INTENTION_ABOUT_SUBJECT_CONFIDENCE = 0.99
+# Detected "fear" or "anger" emotion
+USER_FEEL_EMOTION_CONFIDENCE = 0.95
+# Detected "fear" emotion
+USER_FEEL_FEAR_CONFIDENCE = 0.90
+
+
+logger = logging.getLogger(__name__)
 
 flows = {
     "global": {
         GRAPH: {
             "start": {RESPONSE: ""},
-            "fallback": {RESPONSE: "", PROCESSING: [int_prs.set_confidence(0)]},
+            "fallback": {RESPONSE: "", PROCESSING: [int_prs.set_confidence(ZERO_CONFIDENCE)]},
         }
     },
     "simple": {
@@ -98,12 +113,12 @@ flows = {
                 RESPONSE: "Although most American states are easing the restrictions, "
                 "the Coronavirus pandemics in the majority of the states hasn't been reached yet. "
                 "If you want to help ending it faster, please continue social distancing as much as you can.",
-                PROCESSING: [int_prs.set_confidence(0.95)],
+                PROCESSING: [int_prs.set_confidence(DEFAULT_CONFIDENCE)],
             },
-            "uninteresting_topic": {RESPONSE: "", PROCESSING: [int_prs.set_confidence(0)]},
+            "uninteresting_topic": {RESPONSE: "", PROCESSING: [int_prs.set_confidence(ZERO_CONFIDENCE)]},
             "bot_has_covid": {
                 RESPONSE: "As a socialbot, I don't have coronavirus. I hope you won't have it either.",
-                PROCESSING: [int_prs.set_confidence(0.95)]
+                PROCESSING: [int_prs.set_confidence(DEFAULT_CONFIDENCE)]
                 # offer_more should be here by original idea, but it's useless due default function arguments
                 # in legacy version of code (see coronavirus_skill.scenario: 554 and 375)
             },
@@ -112,7 +127,7 @@ flows = {
                 "of course, if your doctor does not mind against using them. "
                 "I can't say the same about getting infected, however, "
                 "so vaccines are necessary to prevent people from that..",
-                PROCESSING: [int_prs.set_confidence(0.95)],
+                PROCESSING: [int_prs.set_confidence(DEFAULT_CONFIDENCE)],
             },
             "user_feel_emotion": {
                 RESPONSE: rsp.choice(
@@ -123,13 +138,13 @@ flows = {
                         "and I am sure that coronavirus will be the next one.",
                     ]
                 ),
-                PROCESSING: [int_prs.set_confidence(0.95)],
+                PROCESSING: [int_prs.set_confidence(USER_FEEL_EMOTION_CONFIDENCE)],
             },
             "user_resilience_to_covid": {
                 RESPONSE: "As I am not your family doctor, "
                 "my knowledge about your resilience to coronavirus is limited. "
                 "Please, check the CDC website for more information.",
-                PROCESSING: [int_prs.set_confidence(0.95)],
+                PROCESSING: [int_prs.set_confidence(DEFAULT_CONFIDENCE)],
             },
             "covid_symptoms": {
                 RESPONSE: "According to the CDC website, "
@@ -139,14 +154,14 @@ flows = {
                 "new confusion or inability to arouse, "
                 "bluish lips or face. If you develop any of these signs, "
                 "get a medical attention.",
-                PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
+                PROCESSING: [int_prs.set_confidence(SUPER_CONFIDENCE), loc_prs.offer_more],
                 TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "covid_treatment": {
                 RESPONSE: "There is no cure designed for COVID-19 yet. "
                 "You can consult with CDC.gov website for detailed "
                 "information about the ongoing work on the cure.",
-                PROCESSING: [int_prs.set_confidence(0.9), loc_prs.offer_more],
+                PROCESSING: [int_prs.set_confidence(BIT_LOWER_CONFIDENCE), loc_prs.offer_more],
                 TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "asthma_mentioned": {
@@ -154,19 +169,19 @@ flows = {
                 "cautious about coronavirus. Unfortunately, I am not allowed to "
                 "give any recommendations about coronavirus. You can check the CDC "
                 "website for more info.",
-                PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
+                PROCESSING: [int_prs.set_confidence(SUPER_CONFIDENCE), loc_prs.offer_more],
                 TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "covid_advice": {
                 RESPONSE: "Unfortunately, I am not allowed to give any recommendations "
                 "about coronavirus. You can check the CDC website for more info.",
-                PROCESSING: [int_prs.set_confidence(1), loc_prs.offer_more],
+                PROCESSING: [int_prs.set_confidence(SUPER_CONFIDENCE), loc_prs.offer_more],
                 TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "covid_origin": {
                 RESPONSE: "According to the scientific data, coronavirus COVID 19 is a product of natural evolution. "
                 "The first place where it caused an outbreak is the city of Wuhan, China.",
-                PROCESSING: [int_prs.set_confidence(0.98)],
+                PROCESSING: [int_prs.set_confidence(HIGH_CONFIDENCE)],
             },
             "what_is_covid": {
                 RESPONSE: "Coronavirus COVID 19 is an infectious disease. "
@@ -175,7 +190,7 @@ flows = {
                 "symptoms, some cases can be lethal. Older adults and people who have severe underlying "
                 "medical conditions like heart or lung disease or diabetes seem to be at higher risk for "
                 "developing more serious complications from COVID-19 illness.",
-                PROCESSING: [int_prs.set_confidence(0.98), loc_prs.offer_more],
+                PROCESSING: [int_prs.set_confidence(HIGH_CONFIDENCE), loc_prs.offer_more],
                 TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "age_covid_risks": {
@@ -184,7 +199,7 @@ flows = {
                 # for more details about linking issue
                 RESPONSE: loc_rsp.tell_age_risks,
                 PROCESSING: [
-                    int_prs.set_confidence(1),
+                    int_prs.set_confidence(SUPER_CONFIDENCE),
                     loc_prs.detect_age,
                     loc_prs.execute_response,
                     loc_prs.set_flag("asked_about_age", True),
@@ -202,7 +217,7 @@ flows = {
                 # Is it still required?
                 # See coronavirus_skill.scenario: 578 for more details.
                 PROCESSING: [
-                    int_prs.set_confidence(0.98),
+                    int_prs.set_confidence(HIGH_CONFIDENCE),
                     loc_prs.add_from_options(
                         [common_books.SWITCH_BOOK_SKILL_PHRASE, common_movies.SWITCH_MOVIE_SKILL_PHRASE]
                     ),
@@ -210,18 +225,18 @@ flows = {
             },
             "feel_fear": {
                 RESPONSE: "Just stay home, wash your hands and you will be fine. We will get over it.",
-                PROCESSING: [int_prs.set_confidence(0.95)],
+                PROCESSING: [int_prs.set_confidence(USER_FEEL_FEAR_CONFIDENCE)],
             },
             "replied_yes": {
                 RESPONSE: loc_rsp.get_covid_fact,
-                PROCESSING: [int_prs.set_confidence(1), loc_prs.execute_response, loc_prs.offer_more],
+                PROCESSING: [int_prs.set_confidence(SUPER_CONFIDENCE), loc_prs.execute_response, loc_prs.offer_more],
                 TRANSITIONS: loc_cnd.replied_to_offer,
             },
             "core_fact_1": {
                 RESPONSE: "According to the recent data, there are {0} confirmed cases of coronavirus. "
                 "Shall I tell you more?",
                 PROCESSING: [
-                    int_prs.set_confidence(1),
+                    int_prs.set_confidence(SUPER_CONFIDENCE),
                     loc_prs.insert_global_confirmed,
                     loc_prs.set_flag("core_fact_1", True),
                 ],
@@ -234,7 +249,7 @@ flows = {
             "core_fact_2": {
                 RESPONSE: "According to the recent data, there are {0} confirmed deaths from coronavirus.",
                 PROCESSING: [
-                    int_prs.set_confidence(1),
+                    int_prs.set_confidence(SUPER_CONFIDENCE),
                     loc_prs.insert_global_deaths,
                     loc_prs.offer_more,
                     loc_prs.set_flag("core_fact_2", True),
@@ -247,13 +262,17 @@ flows = {
         GRAPH: {
             "clarify_intention": {
                 RESPONSE: "I suppose you are asking about coronavirus in {0}. Is it right?",
-                PROCESSING: [int_prs.set_confidence(0.99), loc_prs.detect_subject, loc_prs.insert_subject],
+                PROCESSING: [
+                    int_prs.set_confidence(CLARIFY_INTENTION_ABOUT_SUBJECT_CONFIDENCE),
+                    loc_prs.detect_subject,
+                    loc_prs.insert_subject
+                ],
                 TRANSITIONS: {"subject_stats": int_cnd.is_yes_vars},
             },
             "subject_stats": {
                 RESPONSE: loc_rsp.tell_subject_stats,
                 PROCESSING: [
-                    int_prs.set_confidence(0.95),
+                    int_prs.set_confidence(DEFAULT_CONFIDENCE),
                     loc_prs.detect_subject,
                     loc_prs.execute_response,
                     loc_prs.offer_more,
@@ -266,7 +285,7 @@ flows = {
         GRAPH: {
             "clarify_intention": {
                 RESPONSE: "I suppose you are asking about coronavirus. Is it right?",
-                PROCESSING: [int_prs.set_confidence(1)],
+                PROCESSING: [int_prs.set_confidence(CLARIFY_INTENTION_ABOUT_COVID_CONFIDENCE)],
                 TRANSITIONS: {
                     ("covid_fact", "core_fact_1"): cnd.all(
                         [

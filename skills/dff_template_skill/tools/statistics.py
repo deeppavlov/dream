@@ -42,7 +42,7 @@ class CovidFetcher(threading.Thread):
 
             for date in [today, yesterday, two_days_ago]:
                 try:
-                    curr_data = pd.read_csv(f"{DAILY_BASE_URL}/{date}.csv", on_bad_lines={"skip"})
+                    curr_data = pd.read_csv(f"{DAILY_BASE_URL}/{date}.csv", on_bad_lines="skip")
                     logging.info(f"Data for {date} retrieved successfully")
                     break
                 except Exception:
@@ -69,8 +69,8 @@ class CovidFetcher(threading.Thread):
                 except Exception:
                     pass
 
-            global_confirmed = pd.read_csv(GLOBAL_CONFIRMED_URL, on_bad_lines={"skip"})
-            global_deaths = pd.read_csv(GLOBAL_DEATHS_URL, on_bad_lines={"skip"})
+            global_confirmed = pd.read_csv(GLOBAL_CONFIRMED_URL, on_bad_lines="skip")
+            global_deaths = pd.read_csv(GLOBAL_DEATHS_URL, on_bad_lines="skip")
 
             self.global_confirmed = global_confirmed[global_confirmed.columns[-1]].sum()
             self.global_deaths = global_deaths[global_deaths.columns[-1]].sum()
