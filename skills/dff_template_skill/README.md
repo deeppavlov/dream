@@ -7,8 +7,14 @@
 ## Quickstart from docker
 
 ```bash
-docker build -t ${SERVICE_DOCKER_IMAGE} --build-arg SERVICE_NAME=${SERVICE_NAME} --build-arg RANDOM_SEED=${RANDOM_SEED} --build-arg SERVICE_PORT=${SERVICE_PORT} .
-docker run -d --rm ${SERVICE_DOCKER_IMAGE}
+# create local.yml
+python utils/create_local_yml.py -s dff-funfact-skill
+# build service
+docker-compose -f docker-compose.yml -f local.yml up -d --build dff-funfact-skill
+# run tests
+docker-compose -f docker-compose.yml -f local.yml exec dff-funfact-skill bash test.sh
+# run a dialog with the agent
+docker-compose -f docker-compose.yml -f local.yml exec agent python -m deeppavlov_agent.run
 ```
 
 ## Quickstart without docker
@@ -22,4 +28,4 @@ gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
 
 * Execution time: 46 ms
 * Starting time: 1.5 sec
-* RAM: 45 MB
+* RAM: 45 МИ
