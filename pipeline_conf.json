@@ -242,7 +242,7 @@
                     "timeout": 1,
                     "url": "http://fact-random:8119/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:fact_random_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
@@ -979,19 +979,6 @@
                     "url": "http://blacklisted-words:8018/blacklisted_words_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "cobot_convers_evaluator_annotator": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://cobot-convers-evaluator-annotator:8004/evaluate"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:cobot_convers_evaluator_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"
