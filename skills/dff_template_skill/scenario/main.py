@@ -99,10 +99,12 @@ flows = {
                 [loc_cnd.subject_detected, cnd.all([loc_cnd.about_virus, cnd.negation(loc_cnd.about_coronavirus)])]
             ),
             ("subject_detected", "subject_stats"): cnd.all([loc_cnd.subject_detected, loc_cnd.about_coronavirus]),
-            ("subject_undetected", "clarify_intention"): cnd.all([
-                cnd.negation(loc_cnd.subject_detected),
-                cnd.all([loc_cnd.about_virus, cnd.negation(loc_cnd.about_coronavirus)])
-            ]),
+            ("subject_undetected", "clarify_intention"): cnd.all(
+                [
+                    cnd.negation(loc_cnd.subject_detected),
+                    cnd.all([loc_cnd.about_virus, cnd.negation(loc_cnd.about_coronavirus)]),
+                ]
+            ),
             ("covid_fact", "core_fact_2"): cnd.regexp(
                 r"(death|\bdie\b|\bdied\b|\bdying\b|mortality|how many desk)", re.IGNORECASE
             ),
@@ -265,7 +267,7 @@ flows = {
                 PROCESSING: [
                     int_prs.set_confidence(CLARIFY_INTENTION_ABOUT_SUBJECT_CONFIDENCE),
                     loc_prs.detect_subject,
-                    loc_prs.insert_subject
+                    loc_prs.insert_subject,
                 ],
                 TRANSITIONS: {"subject_stats": int_cnd.is_yes_vars},
             },

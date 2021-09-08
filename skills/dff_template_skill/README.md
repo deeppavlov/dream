@@ -6,7 +6,7 @@ It also supports questions about coronavirus incidence statistics across countri
 # Metrics
 
 OS: Windows 10
-CPU: i7-8565U CPU @ 1.80GHz
+CPU: i7-8565U @ 1.80GHz
 
 | Metric       | Average value |
 | ------------ | ------------- |

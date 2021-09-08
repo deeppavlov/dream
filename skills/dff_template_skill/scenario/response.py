@@ -92,7 +92,11 @@ def tell_subject_stats(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def tell_age_risks(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = ""
-    template = "According to the statistical data, {non_vaccinated} persons from {non_vaccinated_per} in your age recover after contacting coronavirus if they are non-vaccinated and {vaccinated} from {vaccinated_per} if they are vaccinated."
+    template = (
+        "According to the statistical data, {non_vaccinated} persons from {non_vaccinated_per} in your "
+        "age recover after contacting coronavirus if they are non-vaccinated and {vaccinated} "
+        "from {vaccinated_per} if they are vaccinated."
+    )
 
     age = ctx.misc.get("age", None)
 
