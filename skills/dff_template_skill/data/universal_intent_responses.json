@@ -1,0 +1,53 @@
+{
+    "open_question_factual": [
+        "I don't even know yes or no.",
+        "I'm ashamed, I don't know.",
+        "It's so embarrassing, but I don't know.",
+        "I'm not sure about that.",
+        "I have no idea."
+    ],
+    "open_question_opinion": [
+        "Till today I would never think of it.",
+        "I didn't think much of that.",
+        "I never really thought about it that way.",
+        "I've hardly stopped to think about that.",
+        "I hadn't really thought about it.",
+        "I never even thought about it."
+    ],
+    "open_question_personal": [
+        "Till today I would never think of it.",
+        "I didn't think much of that.",
+        "I never really thought about it that way.",
+        "I've hardly stopped to think about that.",
+        "I hadn't really thought about it.",
+        "I never even thought about it."
+    ],
+    "yes_no_question": [
+        "Well, maybe yes, maybe no. I'm not sure.",
+        "Maybe, maybe not. I am sorry, I don't know.",
+        "Perhaps, perhaps not. I am not sure.",
+        "I don't even know yes or no.",
+        "I'm ashamed, I don't know.",
+        "It's so embarrassing, but I don't know."
+    ],
+    "opinion": [
+        "Nice to know you better.",
+        "I'm so much enjoying getting to know you.",
+        "It's been really cool getting to know you better.",
+        "I'm pleased to know something new about you.",
+        "There's nothing more comforting than to find out something new about you."
+    ],
+    "complaint": [
+        "In all seriousness, excuse me.",
+        "Hang on, sorry, I'm mistaken.",
+        "Sorry, I never wanted to hurt you.",
+        "Sorry, I sure didn't mean to make you uncomfortable.",
+        "Wait, I didn't mean to upset you."
+    ],
+    "comment": [
+        "Thank you!",
+        "I really appreciate that.",
+        "Thank you so much.",
+        "Thanks a lot."
+    ]
+}

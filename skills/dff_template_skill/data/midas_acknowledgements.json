@@ -1,0 +1,40 @@
+{
+    "open_question_opinion": [
+        "You wanna know my opinion on SUBJECT.",
+        "So, you asked for my opinion on SUBJECT.",
+        "You wanna hear my view on SUBJECT."
+    ],
+    "open_question_factual": [
+        "You've asked me SUBJECT.",
+        "So, you wanna know SUBJECT.",
+        "You wanna hear SUBJECT."
+    ],
+    "open_question_personal": [
+        "You've asked me SUBJECT.",
+        "So, you wanna know SUBJECT.",
+        "You wanna hear SUBJECT."
+    ],
+    "yes_no_question": [
+        "You've asked me SUBJECT.",
+        "So, you wanna know SUBJECT.",
+        "You wanna hear SUBJECT."
+    ],
+    "opinion": [
+        "I appreciate you being so PROPERTY about following this up.",
+        "I think you are being PROPERTY.",
+        "I'm always happy to have a conversation with such a PROPERTY person.",
+        "It is PROPERTY that you have been so thorough in your thoughts.",
+        "It is very PROPERTY of you to say that.",
+        "Thank you for being so PROPERTY.",
+        "Thank you for being so PROPERTY with me on this.",
+        "You are very PROPERTY to say that.",
+        "You have been very PROPERTY, which makes my job a lot easier.",
+        "Your feedback has been very PROPERTY.",
+        "I bet that you are so PROPERTY'.",
+        "I think that you have a PROPERTY personality.",
+        "I'm sure that you are PROPERTY.",
+        "That's a PROPERTY to hear that, you should be proud of yourself.",
+        "You are a PROPERTY example to others.",
+        "You have done a PROPERTY job in figuring this out."
+    ]
+}
