@@ -1,0 +1,342 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I am very interested in 1 very specific question. Do you have coronavirus?",
+                    "annotations": {
+                        "spelling_preprocessing": "I am very interested in 1 very specific question. Do you have coronavirus?",
+                        "cobot_nounphrases": [
+                            "1 very specific question",
+                            "coronavirus"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "I am very interested in 1 very specific question. Do you have coronavirus?",
+                            "segments": [
+                                "I am very interested in 1 very specific question.",
+                                "Do you have coronavirus?"
+                            ]
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9993222951889038,
+                            "conversational": 0.0006777643575333059
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9924070835113525,
+                                "Information_DeliveryIntent": 0.9707000255584717
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9985107183456421
+                            },
+                            "cobot_topics": {
+                                "Other": 0.9993609189987183,
+                                "Religion": 0.8210577964782715
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9979362487792969
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7325938940048218
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0011847615242004395
+                            }
+                        },
+                        "conceptnet": {
+                            "1 very specific question": {
+                                "Causes": [
+                                    "answer",
+                                    "one to be answer",
+                                    "many answer"
+                                ],
+                                "CausesDesire": [
+                                    "write essay",
+                                    "find answer",
+                                    "answer"
+                                ],
+                                "HasProperty": [
+                                    "one of five answer",
+                                    "one of many",
+                                    "important"
+                                ],
+                                "SymbolOf": [
+                                    "japanese person",
+                                    "mathematics",
+                                    "math"
+                                ]
+                            },
+                            "coronavirus": {
+                                "Causes": [
+                                    "death",
+                                    "die",
+                                    "illness"
+                                ],
+                                "CausesDesire": [
+                                    "have checkup",
+                                    "die",
+                                    "take vitamin"
+                                ],
+                                "HasProperty": [
+                                    "fatal",
+                                    "contagious",
+                                    "deadly"
+                                ],
+                                "SymbolOf": [
+                                    "bacteria",
+                                    "disease",
+                                    "virus"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.00893415603786707,
+                                "command": 0.8171800971031189,
+                                "comment": 0.009409650228917599,
+                                "complaint": 0.009785179048776627,
+                                "dev_command": 0.01930011436343193,
+                                "neg_answer": 0.001754445256665349,
+                                "open_question_factual": 0.008338364772498608,
+                                "open_question_opinion": 0.015608816407620907,
+                                "opinion": 0.05842074006795883,
+                                "other_answers": 0.004722854122519493,
+                                "pos_answer": 0.003983970265835524,
+                                "statement": 0.037365902215242386,
+                                "yes_no_question": 0.005195773672312498
+                            },
+                            {
+                                "appreciation": 0.004314368590712547,
+                                "command": 0.018283234909176826,
+                                "comment": 0.004580514505505562,
+                                "complaint": 0.007002287544310093,
+                                "dev_command": 0.014960004948079586,
+                                "neg_answer": 0.002047033980488777,
+                                "open_question_factual": 0.026281528174877167,
+                                "open_question_opinion": 0.008365130983293056,
+                                "opinion": 0.0010521507356315851,
+                                "other_answers": 0.0023933802731335163,
+                                "pos_answer": 0.0026489512529224157,
+                                "statement": 0.007632836699485779,
+                                "yes_no_question": 0.900438666343689
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "coronavirus"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        12,
+                                        23
+                                    ],
+                                    "text": "coronavirus"
+                                }
+                            ]
+                        },
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Do you have coronavirus?"
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "SAN SALVADOR \u2014 El Salvador on Tuesday became the first country to adopt bitcoin as legal tender, a real-world experiment proponents say will lower commission costs for billions of dollars sent from abroad but which critics warned may fuel money laund... [3663 chars]",
+                                    "description": "El Salvador became the first country to adopt bitcoin as legal tender, with Pres. Nayib Bukele saying it will save millions in commissions for remittances.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2021-09/210907-el-salvador-bitcoin-al-0725-c81b6b.jpg",
+                                    "publishedAt": "2021-09-07T14:41:28Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "El Salvador adopts bitcoin as official currency, first country to do so",
+                                    "url": "https://www.nbcnews.com/news/latino/el-salvador-adopts-bitcoin-official-currency-first-country-rcna1910"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "1 very specific question",
+                                "news": {},
+                                "which": "human"
+                            },
+                            {
+                                "entity": "coronavirus",
+                                "news": {
+                                    "content": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus.\nCurrently, 1 in 7 patients in the hospital is being treated for COVID-19.\nA week ago, that number was 1 in 8.\nTo ... [734 chars]",
+                                    "description": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus. Currently, 1 in 7 patients in the hospital is being treated for COVID-19.",
+                                    "image": "https://fox8.com/wp-content/uploads/sites/12/2021/09/GettyImages-523533754.jpg?w=1280",
+                                    "publishedAt": "2021-09-07T13:23:24Z",
+                                    "source": {
+                                        "name": "WJW FOX 8 News Cleveland",
+                                        "url": "https://fox8.com"
+                                    },
+                                    "title": "Ohio coronavirus hospitalizations",
+                                    "url": "https://fox8.com/news/coronavirus/coronavirus-in-ohio-hospitalizations-on-the-rise-in-every-age-group/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

@@ -1,0 +1,271 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "What is corona?",
+                    "annotations": {
+                        "spelling_preprocessing": "What is corona?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "What is corona?",
+                            "segments": [
+                                "What is corona?"
+                            ]
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9005724191665649
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.963884711265564
+                            },
+                            "cobot_topics": {
+                                "Food_Drink": 0.9673930406570435
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995616674423218
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7167532444000244
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0013474822044372559
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9995326995849609,
+                            "conversational": 0.0004673534131143242
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {},
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0026648922357708216,
+                                "command": 0.008758030831813812,
+                                "comment": 0.002409746404737234,
+                                "complaint": 0.007643893826752901,
+                                "dev_command": 0.004679771605879068,
+                                "neg_answer": 0.0038797997403889894,
+                                "open_question_factual": 0.9065764546394348,
+                                "open_question_opinion": 0.03304518386721611,
+                                "opinion": 0.013296815566718578,
+                                "other_answers": 0.002938095945864916,
+                                "pos_answer": 0.0023175119422376156,
+                                "statement": 0.006367524154484272,
+                                "yes_no_question": 0.005422457121312618
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "corona"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        8,
+                                        14
+                                    ],
+                                    "text": "corona"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "What is corona?"
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "corona",
+                                "news": {
+                                    "content": "In high school, Roger Cuadra, now 40, played football and baseball and tried wrestling and track \u2014 but he wasn't a star student. \"High school was an adventure,\" he says. \"I didn't take it seriously, to be completely honest. Even though I was trying t... [5752 chars]",
+                                    "description": "In high school, Roger Cuadra, now 40, played football and baseball and tried wrestling and track \u2014 but he wasn't a star student. \"High school was an adventure,\" he says.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106933801-1629997940243-Roger_Cuadra.jpg?v=1629997975",
+                                    "publishedAt": "2021-08-28T13:00:01Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "What it takes to earn $80,000 as an HVAC tech in Corona, California",
+                                    "url": "https://www.cnbc.com/2021/08/28/what-it-takes-to-earn-80000-as-an-hvac-tech-in-corona-california.html"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

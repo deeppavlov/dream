@@ -1,0 +1,49 @@
+[
+    [
+        "All CDC-approved vaccines are safe enough for you - of course, if your doctor does not mind against using them. I can't say the same about getting infected, however, so vaccines are necessary to prevent people from that..",
+        0.95,
+        {
+            "dff_coronavirus_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "simple",
+                        "vaccine_safety"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "a631d914-96b8-46ee-8091-2cf9249aca37",
+                    "node_labels": {
+                        "0": [
+                            "simple",
+                            "vaccine_safety"
+                        ]
+                    },
+                    "requests": {
+                        "0": "I am very interested in 1 very specific question. Should i have take vaccine?"
+                    },
+                    "responses": {
+                        "0": "All CDC-approved vaccines are safe enough for you - of course, if your doctor does not mind against using them. I can't say the same about getting infected, however, so vaccines are necessary to prevent people from that.."
+                    },
+                    "previous_index": 0,
+                    "current_index": 0,
+                    "misc": {},
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

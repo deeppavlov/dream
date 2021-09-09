@@ -1,0 +1,1095 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington.",
+                        "sentseg": {
+                            "punct_sent": "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington.",
+                            "segments": [
+                                "I am very interested in 1 very specific question.",
+                                "Tell me about covid statistics in Arlington."
+                            ]
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "arlington",
+                            "1 very specific question",
+                            "covid statistics"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9990537762641907,
+                            "conversational": 0.0009462503949180245
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.998358964920044
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9994610548019409
+                            },
+                            "cobot_topics": {
+                                "Math": 0.9198930263519287,
+                                "Other": 0.8216553926467896
+                            },
+                            "emotion_classification": {
+                                "joy": 0.5869033932685852,
+                                "neutral": 0.9905446767807007
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7492758631706238
+                            },
+                            "toxic_classification": {
+                                "insult": 0.0009920001029968262
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.00893415603786707,
+                                "command": 0.8171800971031189,
+                                "comment": 0.009409650228917599,
+                                "complaint": 0.009785179048776627,
+                                "dev_command": 0.01930011436343193,
+                                "neg_answer": 0.001754445256665349,
+                                "open_question_factual": 0.008338364772498608,
+                                "open_question_opinion": 0.015608816407620907,
+                                "opinion": 0.05842074006795883,
+                                "other_answers": 0.004722854122519493,
+                                "pos_answer": 0.003983970265835524,
+                                "statement": 0.037365902215242386,
+                                "yes_no_question": 0.005195773672312498
+                            },
+                            {
+                                "appreciation": 0.0017068794695660472,
+                                "command": 0.9701931476593018,
+                                "comment": 0.0011936156079173088,
+                                "complaint": 0.0026954254135489464,
+                                "dev_command": 0.007658020593225956,
+                                "neg_answer": 0.0015919170109555125,
+                                "open_question_factual": 0.0015497172717005014,
+                                "open_question_opinion": 0.0018409413751214743,
+                                "opinion": 0.002702240599319339,
+                                "other_answers": 0.0006983444327488542,
+                                "pos_answer": 0.0029672449454665184,
+                                "statement": 0.0030756474006921053,
+                                "yes_no_question": 0.002126970561221242
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 3,
+                                    "text": "covid statistics",
+                                    "type": "ORG"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 6,
+                                    "text": "arlington",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "covid statistics",
+                                "arlington"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        14,
+                                        30
+                                    ],
+                                    "text": "covid statistics"
+                                },
+                                {
+                                    "label": "location",
+                                    "offsets": [
+                                        34,
+                                        43
+                                    ],
+                                    "text": "arlington"
+                                }
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington."
+                            ]
+                        },
+                        "fact_random": [],
+                        "conceptnet": {
+                            "1 very specific question": {
+                                "Causes": [
+                                    "answer",
+                                    "one to be answer",
+                                    "many answer"
+                                ],
+                                "CausesDesire": [
+                                    "write essay",
+                                    "find answer",
+                                    "answer"
+                                ],
+                                "HasProperty": [
+                                    "one of five answer",
+                                    "one of many",
+                                    "important"
+                                ],
+                                "SymbolOf": [
+                                    "japanese person",
+                                    "mathematics",
+                                    "math"
+                                ]
+                            },
+                            "arlington": {
+                                "Causes": [
+                                    "death",
+                                    "suicide",
+                                    "die"
+                                ],
+                                "CausesDesire": [
+                                    "attend meet",
+                                    "visit friend",
+                                    "see doctor"
+                                ],
+                                "HasProperty": [
+                                    "state",
+                                    "south of maryland",
+                                    "north of maryland"
+                                ],
+                                "SymbolOf": [
+                                    "us",
+                                    "usa",
+                                    "hospital"
+                                ]
+                            },
+                            "covid statistics": {
+                                "Causes": [
+                                    "global thermonuclear war",
+                                    "global thermonuclear war on earth",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "watch tv",
+                                    "surf web",
+                                    "watch television"
+                                ],
+                                "HasProperty": [
+                                    "unreliable",
+                                    "worthless",
+                                    "useless"
+                                ],
+                                "SymbolOf": [
+                                    "human life",
+                                    "human experience",
+                                    "many race"
+                                ]
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9795596599578857,
+                                    0.9597290754318237,
+                                    0.9399212002754211,
+                                    0.8095911741256714,
+                                    0.9763730764389038
+                                ],
+                                "entity_ids": [
+                                    "Q12483",
+                                    "Q191076",
+                                    "Q1131372",
+                                    "Q47457611",
+                                    "Q3274962"
+                                ],
+                                "entity_pages": [
+                                    "Statistics is the discipline that concerns the collection, organization, analysis, interpretation, and presentation of data. In applying statistics to a scientific, industrial, or social problem, it is conventional to begin with a statistical population or a statistical model to be studied. Populations can be diverse groups of people or objects such as \"all people living in a country\" or \"every atom composing a crystal\". Statistics deals with every aspect of data, including the planning of data collection in terms of the design of surveys and experiments.",
+                                    "In quantum statistics, Bose\u2013Einstein (B\u2013E) statistics describe one of two possible ways in which a collection of non-interacting, indistinguishable particles may occupy a set of available discrete energy states at thermodynamic equilibrium. The aggregation of particles in the same state, which is a characteristic of particles obeying Bose\u2013Einstein statistics, accounts for the cohesive streaming of laser light and the frictionless creeping of superfluid helium. The theory of this behaviour was developed (1924\u201325) by Satyendra Nath Bose, who recognized that a collection of identical and indistinguishable particles can be distributed in this way. The idea was later adopted and extended by Albert Einstein in collaboration with Bose."
+                                ],
+                                "entity_pages_titles": [
+                                    "Statistics",
+                                    "Bose\u2013Einstein statistics",
+                                    "Vital statistics (government records)",
+                                    "Social statistics"
+                                ],
+                                "entity_substr": "covid statistics",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    0.5,
+                                    0.5,
+                                    0.5
+                                ]
+                            },
+                            {
+                                "confidences": [
+                                    0.6630175709724426,
+                                    0.1431533396244049,
+                                    0.17290592193603516,
+                                    0.0036495050881057978,
+                                    0.595706582069397
+                                ],
+                                "entity_ids": [
+                                    "Q17943",
+                                    "Q2090461",
+                                    "Q675558",
+                                    "Q4792272",
+                                    "Q1055866"
+                                ],
+                                "entity_pages": [
+                                    "Arlington is a city in the U.S. state of Texas, located in Tarrant County. It forms part of the Mid-Cities region of the Dallas\u2013Fort Worth\u2013Arlington metropolitan statistical area, and is a principal city of the metropolis and region. According to the U.S. Census Bureaus 2019 population estimates, the city had a population of 398,854,<ref name=\"State & County QuickFacts\"></ref> making it the second-largest city in the county after Fort Worth. Arlington is the 49th-most populous city in the United States, the seventh-most populous city in the state of Texas,<ref name=\"dmn1\"></ref> and the largest city in the state that is not a county seat.",
+                                    "Arlington is a town in Middlesex County, Massachusetts, United States, six miles (10 km) northwest of Boston. The population was 42,844 at the 2010 census."
+                                ],
+                                "entity_pages_titles": [
+                                    "Arlington, Texas",
+                                    "Arlington, Massachusetts",
+                                    "Arlington, Vermont",
+                                    "Arlington (song)",
+                                    "Arlington, Washington"
+                                ],
+                                "entity_substr": "arlington",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "arlington": {
+                                    "conf": 0.6630175709724426,
+                                    "country": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "entity_label": "Arlington",
+                                    "inception": [
+                                        [
+                                            "\"+1876-01-01^^T\"",
+                                            "01 January 1876"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q1093829",
+                                            "city of the United States"
+                                        ],
+                                        [
+                                            "Q1549591",
+                                            "big city"
+                                        ],
+                                        [
+                                            "Q188509",
+                                            "suburb"
+                                        ]
+                                    ],
+                                    "located in": [
+                                        [
+                                            "Q110412",
+                                            "Tarrant County"
+                                        ]
+                                    ],
+                                    "owner of": [
+                                        [
+                                            "Q2861657",
+                                            "Arlington Stadium"
+                                        ],
+                                        [
+                                            "Q838284",
+                                            "AT&T Stadium"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q17943",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q15253706",
+                                            "like a city"
+                                        ],
+                                        [
+                                            "Q15700808",
+                                            "urban unit definition"
+                                        ],
+                                        [
+                                            "Q1549591",
+                                            "big city"
+                                        ],
+                                        [
+                                            "Q1093829",
+                                            "city of the United States"
+                                        ],
+                                        [
+                                            "Q515",
+                                            "city"
+                                        ],
+                                        [
+                                            "Q188509",
+                                            "suburb"
+                                        ],
+                                        [
+                                            "Q7930989",
+                                            "city/town"
+                                        ],
+                                        [
+                                            "Q3327870",
+                                            "municipal corporation in the United States"
+                                        ],
+                                        [
+                                            "Q486972",
+                                            "human settlement"
+                                        ]
+                                    ]
+                                },
+                                "covid statistics": {
+                                    "conf": 0.9795596599578857,
+                                    "entity_label": "statistics",
+                                    "instance of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ],
+                                        [
+                                            "Q4671286",
+                                            "academic major"
+                                        ]
+                                    ],
+                                    "part of": [
+                                        [
+                                            "Q395",
+                                            "mathematics"
+                                        ],
+                                        [
+                                            "Q8134",
+                                            "economics"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q12483",
+                                    "pos": 0,
+                                    "subclass of": [
+                                        [
+                                            "Q395",
+                                            "mathematics"
+                                        ],
+                                        [
+                                            "Q816264",
+                                            "formal science"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ],
+                                        [
+                                            "Q1047113",
+                                            "specialty"
+                                        ],
+                                        [
+                                            "Q4671286",
+                                            "academic major"
+                                        ],
+                                        [
+                                            "Q24017414",
+                                            "first-order metaclass"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "arlington": {
+                                    "conf": 0.0036495050881057978,
+                                    "entity_label": "Arlington",
+                                    "genre": [
+                                        [
+                                            "Q83440",
+                                            "country music"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q134556",
+                                            "single"
+                                        ]
+                                    ],
+                                    "part of": [
+                                        [
+                                            "Q7561326",
+                                            "Songs About Me"
+                                        ]
+                                    ],
+                                    "performer": [
+                                        [
+                                            "Q967817",
+                                            "Trace Adkins"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q4792272",
+                                    "pos": 3,
+                                    "publication date": [
+                                        [
+                                            "\"+2005-06-11^^T\"",
+                                            "11 June 2005"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q20202269",
+                                            "music term"
+                                        ],
+                                        [
+                                            "Q134556",
+                                            "single"
+                                        ],
+                                        [
+                                            "Q2031291",
+                                            "release"
+                                        ]
+                                    ]
+                                },
+                                "covid statistics": {
+                                    "conf": 0.8095911741256714,
+                                    "entity_label": "RFC 388: NCP statistics",
+                                    "instance of": [
+                                        [
+                                            "Q212971",
+                                            "Request for Comments"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q47457611",
+                                    "pos": 3,
+                                    "publication date": [
+                                        [
+                                            "\"+1972-08-01^^T\"",
+                                            "01 August 1972"
+                                        ]
+                                    ],
+                                    "token_conf": 0.5,
+                                    "types_2hop": [
+                                        [
+                                            "Q2217301",
+                                            "serial"
+                                        ],
+                                        [
+                                            "Q212971",
+                                            "Request for Comments"
+                                        ],
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q49848",
+                                            "document"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {
+                                "covid statistics": {
+                                    "conf": 0.9795596599578857,
+                                    "entity_label": "statistics",
+                                    "instance of": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ],
+                                        [
+                                            "Q4671286",
+                                            "academic major"
+                                        ]
+                                    ],
+                                    "part of": [
+                                        [
+                                            "Q395",
+                                            "mathematics"
+                                        ],
+                                        [
+                                            "Q8134",
+                                            "economics"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q12483",
+                                    "pos": 0,
+                                    "subclass of": [
+                                        [
+                                            "Q395",
+                                            "mathematics"
+                                        ],
+                                        [
+                                            "Q816264",
+                                            "formal science"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q11862829",
+                                            "academic discipline"
+                                        ],
+                                        [
+                                            "Q1047113",
+                                            "specialty"
+                                        ],
+                                        [
+                                            "Q4671286",
+                                            "academic major"
+                                        ],
+                                        [
+                                            "Q24017414",
+                                            "first-order metaclass"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021. REUTERS/Jose Cabezas\nSAN SALVADOR, Sept 8 (Reuters) - El Salvador's President Na... [2636 chars]",
+                                    "description": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021.",
+                                    "image": "https://www.reuters.com/resizer/70rqmtPpeSmjobcYmMh-MXuMPKY=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/SX7IFZIH4NKTHMPKRBXDDPRFYI.jpg",
+                                    "publishedAt": "2021-09-08T16:45:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "El Salvador president gets hands-on to fix bitcoin wallet roll-out woes",
+                                    "url": "https://www.reuters.com/technology/it-guy-in-chief-president-tries-fix-el-salvadors-bitcoin-woes-2021-09-08/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "covid statistics",
+                                "news": {
+                                    "content": "Health officials cautiously optimistic about declining COVID statistics\nWhile statistics reveal that across the U.S., less people are getting vaccinated than in previous weeks, health officials are cautiously optimistic about what COVID-related numbe... [4091 chars]",
+                                    "description": "While statistics reveal that across the U.S., less people are getting vaccinated than in previous weeks, health officials are cautiously optimistic about what COVID-related statistics will look like in the upcoming months.",
+                                    "image": "https://dcer237tfveol.cloudfront.net/v2/pWeLrxi_JnBssgPtwuf8KwQyNwxXGCy5_8Nhhfly3thhl8qrRyRVFZKpNVRRjpDQu8B3sbDbSpt472IuOmQQLDtF6m8fQDAJZqwA2JJ4tR9ihlY7jKwd4Vqb2aFbyUxGohR7P4aD__Z85EFKyzyPKi",
+                                    "publishedAt": "2021-05-10T04:00:00Z",
+                                    "source": {
+                                        "name": "WBRZ",
+                                        "url": "https://www.wbrz.com"
+                                    },
+                                    "title": "Health officials cautiously optimistic about declining COVID statistics",
+                                    "url": "https://www.wbrz.com/news/health-officials-cautiously-optimistic-about-declining-covid-statistics"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "arlington",
+                                "news": {
+                                    "content": "A section of Interstate 30 in Arlington will shut down this weekend because of a bridge demolition.\nBoth east and westbound lanes of the freeway between State Highway 360 and President George Bush Turnpike/State Highway 161 will close at 7 p.m. Frida... [893 chars]",
+                                    "description": "A section of Interstate 30 in Arlington will shut down this weekend because of a bridge demolition.",
+                                    "image": "https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/O9RsHeuUx1MR69C47dCBdwU57tc=/1200x630/smart/filters:no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/G4FRUIKFX5E27NLG575ERSJK5U.jpg",
+                                    "publishedAt": "2021-09-08T13:18:00Z",
+                                    "source": {
+                                        "name": "The Dallas Morning News",
+                                        "url": "https://www.dallasnews.com"
+                                    },
+                                    "title": "Expect major delays as stretch of I-30 will close this weekend",
+                                    "url": "https://www.dallasnews.com/news/2021/09/08/expect-major-delays-as-stretch-of-i-30-will-close-this-weekend/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012600576737895608,
+                                "command": 0.001053881598636508,
+                                "comment": 0.0009886831976473331,
+                                "complaint": 0.0003050877130590379,
+                                "dev_command": 0.0006738723604939878,
+                                "neg_answer": 0.0009884777246043086,
+                                "open_question_factual": 0.00031549742561765015,
+                                "open_question_opinion": 0.0004286061739549041,
+                                "opinion": 0.000542624678928405,
+                                "other_answers": 0.0007374203996732831,
+                                "pos_answer": 0.991058886051178,
+                                "statement": 0.00106660439632833,
+                                "yes_no_question": 0.0005802001105621457
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington.",
+                                "I suppose you are asking about coronavirus in Arlington. Is it right?",
+                                "yes, it is right. "
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021. REUTERS/Jose Cabezas\nSAN SALVADOR, Sept 8 (Reuters) - El Salvador's President Na... [2636 chars]",
+                                    "description": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021.",
+                                    "image": "https://www.reuters.com/resizer/70rqmtPpeSmjobcYmMh-MXuMPKY=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/SX7IFZIH4NKTHMPKRBXDDPRFYI.jpg",
+                                    "publishedAt": "2021-09-08T16:45:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "El Salvador president gets hands-on to fix bitcoin wallet roll-out woes",
+                                    "url": "https://www.reuters.com/technology/it-guy-in-chief-president-tries-fix-el-salvadors-bitcoin-woes-2021-09-08/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "coronavirus",
+                                "news": {
+                                    "content": "About 252,000 new coronavirus cases were reported among children last week, according to data compiled by two health organizations. This marks the largest number of new pediatric COVID-19 cases in a single week since the pandemic began, and it comes ... [3723 chars]",
+                                    "description": "About 252,000 new coronavirus cases were reported among children last week, according to data compiled by two health organizations.",
+                                    "image": "https://img.huffingtonpost.com/asset/6138e1ca280000260271f5a1.jpeg?cache=2kxm34gk6m&ops=1778_1000",
+                                    "publishedAt": "2021-09-08T17:27:55Z",
+                                    "source": {
+                                        "name": "The Huffington Post",
+                                        "url": "https://www.huffpost.com"
+                                    },
+                                    "title": "Coronavirus Cases Among Kids Hit Pandemic High After Summer Dip",
+                                    "url": "https://www.huffpost.com/entry/weekly-covid-19-pediatric-cases-rising_n_6138a9e1e4b0aac9c01e4594"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "arlington",
+                                "news": {
+                                    "content": "A section of Interstate 30 in Arlington will shut down this weekend because of a bridge demolition.\nBoth east and westbound lanes of the freeway between State Highway 360 and President George Bush Turnpike/State Highway 161 will close at 7 p.m. Frida... [893 chars]",
+                                    "description": "A section of Interstate 30 in Arlington will shut down this weekend because of a bridge demolition.",
+                                    "image": "https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/O9RsHeuUx1MR69C47dCBdwU57tc=/1200x630/smart/filters:no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/G4FRUIKFX5E27NLG575ERSJK5U.jpg",
+                                    "publishedAt": "2021-09-08T13:18:00Z",
+                                    "source": {
+                                        "name": "The Dallas Morning News",
+                                        "url": "https://www.dallasnews.com"
+                                    },
+                                    "title": "Expect major delays as stretch of I-30 will close this weekend",
+                                    "url": "https://www.dallasnews.com/news/2021/09/08/expect-major-delays-as-stretch-of-i-30-will-close-this-weekend/"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I suppose you are asking about coronavirus in Arlington. Is it right?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I suppose you are asking about coronavirus in Arlington. Is it right?",
+                            "segments": [
+                                "I suppose you are asking about coronavirus in Arlington.",
+                                "Is it right?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 6,
+                                    "text": "coronavirus",
+                                    "type": "ORG"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 9,
+                                    "start_pos": 8,
+                                    "text": "arlington",
+                                    "type": "LOC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington.",
+                                "I suppose you are asking about coronavirus in Arlington. Is it right?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_coronavirus_skill"
+                }
+            ]
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 0,
+                "id": "837f0041-e5da-471d-9234-c3c453136c9b",
+                "misc": {
+                    "subject": {
+                        "city": "Arlington",
+                        "country": "undetected",
+                        "county": "snohomish county",
+                        "state": "washington",
+                        "type": "city"
+                    }
+                },
+                "node_labels": {
+                    "0": [
+                        "subject_detected",
+                        "clarify_intention"
+                    ]
+                },
+                "previous_index": 0,
+                "requests": {
+                    "0": "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington."
+                },
+                "responses": {
+                    "0": "I suppose you are asking about coronavirus in Arlington. Is it right?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "subject_detected",
+                    "clarify_intention"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "arlington": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "arlington",
+                        "human_utterance_index": 0,
+                        "previous_skill_name": "pre_start"
+                    }
+                ],
+                "name": "arlington"
+            },
+            "covid statistics": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "covid statistics"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

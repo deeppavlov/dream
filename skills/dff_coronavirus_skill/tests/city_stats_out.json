@@ -1,0 +1,67 @@
+[
+    [
+        "Arlington is located in snohomish county. In this county, the total number of registered coronavirus cases is 586694 including 6743 deaths. Would you want to learn more?",
+        0.95,
+        {
+            "dff_coronavirus_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "0": [
+                        "subject_detected",
+                        "clarify_intention"
+                    ],
+                    "1": [
+                        "subject_detected",
+                        "subject_stats"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "837f0041-e5da-471d-9234-c3c453136c9b",
+                    "node_labels": {
+                        "0": [
+                            "subject_detected",
+                            "clarify_intention"
+                        ],
+                        "1": [
+                            "subject_detected",
+                            "subject_stats"
+                        ]
+                    },
+                    "requests": {
+                        "0": "I am very interested in 1 very specific question. Tell me about covid statistics in Arlington.",
+                        "1": "yes."
+                    },
+                    "responses": {
+                        "0": "I suppose you are asking about coronavirus in Arlington. Is it right?",
+                        "1": "Arlington is located in snohomish county. In this county, the total number of registered coronavirus cases is 586694 including 6743 deaths. Would you want to learn more?"
+                    },
+                    "previous_index": 1,
+                    "current_index": 1,
+                    "misc": {
+                        "subject": {
+                            "type": "city",
+                            "city": "Arlington",
+                            "state": "washington",
+                            "county": "snohomish county",
+                            "country": "undetected"
+                        }
+                    },
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

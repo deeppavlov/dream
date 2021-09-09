@@ -1,0 +1,337 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "What are my chances to recover from covid?",
+                    "annotations": {
+                        "spelling_preprocessing": "What are my chances to recover from covid?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "What are my chances to recover from covid?",
+                            "segments": [
+                                "What are my chances to recover from covid?"
+                            ]
+                        },
+                        "cobot_nounphrases": [
+                            "my chances",
+                            "covid"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9182120561599731,
+                                "Information_RequestIntent": 0.9828192591667175
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9948566555976868
+                            },
+                            "cobot_topics": {
+                                "Games": 0.5630432963371277,
+                                "Other": 0.9988421201705933
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9981063604354858
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6578723192214966
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003161132335662842
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9994766116142273,
+                            "conversational": 0.0005233788979239762
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "covid": {
+                                "Causes": [
+                                    "headache",
+                                    "erection",
+                                    "insomnia"
+                                ],
+                                "CausesDesire": [
+                                    "watch film",
+                                    "watch tv",
+                                    "watch movie"
+                                ],
+                                "HasProperty": [
+                                    "fun to watch",
+                                    "fun",
+                                    "addictive"
+                                ],
+                                "SymbolOf": [
+                                    "moon",
+                                    "sex",
+                                    "human"
+                                ]
+                            },
+                            "my chances": {
+                                "Causes": [
+                                    "win or lose",
+                                    "failure",
+                                    "win"
+                                ],
+                                "CausesDesire": [
+                                    "compete against someone",
+                                    "compete",
+                                    "win contest"
+                                ],
+                                "HasProperty": [
+                                    "slim",
+                                    "good",
+                                    "great"
+                                ],
+                                "SymbolOf": [
+                                    "luck",
+                                    "success",
+                                    "hope"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003478672821074724,
+                                "command": 0.0075532905757427216,
+                                "comment": 0.002178536495193839,
+                                "complaint": 0.00414086552336812,
+                                "dev_command": 0.004532387480139732,
+                                "neg_answer": 0.003322217147797346,
+                                "open_question_factual": 0.8258256316184998,
+                                "open_question_opinion": 0.12172436714172363,
+                                "opinion": 0.011108173057436943,
+                                "other_answers": 0.0032334737479686737,
+                                "pos_answer": 0.0021691792644560337,
+                                "statement": 0.002938171848654747,
+                                "yes_no_question": 0.007795161101967096
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "covid"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        36,
+                                        41
+                                    ],
+                                    "text": "covid"
+                                }
+                            ]
+                        },
+                        "fact_random": [],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 8,
+                                    "start_pos": 7,
+                                    "text": "covid",
+                                    "type": "MISC"
+                                }
+                            ]
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [],
+                                "entity_ids": [],
+                                "entity_pages": [],
+                                "entity_pages_titles": [],
+                                "entity_substr": "covid",
+                                "tokens_match_conf": []
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "What are my chances to recover from covid?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "covid",
+                                "news": {
+                                    "content": "Some Michigan venues have decided to require proof of COVID-19 vaccination in order to attend an event in an effort to prevent virus spread.\nAs COVID spread worsens throughout Michigan and much of the U.S., largely driven by the highly contagious del... [960 chars]",
+                                    "description": "Some Michigan venues have decided to require proof of COVID-19 vaccination in order to attend an event in an effort to prevent virus spread.",
+                                    "image": "https://www.clickondetroit.com/resizer/vUWEVdA1c9EfMG787fHMFCfco8s=/800x450/smart/filters:format(jpeg):strip_exif(true):strip_icc(true):no_upscale(true):quality(65)/cloudfront-us-east-1.images.arcpublishing.com/gmg/7FV2E7ACUFAKDPMBMNT7QZYMQM.png",
+                                    "publishedAt": "2021-09-07T14:11:06Z",
+                                    "source": {
+                                        "name": "WDIV ClickOnDetroit",
+                                        "url": "https://www.clickondetroit.com"
+                                    },
+                                    "title": "Tracking Michigan venues requiring COVID vaccination proof for entry",
+                                    "url": "https://www.clickondetroit.com/news/local/2021/09/02/tracking-michigan-venues-requiring-covid-vaccination-proof-for-entry/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

@@ -1,0 +1,632 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "yes",
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "conceptnet": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.001169804367236793,
+                                "command": 0.001244202139787376,
+                                "comment": 0.0008894558413885534,
+                                "complaint": 0.00031573366140946746,
+                                "dev_command": 0.0007030134438537061,
+                                "neg_answer": 0.0010521711083129048,
+                                "open_question_factual": 0.00031922824564389884,
+                                "open_question_opinion": 0.0004232664068695158,
+                                "opinion": 0.0005860166857019067,
+                                "other_answers": 0.00072457455098629,
+                                "pos_answer": 0.9909245371818542,
+                                "statement": 0.0010643722489476204,
+                                "yes_no_question": 0.0005836367490701377
+                            }
+                        ],
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Tell me some facts.",
+                                "Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. Moreover, even dogs and cats who have coronavirus cannot transmit coronavirus to the human. Would you want to learn more?",
+                                "yes, i would want to learn more. "
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "earth",
+                                "news": {
+                                    "content": "NASA confirmed Monday that its Perseverance Mars rover succeeded in collecting its first rock sample for scientists to pore over when a future mission eventually brings it back to Earth.\n\"I've got it!\" the space agency tweeted, alongside a photograph... [3371 chars]",
+                                    "description": "NASA confirmed Monday that its Perseverance Mars rover succeeded in collecting its first rock sample for scientists to pore over when a future mission eventually brings it back to Earth. \"I've got it!\"",
+                                    "image": "https://cbsnews3.cbsistatic.com/hub/i/r/2021/09/07/557b2360-b35c-480d-a2e3-1b7039117ce5/thumbnail/1200x630/ce3fa01eaf83ad814416f07a9b31a3ae/mars.jpg",
+                                    "publishedAt": "2021-09-07T14:11:25Z",
+                                    "source": {
+                                        "name": "CBS News",
+                                        "url": "https://www.cbsnews.com"
+                                    },
+                                    "title": "NASA confirms Perseverance Mars rover grabbed first-ever rock sample drilled on another planet",
+                                    "url": "https://www.cbsnews.com/news/nasa-perseverance-mars-rover-first-rock-sample-drilled-on-another-planet/"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "34.",
+                    "annotations": {
+                        "spelling_preprocessing": "34",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9991717338562012
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9991617202758789
+                            },
+                            "cobot_topics": {
+                                "Other": 0.19651800394058228
+                            },
+                            "emotion_classification": {
+                                "anger": 0.5366966724395752,
+                                "joy": 0.594438910484314,
+                                "neutral": 0.9830451011657715
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8312017321586609
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.00079384446144104
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "34.",
+                            "segments": [
+                                "34."
+                            ]
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "factoid_classification": {
+                            "factoid": 0.007124739699065685,
+                            "conversational": 0.9928752183914185
+                        },
+                        "conceptnet": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0010794749250635505,
+                                "command": 0.0020206300541758537,
+                                "comment": 0.0027934040408581495,
+                                "complaint": 0.0017044254345819354,
+                                "dev_command": 0.0018675390165299177,
+                                "neg_answer": 0.0006044358597137034,
+                                "open_question_factual": 0.0014608687488362193,
+                                "open_question_opinion": 0.0007349405786953866,
+                                "opinion": 0.022222522646188736,
+                                "other_answers": 0.0013135875342413783,
+                                "pos_answer": 0.0007267725304700434,
+                                "statement": 0.9625822901725769,
+                                "yes_no_question": 0.000889260380063206
+                            }
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 81,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 70,
+                                        "text": "coronavirus"
+                                    },
+                                    {
+                                        "end": 132,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 121,
+                                        "text": "coronavirus"
+                                    },
+                                    {
+                                        "end": 500,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 489,
+                                        "text": "coronavirus"
+                                    },
+                                    {
+                                        "end": 514,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 512,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. Moreover, even dogs and cats who have coronavirus cannot transmit coronavirus to the human. Would you want to learn more?",
+                                "yes, i would want to learn more. ",
+                                "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people. Can you tell me what people love doing when people are self-isolating? Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get coronavirus. What is your age?",
+                                "34."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people. Can you tell me what people love doing when people are self-isolating? Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get it. What is your age?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people. Can you tell me what people love doing when people are self-isolating? Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get it. What is your age?",
+                            "segments": [
+                                "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people.",
+                                "Can you tell me what people love doing when people are self-isolating?",
+                                "Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get it.",
+                                "What is your age?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 101,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 90,
+                                        "text": "coronavirus"
+                                    },
+                                    {
+                                        "end": 152,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 141,
+                                        "text": "coronavirus"
+                                    },
+                                    {
+                                        "end": 520,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 509,
+                                        "text": "coronavirus"
+                                    },
+                                    {
+                                        "end": 534,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "coronavirus",
+                                        "start": 532,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "Tell me some facts.",
+                                "Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. Moreover, even dogs and cats who have coronavirus cannot transmit coronavirus to the human. Would you want to learn more?",
+                                "yes, i would want to learn more. ",
+                                "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people. Can you tell me what people love doing when people are self-isolating? Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get coronavirus. What is your age?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_coronavirus_skill"
+                }
+            ]
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 1,
+                "id": "88ec3bd5-1256-40c0-a8fd-c1527602d161",
+                "misc": {
+                    "covid_facts_exhausted": true,
+                    "used_covid_facts": [
+                        0,
+                        1,
+                        2
+                    ]
+                },
+                "node_labels": {
+                    "0": [
+                        "covid_fact",
+                        "replied_yes"
+                    ],
+                    "1": [
+                        "covid_fact",
+                        "replied_yes"
+                    ]
+                },
+                "previous_index": 1,
+                "requests": {
+                    "0": "Tell me some facts.",
+                    "1": "yes."
+                },
+                "responses": {
+                    "0": "Only two dogs and two cats on the Earth have ever been diagnosed with coronavirus. Moreover, even dogs and cats who have coronavirus cannot transmit coronavirus to the human. Would you want to learn more?",
+                    "1": "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people. Can you tell me what people love doing when people are self-isolating? Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get it. What is your age?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "covid_fact",
+                    "replied_yes"
+                ],
+                "1": [
+                    "covid_fact",
+                    "replied_yes"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

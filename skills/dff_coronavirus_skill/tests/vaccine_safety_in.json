@@ -1,0 +1,335 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I am very interested in 1 very specific question. Should i have take vaccine?",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "I am very interested in 1 very specific question. Should i have take vaccine?",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "I am very interested in 1 very specific question. Should i have take vaccine?",
+                            "segments": [
+                                "I am very interested in 1 very specific question.",
+                                "Should i have take vaccine?"
+                            ]
+                        },
+                        "cobot_nounphrases": [
+                            "1 very specific question",
+                            "vaccine"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.7843413949012756,
+                            "conversational": 0.21565863490104675
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.999167799949646
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9985153675079346
+                            },
+                            "cobot_topics": {
+                                "Other": 0.9999061822891235
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9981186389923096
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6716441512107849
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.001119166612625122
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "1 very specific question": {
+                                "Causes": [
+                                    "answer",
+                                    "one to be answer",
+                                    "many answer"
+                                ],
+                                "CausesDesire": [
+                                    "write essay",
+                                    "find answer",
+                                    "answer"
+                                ],
+                                "HasProperty": [
+                                    "one of five answer",
+                                    "one of many",
+                                    "important"
+                                ],
+                                "SymbolOf": [
+                                    "japanese person",
+                                    "mathematics",
+                                    "math"
+                                ]
+                            },
+                            "vaccine": {
+                                "Causes": [
+                                    "disease",
+                                    "death",
+                                    "sickness"
+                                ],
+                                "CausesDesire": [
+                                    "infect person",
+                                    "spread disease",
+                                    "spread"
+                                ],
+                                "HasProperty": [
+                                    "contagious",
+                                    "bad",
+                                    "dangerous"
+                                ],
+                                "SymbolOf": [
+                                    "disease",
+                                    "infection",
+                                    "virus"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.00893415603786707,
+                                "command": 0.8171800971031189,
+                                "comment": 0.009409650228917599,
+                                "complaint": 0.009785179048776627,
+                                "dev_command": 0.01930011436343193,
+                                "neg_answer": 0.001754445256665349,
+                                "open_question_factual": 0.008338364772498608,
+                                "open_question_opinion": 0.015608816407620907,
+                                "opinion": 0.05842074006795883,
+                                "other_answers": 0.004722854122519493,
+                                "pos_answer": 0.003983970265835524,
+                                "statement": 0.037365902215242386,
+                                "yes_no_question": 0.005195773672312498
+                            },
+                            {
+                                "appreciation": 0.01234355941414833,
+                                "command": 0.03190191835165024,
+                                "comment": 0.00654566427692771,
+                                "complaint": 0.0045881690457463264,
+                                "dev_command": 0.015760967507958412,
+                                "neg_answer": 0.002092161914333701,
+                                "open_question_factual": 0.07596536725759506,
+                                "open_question_opinion": 0.4349525570869446,
+                                "opinion": 0.004321449436247349,
+                                "other_answers": 0.00608823960646987,
+                                "pos_answer": 0.0032201025169342756,
+                                "statement": 0.002757386537268758,
+                                "yes_no_question": 0.3994624614715576
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "vaccine"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        19,
+                                        26
+                                    ],
+                                    "text": "vaccine"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Should i have take vaccine?"
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "SAN SALVADOR \u2014 El Salvador on Tuesday became the first country to adopt bitcoin as legal tender, a real-world experiment proponents say will lower commission costs for billions of dollars sent from abroad but which critics warned may fuel money laund... [3663 chars]",
+                                    "description": "El Salvador became the first country to adopt bitcoin as legal tender, with Pres. Nayib Bukele saying it will save millions in commissions for remittances.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2021-09/210907-el-salvador-bitcoin-al-0725-c81b6b.jpg",
+                                    "publishedAt": "2021-09-07T14:41:28Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "El Salvador adopts bitcoin as official currency, first country to do so",
+                                    "url": "https://www.nbcnews.com/news/latino/el-salvador-adopts-bitcoin-official-currency-first-country-rcna1910"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "vaccine",
+                                "news": {
+                                    "content": "Some 200 Seattle police officers may lose their jobs due to their resistance to getting vaccinated against COVID-19 or handing over personal medical data, according to a report.\nThat represents about 20 percent of the department\u2019s deployable staff an... [3571 chars]",
+                                    "description": "Some 200 Seattle police officers may lose their jobs due to their resistance to getting vaccinated against COVID-19 or handing over personal medical data, according to a report.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/09/seattle-police-masks-vax-hp.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-09-07T14:57:00Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Seattle to lose over 200 cops due to COVID-19 Vaccine mandate",
+                                    "url": "https://nypost.com/2021/09/07/seattle-to-lose-over-200-cops-due-to-covid-19-vaccine-mandate/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

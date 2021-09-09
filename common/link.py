@@ -83,7 +83,7 @@ SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference
 # assuming that all skills weights are equal to 1 by default
 # it is used to control amount of link_to phrases to specific skills
 skills_link_to_weights = {
-    "coronavirus_skill": 0.25,
+    "dff_coronavirus_skill": 0.25,
 }
 
 link_to_skill2key_words = {
