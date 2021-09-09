@@ -21,7 +21,7 @@ def get_story_type(ctx: Context, actor: Actor) -> str:
     elif re.search("(horror)|(scary)|(frightening)|(spooky)", human_sentence):
         return "scary"
     elif re.search("(bedtime)|(good)|(kind)|(baby)|(children)|(good night)|(for kid(s){0,1})", human_sentence):
-        return "bedtime"
+        return "bedtime"    
     else:
         return ""
  
@@ -90,7 +90,7 @@ def fallback_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     # runout stories
     if prev_node == "which_story_node" and story_type and not story_left:
         int_ctx.set_can_continue(ctx, actor, "CANNOT_CONTINUE")
-        return "Oh, I am sorry, but I've run out of stories."
+        return " "
         
     # no stories
     elif prev_node == "which_story_node" and not story_type:
@@ -100,9 +100,3 @@ def fallback_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
         int_ctx.set_confidence(ctx, actor, 0.5) if int_ctx.int_cnd.is_do_not_know_vars(ctx,actor) else None
         return random.choice(phrases.get("start_phrases",[]))
-
-# def example_response(reply: str):
-#     def example_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-#         return reply
-
-#     return example_response_handler
