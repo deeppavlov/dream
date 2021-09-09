@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 import requests
 
@@ -7,14 +6,13 @@ import common.test_utils as test_utils
 
 
 PORT = int(os.getenv("PORT"))
+RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 URL = f"http://0.0.0.0:{PORT}/model"
 
 
-def handler(requested_data) -> List[str]:
-    response = requests.post(URL, json=requested_data).json()
-    facts = response[0]["facts"]
-
-    return facts
+def handler(requested_data, random_seed):
+    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}).json()
+    return hypothesis
 
 
 def run_test(handler) -> None:
@@ -24,7 +22,8 @@ def run_test(handler) -> None:
         cur_in_test = in_data[test_name]
         cur_out_test = out_data[test_name]
         for cur_in_data, cur_out_data in zip(cur_in_test, cur_out_test):
-            cur_real_out_data = handler(cur_in_data)
+            cur_real_out_data = handler(cur_in_data, RANDOM_SEED)
+            cur_real_out_data = cur_real_out_data[0]["facts"]
 
             assert cur_real_out_data == cur_out_data, f"expect out: {cur_out_data}\n real out: {cur_real_out_data}"
 
