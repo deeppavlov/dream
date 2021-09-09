@@ -408,7 +408,7 @@ services:
       - 8061:8061
   dff-template-skill:
     volumes:
-      - "./skills/dff_coronavirus_skill:/src"
+      - "./skills/dff_template_skill:/src"
       - "./common:/src/common"
     ports:
       - 8120:8120
