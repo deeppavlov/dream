@@ -3,10 +3,10 @@ import re
 
 import dff.conditions as cnd
 from dff.core import Context, Actor
+
+import common.dff.integration.condition as int_cnd
 from common.utils import get_emotions
 from tools.detectors import get_subject, get_age
-import common.dff.integration.condition as int_cnd
-
 
 logger = logging.getLogger(__name__)
 
