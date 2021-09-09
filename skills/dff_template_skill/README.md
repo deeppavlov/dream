@@ -28,4 +28,4 @@ gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
 
 * Execution time: 46 ms
 * Starting time: 1.5 sec
-* RAM: 45 МИ
+* RAM: 45 MB
