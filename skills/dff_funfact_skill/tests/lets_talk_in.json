@@ -213,7 +213,7 @@
             "bot_utterances": []
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_funfact_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [

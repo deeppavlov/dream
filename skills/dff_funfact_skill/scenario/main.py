@@ -5,9 +5,9 @@ import dff.transitions as trn
 from dff.core import Actor
 from dff.core.keywords import GRAPH, PROCESSING, RESPONSE, TRANSITIONS
 
-from .condition import another_funfact_condition, random_funfact_condition, thematic_funfact_condition
-from .processing import fallback_processing
-from .response import random_funfact_response, thematic_funfact_response
+from scenario.condition import another_funfact_condition, random_funfact_condition, thematic_funfact_condition
+from scenario.processing import fallback_processing
+from scenario.response import random_funfact_response, thematic_funfact_response
 
 logger = logging.getLogger(__name__)
 

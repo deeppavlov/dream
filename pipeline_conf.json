@@ -413,7 +413,7 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
- 		   "annotators.cobot_topics"
+		    "annotators.cobot_topics"
                 ],
                 "state_manager_method": "add_annotation"
             },

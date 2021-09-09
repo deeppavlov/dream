@@ -1,7 +1,6 @@
 import copy
 import logging
 import random
-from typing import Any
 
 from dff.core import Actor, Context
 
@@ -23,7 +22,7 @@ CONF_HIGH = 1.0
 CONF_ZERO = 0.0
 
 
-def random_funfact_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+def random_funfact_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = ""
     set_confidence(ctx, actor, CONF_HIGH)
     set_can_continue(ctx, actor, MUST_CONTINUE)
@@ -45,7 +44,7 @@ def random_funfact_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     return response
 
 
-def thematic_funfact_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+def thematic_funfact_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = ""
     set_confidence(ctx, actor, CONF_HIGH)
     set_can_continue(ctx, actor, MUST_CONTINUE)
