@@ -6,16 +6,13 @@ from dff.core import Actor
 import dff.conditions as cnd
 import dff.response as rsp
 
+import common.books as common_books
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
-
-import common.books as common_books
 import common.movies as common_movies
-
-
-from . import condition as loc_cnd
-from . import response as loc_rsp
-from . import processing as loc_prs
+import scenario.condition as loc_cnd
+import scenario.processing as loc_prs
+import scenario.response as loc_rsp
 
 # !WARNING!WARNING!WARNING!
 # Flow for skill_trigger_phrases

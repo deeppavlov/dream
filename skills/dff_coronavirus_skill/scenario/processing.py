@@ -1,7 +1,9 @@
 import logging
 import random
 from typing import Optional
+
 from dff.core import Context, Actor, Node
+
 from tools.detectors import get_subject, get_age
 from tools.statistics import covid_data_server as cds
 

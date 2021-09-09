@@ -1,8 +1,10 @@
 import logging
 from random import random
+
 from dff.core import Context, Actor
-from tools.statistics import covid_data_server as cds
+
 import common.dff.integration.context as int_ctx
+from tools.statistics import covid_data_server as cds
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +132,6 @@ def tell_age_risks(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = template.format(**_data)
     response = f"{response} However, it is better to stay at home as much as you can to make older people safer."
 
-    skill = ""
     r = random()
     if r < 0.5:
         skill = "dff_movie_skill"
