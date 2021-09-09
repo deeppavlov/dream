@@ -40,9 +40,9 @@ flows = {
                              ("album", "who_beatle_res", 1.2): loc_cnd.wants_to_see(item_name="beatles|band\smembers|artists"),
                              ("album", "please_please_me", 1.2): loc_cnd.wants_to_see(item_name="Please Please Me"),
                              ("album", "with_the_beatles", 1.2): loc_cnd.wants_to_see(item_name="With The Beatles"),
-                             ("album", "a_hard_days_night_wrong", 1.2): loc_cnd.wants_to_see(item_name="A Hard Day's Night"),
+                             ("album", "a_hard_days_night_wrong", 1.2): loc_cnd.wants_to_see(item_name="Hard Day's Night"),
                              ("album", "beatles_for_sale", 1.2): loc_cnd.wants_to_see(item_name="Beatles For Sale"),
-                             ("album", "help", 1.2): loc_cnd.wants_to_see(item_name="Help!"),
+                             ("album", "help", 1.2): loc_cnd.wants_to_see(item_name="Help"),
                              ("album", "rubber_soul", 1.2): loc_cnd.wants_to_see(item_name="Rubber Soul"),
                              ("album", "revolver", 1.2): loc_cnd.wants_to_see(item_name="revolver"),
                              ("album", "yellow_submarine", 1.2): loc_cnd.wants_to_see(item_name="Yellow Submarine"),
@@ -109,9 +109,9 @@ flows = {
                 TRANSITIONS: {
                     ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
                     ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
-                    ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="A Hard Day's Night"),
+                    ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="Hard Day's Night"),
                     ("album", "beatles_for_sale"): loc_cnd.has_album(album_name="Beatles For Sale"),
-                    ("album", "help"): loc_cnd.has_album(album_name="Help!"),
+                    ("album", "help"): loc_cnd.has_album(album_name="Help"),
                     ("album", "rubber_soul"): loc_cnd.has_album(album_name="Rubber Soul"),
                     ("album", "revolver"): loc_cnd.has_album(album_name="revolver"),
                     ("album", "yellow_submarine"): loc_cnd.has_album(album_name="Yellow Submarine"),
@@ -127,9 +127,9 @@ flows = {
                 TRANSITIONS: {
                     ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
                     ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
-                    ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="A Hard Day's Night"),
+                    ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="Hard Day's Night"),
                     ("album", "beatles_for_sale"): loc_cnd.has_album(album_name="Beatles For Sale"),
-                    ("album", "help"): loc_cnd.has_album(album_name="Help!"),
+                    ("album", "help"): loc_cnd.has_album(album_name="Help"),
                     ("album", "rubber_soul"): loc_cnd.has_album(album_name="Rubber Soul"),
                     ("album", "revolver"): loc_cnd.has_album(album_name="revolver"),
                     ("album", "yellow_submarine"): loc_cnd.has_album(album_name="Yellow Submarine"),
@@ -144,9 +144,9 @@ flows = {
                 RESPONSE: "By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn.*y"),
                     ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Ha*rison"),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Har*ison"),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
@@ -154,9 +154,9 @@ flows = {
                 RESPONSE: "Who do you want to discuss: John, Paul, Ringo or George?",
                 TRANSITIONS: {
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn.*y"),
                     ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Ha*rison"),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Har*ison"),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
@@ -164,9 +164,9 @@ flows = {
                 RESPONSE: "Well, I am not sure that this song is The Beatles' song... By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn*y"),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn.*y"),
                     ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Ha*rison"),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Har*ison"),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
@@ -482,7 +482,6 @@ flows = {
             },
             "show_video": {
                 RESPONSE: "Great! You can watch it 🙂 Just let me know when you're done",
-                PROCESSING: [loc_prs.add_misc_to_response], #кажется эта строка дает null
                 TRANSITIONS: {("album", "who_beatle"): cnd.true},
                 # MISC: {"command": "goto", "objectId": "{video}"},
             },
@@ -505,7 +504,7 @@ flows = {
             "fact_lennon": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that John Lennon’s father"
                 " was absent for much of his early life but showed up when his son became famous?"
-                " Sounds kind of sad... Let's take a look at his biography. Just text me when you're done:)",
+                " Sounds kind of sad... Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "w6mdvshkg95p4r"},
@@ -514,15 +513,15 @@ flows = {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that Paul McCartney played"
                 " to what's believed to be the largest paid audience in recorded history? In 1989,"
                 " he played a solo concert to a crowd of 350,000-plus in Brazil. That's amazing!"
-                " Let's take a look at his biography. Just text me when you're done:)",
+                " Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "0fzh0phwszmzb1"},
             },
             "fact_harrison": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that"
-                " the song ‘CRACKERBOX PALACE’ is about his mansion?  Modest as he was - he did live"
-                " in a 120 room mansion on a 66 acre estate. Let's take a look at his biography. Just text me when you're done:)",
+                " the song ‘CRACKERBOX PALACE’ is about his mansion? Modest as he was - he did live"
+                " in a 120 room mansion on a 66 acre estate. Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "gg1cr8v40rv13x"},
@@ -530,7 +529,7 @@ flows = {
             "fact_starr": {
                 RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that due to his allergy"
                 " he has never had pizza, curry, or onions? That didn’t stop him from doing a pizza"
-                " commercial in 1995, though. Let's take a look at his biography. Just text me when you're done:)",
+                " commercial in 1995, though. Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
                 TRANSITIONS: {("beatles", "instruments_q"): cnd.true},
                 MISC: {"command": "goto", "objectId": "q07q698tfsb8hh"},
@@ -543,8 +542,7 @@ flows = {
             "play_q": {
                 RESPONSE: "And do you play any instrument?",
                 TRANSITIONS: {
-                    ("instruments", "guitar_paul_1"): int_cnd.is_yes_vars,
-                    ("instruments", "guitar_paul_1_2"): cnd.true,
+                    ("instruments", "guitar_paul_1"): cnd.true,
                 },
             },
             "play_q_res": {

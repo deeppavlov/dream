@@ -9,6 +9,24 @@ logger = logging.getLogger(__name__)
 # ....
 
 
+def levenshtein_item(items, user_uttr):
+  vocab = set([item.lower().replace(' ', '$') for item in items])
+  abet = set(c for w in vocab for c in w)
+  abet.update(set(string.ascii_letters))
+  searcher = LevenshteinSearcher(abet, vocab)
+  for line in [user_uttr.lower()]:
+    for i in [6, 5, 4, 3, 2, 1]:
+      token = word_tokenize(line)
+      grams = list(ngrams(token, i))
+      for gram in grams:
+        gram = '$'.join(gram)
+        print(gram)
+        candidate = searcher.search(gram, 3)
+        if candidate:
+          candidate = candidate[0][0].replace('$', ' ')
+          return candidate
+
+
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     members = ["John", "Len*on", "Ringo", "Star*", "Paul", "McCartn*y", "George", "Har*ison"]
@@ -55,40 +73,20 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
     albums = [
         "Please Please Me",
         "With the Beatles",
-        "Introducing... The Beatles",
-        "Meet the Beatles!",
-        "Twist and Shout",
-        "The Beatles' Second Album",
-        "The Beatles' Long Tall Sally",
         "A Hard Day's Night",
-        "Something New",
         "Help!",
         "Sgt. Pepper's Lonely Hearts Club Band",
         "White Album",
-        "The Beatles Beat",
-        "Another Beatles Christmas Record",
-        "Beatles '65",
-        "Beatles VI",
-        "Five Nights In A Judo Arena",
-        "The Beatles at the Hollywood Bowl",
-        "Live! at the Star-Club in Hamburg, German; 1962",
-        "The Black Album",
-        "20 Exitos De Oro",
-        "A Doll's House",
-        "The Complete Silver Beatles",
-        "Rock 'n' Roll Music Vol. 1",
         "Yellow Submarine",
         "Let It Be",
         "Beatles for Sale",
         "Revolver",
         "Abbey Road",
-        "Rubber Soul",
+        "Rubber Soul"
     ]
-
-    albums_re = "|".join(albums)
-    extracted_album = re.findall(albums_re, ctx.last_request, re.IGNORECASE)
+    extracted_album = levenshtein_item(albums, ctx.last_request)
     if extracted_album:
-        slots["album_name"] = extracted_album[0]
+        slots["album_name"] = extracted_album
         ctx.misc["slots"] = slots
 
     return node_label, node
@@ -134,7 +132,7 @@ def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
         "Something",
         "Hello, Goodbye",
         "A Day In The Life",
-        "Help!",
+        "Help",
         "Penny Lane",
     ]
 
@@ -149,7 +147,7 @@ def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
         "Something": "74v09tbmqmbf9z",
         "Hello, Goodbye": "87krd594czgd2d",
         "A Day In The Life": "b8ptdvbm1rzccs",
-        "Help!": "zk3dvf2qt7sr0p",
+        "Help": "zk3dvf2qt7sr0p",
         "Penny Lane": "zhw7593t9mb9gn",
     }
 
