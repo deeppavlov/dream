@@ -1,5 +1,5 @@
-import threading
 import logging
+import threading
 import time
 from collections import defaultdict
 from dataclasses import dataclass
