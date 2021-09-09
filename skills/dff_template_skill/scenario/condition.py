@@ -1,23 +1,15 @@
 import logging
 
-from dff.core import Actor, Context
+from dff.core import Context, Actor
 
-from common.dff.integration.condition import is_yes_vars
-from common.funfact import FUNFACT_COMPILED_PATTERN
+from common.dff.integration import condition as int_cnd
 
 logger = logging.getLogger(__name__)
+# ....
 
 
-def random_funfact_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    request = ctx.last_request
-    return bool(FUNFACT_COMPILED_PATTERN.search(request))
+def example_lets_talk_about():
+    def example_lets_talk_about_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        return int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
 
-
-def thematic_funfact_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    request = ctx.last_request
-    return bool(FUNFACT_COMPILED_PATTERN.search(request) and "about" in request)
-
-
-def another_funfact_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    request = ctx.last_request
-    return bool("other" in request or is_yes_vars(ctx, actor))
+    return example_lets_talk_about_handler

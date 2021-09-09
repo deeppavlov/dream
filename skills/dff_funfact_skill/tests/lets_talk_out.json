@@ -1,29 +1,49 @@
 [
     [
-        "Only two mammals like spicy food humans and the tree shrew. Would you like to talk about food? Or would you like to hear another fun fact?",
-        1.0,
+        "Hi, how are you?",
+        0.85,
         {
-            "dff_funfact_skill_state": {
-                "shared_memory": {
-                    "given_funfacts": [
-                        "Only two mammals like spicy food: humans and the tree shrew."
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "greeting",
+                        "node1"
                     ]
                 },
-                "previous_human_utter_index": 8,
-                "history": {
-                    "8": "State.SYS_OFFERS_FACT"
-                },
                 "current_turn_dff_suspended": false,
-                "dialogflow_state": "{\"vars\": {\"__stack__\": [], \"__user_utterance__\": \"fun fact\", \"__system_state__\": \"State.SYS_OFFERS_FACT\", \"__state__\": \"State.USR_START\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Only two mammals like spicy food humans and the tree shrew. Would you like to talk about food? Or would you like to hear another fun fact?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"FUNFACT\\\"<__tuple__>\\\"State.USR_START\\\"\"}"
+                "context": {
+                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
+                    "node_labels": {
+                        "0": [
+                            "greeting",
+                            "node1"
+                        ]
+                    },
+                    "requests": {
+                        "0": "hi."
+                    },
+                    "responses": {
+                        "0": "Hi, how are you?"
+                    },
+                    "previous_index": 0,
+                    "current_index": 0,
+                    "misc": {},
+                    "validation": false
+                }
             },
-            "dff_shared_state": {},
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
             "used_links": {},
-            "age_group": "",
-            "disliked_skills": {}
+            "age_group": "unknown",
+            "disliked_skills": []
         },
         {},
         {
-            "can_continue": "must"
+            "can_continue": "can"
         }
     ]
 ]

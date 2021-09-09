@@ -424,8 +424,8 @@ def select_response(
             if random.random() <= CALL_BY_NAME_PROBABILITY:
                 best_text = f"{name}, {best_text}"
 
-    # if dialog["human_utterances"][-1]["text"] == "/get_dialog_id":
-    #     best_text = "Your dialog's id: " + str(dialog["dialog_id"])
+    if dialog["human_utterances"][-1]["text"] == "/get_dialog_id":
+        best_text = "Your dialog's id: " + str(dialog["dialog_id"])
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 
