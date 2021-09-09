@@ -9,4 +9,3 @@ def prepare_position_embeddings(opt, encoder_vocab, sequences):
     sequences = sequences.repeat(1, 1, 2)
     sequences[:, :, 1] = position_embeddings
     return sequences
-

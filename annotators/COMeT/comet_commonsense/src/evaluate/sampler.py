@@ -184,17 +184,6 @@ class BeamSampler(TopKSampler):
         self.kill_mask = torch.ones(opt.eval.bs, opt.eval.bs) * 9000
         self.kill_mask[:, 0] = 0
 
-    def make_batch(self, X):
-        X = np.array(X)
-        assert X.ndim in [1, 2]
-        if X.ndim == 1:
-            X = np.expand_dims(X, axis=0)
-        pos_enc = np.arange(n_vocab + n_special, n_vocab + n_special + X.shape[-1])
-        pos_enc = np.expand_dims(pos_enc, axis=0)
-        batch = np.stack([X, pos_enc], axis=-1)
-        batch = torch.tensor(batch, dtype=torch.long).to(device)
-        return batch
-
     def append_batch(self, X, beam_toks, mask):
         next_pos = X[:, -1:, 1] + 1
         next_x = torch.cat((beam_toks.unsqueeze(1), next_pos), -1).unsqueeze(1)
@@ -212,7 +201,6 @@ class BeamSampler(TopKSampler):
         XMB = model_utils.prepare_position_embeddings(
             self.opt, data_loader.vocab_encoder, XMB.unsqueeze(-1))
 
-        tokens = []
         beam_losses = []
         # Beam Search
         beam_lls, beam_toks, beam_seqs = None, None, None
@@ -245,8 +233,8 @@ class BeamSampler(TopKSampler):
 
             # Compute masks and expand beam
             expanded_ended = ended.unsqueeze(1).repeat(1, self.opt.eval.bs)
-            hypothesis_mask = expanded_ended * self.kill_mask.to(device=settings.CUDA_VISIBLE_DEVICES) + (
-                        1 - expanded_ended)
+            hypothesis_mask = expanded_ended * self.kill_mask.to(device=settings.CUDA_VISIBLE_DEVICES)
+            hypothesis_mask = hypothesis_mask + (1 - expanded_ended)
 
             paper_results = False
 
@@ -260,8 +248,7 @@ class BeamSampler(TopKSampler):
                     1, self.opt.eval.bs).view(self.opt.eval.bs ** 2)
 
             # Compute losses of hypotheses, masking those that have ended
-            hyp_beam_lls = (hyp_beam_lls.view(self.opt.eval.bs ** 2) *
-                            hypothesis_mask.view(-1)) + current_beam_lls
+            hyp_beam_lls = (hyp_beam_lls.view(self.opt.eval.bs ** 2) * hypothesis_mask.view(-1)) + current_beam_lls
 
             # Get normalizer for sequences
             temp_counts = counts.unsqueeze(1).repeat(1, self.opt.eval.bs).view(

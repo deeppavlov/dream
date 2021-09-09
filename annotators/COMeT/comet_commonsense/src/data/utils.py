@@ -88,12 +88,11 @@ class TextEncoder(object):
                     j = word.index(first, i)
                     new_word.extend(word[i:j])
                     i = j
-                except:
+                except ValueError:
                     new_word.extend(word[i:])
                     break
 
-                if (word[i] == first and i < len(word) - 1 and
-                        word[i + 1] == second):
+                if word[i] == first and i < len(word) - 1 and word[i + 1] == second:
                     new_word.append(first + second)
                     i += 2
                 else:

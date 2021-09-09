@@ -115,12 +115,10 @@ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, 
 
             batch = set_atomic_inputs(
                 input_event, category, data_loader, text_encoder)
-
+            max_event = data_loader.max_event + data.atomic_data.num_delimiter_tokens["category"]
+            max_effect = data_loader.max_effect - data.atomic_data.num_delimiter_tokens["category"]
             sampling_result = sampler.generate_sequence(
-                batch, model, data_loader, data_loader.max_event +
-                                           data.atomic_data.num_delimiter_tokens["category"],
-                                           data_loader.max_effect -
-                                           data.atomic_data.num_delimiter_tokens["category"])
+                batch, model, data_loader, max_event, max_effect)
 
         sequence_all['beams'] = sampling_result["beams"]
         return {category: sequence_all}
