@@ -10,10 +10,9 @@ POSTPROCESSING_REGEXP = re.compile(r"[^a-zA-Z0-9\- ]|\bnone\b", re.IGNORECASE)
 
 
 class COMeTBaseEngine:
-    def __init__(self, graph, model_path, device, decoding_algorithm):
+    def __init__(self, graph, model_path, decoding_algorithm):
         self.graph = graph
         self.model_path = model_path
-        self.device = device
         self.decoding_algorithm = decoding_algorithm
 
         self._opt, self._state_dict = interactive.load_model_file(self.model_path)
@@ -78,8 +77,8 @@ class COMeTBaseEngine:
 
 
 class COMeTAtomic(COMeTBaseEngine):
-    def __init__(self, model_path, device, decoding_algorithm):
-        super().__init__(graph="atomic", model_path=model_path, device=device, decoding_algorithm=decoding_algorithm)
+    def __init__(self, model_path, decoding_algorithm):
+        super().__init__(graph="atomic", model_path=model_path, decoding_algorithm=decoding_algorithm)
         self._input_event_model = schemas.AtomicInputEventModel
         self._response_model = schemas.AtomicResponseModel
 
@@ -87,7 +86,7 @@ class COMeTAtomic(COMeTBaseEngine):
         return self._data_loader.max_event + self._data_loader.max_effect
 
     def process_request(self, input_event: schemas.AtomicInputEventModel) -> Dict:
-        return self._get_result(input_event.input, input_event.category)
+        return self._get_result(input_event["input"], input_event["category"])
 
     def _get_result(self, event: str, category: Sequence[str]) -> Dict:
         raw_result = interactive.get_atomic_sequence(
@@ -105,9 +104,11 @@ class COMeTAtomic(COMeTBaseEngine):
 
 
 class COMeTConceptNet(COMeTBaseEngine):
-    def __init__(self, model_path, device, decoding_algorithm):
-        super().__init__(graph="conceptnet", model_path=model_path, device=device,
-                         decoding_algorithm=decoding_algorithm)
+    def __init__(self, model_path, decoding_algorithm):
+        super().__init__(graph="conceptnet",
+                         model_path=model_path,
+                         decoding_algorithm=decoding_algorithm
+                         )
         self._input_event_model = schemas.ConceptNetInputEventModel
         self._response_model = schemas.ConceptNetResponseModel
         self._annotator_input_model = schemas.ConceptNetAnnotatorEventModel
@@ -117,7 +118,7 @@ class COMeTConceptNet(COMeTBaseEngine):
         return self._data_loader.max_e1 + self._data_loader.max_e2 + self._data_loader.max_r
 
     def process_request(self, input_event: schemas.ConceptNetInputEventModel) -> Dict:
-        return self._get_result(input_event.input, input_event.category)
+        return self._get_result(input_event["input"], input_event["category"])
 
     def _get_result(self, event, category):
         raw_result = interactive.get_conceptnet_sequence(
@@ -132,10 +133,10 @@ class COMeTConceptNet(COMeTBaseEngine):
 
     def annotator(self, input_event: schemas.ConceptNetAnnotatorEventModel):
         batch = []
-        for nounphrases in input_event.nounphrases:
+        for nounphrases in input_event["nounphrases"]:
             result = {}
             for nounphrase in nounphrases:
-                conceptnet_result = self._get_result(nounphrase, input_event.category)
+                conceptnet_result = self._get_result(nounphrase, input_event["category"])
                 result[nounphrase] = self.all_beams_cleanup(conceptnet_result, include_beams_key=False)
             batch += [result]
         return batch
@@ -145,17 +146,15 @@ class COMeTFactory:
     def __init__(self, graph):
         self.graph = graph
 
-    def __call__(self, model_path, device, decoding_algorithm):
+    def __call__(self, model_path, decoding_algorithm):
         if self.graph == "atomic":
             return COMeTAtomic(
                 model_path=model_path,
-                device=device,
                 decoding_algorithm=decoding_algorithm
             )
         elif self.graph == "conceptnet":
             return COMeTConceptNet(
                 model_path=model_path,
-                device=device,
                 decoding_algorithm=decoding_algorithm
             )
         else:

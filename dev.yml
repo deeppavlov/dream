@@ -137,9 +137,13 @@ services:
     ports:
       - 8052:8052
   comet-atomic:
+    volumes:
+      - "./common:/src/common"
     ports:
       - 8053:8053
   comet-conceptnet:
+    volumes:
+      - "./common:/src/common"
     ports:
       - 8065:8065
   meta-script-skill:
