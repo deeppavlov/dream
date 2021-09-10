@@ -36,6 +36,9 @@ DOUBLE_SPACES = re.compile(r"\s+")
 def get_result(request):
     st_time = time.time()
     last_utterances = request.json.get("last_utterances", [])
+    out = open("log.txt", 'a')
+    out.write(f"last utterances {last_utterances}"+'\n')
+    out.close()
     logger.info(f"input (the last utterances): {last_utterances}")
 
     utterances_list = []

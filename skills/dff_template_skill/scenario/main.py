@@ -35,14 +35,10 @@ flows = {
     "beatles": {
         GLOBAL_TRANSITIONS: {("beatles", "beatles_q"): cnd.regexp(r"\bbeatles\b", re.I),
                              ("beatles_reset", "intro_reset", 1.2): cnd.regexp(r"\breset\b", re.I),
-                             ("album", "what_album_res", 1.2): loc_cnd.wants_to_see(item_name="album*"),
-                             ("instruments", "play_q_res", 1.2): loc_cnd.wants_to_see(item_name="instrument*"),
-                             ("album", "who_beatle_res", 1.2): loc_cnd.wants_to_see(item_name="beatles|band\smembers|artists"),
                              ("album", "please_please_me", 1.2): loc_cnd.wants_to_see(item_name="Please Please Me"),
                              ("album", "with_the_beatles", 1.2): loc_cnd.wants_to_see(item_name="With The Beatles"),
                              ("album", "a_hard_days_night_wrong", 1.2): loc_cnd.wants_to_see(item_name="Hard Day's Night"),
                              ("album", "beatles_for_sale", 1.2): loc_cnd.wants_to_see(item_name="Beatles For Sale"),
-                             ("album", "help", 1.2): loc_cnd.wants_to_see(item_name="Help"),
                              ("album", "rubber_soul", 1.2): loc_cnd.wants_to_see(item_name="Rubber Soul"),
                              ("album", "revolver", 1.2): loc_cnd.wants_to_see(item_name="revolver"),
                              ("album", "yellow_submarine", 1.2): loc_cnd.wants_to_see(item_name="Yellow Submarine"),
@@ -51,14 +47,19 @@ flows = {
                              ("album", "white_album", 1.2): loc_cnd.wants_to_see(item_name="White Album"),
                              ("album", "abbey_road", 1.2): loc_cnd.wants_to_see(item_name="Abbey Road"),
                              ("album", "let_it_be", 1.2): loc_cnd.wants_to_see(item_name="Let It Be"),
-                             ("people", "fact_lennon", 1.2): loc_cnd.wants_to_see(item_name="John|Len*on"),
-                             ("people", "fact_mccartney", 1.2): loc_cnd.wants_to_see(item_name="Paul|McCartn*y"),
-                             ("people", "fact_starr", 1.2): loc_cnd.wants_to_see(item_name="Ringo|Star*"),
-                             ("people", "fact_harrison", 1.2): loc_cnd.wants_to_see(item_name="George|Ha*rison"),
-                             ("instruments", "guitar_paul_1", 1.2): loc_cnd.wants_to_see(item_name="zenith"),
+                             ("album", "what_album_res", 1.2): loc_cnd.wants_to_see(item_name="albums"),
+                             ("instruments", "play_q_res", 1.2): loc_cnd.wants_to_see(item_name="instruments"),
+                             ("album", "help", 1.2): loc_cnd.wants_to_see(item_name="Help"),
+                             ("instruments", "guitar_paul_1", 1.2): loc_cnd.wants_to_see(item_name=["zenith", "paul's guitar", "mccartney's guitar"]),
                              ("instruments", "guitar_paul_2", 1.2): loc_cnd.wants_to_see(item_name="hofner"),
-                             ("instruments", "guitar_lennon", 1.2): loc_cnd.wants_to_see(item_name="rickenbacker"),
-                             ("instruments", "drum_kit", 1.2): loc_cnd.wants_to_see(item_name="drum\skit"),
+                             ("instruments", "guitar_lennon", 1.2): loc_cnd.wants_to_see(item_name=["john's guitar", "lennon's guitar", "rickenbacker"]),
+                             ("instruments", "drum_kit", 1.2): loc_cnd.wants_to_see(item_name=["drum kit", "drums"]),
+                             ("people", "fact_lennon", 1.2): loc_cnd.wants_to_see(item_name=['John', 'Lennon']),
+                             ("people", "fact_mccartney", 1.2): loc_cnd.wants_to_see(item_name=['Paul', 'McCartney']),
+                             ("people", "fact_starr", 1.2): loc_cnd.wants_to_see(item_name=['Ringo', 'Starr']),
+                             ("people", "fact_harrison", 1.2): loc_cnd.wants_to_see(item_name=['George', 'Harrison']),
+                             ("album", "who_beatle_res", 1.2): loc_cnd.wants_to_see(
+                                 item_name=['beatles', 'band members', "artists", "band"]),
                              trn.previous(1.2): cnd.regexp(r".*sorry|repeat|go\sback.*", re.I)},
         GRAPH: {
             "start": {RESPONSE: ""},
@@ -113,7 +114,7 @@ flows = {
                     ("album", "beatles_for_sale"): loc_cnd.has_album(album_name="Beatles For Sale"),
                     ("album", "help"): loc_cnd.has_album(album_name="Help"),
                     ("album", "rubber_soul"): loc_cnd.has_album(album_name="Rubber Soul"),
-                    ("album", "revolver"): loc_cnd.has_album(album_name="revolver"),
+                    ("album", "revolver"): loc_cnd.has_album(album_name="Revolver"),
                     ("album", "yellow_submarine"): loc_cnd.has_album(album_name="Yellow Submarine"),
                     ("album", "sgt_peppers"): loc_cnd.has_album(album_name="Sgt. Pepper's Lonely Hearts Club Band"),
                     ("album", "white_album"): loc_cnd.has_album(album_name="White Album"),
@@ -131,7 +132,7 @@ flows = {
                     ("album", "beatles_for_sale"): loc_cnd.has_album(album_name="Beatles For Sale"),
                     ("album", "help"): loc_cnd.has_album(album_name="Help"),
                     ("album", "rubber_soul"): loc_cnd.has_album(album_name="Rubber Soul"),
-                    ("album", "revolver"): loc_cnd.has_album(album_name="revolver"),
+                    ("album", "revolver"): loc_cnd.has_album(album_name="Revolver"),
                     ("album", "yellow_submarine"): loc_cnd.has_album(album_name="Yellow Submarine"),
                     ("album", "sgt_peppers"): loc_cnd.has_album(album_name="Sgt. Pepper's Lonely Hearts Club Band"),
                     ("album", "white_album"): loc_cnd.has_album(album_name="White Album"),
@@ -143,30 +144,30 @@ flows = {
             "who_beatle": {
                 RESPONSE: "By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
-                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn.*y"),
-                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Har*ison"),
+                    ("people", "fact_lennon"): loc_cnd.has_member(member_name=['John', 'Lennon']),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name=['Paul', 'McCartney']),
+                    ("people", "fact_starr"): loc_cnd.has_member(member_name=['Ringo', 'Starr']),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name=['George', 'Harrison']),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
             "who_beatle_res": {
                 RESPONSE: "Who do you want to discuss: John, Paul, Ringo or George?",
                 TRANSITIONS: {
-                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn.*y"),
-                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Har*ison"),
+                    ("people", "fact_lennon"): loc_cnd.has_member(member_name=['John', 'Lennon']),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name=['Paul', 'McCartney']),
+                    ("people", "fact_starr"): loc_cnd.has_member(member_name=['Ringo', 'Starr']),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name=['George', 'Harrison']),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
 	        "who_beatle_1": {
                 RESPONSE: "Well, I am not sure that this song is The Beatles' song... By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
-                    ("people", "fact_lennon"): loc_cnd.has_member(member_name="John|Len*on"),
-                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name="Paul|McCartn.*y"),
-                    ("people", "fact_starr"): loc_cnd.has_member(member_name="Ringo|Star*"),
-                    ("people", "fact_harrison"): loc_cnd.has_member(member_name="George|Har*ison"),
+                    ("people", "fact_lennon"): loc_cnd.has_member(member_name=['John', 'Lennon']),
+                    ("people", "fact_mccartney"): loc_cnd.has_member(member_name=['Paul', 'McCartney']),
+                    ("people", "fact_starr"): loc_cnd.has_member(member_name=['Ringo', 'Starr']),
+                    ("people", "fact_harrison"): loc_cnd.has_member(member_name=['George', 'Harrison']),
                     ("beatles", "instruments_q"): cnd.true,
                 },
             },
@@ -269,7 +270,7 @@ flows = {
             },
             "help": {
                 RESPONSE: "{first_album}"
-                "Just like A Hard Day's Night, one side of Help! consisted the soundtrack songs for the movie. "
+                "Just like A Hard Day's Night, one side of Help! consisted of the soundtrack songs for the movie. "
                 "The other side included several famous songs, such as Yesterday, officially the most "
                 "covered song in the history of music. John Lennon later said that the title song of the album "
                 "really was a cry for help: 'I was fat and depressed and I was crying out for 'Help'.'",
@@ -467,8 +468,10 @@ flows = {
     "song": {
         GRAPH: {
             "song_q": {
-                RESPONSE: "All right, let's finish the albums here. What's your favorite Beatles song?",
-                TRANSITIONS: {("song", "fav_song"): loc_cnd.has_songs, ("song", "why_song"): loc_cnd.is_beatles_song,
+            RESPONSE: "All right, let's finish the albums here. What's your favorite Beatles song?",
+            TRANSITIONS: {
+                ("song", "fav_song"): loc_cnd.has_songs,
+                ("song", "why_song"): loc_cnd.has_entities(entity_types="wiki:Q7366"),
                 ("album", "who_beatle_1"): cnd.true},
             },
             "fav_song": {

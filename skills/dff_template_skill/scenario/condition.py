@@ -7,6 +7,10 @@ from nltk import word_tokenize
 from nltk.util import ngrams
 nltk.download('punkt')
 
+import common.dialogflow_framework.utils.state as state_utils
+from common.utils import is_yes
+# from skills.wiki_skill import find_entity_by_types
+
 # from deeppavlov.models.spelling_correction.levenshtein.searcher_component import LevenshteinSearcher
 # from deeppavlov.models.spelling_correction.levenshtein.searcher_component import LevenshteinSearcherComponent
 import string
@@ -1161,52 +1165,38 @@ class SegmentTransducer:
             self.operation_costs[" "][""] = 1.0
 
 
-def levenshtein_item(items, user_uttr):
+def levenshtein_item(album_name, user_uttr):
     flag = False
+    items = album_name
+    if type(album_name) != list:
+        items = [album_name]
     vocab = set([item.lower().replace(' ', '$') for item in items])
     abet = set(c for w in vocab for c in w)
     abet.update(set(string.ascii_letters))
     searcher = LevenshteinSearcher(abet, vocab)
     for line in [user_uttr.lower()]:
+        token = word_tokenize(line)
         for i in [6, 5, 4, 3, 2, 1]:
-            token = word_tokenize(line)
-            grams = list(ngrams(token, i))
-            for gram in grams:
-                gram = '$'.join(gram)
-                candidate = searcher.search(gram, 3)
-                if candidate:
-                    candidate = candidate[0][0].replace('$', ' ')
-                    flag = True
-                    return flag
+            if i <= len(token):
+                print(token)
+                grams = list(ngrams(token, i))
+                for gram in grams:
+                    gram = '$'.join(gram)
+                    candidate = searcher.search(gram, 3)
+                    if candidate:
+                        candidate = candidate[0][0].replace('$', ' ')
+                        flag = True
+                        return flag
 
     return flag
 
 
 def has_album(album_name: str):
     def has_album_condition(ctx: Context, actor: Actor, *args, **kwargs):
-        flag = False
-        items = [album_name]
-        user_uttr = ctx.last_request
-        vocab = set([item.lower().replace(' ', '$') for item in items])
-        abet = set(c for w in vocab for c in w)
-        abet.update(set(string.ascii_letters))
-        searcher = LevenshteinSearcher(abet, vocab)
-        for line in [user_uttr.lower()]:
-            token = word_tokenize(line)
-            for i in [6, 5, 4, 3, 2, 1]:
-                if i <= len(token):
-                    print(token)
-                    grams = list(ngrams(token, i))
-                    for gram in grams:
-                        gram = '$'.join(gram)
-                        candidate = searcher.search(gram, 3)
-                        if candidate:
-                            candidate = candidate[0][0].replace('$', ' ')
-                            flag = True
-                            return flag
-        return flag
+        return levenshtein_item(album_name, ctx.last_request)
 
     return has_album_condition
+
 
 # def has_album(album_name: str):
 #     def has_album_condition(ctx: Context, actor: Actor, *args, **kwargs):
@@ -1219,15 +1209,109 @@ def has_album(album_name: str):
 #     return has_album_condition
 
 
+def extract_entity(ctx, entity_type):
+    vars = ctx.shared_memory.get("vars", {})
+    user_uttr = state_utils.get_last_human_utterance(vars)
+    annotations = user_uttr.get("annotations", {})
+    logger.info(f"annotations {annotations}")
+    if entity_type.startswith("tags"):
+        tag = entity_type.split("tags:")[1]
+        nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
+        for nounphr in nounphrases:
+            nounphr_text = nounphr.get("text", "")
+            nounphr_label = nounphr.get("label", "")
+            if nounphr_label == tag:
+                found_entity = nounphr_text
+                return found_entity
+    elif entity_type.startswith("wiki"):
+        wp_type = entity_type.split("wiki:")[1]
+        found_entity, *_ = find_entity_by_types(annotations, [wp_type])
+        if found_entity:
+            return found_entity
+    elif entity_type == "any_entity":
+        entities = annotations.get("entity_detection", {}).get("entities", [])
+        if entities:
+            return entities[0]
+    else:
+        res = re.findall(entity_type, user_uttr["text"])
+        if res:
+            return res[0]
+    return ""
+
+
+def has_entities(entity_types):
+    def has_entities_func(ctx):
+        flag = False
+        if isinstance(entity_types, str):
+            extracted_entity = extract_entity(ctx, entity_types)
+            if extracted_entity:
+                flag = True
+        elif isinstance(entity_types, list):
+            for entity_type in entity_types:
+                extracted_entity = extract_entity(ctx, entity_type)
+                if extracted_entity:
+                    flag = True
+                    break
+        return flag
+
+    return has_entities_func
+
+
+def entities(**kwargs):
+    def extract_entities(vars):
+        shared_memory = state_utils.get_shared_memory(vars)
+        slot_values = shared_memory.get("slots", {})
+        for slot_name, slot_types in kwargs.items():
+            if isinstance(slot_types, str):
+                extracted_entity = extract_entity(vars, slot_types)
+                if extracted_entity:
+                    slot_values[slot_name] = extracted_entity
+                    state_utils.save_to_shared_memory(vars, slot_values=slot_values)
+            elif isinstance(slot_types, list):
+                for slot_type in slot_types:
+                    extracted_entity = extract_entity(vars, slot_type)
+                    if extracted_entity:
+                        slot_values[slot_name] = extracted_entity
+                        state_utils.save_to_shared_memory(vars, slot_values=slot_values)
+
+    return extract_entities
+
+
+
+# def has_entities(**kwargs):
+#     def extract_entities(vars):
+#         flag = False
+#         shared_memory = state_utils.get_shared_memory(vars)
+#         slot_values = shared_memory.get("slots", {})
+#         for slot_name, slot_types in kwargs.items():
+#             if isinstance(slot_types, str):
+#                 extracted_entity = extract_entity(vars, slot_types)
+#                 if extracted_entity:
+#                     slot_values[slot_name] = extracted_entity
+#                     state_utils.save_to_shared_memory(vars, slot_values=slot_values)
+#                     flag = True
+#             elif isinstance(slot_types, list):
+#                 for slot_type in slot_types:
+#                     extracted_entity = extract_entity(vars, slot_type)
+#                     if extracted_entity:
+#                         slot_values[slot_name] = extracted_entity
+#                         state_utils.save_to_shared_memory(vars, slot_values=slot_values)
+#                         flag = True
+#         return flag
+#
+#     return extract_entities
+
+
+
 def wants_to_see(item_name: str):
     def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
-        flag = False
         match = re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
                           r"(.*show\sme\s)|(.*tell\sme\sabout\s))(?P<item>.*)", ctx.last_request, re.I)
-        item = match.group('item')
-        if re.findall(item_name, item, re.I):
-            flag = True
-        return flag
+        if match:
+            item = match.group('item')
+        else:
+            return False
+        return levenshtein_item(item_name, item)
 
     return has_cond
 
@@ -1255,22 +1339,19 @@ def has_songs(ctx: Context, actor: Actor, *args, **kwargs):
         "Help",
         "Penny Lane",
     ]
-
-    songs_re = "|".join(songs)
-    return bool(re.findall(songs_re, ctx.last_request, re.IGNORECASE))
+    return levenshtein_item(songs, ctx.last_request)
 
 
 def has_member(member_name: str):
-    def has_membar_condition(ctx: Context, actor: Actor, *args, **kwargs):
-        return bool(re.findall(member_name, ctx.last_request, re.IGNORECASE))
+    def has_member_condition(ctx: Context, actor: Actor, *args, **kwargs):
+        return levenshtein_item(member_name, ctx.last_request)
 
-    return has_membar_condition
+    return has_member_condition
 
 
 def has_correct_answer(ctx: Context, actor: Actor, *args, **kwargs):
-    a = ["Abbey Road", "Hard Day's Night"]
-    ar = "|".join(a)
-    return bool(re.findall(ar, ctx.last_request, re.IGNORECASE))
+    a = ["Abbey Road", "A Hard Day's Night"]
+    return levenshtein_item(a, ctx.last_request)
 
 
 def has_any_album(ctx: Context, actor: Actor, *args, **kwargs):
@@ -1307,8 +1388,7 @@ def has_any_album(ctx: Context, actor: Actor, *args, **kwargs):
         "Rubber Soul",
     ]
 
-    albums_re = "|".join(albums)
-    return bool(re.findall(albums_re, ctx.last_request, re.IGNORECASE))
+    return levenshtein_item(albums, ctx.last_request)
 
 
 def is_beatles_song(ctx: Context, actor: Actor, *args, **kwargs):

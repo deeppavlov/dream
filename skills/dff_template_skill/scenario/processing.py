@@ -1,7 +1,7 @@
 import logging
 import re
 import json
-
+from . import condition
 from dff.core import Node, Context, Actor
 
 
@@ -9,22 +9,22 @@ logger = logging.getLogger(__name__)
 # ....
 
 
-def levenshtein_item(items, user_uttr):
-  vocab = set([item.lower().replace(' ', '$') for item in items])
-  abet = set(c for w in vocab for c in w)
-  abet.update(set(string.ascii_letters))
-  searcher = LevenshteinSearcher(abet, vocab)
-  for line in [user_uttr.lower()]:
-    for i in [6, 5, 4, 3, 2, 1]:
-      token = word_tokenize(line)
-      grams = list(ngrams(token, i))
-      for gram in grams:
-        gram = '$'.join(gram)
-        print(gram)
-        candidate = searcher.search(gram, 3)
-        if candidate:
-          candidate = candidate[0][0].replace('$', ' ')
-          return candidate
+# def levenshtein_item(items, user_uttr):
+#   vocab = set([item.lower().replace(' ', '$') for item in items])
+#   abet = set(c for w in vocab for c in w)
+#   abet.update(set(string.ascii_letters))
+#   searcher = LevenshteinSearcher(abet, vocab)
+#   for line in [user_uttr.lower()]:
+#     for i in [6, 5, 4, 3, 2, 1]:
+#       token = word_tokenize(line)
+#       grams = list(ngrams(token, i))
+#       for gram in grams:
+#         gram = '$'.join(gram)
+#         print(gram)
+#         candidate = searcher.search(gram, 3)
+#         if candidate:
+#           candidate = candidate[0][0].replace('$', ' ')
+#           return candidate
 
 
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
@@ -108,9 +108,11 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
         "Did you know that Abbey Road was created and issued after the recording of the Beatles' "
         "last released album took place? "
     )
-
     for slot_name, slot_value in slots.items():
-        if ctx.misc.get("first_album") is None and slot_name == "first_album":
+        if re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
+                     r"(.*show\sme\s)|(.*tell\sme\sabout\s))(?P<item>.*)", ctx.last_request, re.I):
+            slot_value = ""
+        elif ctx.misc.get("first_album") is None and slot_name == "first_album":
             ctx.misc["first_album"] = True
         elif ctx.misc.get("first_album") is not None:
             if ctx.misc["first_album"] == True and slot_name == "first_album":
