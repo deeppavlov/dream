@@ -14,30 +14,29 @@ THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRI
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-from argparse import ArgumentParser
 import json
-import random
 import logging
-from os import getenv
+import random
 import re
 import string
 import time
+import uuid
+from argparse import ArgumentParser
+from os import getenv
 from typing import Tuple, List, Any
 
+import sentry_sdk
 from fastapi import FastAPI
 from programy.clients.args import ClientArguments
 from programy.clients.client import BotClient
 from programy.clients.config import ClientConfigurationData
 from programy.services.coordinator import RandomResultServiceCoordinator
 from pydantic import BaseModel
-import sentry_sdk
 from starlette.middleware.cors import CORSMiddleware
-import uuid
 
+import test_server
 from dream_aiml.normalizer import PreProcessor
 from state_formatters.utils import programy_post_formatter_dialog
-import test_server
-
 
 SERVICE_NAME = getenv("SERVICE_NAME")
 RANDOM_SEED = int(getenv("RANDOM_SEED", 2718))
