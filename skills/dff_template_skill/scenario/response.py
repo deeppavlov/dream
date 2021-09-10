@@ -6,6 +6,7 @@ import common.dff.integration.context as int_ctx
 import common.dff.integration.condition as int_cnd
 
 logger = logging.getLogger(__name__)
+
 with open( "data/stories.json",
     ) as stories_json:
         stories = json.load(stories_json)
