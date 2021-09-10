@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu:0.14.1
+FROM tensorflow/tensorflow:1.15.2-gpu
 
 ARG MIDAS_DATA_URL=http://files.deeppavlov.ai/alexaprize_data/midas.tar.gz
 ARG CONVERT_DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.8.tar.gz
@@ -13,6 +13,7 @@ RUN wget -q $MIDAS_DATA_URL -O /tmp/midas.tar.gz && tar -zvxf /tmp/midas.tar.gz 
 RUN wget -q $CONVERT_DATA_URL -O /tmp/convert.tar.gz && tar -zvxf /tmp/convert.tar.gz -C /convert && rm -f /tmp/convert.tar.gz
 
 COPY ./requirements.txt /src/requirements.txt
+RUN pip install --upgrade pip
 RUN pip install -r /src/requirements.txt
 RUN pip uninstall -y protobuf tensorflow tensorflow-gpu && \
     pip install --upgrade --force-reinstall tensorflow-gpu==1.14.0

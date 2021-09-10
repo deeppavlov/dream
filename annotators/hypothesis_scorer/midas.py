@@ -61,10 +61,13 @@ label_to_act = {
 }
 
 
+def _apply_softmax_for_raw_data(raw_data):
+    return softmax(raw_data.astype(np.float64))
+
+
 def predict(inputs) -> List[Dict]:
     predictions, raw_outputs = model.predict(inputs)
-    raw_outputs = [raw_output.astype(np.float64) for raw_output in raw_outputs]
-    pred_probas = map(softmax, raw_outputs)
+    pred_probas = [_apply_softmax_for_raw_data(raw_output) for raw_output in raw_outputs]
     responses = [dict(zip(label_to_act.values(), pred[0])) for pred in pred_probas]
     assert len(responses) == len(inputs)
     return responses
