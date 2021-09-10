@@ -1,7 +1,7 @@
 import requests
 
 from comet_commonsense.config import settings
-import common.test_utils as test_utils
+from common import test_utils
 
 URL = f"http://0.0.0.0:{settings.SERVICE_PORT}/comet"
 

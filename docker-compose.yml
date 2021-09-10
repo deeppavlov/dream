@@ -374,9 +374,11 @@ services:
   comet-atomic:
     env_file: [.env]
     build:
-      context: ./annotators/COMeT/
+      context: .
+      dockerfile: ./annotators/COMeT/Dockerfile
       args:
         GRAPH: atomic
+        SERVICE_HOME: ./annotators/COMeT/
         SERVICE_NAME: comet-atomic
         SERVICE_PORT: 8053
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
@@ -394,9 +396,11 @@ services:
   comet-conceptnet:
     env_file: [.env]
     build:
-      context: ./annotators/COMeT/
+      context: .
+      dockerfile: ./annotators/COMeT/Dockerfile
       args:
         GRAPH: conceptnet
+        SERVICE_HOME: ./annotators/COMeT/
         SERVICE_NAME: comet-conceptnet
         SERVICE_PORT: 8065
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
