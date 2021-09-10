@@ -47,7 +47,7 @@ def handler(requested_data, random_seed=None):
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("", 1.0, {}, {}, {}))
+            responses.append(("", 0.0, {}, {}, {}))
 
     total_time = time.time() - st_time
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
