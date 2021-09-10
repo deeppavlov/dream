@@ -65,7 +65,7 @@
         ],
         "trigger_function": null,
         "skills": [
-            "coronavirus_skill"
+            "dff_coronavirus_skill"
         ]
     },
     "oscar": {

@@ -143,11 +143,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa text-qa wiki-parser convert-reddit \
                      book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
-                     grounding-skill dff-friendship-skill masked-lm entity-storer \
+                     grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
                      fact-random fact-retrieval news-api-skill hypothesis-scorer \
                      dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
-                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill; do
+                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
