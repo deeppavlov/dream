@@ -7,10 +7,17 @@ import uvicorn as uvicorn
 from catboost import CatBoostClassifier
 from fastapi import FastAPI
 from pydantic import BaseModel, conlist
+from sentry_sdk.integrations.logging import ignore_logger
 
+from annotators.hypothesis_scorer import test_server
 from score import get_features
 
+ignore_logger("root")
+
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
+SERVICE_NAME = os.getenv("SERVICE_NAME")
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
+RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -59,6 +66,31 @@ except Exception as e:
     raise e
 
 
+def handler(contexts, hypotheses):
+    st_time = time.time()
+
+    try:
+        responses = get_probas(contexts, hypotheses).tolist()
+    except Exception as e:
+        responses = [0] * len(hypotheses)
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+
+    logging.warning(f"hypothesis_scorer exec time {time.time() - st_time}")
+    return [{"batch": responses}]
+
+
+try:
+    test_server.main_test()  # TODO: Rewrite tests!!!!
+    logger.info("test query processed")
+except Exception as exc:
+    sentry_sdk.capture_exception(exc)
+    logger.exception(exc)
+    raise exc
+
+logger.info(f"{SERVICE_NAME} is loaded and ready")
+
+
 class HypothesesSchema(BaseModel):
     is_best: bool
     text: str
@@ -72,17 +104,7 @@ class RequestSchema(BaseModel):
 
 @app.post("/batch_model")
 async def batch_respond(request: RequestSchema):
-    st_time = time.time()
-
-    try:
-        responses = get_probas(request.contexts, request.hypotheses).tolist()
-    except Exception as e:
-        responses = [0] * len(request.hypotheses)
-        sentry_sdk.capture_exception(e)
-        logger.exception(e)
-
-    logging.warning(f"hypothesis_scorer exec time {time.time() - st_time}")
-    return [{"batch": responses}]
+    return handler(request.contexts, request.hypotheses)
 
 
 if __name__ == "__main__":
