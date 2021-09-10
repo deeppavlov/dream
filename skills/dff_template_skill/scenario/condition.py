@@ -11,7 +11,6 @@ def get_previous_node(ctx:Context) -> str:
         return "start_node"
 
 def is_tell_me_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    print(ctx.misc.get("intents",""))
     return ctx.misc.get("intents","") == "tell_me_a_story"
 
 def is_asked_for_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
