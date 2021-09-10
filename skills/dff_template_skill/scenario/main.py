@@ -58,4 +58,4 @@ flows = {
     }
 }
 
-actor = Actor(flows, start_node_label=("story_flow", "start"), fallback_node_label=("story_flow", "fallback"))
+actor = Actor(flows, start_node_label=("story_flow", "start_node"), fallback_node_label=("story_flow", "fallback_node"))

@@ -3,17 +3,23 @@ import logging, json, re, random
 from dff.core import Context, Actor
 
 import common.dff.integration.context as int_ctx
+import common.dff.integration.condition as int_cnd
 
 logger = logging.getLogger(__name__)
-with open( "stories.json",
+with open( "data/stories.json",
     ) as stories_json:
         stories = json.load(stories_json)
 
-with open( "phrases.json",
+with open( "data/phrases.json",
     ) as phrases_json:
         phrases = json.load(phrases_json)
+ 
+def get_previous_node(ctx:Context) -> str:
+    try:
+        return [node_tuple[1] for node_tuple in ctx.node_labels.values()][-2]
+    except:
+        return "start_node"
     
-
 def get_story_type(ctx: Context, actor: Actor) -> str:
     human_sentence = ctx.last_request
     if re.search("fun((ny)|(niest)){0,1}", human_sentence):
@@ -26,7 +32,6 @@ def get_story_type(ctx: Context, actor: Actor) -> str:
         return ""
  
 def get_story_left(ctx: Context, actor: Actor) -> str:
-    # stories = ctx.misc.get("stories", {})
     story_type = get_story_type(ctx, actor)
     stories_left = list(set(stories.get(story_type, []))-set(ctx.misc.get("stories_told",[])))
     try:
@@ -35,12 +40,13 @@ def get_story_left(ctx: Context, actor: Actor) -> str:
         return ""
 
 def choose_story_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-
+    prev_node = get_previous_node(ctx)
     story = get_story_left(ctx,actor)
     story_type = get_story_type(ctx, actor)
-    setup = ctx.misc.get('stories',{}).get(story_type, {}).get(story, {}).get("setup", "")
+    setup = stories.get(story_type, {}).get(story, {}).get("setup", "")
     what_happend_next_phrase = random.choice(phrases.get("what_happend_next",[]))  
-    sure_phrase = random.choice(phrases.get("sure",[]))
+    sure_phrase = random.choice(phrases.get("sure",[])) if prev_node == 'start_node' else ""
+    
     ctx.misc["stories_told"] = ctx.misc.get("stories_told",[]) + [story]
     ctx.misc["story"] = story
     ctx.misc["story_type"] = story_type
@@ -48,12 +54,8 @@ def choose_story_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return sure_phrase +setup+ "..."+ what_happend_next_phrase
 
 def which_story_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    
-    try:
-        prev_node = [node_tuple[1] for node_tuple in ctx.node_labels.values()][-2]
-    except:
-        prev_node = "start_node"
-    
+
+    prev_node = get_previous_node(ctx)
     if prev_node in ["start_node","fallback_node"]:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
         sure_phrase = random.choice(phrases.get("sure",[])) if prev_node == "start_node" else ""
@@ -66,7 +68,7 @@ def which_story_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def tell_punchline_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, "CAN_CONTINUE")
-    int_ctx.set_confidence(ctx, actor, 0.8) if int_ctx.int_cnd.is_do_not_know_vars(ctx,actor) else None
+    int_ctx.set_confidence(ctx, actor, 0.8) if int_cnd.is_do_not_know_vars(ctx,actor) else None
     stories = ctx.misc.get("stories", {})
     story = ctx.misc.get("story", "")
     story_type = ctx.misc.get("story_type", "")
@@ -78,18 +80,14 @@ def tell_punchline_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         return "Oh, sorry, i lost the track of what I was talking about."
 
 def fallback_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    try:
-        prev_node = [node_tuple[1] for node_tuple in ctx.node_labels.values()][-2]
-    except:
-        prev_node = None
-
+    prev_node = get_previous_node(ctx)
     story_type = get_story_type(ctx, actor)
     story_left = get_story_left(ctx, actor)
 
     # runout stories
     if prev_node == "which_story_node" and story_type and not story_left:
         int_ctx.set_can_continue(ctx, actor, "CANNOT_CONTINUE")
-        return " "
+        return "Oh, sorry, but I've run out of stories."
         
     # no stories
     elif prev_node == "which_story_node" and not story_type:
@@ -97,5 +95,5 @@ def fallback_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         return random.choice(phrases.get("no_stories",[])) 
     else:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
-        int_ctx.set_confidence(ctx, actor, 0.5) if int_ctx.int_cnd.is_do_not_know_vars(ctx,actor) else None
+        int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(ctx,actor) else None
         return random.choice(phrases.get("start_phrases",[]))
