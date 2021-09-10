@@ -33,23 +33,28 @@ EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 \-&*+]")
 DOUBLE_SPACES = re.compile(r"\s+")
 
 
-def get_result(request):
+def get_result(request, prev_utt=False):
     st_time = time.time()
     last_utterances = request.json.get("last_utterances", [])
-    out = open("log.txt", 'a')
-    out.write(f"last utterances {last_utterances}"+'\n')
-    out.close()
+    prev_utterances = request.json.get("prev_utterances", [])
     logger.info(f"input (the last utterances): {last_utterances}")
 
     utterances_list = []
     utterances_nums = []
-    for n, utterances in enumerate(last_utterances):
-        for elem in utterances:
-            if len(elem) > 0:
-                if elem[-1] not in {".", "!", "?"}:
-                    elem = f"{elem}."
-                utterances_list.append(elem.lower())
-                utterances_nums.append(n)
+    if prev_utt:
+        for n, (prev_utt, last_utt) in enumerate(zip(prev_utterances, last_utterances)):
+            total_utt = " ".join(prev_utt) + " ".join(last_utt)
+            total_utt = total_utt.replace("  ", " ").strip()
+            utterances_list.append(total_utt)
+            utterances_nums.append(n)
+    else:
+        for n, utterances in enumerate(last_utterances):
+            for elem in utterances:
+                if len(elem) > 0:
+                    if elem[-1] not in {".", "!", "?"}:
+                        elem = f"{elem}."
+                    utterances_list.append(elem.lower())
+                    utterances_nums.append(n)
 
     utt_entities_batch = [{} for _ in last_utterances]
     utt_entities = {}
@@ -120,6 +125,8 @@ def get_result(request):
 @app.route('/respond', methods=['POST'])
 def respond():
     result = get_result(request)
+    if result == [{}]:
+        result = get_result(request, prev_utt=True)
     return jsonify(result)
 
 

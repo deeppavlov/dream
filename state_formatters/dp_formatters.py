@@ -464,11 +464,17 @@ def last_utt_sentseg_segments_dialog(dialog: Dict):
 
 def ner_formatter_dialog(dialog: Dict):
     # Used by: ner_formatter
+    prev_utterances = []
     if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
-        return [{"last_utterances": [dialog["human_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+        if len(dialog["human_utterances"]) >= 2:
+            prev_utterances = dialog["human_utterances"][-2]["annotations"]["sentseg"]["segments"]
+        return [{"last_utterances": [dialog["human_utterances"][-1]["annotations"]["sentseg"]["segments"]],
+                 "prev_utterances": prev_utterances}]
     else:
         segments = [dialog["human_utterances"][-1]["text"]]
-        return [{"last_utterances": [segments]}]
+        if len(dialog["human_utterances"]):
+            prev_utterances = dialog["human_utterances"][-2]["text"]
+        return [{"last_utterances": [segments], "prev_utterances": prev_utterances}]
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
