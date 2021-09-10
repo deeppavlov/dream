@@ -44,11 +44,18 @@ RANDOM_SEED = int(getenv("RANDOM_SEED", 2718))
 CONFIG_PATH = getenv("CONFIG_PATH", "/src/data/config.json")
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
+
+class EndpointFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return record.getMessage().find("/healthcheck") == -1
+
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 logging.getLogger(__name__).setLevel("INFO")
+logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
 
 tags_map = [
     (

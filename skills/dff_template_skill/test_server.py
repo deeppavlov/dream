@@ -1,5 +1,5 @@
-import os
 import requests
+import os
 
 import common.test_utils as test_utils
 

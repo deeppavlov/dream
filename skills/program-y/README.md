@@ -11,4 +11,4 @@ docker run -d --rm ${SERVICE_DOCKER_IMAGE}
 # Average RAM for CPU and average starting time
 Average RAM usage ~ 706 MiB
 Average starting time ~ 16 seconds
-Average request exedcution time ~ 64 μs
+Average request execution time ~ 64 μs
