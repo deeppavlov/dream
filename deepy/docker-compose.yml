@@ -8,7 +8,7 @@ services:
     ports:
       - 4242:4242
     tty: true
-    command: python -m deeppavlov_agent.run -ch http_client --cors
+    command: python -m deeppavlov_agent.run_http
   spelling_preprocessing:
     build:
       context: annotators/spelling_preprocessing

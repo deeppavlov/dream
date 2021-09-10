@@ -1,7 +1,7 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run_http'
     volumes:
       - ".:/dp-agent"
     ports:
