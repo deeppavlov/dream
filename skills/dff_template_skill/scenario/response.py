@@ -109,6 +109,8 @@ def programy_reponse(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     for _, sentence in enumerate(ctx.requests.values()):
         # s = s if i != 0 else f"BEGIN_USER_UTTER {s}"
         response = model.ask_question(userid, preprocessor.process(sentence))
+        import sys
+        print(response, file=sys.stderr, flush=True)
 
     # if "DEFAULT_SORRY_RESPONCE" in response:
     #     response = (

@@ -59,9 +59,6 @@ rest:
                 learnf_storage:
                   dirs: /src/data/storage/categories/learnf
 
-                conversation_storage:
-                  dirs: /src/data/storage/conversations
-
                 sets_storage:
                   dirs: /src/data/storage/sets
                   extension: txt
@@ -119,11 +116,6 @@ rest:
 
                 usergroups_storage:
                   file: /src/data/storage/security/usergroups.yaml
-
-          logger:
-              type:   logger
-              config:
-                  conversation_logger: conversation
 #####################################################################################################
 #
 
