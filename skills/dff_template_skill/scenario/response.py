@@ -93,7 +93,7 @@ def tell_punchline(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     story_type = ctx.misc.get("story_type", "")
 
     try:
-        return stories[story_type][story]["punchline"]
+        return stories.get(story_type, {}).get(story, {}).get("punchline", "")
 
     except:
         return "Oh, sorry, i lost the track of what I was talking about."
