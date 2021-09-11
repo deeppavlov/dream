@@ -92,11 +92,7 @@ def tell_punchline(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     story = ctx.misc.get("story", "")
     story_type = ctx.misc.get("story_type", "")
 
-    try:
-        return stories.get(story_type, {}).get(story, {}).get("punchline", "")
-
-    except:
-        return "Oh, sorry, i lost the track of what I was talking about."
+    return stories.get(story_type, {}).get(story, {}).get("punchline", "")
 
 
 def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:

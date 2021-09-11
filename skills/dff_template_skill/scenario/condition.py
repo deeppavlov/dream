@@ -15,7 +15,7 @@ def has_story_left(ctx: Context, actor: Actor) -> bool:
 
 
 def is_tell_me_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    return ctx.misc.get("intents", "") == "tell_me_a_story"
+    return str(ctx.misc.get("intents", {}).get("tell_me_a_story", {}).get("detected", "")) == "1"
 
 
 def is_asked_for_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
