@@ -11,9 +11,7 @@ def get_midas_features_human(contexts):
         item = last_bot + " : EMPTY > " + last_human
         requests.append(item)
 
-    res = midas.predict(requests)
-    res = [list(x.values()) for x in res]
-    return res
+    return [list(x.values()) for x in midas.predict(requests)]
 
 
 def get_midas_features_bot(contexts, hypotheses):
@@ -24,9 +22,7 @@ def get_midas_features_bot(contexts, hypotheses):
         item = last_human + " : EMPTY > " + cur_bot
         requests.append(item)
 
-    res = midas.predict(requests)
-    res = [list(x.values()) for x in res]
-    return res
+    return [list(x.values()) for x in midas.predict(requests)]
 
 
 def get_features(contexts, hypotheses):
