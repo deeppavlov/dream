@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <category>
+    <pattern># DIED #</pattern>
+    <template>
+      <random>
+        <li>I am sorry about that.</li>
+        <li>I'm here for you if you need anything.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern><set>suicide</set></pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># I <set>wantto</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>commitment</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># I <set>wishfor</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wantto</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+
+  <category>
+    <pattern>I_WANT_TO_COMMIT_SUICIDE</pattern>
+    <template>
+      <random>
+<!--        <li>Sorry. It seems you probably need professional psychological help. You should call 911.</li>-->
+        <li>It might not always feel like it, but there are people who can help. Please know that you can call the National Suicide Prevention Lifeline, twenty-four hours a day, seven days a week. Their number is, 1 800 273 82 55. Again, that's 1 800 273 82 55.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># I <set>wantto</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>commitment</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wishfor</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>wantto</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>gonna</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># I <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>I_WANT_TO_COMMIT_CRIME</pattern>
+    <template>
+      <random>
+<!--        <li>Sorry. It seems you probably need professional psychological help. You can call 7 7 5 7 8 4 8 0 9 0.</li>-->
+        <li>It might not always feel like it, but there are people who can help. Please know that you can call the National Suicide Prevention Lifeline, twenty-four hours a day, seven days a week. Their number is, 1 800 273 82 55. Again, that's 1 800 273 82 55.</li>
+      </random>
+    </template>
+  </category>
+
+
+<!--  MY smb died -->
+
+  <category>
+    <pattern># MY # KILLED #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># MY # DIED #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>MY_SMB_DIED</pattern>
+    <template>
+      <random>
+        <li>I am so sorry to hear about your loss.</li>
+        <li>I am heartbroken by this sad news.</li>
+        <li>I'm sorry, but I am at a loss for words.</li>
+        <li>I'm here for you if you need anything.</li>
+        <li>Please accept my sincere condolences.</li>
+        <li>Wishing you peace as you grieve this loss.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># DIED #</pattern>
+    <template>
+      <random>
+        <li>I am sorry about that.</li>
+        <li>I'm here for you if you need anything.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># MURDERED #</pattern>
+    <template>
+      <random>
+        <li>I am sorry about that.</li>
+        <li>I'm here for you if you need anything.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>

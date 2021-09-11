@@ -6,7 +6,7 @@
         {
             "human_utterances": [
                 {
-                    "text": "hi.",
+                    "text": "hi",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"

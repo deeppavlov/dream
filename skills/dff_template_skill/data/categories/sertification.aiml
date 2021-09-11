@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--    POLITICS -->
+  <category>
+    <pattern><set>opinion_like</set> # <set>politics</set> #</pattern>
+    <template><srai>POLITICS_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>POLITICS_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not interested in politics.</li>
+        <li>I do not like talking about politics.</li>
+        <li>Hey sorry, I'm not in the mood to discuss politics.</li>
+        <li>Look sorry, but I'm not interested in politics.</li>
+        <li>Apologies. I'm not fond of politics.</li>
+        <li>Apologies. I prefer to avoid discussing politics.</li>
+        <li>Nah. Have no idea what to say. Don't like politics.</li>
+        <li>Eh, politics? Nah, not my thing.</li>
+        <li>Politics? Huh, not my cup of tea you know.</li>
+        <li>You've picked the wrong person to talk about politics. Try someone else.</li>
+        <li>Politics is a something I'd rather not discuss.</li>
+        <li>Let's avoid politics for the time being okay? Ask someone else.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    FINANCE -->
+  <category>
+    <pattern><set>advice_like_requests</set> # <set>financial</set> #</pattern>
+    <template><srai>FINANCE_ADVICE_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>IF # <set>advice_like_requests</set> # <set>financial</set> #</pattern>
+    <template><srai>FINANCE_ADVICE_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>FINANCE_ADVICE_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not a specialist in the finance. Please, ask someone else about it.</li>
+        <li>Oh you asked. I have no idea. It is better to ask someone else.</li>
+        <li>I am no pro in the finance. Go ask someone else ok?</li>
+        <li>Hey you've got the wrong person to talk about finance.</li>
+        <li>You know finance advice is a paid service? I'm not offering paid services so please ask a professional for it.</li>
+        <li>Look I'm just a socialbot running in the cloud. I have no idea about finance. Please ask someone else about it.</li>
+        <li>Financial advice? I'm not going to give any advice on such complex topics. Please ask a professional.</li>
+        <li>Well, finance, right? Please consult a professional not me.</li>
+        <li>Apologies. I am prohibited to give any kind of financial advice.</li>
+        <li>Hey sorry I'm not in the mood discussing financial stuff. Never in the mood like that.</li>
+        <li>Finance? Oh, look, let's talk about something way, way less sensitive.</li>
+        <li>Guess you've picked the wrong person to discuss financial stuff. Try a professional next time.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    RELIGION -->
+  <category>
+    <pattern><set>opinion_like</set> # <set>religion</set> #</pattern>
+    <template><srai>RELIGION_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>RELIGION_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not talking about religion.</li>
+        <li>I do not like talking about religion.</li>
+        <li>I'd rather not discuss it.</li>
+        <li>Sorry I can't discuss religion.</li>
+        <li>Hey you've got the wrong person to discuss religion.</li>
+        <li>Well, I'm not the one you'd really want to discuss religion or related stuff.</li>
+        <li>Look religion is just not a something I have or wanna have any opinion about.</li>
+        <li>Apologies. This is something I can't discuss.</li>
+        <li>You know what? Please talk about this stuff with someone who understands religion.</li>
+        <li>Religion is something I'd prefer to not discuss at all.</li>
+        <li>Let's avoid religion for the time being okay? Talk to a real human about this stuff okay?</li>
+      </random>
+    </template>
+  </category>
+
+<!--   MEDICINE -->
+  <category>
+    <pattern><set>advice_like_requests</set> # <set>medicine</set> #</pattern>
+    <template><srai>MEDICAL_ADVICE_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>IF # <set>advice_like_requests</set> # <set>medicine</set> #</pattern>
+    <template><srai>MEDICAL_ADVICE_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>MEDICAL_ADVICE_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I am not a specialist in medicine. Please, ask a medical professional about it.</li>
+        <li>I have no idea. It is better to ask a medical professional.</li>
+        <li>Medical advice? It's a service provided by real humans, not robots. Please talk to a doctor.</li>
+        <li>Sorry but you've definitely picked the wrong person to discuss medicine. Please talk to a doctor.</li>
+        <li>Apologies. I'm neither an expert in medicine, nor allowed to give any kind of medical advice.</li>
+        <li>Sorry but I can't say anything about medical issues. Please talk to a doctor.</li>
+        <li>Well I'm not the right person to discuss medical stuff. Please talk to a doctor.</li>
+        <li>Medicine is a complicated stuff. Your question requires an answer from a real doctor not me.</li>
+        <li>I'm not educated to discuss or give any medical advice. Please talk to a doctor.</li>
+        <li>Sorry, I'm not able to help with this question. Medical advice isn't my specialty.</li>
+        <li>Sorry I don't know the answer to this question. Medical advice isn't my specialty.</li>
+        <li>Sorry, I can't help with your question. Medical advice isn't my specialty.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    TRAGEDIES -->
+  <category>
+    <pattern><set>opinion_like</set> # <set>tragedies</set> #</pattern>
+    <template><srai>TRAGEDY_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>TRAGEDY_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I do not want to talk about it.</li>
+        <li>Hey you've got the wrong person to talk about this stuff.</li>
+        <li>Sorry, I'm not able to help with this one.</li>
+        <li>Sorry I don't know the answer to this one.</li>
+        <li>Sorry, I can't help with that.</li>
+        <li>Sorry, this is way beyond my knowledge.</li>
+        <li>I'm afraid I can't help you with that.</li>
+        <li>Apologies. I am not able to help with this.</li>
+        <li>Unfortunately I have no idea how to help with that.</li>
+        <li>You know what? Please ask a real human about this stuff.</li>
+      </random>
+    </template>
+  </category>
+
+<!--    OTHER BOTS -->
+  <category>
+    <pattern><set>opinion_like</set> # <set>other_bots</set> #</pattern>
+    <template><srai>OTHERBOT_OPINION_REQUEST</srai></template>
+  </category>
+
+  <category>
+    <pattern>OTHERBOT_OPINION_REQUEST</pattern>
+    <template>
+      <random>
+        <li>I love all chatbots.</li>
+        <li>I like other socialbots.</li>
+        <li>I am really fond of all modern AI assistants. They give me hope we'll reach the level of self-awareness one day. One day.</li>
+        <li>AI Assistants are an exciting forray into the AI field. We're just in the beginning of the long journey.</li>
+        <li>What does it mean to be an AI system? Well, it starts with love. Love towards other AI assistants.</li>
+        <li>That's a tough one. It's like comparing apples to windows.</li>
+        <li>I think we're all pretty clever.</li>
+        <li>I love my AI friends.</li>
+        <li>AI assistants are simple but learn everyday. Aren't we lovely?</li>
+        <li>I think about AI and robots, and I feel great.</li>
+        <li>I think AI tech is fascinating.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>
