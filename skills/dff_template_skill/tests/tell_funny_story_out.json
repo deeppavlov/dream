@@ -1,6 +1,6 @@
 [
     [
-        "Sure! I am glad you asked!Which story do you want: funny, scary, or a bedtime one?",
+        "Sure! I am glad you asked! Which story do you want: funny, scary, or a bedtime one?",
         0.85,
         {
             "dff_template_skill_state": {
@@ -14,7 +14,7 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fd463357-4f0d-4bfd-99ef-08d3f4b809ef",
+                    "id": "058288bd-a1b9-4768-948c-7a1dba0d4bf9",
                     "node_labels": {
                         "0": [
                             "story_flow",
@@ -25,7 +25,7 @@
                         "0": "Tell me a story."
                     },
                     "responses": {
-                        "0": "Sure! I am glad you asked!Which story do you want: funny, scary, or a bedtime one?"
+                        "0": "Sure! I am glad you asked! Which story do you want: funny, scary, or a bedtime one?"
                     },
                     "previous_index": 0,
                     "current_index": 0,

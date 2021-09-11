@@ -116,5 +116,4 @@ def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(
             ctx, actor
         ) else None
-        # return random.choice(phrases.get("start_phrases", []))
-        return "X"
+        return random.choice(phrases.get("start_phrases", []))
