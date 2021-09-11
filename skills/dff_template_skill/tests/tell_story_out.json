@@ -1,0 +1,49 @@
+[
+    [
+        "Sure! I am glad you asked!Which story do you want: funny, scary, or a bedtime one?",
+        0.85,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "story_flow",
+                        "which_story_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "6940d6d2-cf09-4e9d-9c85-b8de23bf09d3",
+                    "node_labels": {
+                        "0": [
+                            "story_flow",
+                            "which_story_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "Tell me a story."
+                    },
+                    "responses": {
+                        "0": "Sure! I am glad you asked!Which story do you want: funny, scary, or a bedtime one?"
+                    },
+                    "previous_index": 0,
+                    "current_index": 0,
+                    "misc": {},
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "MUST_CONTINUE"
+        }
+    ]
+]

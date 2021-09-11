@@ -63,7 +63,7 @@ def choose_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     ctx.misc["story"] = story
     ctx.misc["story_type"] = story_type
 
-    return sure_phrase + setup + "..." + what_happend_next_phrase
+    return sure_phrase + " " + setup + " " + "..." + " " + what_happend_next_phrase
 
 
 def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -76,7 +76,7 @@ def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         sure_phrase = (
             random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
         )
-        return sure_phrase + random.choice(phrases.get("which_story", []))
+        return sure_phrase + " " + random.choice(phrases.get("which_story", []))
     elif prev_node == "choose_story_node":
         int_ctx.set_can_continue(ctx, actor, "CANNOT_CONTINUE")
         return random.choice(phrases.get("no", []))
@@ -116,4 +116,5 @@ def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(
             ctx, actor
         ) else None
-        return random.choice(phrases.get("start_phrases", []))
+        # return random.choice(phrases.get("start_phrases", []))
+        return "X"
