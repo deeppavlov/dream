@@ -148,10 +148,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
-  short-story-skill:
-    volumes:
-      - "./skills/short_story_skill:/src"
-      - "./common:/src/common"
     ports:
       - 8057:8057
   small-talk-skill:
@@ -406,6 +402,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8061:8061
+  dff-short-story-skill:
+    volumes:
+      - "./skills/dff_template_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8057:8057
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
