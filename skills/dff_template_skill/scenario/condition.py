@@ -1261,7 +1261,7 @@ def entities(**kwargs):
     slot_info = list(kwargs.items())
 
     def extract_entities(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-        slot_values = ctx.shared_memory.get("slot_values", {})
+        slot_values = getattr(ctx, "shared_memory", {}).get("slot_values", {})
         for slot_name, slot_types in slot_info:
             if isinstance(slot_types, str):
                 extracted_entity = extract_entity(ctx, slot_types)
