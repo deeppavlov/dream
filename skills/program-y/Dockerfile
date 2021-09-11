@@ -1,33 +1,12 @@
-FROM python:3.9.1
-# ###################### IMMUTABLE SECTION ######################################
-# Do not change anything in this section
+FROM python:3.7.4
+
 WORKDIR /src
 
-COPY common/dff/requirements.txt .
+COPY ./skills/program-y/requirements.txt .
 RUN pip install -r requirements.txt
 
-# ###################### CUSTOM SECTION ######################################
-# Here you can make changes
+COPY ./skills/program-y/ ./
+COPY ./common/ ./dream_aiml/src/common/
+COPY ./state_formatters/ ./dream_aiml/src/state_formatters/
 
-ARG RANDOM_SEED
-ENV RANDOM_SEED ${RANDOM_SEED:-2718}
-
-ARG SERVICE_NAME
-ENV SERVICE_NAME ${SERVICE_NAME}
-
-COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
-
-COPY skills/${SERVICE_NAME}/ ./
-COPY ./common/ ./common/
-COPY ./state_formatters ./state_formatters
-
-ARG SERVICE_PORT
-ENV SERVICE_PORT ${SERVICE_PORT}
-
-# wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
-HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
-
-
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD cd /src/dream_aiml/scripts/xnix && ./sanic.sh

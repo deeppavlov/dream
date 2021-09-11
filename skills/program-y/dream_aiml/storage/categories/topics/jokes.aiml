@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <!-- Free software &copy; 2001-2003 ALICE A.I. Foundation. -->
+    <!-- This program is open source code released under -->
+    <!-- the terms of the GNU General Public License     -->
+    <!-- as published by the Free Software Foundation.   -->
+    <!-- Complies with AIML 1.01 Tag Set Specification -->
+    <!-- as adopted by the ALICE A.I. Foundation.  -->
+    <!-- Annotated Version updated September 2003 -->
+
+    <!-- Modified for Y-Bot by Keith Sterling March 2017 -->
+
+
+    <category>
+        <pattern>* SOMETHING FUNNY</pattern>
+        <template>
+            <srai>JOKE</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>TELL * JOKE</pattern>
+        <template>
+            <srai>JOKE</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># MAKE * LAUGH</pattern>
+        <template>
+            <srai>JOKE</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>JOKE</pattern>
+        <template>
+            Seems like I don't have a sense of humor, so I prefer not to joke.
+        </template>
+    </category>
+
+    <category>
+        <pattern>_</pattern>
+        <that>1110011010001011111? 010011010101100111011!</that>
+        <template>Well computers think it's a funny joke.</template>
+    </category>
+
+</aiml>

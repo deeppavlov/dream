@@ -33,11 +33,10 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def handler(requested_data, random_seed=None):
+def handler(requested_data, random_seed=RANDOM_SEED):
     st_time = time.time()
     ctxs = load_ctxs(requested_data)
     random_seed = requested_data.get("random_seed", random_seed)  # for tests
-
     responses = []
     for ctx in ctxs:
         try:

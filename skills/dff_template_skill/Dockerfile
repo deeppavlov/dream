@@ -1,13 +1,16 @@
 FROM python:3.9.1
 # ###################### IMMUTABLE SECTION ######################################
-# Do not change anything in this section 
+# Do not change anything in this section
 WORKDIR /src
 
 COPY common/dff/requirements.txt .
 RUN pip install -r requirements.txt
 
 # ###################### CUSTOM SECTION ######################################
-# Here you can make changes 
+# Here you can make changes
+
+ARG RANDOM_SEED
+ENV RANDOM_SEED ${RANDOM_SEED:-2718}
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
@@ -18,6 +21,7 @@ RUN python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
+COPY ./state_formatters ./state_formatters
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
