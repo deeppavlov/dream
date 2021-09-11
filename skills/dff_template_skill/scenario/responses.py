@@ -2,7 +2,7 @@ import logging
 import random
 import sentry_sdk
 from os import getenv
-from typing import Any, Optional, Tuple
+from typing import Any, Tuple
 
 from dff.core import Actor, Context
 import common.dff.integration.response as int_rsp

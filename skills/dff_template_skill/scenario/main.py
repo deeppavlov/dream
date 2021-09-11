@@ -1,7 +1,7 @@
 import logging
 
-from dff.core.keywords import GRAPH, RESPONSE, PROCESSING, TRANSITIONS
-from dff.core import Actor, Context, Node
+from dff.core.keywords import GRAPH, RESPONSE, TRANSITIONS
+from dff.core import Actor
 import dff.transitions as trs
 import dff.conditions as cnd
 
