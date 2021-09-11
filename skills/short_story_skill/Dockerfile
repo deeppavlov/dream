@@ -1,29 +1,20 @@
-FROM python:3.9.1
-# ###################### IMMUTABLE SECTION ######################################
-# Do not change anything in this section 
+FROM python:3.6
+
+RUN mkdir /src
+RUN mkdir /data
+RUN mkdir /src/common
+
+COPY ./skills/reddit_ner_skill/requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
+
+COPY ./skills/short_story_skill/ /src/
+COPY ./common/ /src/common/
+
+COPY ./skills/short_story_skill/phrases.json /data/phrases.json
+COPY ./skills/short_story_skill/stories.json /data/stories.json
+
 WORKDIR /src
 
-COPY common/dff/requirements.txt .
-RUN pip install -r requirements.txt
+EXPOSE 8057:8057
 
-# ###################### CUSTOM SECTION ######################################
-# Here you can make changes 
-
-ARG SERVICE_NAME
-ENV SERVICE_NAME ${SERVICE_NAME}
-
-COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
-
-COPY skills/${SERVICE_NAME}/ ./
-COPY ./common/ ./common/
-
-ARG SERVICE_PORT
-ENV SERVICE_PORT ${SERVICE_PORT}
-
-# wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
-HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
-
-
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD gunicorn --workers=1 --name=short_story_skill --bind 0.0.0.0:8057 --timeout=500 server:app

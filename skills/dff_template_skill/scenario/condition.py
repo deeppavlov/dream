@@ -1,4 +1,5 @@
-import logging, re
+import logging
+import re
 from . import response as loc_rsp
 
 from dff.core import Context, Actor
@@ -15,7 +16,9 @@ def has_story_left(ctx: Context, actor: Actor) -> bool:
 
 
 def is_tell_me_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    return bool(re.search("tell", ctx.last_request,re.IGNORECASE) and re.search("story", ctx.last_request, re.IGNORECASE))
+    return bool(
+        re.search("tell", ctx.last_request, re.IGNORECASE) and re.search("story", ctx.last_request, re.IGNORECASE)
+    )
 
 
 def is_asked_for_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:

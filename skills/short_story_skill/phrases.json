@@ -1,0 +1,27 @@
+{
+  "start_phrases":[
+    "Do you mind if I tell you a story?",
+    "Do you want me to tell you a short story?"
+  ],
+  "sure":[
+    "Sure! I am glad you asked!",
+    "Yes, sure."
+  ],
+  "which_story":[
+    "Which story do you want: funny, scary, or a bedtime one?",
+    "What kind of story do you want: funny, scary, or a bedtime one?"
+  ],
+  "what_happend_next":[
+    "Wanna hear what happend next?",
+    "Are you still intrigued?",
+    "Do you want to know what happend after?"
+  ],
+  "no":[
+    "Oh, okay, sorry. I guess it's boring. What do you want to talk about then?",
+    "Okay. What do you want then?"
+  ],
+  "no_stories":[
+    "I guess I don't have such stories.",
+    "I don't really have stories about that."
+  ]
+}

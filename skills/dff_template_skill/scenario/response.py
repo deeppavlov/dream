@@ -1,4 +1,7 @@
-import logging, json, re, random
+import logging
+import json
+import re
+import random
 
 from dff.core import Context, Actor
 
@@ -7,17 +10,21 @@ import common.dff.integration.condition as int_cnd
 
 logger = logging.getLogger(__name__)
 
-with open("data/stories.json",) as stories_json:
+with open(
+    "data/stories.json",
+) as stories_json:
     stories = json.load(stories_json)
 
-with open("data/phrases.json",) as phrases_json:
+with open(
+    "data/phrases.json",
+) as phrases_json:
     phrases = json.load(phrases_json)
 
 
 def get_previous_node(ctx: Context) -> str:
     try:
         return [node_tuple[1] for node_tuple in ctx.node_labels.values()][-2]
-    except:
+    except Exception:
         return "start_node"
 
 
@@ -38,12 +45,10 @@ def get_story_type(ctx: Context, actor: Actor) -> str:
 
 def get_story_left(ctx: Context, actor: Actor) -> str:
     story_type = get_story_type(ctx, actor)
-    stories_left = list(
-        set(stories.get(story_type, [])) - set(ctx.misc.get("stories_told", []))
-    )
+    stories_left = list(set(stories.get(story_type, [])) - set(ctx.misc.get("stories_told", [])))
     try:
         return random.choice(stories_left)
-    except:
+    except Exception:
         return ""
 
 
@@ -55,9 +60,7 @@ def choose_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     what_happend_next_phrase = random.choice(phrases.get("what_happend_next", []))
 
     # include sure if user defined a type of story at the beginnig, otherwise include nothing
-    sure_phrase = (
-        random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
-    )
+    sure_phrase = random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
 
     ctx.misc["stories_told"] = ctx.misc.get("stories_told", []) + [story]
     ctx.misc["story"] = story
@@ -73,9 +76,7 @@ def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
 
         # include sure if user asked to tell a story, include nothing if agent proposed to tell a story
-        sure_phrase = (
-            random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
-        )
+        sure_phrase = random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
         return sure_phrase + " " + random.choice(phrases.get("which_story", []))
     elif prev_node == "choose_story_node":
         int_ctx.set_can_continue(ctx, actor, "CANNOT_CONTINUE")
@@ -86,9 +87,7 @@ def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def tell_punchline(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, "CAN_CONTINUE")
-    int_ctx.set_confidence(ctx, actor, 0.8) if int_cnd.is_do_not_know_vars(
-        ctx, actor
-    ) else None
+    int_ctx.set_confidence(ctx, actor, 0.8) if int_cnd.is_do_not_know_vars(ctx, actor) else None
     story = ctx.misc.get("story", "")
     story_type = ctx.misc.get("story_type", "")
 
@@ -113,7 +112,5 @@ def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     # if prev_node is tell_punchline_node or fallback_node
     else:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
-        int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(
-            ctx, actor
-        ) else None
+        int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(ctx, actor) else None
         return random.choice(phrases.get("start_phrases", []))

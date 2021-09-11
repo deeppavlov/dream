@@ -1,80 +1,53 @@
 #!/usr/bin/env python
 
 import logging
-import time
-import os
-import random
-
-from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
+import json
+from os import getenv
 import sentry_sdk
-from sentry_sdk.integrations.logging import ignore_logger
+from flask import Flask, request, jsonify
 
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 
-from common.dff.integration.actor import load_ctxs, get_response
+from teller import Teller
 
-from scenario.main import actor
-# import test_server
+STORIES_FILE = "/data/stories.json"
+PHRASES_FILE = "/data/phrases.json"
 
+status_constants = {"cannot": CAN_NOT_CONTINUE, "can": CAN_CONTINUE_SCENARIO, "must": MUST_CONTINUE}
 
-ignore_logger("root")
-
-sentry_sdk.init(os.getenv("SENTRY_DSN"))
-SERVICE_NAME = os.getenv("SERVICE_NAME")
-SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
-RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
+sentry_sdk.init(getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+gunicorn_logger = logging.getLogger("gunicorn.error")
+logger.handlers = gunicorn_logger.handlers
+logger.setLevel(gunicorn_logger.level)
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
-
-def handler(requested_data, random_seed=None):
-    st_time = time.time()
-    ctxs = load_ctxs(requested_data)
-    random_seed = requested_data.get("random_seed", random_seed)  # for tests
-
-    responses = []
-    for ctx in ctxs:
-        try:
-            # for tests
-            if random_seed:
-                random.seed(int(random_seed))
-            ctx = actor(ctx)
-            responses.append(get_response(ctx, actor))
-        except Exception as exc:
-            sentry_sdk.capture_exception(exc)
-            logger.exception(exc)
-            responses.append(("", 1.0, {}, {}, {}))
-
-    total_time = time.time() - st_time
-    logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
-    return responses
-
-
+logger.info("Loading stories")
 try:
-    # test_server.run_test(handler)
-    logger.info("test query processed")
-except Exception as exc:
-    sentry_sdk.capture_exception(exc)
-    logger.exception(exc)
-    raise exc
+    stories = json.load(open(STORIES_FILE))
+except json.JSONDecodeError as e:
+    logger.error("Stories file is not properly encoded.")
+    raise e
 
-logger.info(f"{SERVICE_NAME} is loaded and ready")
+logger.info("Loading phrases")
+try:
+    phrases = json.load(open(PHRASES_FILE))
+except json.JSONDecodeError as e:
+    logger.error("Phrases file is not properly encoded.")
+    raise e
+
+logger.info("Creating teller")
+teller = Teller(stories, phrases, status_constants, logger)
+
+logger.info("All done!")
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
-    # responses = handler(request.json, RANDOM_SEED)  # TEST
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
-    responses = handler(request.json)
-    return jsonify(responses)
-
-
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=SERVICE_PORT)
+    human_sentence = request.json["human_sentence"]
+    intents = request.json["intents"]
+    state = request.json["state"]
+    return jsonify([teller.tell(human_sentence, intents, state)])
