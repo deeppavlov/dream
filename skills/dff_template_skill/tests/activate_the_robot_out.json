@@ -1,0 +1,49 @@
+[
+    [
+        "Robot activated. Awaiting your command Mate.",
+        0.85,
+        {
+            "age_group": "unknown",
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "dff_template_skill_state": {
+                "context": {
+                    "current_index": 0,
+                    "id": "62160483-dca0-45e7-9ad2-f5ae04ce2148",
+                    "misc": {},
+                    "node_labels": {
+                        "0": [
+                            "story_flow",
+                            "start_node"
+                        ]
+                    },
+                    "previous_index": 0,
+                    "requests": {
+                        "0": "ACTIVATE THE ROBOT"
+                    },
+                    "responses": {
+                        "0": "Robot activated. Awaiting your command Mate."
+                    },
+                    "validation": false
+                },
+                "current_turn_dff_suspended": false,
+                "history": {
+                    "0": [
+                        "story_flow",
+                        "start_node"
+                    ]
+                },
+                "previous_human_utter_index": 0,
+                "shared_memory": {}
+            },
+            "disliked_skills": [],
+            "used_links": {}
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

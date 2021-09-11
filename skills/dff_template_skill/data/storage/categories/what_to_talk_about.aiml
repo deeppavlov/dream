@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+  <category>
+    <pattern>WHAT ^ <set>wantto</set> ^ <set>talk</set> ^ ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>WHAT ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>WHAT ^ <set>talk</set> ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>WHICH ^ <set>wantto</set> ^ <set>talk</set> ^ ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>WHICH ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>WHICH ^ <set>talk</set> ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>WHATEVER ^ <set>wantto</set> ^ <set>talk</set> ^ ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>WHATEVER ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>WHATEVER ^ <set>talk</set> ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>^ NOT KNOW ^ WHAT ^ <set>wantto</set> ^ <set>talk</set> ^ ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ NOT KNOW ^ WHAT ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ NOT KNOW ^ WHAT ^ <set>talk</set> ^ ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ CAN ^ I ^ CHOOSE ^ TOPIC ^</pattern>
+    <template>
+      We can talk on different topics, like movies, books, or I can answer you questions or share news.
+      What do you want to talk about?
+    </template>
+  </category>
+
+  <category>
+    <pattern>WHAT_TO_TALK_ABOUT</pattern>
+    <template>
+      <random>
+        <li>We can talk on different topics, like movies, books, or I can answer you questions.</li>
+        <li>We can talk about movies. For example, what is the last movie you have seen?</li>
+        <li>We can talk about books. Do you love reading?</li>
+      </random>
+    </template>
+  </category>
+
+
+  <category>
+    <pattern># NOT # WHAT I # ASKED YOU ABOUT #</pattern>
+    <template>
+      <srai>ASKED_ABOUT_SOMETHING_ELSE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># NOT # WHAT I ASK YOU ABOUT #</pattern>
+    <template>
+      <srai>ASKED_ABOUT_SOMETHING_ELSE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># NOT # WHAT I AM ASKING YOU ABOUT #</pattern>
+    <template>
+      <srai>ASKED_ABOUT_SOMETHING_ELSE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>ASKED_ABOUT_SOMETHING_ELSE</pattern>
+    <template>
+      Oh... I am sorry. Probably, I'm thinking too fast, so I switched the topic. Tell me again, please, what do you want to talk about?
+    </template>
+  </category>
+
+  <category>
+    <pattern>I ASKED YOU ABOUT #</pattern>
+    <template>
+      Hm... Sorry, I'm thinking too fast, so I switched the topic. Tell me what do you want to know about <star/>.
+    </template>
+  </category>
+
+</aiml>
