@@ -2,7 +2,10 @@ import logging
 import random
 import sentry_sdk
 from os import getenv
+from typing import Any, Optional, Tuple
 
+from dff.core import Actor, Context
+import common.dff.integration.response as int_rsp
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import link_to_skill2key_words
@@ -12,36 +15,96 @@ from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_entities, is_toxic_or_blacklisted_utterance, is_no
 
 from .utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement
-
-from .responses_utils import (PRIVACY_REPLY,
-                              DONTKNOW_PHRASE,
-                              SUPER_CONF,
-                              ALMOST_SUPER_CONF,
-                              UNIVERSAL_RESPONSE_CONF,
-                              UNIVERSAL_RESPONSE_LOW_CONF,
-                              ACKNOWLEDGEMENT_CONF,
-                              DONTKNOW_CONF,
-                              LINKTO_QUESTIONS_LOWERCASED,
-                              UNIVERSAL_INTENT_RESPONSES)
-from .responses_utils import get_what_do_you_mean_intent, get_bot_based_on_skill_reply, get_current_intents, \
-    generate_acknowledgement, get_unused_reply, get_bot_based_on_topic_or_intent_reply
+from .responses_utils import (
+    PRIVACY_REPLY,
+    DONTKNOW_PHRASE,
+    SUPER_CONF,
+    ALMOST_SUPER_CONF,
+    UNIVERSAL_RESPONSE_CONF,
+    UNIVERSAL_RESPONSE_LOW_CONF,
+    ACKNOWLEDGEMENT_CONF,
+    DONTKNOW_CONF,
+    LINKTO_QUESTIONS_LOWERCASED,
+    UNIVERSAL_INTENT_RESPONSES,
+)
+from .responses_utils import (
+    get_what_do_you_mean_intent,
+    get_bot_based_on_skill_reply,
+    get_current_intents,
+    generate_acknowledgement,
+    get_unused_reply,
+    get_bot_based_on_topic_or_intent_reply,
+)
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+REPLY_TYPE = Tuple[str, float, dict, dict, dict]
 
-def are_we_recorded_response(dialog):
+
+def grounding_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+    curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
+
+    def gathering_responses(reply, confidence, human_attr, bot_attr, attr, name):
+        nonlocal curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs
+        if reply and confidence:
+            curr_responses += [reply]
+            curr_confidences += [confidence]
+            curr_human_attrs += [human_attr]
+            curr_bot_attrs += [bot_attr]
+            curr_attrs += [attr]
+            logger.info(f"Grounding skill {name}: {reply}")
+
+    if "agent" in ctx.misc:
+        dialog = ctx.misc["agent"]["dialog"]
+
+        is_toxic = (
+            is_toxic_or_blacklisted_utterance(dialog["human_utterances"][-2])  # ???
+            if len(dialog["human_utterances"]) > 1
+            else False
+        )
+        reply, confidence, human_attr, bot_attr, attr = are_we_recorded_response(ctx)
+        gathering_responses(reply, confidence, human_attr, bot_attr, attr, "are_we_recorded")
+
+        if not is_toxic:
+            reply, confidence, human_attr, bot_attr, attr = what_do_you_mean_response(ctx)
+            gathering_responses(reply, confidence, human_attr, bot_attr, attr, "what_do_you_mean")
+
+        reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement_response(ctx)
+        gathering_responses(reply, confidence, human_attr, bot_attr, attr, "acknowledgement_response")
+
+        reply, confidence, human_attr, bot_attr, attr = generate_universal_response(ctx)
+        gathering_responses(reply, confidence, human_attr, bot_attr, attr, "universal_response")
+
+        reply, confidence, human_attr, bot_attr, attr = ask_for_topic_after_two_no_in_a_row_to_linkto_response(ctx)
+        gathering_responses(reply, confidence, human_attr, bot_attr, attr, '2 "no" detected')
+
+    # to pass assert  "Got empty replies"
+    if len(curr_responses) == 0:
+        gathering_responses(DONTKNOW_PHRASE, DONTKNOW_CONF, {}, {}, {}, "empty_response")
+
+    return int_rsp.multi_response(
+        replies=curr_responses,
+        confidences=curr_confidences,
+        human_attr=curr_human_attrs,
+        bot_attr=curr_bot_attrs,
+        hype_attr=curr_attrs,
+    )(ctx, actor, *args, **kwargs)
+
+
+def are_we_recorded_response(ctx: Context) -> REPLY_TYPE:
     """
-      Returns:
-          reply PRIVACY_REPLY or (empty),
-          confidence 1.0 or 0.0,
-          human attributes (empty),
-          bot attributes (empty),
-          attributes MUST_CONTINUE or (empty)
-      """
+    Returns:
+        reply PRIVACY_REPLY or (empty),
+        confidence 1.0 or 0.0,
+        human attributes (empty),
+        bot attributes (empty),
+        attributes MUST_CONTINUE or (empty)
+    """
+    last_human_utterance = ctx.last_request
     attr = {}
-    if are_we_recorded(dialog["human_utterances"][-1]):
+    if are_we_recorded(last_human_utterance):
         reply, confidence = PRIVACY_REPLY, 1
         attr = {"can_continue": MUST_CONTINUE}
     else:
@@ -49,15 +112,16 @@ def are_we_recorded_response(dialog):
     return reply, confidence, {}, {}, attr
 
 
-def what_do_you_mean_response(dialog):
+def what_do_you_mean_response(ctx: Context) -> REPLY_TYPE:
     """Generate response when we are asked about subject of the dialog
-      Returns:
-          template phrase based on previous skill or intent or topic
-          confidence (can be 0.0, DONTKNOW_CONF, UNIVERSAL_RESPONSE_CONF, SUPER_CONF)
-          human attributes (empty),
-          bot attributes (empty),
-          attributes (empty or MUST_CONTINUE)
-      """
+    Returns:
+        template phrase based on previous skill or intent or topic
+        confidence (can be 0.0, DONTKNOW_CONF, UNIVERSAL_RESPONSE_CONF, SUPER_CONF)
+        human attributes (empty),
+        bot attributes (empty),
+        attributes (empty or MUST_CONTINUE)
+    """
+    dialog = ctx.misc["agent"]["dialog"]
     attr = {}
     try:
         what_do_you_mean_intent = get_what_do_you_mean_intent(dialog["human_utterances"][-1])
@@ -69,7 +133,8 @@ def what_do_you_mean_response(dialog):
             reply = get_bot_based_on_skill_reply(dialog.get("bot_utterances", []))
             if reply is None:
                 reply = get_bot_based_on_topic_or_intent_reply(
-                    dialog["human_utterances"][-2] if len(dialog["human_utterances"]) > 1 else [])
+                    dialog["human_utterances"][-2] if len(dialog["human_utterances"]) > 1 else []
+                )
             if reply is None:
                 reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
             else:
@@ -89,7 +154,7 @@ def what_do_you_mean_response(dialog):
     return reply, confidence, {}, {}, attr
 
 
-def generate_acknowledgement_response(dialog):
+def generate_acknowledgement_response(ctx: Context) -> REPLY_TYPE:
     """Generate acknowledgement for human questions.
 
     Returns:
@@ -99,6 +164,7 @@ def generate_acknowledgement_response(dialog):
         bot attributes (empty),
         attributes (with response parts set to acknowledgement)
     """
+    dialog = ctx.misc["agent"]["dialog"]
     curr_intents = get_current_intents(dialog["human_utterances"][-1])
     curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENTS]
 
@@ -110,9 +176,9 @@ def generate_acknowledgement_response(dialog):
     # we generate acknowledgement ONLY if we have some entities!
     if curr_considered_intents and len(curr_human_entities) and contains_question:
         # can generate acknowledgement
-        ackn_response, attr = generate_acknowledgement(dialog["human_utterances"][-1],
-                                                       curr_intents,
-                                                       curr_considered_intents)
+        ackn_response, attr = generate_acknowledgement(
+            dialog["human_utterances"][-1], curr_intents, curr_considered_intents
+        )
     elif contains_question:
         ackn_response = random.choice(MANY_INTERESTING_QUESTIONS)
         attr = {"response_parts": ["acknowledgement"]}
@@ -122,26 +188,27 @@ def generate_acknowledgement_response(dialog):
     return ackn_response, ACKNOWLEDGEMENT_CONF, {}, {}, attr
 
 
-def generate_universal_response(dialog):
+def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     """
-        Returns:
-          string from universal_intent_responses file filtered with intent, 
-          confidence (can be UNIVERSAL_RESPONSE_CONF, UNIVERSAL_RESPONSE_LOW_CONF, ALMOST_SUPER_CONF),
-          human attributes (used universal intent responses), # for now not used
-          bot attributes (empty),
-          attributes (response parts)
-      """
+    Returns:
+      string from universal_intent_responses file filtered with intent,
+      confidence (can be UNIVERSAL_RESPONSE_CONF, UNIVERSAL_RESPONSE_LOW_CONF, ALMOST_SUPER_CONF),
+      human attributes (used universal intent responses), # for now not used
+      bot attributes (empty),
+      attributes (response parts)
+    """
+    dialog = ctx.misc["agent"]["dialog"]
     curr_intents = get_current_intents(dialog["human_utterances"][-1])
     # currently unused this part because it's specific formatter need to be implemented
     human_attr = {}
-    human_attr["grounding_skill"] = {}  # dialog["human"]["attributes"].get("grounding_skill", {})
-    human_attr["grounding_skill"]["used_universal_intent_responses"] = []  # human_attr["grounding_skill"].get(
-    #     "used_universal_intent_responses", []
-    # )
+    human_attr["grounding_skill"] = ctx.misc.get("grounding_skill", {})
+    human_attr["grounding_skill"]["used_universal_intent_responses"] = human_attr["grounding_skill"].get(
+        "used_universal_intent_responses", []
+    )
     attr = {}
     reply = ""
     confidence = 0.0
-    ackn, _, _, _, _ = generate_acknowledgement_response(dialog)
+    ackn, _, _, _, _ = generate_acknowledgement_response(ctx)
     is_question = is_any_question_sentence_in_utterance(dialog["human_utterances"][-1])
 
     def universal_response(intent):
@@ -150,6 +217,8 @@ def generate_universal_response(dialog):
         reply = get_unused_reply(intent, human_attr["grounding_skill"]["used_universal_intent_responses"])
         human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
         attr = {"response_parts": ["body"], "type": "universal_response"}
+
+    ctx.misc["grounding_skill"] = human_attr["grounding_skill"]
 
     for intent in curr_intents:
         if intent in UNIVERSAL_INTENT_RESPONSES:
@@ -170,15 +239,16 @@ def generate_universal_response(dialog):
     return reply, confidence, human_attr, {}, attr
 
 
-def ask_for_topic_after_two_no_in_a_row_to_linkto_response(dialog):
+def ask_for_topic_after_two_no_in_a_row_to_linkto_response(ctx: Context) -> REPLY_TYPE:
     """
-      Returns:
-          greeting phrase - suggesting topics to talk about,
-          confidence (0.0 or SUPER_CONF),
-          human attributes (empty),
-          bot attributes (empty),
-          attributes (empty of MUST_CONTINUE)
-      """
+    Returns:
+        greeting phrase - suggesting topics to talk about,
+        confidence (0.0 or SUPER_CONF),
+        human attributes (empty),
+        bot attributes (empty),
+        attributes (empty of MUST_CONTINUE)
+    """
+    dialog = ctx.misc["agent"]["dialog"]
     prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower() if len(dialog["bot_utterances"]) else ""
     prev_prev_bot_uttr = dialog["bot_utterances"][-2]["text"].lower() if len(dialog["bot_utterances"]) > 1 else ""
     prev_was_linkto = any([question in prev_bot_uttr for question in LINKTO_QUESTIONS_LOWERCASED])

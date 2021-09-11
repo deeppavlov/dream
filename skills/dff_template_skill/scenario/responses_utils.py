@@ -40,15 +40,14 @@ with open("./data/universal_intent_responses.json", "r") as f:
 
 
 #####################################################################
-#					For what_do_you_mean_response					#
+# 					For what_do_you_mean_response					#
 #####################################################################
 def get_what_do_you_mean_intent(last_human_utterance):
     return (
-        last_human_utterance
-            .get("annotations", {})
-            .get("intent_catcher", {})
-            .get("what_are_you_talking_about", {})
-            .get("detected", False)
+        last_human_utterance.get("annotations", {})
+        .get("intent_catcher", {})
+        .get("what_are_you_talking_about", {})
+        .get("detected", False)
     )
 
 
@@ -66,9 +65,7 @@ def get_bot_based_on_topic_or_intent_reply(prev_human_utterance):
     # collect prev current intents, topics
     intent_list, da_topic_list, cobot_topic_list = collect_topics_entities_intents(prev_human_utterance)
     # get prev entity_name
-    prev_annotations = (
-        prev_human_utterance.get("annotations", {}) if len(prev_human_utterance) > 1 else {}
-    )
+    prev_annotations = prev_human_utterance.get("annotations", {}) if len(prev_human_utterance) > 1 else {}
     entity_name = get_entity_name(prev_annotations)
 
     for intent in INTENTS_BY_POPULARITY:  # start from least popular
@@ -86,7 +83,7 @@ def get_bot_based_on_topic_or_intent_reply(prev_human_utterance):
 
 
 #####################################################################
-#				For generate_acknowledgement_response				#
+# 				For generate_acknowledgement_response				#
 #####################################################################
 def collect_topics_entities_intents(prev_human_utterance):
     if len(prev_human_utterance) > 1:
@@ -118,16 +115,13 @@ def get_current_intents(last_human_utterances):
 
 def get_last_human_sent(last_human_utterances):
     return (
-        last_human_utterances
-            .get("annotations", {})
-            .get("sentseg", {})
-            .get("segments", [last_human_utterances["text"]])[-1]
+        last_human_utterances.get("annotations", {})
+        .get("sentseg", {})
+        .get("segments", [last_human_utterances["text"]])[-1]
     )
 
 
-def generate_acknowledgement(last_human_utterances,
-                             curr_intents,
-                             curr_considered_intents):
+def generate_acknowledgement(last_human_utterances, curr_intents, curr_considered_intents):
     ackn_response = ""
     is_need_nounphrase_intent = any([intent in curr_intents for intent in ["open_question_opinion"]])
     if is_need_nounphrase_intent:
@@ -145,7 +139,7 @@ def generate_acknowledgement(last_human_utterances,
 
 
 #####################################################################
-#					For generate_universal_response					#
+# 					For generate_universal_response					#
 #####################################################################
 def get_unused_reply(intent, used_universal_intent_responses):
     available_resps = list(set(UNIVERSAL_INTENT_RESPONSES[intent]).difference(set(used_universal_intent_responses)))
