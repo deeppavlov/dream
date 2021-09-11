@@ -6,7 +6,7 @@
         {
             "human_utterances": [
                 {
-                    "text": "Tell me a story.",
+                    "text": "Tell me funny story.",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"

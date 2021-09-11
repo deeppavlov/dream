@@ -1,6 +1,6 @@
 [
     [
-        "Sure! I am glad you asked! Which story do you want: funny, scary, or a bedtime one?",
+        "Yes, sure. This one is from my friend. So one time I was home alone and it was around dinnertime when I decided to make myself something to eat. I opened the freezer and dug around until I found what appeared to be chicken nuggets in an unopened plastic bag that for some reason, didn\u2019t have any cooking instructions. Thinking that my parents must have thrown away the box for box tops, I called my mom to ask how long and at what temperature to cook chicken nuggets. She told me both of them, I laid out about 20 on a tray and stuck it in the oven, setting the timer before I walked out of the kitchen. When it was almost time to get my chicken nuggets, I walked into a cinnamon scented kitchen. I searched all over that kitchen, trying to find the cinnamon scent, leading me to the oven. I decide to turn on the oven light to see if maybe my mom had stuck some cookies in the oven and forgot to bake them, but instead ... Are you still intrigued?",
         0.85,
         {
             "dff_template_skill_state": {
@@ -9,27 +9,33 @@
                 "history": {
                     "0": [
                         "story_flow",
-                        "which_story_node"
+                        "choose_story_node"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "058288bd-a1b9-4768-948c-7a1dba0d4bf9",
+                    "id": "5c7c87a8-03e5-4f0b-888f-7ff22c1d7825",
                     "node_labels": {
                         "0": [
                             "story_flow",
-                            "which_story_node"
+                            "choose_story_node"
                         ]
                     },
                     "requests": {
-                        "0": "Tell me a story."
+                        "0": "Tell me funny story."
                     },
                     "responses": {
-                        "0": "Sure! I am glad you asked! Which story do you want: funny, scary, or a bedtime one?"
+                        "0": "Yes, sure. This one is from my friend. So one time I was home alone and it was around dinnertime when I decided to make myself something to eat. I opened the freezer and dug around until I found what appeared to be chicken nuggets in an unopened plastic bag that for some reason, didn\u2019t have any cooking instructions. Thinking that my parents must have thrown away the box for box tops, I called my mom to ask how long and at what temperature to cook chicken nuggets. She told me both of them, I laid out about 20 on a tray and stuck it in the oven, setting the timer before I walked out of the kitchen. When it was almost time to get my chicken nuggets, I walked into a cinnamon scented kitchen. I searched all over that kitchen, trying to find the cinnamon scent, leading me to the oven. I decide to turn on the oven light to see if maybe my mom had stuck some cookies in the oven and forgot to bake them, but instead ... Are you still intrigued?"
                     },
                     "previous_index": 0,
                     "current_index": 0,
-                    "misc": {},
+                    "misc": {
+                        "stories_told": [
+                            "chicken nuggets"
+                        ],
+                        "story": "chicken nuggets",
+                        "story_type": "funny"
+                    },
                     "validation": false
                 }
             },
@@ -43,7 +49,7 @@
         },
         {},
         {
-            "can_continue": "MUST_CONTINUE"
+            "can_continue": "can"
         }
     ]
 ]
