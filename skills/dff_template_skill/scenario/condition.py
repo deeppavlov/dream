@@ -1210,32 +1210,33 @@ def has_album(album_name: str):
 
 
 def extract_entity(ctx, entity_type):
-    vars = ctx.shared_memory.get("vars", {})
-    user_uttr = state_utils.get_last_human_utterance(vars)
-    annotations = user_uttr.get("annotations", {})
-    logger.info(f"annotations {annotations}")
-    if entity_type.startswith("tags"):
-        tag = entity_type.split("tags:")[1]
-        nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
-        for nounphr in nounphrases:
-            nounphr_text = nounphr.get("text", "")
-            nounphr_label = nounphr.get("label", "")
-            if nounphr_label == tag:
-                found_entity = nounphr_text
+    vars = {"agent": ctx.misc.get("agent", {})}
+    if vars["agent"]:
+        user_uttr = state_utils.get_last_human_utterance(vars)
+        annotations = user_uttr.get("annotations", {})
+        logger.info(f"annotations {annotations}")
+        if entity_type.startswith("tags"):
+            tag = entity_type.split("tags:")[1]
+            nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
+            for nounphr in nounphrases:
+                nounphr_text = nounphr.get("text", "")
+                nounphr_label = nounphr.get("label", "")
+                if nounphr_label == tag:
+                    found_entity = nounphr_text
+                    return found_entity
+        elif entity_type.startswith("wiki"):
+            wp_type = entity_type.split("wiki:")[1]
+            found_entity, *_ = find_entity_by_types(annotations, [wp_type])
+            if found_entity:
                 return found_entity
-    elif entity_type.startswith("wiki"):
-        wp_type = entity_type.split("wiki:")[1]
-        found_entity, *_ = find_entity_by_types(annotations, [wp_type])
-        if found_entity:
-            return found_entity
-    elif entity_type == "any_entity":
-        entities = annotations.get("entity_detection", {}).get("entities", [])
-        if entities:
-            return entities[0]
-    else:
-        res = re.findall(entity_type, user_uttr["text"])
-        if res:
-            return res[0]
+        elif entity_type == "any_entity":
+            entities = annotations.get("entity_detection", {}).get("entities", [])
+            if entities:
+                return entities[0]
+        else:
+            res = re.findall(entity_type, user_uttr["text"])
+            if res:
+                return res[0]
     return ""
 
 
@@ -1261,19 +1262,19 @@ def entities(**kwargs):
     slot_info = list(kwargs.items())
 
     def extract_entities(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-        slot_values = getattr(ctx, "shared_memory", {}).get("slot_values", {})
+        slot_values = ctx.misc.get("agent", {}).get("shared_memory", {}).get("slot_values", {})
         for slot_name, slot_types in slot_info:
             if isinstance(slot_types, str):
                 extracted_entity = extract_entity(ctx, slot_types)
                 if extracted_entity:
                     slot_values[slot_name] = extracted_entity
-                    ctx.shared_memory["slot_values"] = slot_values
+                    ctx.misc["agent"]["shared_memory"]["slot_values"] = slot_values
             elif isinstance(slot_types, list):
                 for slot_type in slot_types:
                     extracted_entity = extract_entity(ctx, slot_type)
                     if extracted_entity:
                         slot_values[slot_name] = extracted_entity
-                        ctx.shared_memory["slot_values"] = slot_values
+                        ctx.misc["agent"]["shared_memory"]["slot_values"] = slot_values
         return node_label, node
 
     return extract_entities
