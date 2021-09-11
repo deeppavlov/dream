@@ -1,4 +1,5 @@
 # Hypothesis scorer annotator
+Hypothesis scorer is an annotator which gets a replica as an input and estimate it. There are scorer which estimates quality of hypothesis and gives score with using CatBoost model.
 
 ###Metrics
 

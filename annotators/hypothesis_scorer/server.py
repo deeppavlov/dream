@@ -6,11 +6,11 @@ import sentry_sdk
 import uvicorn as uvicorn
 from catboost import CatBoostClassifier
 from fastapi import FastAPI
-from pydantic import BaseModel, conlist
 from sentry_sdk.integrations.logging import ignore_logger
 
 from annotators.hypothesis_scorer import test_server
-from score import get_features
+from annotators.hypothesis_scorer.schemas.request_schema import RequestSchema
+from annotators.hypothesis_scorer.score.score import get_features
 
 ignore_logger("root")
 
@@ -70,18 +70,17 @@ def handler(contexts, hypotheses):
     st_time = time.time()
 
     try:
-        responses = get_probas(contexts, hypotheses).tolist()
+        return [{"batch": get_probas(contexts, hypotheses).tolist()}]
     except Exception as e:
-        responses = [0] * len(hypotheses)
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-
-    logging.warning(f"hypothesis_scorer exec time {time.time() - st_time}")
-    return [{"batch": responses}]
+        return [{"batch": [0] * len(hypotheses)}]
+    finally:
+        logging.warning(f"hypothesis_scorer exec time {time.time() - st_time}")
 
 
 try:
-    test_server.main_test()  # TODO: Rewrite tests!!!!
+    test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
@@ -89,17 +88,6 @@ except Exception as exc:
     raise exc
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
-
-
-class HypothesesSchema(BaseModel):
-    is_best: bool
-    text: str
-    confidence: float
-
-
-class RequestSchema(BaseModel):
-    contexts: conlist(item_type=conlist(item_type=str, min_items=0), min_items=0)
-    hypotheses: conlist(item_type=HypothesesSchema, min_items=0)
 
 
 @app.post("/batch_model")

@@ -1,30 +1,40 @@
-import requests
-import logging
 import json
+import os
+
 import numpy as np
+import requests
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-URL = f"http://0.0.0.0:8110/batch_model"
-
-dialogs_path = "tests/test_data.json"
-with open(dialogs_path) as f:
-    dialogs = json.load(f)
-
-test_config = {"contexts": [], "hypotheses": []}
-dialog_ids = []
-for i, sample in enumerate(dialogs):
-    for hyp in sample["hyp"]:
-        test_config["contexts"] += [sample["context"]]
-        test_config["hypotheses"] += [hyp]
-        dialog_ids += [i]
-dialog_ids = np.array(dialog_ids)
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
+URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 
 
-def main_test():
-    batch_responses = requests.post(URL, json=test_config).json()[0]["batch"]
-    batch_responses = np.array(batch_responses)
+def get_dataset():
+    dialogs_path = "tests/test_data.json"
+    with open(dialogs_path) as f:
+        dialogs = json.load(f)
+
+    test_config = {"contexts": [], "hypotheses": []}
+    dialog_ids = []
+    for i, sample in enumerate(dialogs):
+        for hyp in sample["hyp"]:
+            test_config["contexts"] += [sample["context"]]
+            test_config["hypotheses"] += [hyp]
+            dialog_ids += [i]
+    dialog_ids = np.array(dialog_ids)
+
+    return dialogs, test_config, dialog_ids
+
+
+def handler(contexts, hypotheses):
+    return requests.post(URL, json={"contexts": contexts, "hypotheses": hypotheses}).json()
+
+
+def run_test(handler):
+    dialogs, test_config, dialog_ids = get_dataset()
+
+    batch_responses = np.array(handler(**test_config))
+
+    print(f"test name: {test_config}")
 
     for i, sample in enumerate(dialogs):
         curr_responses = batch_responses[dialog_ids == i]
@@ -33,9 +43,8 @@ def main_test():
         assert sample["hyp"][pred_best_hyp_id], print(
             f"Current responses: {curr_responses}, pred best resp id: {pred_best_hyp_id}"
         )
-
-    logger.info("Success!")
+    print("Success")
 
 
 if __name__ == "__main__":
-    main_test()
+    run_test(handler)
