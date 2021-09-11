@@ -14,7 +14,6 @@ from sentry_sdk.integrations.logging import ignore_logger
 from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
-
 # import test_server
 
 
@@ -70,10 +69,10 @@ logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
-    # responses = handler(request.json, RANDOM_SEED)  # TEST
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
-    responses = handler(request.json)
+    import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
+    responses = handler(request.json, RANDOM_SEED)  # TEST
+    import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
+    # responses = handler(request.json)
     return jsonify(responses)
 
 

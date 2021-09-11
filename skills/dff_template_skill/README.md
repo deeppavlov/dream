@@ -1,6 +1,6 @@
 # short-story-skill (DFF)
 
-Краткое описание: скилл, выдающий истории. Сначала спрашивает, какую именно историю человек хочет, затем выдает ее.
+Short description: skill that tells stories. First the bot asks what kind of story the person wants, then tells a story.
 
 # Metrics
 | Metric       | Average value |

@@ -19,37 +19,47 @@ flows = {
                 RESPONSE: "",
                 TRANSITIONS: {
                     "choose_story_node": cnd.all(
-                        [loc_cnd.is_tell_me_a_story, loc_rsp.get_story_type, loc_rsp.get_story_left]
+                        [
+                            loc_cnd.is_tell_me_a_story,
+                            loc_cnd.has_story_type,
+                            loc_cnd.has_story_left,
+                        ]
                     ),
-                    "which_story_node": cnd.all([loc_cnd.is_tell_me_a_story, cnd.neg(loc_rsp.get_story_type)]),
+                    "which_story_node": cnd.all(
+                        [loc_cnd.is_tell_me_a_story, cnd.neg(loc_cnd.has_story_type)]
+                    ),
                     "fallback_node": cnd.true,
                 },
             },
             "choose_story_node": {
-                RESPONSE: loc_rsp.choose_story_response,
+                RESPONSE: loc_rsp.choose_story,
                 TRANSITIONS: {
-                    "tell_punchline_node": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars]),
+                    "tell_punchline_node": cnd.any(
+                        [int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars]
+                    ),
                     "which_story_node": int_cnd.is_no_vars,
                     "fallback_node": cnd.true,
                 },
             },
             "which_story_node": {
-                RESPONSE: loc_rsp.which_story_response,
+                RESPONSE: loc_rsp.which_story,
                 TRANSITIONS: {
-                    "choose_story_node": cnd.all([loc_rsp.get_story_type, loc_rsp.get_story_left]),
+                    "choose_story_node": cnd.all(
+                        [loc_cnd.has_story_type, loc_cnd.has_story_left]
+                    ),
                     "fallback_node": cnd.true,
                 },
             },
             "tell_punchline_node": {
-                RESPONSE: loc_rsp.tell_punchline_response,
-                TRANSITIONS: {
-                    "fallback_node": cnd.true,
-                },
+                RESPONSE: loc_rsp.tell_punchline,
+                TRANSITIONS: {"fallback_node": cnd.true,},
             },
             "fallback_node": {
-                RESPONSE: loc_rsp.fallback_response,
+                RESPONSE: loc_rsp.fallback,
                 TRANSITIONS: {
-                    "which_story_node": cnd.all([loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars]),
+                    "which_story_node": cnd.all(
+                        [loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars]
+                    ),
                     trn.repeat(): cnd.true,
                 },
             },
@@ -57,4 +67,8 @@ flows = {
     }
 }
 
-actor = Actor(flows, start_node_label=("story_flow", "start_node"), fallback_node_label=("story_flow", "fallback_node"))
+actor = Actor(
+    flows,
+    start_node_label=("story_flow", "start_node"),
+    fallback_node_label=("story_flow", "fallback_node"),
+)

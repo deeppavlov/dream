@@ -1,6 +1,6 @@
 [
     [
-        "Hi, how are you?",
+        "Sure! I am glad you asked!Which story do you want: funny, scary, or a bedtime one?",
         0.85,
         {
             "dff_template_skill_state": {
@@ -8,24 +8,24 @@
                 "previous_human_utter_index": 0,
                 "history": {
                     "0": [
-                        "greeting",
-                        "node1"
+                        "story_flow",
+                        "which_story_node"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
+                    "id": "618e31d2-ea69-42c1-884b-142aa5be71d0",
                     "node_labels": {
                         "0": [
-                            "greeting",
-                            "node1"
+                            "story_flow",
+                            "which_story_node"
                         ]
                     },
                     "requests": {
-                        "0": "hi."
+                        "0": "sd saodj."
                     },
                     "responses": {
-                        "0": "Hi, how are you?"
+                        "0": "Sure! I am glad you asked!Which story do you want: funny, scary, or a bedtime one?"
                     },
                     "previous_index": 0,
                     "current_index": 0,
@@ -43,7 +43,7 @@
         },
         {},
         {
-            "can_continue": "can"
+            "can_continue": "MUST_CONTINUE"
         }
     ]
 ]
