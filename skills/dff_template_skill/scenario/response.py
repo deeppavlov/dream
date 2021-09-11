@@ -2,10 +2,7 @@ from argparse import ArgumentParser
 import logging
 import os
 import re
-import sentry_sdk
-import string
-import time
-from typing import Tuple, List, Any, Dict
+from typing import Tuple, Any
 
 from dff.core import Context, Actor
 from programy.clients.args import ClientArguments
@@ -13,8 +10,7 @@ from programy.clients.client import BotClient
 from programy.clients.config import ClientConfigurationData
 import uuid
 
-from dream_aiml.normalizer import PreProcessor
-from state_formatters.utils import programy_post_formatter_dialog
+from utils.normalizer import PreProcessor
 
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 
@@ -32,21 +28,6 @@ tags_map = [
     (re.compile("AMAZON_EMOTION_CLOSE."), "", "</amazon:emotion>"),
     (re.compile("AMAZON_EMOTION_CLOSE"), "", "</amazon:emotion>"),
 ]
-
-
-def remove_punct(s: str) -> str:
-    return "".join([c for c in s if c not in string.punctuation])
-
-
-def to_dialogs(sentences: List[Any]) -> Dict[Any, Any]:
-    utters = [
-        {"text": sent, "user": {"user_type": "human"}} for sent in ["hi"] + sentences
-    ]
-    return {
-        "dialogs": [
-            {"utterances": utters, "bot_utterances": utters, "human_utterances": utters}
-        ]
-    }
 
 
 def create_amazon_ssml_markup(text: str) -> Tuple[str, str]:
@@ -75,9 +56,7 @@ class AIBotClient(BotClient):
         try:
             self._questions += 1
             client_context = self.create_client_context(userid)
-            response = client_context.bot.ask_question(
-                client_context, question, responselogger=self
-            )
+            response = client_context.bot.ask_question(client_context, question, responselogger=self)
 
         except Exception as e:
             logging.exception(e)
@@ -116,52 +95,29 @@ except Exception as e:
 
 
 def programy_reponse(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    st_time = time.time()
-    question = "Unknown"
-    try:
-        responses = ""
-        for dialog in to_dialogs(list(ctx.requests.values()))["dialogs"]:
+    # user_sentences = user_sentences[0] if user_sentences else [""]
 
-            user_sentences = programy_post_formatter_dialog(dialog).get(
-                "sentences_batch"
-            )
-            user_sentences = user_sentences[0] if user_sentences else [""]
+    # replace_phrases = ["thanks.", "thank you.", "please."]
+    # for phrase in replace_phrases:
+    #     if user_sentences[-1] != phrase:
+    #         user_sentences[-1] = user_sentences[-1].replace(phrase, "").strip()
 
-            replace_phrases = ["thanks.", "thank you.", "please."]
-            for phrase in replace_phrases:
-                if user_sentences[-1] != phrase:
-                    user_sentences[-1] = user_sentences[-1].replace(phrase, "").strip()
+    userid = uuid.uuid4().hex
+    # if user said let's chat at beginning of a dialogue, that we
+    # should response with greeting
+    response = ""
+    for _, sentence in enumerate(ctx.requests.values()):
+        # s = s if i != 0 else f"BEGIN_USER_UTTER {s}"
+        response = model.ask_question(userid, preprocessor.process(sentence))
 
-            userid = uuid.uuid4().hex
-            # if user said let's chat at beginning of a dialogue, that we
-            # should response with greeting
-            answer = ""
-            for _, sentence in enumerate(user_sentences):
-                # s = s if i != 0 else f"BEGIN_USER_UTTER {s}"
-                new_answer = model.ask_question(userid, preprocessor.process(sentence))
-                if new_answer:
-                    answer = f"{answer} {new_answer}"
+    # if "DEFAULT_SORRY_RESPONCE" in response:
+    #     response = (
+    #         "AMAZON_EMOTION_DISAPPOINTED_MEDIUM "
+    #         "Sorry, I don't have an answer for that! "
+    #         "AMAZON_EMOTION_CLOSE"
+    #     )
 
-            if "DEFAULT_SORRY_RESPONCE" in answer:
-                answer = (
-                    "AMAZON_EMOTION_DISAPPOINTED_MEDIUM "
-                    "Sorry, I don't have an answer for that! "
-                    "AMAZON_EMOTION_CLOSE"
-                )
+    # untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
 
-            untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
-
-            responses = f"{responses} {untagged_text.strip()}"
-        return responses
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        import traceback
-
-        logging.error(
-            f"Get exception with type {type(e)} and value {e}.\n"
-            f"Traceback is {traceback.format_exc()}"
-        )
-        return [uuid.uuid4().hex, question, str(e)]
-    finally:
-        total_time = time.time() - st_time
-        logging.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
+    # responses = f"{responses} {untagged_text.strip()}"
+    return response
