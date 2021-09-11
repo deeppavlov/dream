@@ -82,8 +82,7 @@ def grounding_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     # to pass assert  "Got empty replies"
     if len(curr_responses) == 0:
-        gathering_responses(DONTKNOW_PHRASE, DONTKNOW_CONF, {}, {}, {}, "empty_response")
-
+        gathering_responses(" ", 0.01, {}, {}, {}, "empty_response")
     return int_rsp.multi_response(
         replies=curr_responses,
         confidences=curr_confidences,

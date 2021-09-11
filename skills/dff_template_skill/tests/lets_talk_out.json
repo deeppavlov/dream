@@ -31,7 +31,7 @@
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "6a1cbd3e-f17d-47cc-a8af-0587bc8da180",
+                        "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
                         "node_labels": {
                             "1": [
                                 "grounding",
@@ -56,12 +56,12 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
+                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
-                                                "I'm so much enjoying getting to know you."
+                                                "It's been really cool getting to know you better."
                                             ]
                                         }
                                     },
@@ -102,7 +102,7 @@
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
-                                                "I'm so much enjoying getting to know you.",
+                                                "It's been really cool getting to know you better.",
                                                 "I'm ashamed, I don't know."
                                             ]
                                         }
@@ -123,7 +123,7 @@
                         "misc": {
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
-                                    "I'm so much enjoying getting to know you.",
+                                    "It's been really cool getting to know you better.",
                                     "I'm ashamed, I don't know."
                                 ]
                             }
@@ -159,7 +159,7 @@
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "6a1cbd3e-f17d-47cc-a8af-0587bc8da180",
+                        "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
                         "node_labels": {
                             "1": [
                                 "grounding",
@@ -184,12 +184,12 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
+                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
-                                                "I'm so much enjoying getting to know you."
+                                                "It's been really cool getting to know you better."
                                             ]
                                         }
                                     },
@@ -230,7 +230,7 @@
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
-                                                "I'm so much enjoying getting to know you.",
+                                                "It's been really cool getting to know you better.",
                                                 "I'm ashamed, I don't know."
                                             ]
                                         }
@@ -251,7 +251,7 @@
                         "misc": {
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
-                                    "I'm so much enjoying getting to know you.",
+                                    "It's been really cool getting to know you better.",
                                     "I'm ashamed, I don't know."
                                 ]
                             }
@@ -287,7 +287,7 @@
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "6a1cbd3e-f17d-47cc-a8af-0587bc8da180",
+                        "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
                         "node_labels": {
                             "1": [
                                 "grounding",
@@ -312,12 +312,12 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
+                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
-                                                "I'm so much enjoying getting to know you."
+                                                "It's been really cool getting to know you better."
                                             ]
                                         }
                                     },
@@ -358,7 +358,7 @@
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
-                                                "I'm so much enjoying getting to know you.",
+                                                "It's been really cool getting to know you better.",
                                                 "I'm ashamed, I don't know."
                                             ]
                                         }
@@ -379,7 +379,7 @@
                         "misc": {
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
-                                    "I'm so much enjoying getting to know you.",
+                                    "It's been really cool getting to know you better.",
                                     "I'm ashamed, I don't know."
                                 ]
                             }
@@ -396,7 +396,7 @@
                 "disliked_skills": [],
                 "grounding_skill": {
                     "used_universal_intent_responses": [
-                        "I'm so much enjoying getting to know you.",
+                        "It's been really cool getting to know you better.",
                         "I'm ashamed, I don't know."
                     ]
                 }

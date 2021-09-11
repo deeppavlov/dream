@@ -12,9 +12,9 @@ This skill returns multiple hypothesis. For usage in following cases:
 
 ### Resource consumption and average time:
 
-#### AVERAGE EXECUTION TIME  0.007s
+#### AVERAGE EXECUTION TIME  0.009s
 
-#### AVERAGE MEM USAGE  51.2MiB
+#### AVERAGE MEM USAGE  76.81MiB
 
 
 
