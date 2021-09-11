@@ -80,6 +80,9 @@ services:
   program-y:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: program-y
       context: .
       dockerfile: ./skills/program-y/Dockerfile
     deploy:
