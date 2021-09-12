@@ -471,7 +471,7 @@ flows = {
             RESPONSE: "All right, let's finish the albums here. What's your favorite Beatles song?",
             TRANSITIONS: {
                 ("song", "fav_song"): loc_cnd.has_songs,
-                ("song", "why_song"): loc_cnd.has_entities(entity_types="wiki:Q7366"),
+                ("song", "why_song"): loc_cnd.has_entities(entity_types=["wiki:Q7366", "wiki:Q134556"]),
                 ("album", "who_beatle_1"): cnd.true},
             },
             "fav_song": {

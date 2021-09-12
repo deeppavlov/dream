@@ -9,7 +9,7 @@ nltk.download('punkt')
 
 import common.dialogflow_framework.utils.state as state_utils
 from common.utils import is_yes
-# from skills.wiki_skill import find_entity_by_types
+from skills.wiki_skill import find_entity_by_types
 
 # from deeppavlov.models.spelling_correction.levenshtein.searcher_component import LevenshteinSearcher
 # from deeppavlov.models.spelling_correction.levenshtein.searcher_component import LevenshteinSearcherComponent

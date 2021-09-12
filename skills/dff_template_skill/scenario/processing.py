@@ -155,12 +155,13 @@ def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
 
     songs_re = "|".join(songs)
     extracted_song = re.findall(songs_re, ctx.last_request, re.IGNORECASE)
+    song_id = -1
     if extracted_song:
         for k in songs_ids.keys():
             if extracted_song[0].lower() == k.lower():
-                id = songs_ids[k]
+                song_id = songs_ids[k]
 
-    node.misc = {"command": "goto", "objectId": id}
+    node.misc = {"command": "goto", "objectId": song_id}
 
     return node_label, node
 

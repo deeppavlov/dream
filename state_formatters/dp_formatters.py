@@ -469,12 +469,12 @@ def ner_formatter_dialog(dialog: Dict):
         if len(dialog["human_utterances"]) >= 2:
             prev_utterances = dialog["human_utterances"][-2]["annotations"]["sentseg"]["segments"]
         return [{"last_utterances": [dialog["human_utterances"][-1]["annotations"]["sentseg"]["segments"]],
-                 "prev_utterances": prev_utterances}]
+                 "prev_utterances": [prev_utterances]}]
     else:
         segments = [dialog["human_utterances"][-1]["text"]]
         if len(dialog["human_utterances"]):
             prev_utterances = dialog["human_utterances"][-2]["text"]
-        return [{"last_utterances": [segments], "prev_utterances": prev_utterances}]
+        return [{"last_utterances": [segments], "prev_utterances": [prev_utterances]}]
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
@@ -516,7 +516,7 @@ def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2
     ner_output = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
-    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_entities", {}).get("entities", [])
+    nounphrases = dialog["human_utterances"][-1]["annotations"].get("entity_detection", {}).get("entities", [])
     entity_substr = []
     if ner_output:
         for entity in ner_output:
