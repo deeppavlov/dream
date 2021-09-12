@@ -1,6 +1,6 @@
 [
     [
-        " Hi there! how's the day going so far for you? Hi there! How are things?",
+        "Go ahead,, try to ask you a question.",
         0.85,
         {
             "age_group": "unknown",
@@ -8,11 +8,10 @@
                 "cross_links": {},
                 "cross_states": {}
             },
-            "disliked_skills": [],
-            "program-y_state": {
+            "dff_template_skill_state": {
                 "context": {
                     "current_index": 0,
-                    "id": "565db5c3-8b83-4829-a232-df5c46f927cb",
+                    "id": "e7ba3822-b582-4d3b-bb67-9a83467ab9a4",
                     "misc": {},
                     "node_labels": {
                         "0": [
@@ -22,10 +21,10 @@
                     },
                     "previous_index": 0,
                     "requests": {
-                        "0": "hi"
+                        "0": "Let me ask you a question"
                     },
                     "responses": {
-                        "0": " Hi there! how's the day going so far for you? Hi there! How are things?"
+                        "0": "Go ahead,, try to ask you a question."
                     },
                     "validation": false
                 },
@@ -39,6 +38,7 @@
                 "previous_human_utter_index": 0,
                 "shared_memory": {}
             },
+            "disliked_skills": [],
             "used_links": {}
         },
         {},

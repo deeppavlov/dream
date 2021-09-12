@@ -25,14 +25,12 @@
     <category>
         <pattern>YES</pattern>
         <template>
-            
             <random>
                 <li>Okay.</li>
                 <li>Interesting.</li>
                 <li>Sounds interesting.</li>
                 <li>Cool!</li>
             </random>
-            
         </template>
     </category>
    <category>

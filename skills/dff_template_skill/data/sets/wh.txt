@@ -1,7 +1,6 @@
-who
-what
-which
-when
-where
-why
-how
+Who
+What
+When
+Where
+Why
+How

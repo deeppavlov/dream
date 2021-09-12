@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "hi",
+                    "text": "talk about you",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "hi",
+                        "spelling_preprocessing": "talk about you",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,

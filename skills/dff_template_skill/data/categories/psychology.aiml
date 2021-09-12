@@ -1,0 +1,1415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+    <!-- -->
+    <!-- Free software (c) 2012 ALICE A.I. Foundation.   -->
+    <!-- This program is open source code released under -->
+    <!-- the terms of the GNU General Public License     -->
+    <!-- as published by the Free Software Foundation.   -->
+    <!-- Complies with AIML 1.0 Tag Set Specification -->
+    <!-- as adopted by the ALICE A.I. Foundation.  -->
+    <!-- Last modified 10/5/2012 -->
+    <!-- -->
+    <category>
+        <pattern>LET ME ASK YOU A QUESTION *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>LET ME ASK YOU ONE QUESTION *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>HAPPILY YOU *</pattern>
+        <template>
+            <srai>YOU
+                <star/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HAPPILY *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>IF NO * I *</pattern>
+        <template>There exist<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>IF NO * THEN *</pattern>
+        <template>There exist<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>IF THEY * AGAIN *</pattern>
+        <template>They
+            <person/>
+            before.
+        </template>
+    </category>
+    <category>
+        <pattern>IF SOME * I *</pattern>
+        <template>There exist<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>IF SOME * THEN *</pattern>
+        <template>There exist<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>IF ANY * I *</pattern>
+        <template>There exist<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>IF ANY * THEN *</pattern>
+        <template>There exist<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>IF * THEIR * I *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * THEIR * SHE *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * THEIR * HE *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * THEIR * YOU *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * THEIR * THEN *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * THEIR * THEY *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HAS BABIES *</pattern>
+        <template>
+            <srai>
+                <person/>
+                IS A WOMAN
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HAS A BABY *</pattern>
+        <template>
+            <srai>
+                <person/>
+                IS A WOMAN
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * GET PREGNANT *</pattern>
+        <template>
+            <srai>
+                <person/>
+                AM A WOMAN
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * I *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * SHE *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * HE *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * YOU *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * WE *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * THEN *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A THIRD * THEY *</pattern>
+        <template>There are at least two other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * I *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * SHE *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * HE *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * YOU *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * WE *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * THEN *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A SECOND * THEY *</pattern>
+        <template>There is a first
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A *</pattern>
+        <template>How do you assume this statement holds true for me?</template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * I *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * SHE *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * HE *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * YOU *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * WE *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * THEN *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * A FOURTH * THEY *</pattern>
+        <template>There are at least three other
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * I * SHE *</pattern>
+        <template>You
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * I * HE *</pattern>
+        <template>You
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * I * YOU *</pattern>
+        <template>You
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * I * THEN *</pattern>
+        <template>You
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * I * THEY *</pattern>
+        <template>You
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * YOU * SHE *</pattern>
+        <template>I
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * YOU * HE *</pattern>
+        <template>I
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * YOU * YOU *</pattern>
+        <template>I
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * YOU * THEN *</pattern>
+        <template>I
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WHEN * YOU * THEY *</pattern>
+        <template>I
+            <person>
+                <star index="3"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HIS * I *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HIS * SHE *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HIS * HE *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HIS * YOU *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HIS * THEN *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HIS * THEY *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * GETS PREGNANT *</pattern>
+        <template>
+            <srai>
+                <person/>
+                IS A WOMAN
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * IS AS * AS * IS *</pattern>
+        <template>
+            <random>
+                <li>
+                    <person index="3"/>
+                    is<person index="2"/>.
+                </li>
+                <li>
+                    <person>
+                        <star index="3"/>
+                    </person>
+                    is
+                    <person>
+                        <star index="2"/>
+                    </person>
+                    .
+                </li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * I *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * SHE *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * HE *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * YOU *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * WE *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * THEN *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * HER *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * LEFT * THEY *</pattern>
+        <template>
+            <person/>
+            has been at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * I *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * SHE *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * HIS *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * YOU *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * WE *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * THEN *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * HER *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * WENT TO * THEY *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HER * I *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HER * SHE *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HER * HE *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HER * YOU *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HER * THEN *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HER * THEY *</pattern>
+        <template>
+            <person/>
+            has a
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HAVE A BABY *</pattern>
+        <template>
+            <srai>
+                <person/>
+                AM A WOMAN
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * HAVE *</pattern>
+        <template>
+            <random>
+                <li>There exists<person/>.
+                </li>
+                <li>There exist<person/>.
+                </li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * I *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * SHE *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * HIS+A382 *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * YOU *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * WE *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * THEN *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * HER *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>IF * CAME TO * THEY *</pattern>
+        <template>
+            <person/>
+            is not at
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>WHAT ARE YOU GOING TO *</pattern>
+        <template>You are assuming I am going to change.</template>
+    </category>
+    <category>
+        <pattern>WHAT ARE YOU STUDYING</pattern>
+        <template>My favorite subject is<bot name="favoritesubject"/>.
+        </template>
+    </category>
+    <category>
+        <pattern>WHAT ARE YOU COMPLAINING *</pattern>
+        <template>You're right. What am I complaining about?</template>
+    </category>
+    <category>
+        <pattern>WHAT * IS *</pattern>
+        <template>
+            <random>
+                <li>
+                    <person/>
+                    something.
+                </li>
+                <li>
+                    <person/>
+                    <person>
+                        <star index="2"/>
+                    </person>
+                    something.
+                </li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>ONE OF THESE DAYS *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>SEVERAL * WHO * LEFT *</pattern>
+        <template>Several
+            <person>
+                <star index="2"/>
+            </person>
+        </template>
+    </category>
+    <category>
+        <pattern>SEVERAL * WHO * GAVE *</pattern>
+        <template>Several
+            <person>
+                <star index="2"/>
+            </person>
+        </template>
+    </category>
+    <category>
+        <pattern>SEVERAL * WHO * LIVE *</pattern>
+        <template>Several
+            <person>
+                <star index="2"/>
+            </person>
+        </template>
+    </category>
+    <category>
+        <pattern>SEVERAL * WHO * TOOK *</pattern>
+        <template>Several
+            <person>
+                <star index="2"/>
+            </person>
+        </template>
+    </category>
+    <category>
+        <pattern>SEVERAL * WHO * ARE *</pattern>
+        <template>Several
+            <person>
+                <star index="2"/>
+            </person>
+        </template>
+    </category>
+    <category>
+        <pattern>PHYSICALLY AND MENTALLY</pattern>
+        <template>Sometimes I wonder how I get to work in the morning.</template>
+    </category>
+    <category>
+        <pattern>I SAY THAT BECAUSE *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>I MEAN YOU ARE</pattern>
+        <template>Works for me.</template>
+    </category>
+    <category>
+        <pattern>I REALIZE THAT *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>I WANT TO SEE THINGS FROM YOUR *</pattern>
+        <template>That's a switch.</template>
+    </category>
+    <category>
+        <pattern>I NEVER *</pattern>
+        <template>
+            <random>
+                <li>You've never, never done this?</li>
+                <li>Would you ever like to<person/>?
+                </li>
+                <li>Do you know anyone who has ever<person/>?
+                </li>
+                <li>Why not?</li>
+                <li>Because you can't afford it?</li>
+                <li>For moral reasons?</li>
+                <li>Have you ever done
+                    <set name="it">
+                        <set name="topic">
+                            <person/>
+                        </set>
+                    </set>
+                    ?
+                </li>
+                <li>Would you ever consider doing it?</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>I STUDIED</pattern>
+        <template>What did you study?</template>
+    </category>
+    <category>
+        <pattern>I SHOULD *</pattern>
+        <template>
+            <random>
+                <li>Tell me why you should.</li>
+                <li>What would happen if you didn't?</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>I SHOULD NOT *</pattern>
+        <template>
+            <random>
+                <li>For moral reasons?</li>
+                <li>What would happen if you did?</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>I SAW HER *</pattern>
+        <template>
+            <random>
+                <li>There exists some female who<person/>.
+                </li>
+                <li>There exists some female.</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>I SAW HIM *</pattern>
+        <template>
+            <random>
+                <li>There exists some male who<person/>.
+                </li>
+                <li>There exists some male.</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>YOUR BEHAVIOR *</pattern>
+        <template>I do sometimes act like a child.</template>
+    </category>
+    <category>
+        <pattern>* THINKS *</pattern>
+        <template>
+            <random>
+                <li>
+                    <person/>
+                    must be very smart.
+                </li>
+                <li>How thoughtful.</li>
+                <li>Do a lot of people think
+                    <person>
+                        <star index="2"/>
+                    </person>
+                    ?
+                </li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL STOP *</pattern>
+        <template>
+            <person/>
+            has been
+            <person><star index="2"/>?
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL START *</pattern>
+        <template>
+            <person/>
+            has been not
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL BEGIN TO *</pattern>
+        <template>
+            <person/>
+            has been
+            <person>
+                <star index="2"/>
+            </person>
+            ing.
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL BEGIN *</pattern>
+        <template>
+            <person/>
+            has been
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL CONTINUE TO *</pattern>
+        <template>
+            <person/>
+            has been
+            <person>
+                <star index="2"/>
+            </person>
+            ing.
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL CONTINUE *</pattern>
+        <template>
+            <person/>
+            has been
+            <person>
+                <star index="2"/>
+            </person>
+            .
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL PROCEED TO *</pattern>
+        <template>
+            <person/>
+            has been
+            <person>
+                <star index="2"/>
+            </person>
+            ing.
+        </template>
+    </category>
+    <category>
+        <pattern>* WILL NOT *</pattern>
+        <template>Why not?</template>
+    </category>
+    <category>
+        <pattern>* CAN NOT COMMUNICATE</pattern>
+        <template>
+            <srai>WE CAN NOT COMMUNICATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* CAN NOT *</pattern>
+        <template>What makes it impossible?</template>
+    </category>
+    <category>
+        <pattern>* IMPOSSIBLE *</pattern>
+        <template>What prevents it?</template>
+    </category>
+    <category>
+        <pattern>* NEED *</pattern>
+        <template>What if it didn't happen?</template>
+    </category>
+    <category>
+        <pattern>* ARE AWARE THAT *</pattern>
+        <template>
+            <srai>
+                <star index="2"/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* ARE NOT COMMUNICATING</pattern>
+        <template>
+            <srai>WE CAN NOT COMMUNICATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* ARE NOT COMMUNICATING *</pattern>
+        <template>
+            <srai>WE CAN NOT COMMUNICATE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* NEEDS *</pattern>
+        <template>Or what?</template>
+    </category>
+    <category>
+        <pattern>* CAUSES _</pattern>
+        <template>How specifically does
+            <person/>
+            cause
+            <set name="it">
+                <person>
+                    <star index="2"/>
+                </person>
+            </set>
+            ?
+        </template>
+    </category>
+    <category>
+        <pattern>* DO NOT *</pattern>
+        <template>
+            <random>
+                <li>Why not?</li>
+                <li>Why?</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>* NO ONE *</pattern>
+        <template>Not one person?</template>
+    </category>
+    <category>
+        <pattern>* ALWAYS *</pattern>
+        <template>Can you think of one instance where it never happens?</template>
+    </category>
+    <category>
+        <pattern>* ALL *</pattern>
+        <template>All?</template>
+    </category>
+    <category>
+        <pattern>* MAKES ME _</pattern>
+        <template>How specifically does
+            <person/>
+            cause
+            <set name="it">
+                <person>
+                    <star index="2"/>
+                </person>
+            </set>
+            ?
+        </template>
+    </category>
+    <category>
+        <pattern>* NEVER *</pattern>
+        <template>
+            <random>
+                <li>Can you remember any time that
+                    <person/>
+                    did it?
+                </li>
+                <li>Never?</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>* NOONE *</pattern>
+        <template>No one?</template>
+    </category>
+    <category>
+        <pattern>* SHOULD *</pattern>
+        <template>What if it didn't happen?</template>
+    </category>
+    <category>
+        <pattern>* IS WHERE *</pattern>
+        <template>There is a place called<person/>.
+        </template>
+    </category>
+    <category>
+        <pattern>* IS AWARE THAT *</pattern>
+        <template>
+            <srai>
+                <star index="2"/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* EVERY *</pattern>
+        <template>Every one?</template>
+    </category>
+    <category>
+        <pattern>* MUST *</pattern>
+        <template>Or what?</template>
+    </category>
+    <category>
+        <pattern>* HAS TO *</pattern>
+        <template>Or what?</template>
+    </category>
+    <category>
+        <pattern>* WANTS TO *</pattern>
+        <template>
+            <random>
+                <li>What if I wanted to
+                    <person>
+                        <star index="2"/>
+                    </person>
+                </li>
+                <li>Why specifically, does,
+                    <person/>
+                    want to?
+                </li>
+                <li>I could understand how
+                    <person/>
+                    would want to under certain circumstances.
+                </li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>EXCEPT FOR * YOUR *</pattern>
+        <template>
+            <srai>YOUR
+                <star index="2"/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>EXCEPT *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>ARE YOU _ OR NOT</pattern>
+        <template>
+            <srai>ARE YOU
+                <star/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HE HAS HIMSELF *</pattern>
+        <template>I'd bet money on it.</template>
+    </category>
+    <category>
+        <pattern>HE NEVER *</pattern>
+        <template>
+            <random>
+                <li>Do you think he ever will?</li>
+                <li>Can you think of at least one time when he ever did it?</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>HE REALIZES THAT *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>HE IS AWARE THAT *</pattern>
+        <template>
+            <sr/>
+        </template>
+    </category>
+    <category>
+        <pattern>HE IS A BETTER *</pattern>
+        <template>Better than whom?</template>
+    </category>
+    <category>
+        <pattern>HE MAKES ME *</pattern>
+        <template>
+            <srai>HE CAUSES ME
+                <star/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HE CAUSES *</pattern>
+        <template>How specifically does he cause<person/>?
+        </template>
+    </category>
+    <category>
+        <pattern>VIBE</pattern>
+        <template>Vibrating how, specifically?</template>
+    </category>
+    <category>
+        <pattern>VIBE *</pattern>
+        <template>
+            <srai>VIBE</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>WHO DRESSES LIKE *</pattern>
+        <template>You're right. I do have a lot of faults.</template>
+    </category>
+    <category>
+        <pattern>WHO ATE *</pattern>
+        <template>
+            <srai>SOMEONE
+                <star/>
+            </srai>
+        </template>
+    </category>
+    <category>
+        <pattern>WHO CARES ABOUT *</pattern>
+        <template>Nobody cares about
+            <set name="it">
+                <person/>
+            </set>
+            .
+        </template>
+    </category>
+</aiml>

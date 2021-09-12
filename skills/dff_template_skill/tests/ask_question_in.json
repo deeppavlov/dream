@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "ACTIVATE THE ROBOT",
+                    "text": "Let me ask you a question",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "ACTIVATE THE ROBOT",
+                        "spelling_preprocessing": "Let me ask you a question",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
