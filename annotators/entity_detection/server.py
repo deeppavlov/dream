@@ -43,7 +43,7 @@ def get_result(request, prev_utt=False):
     utterances_nums = []
     if prev_utt:
         for n, (prev_utt, last_utt) in enumerate(zip(prev_utterances, last_utterances)):
-            total_utt = " ".join(prev_utt) + " ".join(last_utt)
+            total_utt = " ".join(prev_utt) + " " + " ".join(last_utt)
             total_utt = total_utt.replace("  ", " ").strip()
             utterances_list.append(total_utt)
             utterances_nums.append(n)
