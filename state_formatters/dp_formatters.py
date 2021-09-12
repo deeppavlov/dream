@@ -516,7 +516,7 @@ def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2
     ner_output = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
-    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_entities", {}).get("entities", [])
+    nounphrases = dialog["human_utterances"][-1]["annotations"].get("entity_detection", {}).get("entities", [])
     entity_substr = []
     if ner_output:
         for entity in ner_output:
