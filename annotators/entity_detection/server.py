@@ -37,7 +37,7 @@ def get_result(request, prev_utt=False):
     st_time = time.time()
     last_utterances = request.json.get("last_utterances", [])
     prev_utterances = request.json.get("prev_utterances", [])
-    logger.info(f"input (the last utterances): {last_utterances}")
+    logger.info(f"input (the last utterances): {last_utterances} (prev utterances): {prev_utterances}")
 
     utterances_list = []
     utterances_nums = []
@@ -47,6 +47,7 @@ def get_result(request, prev_utt=False):
             total_utt = total_utt.replace("  ", " ").strip()
             utterances_list.append(total_utt)
             utterances_nums.append(n)
+        logger.info(f"utterances concat {utterances_list}")
     else:
         for n, utterances in enumerate(last_utterances):
             for elem in utterances:

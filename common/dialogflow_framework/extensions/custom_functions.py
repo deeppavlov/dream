@@ -23,9 +23,11 @@ def drawing_request(vars):
     return flag
 
 
-def extract_entity(vars, entity_type):
+def extract_entity(ctx, entity_type):
+    vars = ctx.shared_memory.get("vars", {})
     user_uttr = state_utils.get_last_human_utterance(vars)
-    annotations = user_uttr["annotations"]
+    annotations = user_uttr.get("annotations", {})
+    logger.info(f"annotations {annotations}")
     if entity_type.startswith("tags"):
         tag = entity_type.split("tags:")[1]
         nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
@@ -52,15 +54,15 @@ def extract_entity(vars, entity_type):
 
 
 def has_entities(entity_types):
-    def has_entities_func(vars):
+    def has_entities_func(ctx: Context, actor: Actor, *args, **kwargs):
         flag = False
         if isinstance(entity_types, str):
-            extracted_entity = extract_entity(vars, entity_types)
+            extracted_entity = extract_entity(ctx, entity_types)
             if extracted_entity:
                 flag = True
         elif isinstance(entity_types, list):
             for entity_type in entity_types:
-                extracted_entity = extract_entity(vars, entity_type)
+                extracted_entity = extract_entity(ctx, entity_type)
                 if extracted_entity:
                     flag = True
                     break
@@ -70,21 +72,23 @@ def has_entities(entity_types):
 
 
 def entities(**kwargs):
-    def extract_entities(vars):
-        shared_memory = state_utils.get_shared_memory(vars)
-        slot_values = shared_memory.get("slots", {})
-        for slot_name, slot_types in kwargs.items():
+    slot_info = list(kwargs.items())
+
+    def extract_entities(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+        slot_values = ctx.shared_memory.get("slot_values", {})
+        for slot_name, slot_types in slot_info:
             if isinstance(slot_types, str):
-                extracted_entity = extract_entity(vars, slot_types)
+                extracted_entity = extract_entity(ctx, slot_types)
                 if extracted_entity:
                     slot_values[slot_name] = extracted_entity
-                    state_utils.save_to_shared_memory(vars, slot_values=slot_values)
+                    ctx.shared_memory["slot_values"] = slot_values
             elif isinstance(slot_types, list):
                 for slot_type in slot_types:
-                    extracted_entity = extract_entity(vars, slot_type)
+                    extracted_entity = extract_entity(ctx, slot_type)
                     if extracted_entity:
                         slot_values[slot_name] = extracted_entity
-                        state_utils.save_to_shared_memory(vars, slot_values=slot_values)
+                        ctx.shared_memory["slot_values"] = slot_values
+        return node_label, node
 
     return extract_entities
 
