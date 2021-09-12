@@ -316,7 +316,8 @@
                 ],
                 "previous_services": [
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.cobot_nounphrases",
+                    "annotators.entity_detection"
                 ]
             },
             "wiki_parser": {
