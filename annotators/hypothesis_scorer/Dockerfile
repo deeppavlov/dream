@@ -8,9 +8,9 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf 
 
 RUN mkdir src midas convert
 
-RUN wget -L $MODEL_CONFIDENCE_CONVERT_DATA_URL
 RUN wget -q $MIDAS_DATA_URL -O /tmp/midas.tar.gz && tar -zvxf /tmp/midas.tar.gz -C /midas && rm -f /tmp/midas.tar.gz
 RUN wget -q $CONVERT_DATA_URL -O /tmp/convert.tar.gz && tar -zvxf /tmp/convert.tar.gz -C /convert && rm -f /tmp/convert.tar.gz
+RUN wget -L $MODEL_CONFIDENCE_CONVERT_DATA_URL && mv model-confidence-convert-old_midas.cbm /src/
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

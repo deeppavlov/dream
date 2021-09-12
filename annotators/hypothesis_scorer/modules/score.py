@@ -1,5 +1,5 @@
-import midas
-import convert
+from . import midas
+from . import convert
 import numpy as np
 
 

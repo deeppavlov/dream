@@ -8,9 +8,9 @@ from catboost import CatBoostClassifier
 from fastapi import FastAPI
 from sentry_sdk.integrations.logging import ignore_logger
 
-from annotators.hypothesis_scorer import test_server
-from annotators.hypothesis_scorer.schemas.request_schema import RequestSchema
-from annotators.hypothesis_scorer.score.score import get_features
+import test_server
+from schemas.request_schema import RequestSchema
+from modules.score import get_features
 
 ignore_logger("root")
 
