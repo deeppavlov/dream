@@ -1,8 +1,6 @@
 from argparse import ArgumentParser
 import logging
-import os
-import re
-from typing import Tuple, Any
+from typing import Any
 
 from dff.core import Context, Actor
 from programy.clients.args import ClientArguments
@@ -11,34 +9,6 @@ from programy.clients.config import ClientConfigurationData
 import uuid
 
 from utils.normalizer import PreProcessor
-
-SERVICE_NAME = os.getenv("SERVICE_NAME")
-
-tags_map = [
-    (
-        re.compile("AMAZON_EMOTION_DISAPPOINTED_MEDIUM"),
-        "",
-        '<amazon:emotion name="disappointed" intensity="medium">',
-    ),
-    (
-        re.compile("AMAZON_EMOTION_EXCITED_MEDIUM"),
-        "",
-        '<amazon:emotion name="excited" intensity="medium">',
-    ),
-    (re.compile("AMAZON_EMOTION_CLOSE."), "", "</amazon:emotion>"),
-    (re.compile("AMAZON_EMOTION_CLOSE"), "", "</amazon:emotion>"),
-]
-
-
-def create_amazon_ssml_markup(text: str) -> Tuple[str, str]:
-    untagged_text = text
-    tagged_text = text
-    for reg, untag, tag in tags_map:
-        untagged_text = reg.sub(untag, untagged_text)
-        tagged_text = reg.sub(tag, tagged_text)
-    return untagged_text, tagged_text
-
-
 class AIBotClient(BotClient):
     def __init__(self, botid: str, argument_parser: ArgumentParser = None):
         BotClient.__init__(self, botid, argument_parser)
@@ -114,9 +84,9 @@ def programy_reponse(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     # if "DEFAULT_SORRY_RESPONCE" in response:
     #     response = (
-    #         "AMAZON_EMOTION_DISAPPOINTED_MEDIUM "
+    #         " "
     #         "Sorry, I don't have an answer for that! "
-    #         "AMAZON_EMOTION_CLOSE"
+    #         ""
     #     )
 
     # untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)

@@ -51,17 +51,17 @@ def remove_punct(s):
 
 tags_map = [
     (
-        re.compile("AMAZON_EMOTION_DISAPPOINTED_MEDIUM"),
+        re.compile(""),
         "",
         '<amazon:emotion name="disappointed" intensity="medium">',
     ),
     (
-        re.compile("AMAZON_EMOTION_EXCITED_MEDIUM"),
+        re.compile(""),
         "",
         '<amazon:emotion name="excited" intensity="medium">',
     ),
-    (re.compile("AMAZON_EMOTION_CLOSE."), "", "</amazon:emotion>"),
-    (re.compile("AMAZON_EMOTION_CLOSE"), "", "</amazon:emotion>"),
+    (re.compile("."), "", "</amazon:emotion>"),
+    (re.compile(""), "", "</amazon:emotion>"),
 ]
 
 
@@ -114,8 +114,8 @@ class SanicRestBotClient(RestBotClient):
 
                 if "DEFAULT_SORRY_RESPONCE" in answer:
                     answer = (
-                        "AMAZON_EMOTION_DISAPPOINTED_MEDIUM Sorry, I don't have an answer for that! "
-                        "AMAZON_EMOTION_CLOSE"
+                        " Sorry, I don't have an answer for that! "
+                        ""
                     )
 
                 untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
