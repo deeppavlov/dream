@@ -15,9 +15,9 @@
 import re
 
 
-spaces_pat = re.compile(r"\s+")
-special_symb_pat = re.compile(r"[^a-zа-я0-9 ]", re.IGNORECASE)
+spaces_patter = re.compile(r"\s+", re.IGNORECASE)
+special_symb_patter = re.compile(r"[^a-zа-я0-9 ]", re.IGNORECASE)
 
 
 def clean_text(text):
-    return special_symb_pat.sub("", spaces_pat.sub(" ", text.lower())).strip()
+    return special_symb_patter.sub("", spaces_patter.sub(" ", text.lower())).strip()

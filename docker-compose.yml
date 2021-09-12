@@ -1175,7 +1175,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 2048M
         reservations:
-          memory: 128M
+          memory: 2048M
 version: '3.7'
