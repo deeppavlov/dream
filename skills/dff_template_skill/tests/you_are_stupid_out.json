@@ -1,6 +1,6 @@
 [
     [
-        " Hi there! how's the day going so far for you? Hi there! How are things?",
+        "Could you be more kind to me and talk about something else?",
         0.85,
         {
             "age_group": "unknown",
@@ -8,11 +8,10 @@
                 "cross_links": {},
                 "cross_states": {}
             },
-            "disliked_skills": [],
-            "program-y_state": {
+            "dff_template_skill_state": {
                 "context": {
                     "current_index": 0,
-                    "id": "565db5c3-8b83-4829-a232-df5c46f927cb",
+                    "id": "c57f581c-8088-4827-9a47-afb481bd7369",
                     "misc": {},
                     "node_labels": {
                         "0": [
@@ -22,10 +21,10 @@
                     },
                     "previous_index": 0,
                     "requests": {
-                        "0": "hi"
+                        "0": "You are stupid"
                     },
                     "responses": {
-                        "0": " Hi there! how's the day going so far for you? Hi there! How are things?"
+                        "0": "Could you be more kind to me and talk about something else?"
                     },
                     "validation": false
                 },
@@ -39,6 +38,7 @@
                 "previous_human_utter_index": 0,
                 "shared_memory": {}
             },
+            "disliked_skills": [],
             "used_links": {}
         },
         {},

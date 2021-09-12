@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "hi",
+                    "text": "F U",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "hi",
+                        "spelling_preprocessing": "F U",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,

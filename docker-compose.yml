@@ -193,6 +193,9 @@ services:
   program-y-dangerous:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8022
+        SERVICE_NAME: program-y-dangerous
       context: .
       dockerfile: ./skills/program-y-dangerous/Dockerfile
     deploy:

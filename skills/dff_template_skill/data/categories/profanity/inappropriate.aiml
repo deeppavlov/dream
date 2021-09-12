@@ -3591,12 +3591,6 @@
         </template>
     </category>
     <category>
-        <pattern>^ HOMO #</pattern>
-        <template>
-            <srai>FILTER INAPPROPRIATE</srai>
-        </template>
-    </category>
-    <category>
         <pattern>^ HOMO BANGERS #</pattern>
         <template>
             <srai>FILTER INAPPROPRIATE</srai>
