@@ -9,22 +9,22 @@ logger = logging.getLogger(__name__)
 # ....
 
 
-# def levenshtein_item(items, user_uttr):
-#   vocab = set([item.lower().replace(' ', '$') for item in items])
-#   abet = set(c for w in vocab for c in w)
-#   abet.update(set(string.ascii_letters))
-#   searcher = LevenshteinSearcher(abet, vocab)
-#   for line in [user_uttr.lower()]:
-#     for i in [6, 5, 4, 3, 2, 1]:
-#       token = word_tokenize(line)
-#       grams = list(ngrams(token, i))
-#       for gram in grams:
-#         gram = '$'.join(gram)
-#         print(gram)
-#         candidate = searcher.search(gram, 3)
-#         if candidate:
-#           candidate = candidate[0][0].replace('$', ' ')
-#           return candidate
+def levenshtein_item(items, user_uttr):
+  vocab = set([item.lower().replace(' ', '$') for item in items])
+  abet = set(c for w in vocab for c in w)
+  abet.update(set(string.ascii_letters))
+  searcher = LevenshteinSearcher(abet, vocab)
+  for line in [user_uttr.lower()]:
+    for i in [6, 5, 4, 3, 2, 1]:
+      token = word_tokenize(line)
+      grams = list(ngrams(token, i))
+      for gram in grams:
+        gram = '$'.join(gram)
+        print(gram)
+        candidate = searcher.search(gram, 3)
+        if candidate:
+          candidate = candidate[0][0].replace('$', ' ')
+          return candidate
 
 
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
@@ -94,15 +94,15 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
 def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    slots["first_album"] = "Let's begin our trip here. I will show you some albums first. If you get tired, just say 'move on'. "
+    slots["first_album"] = "Let's begin with the albums. If you get tired, just say 'move on'. "
     slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club."
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
     slots["a_hard_days_night_wrong"] = "It was A Hard Day's Night! "
-    slots["rubber_soul"] = "However, it was after this cry for 'Help' that the Beatles became the Beatles. "
+    slots["rubber_soul"] = "However, it was after this cry for 'Help!' that the Beatles became the Beatles. "
     slots["yellow_submarine"] = "Then let's take a look at the album. "
     slots["abbey_road"] = (
         "By the way, The White Album' recording sessions lasted 137 days! Abbey Road, on the opposite, "
-        "was recorded in one 12-hour session -- even faster than Please Please Me! "
+        "was recorded in one 12-hour session. "
     )
     slots["let_it_be"] = (
         "Did you know that Abbey Road was created and issued after the recording of the Beatles' "
@@ -224,3 +224,10 @@ def extract_members_id(node_label: str, node: Node, ctx: Context, actor: Actor, 
     node.misc = {"command": "goto", "objectId": id}
 
     return node_label, node
+
+
+def add_node_name(name: str):
+    def node_name(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+        ctx.misc["current_node"] = name
+        return node_label, node
+    return node_name

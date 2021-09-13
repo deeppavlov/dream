@@ -9,7 +9,6 @@ nltk.download('punkt')
 
 import common.dialogflow_framework.utils.state as state_utils
 from common.utils import is_yes
-from skills.wiki_skill import find_entity_by_types
 
 # from deeppavlov.models.spelling_correction.levenshtein.searcher_component import LevenshteinSearcher
 # from deeppavlov.models.spelling_correction.levenshtein.searcher_component import LevenshteinSearcherComponent
@@ -1307,7 +1306,7 @@ def entities(**kwargs):
 
 def wants_to_see(item_name: str):
     def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
-        match = re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
+        match = re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*go\sto.*)|(.*\slook\sat\s)|"
                           r"(.*show\sme\s)|(.*tell\sme\sabout\s))(?P<item>.*)", ctx.last_request, re.I)
         if match:
             item = match.group('item')
@@ -1333,13 +1332,13 @@ def has_songs(ctx: Context, actor: Actor, *args, **kwargs):
         "We Can Work it Out",
         "Come Together",
         "Yellow Submarine",
-        "Revolution",
-        "Imagine",
-        "Something",
         "Hello, Goodbye",
         "A Day In The Life",
-        "Help",
         "Penny Lane",
+        "Revolution",
+        "Something",
+        "Imagine",
+        "Help",
     ]
     return levenshtein_item(songs, ctx.last_request)
 
@@ -1352,7 +1351,7 @@ def has_member(member_name: str):
 
 
 def has_correct_answer(ctx: Context, actor: Actor, *args, **kwargs):
-    a = ["Abbey Road", "A Hard Day's Night"]
+    a = ["Abbey Road", "A Hard Day's Night", "Liverpool"]
     return levenshtein_item(a, ctx.last_request)
 
 
@@ -1450,5 +1449,26 @@ def is_beatles_song(ctx: Context, actor: Actor, *args, **kwargs):
     return bool(re.findall(songs_re, ctx.last_request, re.IGNORECASE))
 
 
+def is_next(album_name: str):
+    # albums_seq = {
+    #     "Please Please Me": "With The Beatles",
+    #     "With The Beatles": "Hard Day's Night",
+    #     "Hard Day's Night": "Beatles For Sale",
+    #     "Beatles For Sale": "Help",
+    #     "Help": "Rubber Soul",
+    #     "Rubber Soul": "Revolver",
+    #     "Revolver": "Yellow Submarine",
+    #     "Yellow Submarine": "Sgt. Pepper's Lonely Hearts Club Band",
+    #     "Sgt. Pepper's Lonely Hearts Club Band": "White Album",
+    #     "White Album": "Abbey Road",
+    #     "Abbey Road": "Let It Be",
+    #     "Let It Be": "Please Please Me"
+    # }
+    def next(ctx: Context, actor: Actor, *args, **kwargs):
+        flag = False
+        if ctx.misc.get("current_node") == album_name:
+            flag = True
+        return flag
+    return next
 
 
