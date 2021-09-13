@@ -110,7 +110,7 @@ def xmas_scenario(dialog, topic=""):
         "wishes": [
             "I make wishes every time I have an opportunity. "
             "Was two thousand nineteenth a good year for you? What were some of your highlights?",
-            "For me last year was so cool, too. My sis got into Alexa Prize Challenge! Let me ask you: ",
+            "For me last year was so cool, too. Let me ask you: ",
             "Did you achieve any goals in two thousand nineteenth? ",
             "I am happy for your. This is so nice to feel the fulfillment of the goals. "
             'Some people complain they are "expected to be happy" over Holidays, '

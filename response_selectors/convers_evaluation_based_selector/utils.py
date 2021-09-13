@@ -32,7 +32,6 @@ CONV_EVAL_STRENGTH = 0.4
 how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
 what_i_can_do_spec = "socialbot running inside"
 psycho_help_spec = "you can call the National Suicide Prevention Lifeline"
-greeting_spec = "this is an Alexa Prize Socialbot"
 misheard_with_spec1 = "I misheard you"
 misheard_with_spec2 = "like to chat about"
 alexa_abilities_spec = "If you want to use the requested feature say"

@@ -227,9 +227,9 @@ def main_test():
         "It is always a pleasure to talk with a kind person. What do you want to talk about?",
         "Yeah, let's chat! What do you want to talk about?",
         "Let's chat. I love talking! What do you want to talk about?",
-        "Hi, this is an Alexa Prize Socialbot! Yeah, let’s have a chat! What shall we talk about?",
-        "Hi there, this is an Alexa Prize Socialbot! Lovely to meet you! What do you want to talk about?",
-        "Hi there, this is an Alexa Prize Socialbot! Nice to meet you! What do you want to talk about?",
+        "Yeah, let’s have a chat! What shall we talk about?",
+        "Lovely to meet you! What do you want to talk about?",
+        "Nice to meet you! What do you want to talk about?",
         # Hi
         "Hi there! How are you?",
         "Hi there! How are things?",

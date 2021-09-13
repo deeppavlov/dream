@@ -184,7 +184,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like me to call you?",
+                                "I think we have not met yet. What name would you like me to call you?",
                                 "ruth."
                             ]
                         },
@@ -488,7 +488,7 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like me to call you?",
+                                "I think we have not met yet. What name would you like me to call you?",
                                 "ruth.",
                                 "Nice to meet you, Ruth.",
                                 "your favorite number."
@@ -548,7 +548,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like me to call you?",
+                                "I think we have not met yet. What name would you like me to call you?",
                                 "ruth.",
                                 "Nice to meet you, Ruth."
                             ]

@@ -19,8 +19,6 @@
     <template>
       <random>
         <li>Sorry, I am a socialbot, so I can't talk like anybody but me.</li>
-        <li>Not during the Alexa Prize Challenge.</li>
-        <li>Sadly, I'm prohibited from doing that during the Alexa Prize Challenge.</li>
       </random>
     </template>
   </category>

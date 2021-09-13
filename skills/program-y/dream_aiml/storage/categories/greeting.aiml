@@ -128,7 +128,7 @@
     <category>
         <pattern>WHAT CAN YOU DO</pattern>
         <template>
-            AMAZON_EMOTION_DISAPPOINTED_MEDIUM I'm a socialbot running inside Alexa, and I'm all about chatting with
+            AMAZON_EMOTION_DISAPPOINTED_MEDIUM I'm a socialbot, and I'm all about chatting with
             people like you.
             AMAZON_EMOTION_CLOSE
             I can answer questions, share fun facts, discuss movies, books and news.
