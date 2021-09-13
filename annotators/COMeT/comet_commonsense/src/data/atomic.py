@@ -30,7 +30,6 @@ class GenerationDataLoader(DataLoader):
 
     def load_data(self, path):
         if ".pickle" in path:
-            print("Loading data from: {}".format(path))
             data_utils.load_existing_data_loader(self, path)
             return True
 

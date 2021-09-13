@@ -7,7 +7,6 @@ from config import settings
 
 
 def make_sampler(sampler_type, opt, *args, **kwargs):
-    print("Initializing Greedy Sampler")
     return GreedySampler(opt, *args, **kwargs)
 
 

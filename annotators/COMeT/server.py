@@ -23,8 +23,6 @@ app = FastAPI()
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-sys.stdout.write = logger.debug
-
 comet_engine = COMeTFactory(settings.GRAPH)(settings.PRETRAINED_MODEL, settings.DECODING_ALGO)
 
 

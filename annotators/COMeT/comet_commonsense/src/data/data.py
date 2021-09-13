@@ -12,9 +12,8 @@ def load_checkpoint(filename):
     if os.path.exists(filename):
         checkpoint = torch.load(
             filename, map_location=lambda storage, loc: storage)
-    else:
-        print("No model found at {}".format(filename))
-    return checkpoint
+        return checkpoint
+    raise FileNotFoundError("No model found at {}".format(filename))
 
 
 def make_data_loader(opt, *args):
