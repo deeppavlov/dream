@@ -1,0 +1,11 @@
+services:
+  nemo:
+    command: uvicorn main:app --host 0.0.0.0 --reload --port 4343
+    build:
+      context: deepy/services/speech/thirdparty/nemo
+    depends_on:
+      - agent
+    ports:
+      - 4343:4343
+version: "3.7"
+
