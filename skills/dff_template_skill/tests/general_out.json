@@ -2,7 +2,7 @@
     [
         [
             "Thank you for being so considerate with me on this.",
-            "I bet that you are so sincere'. It's been really cool getting to know you better."
+            "I bet that you are so sincere'. There's nothing more comforting than to find out something new about you."
         ],
         [
             0.5,
@@ -135,7 +135,7 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                                    "I bet that you are so sincere'. There's nothing more comforting than to find out something new about you.",
                                     0.7,
                                     {
                                         "grounding_skill": {
@@ -148,7 +148,7 @@
                                                 "I hadn't really thought about it.",
                                                 "I'm not sure about that.",
                                                 "It's so embarrassing, but I don't know.",
-                                                "It's been really cool getting to know you better."
+                                                "There's nothing more comforting than to find out something new about you."
                                             ]
                                         }
                                     },
@@ -176,7 +176,7 @@
                                     "I hadn't really thought about it.",
                                     "I'm not sure about that.",
                                     "It's so embarrassing, but I don't know.",
-                                    "It's been really cool getting to know you better."
+                                    "There's nothing more comforting than to find out something new about you."
                                 ]
                             }
                         },
@@ -317,7 +317,7 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                                    "I bet that you are so sincere'. There's nothing more comforting than to find out something new about you.",
                                     0.7,
                                     {
                                         "grounding_skill": {
@@ -330,7 +330,7 @@
                                                 "I hadn't really thought about it.",
                                                 "I'm not sure about that.",
                                                 "It's so embarrassing, but I don't know.",
-                                                "It's been really cool getting to know you better."
+                                                "There's nothing more comforting than to find out something new about you."
                                             ]
                                         }
                                     },
@@ -358,7 +358,7 @@
                                     "I hadn't really thought about it.",
                                     "I'm not sure about that.",
                                     "It's so embarrassing, but I don't know.",
-                                    "It's been really cool getting to know you better."
+                                    "There's nothing more comforting than to find out something new about you."
                                 ]
                             }
                         },
@@ -382,7 +382,7 @@
                         "I hadn't really thought about it.",
                         "I'm not sure about that.",
                         "It's so embarrassing, but I don't know.",
-                        "It's been really cool getting to know you better."
+                        "There's nothing more comforting than to find out something new about you."
                     ]
                 }
             }
