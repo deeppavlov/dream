@@ -10,7 +10,7 @@
         ],
         [
             {
-                "dff_template_skill_state": {
+                "dff_grounding_skill_state": {
                     "shared_memory": {},
                     "previous_human_utter_index": 13,
                     "history": {
@@ -192,7 +192,7 @@
                 "disliked_skills": []
             },
             {
-                "dff_template_skill_state": {
+                "dff_grounding_skill_state": {
                     "shared_memory": {},
                     "previous_human_utter_index": 13,
                     "history": {

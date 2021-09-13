@@ -476,12 +476,12 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_template_skill"
+                    "active_skill": "dff_grounding_skill"
                 }
             ]
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_grounding_skill_state_batch": [
         {
             "context": {
                 "current_index": 12,
