@@ -1,9 +1,11 @@
 import requests
+import os
 
-from comet_commonsense.config import settings
 import common.test_utils as test_utils
+from comet_commonsense.config import settings
 
-URL = f"http://0.0.0.0:{settings.SERVICE_PORT}/comet"
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
+URL = f"http://0.0.0.0:{SERVICE_PORT}/comet"
 
 
 def handler(requested_data):

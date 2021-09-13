@@ -1,6 +1,6 @@
 from typing import Optional, Union
 from pydantic import BaseSettings, validator
-import os
+from pathlib import Path
 
 PRETRAINED_MODEL_PATH_FOLDER = ["comet_commonsense", "pretrained_models"]
 
@@ -18,8 +18,8 @@ class AppConfig(BaseSettings):
 
     @validator("PRETRAINED_MODEL")
     def create_full_model_path(cls, pretrained_model_pkl):
-        model_file = os.path.split(pretrained_model_pkl)[1]
-        return os.path.join(*PRETRAINED_MODEL_PATH_FOLDER, model_file)
+        model_file = Path(pretrained_model_pkl).name
+        return Path(*PRETRAINED_MODEL_PATH_FOLDER, model_file)
 
     @validator("CUDA_VISIBLE_DEVICES")
     def device_validator(cls, device):
