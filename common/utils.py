@@ -28,7 +28,7 @@ scenario_skills = {
     "emotion_skill",
     "dummy_skill_dialog",
     "meta_script_skill",
-    "coronavirus_skill",
+    "dff_coronavirus_skill",
     "small_talk_skill",
     "news_api_skill",
     "game_cooperative_skill",

@@ -214,15 +214,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8057
       - PORT=8057
 
-  coronavirus-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8061
-      - PORT=8061
-
   small-talk-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -602,7 +593,7 @@ services:
 
     command: [ "nginx", "-g", "daemon off;" ]
   topic-dialogact-classification:
-    build:
+      build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
@@ -610,6 +601,15 @@ services:
       - PORT=8118
  
     command: ["nginx", "-g", "daemon off;"]
+  dff-coronavirus-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8061
+      - PORT=8061
+
+    command: [ "nginx", "-g", "daemon off;" ]
   dff-template-skill:
     build:
       context: dp/proxy/

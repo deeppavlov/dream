@@ -130,7 +130,7 @@ SKILL_TOPICS = {
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
     },
-    "coronavirus_skill": {
+    "dff_coronavirus_skill": {
         "compiled_patterns": [virus_compiled],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
