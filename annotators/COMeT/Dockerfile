@@ -40,6 +40,6 @@ RUN wget ${PRETRAINED_MODEL} -q -P /src/comet_commonsense/pretrained_models/ && 
     wget ${PREPROCESS_DATA} -q -P /src/comet_commonsense/data/${GRAPH}/processed/generation/
 
 COPY $SERVICE_HOME/server.py $SERVICE_HOME/test_server.py $SERVICE_HOME/test.sh ./
-COPY common common
+COPY $SERVICE_HOME/tests tests
 
-CMD uvicorn server:app --reload --host 0.0.0.0 --port ${SERVICE_PORT}
+CMD uvicorn server:app --host 0.0.0.0 --port ${SERVICE_PORT}

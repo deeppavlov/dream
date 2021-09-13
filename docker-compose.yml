@@ -378,7 +378,7 @@ services:
       dockerfile: ./annotators/COMeT/Dockerfile
       args:
         GRAPH: atomic
-        SERVICE_HOME: ./annotators/COMeT/
+        SERVICE_HOME: ./annotators/COMeT
         SERVICE_NAME: comet-atomic
         SERVICE_PORT: 8053
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
