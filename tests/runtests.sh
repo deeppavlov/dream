@@ -56,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream-alexa${WORKER} -f docker-compose.yml -f test.yml"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f test.yml"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
@@ -144,11 +144,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      entity-linking kbqa text-qa wiki-parser convert-reddit \
                      convers-evaluator-annotator \
                      book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
-                     grounding-skill dff-friendship-skill masked-lm entity-storer \
+                     grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
                      fact-random fact-retrieval news-api-skill hypothesis-scorer \
                      dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
-                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill; do
+                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

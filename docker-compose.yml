@@ -12,7 +12,7 @@ services:
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, weather-skill:8037,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
-        coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
+        dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
@@ -452,21 +452,6 @@ services:
           memory: 80M
         reservations:
           memory: 80M
-
-  coronavirus-skill:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./skills/coronavirus_skill/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8061
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
 
   small-talk-skill:
     env_file: [.env]
@@ -1166,6 +1151,22 @@ services:
           memory: 2.5G
         reservations:
           memory: 2.5G
+
+  dff-coronavirus-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8061
+        SERVICE_NAME: dff_coronavirus_skill
+      context: .
+      dockerfile: ./skills/dff_coronavirus_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8061 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 192M
+        reservations:
+          memory: 192M
 
   dff-template-skill:
     env_file: [.env]
