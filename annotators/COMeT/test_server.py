@@ -2,8 +2,8 @@ import requests
 import os
 
 import common.test_utils as test_utils
-from comet_commonsense.config import settings
 
+SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 URL = f"http://0.0.0.0:{SERVICE_PORT}/comet"
 
@@ -16,7 +16,7 @@ def handler(requested_data):
 def run_test(handler):
     in_data, out_data = test_utils.get_dataset()
     for test_name in in_data:
-        if test_name == settings.GRAPH:
+        if test_name in SERVICE_NAME:
             hypothesis = handler(in_data[test_name])
             print(f"test name: {test_name}")
             is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis)
