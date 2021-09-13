@@ -19,9 +19,9 @@ RUN pip install -r requirements.txt && \
 
 COPY $SERVICE_HOME/comet_commonsense comet_commonsense
 
-RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz && \
-    tar -xzf model.tar.gz -C /src/comet_commonsense/ && \
-    rm model.tar.gz
+RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz -P /src/models/ && \
+    tar -xzf /src/models/model.tar.gz -C /src/comet_commonsense/ && \
+    rm -rf /src/models/
 
 ARG GRAPH
 ARG PRETRAINED_MODEL
