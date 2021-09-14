@@ -547,6 +547,21 @@ def kbqa_formatter_dialog(dialog: Dict):
     return [{"x_init": sentences, "entities": entities}]
 
 
+def fact_random_formatter_dialog(dialog: Dict):
+    # Used by: fact-random annotator
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list = []
+
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+    return [[entity_substr_list]]
+
+
 def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
@@ -653,10 +668,6 @@ def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_friendship_skill")
 
 
-def dff_template_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_template")
-
-
 def dff_funfact_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_funfact_skill")
 
@@ -697,33 +708,30 @@ def dff_movie_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_movie_skill")
 
 
-def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
-    # Used by: dialog_breakdown
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = " ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])
-    hyps = {"context": [], "curr_utterance": []}
-    for hyp in dialog["human_utterances"][-1]["hypotheses"]:
-        hyps["context"].append(context)
-        hyps["curr_utterance"].append(hyp["text"])
-    return [hyps]
+def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_art_skill")
+
+
+def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_coronavirus_skill")
+
+
+def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_template_skill")
 
 
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_food_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_food_skill")
 
 
 def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_bot_persona_skill"
-    return utils.dff_formatter(dialog, service_name)
+    return utils.dff_formatter(dialog, "dff_bot_persona_skill")
 
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_wiki_skill"
     return utils.dff_formatter(
         dialog,
-        service_name,
+        "dff_wiki_skill",
         used_annotations=[
             "cobot_entities",
             "cobot_nounphrases",
@@ -736,9 +744,16 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     )
 
 
-def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_art_skill"
-    return utils.dff_formatter(dialog, service_name)
+def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
+    # Used by: dialog_breakdown
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = " ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])
+    hyps = {"context": [], "curr_utterance": []}
+    for hyp in dialog["human_utterances"][-1]["hypotheses"]:
+        hyps["context"].append(context)
+        hyps["curr_utterance"].append(hyp["text"])
+    return [hyps]
 
 
 def game_cooperative_skill_formatter(dialog: Dict):

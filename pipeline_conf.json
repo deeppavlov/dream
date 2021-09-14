@@ -242,7 +242,7 @@
                     "timeout": 1,
                     "url": "http://fact-random:8119/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:fact_random_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
@@ -658,13 +658,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "coronavirus_skill": {
+            "dff_coronavirus_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://coronavirus-skill:8061/coronavirus_skill"
+                    "url": "http://dff-coronavirus-skill:8061/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_coronavirus_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

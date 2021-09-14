@@ -154,12 +154,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8057:8057
-  coronavirus-skill:
-    volumes:
-      - "./skills/coronavirus_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8061:8061
   small-talk-skill:
     volumes:
       - "./skills/small_talk_skill:/src"
@@ -406,4 +400,16 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
+  dff-coronavirus-skill:
+    volumes:
+      - "./skills/dff_coronavirus_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8061:8061
+  dff-template-skill:
+    volumes:
+      - "./skills/dff_template_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8120:8120
 version: "3.7"

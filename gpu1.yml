@@ -111,8 +111,6 @@ services:
     restart: unless-stopped
   short-story-skill:
     restart: unless-stopped
-  coronavirus-skill:
-    restart: unless-stopped
   small-talk-skill:
     restart: unless-stopped
   game-cooperative-skill:
@@ -199,4 +197,8 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  dff-coronavirus-skill:
+    restart: unless-stopped
+  dff-template-skill:
+    restart: unless-stopped
 version: '3.7'
