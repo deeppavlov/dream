@@ -1,30 +1,12 @@
 import logging
 import re
 import json
-from . import condition
+from . import condition as loc_cnd
 from dff.core import Node, Context, Actor
 
 
 logger = logging.getLogger(__name__)
 # ....
-
-
-def levenshtein_item(items, user_uttr):
-  vocab = set([item.lower().replace(' ', '$') for item in items])
-  abet = set(c for w in vocab for c in w)
-  abet.update(set(string.ascii_letters))
-  searcher = LevenshteinSearcher(abet, vocab)
-  for line in [user_uttr.lower()]:
-    for i in [6, 5, 4, 3, 2, 1]:
-      token = word_tokenize(line)
-      grams = list(ngrams(token, i))
-      for gram in grams:
-        gram = '$'.join(gram)
-        print(gram)
-        candidate = searcher.search(gram, 3)
-        if candidate:
-          candidate = candidate[0][0].replace('$', ' ')
-          return candidate
 
 
 def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
@@ -50,20 +32,26 @@ def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
 
 def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    insts = ["trumpet", "drums", "guitar"]
-    insts_re = "|".join(insts)
-    extracted_inst = re.findall(insts_re, ctx.last_request, re.IGNORECASE)
-    if "guitar" in extracted_inst:
+    insts = ["trumpet", "drums", "guitar", "accordion", "bagpipe", "banjo", "bugle", "cello", "clarinet", "cymbal", 
+             "flute", "horn", "harmonica", "harp", "keyboard", "maracase", "organ", "flute", "piano", "recorder",
+             "saxophone", "sitar", "tambourine", "triangle", "trombone", "tuba", "ukulele", "violin", 
+             "xylophone", "bassoon", "castanet", "didgeridoo", "gong", "harpsichord", "lute", "mandolin", "oboe", 
+             "piccolo", "viola"]
+    extracted_inst = loc_cnd.levenshtein_cand(insts, ctx.last_request)
+    if "guitar" in extracted_inst[1]:
         slots["instrument_intro"] = "Cool! We have a lot of guitars here. Let's begin with a story about Paul McCartney's first guitar. "
         ctx.misc["slots"] = slots
-    elif "trumpet" in extracted_inst:
+    elif "trumpet" in extracted_inst[1]:
         slots["instrument_intro"] = "Then I have a funny story about trumpets for you! "
         ctx.misc["slots"] = slots
-    elif "drums" in extracted_inst:
+    elif "drums" in extracted_inst[1]:
         slots["instrument_intro"] = "If you like drums, you must like Ringo Starr! Let's save his his drumkit for last and begin with the guitars. "
         ctx.misc["slots"] = slots
+    elif extracted_inst[0]:
+        slots["instrument_intro"] = f"That's so cool! We don't have {extracted_inst[1]}s here, but I can show you some other instruments. "
+        ctx.misc["slots"] = slots
     else:
-        slots["instrument_intro"] = "Well, let me show you the collection of instruments that we have here. "
+        slots["instrument_intro"] = "All right, let me show you instruments that we have here! "
         ctx.misc["slots"] = slots
     return node_label, node
 
@@ -84,7 +72,7 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
         "Abbey Road",
         "Rubber Soul"
     ]
-    extracted_album = levenshtein_item(albums, ctx.last_request)
+    extracted_album = loc_cnd.levenshtein_item(albums, ctx.last_request)
     if extracted_album:
         slots["album_name"] = extracted_album
         ctx.misc["slots"] = slots
@@ -94,23 +82,22 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
 
 def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
-    slots["first_album"] = "Let's begin with the albums. If you get tired, just say 'move on'. "
-    slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club."
+    slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club Band."
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
     slots["a_hard_days_night_wrong"] = "It was A Hard Day's Night! "
     slots["rubber_soul"] = "However, it was after this cry for 'Help!' that the Beatles became the Beatles. "
     slots["yellow_submarine"] = "Then let's take a look at the album. "
-    slots["abbey_road"] = (
-        "By the way, The White Album' recording sessions lasted 137 days! Abbey Road, on the opposite, "
-        "was recorded in one 12-hour session. "
-    )
+    slots["abbey_road"] = "By the way, The White Album' recording sessions lasted 137 days! And Abbey Road was recorded in 12 hours. "
     slots["let_it_be"] = (
         "Did you know that Abbey Road was created and issued after the recording of the Beatles' "
         "last released album took place? "
     )
+    slots["first_album"] = "Let's begin our trip here! If you get tired, just say 'move on'. "
     for slot_name, slot_value in slots.items():
         if re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
-                     r"(.*show\sme\s)|(.*tell\sme\sabout\s))(?P<item>.*)", ctx.last_request, re.I):
+                     r"(.*show\sme\s)|(.*tell\sme\s)|(.*go\sto\s))(?P<item>.*)", ctx.last_request, re.I):
+            slot_value = ""
+        elif ctx.misc.get("first_album") is None and slot_name != "first_album":
             slot_value = ""
         elif ctx.misc.get("first_album") is None and slot_name == "first_album":
             ctx.misc["first_album"] = True

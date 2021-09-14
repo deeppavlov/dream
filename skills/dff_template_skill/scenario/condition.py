@@ -1177,17 +1177,42 @@ def levenshtein_item(album_name, user_uttr):
         token = word_tokenize(line)
         for i in [6, 5, 4, 3, 2, 1]:
             if i <= len(token):
-                print(token)
                 grams = list(ngrams(token, i))
                 for gram in grams:
                     gram = '$'.join(gram)
-                    candidate = searcher.search(gram, 3)
+                    candidate = searcher.search(gram, 2)
                     if candidate:
                         candidate = candidate[0][0].replace('$', ' ')
                         flag = True
                         return flag
 
     return flag
+
+
+def levenshtein_cand(album_name, user_uttr):
+    flag = False
+    items = album_name
+    if type(album_name) != list:
+        items = [album_name]
+    vocab = set([item.lower().replace(' ', '$') for item in items])
+    abet = set(c for w in vocab for c in w)
+    abet.update(set(string.ascii_letters))
+    searcher = LevenshteinSearcher(abet, vocab)
+    candidate = ""
+    for line in [user_uttr.lower()]:
+        token = word_tokenize(line)
+        for i in [6, 5, 4, 3, 2, 1]:
+            if i <= len(token):
+                grams = list(ngrams(token, i))
+                for gram in grams:
+                    gram = '$'.join(gram)
+                    candidate = searcher.search(gram, 2)
+                    if candidate:
+                        candidate = candidate[0][0].replace('$', ' ')
+                        flag = True
+                        return flag, candidate
+
+    return flag, candidate
 
 
 def has_album(album_name: str):
@@ -1307,7 +1332,7 @@ def entities(**kwargs):
 def wants_to_see(item_name: str):
     def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
         match = re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*go\sto.*)|(.*\slook\sat\s)|"
-                          r"(.*show\sme\s)|(.*tell\sme\sabout\s))(?P<item>.*)", ctx.last_request, re.I)
+                          r"(.*show\sme\s)|(.*tell\sme\s))(?P<item>.*)", ctx.last_request, re.I)
         if match:
             item = match.group('item')
         else:
@@ -1351,7 +1376,7 @@ def has_member(member_name: str):
 
 
 def has_correct_answer(ctx: Context, actor: Actor, *args, **kwargs):
-    a = ["Abbey Road", "A Hard Day's Night", "Liverpool"]
+    a = ["Abbey Road", "Hard Day's Night", "Liverpool"]
     return levenshtein_item(a, ctx.last_request)
 
 
@@ -1394,7 +1419,7 @@ def has_any_album(ctx: Context, actor: Actor, *args, **kwargs):
 
 def is_beatles_song(ctx: Context, actor: Actor, *args, **kwargs):
     songs = [
-	'Title', '12-Bar Original', 'A Day in the Life', "A Hard Day's Night",
+	'Title', '12-Bar Original', 'A Day in the Life', "Hard Day's Night",
 	'A Shot of Rhythm and Blues', 'A Taste of Honey', 'Across the Universe', 'Act Naturally',
 	"Ain't She Sweet", "All I've Got to Do", 'All My Loving', 'All Things Must Pass', 'All Together Now',
 	'All You Need Is Love', 'And I Love Her', 'And Your Bird Can Sing', 'Anna (Go to Him)', 'Another Girl',

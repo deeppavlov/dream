@@ -33,7 +33,8 @@ logger = logging.getLogger(__name__)
 #      - the condition under which to make the transition
 flows = {
     "beatles": {
-        GLOBAL_TRANSITIONS: {("beatles", "beatles_q"): cnd.regexp(r"\bbeatles\b", re.I),
+        GLOBAL_TRANSITIONS: {("beatles", "beatles_q", 1.2): cnd.regexp(r"\bbeatles\b", re.I),
+                             trn.previous(1.2): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                              ("beatles_reset", "intro_reset", 1.2): cnd.regexp(r"\breset\b", re.I),
                              ("album", "please_please_me", 1.2): loc_cnd.wants_to_see(item_name="Please Please Me"),
                              ("album", "with_the_beatles", 1.2): loc_cnd.wants_to_see(item_name="With The Beatles"),
@@ -48,12 +49,12 @@ flows = {
                              ("album", "abbey_road", 1.2): loc_cnd.wants_to_see(item_name="Abbey Road"),
                              ("album", "let_it_be", 1.2): loc_cnd.wants_to_see(item_name="Let It Be"),
                              ("album", "who_beatle_res", 1.2): loc_cnd.wants_to_see(
-                                 item_name=['beatles', 'band members', "artists", "the band"]),
+                                 item_name=['beatles', 'band members', "artists", "the band", "band"]),
                              ("song", "video_q", 1.2): loc_cnd.wants_to_see(item_name=["songs", "videos"]),
                              ("photos", "abbey_road", 1.2): loc_cnd.wants_to_see(item_name=["photos", "pictures"]),
                              ("album", "what_album_res", 1.2): loc_cnd.wants_to_see(item_name="albums"),
                              ("instruments", "play_q_res", 1.2): loc_cnd.wants_to_see(item_name="instruments"),
-                             ("album", "help", 1.2): loc_cnd.wants_to_see(item_name="Help"),
+                             ("album", "help", 1.2): loc_cnd.wants_to_see(item_name="Help!"),
                              ("instruments", "guitar_paul_1", 1.2): loc_cnd.wants_to_see(item_name=["zenith", "paul's guitar", "mccartney's guitar"]),
                              ("instruments", "guitar_paul_2", 1.2): loc_cnd.wants_to_see(item_name="hofner"),
                              ("instruments", "guitar_lennon", 1.2): loc_cnd.wants_to_see(item_name=["john's guitar", "lennon's guitar", "rickenbacker"]),
@@ -62,14 +63,13 @@ flows = {
                              ("people", "fact_mccartney", 1.2): loc_cnd.wants_to_see(item_name=['Paul', 'McCartney']),
                              ("people", "fact_starr", 1.2): loc_cnd.wants_to_see(item_name=['Ringo', 'Starr']),
                              ("people", "fact_harrison", 1.2): loc_cnd.wants_to_see(item_name=['George', 'Harrison']),
-                             ("album", "who_beatle_res", 1.2): loc_cnd.wants_to_see(
-                                 item_name=['beatles', 'band members', "artists", "band"]),
+                             ("history", "first_members_res", 1.2): loc_cnd.wants_to_see(item_name='history'),
                              ("beatles_reset", "sorry_reset", 1.2): cnd.regexp(r"((.*i\swant\sto\ssee\s)|(.*go\sto.*)|"
                                                                                r"(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
-                                                                               r"(.*show\sme\s)|(.*tell\sme\sabout\s))", re.I),
-                             trn.previous(1.2): cnd.regexp(r".*sorry|repeat|go\sback.*", re.I)},
+                                                                               r"(.*show\sme\s)|(.*tell\sme))", re.I),
+                             },
         GRAPH: {
-            "start": {RESPONSE: ""},
+            "start": {RESPONSE: "Hello!"},
             "beatles_q": {
                 RESPONSE: "Hello! I am the Doorman and I will be your guide here today. Do you like Beatles?",
                 # PROCESSING: set_confidence_and_continue_flag(1.0, common_constants.MUST_CONTINUE,
@@ -82,6 +82,7 @@ flows = {
             "instruments_q": {
                 RESPONSE: "Are you interested in musical instruments?",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("instruments", "play_q"): int_cnd.is_yes_vars,
                     ("photos", "photos_q"): cnd.true,
                 },
@@ -92,22 +93,26 @@ flows = {
         GRAPH: {
             "intro_reset": {
                 RESPONSE: "Hello, again! What do you want to discuss about the Beatles? "
-                          "Ask me to tell about albums, instruments, songs or artists themselves.",
+                          "Ask me to tell about albums, instruments, songs, the band's history or artists themselves.",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "what_album"): cnd.regexp(r".*album.*", re.I),
                     ("instruments", "play_q"): cnd.regexp(r".*instrument.*", re.I),
                     ("song", "video_q"): cnd.regexp(r".*song.*", re.I),
-                    ("album", "who_beatle"): cnd.regexp(r".*artist.*", re.I)
+                    ("album", "who_beatle"): cnd.regexp(r".*artist.*", re.I),
+                    ("history", "first_members_res"): cnd.regexp(r".*history.*", re.I)
                 },
             },
             "sorry_reset": {
                 RESPONSE: "Sorry, I would love to help you with that, but I am not ready yet. "
-                          "You can ask me to tell about albums, instruments, songs or artists themselves.",
+                          "You can ask me to tell about albums, instruments, songs, the band's history or artists themselves.",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "what_album"): cnd.regexp(r".*album.*", re.I),
                     ("instruments", "play_q"): cnd.regexp(r".*instrument.*", re.I),
                     ("song", "video_q"): cnd.regexp(r".*song.*", re.I),
-                    ("album", "who_beatle"): cnd.regexp(r".*artist.*", re.I)
+                    ("album", "who_beatle"): cnd.regexp(r".*artist.*", re.I),
+                    ("history", "first_members_res"): cnd.regexp(r".*history.*", re.I)
                 },
             },
         },
@@ -116,30 +121,47 @@ flows = {
         GRAPH: {
             "name": {
                 RESPONSE: "Beatles... Sounds like a wordplay, doesn’t it? Beetles making the beat. "
-                "That’s how they meant it",
-                TRANSITIONS: {("history", "first_members"): cnd.true},
+                "That’s how they meant it.",
+                TRANSITIONS: {
+                    trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("history", "first_members"): cnd.true},
             }
         },
     },
     "history": {
         GRAPH: {
             "first_members": {
-                RESPONSE: "First, I will tell you abut the band's history. If you get tired, you can tell me to 'move on' "
+                RESPONSE: "First, I will tell you about the band's history. If you get tired, you can tell me to 'move on' "
                           "and I will take you to the next part. "
                           "The band formed around John Lennon and Paul McCartney, who first performed together in 1957. "
                           "Do you know in what city the story of the Beatles began?",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "what_album"): loc_cnd.move_on,
+                    ("what_is_next", "cur_history"): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("history", "city_right"): loc_cnd.has_album(album_name="Liverpool"),
+                    ("history", "city_wrong"): cnd.true
+                },
+            },
+            "first_members_res": {
+                RESPONSE: "The Beatles formed around John Lennon and Paul McCartney, who first performed together in 1957. "
+                          "Do you know in what city the story of the band began?",
+                TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("album", "what_album"): loc_cnd.move_on,
+                    ("what_is_next", "cur_history"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("history", "city_right"): loc_cnd.has_album(album_name="Liverpool"),
                     ("history", "city_wrong"): cnd.true
                 },
             },
             "city_wrong": {
-                RESPONSE: "It was Liverpool, where the 'beat' music scene was booming at that moment! "
+                RESPONSE: "It was Liverpool! The 'beat' music scene was booming there at that moment. "
                           "The band also used to perform a lot in Hamburg. And do you know who was the Beatles' "
                           "first drummer? ",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "what_album"): loc_cnd.move_on,
+                    ("what_is_next", "cur_history"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("history", "drummer_right"): loc_cnd.has_album(album_name=["Pete", "Best"]),
                     ("history", "drummer_wrong"): cnd.true
                 },
@@ -148,7 +170,9 @@ flows = {
                 RESPONSE: "Wow, you seem to know a lot about the band! And do you know who was the Beatles' "
                           "first drummer? ",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "what_album"): loc_cnd.move_on,
+                    ("what_is_next", "cur_history"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("history", "drummer_right"): loc_cnd.has_album(album_name=["Pete", "Best"]),
                     ("history", "drummer_wrong"): cnd.true
                 },
@@ -156,16 +180,20 @@ flows = {
             "drummer_wrong": {
                 RESPONSE: "His name was Pete Best. John Lennon, Paul McCartney, George Harrison "
                           "and Pete Best were the first Beatles. But later the band fell out with Pete and that was "
-                          "when they found Ringo Starr. Now let's move on and talk about albums ",
-                TRANSITIONS: {("album", "what_album"): loc_cnd.move_on,
-                              ("album", "what_album"): cnd.true
-                              },
+                          "when they invited Ringo Starr to play with them. Now let's move on and talk about albums!",
+                TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("album", "what_album"): loc_cnd.move_on,
+                    ("album", "what_album"): cnd.true
+                },
             },
             "drummer_right": {
                 RESPONSE: "Yeah, that was him! After several years of playing with other bands, Pete worked as a civil "
                           "servant for 20 years. Now he has a band of his own, Pete Best Band. Now let's move on "
-                          "and talk about albums ",
-                TRANSITIONS: {("album", "what_album"): cnd.true},
+                          "and talk about albums. ",
+                TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("album", "what_album"): cnd.true},
             }
         },
     },
@@ -175,6 +203,7 @@ flows = {
                 RESPONSE: "What's your favorite Beatles album?",
                 PROCESSING: [loc_prs.add_node_name(name='what_album')],
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
                     ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
                     ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="Hard Day's Night"),
@@ -187,12 +216,13 @@ flows = {
                     ("album", "abbey_road"): loc_cnd.has_album(album_name="Abbey Road"),
                     ("album", "let_it_be"): loc_cnd.has_album(album_name="Let It Be"),
                     ("album", "help"): loc_cnd.has_album(album_name="Help"),
-                    ("album", "please_please_me", 0.1): cnd.true,
+                    ("album", "please_please_me"): cnd.true,
                 },
             },
             "what_album_res": {
                 RESPONSE: "What album do you want to begin with?",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("album", "please_please_me"): loc_cnd.has_album(album_name="Please Please Me"),
                     ("album", "with_the_beatles"): loc_cnd.has_album(album_name="With The Beatles"),
                     ("album", "a_hard_days_night_wrong"): loc_cnd.has_album(album_name="Hard Day's Night"),
@@ -205,12 +235,13 @@ flows = {
                     ("album", "abbey_road"): loc_cnd.has_album(album_name="Abbey Road"),
                     ("album", "let_it_be"): loc_cnd.has_album(album_name="Let It Be"),
                     ("album", "help"): loc_cnd.has_album(album_name="Help"),
-                    ("album", "please_please_me", 0.1): cnd.true,
+                    ("album", "please_please_me"): cnd.true,
                 },
             },
             "who_beatle": {
                 RESPONSE: "By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("what_is_next", "cur_band"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name=['John', 'Lennon']),
                     ("people", "fact_mccartney"): loc_cnd.has_member(member_name=['Paul', 'McCartney']),
@@ -222,6 +253,7 @@ flows = {
             "who_beatle_res": {
                 RESPONSE: "Who do you want to discuss: John, Paul, Ringo or George?",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("what_is_next", "cur_band"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name=['John', 'Lennon']),
                     ("people", "fact_mccartney"): loc_cnd.has_member(member_name=['Paul', 'McCartney']),
@@ -233,6 +265,7 @@ flows = {
 	        "who_beatle_1": {
                 RESPONSE: "Well, I am not sure that this song is The Beatles' song... By the way, who is your favorite Beatle?",
                 TRANSITIONS: {
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
                     ("what_is_next", "cur_band"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("people", "fact_lennon"): loc_cnd.has_member(member_name=['John', 'Lennon']),
                     ("people", "fact_mccartney"): loc_cnd.has_member(member_name=['Paul', 'McCartney']),
@@ -242,7 +275,7 @@ flows = {
                 },
             },
             "please_please_me": {
-                RESPONSE: "{first_album} Please Please Me is the first studio album by the Beatles! "
+                RESPONSE: "{first_album}Please Please Me is the first studio album by the Beatles! "
                 "The album was recorded within 13 hours and the studio cost 400£. "
                 "It hit the top of the British chart and stayed there for 30 weeks to be replaced "
                 "by 'With the Beatles'. Quite unexpected for a debut, right?",
@@ -253,9 +286,10 @@ flows = {
                     loc_prs.add_node_name('Please Please Me')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "with_the_beatles"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "with_the_beatles", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "1vqwhwcpmh4t5k"},
@@ -272,18 +306,18 @@ flows = {
                     loc_prs.add_node_name('With The Beatles')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "a_hard_days_night_corr"): loc_cnd.has_correct_answer,
-                    ("album", "a_hard_days_night_wrong"): cnd.true,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "a_hard_days_night_corr", 0.1): loc_cnd.has_correct_answer,
+                    ("album", "a_hard_days_night_wrong", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "80nrsg1xgqk8ch"},
             },
             "a_hard_days_night_corr": {
-                RESPONSE: "{first_album}"
-                "{a_hard_days_night_corr} "
-                "It was the band's third album, the first one to consist entirely of "
-                "the Beatles' original song and the only one to consist solely of songs written by Lennon-McCartney. ",
+                RESPONSE: "{a_hard_days_night_corr}{first_album}"
+                "It was the band's third album, the first one to consist entirely of the Beatles' original song and \
+                the only one to consist solely of songs written by Lennon-McCartney. ",
                 PROCESSING: [
                     loc_prs.increment_album_counter,
                     loc_prs.slot_filling_albums,
@@ -291,16 +325,16 @@ flows = {
                     loc_prs.add_node_name("Hard Day's Night")
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "beatles_for_sale", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "2mm0prqv0rq7dh"},
             },
             "a_hard_days_night_wrong": {
-                RESPONSE: "{first_album}"
-                "{a_hard_days_night_wrong} "
+                RESPONSE: "{a_hard_days_night_wrong}{first_album}"
                 "It was the band's third album, the first one to consist entirely of "
                 "the Beatles' original song and the only one to consist solely of songs written by Lennon-McCartney. ",
                 PROCESSING: [
@@ -310,9 +344,10 @@ flows = {
                     loc_prs.add_node_name("Hard Day's Night")
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "beatles_for_sale"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "beatles_for_sale", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "2mm0prqv0rq7dh"},
@@ -328,9 +363,10 @@ flows = {
                     loc_prs.add_node_name('Beatles For Sale')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "help"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "help", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "w2gnmmg1f34rkh"},
@@ -347,9 +383,10 @@ flows = {
                     loc_prs.add_node_name('Help')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "rubber_soul"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "rubber_soul", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "xg3xm6mhb81m6c"},
@@ -366,9 +403,10 @@ flows = {
                     loc_prs.add_node_name('Rubber Soul')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "revolver"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "revolver", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "9wqs15r56psr2q"},
@@ -386,15 +424,16 @@ flows = {
                     loc_prs.add_node_name('Revolver')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("song", "yellow_submarine"): int_cnd.is_no_vars,
-                    ("album", "yellow_submarine"): cnd.true,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("song", "yellow_submarine", 0.1): int_cnd.is_no_vars,
+                    ("album", "yellow_submarine", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "86npm1z4m5mftr"},
             },
             "yellow_submarine": {
-                RESPONSE: "{first_album} {yellow_submarine} One side of the album contains Beatles' song, "
+                RESPONSE: "{yellow_submarine}{first_album}One side of the album contains Beatles' song, "
                 "while the other one consists of symphonic film score composed by George Martin, "
                 "the Beatles' producer and the so-called fifth Beatle. Have you ever heard of this man?",
                 PROCESSING: [
@@ -404,20 +443,19 @@ flows = {
                     loc_prs.add_node_name('Yellow Submarine')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "sgt_peppers"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "sgt_peppers", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "ht5p6z4rs7zf65"},
             },
             "sgt_peppers": {
-                RESPONSE: "{first_album} {sgt_peppers} "
-                "Called 'a decisive moment in the history of Western civilisation' and "
-                "'a historic departure in the progress of music', "
+                RESPONSE: "{sgt_peppers}{first_album}"
+                "Called 'a decisive moment in the history of Western civilisation', "
                 "Sgt. Pepper's Lonely Hearts Club Band is the Beatles' best-selling album "
-                "of all times. More than 32 million copies of "
-                "Sgt. Pepper's Lonely Hearts Club Band were sold all over the world! "
+                "of all times. More than 32 million copies were sold all over the world! "
                 "A stunning number, isn't it?",
                 PROCESSING: [
                     loc_prs.increment_album_counter,
@@ -426,15 +464,16 @@ flows = {
                     loc_prs.add_node_name("Sgt. Pepper's Lonely Hearts Club Band")
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "white_album"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "white_album", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "n0kgrcdqqqfpqq"},
             },
             "white_album": {
-                RESPONSE: "{first_album} Unlike the earlier albums, "
+                RESPONSE: "{first_album}Unlike the earlier albums, "
                 "the idea of 'The Beatles', or the White Album, "
                 "was almost entirely conceived far from London. The group went to an ashram in Rishikesh, India, "
                 "for a meditation course, where they only had an acoustic guitar available! "
@@ -446,19 +485,19 @@ flows = {
                     loc_prs.add_node_name('White Album')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "abbey_road"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "abbey_road", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "h8fxrqh4611dg3"},
             },
             "abbey_road": {
-                RESPONSE: "{first_album} {abbey_road} "
+                RESPONSE: "{abbey_road}{first_album}"
                 "Abbey Road's working title was Everest, but it seems that the band didn't want to go "
                 "to Mount Everest to do a photoshoot for the cover. So they named it "
-                "after the street where most of the band's material was recorded. By the way, "
-                "do you remember what the album's cover looks like?",
+                "after the street where most of the band's material was recorded.",
                 PROCESSING: [
                     loc_prs.increment_album_counter,
                     loc_prs.slot_filling_albums,
@@ -466,27 +505,16 @@ flows = {
                     loc_prs.add_node_name('Abbey Road')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "abbey_road_cover"): int_cnd.is_no_vars,
-                    ("album", "let_it_be"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "let_it_be", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "665x7hc4s22wpv"},
             },
-            "abbey_road_cover": {
-                RESPONSE: "Then let me show it to you! The photoshoot was Paul McCartney's idea. "
-                "It happened right outside the bands' recording studio and took less than half an hour.",
-                PROCESSING: [loc_prs.increment_album_counter, loc_prs.add_misc_to_response],
-                TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("album", "let_it_be"): loc_cnd.not_visited_album,
-                    ("song", "song_q", 0.1): cnd.true,
-                },
-                MISC: {"command": "goto", "objectId": "z3nfvv0r06v3kx"},
-            },
             "let_it_be": {
-                RESPONSE: "{first_album} {let_it_be} "
+                RESPONSE: "{let_it_be}{first_album}"
                 "Originally, the band's last album was called Get Back, but later its name was changed to Let It Be. "
                 "The album spent more than a year unreleased as the relations between the Beatles had become so tense "
                 "that none of them wanted to sort the songs out.",
@@ -497,9 +525,10 @@ flows = {
                     loc_prs.add_node_name('Let It Be')
                 ],
                 TRANSITIONS: {
-                    ("song", "song_q"): loc_cnd.move_on,
-                    ("what_is_next", "cur_album"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "please_please_me"): loc_cnd.not_visited_album,
+                    # trn.previous(): cnd.regexp(r".*(sorry)|(repeat)|(go\sback)|(previous).*", re.I),
+                    ("song", "song_q", 0.2): loc_cnd.move_on,
+                    ("what_is_next", "cur_album", 0.1): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("album", "please_please_me", 0.1): loc_cnd.not_visited_album,
                     ("song", "song_q", 0.1): cnd.true,
                 },
                 MISC: {"command": "goto", "objectId": "4n02cf8h4qx00c"},
@@ -538,8 +567,8 @@ flows = {
             },
             "info_ar": {
                 RESPONSE: "It's Abbey Road! Photographer was given only 10 minutes to take the photo while he stood "
-                """on a step-ladder and a policeman held up traffic behind the camera. He took 6 photographs and """
-                """McCartney chose this one for the cover""",
+                          "on a step-ladder and a policeman held up traffic behind the camera. He took 6 photographs and "
+                          "McCartney chose this one for the cover. ",
                 PROCESSING: [loc_prs.add_node_name(name="info_ar")],
                 TRANSITIONS: {
                     ("what_is_next", "cur_photos"): cnd.regexp(r"\bwhat's\snext\b", re.I),
@@ -550,6 +579,10 @@ flows = {
                 RESPONSE: """This photo is from Whitaker photo session, where he assembled different scary props such """
                 """as doll parts and trays of meat. One of the photos was used for the cover of Yesterday """
                 """and Today album. We have some more photos of The Beatles, so be sure to check them out 🙂 """,
+                PROCESSING: [loc_prs.add_misc_to_response],
+                TRANSITIONS: {
+                    ("what_is_next", "cur_last_photo"): cnd.regexp(r"\bwhat's\snext\b", re.I)
+                },
                 MISC: {"command": "goto", "objectId": "pv2qgzk51vmgq6"},
             },
         },
@@ -575,31 +608,21 @@ flows = {
                     ("song", "video_rep"): cnd.true},
             },
             "video_rep": {
-                RESPONSE: """Unfortunately, we don't have this one here. You can choose from
-                 "Hey Jude", "Don't Let Me Down", "We Can Work it Out", "Come Together", "Yellow Submarine", 
-                 "Revolution", "Imagine", "Something", "Hello, Goodbye",
-                "A Day In The Life", "Help" and "Penny Lane"!""",
+                RESPONSE: """Unfortunately, we don't have this one here. You can choose from "Hey Jude", "Don't Let Me Down", 
+                "We Can Work it Out", "Come Together", "Yellow Submarine", 
+                "Revolution", "Imagine", "Something", "Hello, Goodbye", "A Day In The Life", "Help" and "Penny Lane"!""",
                 TRANSITIONS: {
                     ("what_is_next", "cur_songs"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     ("song", "fav_song"): loc_cnd.has_songs,
                     trn.repeat(): cnd.true},
             },
             "fav_song": {
-                RESPONSE: "Do you want to watch the music video for this song?",
+                RESPONSE: "Enjoy watching the music video! Just text me when you are done.",
                 PROCESSING: [loc_prs.extract_song_id, loc_prs.add_misc_to_response],
                 TRANSITIONS: {
                     ("what_is_next", "cur_songs"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "who_beatle"): int_cnd.is_no_vars,
-                    ("song", "show_video"): cnd.true
+                    ("album", "who_beatle"): cnd.true,
                 },
-            },
-            "show_video": {
-                RESPONSE: "Great! You can watch it 🙂 Just let me know when you're done",
-                TRANSITIONS: {
-                    ("what_is_next", "cur_songs"): cnd.regexp(r"\bwhat's\snext\b", re.I),
-                    ("album", "who_beatle"): cnd.true
-                },
-                # MISC: {"command": "goto", "objectId": "{video}"},
             },
             "why_song": {RESPONSE: "Why do you like this song?", TRANSITIONS: {("album", "who_beatle"): cnd.true}},
             "yellow_submarine": {
@@ -618,7 +641,7 @@ flows = {
     "people": {
         GRAPH: {
             "fact_lennon": {
-                RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that John Lennon’s father"
+                RESPONSE: "I adore John Lennon! By the way, did you know that John Lennon’s father"
                 " was absent for much of his early life but showed up when his son became famous?"
                 " Sounds kind of sad... Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
@@ -629,7 +652,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "w6mdvshkg95p4r"},
             },
             "fact_mccartney": {
-                RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that Paul McCartney played"
+                RESPONSE: "Paul McCartney is awesome! By the way, did you know that he played"
                 " to what's believed to be the largest paid audience in recorded history? In 1989,"
                 " he played a solo concert to a crowd of 350,000-plus in Brazil. That's amazing!"
                 " Let's take a look at his biography. Just text me when you're done :)",
@@ -641,7 +664,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "0fzh0phwszmzb1"},
             },
             "fact_harrison": {
-                RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that"
+                RESPONSE: "Oh, I love George Harrison! By the way, did you know that"
                 " the song ‘CRACKERBOX PALACE’ is about his mansion? Modest as he was - he did live"
                 " in a 120 room mansion on a 66 acre estate. Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
@@ -652,7 +675,7 @@ flows = {
                 MISC: {"command": "goto", "objectId": "gg1cr8v40rv13x"},
             },
             "fact_starr": {
-                RESPONSE: "Yeah, I like {beatles_member} too! By the way, did you know that due to his allergy"
+                RESPONSE: "Ringo is the best drummer in the world! By the way, did you know that due to his allergy"
                 " he has never had pizza, curry, or onions? That didn’t stop him from doing a pizza"
                 " commercial in 1995, though. Let's take a look at his biography. Just text me when you're done :)",
                 PROCESSING: [loc_prs.extract_members, loc_prs.fill_slots, loc_prs.add_misc_to_response],
@@ -666,12 +689,12 @@ flows = {
     },
     "instruments": {
         GRAPH: {
-            "guitar": {RESPONSE: "Cool! I can show you Paul McCartney's guitar!"},
             "play_q": {
                 RESPONSE: "And do you play any instrument?",
                 PROCESSING: [loc_prs.add_node_name(name="play_q")],
                 TRANSITIONS: {
                     ("what_is_next", "cur_instruments"): cnd.regexp(r"\bwhat's\snext\b", re.I),
+                    ("instruments", "guitar_paul_1_2"): int_cnd.is_no_vars,
                     ("instruments", "guitar_paul_1"): cnd.true,
                 },
             },
@@ -680,10 +703,10 @@ flows = {
                           "John's Rickenbacker 325 or Ringo's drum kit?",
                 PROCESSING: [loc_prs.add_node_name(name="play_q_res")],
                 TRANSITIONS: {
-                    ("instruments", "guitar_paul_1"): loc_cnd.has_member(member_name="zenith"),
-                    ("instruments", "guitar_paul_2"): loc_cnd.has_member(member_name="hofner"),
-                    ("instruments", "guitar_lennon"): loc_cnd.has_member(member_name="rickenbacker"),
-                    ("instruments", "drum_kit"): loc_cnd.has_member(member_name="drum\skit"),
+                    ("instruments", "guitar_paul_1"): loc_cnd.has_member(member_name=["zenith", "model", "acoustic"]),
+                    ("instruments", "guitar_paul_2"): loc_cnd.has_member(member_name=["hofner", "500/1", "bass"]),
+                    ("instruments", "guitar_lennon"): loc_cnd.has_member(member_name=["rickenbacker", "john's"]),
+                    ("instruments", "drum_kit"): loc_cnd.has_member(member_name=["drumkit", "drum", "ringo"]),
                     ("what_is_next", "cur_instruments"): cnd.regexp(r"\bwhat's\snext\b", re.I),
                     trn.repeat(): cnd.true
                 },
@@ -766,6 +789,14 @@ flows = {
                 ("album", "let_it_be"): cnd.all([loc_cnd.is_next(album_name="Abbey Road"), cnd.regexp(r"\b(continue)|(albums)\b", re.I)]),
                 },
             },
+            "cur_history": {
+                RESPONSE: "We can continue speaking about the history of the band or we can move on to albums."
+                          " What would you prefer?",
+                TRANSITIONS: {
+                    ("album", "what_album"): cnd.regexp(r"\b(move)|(albums)\b", re.I),
+                    ("history", "first_members_res"): cnd.regexp(r"\b(continue)|(history)\b", re.I),
+                },
+            },
             "cur_songs": {
                 RESPONSE: "We can continue looking at the songs or we can move on to the band. What would you prefer?",
                 TRANSITIONS: {
@@ -793,15 +824,20 @@ flows = {
             "cur_photos": {
                 RESPONSE: "We can continue looking at the photos or we can finish. What would you prefer?",
                 TRANSITIONS: {
-                    ("photos", "abbey_road"): cnd.all([loc_cnd.is_next(album_name="photos_q"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)]),
-                    ("photos", "yesterday&today"): cnd.all([loc_cnd.is_next(album_name="abbey_road"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)]),
-                    ("photos", "yesterday&today"): cnd.all([loc_cnd.is_next(album_name="fact_ar"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)]),
-                    ("photos", "yesterday&today"): cnd.all([loc_cnd.is_next(album_name="info_ar"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)])
+                    ("photos", "abbey_road", 1): cnd.all([loc_cnd.is_next(album_name="photos_q"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)]),
+                    ("photos", "yesterday&today", 0.9): cnd.all([loc_cnd.is_next(album_name="abbey_road"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)]),
+                    ("photos", "yesterday&today", 0.8): cnd.all([loc_cnd.is_next(album_name="fact_ar"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)]),
+                    ("photos", "yesterday&today", 0.7): cnd.all([loc_cnd.is_next(album_name="info_ar"), cnd.regexp(r"\b(continue)|(photos)\b", re.I)])
                 }
+            },
+            "cur_last_photo": {
+                RESPONSE: "Let's finish looking at the photos here. Feel free to walk around and do not hesitate"
+                          " to ask me questions about albums, musical instruments, or the artists themselves."
+                          " I'm happy to help!"
             }
         }
     },
 }
 
 
-actor = Actor(flows, start_node_label=("beatles", "start"))
+actor = Actor(flows, start_node_label=("beatles", "start"), default_transition_priority=1.0,)
