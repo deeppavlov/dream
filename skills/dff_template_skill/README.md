@@ -26,6 +26,6 @@ gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
 
 ## Resources
 
-* Execution time: ~150 ms
+* Average execution time: ~150 ms
 * Starting time: ~25 sec
 * RAM: 1.3G

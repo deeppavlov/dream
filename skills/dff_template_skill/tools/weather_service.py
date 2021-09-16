@@ -1,9 +1,14 @@
 import logging
+from os import getenv
 import requests
 import random
 
 
 WEATHER_SERVICE_TIMEOUT = 2
+OPENWEATHERMAP_API_KEY = getenv("OPENWEATHERMAP_API_KEY")
+if OPENWEATHERMAP_API_KEY is None:
+    raise RuntimeError("OPENWEATHERMAP_API_KEY environment variable is not set")
+OPENWEATHERMAP_URL = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s"
 SORRY_TEMPLATE = "Sorry, we have a problem with the weather service. Try again a little bit later."
 # Temperature conversion constants
 KELVIN_OFFSET = 273.15
@@ -132,8 +137,7 @@ def owm_requests_weather_forecast_now(city_str: str) -> str:
     :return: a forecast or the sorry template in case of problems with the service
     :rtype: str
     """
-    api_key = "644515bef5492fff0a5913f73ac212ae"
-    url = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s" % (city_str, api_key)
+    url = OPENWEATHERMAP_URL % (city_str, OPENWEATHERMAP_API_KEY)
     try:
         resp = requests.get(url=url, timeout=WEATHER_SERVICE_TIMEOUT)
         json_data = resp.json()
