@@ -17,7 +17,6 @@ from scenario.constants import HIGH_CONF, ZERO_CONF
 from scenario.processing import location_request_processing
 from scenario.response import activity_answer_response, activity_question_response, forecast_response
 
-
 flows = {
     "global": {
         GRAPH: {
@@ -35,12 +34,7 @@ flows = {
                             ),
                         ]
                     ),
-                    ("weather", "location_request"): cnd.all(
-                        [
-                            cnd.neg(request_with_location_condition),
-                            cnd.any([forecast_requested_condition, forecast_intent_condition]),
-                        ]
-                    ),
+                    ("weather", "location_request"): cnd.any([forecast_requested_condition, forecast_intent_condition]),
                     ("weather", "continue_question"): chat_about_weather_condition,
                 },
             },
@@ -63,7 +57,7 @@ flows = {
                 PROCESSING: [int_prs.set_confidence(HIGH_CONF)],
                 TRANSITIONS: {
                     "forecast": cnd.all([int_cnd.is_yes_vars, request_with_location_condition]),
-                    "location_request": cnd.all([int_cnd.is_yes_vars, cnd.neg(request_with_location_condition)]),
+                    "location_request": int_cnd.is_yes_vars,
                 },
             },
             "activity_question": {

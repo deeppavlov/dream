@@ -1,0 +1,69 @@
+[
+    [
+        "Society is like a large piece of frozen water; and skating well is the great art of social life. Do you have pets?",
+        0.999,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {
+                    "preferred_weather": ""
+                },
+                "previous_human_utter_index": 2,
+                "history": {
+                    "0": [
+                        "weather",
+                        "forecast"
+                    ],
+                    "1": [
+                        "weather",
+                        "activity_question"
+                    ],
+                    "2": [
+                        "weather",
+                        "activity_answer"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
+                    "node_labels": {
+                        "1": [
+                            "weather",
+                            "activity_question"
+                        ],
+                        "2": [
+                            "weather",
+                            "activity_answer"
+                        ]
+                    },
+                    "requests": {
+                        "1": "I prefer cold weather.",
+                        "2": "Yes"
+                    },
+                    "responses": {
+                        "1": "I prefer cold weather too! Let me guess you like ice-skating?",
+                        "2": "Society is like a large piece of frozen water; and skating well is the great art of social life. Do you have pets?"
+                    },
+                    "previous_index": 2,
+                    "current_index": 2,
+                    "misc": {},
+                    "validation": false
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {
+                "dff_animals_skill": [
+                    "Do you have pets?"
+                ]
+            },
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

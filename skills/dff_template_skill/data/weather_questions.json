@@ -1,0 +1,37 @@
+{
+  "snow":{
+    "synonyms":["snow", "snowy", "four", "fourth"],
+    "question":"Let me guess - you like skiing?",
+    "answer":"I've heard that the best skiing and snowboard resorts are in Austria. Have you ever been in Austria?"
+  },
+  "cold":{
+    "synonyms":["cold", "freeze", "frost", "freezing", "frosty", "cool", "two", "second"],
+    "question":"I prefer cold weather too! Let me guess you like ice-skating?",
+    "answer":"Society is like a large piece of frozen water; and skating well is the great art of social life."
+  },
+  "cool":{
+    "synonyms":["cool", "chill"],
+    "question":"I prefer cool weather too! Let me guess - you like hiking?",
+    "answer":"To me, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you."
+  },
+  "cloud":{
+    "synonyms":["cloudy", "cloud"],
+    "question":"Let me guess - you like hiking?",
+    "answer":"To me, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you."
+  },
+  "hot":{
+    "synonyms":["hot", "heat", "five", "fifth", "last"],
+    "question":"Let me guess - you like swimming?",
+    "answer":"I have always wanted a swimming pool and never had one."
+  },
+  "warm":{
+    "synonyms":["warm", "warmy", "one", "first"],
+    "question":"Let me guess - you like hiking?",
+    "answer":"To me, the beauty about hiking is that it’s truly an activity for everyone. Whether you’re young or old, an expert or an amateur, there’s a trail out there that will be perfect for you."
+  },
+  "rain":{
+    "synonyms":["rain", "rainy", "three", "third"],
+    "question":"Oh, I see. Let me guess - you like being in the comfort of your home?",
+    "answer":"There are actually many activities to do at home. Table games, like Monopoly, is a great way to get to know your loved ones closer."
+  }
+}

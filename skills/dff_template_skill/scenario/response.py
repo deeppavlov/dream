@@ -61,7 +61,7 @@ def activity_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str
         set_confidence(ctx, actor, SMALLTALK_CONF)
         shared_memory = get_shared_memory(ctx, actor)
         preferred_weather = shared_memory.get("preferred_weather", "")
-        save_to_shared_memory(ctx, actor, preffered_weather="")
+        save_to_shared_memory(ctx, actor, preferred_weather="")
         if preferred_weather:
             if "?" not in WEATHER_DICT[preferred_weather]["answer"]:
                 link = get_new_link_to(ctx, actor, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED)
