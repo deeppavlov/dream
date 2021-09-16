@@ -1,7 +1,6 @@
-import logging
-
 from dff.core import Actor, Context
 
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 from common.dff.integration.condition import is_yes_vars
 from common.dff.integration.context import (
     get_dialog,
@@ -12,22 +11,16 @@ from common.dff.integration.context import (
     set_can_continue,
     set_confidence,
 )
-
-logger = logging.getLogger(__name__)
-
+from common.link import SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from scenario.condition import homeland_forecast_requested_condition
+from scenario.constants import MISSED_CITY_CONF, QUESTION_PHRASE, SMALLTALK_CONF, SORRY_PHRASE, ZERO_CONF
 from scenario.processing import forecast_intent_processing
 from scenario.utils import (
+    WEATHER_DICT,
     get_preferred_weather,
     request_weather_service,
     retrieve_location_entity_from_utterance,
-    WEATHER_DICT,
 )
-
-from scenario.constants import MISSED_CITY_CONF, QUESTION_PHRASE, SMALLTALK_CONF, SORRY_PHRASE, ZERO_CONF
-
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
-from common.link import SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 
 
 def forecast_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:

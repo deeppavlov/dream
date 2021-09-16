@@ -1,8 +1,11 @@
-import logging
-
 import dff.conditions as cnd
 from dff.core import Actor
 from dff.core.keywords import GLOBAL_TRANSITIONS, GRAPH, PROCESSING, RESPONSE, TRANSITIONS
+
+import common.dff.integration.condition as int_cnd
+import common.dff.integration.processing as int_prs
+from common.constants import CAN_CONTINUE_SCENARIO
+from common.weather import ASK_WEATHER_SKILL_PHRASE
 from scenario.condition import (
     chat_about_weather_condition,
     forecast_intent_condition,
@@ -10,19 +13,10 @@ from scenario.condition import (
     homeland_forecast_requested_condition,
     request_with_location_condition,
 )
+from scenario.constants import HIGH_CONF, ZERO_CONF
 from scenario.processing import location_request_processing
 from scenario.response import activity_answer_response, activity_question_response, forecast_response
 
-import common.dff.integration.condition as int_cnd
-import common.dff.integration.processing as int_prs
-from common.weather import ASK_WEATHER_SKILL_PHRASE
-
-
-from scenario.constants import HIGH_CONF, ZERO_CONF
-
-from common.constants import CAN_CONTINUE_SCENARIO
-
-logger = logging.getLogger(__name__)
 
 flows = {
     "global": {

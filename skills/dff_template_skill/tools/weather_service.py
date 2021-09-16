@@ -1,47 +1,49 @@
 import logging
-import sentry_sdk
-from os import getenv
 import requests
 import random
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 WEATHER_SERVICE_TIMEOUT = 2
-
-
-def weather_forecast_now(city_str):
-    """
-    Interface method encapsulating implementation of weather service
-    Return a weather forecast in some city"""
-    # to use openweathermap.org as weather provider:
-    # return openweathermap_pure_url_weather_forecast_now(city_str)
-    return owm_requests_weather_forecast_now(city_str)
-
-
-def dummy_weather_forecast_now(city_str):
-    """Return a weather forecast in some city"""
-    return "Weather in %s is good. 5 above zero" % city_str
-
-
 SORRY_TEMPLATE = "Sorry, we have a problem with the weather service. Try again a little bit later."
-# Temperature coneversion constants
+# Temperature conversion constants
 KELVIN_OFFSET = 273.15
 FAHRENHEIT_OFFSET = 32.0
 FAHRENHEIT_DEGREE_SCALE = 1.8
 
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-def random_crazy_forecast(city_str):
+
+def weather_forecast_now(city_str: str) -> str:
+    """Call the weather service to provide a weather forecast.
+
+    :param city_str: a city name
+    :type city_str: str
+    :return: a weather forecast
+    :rtype: str
     """
-    This function produces joke-like response with funny weather forecast.
+    return owm_requests_weather_forecast_now(city_str)
 
-    May be launched in case of problems with Basic service or in case of bad LOCation recognition
-    :param city_str:
+
+def dummy_weather_forecast_now(city_str: str) -> str:
+    """Provide a dummy weather forecast in a given city.
+
+    :param: a city name
+    :type: str
+    :return: a dummy forecast
+    :rtype: str
+    """
+    return "Weather in %s is good. 5 above zero" % city_str
+
+
+def random_crazy_forecast(city_str: str) -> str:
+    """Provide a joke-like response with a funny weather forecast in case of problems with the service.
+
+    :param city_str: a city name
+    :type city_str: str
     :return: weather forecast as string for Human
+    :rtype: str
     """
-
-    # just a list of crazy forecasts:
     crazy_description = random.choice(
         [
             "Fish rain may occur.",
@@ -58,41 +60,37 @@ def random_crazy_forecast(city_str):
             "Drunk deer may knock the roof",
         ]
     )
-
-    temperature_prediction = random.randrange(0, 100)
-
+    temperature_prediction = random.randrange(2, 100)
     template = (
         "Currently I have problems with getting weather in %s. But I would guess... %s . "
-        "And the temperature may be around %d fahrenheit. Would you enjoy it?"
+        "And the temperature may be around %d degrees Fahrenheit. Would you enjoy it?"
         % (city_str, crazy_description, temperature_prediction)
     )
     return template
 
 
-def kelvin_to_fahrenheit(kelvintemp):
-    """
-    # taken from
-    # https://github.com/csparpa/pyowm/blob/9ee1f88818d6be154865cc7447f2f6708a37227b/pyowm/utils/temputils.py
+def kelvin_to_fahrenheit(kelvin_temp: float) -> float:
+    """Convert temperature in Kelvin to Fahrenheit.
 
-    Converts a numeric temperature from Kelvin degrees to Fahrenheit degrees
-    :param kelvintemp: the Kelvin temperature
-    :type kelvintemp: int/long/float
-    :returns: the float Fahrenheit temperature
-    :raises: *TypeError* when bad argument types are provided
+    This code taken from:
+    https://github.com/csparpa/pyowm/blob/9ee1f88818d6be154865cc7447f2f6708a37227b/pyowm/utils/temputils.py
+
+    :param kelvin_temp: a temperature in Kelvin
+    :type kelvin_temp: float
+    :returns: a temperature in Fahrenheit
+    :rtype: float
+    :raises ValueError: if a negative number is given
     """
-    if kelvintemp < 0:
+    if kelvin_temp < 0:
         raise ValueError(__name__ + ": negative temperature values not allowed")
-    fahrenheittemp = (kelvintemp - KELVIN_OFFSET) * FAHRENHEIT_DEGREE_SCALE + FAHRENHEIT_OFFSET
-    return float("{0:.2f}".format(fahrenheittemp))
+    fahrenheit_temp = (kelvin_temp - KELVIN_OFFSET) * FAHRENHEIT_DEGREE_SCALE + FAHRENHEIT_OFFSET
+    return float("{0:.2f}".format(fahrenheit_temp))
 
 
-def owm_requests_weather_forecast_now(city_str):
-    """Simple service for openweathermap.org
+def owm_requests_weather_forecast_now(city_str: str) -> str:
+    """Access openweathermap.org to provide a forecast.
 
-    :param city_str: string with city name
-    :return: response for user as string
-
-    Result Example:
+    Response example from openweathermap.org:
         {
             "coord":
                 {"lon":-0.13,"lat":51.51},
@@ -128,6 +126,11 @@ def owm_requests_weather_forecast_now(city_str):
             "name":"London",
             "cod":200
         }
+
+    :param city_str: a city name
+    :type city_str: str
+    :return: a forecast or the sorry template in case of problems with the service
+    :rtype: str
     """
     api_key = "644515bef5492fff0a5913f73ac212ae"
     url = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s" % (city_str, api_key)
@@ -140,29 +143,24 @@ def owm_requests_weather_forecast_now(city_str):
                 temperature = kelvin_to_fahrenheit(json_data["main"]["temp"])
                 city_name = json_data["name"]
                 wind_speed = json_data["wind"]["speed"]
-                if int(temperature) % 10 in [0, 1]:
-                    scale_str = "Fahrenheit"
+                if abs(temperature) == 1.0:
+                    degree_str = "degree"
                 else:
-                    scale_str = "Fahrenheits"
+                    degree_str = "degrees"
                 response_template = (
-                    "It is %s, temperature is around %0.1f %s in %s. "
+                    "It is %s, temperature is around %0.1f %s Fahrenheit in %s. "
                     "Wind speed is about %0.1f meters per second"
-                    % (description, temperature, scale_str, city_name, wind_speed)
+                    % (description, temperature, degree_str, city_name, wind_speed)
                 )
             else:
                 response_template = random_crazy_forecast(city_str)
-        except Exception as e:
-            # we have problems with weather service:
-            # soltions:
-            # 1. say sorry and recomend to try later
-            # 2. use another weather provider?
-            logger.exception("WeatherService Problems")
-            sentry_sdk.capture_exception(e)
+        except ValueError:
             response_template = random_crazy_forecast(city_str)
-            # response_template = SORRY_TEMPLATE
-
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
+            logger.exception("Negative temperature given.")
+        except LookupError:
+            response_template = random_crazy_forecast(city_str)
+            logger.exception("Error occurred while parsing weather service response.")
+    except requests.exceptions.RequestException as e:
         logger.exception(e)
         response_template = SORRY_TEMPLATE
     return response_template

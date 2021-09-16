@@ -1,15 +1,11 @@
-import logging
 from typing import Optional
 
 from dff.core import Actor, Context, Node
 
-from scenario.condition import forecast_intent_condition, forecast_requested_condition
-from scenario.constants import HIGH_CONF, QUESTION_CONF
-
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.dff.integration.context import set_can_continue, set_confidence
-
-logger = logging.getLogger(__name__)
+from scenario.condition import forecast_intent_condition, forecast_requested_condition
+from scenario.constants import HIGH_CONF, QUESTION_CONF
 
 
 def location_request_processing(

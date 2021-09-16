@@ -1,19 +1,10 @@
-import logging
-
 from dff.core import Actor, Context
 
-from common.dff.integration.context import (
-    get_last_bot_utterance,
-    get_last_human_utterance,
-)
+from common.dff.integration.context import get_last_bot_utterance, get_last_human_utterance
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents
-
-from scenario.utils import retrieve_location_entity_from_utterance
-
 from common.weather import WEATHER_COMPILED_PATTERN, WEATHER_REQUEST_COMPILED_PATTERN, is_weather_for_homeland_requested
-
-logger = logging.getLogger(__name__)
+from scenario.utils import retrieve_location_entity_from_utterance
 
 
 def request_with_location_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
