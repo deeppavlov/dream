@@ -246,6 +246,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
+                    "annotators.entity_linking",
                     "annotators.cobot_nounphrases",
                     "annotators.entity_detection"
                 ]
