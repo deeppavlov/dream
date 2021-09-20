@@ -505,8 +505,8 @@ train_emb_responds = get_embeddings(responds)
 train_prev_responds = get_embeddings(previous_responds)
 responds_concatenate = np.concatenate([train_emb_responds, train_prev_responds], axis=1)
 
-lr_responds = LogisticRegression(C=0.5, class_weight="balanced", solver="newton-cg")
-lr_responds.fit(responds_concatenate, respond_tags)
+svc_responds = SVC(gamma=.1, kernel='rbf', probability=True)
+svc_responds.fit(responds_concatenate,respond_tags)
 
 
 def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, current_speaker, previous_speaker):
@@ -549,7 +549,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             test_responds_concatenate = np.concatenate(
                 [get_embeddings(test_responds), get_embeddings(test_responds_prev_lines)], axis=1
             )
-            tags_for_responds = lr_responds.predict(test_responds_concatenate)
+            tags_for_responds = svc_responds.predict(test_responds_concatenate)
             if tags_for_responds in confront_labels:
                 y_pred = y_pred + "Confront." + "".join(tags_for_responds)
             if tags_for_responds in support_labels:
@@ -563,7 +563,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
         test_responds_concatenate = np.concatenate(
             [get_embeddings(test_responds), get_embeddings(test_responds_prev_lines)], axis=1
         )
-        tags_for_responds = lr_responds.predict(test_responds_concatenate)
+        tags_for_responds = svc_responds.predict(test_responds_concatenate)
         if tags_for_responds in support_labels:
             y_pred = y_pred + "Support." + "".join(tags_for_responds)
         elif tags_for_responds in confront_labels:
