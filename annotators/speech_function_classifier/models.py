@@ -35,6 +35,11 @@ def load_pickle(filepath):
 
 
 nn_classifier = load_pickle("data/nn_classifier.pickle")
+question_classifier = load_pickle("data/question_model.pickle")
+replies_classifier = load_pickle("data/replies_model.pickle")
+sustain_classifier = load_pickle("data/sustain_model.pickle")
+respond_classifier = load_pickle("data/respond_model.pickle")
+upper_classifier = load_pickle("data/upper_class_model")
 scaler = load_pickle("data/scaler.pickle")
 
 dialogues = []
@@ -223,17 +228,17 @@ all_cuts = []
 all_cuts.extend(cut_train_labels)
 all_cuts.extend(cut_test_labels)
 
-model = LogisticRegression(C = 0.1,  multi_class = 'ovr', solver='newton-cg', class_weight = 'balanced')
+# model = LogisticRegression(C = 0.1,  multi_class = 'ovr', solver='newton-cg', class_weight = 'balanced')
 
 # print(f"all_outputs = {all_outputs}")
 # print(f"all_outputs.shape = {all_outputs.shape}")
 # print(f"len(all_cuts) = {len(all_cuts)}")
 # print(f"all_cuts = {all_cuts}")
-model.fit(all_outputs, all_cuts)
+# model.fit(all_outputs, all_cuts)
 
 
 def upper_class_predict(phrase_embeddings, model):
-    y_pred_sample = model.predict(phrase_embeddings)
+    y_pred_sample = upper_classifier.predict(phrase_embeddings)
     return y_pred_sample
 
 
@@ -393,23 +398,23 @@ def check_develop(y_pred, y_pred_previous, current_speaker, previous_speaker):
     return y_pred
 
 
-train_sustains = get_embeddings(sustains)
+# train_sustains = get_embeddings(sustains)
 
-boosting_model_sus = GradientBoostingClassifier(n_estimators=35, learning_rate=0.5, max_features=1, max_depth=3, random_state=42)
+# boosting_model_sus = GradientBoostingClassifier(n_estimators=35, learning_rate=0.5, max_features=1, max_depth=3, random_state=42)
 
 
 # print(f"train_sustains = {train_sustains}")
 # print(f"train_sustains.shape = {train_sustains.shape}")
 # print(f"len(sus_tags) = {len(sus_tags)}")
 # print(f"sus_tags = {sus_tags}")
-boosting_model_sus.fit(train_sustains,sus_tags)
+# boosting_model_sus.fit(train_sustains,sus_tags)
 
 
 def get_label_for_sustains(phrase, y_pred):
     test_sustains = []
     test_sustains.append(phrase)
     test_sustains_emb = get_embeddings(test_sustains)
-    tags_for_sus = boosting_model_sus.predict(test_sustains_emb)
+    tags_for_sus = sustain_classifier.predict(test_sustains_emb)
     if y_pred == "Sustain.Continue.":
         y_pred = "".join(tags_for_sus)
     if y_pred == "React.Respond.Support.Develop.":
@@ -438,14 +443,14 @@ for line in track_list:
     train_que.append(line[0])
     train_tags.append(line[1][:-1])
 
-train_em_que = get_embeddings(train_que)
+# train_em_que = get_embeddings(train_que)
 
 # print(f"train_em_que = {train_em_que}")
 # print(f"train_em_que.shape = {train_em_que.shape}")
 # train_tags = [int(tag) if tag else 0 for tag in train_tags]
 # print(f"len(train_tags) = {len(train_tags)}")
 # print(f"train_tags = {train_tags}")
-que_model.fit(train_em_que, train_tags)
+# que_model.fit(train_em_que, train_tags)
 
 
 def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
@@ -453,7 +458,7 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
     questions = list()
     questions.append(phrase)
     question_embeddings = get_embeddings(questions)
-    y_pred_track = que_model.predict(question_embeddings)
+    y_pred_track = question_classifier.predict(question_embeddings)
     tag_for_track = map_tracks(y_pred_track)
     if current_speaker != previous_speaker:
         if y_pred == "React.Respond." and tag_for_track != "5":
@@ -488,25 +493,25 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
     return y_pred
 
 
-train_embed_replies = get_embeddings(replies)
-train_prev_lines = get_embeddings(previous_lines)
-reply_concatenate = np.concatenate([train_embed_replies, train_prev_lines], axis=1)
-
-clf1 = RandomForestClassifier(n_estimators=50, random_state=42)
-clf2 = SVC(gamma=.1, kernel='rbf', probability=True)
-clf3 = GaussianNB()
-eclf = VotingClassifier(estimators=[
-       ('rf', clf1), ('svc', clf2), ('gnb', clf3)],
-       voting='soft', weights=[2,1,1],
-       flatten_transform=True)
-eclf = eclf.fit(reply_concatenate,tags)
-
-train_emb_responds = get_embeddings(responds)
-train_prev_responds = get_embeddings(previous_responds)
-responds_concatenate = np.concatenate([train_emb_responds, train_prev_responds], axis=1)
-
-svc_responds = SVC(gamma=.1, kernel='rbf', probability=True)
-svc_responds.fit(responds_concatenate,respond_tags)
+# train_embed_replies = get_embeddings(replies)
+# train_prev_lines = get_embeddings(previous_lines)
+# reply_concatenate = np.concatenate([train_embed_replies, train_prev_lines], axis=1)
+#
+# clf1 = RandomForestClassifier(n_estimators=50, random_state=42)
+# clf2 = SVC(gamma=.1, kernel='rbf', probability=True)
+# clf3 = GaussianNB()
+# eclf = VotingClassifier(estimators=[
+#        ('rf', clf1), ('svc', clf2), ('gnb', clf3)],
+#        voting='soft', weights=[2,1,1],
+#        flatten_transform=True)
+# eclf = eclf.fit(reply_concatenate,tags)
+#
+# train_emb_responds = get_embeddings(responds)
+# train_prev_responds = get_embeddings(previous_responds)
+# responds_concatenate = np.concatenate([train_emb_responds, train_prev_responds], axis=1)
+#
+# svc_responds = SVC(gamma=.1, kernel='rbf', probability=True)
+# svc_responds.fit(responds_concatenate,respond_tags)
 
 
 def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, current_speaker, previous_speaker):
@@ -528,7 +533,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             test_prev_lines.append(previous_phrase)
             try_replies.append(phrase)
             test_concat = np.concatenate([get_embeddings(try_replies), get_embeddings(test_prev_lines)], axis=1)
-            tag_for_reply = eclf.predict(test_concat)
+            tag_for_reply = replies_classifier.predict(test_concat)
             if tag_for_reply == 'Reply.Decline' or tag_for_reply == 'Reply.Disagree':
                 tag_for_reply = 'Reply.Contradict'
             if 'yes' in str(try_replies).lower():
@@ -549,7 +554,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             test_responds_concatenate = np.concatenate(
                 [get_embeddings(test_responds), get_embeddings(test_responds_prev_lines)], axis=1
             )
-            tags_for_responds = svc_responds.predict(test_responds_concatenate)
+            tags_for_responds = respond_classifier.predict(test_responds_concatenate)
             if tags_for_responds in confront_labels:
                 y_pred = y_pred + "Confront." + "".join(tags_for_responds)
             if tags_for_responds in support_labels:
@@ -563,7 +568,7 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
         test_responds_concatenate = np.concatenate(
             [get_embeddings(test_responds), get_embeddings(test_responds_prev_lines)], axis=1
         )
-        tags_for_responds = svc_responds.predict(test_responds_concatenate)
+        tags_for_responds = respond_classifier.predict(test_responds_concatenate)
         if tags_for_responds in support_labels:
             y_pred = y_pred + "Support." + "".join(tags_for_responds)
         elif tags_for_responds in confront_labels:
