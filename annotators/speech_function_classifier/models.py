@@ -9,6 +9,11 @@ import spacy
 import torch
 from nltk import word_tokenize
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import VotingClassifier
+from sklearn.svm import SVC
 from transformers import AutoTokenizer, AutoModel
 
 nlp = spacy.load("en_core_web_sm")
@@ -218,7 +223,7 @@ all_cuts = []
 all_cuts.extend(cut_train_labels)
 all_cuts.extend(cut_test_labels)
 
-model = LogisticRegression(C=0.01, class_weight="balanced")
+model = LogisticRegression(C = 0.1,  multi_class = 'ovr', solver='newton-cg', class_weight = 'balanced')
 
 # print(f"all_outputs = {all_outputs}")
 # print(f"all_outputs.shape = {all_outputs.shape}")
@@ -379,6 +384,7 @@ def get_open_labels(phrase, y_pred):
     return y_pred
 
 
+
 def check_develop(y_pred, y_pred_previous, current_speaker, previous_speaker):
     if current_speaker != previous_speaker:
         if "Sustain.Continue." in y_pred_previous:
@@ -389,20 +395,21 @@ def check_develop(y_pred, y_pred_previous, current_speaker, previous_speaker):
 
 train_sustains = get_embeddings(sustains)
 
-lr_sus = LogisticRegression(C=0.01, class_weight="balanced")
+boosting_model_sus = GradientBoostingClassifier(n_estimators=35, learning_rate=0.5, max_features=1, max_depth=3, random_state=42)
+
 
 # print(f"train_sustains = {train_sustains}")
 # print(f"train_sustains.shape = {train_sustains.shape}")
 # print(f"len(sus_tags) = {len(sus_tags)}")
 # print(f"sus_tags = {sus_tags}")
-lr_sus.fit(train_sustains, sus_tags)
+boosting_model_sus.fit(train_sustains,sus_tags)
 
 
 def get_label_for_sustains(phrase, y_pred):
     test_sustains = []
     test_sustains.append(phrase)
     test_sustains_emb = get_embeddings(test_sustains)
-    tags_for_sus = lr_sus.predict(test_sustains_emb)
+    tags_for_sus = boosting_model_sus.predict(test_sustains_emb)
     if y_pred == "Sustain.Continue.":
         y_pred = "".join(tags_for_sus)
     if y_pred == "React.Respond.Support.Develop.":
@@ -422,7 +429,7 @@ def map_tracks(tags_for_track):
     return tag
 
 
-lr2 = LogisticRegression(C=0.01, class_weight="balanced", solver="newton-cg")
+que_model = GradientBoostingClassifier(n_estimators=35, learning_rate=0.5, max_features=1, max_depth=3, random_state=42)
 
 train_que = []
 train_tags = []
@@ -438,7 +445,7 @@ train_em_que = get_embeddings(train_que)
 # train_tags = [int(tag) if tag else 0 for tag in train_tags]
 # print(f"len(train_tags) = {len(train_tags)}")
 # print(f"train_tags = {train_tags}")
-lr2.fit(train_em_que, train_tags)
+que_model.fit(train_em_que, train_tags)
 
 
 def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
@@ -446,7 +453,7 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
     questions = list()
     questions.append(phrase)
     question_embeddings = get_embeddings(questions)
-    y_pred_track = lr2.predict(question_embeddings)
+    y_pred_track = que_model.predict(question_embeddings)
     tag_for_track = map_tracks(y_pred_track)
     if current_speaker != previous_speaker:
         if y_pred == "React.Respond." and tag_for_track != "5":
@@ -474,6 +481,10 @@ def get_label_for_question(phrase, y_pred, current_speaker, previous_speaker):
                     y_pred = "React.Rejoinder.Confront.Response.Re-challenge"
         if y_pred == "Sustain.Continue.":
             y_pred = "Sustain.Continue.Monitor"
+    if 'Confirm' in y_pred:
+        for word in interrogative_words:
+            if word in phrase.lower():
+                y_pred = re.sub('Confirm', 'Clarify', y_pred)
     return y_pred
 
 
@@ -481,8 +492,14 @@ train_embed_replies = get_embeddings(replies)
 train_prev_lines = get_embeddings(previous_lines)
 reply_concatenate = np.concatenate([train_embed_replies, train_prev_lines], axis=1)
 
-lr_reply = LogisticRegression(C=0.01, class_weight="balanced", solver="newton-cg")
-lr_reply.fit(reply_concatenate, tags)
+clf1 = RandomForestClassifier(n_estimators=50, random_state=42)
+clf2 = SVC(gamma=.1, kernel='rbf', probability=True)
+clf3 = GaussianNB()
+eclf = VotingClassifier(estimators=[
+       ('rf', clf1), ('svc', clf2), ('gnb', clf3)],
+       voting='soft', weights=[2,1,1],
+       flatten_transform=True)
+eclf = eclf.fit(reply_concatenate,tags)
 
 train_emb_responds = get_embeddings(responds)
 train_prev_responds = get_embeddings(previous_responds)
@@ -511,13 +528,15 @@ def get_label_for_responds(phrase, previous_phrase, y_pred, y_pred_previous, cur
             test_prev_lines.append(previous_phrase)
             try_replies.append(phrase)
             test_concat = np.concatenate([get_embeddings(try_replies), get_embeddings(test_prev_lines)], axis=1)
-            tag_for_reply = lr_reply.predict(test_concat)
-            if tag_for_reply == "Reply.Decline":
-                tag_for_reply = "Reply.Contradict"
-            if "yes" in str(try_replies).lower():
-                if "Disagree" in tag_for_reply:
-                    if "Confirm" in y_pred_previous:
-                        y_pred = "React.Respond.Support.Reply.Affirm"
+            tag_for_reply = eclf.predict(test_concat)
+            if tag_for_reply == 'Reply.Decline' or tag_for_reply == 'Reply.Disagree':
+                tag_for_reply = 'Reply.Contradict'
+            if 'yes' in str(try_replies).lower():
+                tag_for_reply = 'Reply.Affirm'
+            for token in nlp(str(try_replies)):
+                if token.dep_ == 'neg' or token.text =='no':
+                    if tag_for_reply in support_labels[:3]:
+                        tag_for_reply = 'Reply.Contradict'
             if tag_for_reply in confront_labels:
                 y_pred = y_pred + "Confront." + "".join(tag_for_reply)
             if tag_for_reply in support_labels:
