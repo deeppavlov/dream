@@ -590,6 +590,14 @@ def get_labels_for_rejoinder(phrase, previous_phrase, current_speaker, previous_
         y_pred = "React.Respond.Support.Develop.Extend"
     return y_pred
 
+def check_functions(y_pred,current_speaker,prev_speaker):
+    if 'Sustain' in y_pred:
+      if current_speaker!=prev_speaker:
+        y_pred = re.sub('Sustain.Continue.Prolong.','React.Respond.Support.Develop.',y_pred)
+    if 'Develop' in y_pred:
+      if current_speaker==prev_speaker:
+        y_pred = re.sub('React.Respond.Support.Develop.','Sustain.Continue.Prolong.', y_pred)
+    return y_pred
 
 def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John", previous_speaker="Doe"):
     # note: default values for current and previous speaker are only to make them different. In out case they are always
@@ -612,4 +620,5 @@ def get_speech_function(phrase, prev_phrase, prev_speech_function, speaker="John
             )
         if y_pred == "React.Rejoinder.":
             y_pred = get_labels_for_rejoinder(phrase, prev_phrase, speaker, previous_speaker)
+    y_pred = check_functions(y_pred, speaker, previous_speaker)
     return y_pred
