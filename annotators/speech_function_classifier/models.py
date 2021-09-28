@@ -39,7 +39,7 @@ question_classifier = load_pickle("data/question_model.pickle")
 replies_classifier = load_pickle("data/replies_model.pickle")
 sustain_classifier = load_pickle("data/sustain_model.pickle")
 respond_classifier = load_pickle("data/respond_model.pickle")
-upper_classifier = load_pickle("data/upper_class_model")
+upper_classifier = load_pickle("data/upper_class_model.pickle")
 scaler = load_pickle("data/scaler.pickle")
 
 dialogues = []
