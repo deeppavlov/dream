@@ -655,7 +655,7 @@ services:
     env_file: [.env]
     build:
       context: .
-      dockerfile: /annotators/spelling_preprocessing/Dockerfile
+      dockerfile: annotators/spelling_preprocessing/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
