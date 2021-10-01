@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  neo4j:
+    image: neo4j:4.2.5
+    ports:
+      - 8474:7474
+      - 8687:7687
+#    volumes:
+#      - ~/neo4j/data:/data
+    environment:
+      NEO4J_AUTH: none
+  client:
+    build:
+      context: .
+  fill_db:
+    build:
+      context: .
+  server_neo4j:
+    build:
+      context: .

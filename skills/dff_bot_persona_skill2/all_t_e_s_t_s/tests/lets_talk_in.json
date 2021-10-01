@@ -1,0 +1,602 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "ruth.",
+                    "annotations": {
+                        "spelling_preprocessing": "ruth",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "ruth"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9983882904052734
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9990949630737305
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.9995505809783936
+                            },
+                            "emotion_classification": {
+                                "anger": 0.5901707410812378,
+                                "neutral": 0.9894037246704102
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.5427898168563843
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.008631020784378052
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.007006365805864334,
+                            "conversational": 0.9929936528205872
+                        },
+                        "sentseg": {
+                            "punct_sent": "ruth.",
+                            "segments": [
+                                "ruth."
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 1,
+                                    "start_pos": 0,
+                                    "text": "ruth",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "cobot_entities": {
+                            "entities": [],
+                            "labelled_entities": []
+                        },
+                        "conceptnet": {
+                            "ruth": {
+                                "Causes": [
+                                    "you feel good",
+                                    "you feel good about yourself",
+                                    "cancer"
+                                ],
+                                "CausesDesire": [
+                                    "pray",
+                                    "go to church",
+                                    "have party"
+                                ],
+                                "HasProperty": [
+                                    "old than ruth",
+                                    "old",
+                                    "female"
+                                ],
+                                "SymbolOf": [
+                                    "christianity",
+                                    "islam",
+                                    "religion"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like me to call you?",
+                                "ruth."
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Phatic"
+                            ]
+                        },
+                        "midas_classification": {
+                            "abandon": 0.039274353380079625,
+                            "nonsense": 0.021562005931256525,
+                            "statement": 0.8913104680417401
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Travel_Geo"
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.31260713934898376,
+                                    0.18736577033996582,
+                                    0.010859142057597637,
+                                    0.6118122339248657,
+                                    0.8922538757324219
+                                ],
+                                "entity_ids": [
+                                    "Q80038",
+                                    "Q7382844",
+                                    "Q15866528",
+                                    "Q17050226",
+                                    "Q77128"
+                                ],
+                                "entity_pages": [
+                                    "The Book of Ruth (abbreviated Rth) (Megilath Ruth, \"the Scroll of Ruth\", one of the Five Megillot) is included in the third division, or the Writings (Ketuvim), of the Hebrew Bible. In most Christian canons it is treated as a history book and placed between Judges and 1 Samuel.",
+                                    "Ruth is a novel by Elizabeth Gaskell, first published in three volumes in 1853."
+                                ],
+                                "entity_substr": "ruth"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "entities_info": {
+                                "ruth": {
+                                    "entity_label": "Ruth",
+                                    "instance of": [
+                                        [
+                                            "Q29154430",
+                                            "book of the Bible"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "part of": [
+                                        [
+                                            "Q19786",
+                                            "Old Testament"
+                                        ],
+                                        [
+                                            "Q208190",
+                                            "Ketuvim"
+                                        ],
+                                        [
+                                            "Q3086228",
+                                            "Historical books"
+                                        ],
+                                        [
+                                            "Q774446",
+                                            "Five Megillot"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q80038"
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "ruth": {
+                                    "entity_label": "Ruth",
+                                    "instance of": [
+                                        [
+                                            "Q29154430",
+                                            "book of the Bible"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "part of": [
+                                        [
+                                            "Q19786",
+                                            "Old Testament"
+                                        ],
+                                        [
+                                            "Q208190",
+                                            "Ketuvim"
+                                        ],
+                                        [
+                                            "Q3086228",
+                                            "Historical books"
+                                        ],
+                                        [
+                                            "Q774446",
+                                            "Five Megillot"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q80038"
+                                }
+                            }
+                        },
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        }
+                    }
+                },
+                {
+                    "text": "your favorite number.",
+                    "annotations": {
+                        "spelling_preprocessing": "your favorite number",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "your favorite number"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.6583560705184937
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9965386390686035
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9993304014205933
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995132088661194
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7152953743934631
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0018356144428253174
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.002219756133854389,
+                            "conversational": 0.9977802634239197
+                        },
+                        "sentseg": {
+                            "punct_sent": "your favorite number.",
+                            "segments": [
+                                "your favorite number."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "cobot_entities": {
+                            "entities": [
+                                "number"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "text": "number"
+                                }
+                            ]
+                        },
+                        "conceptnet": {
+                            "your favorite number": {
+                                "Causes": [
+                                    "happiness",
+                                    "happy",
+                                    "smile"
+                                ],
+                                "CausesDesire": [
+                                    "call your best friend",
+                                    "sing",
+                                    "call your friend"
+                                ],
+                                "HasProperty": [
+                                    "1",
+                                    "411",
+                                    "414"
+                                ],
+                                "SymbolOf": [
+                                    "love",
+                                    "peace",
+                                    "your favorite time"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_linking": [],
+                        "wiki_parser": {
+                            "entities_info": {},
+                            "topic_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like me to call you?",
+                                "ruth.",
+                                "Nice to meet you, Ruth.",
+                                "your favorite number."
+                            ]
+                        },
+                        "cobot_topics": {
+                            "text": [
+                                "Phatic"
+                            ]
+                        },
+                        "cobot_dialogact": {
+                            "intents": [
+                                "General_ChatIntent"
+                            ],
+                            "topics": [
+                                "Other"
+                            ]
+                        },
+                        "midas_classification": {
+                            "abandon": 0.4525388021727353,
+                            "closing": 0.01031539887548771,
+                            "hold": 0.44293350300727596,
+                            "nonsense": 0.010042661708633441,
+                            "opinion": 0.012281366633965025
+                        },
+                        "fact_retrieval": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Nice to meet you, Ruth.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Nice to meet you, Ruth.",
+                            "segments": [
+                                "Nice to meet you, Ruth."
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 6,
+                                    "start_pos": 5,
+                                    "text": "ruth",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is an Alexa Prize Socialbot! I think we have not met yet. What name would you like me to call you?",
+                                "ruth.",
+                                "Nice to meet you, Ruth."
+                            ]
+                        }
+                    },
+                    "active_skill": "personal_info_skill"
+                }
+            ]
+        }
+    ],
+    "dff_bot_persona_skill_state_batch": [
+        {}
+    ],
+    "entities_batch": [
+        {
+            "number": {
+                "bot_encounters": [],
+                "human_encounters": [
+                    {
+                        "emotions": {
+                            "neutral": 0.9995132088661194
+                        },
+                        "full_name": "favorite number",
+                        "human_utterance_index": 2,
+                        "intents": [
+                            "Information_DeliveryIntent"
+                        ],
+                        "next_skill_name": "",
+                        "pos": [
+                            "ADJ",
+                            "NOUN"
+                        ],
+                        "previous_skill_name": "personal_info_skill",
+                        "sentiment": "neutral",
+                        "topics": [
+                            "Phatic",
+                            "Other"
+                        ]
+                    }
+                ],
+                "name": "number"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "disliked_skills_batch": [
+        []
+    ]
+}

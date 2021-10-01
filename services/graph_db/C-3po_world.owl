@@ -1,0 +1,754 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/dilyarem/ontologies/2021/3/C-3PO_world"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/dilyarem/ontologies/2021/3/C-3PO_world">
+    <Prefix name="" IRI="http://www.semanticweb.org/dilyarem/ontologies/2021/3/C-3PO_world"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Type_of_sport"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q11424#Film"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q11862829#Academic_discipline"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q144#Dog"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q1790144#Unit_of_time"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q181802#Prosthesis"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q18327510#Fictional_robot"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q187456#Bar"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q207628#Musical_composition"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q2088357#Musical_ensemble"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q217107#Travel_agency"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q2775969#Fictional_planet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q28640#Profession"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q39201#Pet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q44580842#Medical_device_type"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q4830453#Business"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q622852#Domesticated_animal"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q634#Planet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q729#Animal"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q7725634#Literary_work"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://www.wikidata.org/wiki/Q88985865#Eating_or_drinking_establishment"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#as_loyal_as"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#cut_off_arm_of"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#describes"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#held_experiment_on"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#known_for_taking"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#looks_like"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#loves"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#perform_at"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#planet"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#wants_to_try"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#would_like_to_live_in"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#can&apos;t_imagine_life_without"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P106#occupation"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P1441#present_in_work"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P161#cast_member"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P50#author"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#climate"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="https://www.wikidata.org/wiki/Property:P21#sex_or_gender"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#K"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Luke_Skywalker"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Mad_about_me"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Star_Tours"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#War_and_Peace"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#dog"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#hover-skiing"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#ice-boarding"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Chalmun&apos;s_Spaceport_Cantina"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q11016#technology"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q12206942#Darth_Vader"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q193815#Ryan_Gosling"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q2055046#physiologist"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q2332566#arm_prosthesis"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q33999#actor"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q42985#Ivan_Pavlov"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51802#Han_Solo"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q5447969#Figrin_D’an_and_the_Modal_Nodes"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q6955#19th_century"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q723764#Tatooine"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q7243#Leo_Tolstoy"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q739771#Hoth"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q943048#Rick_Deckard"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q144#Dog"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q39201#Pet"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q181802#Prosthesis"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q44580842#Medical_device_type"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q187456#Bar"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q88985865#Eating_or_drinking_establishment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q217107#Travel_agency"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q4830453#Business"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q39201#Pet"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q622852#Domesticated_animal"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q18327510#Fictional_robot"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="https://www.wikidata.org/wiki/Q622852#Domesticated_animal"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q729#Animal"/>
+    </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+        <NamedIndividual IRI="#K"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+        <NamedIndividual IRI="#Luke_Skywalker"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="#Luke_Skywalker"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q207628#Musical_composition"/>
+        <NamedIndividual IRI="#Mad_about_me"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q217107#Travel_agency"/>
+        <NamedIndividual IRI="#Star_Tours"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q7725634#Literary_work"/>
+        <NamedIndividual IRI="#War_and_Peace"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q39201#Pet"/>
+        <NamedIndividual IRI="#dog"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Type_of_sport"/>
+        <NamedIndividual IRI="#hover-skiing"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Type_of_sport"/>
+        <NamedIndividual IRI="#ice-boarding"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q187456#Bar"/>
+        <NamedIndividual IRI="#Chalmun&apos;s_Spaceport_Cantina"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q11862829#Academic_discipline"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q11016#technology"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q12206942#Darth_Vader"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q12206942#Darth_Vader"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q193815#Ryan_Gosling"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q28640#Profession"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q2055046#physiologist"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q11424#Film"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q181802#Prosthesis"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q2332566#arm_prosthesis"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q28640#Profession"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q33999#actor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q42985#Ivan_Pavlov"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51802#Han_Solo"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51802#Han_Solo"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q2088357#Musical_ensemble"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q5447969#Figrin_D’an_and_the_Modal_Nodes"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q1790144#Unit_of_time"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q6955#19th_century"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q2775969#Fictional_planet"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q723764#Tatooine"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q7243#Leo_Tolstoy"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q2775969#Fictional_planet"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q739771#Hoth"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q943048#Rick_Deckard"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P1441#present_in_work"/>
+        <NamedIndividual IRI="#K"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <NamedIndividual IRI="#K"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q193815#Ryan_Gosling"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#has"/>
+        <NamedIndividual IRI="#Luke_Skywalker"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q2332566#arm_prosthesis"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#wants_to_try"/>
+        <NamedIndividual IRI="#Luke_Skywalker"/>
+        <NamedIndividual IRI="#hover-skiing"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <NamedIndividual IRI="#Mad_about_me"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q5447969#Figrin_D’an_and_the_Modal_Nodes"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#known_for_taking"/>
+        <NamedIndividual IRI="#Star_Tours"/>
+        <NamedIndividual IRI="#hover-skiing"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#known_for_taking"/>
+        <NamedIndividual IRI="#Star_Tours"/>
+        <NamedIndividual IRI="#ice-boarding"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#describes"/>
+        <NamedIndividual IRI="#War_and_Peace"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q6955#19th_century"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P50#author"/>
+        <NamedIndividual IRI="#War_and_Peace"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q7243#Leo_Tolstoy"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#as_loyal_as"/>
+        <NamedIndividual IRI="#dog"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#planet"/>
+        <NamedIndividual IRI="#Chalmun&apos;s_Spaceport_Cantina"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q723764#Tatooine"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#cut_off_arm_of"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q12206942#Darth_Vader"/>
+        <NamedIndividual IRI="#Luke_Skywalker"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P106#occupation"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q193815#Ryan_Gosling"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q33999#actor"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P161#cast_member"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q193815#Ryan_Gosling"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P161#cast_member"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#held_experiment_on"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q42985#Ivan_Pavlov"/>
+        <NamedIndividual IRI="#dog"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P106#occupation"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q42985#Ivan_Pavlov"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q2055046#physiologist"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#as_loyal_as"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="#dog"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#loves"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="#Mad_about_me"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#loves"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="#War_and_Peace"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#loves"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="#dog"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#loves"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#loves"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q5447969#Figrin_D’an_and_the_Modal_Nodes"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#wants_to_try"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="#hover-skiing"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#would_like_to_live_in"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q6955#19th_century"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#can&apos;t_imagine_life_without"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51787#C-3PO"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q11016#technology"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#perform_at"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q5447969#Figrin_D’an_and_the_Modal_Nodes"/>
+        <NamedIndividual IRI="#Chalmun&apos;s_Spaceport_Cantina"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#looks_like"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q51802#Han_Solo"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P106#occupation"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q33999#actor"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P1441#present_in_work"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q943048#Rick_Deckard"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q21500755#Blade_Runner_2049"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q943048#Rick_Deckard"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="https://www.wikidata.org/wiki/Property:P21#sex_or_gender"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q193815#Ryan_Gosling"/>
+        <Literal>male</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="https://www.wikidata.org/wiki/Property:P21#sex_or_gender"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q7243#Leo_Tolstoy"/>
+        <Literal>male</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#climate"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q739771#Hoth"/>
+        <Literal>snowy</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="https://www.wikidata.org/wiki/Property:P21#sex_or_gender"/>
+        <NamedIndividual IRI="https://www.wikidata.org/wiki/Q81328#Harrison_Ford"/>
+        <Literal>male</Literal>
+    </DataPropertyAssertion>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#as_loyal_as"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#as_loyal_as"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q729#Animal"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#cut_off_arm_of"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#describes"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q7725634#Literary_work"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#has"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#held_experiment_on"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#known_for_taking"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q217107#Travel_agency"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#known_for_taking"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q4830453#Business"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#looks_like"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#loves"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#perform_at"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q2088357#Musical_ensemble"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#planet"/>
+        <Class abbreviatedIRI="owl:Thing"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#wants_to_try"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#wants_to_try"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q18327510#Fictional_robot"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#wants_to_try"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#would_like_to_live_in"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#can&apos;t_imagine_life_without"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P106#occupation"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P1441#present_in_work"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P161#cast_member"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q11424#Film"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q15632617#Fictional_human"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q207628#Musical_composition"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P50#author"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q7725634#Literary_work"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#as_loyal_as"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q52383#Droid"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#as_loyal_as"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q729#Animal"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#cut_off_arm_of"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#describes"/>
+        <Class abbreviatedIRI="owl:Thing"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#has"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q181802#Prosthesis"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#held_experiment_on"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q729#Animal"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#known_for_taking"/>
+        <Class IRI="#Type_of_sport"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#looks_like"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#loves"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q207628#Musical_composition"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#loves"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q2088357#Musical_ensemble"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#perform_at"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q88985865#Eating_or_drinking_establishment"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#planet"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q2775969#Fictional_planet"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#planet"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q634#Planet"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#wants_to_try"/>
+        <Class IRI="#Type_of_sport"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#would_like_to_live_in"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q1790144#Unit_of_time"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#can&apos;t_imagine_life_without"/>
+        <Class abbreviatedIRI="owl:Thing"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P106#occupation"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q28640#Profession"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P1441#present_in_work"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q11424#Film"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P161#cast_member"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q2088357#Musical_ensemble"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P175#performer"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="https://www.wikidata.org/wiki/Property:P50#author"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </ObjectPropertyRange>
+    <DataPropertyDomain>
+        <DataProperty IRI="#climate"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q2775969#Fictional_planet"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#climate"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q634#Planet"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="https://www.wikidata.org/wiki/Property:P21#sex_or_gender"/>
+        <Class IRI="https://www.wikidata.org/wiki/Q5#Human"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#climate"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="https://www.wikidata.org/wiki/Property:P21#sex_or_gender"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#looks_like</IRI>
+        <Literal>for C-3PO reality</Literal>
+    </AnnotationAssertion>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

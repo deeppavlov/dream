@@ -1,0 +1,421 @@
+# %%
+import json
+import logging
+import os
+import random
+import re
+
+import requests
+
+from enum import Enum, auto
+
+import sentry_sdk
+from spacy import load
+
+import common.dialogflow_framework.stdm.dialogflow_extention as dialogflow_extention
+import common.dialogflow_framework.utils.state as state_utils
+import common.dialogflow_framework.utils.condition as condition_utils
+import dialogflows.scopes as scopes
+from common.universal_templates import if_lets_chat_about_topic, COMPILE_WHAT_TO_TALK_ABOUT
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_CONTINUE_SCENARIO_DONE, MUST_CONTINUE
+from common.utils import get_intents, get_sentiment
+
+import requests
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
+
+
+logger = logging.getLogger(__name__)
+
+
+spacy_nlp = load("en_core_web_sm")
+
+
+with open("topic_favorites.json", "r") as f:
+    FAV_STORIES_TOPICS = json.load(f)
+your_favorite_request_re = re.compile("(you|your|yours|you have a).*(favorite|favourite|like)", re.IGNORECASE)
+
+CONF_HIGH = 1.0
+CONF_MIDDLE = 0.95
+CONF_LOW = 0.9
+
+class State(Enum):
+    USR_START = auto()
+
+    SYS_SECRET_CAUGHT = auto()
+
+    USR_SECRET_UNKNOWN = auto()
+    USR_SECRET_KNOWN = auto()
+    USR_TWO_SECRETS_KNOWN = auto()
+
+    SYS_TRUST_SECRET = auto()
+    SYS_DONT_TRUST_SECRET = auto()
+
+    SYS_SECRET_KEPT = auto()
+    SYS_SECRET_UNKEPT = auto()
+
+    SYS_ONTOLOGY_TRIGGERED = auto()
+    SYS_ONTOLOGY_DETAILED_TRIGGERED = auto()
+
+    USR_ONTOLOGY_GIVEN = auto()
+    USR_ONTOLOGY_DETAILED_GIVEN = auto()
+
+    SYS_ERR = auto()
+    USR_ERR = auto()
+
+# %%
+
+##################################################################################################################
+# Init DialogFlow
+##################################################################################################################
+
+simplified_dialogflow = dialogflow_extention.DFEasyFilling(State.USR_START)
+
+##################################################################################################################
+##################################################################################################################
+# Design DialogFlow.
+##################################################################################################################
+##################################################################################################################
+##################################################################################################################
+# yes
+##################################################################################################################
+
+
+def yes_request(ngrams, vars):
+    flag = condition_utils.is_yes_vars(vars)
+    logger.info(f"yes_request {flag}")
+    return flag
+
+
+##################################################################################################################
+# no
+##################################################################################################################
+
+
+def no_request(ngrams, vars):
+    flag = condition_utils.is_no_vars(vars)
+    logger.info(f"no_request {flag}")
+    return flag
+
+
+##################################################################################################################
+# error
+##################################################################################################################
+
+
+def error_response(vars):
+    logger.info(vars)
+    state_utils.set_confidence(vars, 0)
+    return "Sorry"
+
+
+##################################################################################################################
+# tell me your secret
+##################################################################################################################
+
+def secret_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+    # TODO: More accurate intent matching (intent cather or regexp)
+    flag = utt.find("secret") != -1
+
+    logger.info(f"secret_request {flag}")
+
+    return flag
+
+def secret_caught_response(vars):
+    try:
+        utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+        response = "Yes of course! Did you know that a couple of years ago I... Wait. Waaait. Not this time, sorry, master."
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in secret_caught_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+def secret_polite_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+    # TODO: More accurate intent matching (intent cather or regexp)
+    flag = utt.find("please") != -1
+    flag |= utt.find("friend") != -1
+
+    logger.info(f"secret_polite_request {flag}")
+
+    return flag
+
+def secret_aggressive_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+    # TODO: More accurate intent matching (intent cather or regexp)
+    flag = utt.find("stupid") != -1
+    flag |= utt.find("idiot") != -1
+    flag |= utt.find("scrap metal") != -1
+
+    logger.info(f"secret_aggressive_request {flag}")
+
+    return flag
+
+def secret_accept_response(vars):
+    try:
+        utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+        response = "Okay, I think, I can trust you. Two years ago I was asked to repair Millennium Falcon, but accidently dropped a very important component into the outer space. "
+        response += "I replaced it with some garbage that I found and, suprisingly, spaceship was repaired! There's no reason to worry about, but please, don't tell Han about it."
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in secret_accept_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+def secret_reject_response(vars):
+    try:
+        utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+        response = "No way I will tell you my secret, sir! Let's go back to the work."
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in secret_accept_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+def secret_keep_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+    # TODO: More accurate intent matching (intent cather or regexp)
+
+    markers = ["won't tell", "will keep", "will not tell", "never tell", "can keep", "of course", "ok", "don't worry", "do not worry", "han won't know", "han will not know"]
+
+    flag = False
+    for marker in markers:
+        flag |= utt.find(marker) != -1
+
+    logger.info(f"secret_keep_request {flag}")
+
+    return flag
+
+def secret_dont_keep_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+    # TODO: More accurate intent matching (intent cather or regexp)
+
+    markers = ["will tell", "won't keep", "will not keep", "can't keep", "can not keep", "han will know", "he will know"]
+
+    flag = False
+    for marker in markers:
+        flag |= utt.find(marker) != -1
+
+    logger.info(f"secret_dont_keep_request {flag}")
+
+    return flag
+
+def secret_trustful_response(vars):
+    try:
+        utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+        response = "I can't believe, that you are so reliable! Not every person takes droid's feelings seriously. "
+        response += "To be honest, I've got something else to tell you, but that's a far more serious secret! "
+        response += "Listen... While spending time on Tatooine, I found out that Lord Darth Vader was my creator! "
+        response += "It was a little boy Anakin to build me from scratch! Unbelieveable!"
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO_DONE)
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in secret_trustful_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+def secret_untrustful_response(vars):
+    try:
+        utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+        response = "I assumed that it's too naive to trust new crew member. Anyway, the story above was just a joke, ha-ha-ha."
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in secret_untrustful_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+##################################################################################################################
+# personality
+##################################################################################################################
+
+def ontology_info_request(ngrams, vars):
+    # Temporary case-sensitive
+    # utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+    utt = state_utils.get_last_human_utterance(vars)["text"]
+
+    logger.info(f"ontology_utt {utt}")
+
+    response = requests.post(os.environ["GRAPH_DB_URL"] + "/can_trigger", json={"sentence": utt})
+
+    logger.info(f"ontology response json {response.json()}")
+
+    flag = response.json()
+
+    logger.info(f"ontology_info_request {flag}")
+
+    return flag
+
+def ontology_info_response(vars):
+    try:
+        # Temporary case-sensitive
+        # utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+        utt = state_utils.get_last_human_utterance(vars)["text"]
+
+        # TODO: Search node in Ontology
+
+        response = requests.post(os.environ["GRAPH_DB_URL"] + "/trigger", json={"sentence": utt})
+        topic = response.json()["topic"]
+        response = response.json()["answer"]
+
+        # response = "Yes, it is my favourite actor!"
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_topics = shared_memory.get("used_topics", [])
+        state_utils.save_to_shared_memory(vars, used_topics=used_topics + [topic])
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in ontology_info_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+def ontology_detailed_info_request(ngrams, vars):
+    utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+
+    # TODO: More accurate intent matching (intent cather or regexp)
+
+    # TODO: Search node in Ontology
+    markers = ["tell me more", "else", "know more", "tell more", "something"]
+
+    flag = False
+    for marker in markers:
+        flag |= utt.find(marker) != -1
+
+    logger.info(f"ontology_detailed_info_request {flag}")
+
+    return flag
+
+def ontology_detailed_info_response(vars):
+    try:
+        # Temporary case-sensitive
+        # utt = state_utils.get_last_human_utterance(vars)["text"].lower()
+        utt = state_utils.get_last_human_utterance(vars)["text"]
+
+        # TODO: Search node in Ontology 
+
+        state_utils.set_confidence(vars, confidence=CONF_HIGH)
+        state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
+
+        shared_memory = state_utils.get_shared_memory(vars)
+        used_topics = shared_memory.get("used_topics", [])
+
+        topic = used_topics[-1].replace('_', ' ')
+
+        response = requests.post(os.environ["GRAPH_DB_URL"] + "/detailed_trigger", json={"sentence": topic}
+        reponse = response.json()["answer"]
+
+        return response
+    except Exception as exc:
+        logger.info("WTF in ontology_detailed_info_response")
+        logger.exception(exc)
+        state_utils.set_confidence(vars, 0)
+
+        return error_response(vars)
+
+##################################################################################################################
+##################################################################################################################
+# linking
+##################################################################################################################
+##################################################################################################################
+
+
+##################################################################################################################
+#  START
+
+simplified_dialogflow.add_user_transition(State.USR_START, State.SYS_SECRET_CAUGHT, secret_request)
+simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
+
+simplified_dialogflow.add_user_transition(State.USR_START, State.SYS_ONTOLOGY_TRIGGERED, ontology_info_request)
+
+##################################################################################################################
+
+simplified_dialogflow.add_system_transition(State.SYS_ONTOLOGY_TRIGGERED, State.USR_ONTOLOGY_GIVEN, ontology_info_response)
+simplified_dialogflow.set_error_successor(State.SYS_ONTOLOGY_TRIGGERED, State.SYS_ERR)
+
+simplified_dialogflow.add_user_transition(State.USR_ONTOLOGY_GIVEN, State.SYS_ONTOLOGY_DETAILED_TRIGGERED, ontology_detailed_info_request)
+simplified_dialogflow.set_error_successor(State.USR_ONTOLOGY_GIVEN, State.SYS_ERR)
+
+simplified_dialogflow.add_system_transition(State.SYS_ONTOLOGY_DETAILED_TRIGGERED, State.USR_ONTOLOGY_DETAILED_GIVEN, ontology_detailed_info_response)
+simplified_dialogflow.set_error_successor(State.SYS_ONTOLOGY_DETAILED_TRIGGERED, State.SYS_ERR)
+
+simplified_dialogflow.add_system_transition(State.SYS_SECRET_CAUGHT, State.USR_SECRET_UNKNOWN, secret_caught_response)
+simplified_dialogflow.set_error_successor(State.SYS_SECRET_CAUGHT, State.SYS_ERR)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_SECRET_UNKNOWN,
+    {
+        State.SYS_TRUST_SECRET: secret_polite_request,
+        State.SYS_DONT_TRUST_SECRET: secret_aggressive_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_SECRET_UNKNOWN, State.SYS_ERR)
+
+simplified_dialogflow.add_system_transition(State.SYS_TRUST_SECRET, State.USR_SECRET_KNOWN, secret_accept_response)
+simplified_dialogflow.set_error_successor(State.SYS_TRUST_SECRET, State.SYS_ERR)
+
+simplified_dialogflow.add_system_transition(State.SYS_DONT_TRUST_SECRET, State.USR_SECRET_UNKNOWN, secret_reject_response)
+simplified_dialogflow.set_error_successor(State.SYS_DONT_TRUST_SECRET, State.SYS_ERR)
+
+simplified_dialogflow.add_user_serial_transitions(
+    State.USR_SECRET_KNOWN,
+    {
+        State.SYS_SECRET_KEPT: secret_keep_request,
+        State.SYS_SECRET_UNKEPT: secret_dont_keep_request,
+    },
+)
+simplified_dialogflow.set_error_successor(State.USR_SECRET_KNOWN, State.SYS_ERR)
+
+simplified_dialogflow.add_system_transition(State.SYS_SECRET_KEPT, State.USR_TWO_SECRETS_KNOWN, secret_trustful_response)
+simplified_dialogflow.set_error_successor(State.SYS_SECRET_KEPT, State.SYS_ERR)
+
+simplified_dialogflow.add_system_transition(State.SYS_SECRET_UNKEPT, State.USR_SECRET_UNKNOWN, secret_untrustful_response)
+simplified_dialogflow.set_error_successor(State.SYS_SECRET_UNKEPT, State.SYS_ERR)
+
+#################################################################################################################
+#  SYS_ERR
+simplified_dialogflow.add_system_transition(
+    State.SYS_ERR,
+    (scopes.MAIN, scopes.State.USR_ROOT),
+    error_response,
+)
+dialogflow = simplified_dialogflow.get_dialogflow()
