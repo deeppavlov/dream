@@ -6,6 +6,9 @@ WORKDIR /src
 COPY common/dialogflow_framework/requirements.txt .
 RUN pip install -r requirements.txt
 
+COPY skills/dff_bot_persona2_skill/requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
 RUN python -m spacy download en
 RUN python -m spacy download en_core_web_sm
 RUN python -m spacy download en_core_web_md
