@@ -1072,22 +1072,41 @@ services:
         reservations:
           memory: 256M
 
+  #dff-bot-persona-skill2:
+  #  build:
+  #    args:
+  #      SERVICE_PORT: 8095
+  #      SERVICE_NAME: dff_bot_persona_skill2 # has to be the same with skill dir name
+  #    context: .
+  #    dockerfile: ./skills/dff_bot_persona_skill2/Dockerfile
+  #  command:  gunicorn --workers=1 server:app -b 0.0.0.0:8095 --reload
+  #  deploy:
+  #    mode: replicated
+  #    replicas: 4
+  #    resources:
+  #      limits:
+  #        memory: 768M
+  #      reservations:
+  #        memory: 768M
+
+  graph_db:
+    build:
+      context: services/graph_db
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3055 --timeout=2000 --reload
+    ports:
+      - 3055:3055
   dff-bot-persona-skill2:
     build:
       args:
-        SERVICE_PORT: 8095
-        SERVICE_NAME: dff_bot_persona_skill2 # has to be the same with skill dir name
+          SERVICE_PORT: 8105
+          SERVICE_NAME: dff_bot_persona_skill2
       context: .
       dockerfile: ./skills/dff_bot_persona_skill2/Dockerfile
-    command:  gunicorn --workers=1 server:app -b 0.0.0.0:8095 --reload
-    deploy:
-      mode: replicated
-      replicas: 4
-      resources:
-        limits:
-          memory: 768M
-        reservations:
-          memory: 768M
+    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8105 --reload --preload
+    environment:
+      WIKIDATA_URL: http://wiki-parser:3013/model
+      ENTITY_LINKING_URL: http://entity_linking:3006/model
+      GRAPH_DB_URL: http://graph_db:3055
 
   dff-funfact-skill:
     env_file: [.env]
