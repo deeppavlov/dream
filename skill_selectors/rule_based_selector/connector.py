@@ -227,6 +227,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_travel_skill",
                         "coronavirus_skill",
                         "dff_bot_persona_skill",
+                        "dff_bot_persona2_skill",
                         "dff_gaming_skill",
                     ],
                 )
@@ -265,6 +266,9 @@ class RuleBasedSkillSelectorConnector:
 
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
+
+            skills_for_uttr.clear()
+            skills_for_uttr.add("dff_bot_persona2_skill")
 
             logger.info(f"Selected skills: {skills_for_uttr}")
 
