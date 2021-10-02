@@ -324,20 +324,20 @@ services:
 #        reservations:
 #          memory: 2540M
 
-  weather-skill:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./skills/weather_skill/Dockerfile
-    command: python -m flask run -h 0.0.0.0 -p 8037
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1152M
-        reservations:
-          memory: 1152M
+#  weather-skill:
+#    env_file: [.env]
+#    build:
+#      context: .
+#      dockerfile: ./skills/weather_skill/Dockerfile
+#    command: python -m flask run -h 0.0.0.0 -p 8037
+#    environment:
+#      - FLASK_APP=server
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 1152M
+#        reservations:
+#          memory: 1152M
 
   emotion-skill:
     env_file: [.env]
