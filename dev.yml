@@ -382,7 +382,7 @@ services:
       - 8105:8105
   dff-bot-persona2-skill:
     volumes:
-      - "./skills/dff_bot_persona2_skill:/src"
+      - "./skills/dff_bot_persona_2_skill:/src"
       - "./common:/src/common"
     ports:
       - 8105:8105
