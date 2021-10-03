@@ -762,6 +762,10 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_bot_persona_skill"
     return utils.dff_formatter(dialog, service_name)
 
+def dff_bot_persona2_skill_formatter(dialog: Dict) -> List[Dict]:
+    service_name = f"dff_bot_persona2_skill"
+    return utils.dff_formatter(dialog, service_name)
+
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     service_name = f"dff_wiki_skill"
