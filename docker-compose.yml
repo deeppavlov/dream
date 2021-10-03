@@ -10,9 +10,9 @@ services:
         cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
-        convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, weather-skill:8037,
+        convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
-        coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
+        coronavirus-skill:8061, small-talk-skill:8062, program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
@@ -23,7 +23,7 @@ services:
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, dff-bot-persona2-skill:8105, news-api-annotator:8112,
         dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
         user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-680}
     deploy:
       resources:
         limits:
