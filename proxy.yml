@@ -502,6 +502,15 @@ services:
       - PORT=8105
 
     command: [ "nginx", "-g", "daemon off;" ]
+  dff-bot-persona2-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8105
+      - PORT=8105
+
+    command: [ "nginx", "-g", "daemon off;" ]
   dff-gaming-skill:
     build:
       context: dp/proxy/
