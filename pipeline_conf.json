@@ -2,17 +2,17 @@
     "connectors": {
         "sentseg": {
             "protocol": "http",
-            "timeout": 1,
+            "timeout": 5,
             "url": "http://sentseg:8011/sentseg"
         },
         "ner": {
             "protocol": "http",
-            "timeout": 1,
+            "timeout": 5,
             "url": "http://ner:8021/ner"
         },
         "sentrewrite": {
             "protocol": "http",
-            "timeout": 1,
+            "timeout": 5,
             "url": "http://sentrewrite:8017/sentrewrite"
         }
     },
@@ -125,7 +125,7 @@
             "cobot_nounphrases": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://cobot-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
@@ -160,7 +160,7 @@
                 "connector": {
                     "protocol": "http",
                     "url": "http://bot_emotion_classifier:8092/model",
-                    "timeout": 1
+                    "timeout": 5
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:user_emotion_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -181,7 +181,7 @@
             "cobot_nounphrases": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://cobot-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -194,7 +194,7 @@
             "conceptnet": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://comet-conceptnet:8065/comet_annotator"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
@@ -211,7 +211,7 @@
             "blacklisted_words": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://blacklisted-words:8018/blacklisted_words"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -234,7 +234,7 @@
             "factoid_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://factoid-classification:8073/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -247,7 +247,7 @@
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://intent-catcher:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
@@ -261,7 +261,7 @@
             "fact_random": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://fact-random:8119/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_random_formatter_dialog",
@@ -275,7 +275,7 @@
             "fact_retrieval": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://fact-retrieval:8100/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
@@ -300,7 +300,7 @@
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://entity-detection:8103/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
@@ -314,7 +314,7 @@
             "kbqa": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://kbqa:8072/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:kbqa_formatter_dialog",
@@ -327,7 +327,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://entity-linking:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
@@ -344,7 +344,7 @@
             "wiki_parser": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://wiki-parser:8077/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
@@ -369,7 +369,7 @@
             "midas_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://midas-classification:8090/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -383,7 +383,7 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 5,
                     "url": "http://combined-classification:8087/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -396,7 +396,7 @@
             "entity_storer": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://entity-storer:8089/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:entity_storer_formatter",
@@ -410,7 +410,7 @@
             "news_api_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://news-api-annotator:8112/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
@@ -427,7 +427,7 @@
             "topic_recommendation": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://topic-recommendation:8113/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:topic_recommendation_formatter",
@@ -442,7 +442,7 @@
             "user_persona_extractor": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://user-persona-extractor:8114/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
@@ -477,7 +477,7 @@
             "dff_sport_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-sport-skill:8098/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_sport_skill_formatter",
@@ -490,7 +490,7 @@
             "eliza": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://eliza:8047/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:eliza_formatter_dialog",
@@ -503,7 +503,7 @@
             "cobotqa": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://cobotqa:8081/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
@@ -516,7 +516,7 @@
             "program_y": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://program-y:8008/api/rest/v1.0/ask"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -529,7 +529,7 @@
             "personality_catcher": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://personality-catcher:8010/personality_catcher"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:personality_catcher_formatter_dialog",
@@ -542,7 +542,7 @@
             "intent_responder": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://intent-responder:8012/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:intent_responder_formatter_dialog",
@@ -579,7 +579,7 @@
             "dummy_skill_dialog": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dummy-skill-dialog:8052/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
@@ -592,7 +592,7 @@
             "misheard_asr": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://misheard-asr:8033/misheard_respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
@@ -605,7 +605,7 @@
             "program_y_dangerous": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://program-y-dangerous:8022/api/rest/v1.0/ask"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -618,7 +618,7 @@
             "dff_movie_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-movie-skill:8023/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_movie_skill_formatter",
@@ -631,7 +631,7 @@
             "emotion_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://emotion-skill:8049/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog_emotion_skill",
@@ -644,7 +644,7 @@
             "convert_reddit": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://convert-reddit:8029/convert_reddit"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convert_formatter_dialog",
@@ -657,7 +657,7 @@
             "personal_info_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://personal-info-skill:8030/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -670,7 +670,7 @@
             "coronavirus_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://coronavirus-skill:8061/coronavirus_skill"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
@@ -683,7 +683,7 @@
             "meta_script_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://meta-script-skill:8054/meta_script"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -696,7 +696,7 @@
             "short_story_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://short-story-skill:8057/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:short_story_formatter_dialog",
@@ -709,7 +709,7 @@
             "small_talk_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://small-talk-skill:8062/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -722,7 +722,7 @@
             "program_y_wide": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://program-y-wide:8064/api/rest/v1.0/ask"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -735,7 +735,7 @@
             "news_api_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://news-api-skill:8066/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
@@ -748,7 +748,7 @@
             "comet_dialog_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://meta-script-skill:8054/comet_dialog"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
@@ -761,7 +761,7 @@
             "grounding_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://grounding-skill:8080/grounding_skill"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -774,7 +774,7 @@
             "factoid_qa": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://factoid-qa:8071/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -787,7 +787,7 @@
             "dff_animals_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-animals-skill:8094/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_animals_skill_formatter",
@@ -800,7 +800,7 @@
             "dff_gaming_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-gaming-skill:8115/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_gaming_skill_formatter",
@@ -813,7 +813,7 @@
             "dff_friendship_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-friendship-skill:8086/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
@@ -826,7 +826,7 @@
             "knowledge_grounding_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://knowledge-grounding-skill:8085/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -839,7 +839,7 @@
             "dff_travel_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-travel-skill:8096/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_travel_skill_formatter",
@@ -852,7 +852,7 @@
             "dff_food_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-food-skill:8097/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_food_skill_formatter",
@@ -865,7 +865,7 @@
             "dff_science_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-science-skill:8101/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_science_skill_formatter",
@@ -876,7 +876,7 @@
             "dff_music_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-music-skill:8099/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_music_skill_formatter",
@@ -889,7 +889,7 @@
             "dff_funfact_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-funfact-skill:8104/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_funfact_skill_formatter",
@@ -902,7 +902,7 @@
             "dff_gossip_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-gossip-skill:8109/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_gossip_skill_formatter",
@@ -917,7 +917,7 @@
             "dff_bot_persona_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-bot-persona-skill:8105/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_bot_persona_skill_formatter",
@@ -930,7 +930,7 @@
             "dff_bot_persona2_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-template:8105/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_bot_persona2_skill_formatter",
@@ -941,7 +941,7 @@
             "dff_wiki_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-wiki-skill:8111/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_wiki_skill_formatter",
@@ -954,7 +954,7 @@
             "dff_art_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-art-skill:8117/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_art_skill_formatter",
@@ -969,7 +969,7 @@
             "blacklisted_words": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://blacklisted-words:8018/blacklisted_words_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -982,7 +982,7 @@
             "cobot_nounphrases": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://cobot-nounphrases:8006/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -995,7 +995,7 @@
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://entity-detection:8103/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -1008,7 +1008,7 @@
             "midas_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://midas-classification:8090/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_last_uttr",
@@ -1021,7 +1021,7 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -1036,7 +1036,7 @@
             "convers_evaluation_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://convers-evaluation-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
