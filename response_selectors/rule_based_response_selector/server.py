@@ -47,7 +47,7 @@ def respond():
             human_attributes += [skill_data.get("human_attributes", {})]
             bot_attributes += [skill_data.get("bot_attributes", {})]
 
-            if skill_data["skill_name"] == "dff_bot_persona_skill" and skill_data["confidence"] == 1.0:
+            if skill_data["skill_name"] == "dff_bot_persona_2_skill" and skill_data["confidence"] == 1.0:
                 confidences[-1] = 100.0
                 logger.info("DFF Persona was superpowered!")
 
