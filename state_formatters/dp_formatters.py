@@ -172,6 +172,14 @@ def base_response_selector_formatter_service(payload: List):
         }
 
 
+def full_dialog(dialog: Dict):
+    return [{'dialogs': [dialog]}]
+
+
+def base_skill_formatter(payload: Dict) -> Dict:
+    return [{"text": payload[0], "confidence": payload[1]}]
+
+
 def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sent_rewrite_formatter
     dialog = utils.get_last_n_turns(dialog)
@@ -256,6 +264,10 @@ def hypotheses_list(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
     return [{"sentences": hypots}]
+
+
+def programy_formatter_dialog(dialog: Dict) -> List:
+    return [{'sentences_batch': [[u['text'] for u in dialog['utterances'][-5:]]]}]
 
 
 def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
@@ -348,6 +360,23 @@ def simple_formatter_service(payload: List):
     """
     logging.info(f"answer {payload}")
     return payload
+
+
+def entity_linking_formatter(payload: List):
+    response = []
+    for entity_name, wikidata_ids, id_types in zip(*payload):
+        item = {
+            'entity_name': entity_name,
+            'wikidata_ids': [
+                {
+                    "id": id,
+                    "instance_of": instance_of
+                }
+                for id, instance_of in zip(wikidata_ids, id_types)
+            ]
+        }
+        response.append(item)
+    return response
 
 
 def simple_batch_formatter_service(payload: List):
@@ -763,7 +792,7 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, service_name)
 
 def dff_bot_persona_2_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_bot_persona_2_skill"
+    service_name = f"dff_bot_persona_skill"
     return utils.dff_formatter(dialog, service_name)
 
 
