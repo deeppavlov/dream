@@ -1,5 +1,7 @@
 # DeepPavlov Agent
 
+**How to Build?**
+- docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml up --build --remove-orphans
 
 **DeepPavlov Agent** is a platform for creating multi-skill chatbots.
 
