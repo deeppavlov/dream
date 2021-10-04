@@ -41,6 +41,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
+  rule_based_response_selector:
+    volumes:
+      - "./response_selectors/rule_based_response_selector:/src"
+        - "./common:/src/common"
+    ports:
+      - 3003:3003
   sentrewrite:
     volumes:
       - "./annotators/SentRewrite:/src"
