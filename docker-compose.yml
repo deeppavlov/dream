@@ -307,37 +307,37 @@ services:
         reservations:
           memory: 128M
 
-#  book-skill:
-#    env_file: [.env]
-#    build:
-#      context: .
-#      dockerfile: ./skills/book_skill/Dockerfile
-#      args:
-#        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
-#    command: python -m flask run -h 0.0.0.0 -p 8032
-#    environment:
-#      - FLASK_APP=server
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 2540M
-#        reservations:
-#          memory: 2540M
+  book-skill:
+    env_file: [.env]
+    build:
+      context: .
+      dockerfile: ./skills/book_skill/Dockerfile
+      args:
+        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
+    command: python -m flask run -h 0.0.0.0 -p 8032
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2540M
+        reservations:
+          memory: 2540M
 
-#  weather-skill:
-#    env_file: [.env]
-#    build:
-#      context: .
-#      dockerfile: ./skills/weather_skill/Dockerfile
-#    command: python -m flask run -h 0.0.0.0 -p 8037
-#    environment:
-#      - FLASK_APP=server
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 1152M
-#        reservations:
-#          memory: 1152M
+  weather-skill:
+    env_file: [.env]
+    build:
+      context: .
+      dockerfile: ./skills/weather_skill/Dockerfile
+    command: python -m flask run -h 0.0.0.0 -p 8037
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1152M
+        reservations:
+          memory: 1152M
 
   emotion-skill:
     env_file: [.env]
@@ -474,22 +474,22 @@ services:
         reservations:
           memory: 80M
 
-#  game-cooperative-skill:
-#    env_file: [.env]
-#    build:
-#      args:
-#        SERVICE_PORT: 8068
-#      context: .
-#      dockerfile: ./skills/game_cooperative_skill/Dockerfile
-#    command: flask run -h 0.0.0.0 -p 8068
-#    environment:
-#      - FLASK_APP=server
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 256M
-#        reservations:
-#          memory: 256M
+  game-cooperative-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8068
+      context: .
+      dockerfile: ./skills/game_cooperative_skill/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8068
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
   program-y-wide:
     env_file: [.env]
@@ -1038,23 +1038,23 @@ services:
         reservations:
           memory: 4G
 
-#  hypothesis-scorer:
-#    env_file: [.env]
-#    build:
-#      args:
-#        SERVICE_PORT: 8110
-#        SERVICE_NAME: hypothesis_scorer # has to be the same with skill dir name
-#      context: ./annotators/hypothesis_scorer
-#    command: flask run -h 0.0.0.0 -p 8110
-#    environment:
-#      - FLASK_APP=server
-#      - CUDA_VISIBLE_DEVICES=0
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 4G
-#        reservations:
-#          memory: 4G
+  hypothesis-scorer:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8110
+        SERVICE_NAME: hypothesis_scorer # has to be the same with skill dir name
+      context: ./annotators/hypothesis_scorer
+    command: flask run -h 0.0.0.0 -p 8110
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
 
   dff-bot-persona-skill:
     env_file: [.env]
