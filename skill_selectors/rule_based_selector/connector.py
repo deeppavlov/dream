@@ -213,6 +213,7 @@ class RuleBasedSkillSelectorConnector:
                     bot_uttr.get("text", ""),
                     available_skills=[
                         "dff_movie_skill",
+                        "book_skill",
                         "news_api_skill",
                         "dff_food_skill",
                         "dff_animals_skill",
@@ -220,6 +221,8 @@ class RuleBasedSkillSelectorConnector:
                         "dff_music_skill",
                         "dff_science_skill",
                         "dff_gossip_skill",  # 'dff_celebrity_skill',
+                        "game_cooperative_skill",
+                        "weather_skill",
                         "dff_funfact_skill",
                         "dff_travel_skill",
                         "coronavirus_skill",
@@ -233,9 +236,9 @@ class RuleBasedSkillSelectorConnector:
                 if is_celebrity_mentioned:
                     skills_for_uttr.append("dff_gossip_skill")
 
-                # # some special cases
-                # if if_special_weather_turn_on(user_uttr, bot_uttr):
-                #     skills_for_uttr.append("weather_skill")
+                # some special cases
+                if if_special_weather_turn_on(user_uttr, bot_uttr):
+                    skills_for_uttr.append("weather_skill")
 
                 if if_turn_on_emotion(user_uttr, bot_uttr):
                     skills_for_uttr.append("emotion_skill")
