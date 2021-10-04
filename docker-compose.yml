@@ -1088,6 +1088,16 @@ services:
   #      reservations:
   #        memory: 768M
 
+  neo4j:
+    image: neo4j:4.2.5
+    ports:
+      - 8474:7474
+      - 8687:7687
+    #    volumes:
+    #      - ~/neo4j/data:/data
+    environment:
+      NEO4J_AUTH: none
+
   graph_db:
     env_file: [.env]
     build:
@@ -1095,6 +1105,7 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3055 --timeout=2000 --reload
     ports:
       - 3055:3055
+
   dff-bot-persona-2-skill:
     env_file: [.env]
     build:
