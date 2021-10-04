@@ -1101,14 +1101,11 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://rule-based-response-selector:3003/respond"
+                    "url": "http://rule_based_response_selector:3003/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
-                "previous_services": [
-                    "post_skill_selector_annotators"
-                ],
+                "dialog_formatter": "dp_formatters:full_dialog",
+                "response_formatter": "dp_formatters:base_response_selector_formatter_service",
+                "previous_services": ["response_annotators"],
                 "state_manager_method": "add_bot_utterance"
             }
         }
