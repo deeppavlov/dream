@@ -7,6 +7,7 @@ import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
 
+LAST_N_TURNS = 5  # number of turns to consider in annotator/skill.
 
 def user_emotion_formatter(dialog: Dict) -> List:
     user_emotion = dialog['human_utterances'][-1]['annotations'].get(
