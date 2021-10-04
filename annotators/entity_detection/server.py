@@ -78,20 +78,21 @@ def get_result(request):
                         utt_entities["labelled_entities"] = [{"text": entity, "label": tag.lower(), "offsets": offsets}]
                         already_detected_set.add((entity, offsets))
         cur_num = 0
-        for entities_list, tags_list, entities_offsets_list, num in \
-                zip(entities_batch_lc, tags_batch_lc, entities_offsets_batch_lc, utterances_nums):
+        for entities_list, entities_offsets_list, num in \
+                zip(entities_batch_lc, entities_offsets_batch_lc, utterances_nums):
             if num != cur_num:
                 utt_entities_batch[cur_num] = utt_entities
                 utt_entities = {}
                 cur_num = num
-            for entity, tag, offsets in zip(entities_list, tags_list, entities_offsets_list):
+            for entity, offsets in zip(entities_list, entities_offsets_list):
                 if entity not in nltk_stopwords and len(entity) > 2:
                     entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                     entity = DOUBLE_SPACES.sub(" ", entity).strip()
                     found_already_detected = False
                     for already_detected_entity, already_detected_offsets in already_detected_set:
                         if entity == already_detected_entity or \
-                            (offsets[0] >= already_detected_offsets[0] and offsets[1] <= already_detected_offsets[1]):
+                                (offsets[0] >= already_detected_offsets[0]
+                                 and offsets[1] <= already_detected_offsets[1]):
                             found_already_detected = True
                     if "entities" in utt_entities:
                         if not found_already_detected:

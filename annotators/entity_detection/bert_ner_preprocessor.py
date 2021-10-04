@@ -1,22 +1,8 @@
-# Copyright 2017 Neural Networks and Deep Learning lab, MIPT
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 import re
 import random
 from logging import getLogger
-from typing import Tuple, List, Optional, Union
+from typing import Tuple, List, Union
 
-from bert_dp.preprocessing import convert_examples_to_features, InputExample, InputFeatures
 from bert_dp.tokenization import FullTokenizer
 
 from deeppavlov.core.commands.utils import expand_path
@@ -76,7 +62,7 @@ class BertNerPreprocessor(Component):
                  tokens: Union[List[List[str]], List[str]],
                  tags: List[List[str]] = None,
                  **kwargs):
-        
+
         tokens_offsets_batch = [[] for _ in tokens]
         if isinstance(tokens[0], str):
             tokens_batch = []
@@ -89,8 +75,8 @@ class BertNerPreprocessor(Component):
                     tokens_offsets_list.append((elem.start(), elem.end()))
                 tokens_batch.append(tokens_list)
                 tokens_offsets_batch.append(tokens_offsets_list)
-            tokens = tokens_batch    
-            
+            tokens = tokens_batch
+
         subword_tokens, subword_tok_ids, startofword_markers, subword_tags = [], [], [], []
         for i in range(len(tokens)):
             toks = tokens[i]

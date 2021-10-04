@@ -1,17 +1,3 @@
-# Copyright 2019 Neural Networks and Deep Learning lab, MIPT
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 from logging import getLogger
 from typing import List, Union, Dict, Optional
 
@@ -384,7 +370,7 @@ class BertSequenceNetwork(LRScheduledTFModel):
         return tf.group(bert_train_op, head_train_op)
 
     def _build_basic_feed_dict(self, input_ids: tf.Tensor, input_masks: tf.Tensor,
-                               token_types: Optional[tf.Tensor]=None, train: bool=False) -> dict:
+                               token_types: Optional[tf.Tensor] = None, train: bool = False) -> dict:
         """Fills the feed_dict with the tensors defined in the basic class.
         You need to update this dict by the values of output placeholders
         and class-specific network inputs in your derived class.
@@ -405,7 +391,7 @@ class BertSequenceNetwork(LRScheduledTFModel):
 
         return feed_dict
 
-    def _build_feed_dict(self, input_ids, input_masks, token_types=None, *args,  **kwargs):
+    def _build_feed_dict(self, input_ids, input_masks, token_types=None, *args, **kwargs):
         raise NotImplementedError("You must implement _build_feed_dict in your derived class.")
 
     def train_on_batch(self,
@@ -431,8 +417,7 @@ class BertSequenceNetwork(LRScheduledTFModel):
 
         if self.ema:
             self.sess.run(self.ema.switch_to_train_op)
-        _, loss, lr = self.sess.run([self.train_op, self.loss, self.learning_rate_ph],
-                                     feed_dict=feed_dict)
+        _, loss, lr = self.sess.run([self.train_op, self.loss, self.learning_rate_ph], feed_dict=feed_dict)
         return {'loss': loss,
                 'head_learning_rate': float(lr),
                 'bert_learning_rate': float(lr) * self.bert_learning_rate_multiplier}
