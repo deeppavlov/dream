@@ -37,7 +37,7 @@ services:
   rule_based_response_selector:
     build:
       context: .
-      dockerfile: ./response_selectors/rule_based_response_selector
+      dockerfile: ./response_selectors/rule_based_response_selector/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3003
     volumes: [ ]
     ports:
