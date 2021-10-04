@@ -1,2 +1,2 @@
 spacy==3.0.6
-emora-stdm==1.95
+emora_stdm==1.95
