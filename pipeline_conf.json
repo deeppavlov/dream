@@ -970,7 +970,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 5,
-                    "url": "http://dff-bot-persona-2-skill:8105/respond"
+                    "url": "http://dff-bot-persona-2-skill:8125/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_bot_persona_2_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

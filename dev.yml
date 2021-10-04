@@ -385,7 +385,7 @@ services:
       - "./skills/dff_bot_persona_2_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8105:8105
+      - 8125:8125
   dff-wiki-skill:
     volumes:
       - "./skills/dff_wiki_skill:/src"

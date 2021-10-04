@@ -19,7 +19,7 @@ services:
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089, book-skill:8032, grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
         midas-classification:8090, fact-random:8119, fact-retrieval:8100,
-        dff-funfact-skill:8104, dff-bot-persona-skill:8105, dff-bot-persona-2-skill:8105, news-api-annotator:8112,
+        dff-funfact-skill:8104, dff-bot-persona-skill:8105, dff-bot-persona-2-skill:8125, news-api-annotator:8112,
         dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
         user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-680}
@@ -1072,23 +1072,6 @@ services:
         reservations:
           memory: 256M
 
-  #dff-bot-persona-2-skill:
-  #  build:
-  #    args:
-  #      SERVICE_PORT: 8095
-  #      SERVICE_NAME: dff_bot_persona_2_skill # has to be the same with skill dir name
-  #    context: .
-  #    dockerfile: ./skills/dff_bot_persona_2_skill/Dockerfile
-  #  command:  gunicorn --workers=1 server:app -b 0.0.0.0:8095 --reload
-  #  deploy:
-  #    mode: replicated
-  #    replicas: 4
-  #    resources:
-  #      limits:
-  #        memory: 768M
-  #      reservations:
-  #        memory: 768M
-
   neo4j:
     image: neo4j:4.2.5
     ports:
@@ -1111,11 +1094,11 @@ services:
     env_file: [.env]
     build:
       args:
-          SERVICE_PORT: 8105
+          SERVICE_PORT: 8125
           SERVICE_NAME: dff_bot_persona_2_skill
       context: .
       dockerfile: ./skills/dff_bot_persona_2_skill/Dockerfile
-    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8105 --reload --preload
+    command: gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8125 --reload --preload
     environment:
       WIKIDATA_URL: http://wiki-parser:3013/model
       ENTITY_LINKING_URL: http://entity_linking:3006/model
