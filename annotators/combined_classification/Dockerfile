@@ -1,7 +1,13 @@
 FROM deeppavlov/base-gpu:0.12.0
 
+COPY ./requirements.txt requirements.txt
+
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt && \
+    pip install git+git://github.com/dimakarp1996/DeepPavlov.git@cdf5f18a5a70c9c3e4c843bbd9b3b399239c19aa
+
 ARG CONFIG
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/cobot_bert_6task.tar.gz
+ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/modelf3onelabel_upsampleall.pth.tar.gz
 ARG PORT
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
