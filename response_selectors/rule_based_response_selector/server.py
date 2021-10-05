@@ -51,7 +51,7 @@ def respond():
             if skill_data["skill_name"] == "dff_bot_persona_2_skill" and skill_data["confidence"] == 1.0:
                 confidences[-1] = 100.0
                 logger.info("DFF Persona was superpowered!")
-
+        print("confidences: ", confidences)
         best_id = np.argmax(confidences)
 
         selected_skill_names.append(skill_names[best_id])
