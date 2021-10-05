@@ -110,6 +110,7 @@ high_priority_intents = {
 low_priority_intents = {"dont_understand", "what_time"}
 
 combined_classes = {
+    "factoid_classification":["is_factoid", "is_conversational"],
     "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
     "toxic_classification": [
         "identity_hate",
