@@ -1101,6 +1101,7 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 5,
                     "url": "http://rule_based_response_selector:3003/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
