@@ -43,6 +43,13 @@ services:
     ports:
       - 3003:3003
 
+  emotion_classification:
+    build:
+      context: annotators/emotion_classification
+    command: python -m deeppavlov riseapi emo_bert.json -p 3004
+    ports:
+      - 3004:3004
+
   cobotqa:
     env_file: [.env]
     build:
