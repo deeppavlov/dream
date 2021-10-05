@@ -1105,7 +1105,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
-                "previous_services": ["annotators.combined_classification"],
+                "required_previous_services": ["annotators.combined_classification"],
                 "state_manager_method": "add_bot_utterance"
             }
         }
