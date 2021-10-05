@@ -47,12 +47,6 @@ services:
       - "./common:/src/common"
     ports:
       - 3003:3003
-  emotion_classification:
-    volumes:
-      - "./annotators/emotion_classification:/src"
-      - "./common:/src/common"
-    ports:
-      - 3004:3004
   sentrewrite:
     volumes:
       - "./annotators/SentRewrite:/src"

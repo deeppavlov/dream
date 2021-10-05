@@ -1084,19 +1084,6 @@
                 "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },
-        "response_annotators": {
-            "emotion_classification": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3004/model"
-                },
-              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
-            }
-        },
         "response_selectors": {
             "convers_evaluation_selector": {
                 "connector": {
@@ -1118,7 +1105,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
-                "previous_services": ["response_annotators"],
+                "previous_services": ["post_skill_selector_annotators"],
                 "state_manager_method": "add_bot_utterance"
             }
         }
