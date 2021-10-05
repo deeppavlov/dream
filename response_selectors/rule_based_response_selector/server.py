@@ -23,7 +23,8 @@ def respond():
 
     dialogs = request.json["dialogs"]
     response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs]
-    print("dialogs: ", dialogs)
+    print("dialogs value: ", dialogs)
+    print("response_candidates: ", response_candidates)
     selected_skill_names = []
     selected_responses = []
     selected_confidences = []
