@@ -19,51 +19,49 @@ app = Flask(__name__)
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    with open("trouble.txt", "w") as outfile:
-        st_time = time.time()
+    st_time = time.time()
 
-        dialogs = request.json["dialogs"]
-        print("dialogs:", dialogs, file=outfile)
-        response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs]
+    dialogs = request.json["dialogs"]
+    response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs]
+    print("dialogs: ", dialogs)
+    selected_skill_names = []
+    selected_responses = []
+    selected_confidences = []
+    selected_human_attributes = []
+    selected_bot_attributes = []
 
-        selected_skill_names = []
-        selected_responses = []
-        selected_confidences = []
-        selected_human_attributes = []
-        selected_bot_attributes = []
+    for i, dialog in enumerate(dialogs):
+        confidences = []
+        responses = []
+        skill_names = []
+        human_attributes = []
+        bot_attributes = []
 
-        for i, dialog in enumerate(dialogs):
-            confidences = []
-            responses = []
-            skill_names = []
-            human_attributes = []
-            bot_attributes = []
+        for skill_data in response_candidates[i]:
+            if skill_data["text"] and skill_data["confidence"]:
+                logger.info(f"Skill {skill_data['skill_name']} returned non-empty hypothesis with non-zero confidence.")
 
-            for skill_data in response_candidates[i]:
-                if skill_data["text"] and skill_data["confidence"]:
-                    logger.info(f"Skill {skill_data['skill_name']} returned non-empty hypothesis with non-zero confidence.")
+            confidences += [skill_data["confidence"]]
+            responses += [skill_data["text"]]
+            skill_names += [skill_data["skill_name"]]
+            human_attributes += [skill_data.get("human_attributes", {})]
+            bot_attributes += [skill_data.get("bot_attributes", {})]
 
-                confidences += [skill_data["confidence"]]
-                responses += [skill_data["text"]]
-                skill_names += [skill_data["skill_name"]]
-                human_attributes += [skill_data.get("human_attributes", {})]
-                bot_attributes += [skill_data.get("bot_attributes", {})]
+            if skill_data["skill_name"] == "dff_bot_persona_2_skill" and skill_data["confidence"] == 1.0:
+                confidences[-1] = 100.0
+                logger.info("DFF Persona was superpowered!")
 
-                if skill_data["skill_name"] == "dff_bot_persona_2_skill" and skill_data["confidence"] == 1.0:
-                    confidences[-1] = 100.0
-                    logger.info("DFF Persona was superpowered!")
+        best_id = np.argmax(confidences)
 
-            best_id = np.argmax(confidences)
+        selected_skill_names.append(skill_names[best_id])
+        selected_responses.append(responses[best_id])
+        selected_confidences.append(confidences[best_id])
+        selected_human_attributes.append(human_attributes[best_id])
+        selected_bot_attributes.append(bot_attributes[best_id])
 
-            selected_skill_names.append(skill_names[best_id])
-            selected_responses.append(responses[best_id])
-            selected_confidences.append(confidences[best_id])
-            selected_human_attributes.append(human_attributes[best_id])
-            selected_bot_attributes.append(bot_attributes[best_id])
-
-        total_time = time.time() - st_time
-        logger.info(f"rule_based_response_selector exec time = {total_time:.3f}s")
-        return jsonify(list(zip(selected_skill_names, selected_responses, selected_confidences, selected_human_attributes, selected_bot_attributes)))
+    total_time = time.time() - st_time
+    logger.info(f"rule_based_response_selector exec time = {total_time:.3f}s")
+    return jsonify(list(zip(selected_skill_names, selected_responses, selected_confidences, selected_human_attributes, selected_bot_attributes)))
 
 
 if __name__ == "__main__":
