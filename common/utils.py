@@ -157,7 +157,8 @@ combined_classes = {
         "Science_and_Technology",
         "Sports",
         "Politics",
-    ],  # Inappropriate_Content
+        "Inappropriate_Content"
+    ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
         "General_ChatIntent",
@@ -517,11 +518,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification":
-            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
-        else:
-            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
-
+        answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -569,10 +566,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
                 answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
         else:
             answer_probs = answer
-            if model_name == "toxic_classification":
-                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
-            else:
-                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         logger.warning(e)
     # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
@@ -635,6 +629,25 @@ def get_toxic(annotated_utterance, probs=True, default_probs=None, default_label
         default_labels=default_labels,
     )
 
+def get_factoid(annotated_utterance, probs=True, default_probs=None, default_labels=None):
+    """Function to get toxic classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with toxic probablilties, if probs == True, or toxic labels if probs != True
+    """
+    default_probs = {"is_conversational": 1} if default_probs is None else default_probs
+    default_labels = ["is_conversational"] if default_labels is None else default_labels
+    return _get_etc_model(
+        annotated_utterance,
+        "factoid_classification",
+        probs=probs,
+        default_probs=default_probs,
+        default_labels=default_labels,
+    )
 
 def get_sentiment(annotated_utterance, probs=True, default_probs=None, default_labels=None):
     """Function to get sentiment classifier annotations from annotated utterance.
