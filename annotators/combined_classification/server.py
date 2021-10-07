@@ -7,6 +7,11 @@ import sentry_sdk
 
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
+from common.utils import combined_classes
+
+task_names = ['cobot_topics', 'cobot_dialogact_topics', 'cobot_dialogact_intents',
+              'emotion_classification', 'sentiment_classification',
+              'toxic_classification', 'factoid_classification']  # ORDER MATTERS!
 
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -33,13 +38,21 @@ def get_result(sentences):
             res = model(sentences)
         else:
             raise Exception("Empty list of sentences received")
+        ans = [{} for _ in res[0]]
+        for name, value in zip(task_names, res):
+            for i in range(len(value)):
+                for class_, prob in zip(combined_classes[name], value[i]):
+                    if prob == max(value[i]):
+                        if class_ != 'not_toxic':
+                            prob = 1
+                ans[i][name] = {class_: prob}
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
     total_time = time.time() - st_time
     logger.info(f"cobot_topics exec time: {total_time:.3f}s")
-    return res
+    return ans
 
 
 @app.route("/model", methods=["POST"])

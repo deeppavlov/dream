@@ -110,7 +110,7 @@ high_priority_intents = {
 low_priority_intents = {"dont_understand", "what_time"}
 
 combined_classes = {
-    "factoid_classification":["is_factoid", "is_conversational"],
+    "factoid_classification": ["is_factoid", "is_conversational"],
     "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
     "toxic_classification": [
         "identity_hate",
@@ -120,6 +120,7 @@ combined_classes = {
         "sexual_explicit",
         "threat",
         "toxic",
+        "not_toxic"
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "cobot_topics": [
@@ -629,6 +630,7 @@ def get_toxic(annotated_utterance, probs=True, default_probs=None, default_label
         default_labels=default_labels,
     )
 
+
 def get_factoid(annotated_utterance, probs=True, default_probs=None, default_labels=None):
     """Function to get toxic classifier annotations from annotated utterance.
 
@@ -648,6 +650,7 @@ def get_factoid(annotated_utterance, probs=True, default_probs=None, default_lab
         default_probs=default_probs,
         default_labels=default_labels,
     )
+
 
 def get_sentiment(annotated_utterance, probs=True, default_probs=None, default_labels=None):
     """Function to get sentiment classifier annotations from annotated utterance.

@@ -27,8 +27,8 @@ def main_test():
             "answers": [["Entertainment_Movies"]],
         },
         {"sentences": ["let's talk about games"], "task": "cobot_topics", "answers": [["Games"]]},
-        {"sentences": ["let's switch topic"], "task": "cobot_dialogact_intents", "answers": [["Topic_SwitchIntent"]],
-        ("sentences": ["fact about books"], "task": "factoid_classification", "answers": [["is_factoid"]]},
+        {"sentences": ["let's switch topic"], "task": "cobot_dialogact_intents", "answers": [["Topic_SwitchIntent"]]},
+        {"sentences": ["fact about books"], "task": "factoid_classification", "answers": [["is_factoid"]]}
     ]
     for config in configs:
         responses = requests.post(url, json=config).json()

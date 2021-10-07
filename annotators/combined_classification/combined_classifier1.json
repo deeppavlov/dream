@@ -62,7 +62,7 @@
                     "factoid":1
                 },
                 "in":[
-                    -1,
+                    "bert_features_x",
                     "bert_features_x",
                     "bert_features_x",
                     "bert_features_x",
@@ -80,6 +80,76 @@
                     "y_toxic_pred",
                     "y_factoid_pred"
                 ]
+            },
+            {
+                "in": [
+                    "y_topics_pred"
+                ],
+                "out": [
+                    "y_topics_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_da_topics_pred"
+                ],
+                "out": [
+                    "y_da_topics_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_da_intents_pred"
+                ],
+                "out": [
+                    "y_da_intents_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_emo_pred"
+                ],
+                "out": [
+                    "y_emo_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_sentiment_pred"
+                ],
+                "out": [
+                    "y_sentiment_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_toxic_pred"
+                ],
+                "out": [
+                    "y_toxic_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_factoid_pred"
+                ],
+                "out": [
+                    "y_factoid_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
             }
         ],
         "out":[
