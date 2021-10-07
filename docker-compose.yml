@@ -314,7 +314,7 @@ services:
       context: .
       dockerfile: ./skills/book_skill/Dockerfile
       args:
-        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
+        QUERY_DICT: https://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
     command: python -m flask run -h 0.0.0.0 -p 8032
     environment:
       - FLASK_APP=server
