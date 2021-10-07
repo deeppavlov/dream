@@ -6,10 +6,10 @@ def main_test():
     url = "http://0.0.0.0:8087/model"
     batch_url = "http://0.0.0.0:8087/batch_model"
     configs = [
-        {"sentences": ["how do I empty my DNS cache?", 
+        {"sentences": ["how do I empty my DNS cache?",
                        "which do you prefer?"],
-        "task": "factoid_classification",
-        "answers": [["is_factoid"], ["is_conversational"]]},
+         "task": "factoid_classification",
+         "answers": [["is_factoid"], ["is_conversational"]]},
         {
             "sentences": ["i love you", "i hate you", "so be it"],
             "task": "sentiment_classification",
