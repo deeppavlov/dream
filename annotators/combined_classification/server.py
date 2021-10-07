@@ -42,6 +42,10 @@ def get_result(sentences):
         ans = [{} for _ in res[0]]
         for name, value in zip(task_names, res):
             for i in range(len(value)):
+                is_toxic = ('toxic' in name and value[i][-1]<0.5)
+                if is_toxic:  # sum of probs of all toxic classes >0.5
+                    value[i][-1]=0
+                    value[i] = [k/sum(k) for k in value[i]]
                 for class_, prob in zip(combined_classes[name], value[i]):
                     if prob == max(value[i]):
                         if class_ != 'not_toxic' and name == 'toxic_classification':
