@@ -11,7 +11,7 @@ def main_test():
          "task": "factoid_classification",
          "answers": [["is_factoid"], ["is_conversational"]]},
         {
-            "sentences": ["i love you", "i hate you", "so be it"],
+            "sentences": ["i love you", "i hate you", "It is now"],
             "task": "sentiment_classification",
             "answers": [["positive"], ["negative"], ["neutral"]],
         },
