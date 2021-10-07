@@ -18,6 +18,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 try:
     model = build_model("combined_classifier.json", download=False)
+    logger.info("Making test res")
     test_res = model(["a"])
     logger.info("model loaded, test query processed")
 except Exception as e:
@@ -43,15 +44,16 @@ def get_result(sentences):
             for i in range(len(value)):
                 for class_, prob in zip(combined_classes[name], value[i]):
                     if prob == max(value[i]):
-                        if class_ != 'not_toxic':
+                        if class_ != 'not_toxic' and name == 'toxic_classification':
                             prob = 1
-                ans[i][name] = {class_: prob}
+                        ans[i][name] = {class_: float(prob)}
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
     total_time = time.time() - st_time
-    logger.info(f"cobot_topics exec time: {total_time:.3f}s")
+    logger.info(f"7in1 exec time: {total_time:.3f}s")
+    logger.info(ans)
     return ans
 
 
