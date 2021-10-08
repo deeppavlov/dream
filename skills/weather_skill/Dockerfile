@@ -3,7 +3,7 @@ FROM python:3.8.0
 WORKDIR /src
 
 RUN mkdir /data && \
-    wget https://files.deeppavlov.ai/dream/weather_skill/openweathermap_city.list.json -O /data/openweathermap_city.list.json
+    curl https://files.deeppavlov.ai/dream/weather_skill/openweathermap_city.list.json --output /data/openweathermap_city.list.json
 
 COPY ./skills/weather_skill/requirements.txt .
 RUN pip install -r requirements.txt
