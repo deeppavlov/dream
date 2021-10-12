@@ -268,7 +268,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr = ["alexa_handler"]
 
             skills_for_uttr.clear()
-            skills_for_uttr.add("dff_bot_persona_2_skill")
+            skills_for_uttr.append("dff_bot_persona_2_skill")
 
             logger.info(f"Selected skills: {skills_for_uttr}")
 
