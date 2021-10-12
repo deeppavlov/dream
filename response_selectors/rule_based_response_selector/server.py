@@ -23,8 +23,8 @@ def respond():
 
     dialogs = request.json["dialogs"]
     response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs]
-    print("dialogs value: ", dialogs)
-    print("response_candidates: ", response_candidates)
+    logger.error(dialogs)
+    logger.error(response_candidates)
     selected_skill_names = []
     selected_responses = []
     selected_confidences = []
@@ -51,7 +51,7 @@ def respond():
             if skill_data["skill_name"] == "dff_bot_persona_2_skill" and skill_data["confidence"] == 1.0:
                 confidences[-1] = 100.0
                 logger.info("DFF Persona was superpowered!")
-        print("confidences: ", confidences)
+        logger.error(confidences)
         best_id = np.argmax(confidences)
 
         selected_skill_names.append(skill_names[best_id])
