@@ -11,7 +11,7 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 
-import common.dialogflow_framework.utils.dialogflow as dialogflow_utils
+import common.dialogflow_framework.utils.dialogflow_for_persona2 as dialogflow_utils
 import common.dialogflow_framework.programy.text_preprocessing as text_utils
 import dialogflows.main as main_dialogflow
 # import test_server
