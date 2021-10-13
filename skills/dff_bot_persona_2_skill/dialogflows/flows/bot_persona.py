@@ -132,6 +132,8 @@ def secret_caught_response(vars):
         response = "Yes of course! Did you know that a couple of years ago I... Wait. Waaait. Not this time, sorry, master."
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        print("state_utils.get_last_human_utterance(vars):", state_utils.get_last_human_utterance(vars))
+        print("utt:", utt)
 
         return response
     except Exception as exc:
@@ -149,6 +151,8 @@ def secret_polite_request(ngrams, vars):
     flag |= utt.find("friend") != -1
 
     logger.info(f"secret_polite_request {flag}")
+    print("state_utils.get_last_human_utterance(vars):", state_utils.get_last_human_utterance(vars))
+    print("utt:", utt)
 
     return flag
 
@@ -161,6 +165,8 @@ def secret_aggressive_request(ngrams, vars):
     flag |= utt.find("scrap metal") != -1
 
     logger.info(f"secret_aggressive_request {flag}")
+    print("state_utils.get_last_human_utterance(vars):", state_utils.get_last_human_utterance(vars))
+    print("utt:", utt)
 
     return flag
 
@@ -172,6 +178,8 @@ def secret_accept_response(vars):
         response += "I replaced it with some garbage that I found and, suprisingly, spaceship was repaired! There's no reason to worry about, but please, don't tell Han about it."
         state_utils.set_confidence(vars, confidence=CONF_HIGH)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
+        print("state_utils.get_last_human_utterance(vars):", state_utils.get_last_human_utterance(vars))
+        print("utt:", utt)
 
         return response
     except Exception as exc:
