@@ -38,6 +38,7 @@ your_favorite_request_re = re.compile("(you|your|yours|you have a).*(favorite|fa
 CONF_HIGH = 1.0
 CONF_MIDDLE = 0.95
 CONF_LOW = 0.9
+CONF_SUPER_LOW = 0.1
 
 class State(Enum):
     USR_START = auto()
@@ -105,7 +106,7 @@ def no_request(ngrams, vars):
 
 def error_response(vars):
     logger.info(vars)
-    state_utils.set_confidence(vars, 0)
+    state_utils.set_confidence(vars, CONF_SUPER_LOW)
     return "Sorry"
 
 
