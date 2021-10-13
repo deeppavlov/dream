@@ -121,7 +121,8 @@ def secret_request(ngrams, vars):
     flag = utt.find("secret") != -1
 
     logger.info(f"secret_request {flag}")
-
+    print("state_utils.get_last_human_utterance(vars):", state_utils.get_last_human_utterance(vars))
+    print("utt:", utt)
     return flag
 
 def secret_caught_response(vars):
