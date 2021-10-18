@@ -154,6 +154,9 @@ def secret_polite_request(ngrams, vars):
     print("state_utils.get_last_human_utterance(vars):", state_utils.get_last_human_utterance(vars))
     print("utt:", utt)
 
+    # debug override
+    flag = True
+
     return flag
 
 def secret_aggressive_request(ngrams, vars):
