@@ -1,6 +1,6 @@
 {
     "human_utter_index_batch": [
-        0
+        1
     ],
     "dialog_batch": [
         {
@@ -536,13 +536,328 @@
                             }
                         ]
                     }
+                },
+                {
+                    "text": "I prefer cold weather.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "I prefer cold weather.",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "cold weather"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.23766659200191498,
+                            "conversational": 0.7623334527015686
+                        },
+                        "conceptnet": {
+                            "cold weather": {
+                                "Causes": [
+                                    "frostbite",
+                                    "cold",
+                                    "hypothermia"
+                                ],
+                                "CausesDesire": [
+                                    "ski",
+                                    "go for walk",
+                                    "go ski"
+                                ],
+                                "HasProperty": [
+                                    "hard to ski on",
+                                    "cold",
+                                    "bad for your health"
+                                ],
+                                "SymbolOf": [
+                                    "winter",
+                                    "cold",
+                                    "snow"
+                                ]
+                            }
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9996445775032043
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9983094930648804
+                            },
+                            "cobot_topics": {
+                                "Weather_Time": 0.9998409748077393
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.998259961605072
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.689949095249176
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003251582384109497
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "I prefer cold weather.",
+                            "segments": [
+                                "I prefer cold weather."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012628238182514906,
+                                "command": 0.006533477921038866,
+                                "comment": 0.0029125039000064135,
+                                "complaint": 0.0013121262891218066,
+                                "dev_command": 0.002030446659773588,
+                                "neg_answer": 0.0022940021008253098,
+                                "open_question_factual": 0.002689708722755313,
+                                "open_question_opinion": 0.002060060855001211,
+                                "opinion": 0.9667980670928955,
+                                "other_answers": 0.0013249326730147004,
+                                "pos_answer": 0.0031791364308446646,
+                                "statement": 0.0062266020104289055,
+                                "yes_no_question": 0.0013760719448328018
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I prefer cold weather."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "PARIS — France reacted with fury on Thursday to President Biden’s announcement of a deal to help Australia deploy nuclear-powered submarines, calling it a “unilateral, brutal, unpredictable decision” that resembled the rash and sudden policy shifts c... [983 chars]",
+                                    "description": "French officials accused President Biden of acting like his predecessor, saying they were stabbed in the back and not consulted.",
+                                    "image": "https://static01.nyt.com/images/2021/09/16/world/16france-defense01/16france-defense01-facebookJumbo.jpg",
+                                    "publishedAt": "2021-09-16T14:49:37Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "France Is Outraged by U.S. Nuclear Submarine Deal With Australia",
+                                    "url": "https://www.nytimes.com/2021/09/16/world/europe/france-australia-uk-us-submarines.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "weather",
+                                "news": {
+                                    "content": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.\nThe agriculture ministry on Tuesday said that farms had sown 356,040 hectares of mostly winter wheat for the 2022 ... [907 chars]",
+                                    "description": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.",
+                                    "image": "https://www.agriculture.com/sites/all/themes/custom/sfg/favicon.ico",
+                                    "publishedAt": "2021-09-16T12:21:10Z",
+                                    "source": {
+                                        "name": "Successful Farming",
+                                        "url": "https://www.agriculture.com"
+                                    },
+                                    "title": "Conditions favour Ukrainian winter grain sowing, say forecasters",
+                                    "url": "https://www.agriculture.com/markets/newswire/conditions-favour-ukrainian-winter-grain-sowing-say-forecasters"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
                 }
             ],
-            "bot_utterances": []
+            "bot_utterances": [
+                {
+                    "text": "It is scattered clouds, temperature is around 67.6 Fahrenheits in London. Wind speed is about 1.0 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
+                    "annotations": {
+                        "sensteg": {
+                            "punct_sent": "It is broken clouds, temperature is around 71.0 degrees Fahrenheit in London. Wind speed is about 0.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
+                            "segments": [
+                                "It is broken clouds, temperature is around 71.",
+                                "0 degrees Fahrenheit in London.",
+                                "Wind speed is about 0.",
+                                "5 meters per second.",
+                                "What weather do you prefer?",
+                                "Warm, cold, rain, snow, hot?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "london",
+                                    "type": "LOC"
+                                }
+                            ],
+                            [],
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Tell me weather in London.",
+                                "It is broken clouds, temperature is around 71. 0 degrees Fahrenheit in London. Wind speed is about 0. 5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_weather_skill"
+                }
+            ]
         }
     ],
-    "dff_template_skill_state_batch": [
-        {}
+    "dff_weather_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 0,
+                "id": "283ad82d-75b7-4a70-b0cb-c1431a3c72e9",
+                "misc": {},
+                "node_labels": {
+                    "0": [
+                        "weather",
+                        "forecast"
+                    ]
+                },
+                "previous_index": 0,
+                "requests": {
+                    "0": "Tell me weather in London."
+                },
+                "responses": {
+                    "0": "It is broken clouds, temperature is around 71.0 degrees Fahrenheit in London. Wind speed is about 0.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "weather",
+                    "forecast"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
     ],
     "dff_shared_state_batch": [
         {

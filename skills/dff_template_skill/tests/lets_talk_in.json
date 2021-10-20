@@ -6,74 +6,47 @@
         {
             "human_utterances": [
                 {
-                    "text": "Tell me weather.",
+                    "text": "hi.",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "Tell me weather in London.",
+                        "spelling_preprocessing": "hi",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
-                            "weather"
-                        ],
+                        "cobot_nounphrases": [],
                         "factoid_classification": {
-                            "factoid": 0.9974457025527954,
-                            "conversational": 0.0025543677620589733
+                            "factoid": 0.009537393227219582,
+                            "conversational": 0.990462601184845
                         },
-                        "conceptnet": {
-                            "weather": {
-                                "Causes": [
-                                    "snow",
-                                    "rain",
-                                    "weather"
-                                ],
-                                "CausesDesire": [
-                                    "fly kite",
-                                    "ski",
-                                    "go to work"
-                                ],
-                                "HasProperty": [
-                                    "hot",
-                                    "very hot",
-                                    "cold"
-                                ],
-                                "SymbolOf": [
-                                    "rain",
-                                    "cold",
-                                    "winter"
-                                ]
-                            }
-                        },
+                        "conceptnet": {},
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.9679458141326904,
-                                "Information_RequestIntent": 0.9958388805389404
+                                "General_ChatIntent": 0.9982210397720337
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9979375600814819
+                                "Other": 0.9222673773765564
                             },
                             "cobot_topics": {
-                                "Travel_Geo": 0.9739552140235901,
-                                "Weather_Time": 0.9993501901626587
+                                "Phatic": 0.9989814758300781
                             },
                             "emotion_classification": {
-                                "neutral": 0.9980624914169312
+                                "neutral": 0.9996328353881836
                             },
                             "sentiment_classification": {
-                                "neutral": 0.7010625600814819
+                                "positive": 0.737922191619873
                             },
                             "toxic_classification": {
-                                "toxic": 0.0009115040302276611
+                                "toxic": 0.0014452040195465088
                             }
                         },
                         "sentseg": {
-                            "punct_sent": "Tell me weather.",
+                            "punct_sent": "hi.",
                             "segments": [
-                                "Tell me weather."
+                                "hi."
                             ]
                         },
                         "topic_recommendation": [
@@ -135,8 +108,8 @@
                                 "detected": 0
                             },
                             "weather_forecast_intent": {
-                                "confidence": 1.0,
-                                "detected": 1
+                                "confidence": 0.0,
+                                "detected": 0
                             },
                             "what_are_you_talking_about": {
                                 "confidence": 0.0,
@@ -173,19 +146,19 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0017131564673036337,
-                                "command": 0.9696163535118103,
-                                "comment": 0.0012449567439034581,
-                                "complaint": 0.0030516311526298523,
-                                "dev_command": 0.008995480835437775,
-                                "neg_answer": 0.001427413895726204,
-                                "open_question_factual": 0.0016862007323652506,
-                                "open_question_opinion": 0.0017678278964012861,
-                                "opinion": 0.0022793940734118223,
-                                "other_answers": 0.0007646132144145668,
-                                "pos_answer": 0.0026610023342072964,
-                                "statement": 0.0026511535979807377,
-                                "yes_no_question": 0.002140837023034692
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
                             }
                         ],
                         "ner": [
@@ -195,7 +168,7 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "Tell me weather."
+                                "hi."
                             ]
                         },
                         "fact_retrieval": {
@@ -203,7 +176,7 @@
                             "topic_facts": []
                         },
                         "kbqa": {
-                            "answer": "Not Found",
+                            "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
@@ -220,34 +193,18 @@
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "Sen. Lindsey Graham Lindsey Olin GrahamOvernight Defense & National Security — Milley becomes lightning rod Joint Chiefs Chairman Milley becomes lightning rod on right GOP senators unveil bill designating Taliban as terrorist organization MORE (R-SC)... [2733 chars]",
-                                    "description": "Sen. Lindsey Graham (R-SC) said he expects to see law enforcement take a zero-tolerance approach in response to any violent behavior during a right-wing rally slated for Washington, D.C., this weekend.",
-                                    "image": "https://thehill.com/sites/default/files/grahamlindsey_060821gn3_lead.jpg",
-                                    "publishedAt": "2021-09-16T12:50:46Z",
+                                    "content": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours. The companies also will not be allowed to provide services to users who haven't logged in with real-n... [3065 chars]",
+                                    "description": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106924433-GettyImages-1234392254.jpg?v=1630329277",
+                                    "publishedAt": "2021-08-30T13:52:58Z",
                                     "source": {
-                                        "name": "The Hill",
-                                        "url": "https://thehill.com"
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
                                     },
-                                    "title": "Lindsey Graham: Police need 'to take a firm line' with Sept. 18 rally attendees",
-                                    "url": "https://thehill.com/homenews/senate/572539-lindsey-graham-police-need-to-take-a-firm-line-with-sept-18-rally-attendees"
+                                    "title": "China to ban kids from playing online games for more than three hours per week",
+                                    "url": "https://www.cnbc.com/2021/08/30/china-to-ban-kids-from-playing-online-games-for-more-than-three-hours-per-week.html"
                                 },
                                 "which": "all"
-                            },
-                            {
-                                "entity": "weather",
-                                "news": {
-                                    "content": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.\nThe agriculture ministry on Tuesday said that farms had sown 356,040 hectares of mostly winter wheat for the 2022 ... [907 chars]",
-                                    "description": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.",
-                                    "image": "https://www.agriculture.com/sites/all/themes/custom/sfg/favicon.ico",
-                                    "publishedAt": "2021-09-16T12:21:10Z",
-                                    "source": {
-                                        "name": "Successful Farming",
-                                        "url": "https://www.agriculture.com"
-                                    },
-                                    "title": "Conditions favour Ukrainian winter grain sowing, say forecasters",
-                                    "url": "https://www.agriculture.com/markets/newswire/conditions-favour-ukrainian-winter-grain-sowing-say-forecasters"
-                                },
-                                "which": "human"
                             }
                         ]
                     }

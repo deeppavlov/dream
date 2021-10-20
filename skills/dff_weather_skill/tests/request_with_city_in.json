@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "Tell me weather in mockcity.",
+                    "text": "Tell me weather in London.",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "Tell me weather in mockcity.",
+                        "spelling_preprocessing": "Tell me weather in London.",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -19,33 +19,33 @@
                         },
                         "cobot_nounphrases": [
                             "weather",
-                            "mockcity"
+                            "london"
                         ],
                         "factoid_classification": {
-                            "factoid": 0.9995546936988831,
-                            "conversational": 0.0004453235014807433
+                            "factoid": 0.9995535016059875,
+                            "conversational": 0.00044644641457125545
                         },
                         "conceptnet": {
-                            "mockcity": {
+                            "london": {
                                 "Causes": [
-                                    "death",
-                                    "war",
-                                    "riot"
+                                    "poverty",
+                                    "pollution",
+                                    "bad reputation"
                                 ],
                                 "CausesDesire": [
-                                    "fly in sky",
-                                    "fly kite",
-                                    "fly"
+                                    "travel",
+                                    "go to play",
+                                    "see friend"
                                 ],
                                 "HasProperty": [
-                                    "alive",
-                                    "yellow",
-                                    "colorful"
+                                    "expensive",
+                                    "big",
+                                    "very large"
                                 ],
                                 "SymbolOf": [
-                                    "cat",
-                                    "cheese",
-                                    "dog"
+                                    "england",
+                                    "japan",
+                                    "europe"
                                 ]
                             },
                             "weather": {
@@ -73,31 +73,30 @@
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.7454321384429932,
-                                "Information_RequestIntent": 0.9140355587005615
+                                "General_ChatIntent": 0.5464200377464294,
+                                "Information_RequestIntent": 0.9894692897796631
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9663711190223694
+                                "Other": 0.999492883682251
                             },
                             "cobot_topics": {
-                                "Weather_Time": 0.9999995827674866
+                                "SciTech": 0.8844426870346069,
+                                "Weather_Time": 0.9999619722366333
                             },
                             "emotion_classification": {
-                                "anger": 0.537294328212738,
-                                "joy": 0.5190792083740234,
-                                "neutral": 0.9478458166122437
+                                "neutral": 0.9916366934776306
                             },
                             "sentiment_classification": {
-                                "neutral": 0.5779114961624146
+                                "neutral": 0.6845933198928833
                             },
                             "toxic_classification": {
-                                "insult": 0.0033301115036010742
+                                "toxic": 0.0027963221073150635
                             }
                         },
                         "sentseg": {
-                            "punct_sent": "Tell me weather in mockcity.",
+                            "punct_sent": "Tell me weather in London.",
                             "segments": [
-                                "Tell me weather in mockcity."
+                                "Tell me weather in London."
                             ]
                         },
                         "topic_recommendation": [
@@ -159,7 +158,7 @@
                                 "detected": 0
                             },
                             "weather_forecast_intent": {
-                                "confidence": 0.9999998807907104,
+                                "confidence": 0.9999524354934692,
                                 "detected": 1
                             },
                             "what_are_you_talking_about": {
@@ -197,19 +196,19 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0017684150952845812,
-                                "command": 0.9672186374664307,
-                                "comment": 0.001179907820187509,
-                                "complaint": 0.0030030158814042807,
-                                "dev_command": 0.010861510410904884,
-                                "neg_answer": 0.0012507113860920072,
-                                "open_question_factual": 0.0020962820854038,
-                                "open_question_opinion": 0.002080917125567794,
-                                "opinion": 0.00233007431961596,
-                                "other_answers": 0.000710063090082258,
-                                "pos_answer": 0.002069666516035795,
-                                "statement": 0.0030088210478425026,
-                                "yes_no_question": 0.0024220345076173544
+                                "appreciation": 0.001907534315250814,
+                                "command": 0.9671372175216675,
+                                "comment": 0.001312284148298204,
+                                "complaint": 0.003782265353947878,
+                                "dev_command": 0.010640330612659454,
+                                "neg_answer": 0.0012577178422361612,
+                                "open_question_factual": 0.0021177600137889385,
+                                "open_question_opinion": 0.0020612895023077726,
+                                "opinion": 0.0018034938257187605,
+                                "other_answers": 0.0007047918625175953,
+                                "pos_answer": 0.0021262646187096834,
+                                "statement": 0.002741969423368573,
+                                "yes_no_question": 0.0024071307852864265
                             }
                         ],
                         "ner": [
@@ -218,19 +217,46 @@
                                     "confidence": 1,
                                     "end_pos": 5,
                                     "start_pos": 4,
-                                    "text": "mockcity",
+                                    "text": "london",
                                     "type": "LOC"
                                 }
                             ]
                         ],
                         "entity_linking": [
                             {
-                                "confidences": [],
-                                "entity_ids": [],
-                                "entity_pages": [],
-                                "entity_pages_titles": [],
-                                "entity_substr": "mockcity",
-                                "tokens_match_conf": []
+                                "confidences": [
+                                    0.9916341304779053,
+                                    0.6478580832481384,
+                                    0.032098039984703064,
+                                    0.028500759974122047,
+                                    0.0167678389698267
+                                ],
+                                "entity_ids": [
+                                    "Q84",
+                                    "Q92561",
+                                    "Q6669761",
+                                    "Q1749384",
+                                    "Q6669754"
+                                ],
+                                "entity_pages": [
+                                    "London is the capital and largest city of England and the United Kingdom. The city stands on the River Thames in the south-east of England, at the head of its estuary leading to the North Sea. London has been a major settlement for two millennia. Londinium was founded by the Romans. The City of London, Londons ancient core and financial centre − an area of just and colloquially known as the Square Mile − retains boundaries that closely follow its medieval limits. The adjacent City of Westminster has for centuries been the location of much of the national government. Thirty-one additional boroughs north and south of the river also comprise modern London. London is governed by the mayor of London and the London Assembly.",
+                                    "London (pronounced ) is a city in southwestern Ontario, Canada, along the Quebec City–Windsor Corridor. The city had a population of 383,822 according to the 2016 Canadian census. London is at the confluence of the Thames River, approximately from both Toronto and Detroit; and about from Buffalo, New York. The city of London is a separated municipality, politically separate from Middlesex County, though it remains the county seat."
+                                ],
+                                "entity_pages_titles": [
+                                    "London",
+                                    "London, Ontario",
+                                    "London (2005 Indian film)",
+                                    "London (2005 American film)",
+                                    "London (1926 film)"
+                                ],
+                                "entity_substr": "london",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
                             }
                         ],
                         "sentrewrite": {
@@ -479,22 +505,33 @@
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "Sen. Lindsey Graham Lindsey Olin GrahamOvernight Defense & National Security — Milley becomes lightning rod Joint Chiefs Chairman Milley becomes lightning rod on right GOP senators unveil bill designating Taliban as terrorist organization MORE (R-SC)... [2733 chars]",
-                                    "description": "Sen. Lindsey Graham (R-SC) said he expects to see law enforcement take a zero-tolerance approach in response to any violent behavior during a right-wing rally slated for Washington, D.C., this weekend.",
-                                    "image": "https://thehill.com/sites/default/files/grahamlindsey_060821gn3_lead.jpg",
-                                    "publishedAt": "2021-09-16T12:50:46Z",
+                                    "content": "The NFL has named Kansas City Chiefs quarterback Patrick Mahomes as its AFC offensive player of the week for Week 1 of the 2021 NFL season.\nAFC Players of the Week! (Week 1) pic.twitter.com/wstlvYBhY1 — NFL (@NFL) September 15, 2021\nMahomes went 27 o... [716 chars]",
+                                    "description": "The NFL has named Kansas City Chiefs quarterback Patrick Mahomes as its AFC offensive player of the week for Week 1 of the 2021 NFL season. AFC Players of the Week!",
+                                    "image": "https://cdn.vox-cdn.com/thumbor/OjWx6dE177hsq891Hz5e0I_h2O4=/0x0:6521x3414/fit-in/1200x630/cdn.vox-cdn.com/uploads/chorus_asset/file/22852317/1339924074.jpg",
+                                    "publishedAt": "2021-09-15T13:15:59Z",
                                     "source": {
-                                        "name": "The Hill",
-                                        "url": "https://thehill.com"
+                                        "name": "Arrowhead Pride",
+                                        "url": "https://www.arrowheadpride.com"
                                     },
-                                    "title": "Lindsey Graham: Police need 'to take a firm line' with Sept. 18 rally attendees",
-                                    "url": "https://thehill.com/homenews/senate/572539-lindsey-graham-police-need-to-take-a-firm-line-with-sept-18-rally-attendees"
+                                    "title": "Patrick Mahomes wins NFL’s Week 1 AFC offensive player of the week",
+                                    "url": "https://www.arrowheadpride.com/2021/9/15/22675332/patrick-mahomes-wins-nfls-week-1-afc-offensive-player-of-the-week-passing-joe-montana-hall-of-fame"
                                 },
                                 "which": "all"
                             },
                             {
-                                "entity": "mockcity",
-                                "news": {},
+                                "entity": "london",
+                                "news": {
+                                    "content": "LONDON, Sept 15 (Reuters) - Environmental campaigners blocked parts of the M25 London orbital motorway on Wednesday, causing major disruption to some rush hour traffic around the British capital in their second such protest this week.\nInsulate Britai... [1880 chars]",
+                                    "description": "LONDON, Sept 15 (Reuters) - Environmental campaigners blocked parts of the M25 London orbital motorway on Wednesday, causing major disruption to some rush hour traffic around the British capital in their second such protest this week.",
+                                    "image": "https://www.reuters.com/pf/resources/images/reuters/reuters-default.png?d=52",
+                                    "publishedAt": "2021-09-15T04:00:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "Environmental activists block major London orbital motorway again",
+                                    "url": "https://www.reuters.com/world/uk/environmental-activists-block-major-london-orbital-motorway-again-2021-09-15/"
+                                },
                                 "which": "human"
                             }
                         ]
@@ -504,7 +541,7 @@
             "bot_utterances": []
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_weather_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [
