@@ -1,7 +1,8 @@
 import logging
-from os import getenv
-import requests
 import random
+from os import getenv
+
+import requests
 
 
 WEATHER_SERVICE_TIMEOUT = 2

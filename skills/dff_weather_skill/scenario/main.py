@@ -1,6 +1,6 @@
 import dff.conditions as cnd
 from dff.core import Actor
-from dff.core.keywords import GLOBAL_TRANSITIONS, GRAPH, PROCESSING, RESPONSE, TRANSITIONS
+from dff.core.keywords import GRAPH, PROCESSING, RESPONSE, TRANSITIONS
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
