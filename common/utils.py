@@ -519,7 +519,10 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+        if model_name == "toxic_classification" and "factoid" not in answer_probs:  # old style
+            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+        else:
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -567,7 +570,10 @@ def _get_plain_annotations(annotated_utterance, model_name):
                 answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
         else:
             answer_probs = answer
-            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+            if model_name == "toxic_classification" and "factoid" not in answer_probs:  # old style
+                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+            else:
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         logger.warning(e)
     # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
