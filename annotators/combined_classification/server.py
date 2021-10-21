@@ -80,7 +80,7 @@ def respond():
 def batch_respond():
     logger.info(request.json)
     sentences = request.json.get("sentences", [" "])
-    sentences_with_hist = request.json.get("sentences_with_history", [" "])   
+    sentences_with_hist = request.json.get("sentences_with_history", [" "])
     answer = get_result(sentences, sentences_with_hist)
     return jsonify([{"batch": answer}])
 
