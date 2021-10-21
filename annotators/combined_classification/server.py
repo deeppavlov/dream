@@ -51,7 +51,7 @@ def get_result(sentences, sentences_with_history):
                 is_toxic = ('toxic' in name and value[i][-1] < 0.5)
                 if is_toxic:  # sum of probs of all toxic classes >0.5
                     value[i][-1] = 0
-                    value[i] = [k / sum(k) for k in value[i]]
+                    value[i] = [k / sum(value[i]) for k in value[i]]
                 for class_, prob in zip(combined_classes[name], value[i]):
                     if prob == max(value[i]):
                         if class_ != 'not_toxic' and name == 'toxic_classification':
