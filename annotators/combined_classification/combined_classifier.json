@@ -1,7 +1,8 @@
 {
     "chainer":{
         "in":[
-            "x"
+            "x",
+            "x_with_history"
         ],
         "pipe":[
             {
@@ -13,6 +14,17 @@
                 ],
                 "out":[
                     "bert_features_x"
+                ]
+            },
+            {
+                "class_name":"torch_transformers_preprocessor",
+                "vocab_file":"bert-base-uncased",
+                "max_seq_length":64,
+                "in":[
+                    "x_with_history"
+                ],
+                "out":[
+                    "bert_features_x_with_history"
                 ]
             },
             {
@@ -62,10 +74,9 @@
                     "factoid":1
                 },
                 "in":[
-                    "bert_features_x",
-                    "bert_features_x",
-                    "bert_features_x",
-                    "bert_features_x",
+                    "bert_features_x_with_history",
+                    "bert_features_x_with_history",
+                    "bert_features_x_with_history",
                     "bert_features_x",
                     "bert_features_x",
                     "bert_features_x",
