@@ -19,7 +19,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 try:
     model = build_model("combined_classifier.json", download=False)
     logger.info("Making test res")
-    test_res = model(["a"])
+    test_res = model(["a", "b"])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -29,16 +29,22 @@ except Exception as e:
 app = Flask(__name__)
 
 
-def get_result(sentences):
+def get_result(sentences, sentences_with_history):
     st_time = time.time()
     res = [{} for _ in sentences]
     if not sentences:
+        logger.exception("Input sentences not received")
         sentences = [" "]
+    if not sentences_with_history:
+        logger.exception("Input sentences with history not received")
+        sentences_with_history = [" "]    
     try:
-        if sentences:
-            res = model(sentences)
+        if sentences and sentences_with_history:
+            res = model(sentences, sentences_with_history)
         else:
-            raise Exception("Empty list of sentences received")
+            raise Exception(f"Empty list of sentences or sentences with history received."
+                            f"Sentences: {sentences} "
+                            f"Sentences with history: {sentences_with_history}")
         ans = [{} for _ in res[0]]
         for name, value in zip(task_names, res):
             for i in range(len(value)):
@@ -65,7 +71,8 @@ def get_result(sentences):
 def respond():
     logger.info(request.json)
     sentences = request.json.get("sentences", [" "])
-    answer = get_result(sentences)
+    sentences_with_hist = request.json.get("sentences_with_history", [" "])
+    answer = get_result(sentences, sentences_with_hist)
     return jsonify(answer)
 
 
@@ -73,7 +80,8 @@ def respond():
 def batch_respond():
     logger.info(request.json)
     sentences = request.json.get("sentences", [" "])
-    answer = get_result(sentences)
+    sentences_with_hist = request.json.get("sentences_with_history", [" "])        
+    answer = get_result(sentences, sentences_with_hist)
     return jsonify([{"batch": answer}])
 
 
