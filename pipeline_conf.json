@@ -1030,7 +1030,7 @@
                     "timeout": 1,
                     "url": "http://combined-classification:8087/batch_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_w_hist",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"
