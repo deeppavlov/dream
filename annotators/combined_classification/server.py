@@ -19,7 +19,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 try:
     model = build_model("combined_classifier.json", download=False)
     logger.info("Making test res")
-    test_res = model(["a", "b"])
+    test_res = model(["a"], ["b"])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
