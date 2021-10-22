@@ -74,6 +74,7 @@
                     "factoid":1
                 },
                 "in":[
+                    "bert_features_x_with_history",                    
                     "bert_features_x_with_history",
                     "bert_features_x_with_history",
                     "bert_features_x_with_history",
