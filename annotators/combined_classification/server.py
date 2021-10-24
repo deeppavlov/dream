@@ -16,16 +16,6 @@ task_names = ['cobot_topics', 'cobot_dialogact_topics', 'cobot_dialogact_intents
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-try:
-    model = build_model("combined_classifier.json", download=False)
-    logger.info("Making test res")
-    test_res = model(["a"], ["b"])
-    logger.info("model loaded, test query processed")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
-
 app = Flask(__name__)
 
 
@@ -45,7 +35,9 @@ def get_result(sentences, sentences_with_history):
             raise Exception(f"Empty list of sentences or sentences with history received."
                             f"Sentences: {sentences} "
                             f"Sentences with history: {sentences_with_history}")
-        ans = [{} for _ in res[0]]
+        ans = [{} for _ in (sentences)]
+        logger.info(ans)
+        logger.info(res)
         for name, value in zip(task_names, res):
             for i in range(len(value)):
                 is_toxic = ('toxic' in name and value[i][-1] < 0.5)
@@ -56,7 +48,7 @@ def get_result(sentences, sentences_with_history):
                     if prob == max(value[i]):
                         if class_ != 'not_toxic' and name == 'toxic_classification':
                             prob = 1
-                        ans[i][name] = {class_: float(prob)}
+                        ans[i][name] = ({class_: float(prob)})
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -66,6 +58,16 @@ def get_result(sentences, sentences_with_history):
     logger.info(ans)
     return ans
 
+
+try:
+    model = build_model("combined_classifier.json", download=False)
+    logger.info("Making test res")
+    test_res = get_result(["a"], ["a"])
+    logger.info("model loaded, test query processed")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
 
 @app.route("/model", methods=["POST"])
 def respond():
