@@ -1,3 +1,4 @@
+from __future__ import build_model
 import logging
 import os
 import time
@@ -17,6 +18,17 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 app = Flask(__name__)
+
+
+try:
+    model = build_model("combined_classifier.json", download=False)
+    logger.info("Making test res")
+    test_res = get_result(["a"], ["a"])
+    logger.info("model loaded, test query processed")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
 
 
 def get_result(sentences, sentences_with_history):
@@ -58,16 +70,6 @@ def get_result(sentences, sentences_with_history):
     logger.info(ans)
     return ans
 
-
-try:
-    model = build_model("combined_classifier.json", download=False)
-    logger.info("Making test res")
-    test_res = get_result(["a"], ["a"])
-    logger.info("model loaded, test query processed")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
 
 @app.route("/model", methods=["POST"])
 def respond():
