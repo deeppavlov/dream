@@ -111,8 +111,6 @@ services:
     restart: unless-stopped
   short-story-skill:
     restart: unless-stopped
-  coronavirus-skill:
-    restart: unless-stopped
   small-talk-skill:
     restart: unless-stopped
   game-cooperative-skill:
@@ -193,4 +191,8 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  dff-coronavirus-skill:
+    restart: unless-stopped
+  dff-template-skill:
+    restart: unless-stopped
 version: '3.7'

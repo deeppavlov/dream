@@ -75,7 +75,6 @@ services:
   dummy-skill-dialog:
   meta-script-skill:
   short-story-skill:
-  coronavirus-skill:
   small-talk-skill:
   game-cooperative-skill:
   program-y-wide:
@@ -126,4 +125,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  dff-coronavirus-skill:
+  dff-template-skill:
 version: '3.7'
