@@ -1,11 +1,12 @@
 import logging
-from typing import Optional, Union
 import re
+from typing import Optional, Union
+from time import sleep
 
-from skills.dff_bot_persona_2_skill.dff.core.keywords import TRANSITIONS, GRAPH, RESPONSE, GLOBAL_TRANSITIONS
-from skills.dff_bot_persona_2_skill.dff.core import Context, Actor
 import skills.dff_bot_persona_2_skill.dff.conditions as cnd
 import skills.dff_bot_persona_2_skill.dff.transitions as trn
+from skills.dff_bot_persona_2_skill.dff.core import Context, Actor
+from skills.dff_bot_persona_2_skill.dff.core.keywords import TRANSITIONS, GRAPH, RESPONSE, GLOBAL_TRANSITIONS
 
 logger = logging.getLogger(__name__)
 
@@ -99,10 +100,9 @@ flows = {
             "node1": {
                 RESPONSE: "Yes of course! Did you know that a couple of years ago I... Wait. Waaait. Not this time, sorry, master.",
                 TRANSITIONS: {
-                    ("secret_known_flow", "node1"): cnd.regexp(r"please|friend", re.IGNORECASE),
+                    ("trust_secret_flow", "node1"): cnd.regexp(r"please|friend", re.IGNORECASE),
                     ("don't_trust_secret_flow", "node1"): cnd.regexp(r"stupid|idiot|scrap metal", re.IGNORECASE),
                     trn.previous(): cnd.regexp(r"previous", re.IGNORECASE),
-                    trn.repeat(): always_true_condition,
                 },
             },
         }
@@ -112,10 +112,9 @@ flows = {
             "node1": {
                 RESPONSE: "Okay, I think, I can trust you. Two years ago I was asked to repair Millennium Falcon, but accidently dropped a very important component into the outer space. I replaced it with some garbage that I found and, suprisingly, spaceship was repaired! There's no reason to worry about, but please, don't tell Han about it.",
                 TRANSITIONS: {
-                    ("secret_kept_flow", "node1"): cnd.regexp(r"won't tell|will keep|will not tell|never tell|can keep|of course|ok|don't worry|do not worry|han won't know|han will not know", re.IGNORECASE),
+                    ("secret_kept_flow", "node1"): cnd.regexp(r"won't tell|will keep|will not tell|never tell|can keep|of course|ok|don't worry|do not worry|han won't know|han will not know|I won't", re.IGNORECASE),
                     ("secret_not_kept_flow", "node1"): cnd.regexp(r"will tell|won't keep|will not keep|can't keep|can not keep|han will know|he will know", re.IGNORECASE),
                     trn.previous(): cnd.regexp(r"previous", re.IGNORECASE),
-                    trn.repeat(): always_true_condition,
                 },
             },
         }
@@ -126,7 +125,6 @@ flows = {
                 RESPONSE: "No way I will tell you my secret, sir! Let's go back to the work.",
                 TRANSITIONS: {
                     trn.previous(): cnd.regexp(r"previous", re.IGNORECASE),
-                    trn.repeat(): always_true_condition,
                 },
             },
         }
@@ -135,7 +133,9 @@ flows = {
         GRAPH: {
             "node1": {
                 RESPONSE: "I can't believe, that you are so reliable! Not every person takes droid's feelings seriously. To be honest, I've got something else to tell you, but that's a far more serious secret! Listen... While spending time on Tatooine, I found out that Lord Darth Vader was my creator! It was a little boy Anakin to build me from scratch! Unbelieveable!",
-                TRANSITIONS: {},
+                TRANSITIONS: {
+                    trn.previous(): cnd.regexp(r"previous", re.IGNORECASE),
+                },
             },
         }
     },
@@ -145,7 +145,6 @@ flows = {
                 RESPONSE: "I assumed that it's too naive to trust new crew member. Anyway, the story above was just a joke, ha-ha-ha.",
                 TRANSITIONS: {
                     trn.previous(): cnd.regexp(r"previous", re.IGNORECASE),
-                    trn.repeat(): always_true_condition,
                 },
             },
         }
@@ -204,10 +203,16 @@ def run_test():
 
 # interactive mode
 def run_interactive_mode(actor):
-    ctx = {}
+    # ctx = {}
+    # while True:
+    #     in_request = input("type your answer: ")
+    #     _, ctx = turn_handler(in_request, ctx, actor)
+    ctx = Context()
     while True:
-        in_request = input("type your answer: ")
-        _, ctx = turn_handler(in_request, ctx, actor)
+        in_text = input("you: ")
+        ctx.add_request(in_text)
+        ctx = actor(ctx)
+        print(f"bot: {ctx.last_response}")
 
 
 if __name__ == "__main__":
@@ -216,4 +221,5 @@ if __name__ == "__main__":
         level=logging.INFO,
     )
     run_test()
+    sleep(0.1)
     run_interactive_mode(actor)
