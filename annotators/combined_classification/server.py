@@ -82,8 +82,9 @@ def respond():
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
     logger.info(request.json)
-    sentences = request.json.get("sentences", [" "])
-    sentences_with_hist = request.json.get("sentences_with_history", sentences)
+    utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
+    sentences_with_hist = [' [SEP] '.join(s) for s in utterances_with_histories]
+    sentences = [s[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist)
     return jsonify([{"batch": answer}])
 
