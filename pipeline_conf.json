@@ -388,7 +388,7 @@
             "news_api_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2.5,
                     "url": "http://news-api-annotator:8112/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
