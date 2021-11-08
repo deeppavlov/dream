@@ -77,6 +77,7 @@ class CachedRequestsAPI:
     def _make_request(self, topic, return_list_of_news):
         for ind, api_key in enumerate(self._api_keys):
             try:
+                logger.warning((topic,api_key,return_list_of_news))
                 request_address = self._construct_address(topic, api_key, return_list_of_news)
                 resp = requests.get(url=request_address, timeout=2)
             except Exception as e:
@@ -91,6 +92,7 @@ class CachedRequestsAPI:
                 # Change order of api_keys to use first success next time
                 self._api_keys.rotate(-ind)
                 break
+        logger.warning(resp)
         return resp
 
     def get_new_topic_news(self, topic, return_list_of_news):
