@@ -75,10 +75,14 @@ class CachedRequestsAPI:
         return request_address
 
     def _make_request(self, topic, return_list_of_news):
+        import time
         for ind, api_key in enumerate(self._api_keys):
             try:
+                t = time.time()
                 request_address = self._construct_address(topic, api_key, return_list_of_news)
-                resp = requests.get(url=request_address, timeout=3)
+                resp = requests.get(url=request_address, timeout=7)
+                logger.warning(time.time() - t)
+                logger.warning(request_address)
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
