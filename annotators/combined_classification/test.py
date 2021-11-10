@@ -36,7 +36,8 @@ def main_test():
     for config in configs:
         responses = requests.post(url, json=config).json()
         batch_responses = requests.post(batch_url, json=config).json()
-        assert batch_responses[0]["batch"] == responses, f"Batch responses {batch_responses} not match to responses {responses}"
+        assert batch_responses[0]["batch"] == responses, f"Batch responses {batch_responses} " \
+                                                         f"not match to responses {responses}"
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers"], config["sentences"]):
             predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
