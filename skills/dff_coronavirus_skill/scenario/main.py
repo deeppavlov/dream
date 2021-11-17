@@ -107,6 +107,7 @@ flows = {
             ),
             ("covid_fact", "replied_yes"): cnd.true(),
         },
+        PROCESSING: {"set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE)},
     },
     "simple": {
         "quarantine_end": {
@@ -117,7 +118,6 @@ flows = {
         "uninteresting_topic": {RESPONSE: "", PROCESSING: {"set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE)}},
         "bot_has_covid": {
             RESPONSE: "As a socialbot, I don't have coronavirus. I hope you won't have it either.",
-            PROCESSING: {"set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE)},
             # offer_more should be here by original idea, but it's useless due default function arguments
             # in legacy version of code (see coronavirus_skill.scenario: 554 and 375)
         },
@@ -126,7 +126,6 @@ flows = {
             "of course, if your doctor does not mind against using them. "
             "I can't say the same about getting infected, however, "
             "so vaccines are necessary to prevent people from that..",
-            PROCESSING: {"set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE)},
         },
         "user_feel_emotion": {
             RESPONSE: rsp.choice(
@@ -143,7 +142,6 @@ flows = {
             RESPONSE: "As I am not your family doctor, "
             "my knowledge about your resilience to coronavirus is limited. "
             "Please, check the CDC website for more information.",
-            PROCESSING: {"set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE)},
         },
         "covid_symptoms": {
             RESPONSE: "According to the CDC website, "
@@ -154,8 +152,8 @@ flows = {
             "bluish lips or face. If you develop any of these signs, "
             "get a medical attention.",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(USER_FEEL_EMOTION_CONFIDENCE),
-                # "offer_more": loc_prs.offer_more,
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
         },
@@ -165,7 +163,7 @@ flows = {
             "information about the ongoing work on the cure.",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
-                # "offer_more": loc_prs.offer_more,
+                "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
         },
@@ -176,7 +174,7 @@ flows = {
             "website for more info.",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                # "offer_more": loc_prs.offer_more,
+                "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
         },
@@ -203,7 +201,7 @@ flows = {
             "developing more serious complications from COVID-19 illness.",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
-                # "offer_more": loc_prs.offer_more,
+                "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
         },
@@ -213,7 +211,7 @@ flows = {
             # for more details about linking issue
             RESPONSE: loc_rsp.tell_age_risks,
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "detect_age": loc_prs.detect_age,
                 "execute_response": loc_prs.execute_response,
                 "set_flag": loc_prs.set_flag("asked_about_age", True),
