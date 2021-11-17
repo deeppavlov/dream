@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "b580a482-841a-42f8-b6f9-861197cfe047",
-                    "node_labels": {
+                    "id": "56291e5c-aebb-47fe-a96c-6f0457d66b22",
+                    "labels": {
                         "0": [
                             "subject_undetected",
                             "clarify_intention"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "I suppose you are asking about coronavirus. Is it right?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

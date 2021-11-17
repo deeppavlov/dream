@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "f4d95570-f4c1-4918-bb1f-d222620921d7",
-                    "node_labels": {
+                    "id": "46accc37-8822-4267-9c67-af1c9f7b05ee",
+                    "labels": {
                         "0": [
                             "simple",
                             "covid_advice"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "Unfortunately, I am not allowed to give any recommendations about coronavirus. You can check the CDC website for more info. Would you want to learn more?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
