@@ -1024,7 +1024,7 @@
                         "type": "city"
                     }
                 },
-                "node_labels": {
+                "labels": {
                     "0": [
                         "subject_detected",
                         "clarify_intention"
