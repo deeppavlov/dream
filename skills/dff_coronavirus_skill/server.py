@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.logging import ignore_logger
 
+import test_server
 from common.dff.integration.actor import load_ctxs, get_response
 from scenario.main import actor
 
@@ -54,7 +55,7 @@ def handler(requested_data, random_seed=None):
 
 
 try:
-    # test_server.run_test(handler)
+    test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
