@@ -77,6 +77,7 @@ logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 #     t_utils.save_to_test(responses, out_file, indent=4)  # TEST
 
+
 @app.route("/respond", methods=["POST"])
 def respond():
     # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/test_in.json",indent=4)  # TEST
