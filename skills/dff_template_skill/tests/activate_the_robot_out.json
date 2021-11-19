@@ -3,43 +3,42 @@
         "Robot activated. Awaiting your command Mate.",
         0.85,
         {
-            "age_group": "unknown",
-            "dff_shared_state": {
-                "cross_links": {},
-                "cross_states": {}
-            },
             "dff_template_skill_state": {
-                "context": {
-                    "current_index": 0,
-                    "id": "62160483-dca0-45e7-9ad2-f5ae04ce2148",
-                    "misc": {},
-                    "node_labels": {
-                        "0": [
-                            "story_flow",
-                            "start_node"
-                        ]
-                    },
-                    "previous_index": 0,
-                    "requests": {
-                        "0": "ACTIVATE THE ROBOT"
-                    },
-                    "responses": {
-                        "0": "Robot activated. Awaiting your command Mate."
-                    },
-                    "validation": false
-                },
-                "current_turn_dff_suspended": false,
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
                 "history": {
                     "0": [
                         "story_flow",
                         "start_node"
                     ]
                 },
-                "previous_human_utter_index": 0,
-                "shared_memory": {}
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "fc39cbca-3bad-4e39-bb05-14c89c5dd30e",
+                    "labels": {
+                        "0": [
+                            "story_flow",
+                            "start_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "ACTIVATE THE ROBOT"
+                    },
+                    "responses": {
+                        "0": "Robot activated. Awaiting your command Mate."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
             },
-            "disliked_skills": [],
-            "used_links": {}
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
         },
         {},
         {
