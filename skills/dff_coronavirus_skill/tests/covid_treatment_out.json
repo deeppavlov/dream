@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "c2cdd5e6-fbbe-4f0b-a7a8-fa9591d020ec",
-                    "node_labels": {
+                    "id": "3e6e5d62-d1ed-4986-8285-4cd444981eba",
+                    "labels": {
                         "0": [
                             "simple",
                             "covid_treatment"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "There is no cure designed for COVID-19 yet. You can consult with CDC.gov website for detailed information about the ongoing work on the cure. Would you want to learn more?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

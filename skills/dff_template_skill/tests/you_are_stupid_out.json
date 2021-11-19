@@ -3,43 +3,42 @@
         "Could you be more kind to me and talk about something else?",
         0.85,
         {
-            "age_group": "unknown",
-            "dff_shared_state": {
-                "cross_links": {},
-                "cross_states": {}
-            },
             "dff_template_skill_state": {
-                "context": {
-                    "current_index": 0,
-                    "id": "c57f581c-8088-4827-9a47-afb481bd7369",
-                    "misc": {},
-                    "node_labels": {
-                        "0": [
-                            "story_flow",
-                            "start_node"
-                        ]
-                    },
-                    "previous_index": 0,
-                    "requests": {
-                        "0": "You are stupid"
-                    },
-                    "responses": {
-                        "0": "Could you be more kind to me and talk about something else?"
-                    },
-                    "validation": false
-                },
-                "current_turn_dff_suspended": false,
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
                 "history": {
                     "0": [
                         "story_flow",
                         "start_node"
                     ]
                 },
-                "previous_human_utter_index": 0,
-                "shared_memory": {}
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "58ea4369-75b1-4012-9995-32ae360f2d12",
+                    "labels": {
+                        "0": [
+                            "story_flow",
+                            "start_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "You are stupid"
+                    },
+                    "responses": {
+                        "0": "Could you be more kind to me and talk about something else?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
             },
-            "disliked_skills": [],
-            "used_links": {}
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
         },
         {},
         {

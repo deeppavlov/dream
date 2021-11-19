@@ -15,7 +15,7 @@ def compare_structs(ground_truth, hypothesis, stack_track="hypothesis", ignored_
             False,
             f"path :: {stack_track} :: ground_truth type {type(ground_truth)} != hypothesis type {type(hypothesis)}",
         )
-    if isinstance(ground_truth, dict):
+    elif isinstance(ground_truth, dict):
         if set(ground_truth.keys()).symmetric_difference(set(hypothesis.keys())):
             return (
                 False,
@@ -32,7 +32,7 @@ def compare_structs(ground_truth, hypothesis, stack_track="hypothesis", ignored_
                 )
                 if not is_equal_flag:
                     return is_equal_flag, msg
-    if isinstance(ground_truth, list):
+    elif isinstance(ground_truth, list):
         if len(ground_truth) != len(hypothesis):
             return (
                 False,
@@ -48,7 +48,7 @@ def compare_structs(ground_truth, hypothesis, stack_track="hypothesis", ignored_
             )
             if not is_equal_flag:
                 return is_equal_flag, msg
-    if ground_truth != hypothesis:
+    elif ground_truth != hypothesis:
         return False, f"path :: {stack_track} :: `{ground_truth}` != `{hypothesis}`"
     return True, ""
 
