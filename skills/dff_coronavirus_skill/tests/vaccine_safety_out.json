@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "a631d914-96b8-46ee-8091-2cf9249aca37",
-                    "node_labels": {
+                    "id": "1f63e8d5-3939-489b-93bc-efda7a58fd6f",
+                    "labels": {
                         "0": [
                             "simple",
                             "vaccine_safety"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "All CDC-approved vaccines are safe enough for you - of course, if your doctor does not mind against using them. I can't say the same about getting infected, however, so vaccines are necessary to prevent people from that.."
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
