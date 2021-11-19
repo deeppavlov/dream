@@ -121,8 +121,6 @@ services:
     restart: unless-stopped
   news-api-annotator:
     restart: unless-stopped
-  factoid-qa:
-    restart: unless-stopped
   entity-linking:
     restart: unless-stopped
     volumes:
