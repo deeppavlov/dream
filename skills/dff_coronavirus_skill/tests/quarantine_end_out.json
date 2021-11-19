@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "bf317dfb-5f61-40e8-823c-faf30d3e709a",
-                    "node_labels": {
+                    "id": "6eed00a2-d2ae-4d73-9fe1-e445453db9cc",
+                    "labels": {
                         "0": [
                             "simple",
                             "quarantine_end"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "Although most American states are easing the restrictions, the Coronavirus pandemics in the majority of the states hasn't been reached yet. If you want to help ending it faster, please continue social distancing as much as you can."
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

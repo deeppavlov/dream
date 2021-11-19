@@ -1126,6 +1126,7 @@ services:
           memory: 512M
         reservations:
           memory: 512M
+ 
   entity-detection:
     env_file: [.env]
     build:

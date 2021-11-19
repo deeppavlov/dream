@@ -23,7 +23,7 @@ def load_ctxs(requested_data):
     dialog_batch = requested_data.get("dialog_batch", [])
     human_utter_index_batch = requested_data.get("human_utter_index_batch", [0] * len(dialog_batch))
     state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
-    dff_shared_state_batch = requested_data.get(f"dff_shared_state_batch", [{}] * len(dialog_batch))
+    dff_shared_state_batch = requested_data.get("dff_shared_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     age_group_batch = requested_data.get("age_group_batch", [""] * len(dialog_batch))
@@ -83,9 +83,6 @@ def get_ctx(
     context = state.get("context", {})
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
     current_turn_dff_suspended = state.get("current_turn_dff_suspended", False)
-    # interrupted_flag = (human_utter_index - previous_human_utter_index) != 1 and not clarification_request_flag
-    # if context and (not interrupted_flag or current_turn_dff_suspended):
-    #     context = {}
     agent = {
         "previous_human_utter_index": previous_human_utter_index,
         "human_utter_index": human_utter_index,
@@ -119,7 +116,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     disliked_skills = agent["disliked_skills"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
     response_parts = agent.get("response_parts", [])
-    history[str(human_utter_index)] = list(ctx.node_labels.values())[-1]
+    history[str(human_utter_index)] = list(ctx.labels.values())[-1]
     state = {
         "shared_memory": agent["shared_memory"],
         "previous_human_utter_index": human_utter_index,
@@ -129,7 +126,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     confidence = ctx.misc["agent"]["response"].get("confidence", 0.85)
     can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
-    ctx.clear(2, ["requests", "responses", "node_labels"])
+    ctx.clear(2, ["requests", "responses", "labels"])
     del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
 
