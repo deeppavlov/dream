@@ -606,7 +606,7 @@ def _get_etc_model(annotated_utterance, model_name, probs, default_probs, defaul
         else:
             answer_probs, answer_labels = default_probs, default_labels
     except Exception as e:
-        logger.warning(e)
+        logger.exception(e, stack_info=True)
         answer_probs, answer_labels = default_probs, default_labels
     if probs:  # return probs
         return answer_probs
