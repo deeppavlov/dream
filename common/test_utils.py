@@ -15,7 +15,7 @@ def compare_structs(ground_truth, hypothesis, stack_track="hypothesis", ignored_
             False,
             f"path :: {stack_track} :: ground_truth type {type(ground_truth)} != hypothesis type {type(hypothesis)}",
         )
-    if isinstance(ground_truth, dict):
+    elif isinstance(ground_truth, dict):
         if set(ground_truth.keys()).symmetric_difference(set(hypothesis.keys())):
             return (
                 False,
