@@ -99,8 +99,8 @@
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "MODEL_PATH": "{MODELS_PATH}/ner_lcquad_detect_entities",
-      "NER_PATH": "{MODELS_PATH}/ner_lcquad_detect_entities",
+      "MODEL_PATH": "{MODELS_PATH}/ner_lcquad_ent_and_type",
+      "NER_PATH": "{MODELS_PATH}/ner_lcquad_ent_and_type",
       "BERT_PATH": "{DOWNLOADS_PATH}/bert_models/uncased_L-6_H-512_A-8",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
     },
