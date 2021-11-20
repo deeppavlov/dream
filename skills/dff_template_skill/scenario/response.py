@@ -23,7 +23,7 @@ with open(
 
 def get_previous_node(ctx: Context) -> str:
     try:
-        return [node_tuple[1] for node_tuple in ctx.node_labels.values()][-2]
+        return [node_tuple[1] for node_tuple in ctx.labels.values()][-2]
     except Exception:
         return "start_node"
 
