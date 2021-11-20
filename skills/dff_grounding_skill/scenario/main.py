@@ -1,8 +1,8 @@
 import logging
 
-from dff.core.keywords import GRAPH, RESPONSE, TRANSITIONS
+from dff.core.keywords import RESPONSE, TRANSITIONS
 from dff.core import Actor
-import dff.transitions as trs
+import dff.labels as lbl
 import dff.conditions as cnd
 
 from .responses import grounding_response
@@ -13,19 +13,17 @@ logger = logging.getLogger(__name__)
 
 flows = {
     "grounding": {
-        GRAPH: {
-            "start_node": {
-                RESPONSE: "",
-                TRANSITIONS: {"grounding_response_node": cnd.true},
-            },
-            "grounding_response_node": {
-                RESPONSE: grounding_response,
-                TRANSITIONS: {trs.repeat(): cnd.true},
-            },
-        }
+        "start_node": {
+            RESPONSE: "",
+            TRANSITIONS: {"grounding_response_node": cnd.true()},
+        },
+        "grounding_response_node": {
+            RESPONSE: grounding_response,
+            TRANSITIONS: {lbl.repeat(): cnd.true()},
+        },
     },
 }
 
 actor = Actor(
-    flows, start_node_label=("grounding", "start_node"), fallback_node_label=("grounding", "grounding_response_node")
+    flows, start_label=("grounding", "start_node"), fallback_node_label=("grounding", "grounding_response_node")
 )

@@ -3,7 +3,7 @@
         [
             "You just told me about star wars, right?",
             "You like to ask interesting questions.",
-            "You have so many interesting questions. I don't even know yes or no."
+            "You have so many interesting questions. I'm not sure about that."
         ],
         [
             1.0,
@@ -32,12 +32,8 @@
                     "current_turn_dff_suspended": false,
                     "context": {
                         "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
-                        "node_labels": {
-                            "1": [
-                                "grounding",
-                                "grounding_response_node"
-                            ],
-                            "2": [
+                        "labels": {
+                            "0": [
                                 "grounding",
                                 "grounding_response_node"
                             ]
@@ -97,13 +93,13 @@
                                     }
                                 ],
                                 [
-                                    "You have so many interesting questions. I don't even know yes or no.",
+                                    "You have so many interesting questions. I'm not sure about that.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
-                                                "I don't even know yes or no."
+                                                "I'm not sure about that."
                                             ]
                                         }
                                     },
@@ -118,17 +114,16 @@
                                 ]
                             ]
                         },
-                        "previous_index": 2,
-                        "current_index": 2,
                         "misc": {
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
-                                    "I don't even know yes or no."
+                                    "I'm not sure about that."
                                 ]
                             }
                         },
-                        "validation": false
+                        "validation": false,
+                        "actor_state": {}
                     }
                 },
                 "dff_shared_state": {
@@ -160,12 +155,8 @@
                     "current_turn_dff_suspended": false,
                     "context": {
                         "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
-                        "node_labels": {
-                            "1": [
-                                "grounding",
-                                "grounding_response_node"
-                            ],
-                            "2": [
+                        "labels": {
+                            "0": [
                                 "grounding",
                                 "grounding_response_node"
                             ]
@@ -225,13 +216,13 @@
                                     }
                                 ],
                                 [
-                                    "You have so many interesting questions. I don't even know yes or no.",
+                                    "You have so many interesting questions. I'm not sure about that.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
-                                                "I don't even know yes or no."
+                                                "I'm not sure about that."
                                             ]
                                         }
                                     },
@@ -246,17 +237,16 @@
                                 ]
                             ]
                         },
-                        "previous_index": 2,
-                        "current_index": 2,
                         "misc": {
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
-                                    "I don't even know yes or no."
+                                    "I'm not sure about that."
                                 ]
                             }
                         },
-                        "validation": false
+                        "validation": false,
+                        "actor_state": {}
                     }
                 },
                 "dff_shared_state": {
@@ -288,12 +278,8 @@
                     "current_turn_dff_suspended": false,
                     "context": {
                         "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
-                        "node_labels": {
-                            "1": [
-                                "grounding",
-                                "grounding_response_node"
-                            ],
-                            "2": [
+                        "labels": {
+                            "0": [
                                 "grounding",
                                 "grounding_response_node"
                             ]
@@ -353,13 +339,13 @@
                                     }
                                 ],
                                 [
-                                    "You have so many interesting questions. I don't even know yes or no.",
+                                    "You have so many interesting questions. I'm not sure about that.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
-                                                "I don't even know yes or no."
+                                                "I'm not sure about that."
                                             ]
                                         }
                                     },
@@ -374,17 +360,16 @@
                                 ]
                             ]
                         },
-                        "previous_index": 2,
-                        "current_index": 2,
                         "misc": {
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
-                                    "I don't even know yes or no."
+                                    "I'm not sure about that."
                                 ]
                             }
                         },
-                        "validation": false
+                        "validation": false,
+                        "actor_state": {}
                     }
                 },
                 "dff_shared_state": {
@@ -397,7 +382,7 @@
                 "grounding_skill": {
                     "used_universal_intent_responses": [
                         "It's been really cool getting to know you better.",
-                        "I don't even know yes or no."
+                        "I'm not sure about that."
                     ]
                 }
             }
