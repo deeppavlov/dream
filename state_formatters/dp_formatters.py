@@ -566,7 +566,8 @@ def fact_random_formatter_dialog(dialog: Dict):
     for entity_info in entity_info_list:
         if "entity_pages" in entity_info and entity_info["entity_pages"]:
             entity_substr_list.append(entity_info["entity_substr"])
-    return [[entity_substr_list]]
+
+    return [{"text": last_human_utt["text"], "entities": entity_substr_list}]
 
 
 def fact_retrieval_formatter_dialog(dialog: Dict):
@@ -721,6 +722,10 @@ def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_grounding_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_grounding_skill")
+
+
+def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_coronavirus_skill")
 
 
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:

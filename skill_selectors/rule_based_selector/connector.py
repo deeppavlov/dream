@@ -115,7 +115,7 @@ class RuleBasedSkillSelectorConnector:
                     bot_uttr.get("text", ""),
                     available_skills=[
                         "news_api_skill",
-                        "coronavirus_skill",
+                        "dff_coronavirus_skill",
                         "dff_funfact_skill",
                         "weather_skill",
                         # "dff_celebrity_skill",
@@ -225,7 +225,7 @@ class RuleBasedSkillSelectorConnector:
                         "weather_skill",
                         "dff_funfact_skill",
                         "dff_travel_skill",
-                        "coronavirus_skill",
+                        "dff_coronavirus_skill",
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
                     ],
@@ -253,9 +253,9 @@ class RuleBasedSkillSelectorConnector:
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
             #  no convert when about coronavirus
-            if "coronavirus_skill" in skills_for_uttr and "convert_reddit" in skills_for_uttr:
+            if "dff_coronavirus_skill" in skills_for_uttr and "convert_reddit" in skills_for_uttr:
                 skills_for_uttr.remove("convert_reddit")
-            if "coronavirus_skill" in skills_for_uttr and "comet_dialog_skill" in skills_for_uttr:
+            if "dff_coronavirus_skill" in skills_for_uttr and "comet_dialog_skill" in skills_for_uttr:
                 skills_for_uttr.remove("comet_dialog_skill")
 
             if len(dialog["utterances"]) > 1:
