@@ -1,0 +1,48 @@
+[
+    [
+        "Although most American states are easing the restrictions, the Coronavirus pandemics in the majority of the states hasn't been reached yet. If you want to help ending it faster, please continue social distancing as much as you can.",
+        0.95,
+        {
+            "dff_coronavirus_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "simple",
+                        "quarantine_end"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "6eed00a2-d2ae-4d73-9fe1-e445453db9cc",
+                    "labels": {
+                        "0": [
+                            "simple",
+                            "quarantine_end"
+                        ]
+                    },
+                    "requests": {
+                        "0": "I am very interested in 1 very specific question. Have you heard that the quarantine will end soon?"
+                    },
+                    "responses": {
+                        "0": "Although most American states are easing the restrictions, the Coronavirus pandemics in the majority of the states hasn't been reached yet. If you want to help ending it faster, please continue social distancing as much as you can."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

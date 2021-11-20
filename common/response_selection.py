@@ -2,7 +2,7 @@
 ACTIVE_SKILLS = [
     "book_skill",
     "christmas_new_year_skill",
-    "coronavirus_skill",
+    "dff_coronavirus_skill",
     "dummy_skill_dialog",
     "emotion_skill",
     "game_cooperative_skill",
