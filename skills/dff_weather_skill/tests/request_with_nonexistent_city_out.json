@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
-                    "node_labels": {
+                    "id": "a62522d9-35e3-435d-a618-0cac0723698e",
+                    "labels": {
                         "0": [
                             "weather",
                             "forecast"
@@ -25,12 +25,11 @@
                         "0": "Tell me weather in mockcity."
                     },
                     "responses": {
-                        "0": "Currently r in mockcity. But I would guess... Potato storm may wonder you. . And the temperature may be around 3 degrees Fahrenheit. Would you enjoy it?. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                        "0": "Currently I have problems with getting weather in mockcity. But I would guess... Potato storm may wonder you. . And the temperature may be around 3 degrees Fahrenheit. Would you enjoy it?. What weather do you prefer? Warm, cold, rain, snow, hot?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

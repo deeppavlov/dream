@@ -20,8 +20,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
-                    "node_labels": {
+                    "id": "283ad82d-75b7-4a70-b0cb-c1431a3c72e9",
+                    "labels": {
                         "0": [
                             "weather",
                             "forecast"
@@ -39,10 +39,9 @@
                         "0": "It is broken clouds, temperature is around 71.0 degrees Fahrenheit in London. Wind speed is about 0.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
                         "1": "I prefer cold weather too! Let me guess you like ice-skating?"
                     },
-                    "previous_index": 1,
-                    "current_index": 1,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

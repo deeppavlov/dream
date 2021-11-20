@@ -9,15 +9,13 @@ from scenario.constants import HIGH_CONF, QUESTION_CONF
 
 
 def location_request_processing(
-    node_label: str,
-    node: Node,
     ctx: Context,
     actor: Actor,
     *args,
     **kwargs,
 ) -> Optional[tuple[str, Node]]:
     forecast_intent_processing(ctx, actor)
-    return node_label, node
+    return ctx
 
 
 def forecast_intent_processing(ctx, actor) -> None:

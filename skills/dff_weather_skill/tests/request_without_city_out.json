@@ -14,9 +14,12 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
-                    "node_labels": {
-                        "0": ["weather", "location_request"]
+                    "id": "4b09ed11-601d-4d2c-9530-03f4c9623e6d",
+                    "labels": {
+                        "0": [
+                            "weather",
+                            "location_request"
+                        ]
                     },
                     "requests": {
                         "0": "Tell me weather."
@@ -24,10 +27,9 @@
                     "responses": {
                         "0": "Hmm. Which particular city would you like a weather forecast for?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

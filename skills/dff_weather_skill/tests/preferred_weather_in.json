@@ -830,16 +830,14 @@
     "dff_weather_skill_state_batch": [
         {
             "context": {
-                "current_index": 0,
                 "id": "283ad82d-75b7-4a70-b0cb-c1431a3c72e9",
                 "misc": {},
-                "node_labels": {
+                "labels": {
                     "0": [
                         "weather",
                         "forecast"
                     ]
                 },
-                "previous_index": 0,
                 "requests": {
                     "0": "Tell me weather in London."
                 },

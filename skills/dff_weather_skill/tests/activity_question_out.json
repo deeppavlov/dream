@@ -1,6 +1,6 @@
 [
     [
-        "Society is like a large piece of frozen water; and skating well is the great art of social life. Do you have pets?",
+        "Society is like a large piece of frozen water; and skating well is the great art of social life. Do you like sports?",
         0.999,
         {
             "dff_weather_skill_state": {
@@ -24,8 +24,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
-                    "node_labels": {
+                    "id": "283ad82d-75b7-4a70-b0cb-c1431a3c72e9",
+                    "labels": {
                         "1": [
                             "weather",
                             "activity_question"
@@ -41,12 +41,11 @@
                     },
                     "responses": {
                         "1": "I prefer cold weather too! Let me guess you like ice-skating?",
-                        "2": "Society is like a large piece of frozen water; and skating well is the great art of social life. Do you have pets?"
+                        "2": "Society is like a large piece of frozen water; and skating well is the great art of social life. Do you like sports?"
                     },
-                    "previous_index": 2,
-                    "current_index": 2,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
@@ -54,8 +53,8 @@
                 "cross_links": {}
             },
             "used_links": {
-                "dff_animals_skill": [
-                    "Do you have pets?"
+                "dff_sport_skill": [
+                    "Do you like sports?"
                 ]
             },
             "age_group": "unknown",

@@ -70,7 +70,7 @@ services:
   asr:
   misheard-asr:
   book-skill:
-  weather-skill:
+  dff-weather-skill:
   emotion-skill:
   dummy-skill-dialog:
   meta-script-skill:

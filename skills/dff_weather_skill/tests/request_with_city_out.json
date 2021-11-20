@@ -1,6 +1,6 @@
 [
     [
-        "It is scattered clouds, temperature is around 67.6 Fahrenheits in London. Wind speed is about 1.0 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
+        "It is overcast clouds, temperature is around 49.7 degrees Fahrenheit in London. Wind speed is about 2.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
         1.0,
         {
             "dff_weather_skill_state": {
@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "fc82c8b9-1a70-4a64-bfd5-d37142d6d52a",
-                    "node_labels": {
+                    "id": "f159ea4c-6a5b-4579-a3ce-b92f32d876b4",
+                    "labels": {
                         "0": [
                             "weather",
                             "forecast"
@@ -25,12 +25,11 @@
                         "0": "Tell me weather in London."
                     },
                     "responses": {
-                        "0": "It is scattered clouds, temperature is around 67.6 Fahrenheits in London. Wind speed is about 1.0 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                        "0": "It is overcast clouds, temperature is around 49.7 degrees Fahrenheit in London. Wind speed is about 2.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
