@@ -6,7 +6,7 @@ import requests
 
 
 WEATHER_SERVICE_TIMEOUT = 2
-OPENWEATHERMAP_API_KEY = "26c0960469a22d7218b4df57c8acd3de"  # getenv("OPENWEATHERMAP_API_KEY")
+OPENWEATHERMAP_API_KEY = getenv("OPENWEATHERMAP_API_KEY")
 if OPENWEATHERMAP_API_KEY is None:
     raise RuntimeError("OPENWEATHERMAP_API_KEY environment variable is not set")
 OPENWEATHERMAP_URL = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s"
