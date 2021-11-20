@@ -566,7 +566,8 @@ def fact_random_formatter_dialog(dialog: Dict):
     for entity_info in entity_info_list:
         if "entity_pages" in entity_info and entity_info["entity_pages"]:
             entity_substr_list.append(entity_info["entity_substr"])
-    return [[entity_substr_list]]
+
+    return [{"text": last_human_utt["text"], "entities": entity_substr_list}]
 
 
 def fact_retrieval_formatter_dialog(dialog: Dict):

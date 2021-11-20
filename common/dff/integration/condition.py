@@ -21,44 +21,44 @@ wnl = WordNetLemmatizer()
 def was_clarification_request(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"]["clarification_request_flag"]
     logger.debug(f"was_clarification_request = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_opinion_request(ctx: Context, actor: Actor) -> bool:
     flag = common_utils.is_opinion_request(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
     logger.debug(f"is_opinion_request = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_opinion_expression(ctx: Context, actor: Actor) -> bool:
     flag = common_utils.is_opinion_expression(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
     logger.debug(f"is_opinion_expression = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_previous_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False)
     logger.debug(f"is_previous_turn_dff_suspended = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_current_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
     flag = ctx.misc["agent"].get("current_turn_dff_suspended", False)
     logger.debug(f"is_current_turn_dff_suspended = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_switch_topic(ctx: Context, actor: Actor) -> bool:
     flag = universal_templates.is_switch_topic(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
     logger.debug(f"is_switch_topic = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_question(ctx: Context, actor: Actor) -> bool:
     text = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     flag = common_utils.is_question(text)
     logger.debug(f"is_question = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor) -> bool:
@@ -66,7 +66,7 @@ def is_lets_chat_about_topic_human_initiative(ctx: Context, actor: Actor) -> boo
         int_ctx.get_last_human_utterance(ctx, actor), int_ctx.get_last_bot_utterance(ctx, actor)
     )
     logger.debug(f"is_lets_chat_about_topic_human_initiative = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_lets_chat_about_topic(ctx: Context, actor: Actor) -> bool:
@@ -77,13 +77,13 @@ def is_lets_chat_about_topic(ctx: Context, actor: Actor) -> bool:
     is_bot_initiative = bool(re.search(universal_templates.COMPILE_WHAT_TO_TALK_ABOUT, last_bot_uttr_text))
     flag = flag or (is_bot_initiative and not common_utils.is_no(last_human_uttr))
     logger.debug(f"is_lets_chat_about_topic = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_begin_of_dialog(ctx: Context, actor: Actor, begin_dialog_n=10) -> bool:
     flag = int_ctx.get_human_utter_index(ctx, actor) < begin_dialog_n
     logger.debug(f"is_begin_of_dialog = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_interrupted(ctx: Context, actor: Actor) -> bool:
@@ -91,7 +91,7 @@ def is_interrupted(ctx: Context, actor: Actor) -> bool:
         int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
     ) != 1 and not was_clarification_request(ctx, actor)
     logger.debug(f"is_interrupted = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_long_interrupted(ctx: Context, actor: Actor, how_long=3) -> bool:
@@ -99,14 +99,14 @@ def is_long_interrupted(ctx: Context, actor: Actor, how_long=3) -> bool:
         int_ctx.get_human_utter_index(ctx, actor) - int_ctx.get_previous_human_utter_index(ctx, actor)
     ) > how_long and not was_clarification_request(ctx, actor)
     logger.debug(f"is_long_interrupted = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_new_human_entity(ctx: Context, actor: Actor) -> bool:
     new_entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
     flag = bool(new_entities)
     logger.debug(f"is_new_human_entity = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_last_state(ctx: Context, actor: Actor, state) -> bool:
@@ -117,13 +117,13 @@ def is_last_state(ctx: Context, actor: Actor, state) -> bool:
         last_state = history_sorted[-1][1]
         if last_state == state:
             flag = True
-    return flag
+    return bool(flag)
 
 
 def is_first_time_of_state(ctx: Context, actor: Actor, state) -> bool:
     flag = state not in list(ctx.misc["agent"]["history"].values())
     logger.debug(f"is_first_time_of_state {state} = {flag}")
-    return flag
+    return bool(flag)
 
 
 def if_was_prev_active(ctx: Context, actor: Actor) -> bool:
@@ -132,7 +132,7 @@ def if_was_prev_active(ctx: Context, actor: Actor) -> bool:
     human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
     if human_uttr_index in skill_uttr_indices:
         flag = True
-    return flag
+    return bool(flag)
 
 
 def is_plural(word) -> bool:
@@ -144,7 +144,7 @@ def is_plural(word) -> bool:
 def is_first_our_response(ctx: Context, actor: Actor) -> bool:
     flag = len(list(ctx.misc["agent"]["history"].values())) == 0
     logger.debug(f"is_first_our_response = {flag}")
-    return flag
+    return bool(flag)
 
 
 def is_no_human_abandon(ctx: Context, actor: Actor) -> bool:
@@ -204,19 +204,19 @@ def no_requests(ctx: Context, actor: Actor) -> bool:
 def is_yes_vars(ctx: Context, actor: Actor) -> bool:
     flag = True
     flag = flag and common_utils.is_yes(int_ctx.get_last_human_utterance(ctx, actor))
-    return flag
+    return bool(flag)
 
 
 def is_no_vars(ctx: Context, actor: Actor) -> bool:
     flag = True
     flag = flag and common_utils.is_no(int_ctx.get_last_human_utterance(ctx, actor))
-    return flag
+    return bool(flag)
 
 
 def is_do_not_know_vars(ctx: Context, actor: Actor) -> bool:
     flag = True
     flag = flag and common_utils.is_donot_know(int_ctx.get_last_human_utterance(ctx, actor))
-    return flag
+    return bool(flag)
 
 
 def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:

@@ -571,7 +571,7 @@
                         2
                     ]
                 },
-                "node_labels": {
+                "labels": {
                     "0": [
                         "covid_fact",
                         "replied_yes"

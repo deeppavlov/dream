@@ -12,7 +12,7 @@ from . import response as loc_rsp
 logger = logging.getLogger(__name__)
 
 flows = {
-    GLOBAL: {TRANSITIONS: {"fallback_node": cnd.true()}},
+    GLOBAL: {TRANSITIONS: {("story_flow", "fallback_node"): cnd.true()}},
     "story_flow": {
         "start_node": {
             RESPONSE: "",

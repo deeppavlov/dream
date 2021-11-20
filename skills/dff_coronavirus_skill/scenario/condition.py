@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 def emotion_detected(name="fear", threshold=0.8):
     def emotion_detected_handler(ctx: Context, actor: Actor, *args, **kwargs):
-        emotion_probs = get_emotions(ctx.last_request, probs=True)
+        annotated_utterance = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+        emotion_probs = get_emotions(annotated_utterance, probs=True)
         return emotion_probs.get(name, 0) >= threshold
 
     return emotion_detected_handler
@@ -28,7 +29,7 @@ def covid_facts_exhausted(ctx: Context, actor: Actor, *args, **kwargs):
 
 def check_flag(flag: str, default: bool = False):
     def check_flag_handler(ctx: Context, actor: Actor, *args, **kwargs):
-        return ctx.misc.get(flag, default)
+        return bool(ctx.misc.get(flag, default))
 
     return check_flag_handler
 
