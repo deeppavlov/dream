@@ -23,7 +23,7 @@ parser.add_argument("--save_dir", help="directory to save labeled data")
 parser.add_argument("--mode", help="add_annotations|label", default="label")
 
 BLACKLIST_URL = "http://localhost:8018/blacklisted_words_batch"
-CONV_EVAL_URL = "http://localhost:8004/model"
+CONV_EVAL_URL = "http://localhost:8004/batch_model"
 TOXIC_URL = "http://localhost:8013/model"
 
 
@@ -130,7 +130,7 @@ def add_annotations(dialogs):
         for i in range(len(blacklist_result["batch"])):
             dialog["hypotheses"][i]["annotations"]["blacklisted_words"] = blacklist_result["batch"][i]
             dialog["hypotheses"][i]["annotations"]["toxic_classification"] = toxic_result[i]
-            dialog["hypotheses"][i]["annotations"]["cobot_convers_evaluator_annotator"] = conv_eval_result["batch"][i]
+            dialog["hypotheses"][i]["annotations"]["convers_evaluator_annotator"] = conv_eval_result["batch"][i]
             utt_hypots[dialog["utterances"][-1]["text"]] = dialog["hypotheses"]
 
         for utt in dialog["utterances"]:
