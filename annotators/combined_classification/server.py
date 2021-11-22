@@ -21,13 +21,15 @@ app = Flask(__name__)
 
 def get_result(sentences, sentences_with_history):
     st_time = time.time()
-    res = [{} for _ in sentences]
+    ans = [{} for _ in sentences]
+
     if not sentences:
         logger.exception("Input sentences not received")
         sentences = [" "]
     if not sentences_with_history:
         logger.exception("Input sentences with history not received")
         sentences_with_history = sentences
+
     try:
         if sentences and sentences_with_history:
             res = model(sentences, sentences_with_history)
@@ -35,9 +37,7 @@ def get_result(sentences, sentences_with_history):
             raise Exception(f"Empty list of sentences or sentences with history received."
                             f"Sentences: {sentences} "
                             f"Sentences with history: {sentences_with_history}")
-        ans = [{} for _ in (sentences)]
-        logger.info(ans)
-        logger.info(res)
+
         for name, value in zip(task_names, res):
             for i in range(len(value)):
                 is_toxic = ('toxic' in name and value[i][-1] < 0.5)
@@ -72,20 +72,22 @@ except Exception as e:
 
 @app.route("/model", methods=["POST"])
 def respond():
-    logger.info(request.json)
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist)
+
+    logger.info(f"7in1 result: {answer}")
     return jsonify(answer)
 
 
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
-    logger.info(request.json)
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
     sentences_with_hist = [' [SEP] '.join(s) for s in utterances_with_histories]
     sentences = [s[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist)
+
+    logger.info(f"7in1 batch result: {answer}")
     return jsonify([{"batch": answer}])
 
 
