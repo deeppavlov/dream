@@ -55,10 +55,6 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     restart: unless-stopped
-#  cobot-convers-evaluator-annotator:
-#    restart: unless-stopped
-#    volumes:
-#      - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
     restart: unless-stopped
   program-y:
@@ -191,6 +187,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  convers-evaluator-annotator:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   dff-coronavirus-skill:
     restart: unless-stopped
   dff-template-skill:

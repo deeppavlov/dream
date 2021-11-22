@@ -6,12 +6,12 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-#  cobot-convers-evaluator-annotator:
-#    volumes:
-#      - "./annotators/CoBotConversationEvaluator:/src"
-#      - "~/.deeppavlov:/root/.deeppavlov"
-#    ports:
-#      - 8004:8004
+  convers-evaluator-annotator:
+    volumes:
+      - "./annotators/ConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
   cobot-nounphrases:
     volumes:
       - "./annotators/cobot_nounphrases:/src"

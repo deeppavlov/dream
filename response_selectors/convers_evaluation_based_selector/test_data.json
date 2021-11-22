@@ -207,7 +207,7 @@
                   "stop": 0.6065886616706848,
                   "continue": 0.4208565950393677
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.909,
                   "isResponseErroneous": 0.808,
                   "isResponseInteresting": 0.073,
@@ -240,7 +240,7 @@
                   "stop": 0.6065886616706848,
                   "continue": 0.4208565950393677
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.909,
                   "isResponseErroneous": 0.808,
                   "isResponseInteresting": 0.073,
@@ -273,7 +273,7 @@
                   "stop": 0.5833511352539062,
                   "continue": 0.46003755927085876
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.281,
                   "isResponseErroneous": 0.531,
                   "isResponseInteresting": 0.228,
@@ -305,7 +305,7 @@
                   "stop": 0.5808720588684082,
                   "continue": 0.45234695076942444
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.984,
                   "isResponseErroneous": 0.614,
                   "isResponseInteresting": 0.253,
@@ -530,7 +530,7 @@
                   "stop": 0.6065886616706848,
                   "continue": 0.4208565950393677
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.909,
                   "isResponseErroneous": 0.808,
                   "isResponseInteresting": 0.073,
@@ -563,7 +563,7 @@
                   "stop": 0.6065886616706848,
                   "continue": 0.4208565950393677
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.909,
                   "isResponseErroneous": 0.808,
                   "isResponseInteresting": 0.073,
@@ -596,7 +596,7 @@
                   "stop": 0.5833511352539062,
                   "continue": 0.46003755927085876
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.281,
                   "isResponseErroneous": 0.531,
                   "isResponseInteresting": 0.228,
@@ -628,7 +628,7 @@
                   "stop": 0.5808720588684082,
                   "continue": 0.45234695076942444
                 },
-                "cobot_convers_evaluator_annotator": {
+                "convers_evaluator_annotator": {
                   "isResponseComprehensible": 0.984,
                   "isResponseErroneous": 0.614,
                   "isResponseInteresting": 0.253,
