@@ -18,6 +18,7 @@ RUN python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
+RUN wget https://gutenberg.org/cache/epub/feeds/pg_catalog.csv
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
