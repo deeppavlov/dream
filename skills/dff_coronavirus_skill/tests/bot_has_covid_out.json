@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "62dd2291-4251-4044-bc31-4a689a42cef2",
-                    "node_labels": {
+                    "id": "5ab3a48a-a3cc-43b3-bf8e-aa48cf3ec52e",
+                    "labels": {
                         "0": [
                             "simple",
                             "bot_has_covid"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "As a socialbot, I don't have coronavirus. I hope you won't have it either."
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
