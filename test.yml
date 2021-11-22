@@ -44,9 +44,6 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
-#  cobot-convers-evaluator-annotator:
-#    volumes:
-#      - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
   program-y:
   personality-catcher:

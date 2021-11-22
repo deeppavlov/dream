@@ -801,8 +801,8 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
             {
                 "text": hyp["text"],
                 "confidence": hyp.get("confidence", 0),
-                "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
-                    "cobot_convers_evaluator_annotator", {}
+                "convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                    "convers_evaluator_annotator", {}
                 ),
             }
         )

@@ -55,10 +55,6 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     restart: unless-stopped
-#  cobot-convers-evaluator-annotator:
-#    restart: unless-stopped
-#    volumes:
-#      - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
     restart: unless-stopped
   program-y:
