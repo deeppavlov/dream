@@ -18,24 +18,22 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "current_index": 0,
-                    "misc": {
-                    },
-                    "node_labels": {
+                    "id": "ba6a7103-0664-4d81-b670-b93042792131",
+                    "labels": {
                         "0": [
                             "funfact",
                             "random"
                         ]
                     },
-                    "previous_index": 0,
                     "requests": {
                         "0": "fun fact."
                     },
                     "responses": {
                         "0": "The hottest spot on the planet is in Libya. Would you like to talk about weather? Or would you like to hear another fun fact?"
                     },
+                    "misc": {},
                     "validation": false,
-                    "id": "1845e046-aba9-485a-8867-9f33fa817f97"
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {},

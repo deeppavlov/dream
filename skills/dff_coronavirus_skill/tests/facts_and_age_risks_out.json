@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "64b16aa8-9c0c-4a77-a95d-c27a8308e473",
-                    "node_labels": {
+                    "id": "a11c02fd-8b01-4d41-8a12-8cb84b493ee9",
+                    "labels": {
                         "0": [
                             "simple",
                             "what_is_covid"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "Coronavirus COVID 19 is an infectious disease. Its common symptoms include fever, cough, shortness of breath, and many others.Anyone can have mild to severe symptoms. While the majority of cases result in mild symptoms, some cases can be lethal. Older adults and people who have severe underlying medical conditions like heart or lung disease or diabetes seem to be at higher risk for developing more serious complications from COVID-19 illness. Would you want to learn more?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
