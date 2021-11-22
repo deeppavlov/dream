@@ -153,6 +153,7 @@ def what_do_you_mean_response(dialog):
 
 def generate_acknowledgement(dialog):
     """Generate acknowledgement for human questions.
+
     Returns:
         string acknowledgement (templated acknowledgement from `midas_acknowledgements.json` file,
         confidence (default ACKNOWLEDGEMENT_CONF),

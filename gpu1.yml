@@ -121,6 +121,8 @@ services:
     restart: unless-stopped
   news-api-annotator:
     restart: unless-stopped
+  factoid-qa:
+    restart: unless-stopped
   entity-linking:
     restart: unless-stopped
     volumes:
@@ -189,8 +191,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  factoid-qa:
-    restart: unless-stopped
   convers-evaluator-annotator:
     restart: unless-stopped
     environment:
