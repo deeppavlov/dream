@@ -219,7 +219,7 @@ def author_genres(plain_author_name):
     return list(map(entity_to_label, plain_genres))
 
 
-def get_plain_genres(plain_bookname):
+def get_plain_genres(plain_bookname: str):
     plain_genres = request_triples_wikidata(
         "find_object", [(plain_bookname, "P136", "forw")], query_dict=book_query_dict
     )

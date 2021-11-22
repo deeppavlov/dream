@@ -8,18 +8,11 @@ import sentry_sdk
 from os import getenv
 import random
 
-<<<<<<< HEAD
 from dff.core.keywords import PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, LOCAL
 from dff.core import Actor
 import dff.conditions as cnd
 import dff.labels as lbl
 import dff.responses as rsp
-=======
-from dff.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
-from dff.core import Actor
-import dff.conditions as cnd
-import dff.labels as lbl
->>>>>>> 15fac7b733be1fbeecf25d70fb3473d6234380c2
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
@@ -27,19 +20,19 @@ import common.dff.integration.response as int_rsp
 import common.constants as common_constants
 import common.movies as common_movies
 
-<<<<<<< HEAD
 from common.movies import SWITCH_MOVIE_SKILL_PHRASE
 from common.science import OFFER_TALK_ABOUT_SCIENCE
 import scenario.condition as loc_cnd
 import scenario.processing as loc_prs
-from scenario.processing import CACHE, get_slot
+from scenario.processing import CACHE
 import scenario.response as loc_rsp
-=======
-from . import condition as loc_cnd
-from . import response as loc_rsp
-
-logger = logging.getLogger(__name__)
->>>>>>> 15fac7b733be1fbeecf25d70fb3473d6234380c2
+from tools.wiki import (
+    get_name,
+    what_is_book_about,
+    get_published_year,
+    best_plain_book_by_author,
+    genre_of_book
+)
 
 fav_keys = loc_rsp.FAVOURITE_BOOK_ATTRS.keys()
 random.shuffle(fav_keys)
@@ -58,7 +51,6 @@ ZERO_CONFIDENCE = 0.0
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-<<<<<<< HEAD
             ("global_flow", "fallback"): loc_cnd.exit_skill,
             ("books_general", "dislikes_reading"): loc_cnd.dislikes_reading,
             ("undetected_flow", "cannot_name", 1.6): cnd.all(
@@ -155,7 +147,8 @@ flows = {
                 ]
             ),
             ("concrete_book_flow", "user_fav", 0.8): loc_cnd.told_fav_book,
-            ("concrete_book_flow", "tell_about", 1): cnd.any([
+            ("concrete_book_flow", "tell_about", 0.8): cnd.any([
+                # if pertains to current book
                 cnd.all(
                     [
                         loc_cnd.asked_book_content,
@@ -170,50 +163,74 @@ flows = {
                         loc_cnd.adapter(loc_prs.about_wiki),
 
                     ]
+                ),
+                # if new book was mentioned
+                cnd.all(
+                    [
+                        loc_cnd.asked_book_content,
+                        loc_cnd.adapter(loc_prs.get_book),
+                        loc_cnd.adapter(lambda ctx, actor: what_is_book_about(
+                            loc_prs.get_book(ctx, actor)[1]
+                        ))
+                    ]
                 )
             ]),
             ("concrete_book_flow", "offer_best", 0.8):  cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
-                    cnd.any([
+                    cnd.all([
                         loc_cnd.adapter(loc_prs.get_author),
-                        loc_cnd.adapter(loc_prs.get_slot("cur_author_plain"))
+                        loc_cnd.adapter(lambda ctx, actor: best_plain_book_by_author(
+                            loc_prs.get_author(ctx, actor)[1]
+                        ))
                     ])
                 ]
             ),
-            ("concrete_book_flow", "offer_date"): cnd.all(
+            ("concrete_book_flow", "offer_date", 1.2): cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
                     loc_cnd.adapter(loc_prs.get_book),
+                    loc_cnd.adapter(lambda ctx, actor: get_published_year(
+                        loc_prs.get_book(ctx, actor)[1]
+                    ))
                 ]
             ),
-            ("concrete_book_flow", "tell_date", 1.2): cnd.all(
+            ("concrete_book_flow", "tell_date"): cnd.all(
                 [
                     loc_cnd.asked_book_date,
-                    loc_cnd.adapter(loc_prs.get_slot("cur_book_ago"))
-                ]
-            ),
-            ("concrete_book_flow", "tell_movie", 1.2): cnd.all(
-                [
-                    cnd.any(
-                        [
-                            loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
-                            loc_cnd.is_last_used_phrase(loc_rsp.OFFER_FACT_ABOUT_BOOK)
-                        ]
-                    ),
-                    loc_cnd.adapter(loc_prs.get_movie)
+                    cnd.any([
+                        # if pertains to current book
+                        loc_cnd.adapter(loc_prs.get_slot("cur_book_ago")),
+                        # if new book was mentioned
+                        cnd.all([
+                            loc_cnd.adapter(loc_prs.get_book),
+                            loc_cnd.adapter(lambda ctx, actor: get_published_year(
+                                loc_prs.get_book(ctx, actor)[1]
+                            ))                            
+                        ])
+                    ])
+                    
                 ]
             ),
             ("concrete_book_flow", "offer_genre", 2): cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
                     loc_cnd.adapter(loc_prs.get_book),
+                    loc_cnd.adapter(lambda ctx, actor: genre_of_book(
+                        loc_prs.get_book(ctx, actor)[1]
+                    ))
                 ]
             ),
             ("concrete_book_flow", "offer_fact", 1.2): cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
                     loc_cnd.adapter(loc_prs.get_book),
+                    cnd.any([
+                        loc_cnd.adapter(lambda ctx, actor: what_is_book_about(
+                            loc_prs.get_book(ctx, actor)[1]
+                        )),
+                        loc_cnd.adapter(lambda ctx, actor: get_name(ctx, "movie"))
+                    ])
                 ]                
             )
         }
@@ -329,21 +346,6 @@ flows = {
             RESPONSE: "OK, let me ask you something else then, alright?",
             PROCESSING: {
                 "set_denied": loc_prs.set_flag("denied_favorite", True),
-=======
-            ("greeting", "node1"): cnd.regexp(r"\bhi\b"),
-        },
-    },
-    "sevice": {
-        "start": {
-            RESPONSE: "",
-            TRANSITIONS: {("greeting", "node1"): cnd.true()},
-        },
-        "fallback": {
-            RESPONSE: "Ooops",
-            TRANSITIONS: {
-                lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
-                lbl.repeat(0.2): cnd.true(),
->>>>>>> 15fac7b733be1fbeecf25d70fb3473d6234380c2
             },
             TRANSITIONS: {
                 lbl.to_fallback(2): int_cnd.is_no_vars,
@@ -354,7 +356,6 @@ flows = {
             }
         },
     },
-<<<<<<< HEAD
     "concrete_book_flow": {
         "ask_fav": {
             RESPONSE: "Fabulous! And ",
@@ -576,64 +577,6 @@ flows = {
                 )
             }
         }
-=======
-    "greeting": {
-        LOCAL: {
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
-                "set_can_continue": int_prs.set_can_continue(),
-                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-            },
-        },
-        "node1": {
-            RESPONSE: int_rsp.multi_response(replies=["Hi, how are you?", "Hi, what's up?"]),  # several hypothesis
-            PROCESSING: {
-                "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
-            },
-            TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
-        },
-        "node2": {
-            RESPONSE: loc_rsp.example_response("Good. What do you want to talk about?"),
-            # loc_rsp.example_response is just for an example, you can use just str without example_response func
-            TRANSITIONS: {"node3": loc_cnd.example_lets_talk_about()},
-        },
-        "node3": {
-            RESPONSE: "Sorry, I can not talk about that now. Maybe late. Do you like {topic}?",
-            PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
-            TRANSITIONS: {
-                "node4": int_cnd.is_yes_vars,
-                "node5": int_cnd.is_no_vars,
-                "node6": int_cnd.is_do_not_know_vars,
-                "node7": cnd.true(),  # it will be chosen if other conditions are False
-            },
-        },
-        "node4": {
-            RESPONSE: "I like {topic} too, {user_name}",
-            PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
-            TRANSITIONS: {("node7", 0.1): cnd.true()},
-        },
-        "node5": {
-            RESPONSE: "I do not like {topic} too, {user_name}",
-            PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
-            TRANSITIONS: {("node7", 0.1): cnd.true()},
-        },
-        "node6": {
-            RESPONSE: "I have no opinion about {topic} too, {user_name}",
-            PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
-            TRANSITIONS: {("node7", 0.1): cnd.true()},
-        },
-        "node7": {
-            RESPONSE: int_rsp.multi_response(
-                replies=["bye", "goodbye"],
-                confidences=[1.0, 0.5],
-                hype_attr=[
-                    {"can_continue": common_constants.MUST_CONTINUE},  # for the first hyp
-                    {"can_continue": common_constants.CAN_CONTINUE_SCENARIO},  # for the second hyp
-                ],
-            ),
-            PROCESSING: {"set_confidence": int_prs.set_confidence(0.0)},
-        },
->>>>>>> 15fac7b733be1fbeecf25d70fb3473d6234380c2
     },
     "bible_flow": {
         "bible_start": {
@@ -711,9 +654,5 @@ flows = {
 }
 
 
-<<<<<<< HEAD
 actor = Actor(flows, start_node_label=("global_flow", "start"), fallback_node_label=("global_flow", "fallback"))
 CACHE.update_actor_handlers(actor)
-=======
-actor = Actor(flows, start_label=("sevice", "start"), fallback_label=("sevice", "fallback"))
->>>>>>> 15fac7b733be1fbeecf25d70fb3473d6234380c2
