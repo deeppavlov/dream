@@ -67,6 +67,7 @@ except Exception as exc:
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
+
 # import pathlib
 # import json
 

@@ -85,12 +85,13 @@ services:
         SERVICE_NAME: program-y
       context: .
       dockerfile: ./skills/program-y/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 1024M
         reservations:
-          memory: 768M
+          memory: 1024M
 
   personality-catcher:
     env_file: [.env]
@@ -1176,7 +1177,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 128M
         reservations:
-          memory: 1024M
+          memory: 128M
 version: '3.7'
