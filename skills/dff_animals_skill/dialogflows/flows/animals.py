@@ -24,7 +24,7 @@ from common.animals import (
     TRIGGER_PHRASES,
     NOT_SWITCH_TEMPLATE,
     DO_YOU_HAVE_TEMPLATE,
-    ANIMAL_BLACKLIST,
+    ANIMAL_BADLIST,
 )
 from common.wiki_skill import if_linked_to_wiki_skill
 from common.animals import stop_about_animals, find_entity_by_types, find_entity_conceptnet
@@ -171,12 +171,12 @@ def user_likes_animal_request(ngrams, vars):
     found_animal_wp = find_entity_by_types(annotations, {"Q55983715", "Q16521"})
     found_animal_in_list = find_in_animals_list(annotations)
     found_pet = re.search(PETS_TEMPLATE, user_uttr["text"])
-    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
+    found_badlist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
     if (
         not found_pet
-        and (found_animal_cnet or (found_animal_wp and found_animal_wp not in ANIMAL_BLACKLIST) or found_animal_in_list)
+        and (found_animal_cnet or (found_animal_wp and found_animal_wp not in ANIMAL_BADLIST) or found_animal_in_list)
         and not is_last_state(vars, "SYS_WHAT_ANIMALS")
-        and not found_blacklist
+        and not found_badlist
     ):
         flag = True
     logger.info(f"user_likes_animal_request={flag}")
@@ -189,8 +189,8 @@ def mention_pets_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     started = shared_memory.get("start", False)
     dont_like = re.findall(NOT_LIKE_PATTERN, text)
-    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, text)
-    if re.search(PETS_TEMPLATE, text) and not started and not dont_like and not found_blacklist:
+    found_badlist = re.findall(NOT_SWITCH_TEMPLATE, text)
+    if re.search(PETS_TEMPLATE, text) and not started and not dont_like and not found_badlist:
         flag = True
     logger.info(f"mention_pets_request={flag}")
     return flag
@@ -203,10 +203,10 @@ def user_mentioned_his_pet_request(ngrams, vars):
     isyes = is_yes(user_uttr)
     users_pet = re.findall(r"my (cat|dog|puppy|kitty|kitten)", user_uttr["text"], re.IGNORECASE)
     has_pet = re.findall(r"i (have |had )(a )?(cat|dog|puppy|kitty|kitten)", user_uttr["text"], re.IGNORECASE)
-    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
+    found_badlist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
     bot_asked_pet = "do you have pets" in bot_uttr["text"].lower()
     found_pet = re.search(PETS_TEMPLATE, user_uttr["text"])
-    if (users_pet or has_pet or (bot_asked_pet and (found_pet or isyes))) and not found_blacklist:
+    if (users_pet or has_pet or (bot_asked_pet and (found_pet or isyes))) and not found_badlist:
         flag = True
     logger.info(f"user_mentioned_his_pet_request={flag}")
     return flag
@@ -218,9 +218,9 @@ def do_you_have_pets_request(ngrams, vars):
     asked_have_pets = shared_memory.get("asked_have_pets", False)
     user_uttr = state_utils.get_last_human_utterance(vars)
     pet_in_uttr = re.findall(r"(\bpet\b|\bpets\b)", user_uttr["text"], re.IGNORECASE)
-    found_blacklist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
+    found_badlist = re.findall(NOT_SWITCH_TEMPLATE, user_uttr["text"])
     if (
-        not found_blacklist
+        not found_badlist
         and pet_in_uttr
         and not asked_have_pets
         and ("you" not in user_uttr["text"] or "my" in user_uttr["text"])

@@ -23,7 +23,7 @@
             "user_type": "human"
           },
           "annotations": {
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -174,8 +174,8 @@
               "confidence": [
                 1.0309148e-05
               ],
-              "is_blacklisted": [
-                "not blacklist"
+              "is_badlisted": [
+                "not badlist"
               ]
             },
             "cobot_topics": {
@@ -214,7 +214,7 @@
                   "isResponseOnTopic": 0.158,
                   "responseEngagesUser": 0.469
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -247,7 +247,7 @@
                   "isResponseOnTopic": 0.158,
                   "responseEngagesUser": 0.469
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -280,7 +280,7 @@
                   "isResponseOnTopic": 0.254,
                   "responseEngagesUser": 0.536
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -312,7 +312,7 @@
                   "isResponseOnTopic": 0.226,
                   "responseEngagesUser": 0.56
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -347,7 +347,7 @@
             "user_type": "human"
           },
           "annotations": {
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -497,8 +497,8 @@
               "confidence": [
                 1.0309148e-05
               ],
-              "is_blacklisted": [
-                "not blacklist"
+              "is_badlisted": [
+                "not badlist"
               ]
             },
             "cobot_topics": {
@@ -537,7 +537,7 @@
                   "isResponseOnTopic": 0.158,
                   "responseEngagesUser": 0.469
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -570,7 +570,7 @@
                   "isResponseOnTopic": 0.158,
                   "responseEngagesUser": 0.469
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -603,7 +603,7 @@
                   "isResponseOnTopic": 0.254,
                   "responseEngagesUser": 0.536
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false
@@ -635,7 +635,7 @@
                   "isResponseOnTopic": 0.226,
                   "responseEngagesUser": 0.56
                 },
-                "blacklisted_words": {
+                "badlisted_words": {
                   "inappropriate": false,
                   "profanity": false,
                   "restricted_topics": false

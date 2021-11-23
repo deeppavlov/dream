@@ -23,7 +23,7 @@
                             "1 very specific question",
                             "the quarantine"
                         ],
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

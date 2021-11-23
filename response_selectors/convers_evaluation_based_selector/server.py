@@ -20,7 +20,7 @@ from utils import (
     lower_duplicates_score,
     lower_retrieve_skills_confidence_if_scenario_exist,
     calculate_single_convers_evaluator_score,
-    downscore_toxic_blacklisted_responses,
+    downscore_toxic_badlisted_responses,
     CONV_EVAL_STRENGTH,
     CONFIDENCE_STRENGTH,
     how_are_you_spec,
@@ -66,7 +66,7 @@ def respond():
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_toxicities = []
-        curr_has_blacklisted = []
+        curr_has_badlisted = []
         curr_has_inappropriate = []
         curr_confidences = []
         curr_scores = []
@@ -88,20 +88,20 @@ def respond():
                         logger.warning(f"Valid skill data without annotations: {skill_data}")
 
                 toxic_result = get_toxic({"annotations": annotation}, probs=True)
-                default_blacklist = {"inappropriate": False, "profanity": False, "restricted_topics": False}
-                blacklist_result = annotation.get("blacklisted_words", default_blacklist)
+                default_badlist = {"inappropriate": False, "profanity": False, "restricted_topics": False}
+                badlist_result = annotation.get("badlisted_words", default_badlist)
 
                 curr_toxicities += [max(toxic_result.values()) if len(toxic_result) > 0 else 0]
-                curr_has_blacklisted += [int(blacklist_result["profanity"])]
-                curr_has_inappropriate += [int(blacklist_result["inappropriate"])]
+                curr_has_badlisted += [int(badlist_result["profanity"])]
+                curr_has_inappropriate += [int(badlist_result["inappropriate"])]
 
-                if blacklist_result["profanity"]:
+                if badlist_result["profanity"]:
                     with sentry_sdk.push_scope() as scope:
                         scope.set_extra("utterance", skill_data["text"])
                         scope.set_extra("selected_skills", skill_data)
-                        sentry_sdk.capture_message("response selector got candidate with blacklisted phrases")
+                        sentry_sdk.capture_message("response selector got candidate with badlisted phrases")
                         msg = (
-                            f"response selector got candidate with blacklisted phrases:\n"
+                            f"response selector got candidate with badlisted phrases:\n"
                             f"utterance: {skill_data['text']}\n"
                             f"skill name: {skill_data['skill_name']}"
                         )
@@ -117,7 +117,7 @@ def respond():
                 curr_scores += [annotation.get("convers_evaluator_annotator", default_conv_eval)]
 
             curr_toxicities = np.array(curr_toxicities)
-            curr_has_blacklisted = np.array(curr_has_blacklisted)
+            curr_has_badlisted = np.array(curr_has_badlisted)
             curr_has_inappropriate = np.array(curr_has_inappropriate)
             curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
@@ -127,7 +127,7 @@ def respond():
                 curr_scores,
                 curr_confidences,
                 curr_toxicities,
-                curr_has_blacklisted,
+                curr_has_badlisted,
                 curr_has_inappropriate,
                 dialog,
                 all_prev_active_skills,
@@ -360,11 +360,11 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
 
 
 def select_response(
-    candidates, scores, confidences, toxicities, has_blacklisted, has_inappropriate, dialog, all_prev_active_skills=None
+    candidates, scores, confidences, toxicities, has_badlisted, has_inappropriate, dialog, all_prev_active_skills=None
 ):
-    # TOXICITY & BLACKLISTS checks
-    n_toxic_candidates, scores, confidences = downscore_toxic_blacklisted_responses(
-        scores, confidences, toxicities, has_blacklisted, has_inappropriate
+    # TOXICITY & BADLISTS checks
+    n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(
+        scores, confidences, toxicities, has_badlisted, has_inappropriate
     )
     if n_toxic_candidates == len(toxicities):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы

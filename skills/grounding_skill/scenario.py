@@ -10,7 +10,7 @@ from common.link import skills_phrases_map, link_to_skill2key_words
 from common.grounding import what_we_talk_about, are_we_recorded, MANY_INTERESTING_QUESTIONS
 from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
-from common.utils import get_topics, get_intents, get_entities, is_toxic_or_blacklisted_utterance, is_no
+from common.utils import get_topics, get_intents, get_entities, is_toxic_or_badlisted_utterance, is_no
 from utils import (
     MIDAS_INTENT_ACKNOWLEDGMENTS,
     get_midas_intent_acknowledgement,
@@ -259,7 +259,7 @@ def generate_universal_response(dialog):
     if is_question and is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
         # if question in sensitive situation - answer with confidence 0.99
         confidence = ALMOST_SUPER_CONF
-    if ackn and not is_toxic_or_blacklisted_utterance(dialog["human_utterances"][-1]):
+    if ackn and not is_toxic_or_badlisted_utterance(dialog["human_utterances"][-1]):
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowlegdement", "body"]
     return reply, confidence, human_attr, bot_attr, attr
@@ -300,7 +300,7 @@ class GroundingSkillScenario:
 
             # what do you mean response
             is_toxic = (
-                is_toxic_or_blacklisted_utterance(dialog["human_utterances"][-2])
+                is_toxic_or_badlisted_utterance(dialog["human_utterances"][-2])
                 if len(dialog["human_utterances"]) > 1
                 else False
             )

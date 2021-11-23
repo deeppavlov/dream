@@ -12,7 +12,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -262,7 +262,7 @@
                             "factoid": 0.00798230990767479,
                             "conversational": 0.9920177459716797
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

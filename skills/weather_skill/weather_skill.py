@@ -24,7 +24,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 city_slot_obj = OWMCitySlot()
-blacklist_cities = {"is", "none", "ok", "okay"}
+badlist_cities = {"is", "none", "ok", "okay"}
 
 
 class DialogDataManager:
@@ -106,7 +106,7 @@ class DialogDataManager:
 
         city = city or ""
         logger.info(f"Extracted city `{city}` from user utterance.")
-        if city.lower().strip() not in blacklist_cities:
+        if city.lower().strip() not in badlist_cities:
             return city
         else:
             return None

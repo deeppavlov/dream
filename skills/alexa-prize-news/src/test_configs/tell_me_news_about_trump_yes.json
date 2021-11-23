@@ -22,7 +22,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -147,8 +147,8 @@
             "confidence": [
               4.6625214e-06
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -279,7 +279,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": true
@@ -402,8 +402,8 @@
             "confidence": [
               1.2110617e-06
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -564,7 +564,7 @@
           "asr": {
             "asr_confidence": "undefined"
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -686,9 +686,9 @@
               3.5959968e-07,
               2.2996242e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {

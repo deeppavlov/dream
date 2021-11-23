@@ -24,7 +24,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -158,8 +158,8 @@
             "confidence": [
               7.830236e-08
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -247,7 +247,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -390,9 +390,9 @@
               2.9089238e-06,
               1.6890588e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -614,7 +614,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -759,9 +759,9 @@
               6.05031e-07,
               1.1927297e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -1015,7 +1015,7 @@
               "curious that they'd do that!"
             ]
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -1145,9 +1145,9 @@
               0.0034772605,
               3.0235566e-07
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -1374,7 +1374,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -1508,9 +1508,9 @@
               1.8575523e-05,
               8.146711e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "ner": [
@@ -1802,7 +1802,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -1951,9 +1951,9 @@
               2.7849374e-05,
               6.469868e-07
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -2258,7 +2258,7 @@
               "i'd get lost in there for days."
             ]
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -2400,11 +2400,11 @@
               3.2907712e-07,
               8.3941915e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist",
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist",
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -2648,7 +2648,7 @@
           "asr": {
             "asr_confidence": "undefined"
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -2787,10 +2787,10 @@
               9.236348e-06,
               9.969777e-08
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_dialogact_intents": {
@@ -2980,7 +2980,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -3133,9 +3133,9 @@
               0.00013967723,
               0.00023291256
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -3292,7 +3292,7 @@
           "asr": {
             "asr_confidence": "undefined"
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -3430,10 +3430,10 @@
               1.0896926e-07,
               1.0316959e-06
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_dialogact_intents": {
@@ -3642,7 +3642,7 @@
           "asr": {
             "asr_confidence": "undefined"
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": true
@@ -3773,9 +3773,9 @@
               1.4963519e-05,
               0.000116034134
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "ner": [
@@ -3881,7 +3881,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -4015,8 +4015,8 @@
             "confidence": [
               7.830236e-08
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -4069,7 +4069,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -4212,9 +4212,9 @@
               2.9089238e-06,
               1.6890588e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -4318,7 +4318,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -4463,9 +4463,9 @@
               6.05031e-07,
               1.1927297e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -4615,7 +4615,7 @@
               "curious that they'd do that!"
             ]
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -4745,9 +4745,9 @@
               0.0034772605,
               3.0235566e-07
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -4880,7 +4880,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -5014,9 +5014,9 @@
               1.8575523e-05,
               8.146711e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "ner": [
@@ -5160,7 +5160,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -5307,9 +5307,9 @@
               2.7849374e-05,
               6.469868e-07
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -5478,7 +5478,7 @@
               "i'd get lost in there for days."
             ]
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -5618,11 +5618,11 @@
               3.2907712e-07,
               8.3941915e-05
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist",
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist",
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -5782,7 +5782,7 @@
           "asr": {
             "asr_confidence": "undefined"
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -5921,10 +5921,10 @@
               9.236348e-06,
               9.969777e-08
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_dialogact_intents": {
@@ -6051,7 +6051,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -6205,9 +6205,9 @@
               0.00013967723,
               0.00023291256
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -6305,7 +6305,7 @@
           "asr": {
             "asr_confidence": "undefined"
           },
-          "blacklisted_words": {
+          "badlisted_words": {
             "inappropriate": false,
             "profanity": false,
             "restricted_topics": false
@@ -6443,10 +6443,10 @@
               1.0896926e-07,
               1.0316959e-06
             ],
-            "is_blacklisted": [
-              "not blacklist",
-              "not blacklist",
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist",
+              "not badlist",
+              "not badlist"
             ]
           },
           "cobot_dialogact_intents": {

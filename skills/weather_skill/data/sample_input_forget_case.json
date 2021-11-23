@@ -22,7 +22,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
@@ -122,8 +122,8 @@
             "confidence": [
               7.830236e-08
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -242,7 +242,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
@@ -357,8 +357,8 @@
             "confidence": [
               9.329563e-05
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "sentrewrite": {
@@ -419,7 +419,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
@@ -519,8 +519,8 @@
             "confidence": [
               7.830236e-08
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "cobot_topics": {
@@ -598,7 +598,7 @@
           "user_type": "human"
         },
         "annotations": {
-          "blacklisted_words": {
+          "badlisted_words": {
             "profanity": false,
             "restricted_topics": false
           },
@@ -713,8 +713,8 @@
             "confidence": [
               9.329563e-05
             ],
-            "is_blacklisted": [
-              "not blacklist"
+            "is_badlisted": [
+              "not badlist"
             ]
           },
           "sentrewrite": {

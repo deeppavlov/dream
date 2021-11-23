@@ -12,7 +12,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "Let's chat about minecraft",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

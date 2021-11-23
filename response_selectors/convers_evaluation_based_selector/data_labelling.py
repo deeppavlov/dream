@@ -22,7 +22,7 @@ parser.add_argument("--dialog_id", help="dialog id to label")
 parser.add_argument("--save_dir", help="directory to save labeled data")
 parser.add_argument("--mode", help="add_annotations|label", default="label")
 
-BLACKLIST_URL = "http://localhost:8018/blacklisted_words_batch"
+BADLIST_URL = "http://localhost:8018/badlisted_words_batch"
 CONV_EVAL_URL = "http://localhost:8004/batch_model"
 TOXIC_URL = "http://localhost:8013/model"
 
@@ -119,7 +119,7 @@ def add_annotations(dialogs):
     utt_hypots = {}
     for dialog in dialogs:
         hypots = [h["text"] for h in dialog["utterances"][-1]["hypotheses"]]
-        blacklist_result = requests.post(BLACKLIST_URL, json={"sentences": hypots}).json()[0]
+        badlist_result = requests.post(BADLIST_URL, json={"sentences": hypots}).json()[0]
         toxic_result = requests.post(TOXIC_URL, json={"sentences": hypots}).json()
         toxic_result = [res[0] for res in toxic_result]
         conv_eval_format = cobot_conv_eval_formatter_dialog(dialog)
@@ -127,8 +127,8 @@ def add_annotations(dialogs):
         logging.debug("***************conv result")
         logging.debug(str(conv_eval_result))
 
-        for i in range(len(blacklist_result["batch"])):
-            dialog["hypotheses"][i]["annotations"]["blacklisted_words"] = blacklist_result["batch"][i]
+        for i in range(len(badlist_result["batch"])):
+            dialog["hypotheses"][i]["annotations"]["badlisted_words"] = badlist_result["batch"][i]
             dialog["hypotheses"][i]["annotations"]["toxic_classification"] = toxic_result[i]
             dialog["hypotheses"][i]["annotations"]["convers_evaluator_annotator"] = conv_eval_result["batch"][i]
             utt_hypots[dialog["utterances"][-1]["text"]] = dialog["hypotheses"]

@@ -12,7 +12,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "hi",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -249,7 +249,7 @@
                                 "toxic": 0.0019210278987884521
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

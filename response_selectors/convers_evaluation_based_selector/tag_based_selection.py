@@ -384,7 +384,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     for cand_id, cand_uttr in enumerate(candidates):
         if confidences[cand_id] == 0.0 and cand_uttr["skill_name"] not in ACTIVE_SKILLS:
-            logger.info(f"Dropping cand_id: {cand_id} due to toxicity/blacklists")
+            logger.info(f"Dropping cand_id: {cand_id} due to toxicity/badlists")
             continue
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
