@@ -85,7 +85,8 @@ class Badlist:
         self.name = path.stem
         self.badlist = set()
         with path.open() as f:
-            for phrase in f:
+            for _phrase in f:
+                phrase = _phrase.split(",")[0]
                 tokenized = en_nlp(phrase.strip().lower())
                 self.badlist.add(" ".join([str(token) for token in tokenized]))
                 lemmatized_variants = lemmatize(tokenized)
