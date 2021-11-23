@@ -55,7 +55,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     restart: unless-stopped
-  cobot-nounphrases:
+  spacy-nounphrases:
     restart: unless-stopped
   program-y:
     restart: unless-stopped

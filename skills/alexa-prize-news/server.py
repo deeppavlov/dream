@@ -67,7 +67,7 @@ def respond():
                     else:
                         entities.append(ent["text"].lower())
 
-            for ent in curr_uttr["annotations"].get("cobot_nounphrases", []):
+            for ent in curr_uttr["annotations"].get("spacy_nounphrases", []):
                 if ent.lower() not in UNIGRAMS:
                     if ent in entities + ["I", "i"]:
                         pass

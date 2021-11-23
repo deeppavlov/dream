@@ -97,7 +97,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [],
+          "spacy_nounphrases": [],
           "ner": [
             []
           ],
@@ -317,7 +317,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "brad pitt"
           ],
           "attitude_classification": {
@@ -494,7 +494,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [],
+          "spacy_nounphrases": [],
           "ner": [
             []
           ],
@@ -673,7 +673,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "brad pitt"
           ],
           "attitude_classification": {

@@ -41,7 +41,7 @@
                                 "toxic": 0.003810584545135498
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "animals"
                         ],
                         "sentseg": {

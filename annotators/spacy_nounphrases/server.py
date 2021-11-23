@@ -278,9 +278,9 @@ def get_result(request):
     nounphrases_batch = [[re.sub(spaces, " ", nounph) for nounph in nounphrases] for nounphrases in nounphrases_batch]
     result = [[nounph for nounph in nounphrases if len(nounph)] for nounphrases in nounphrases_batch]
 
-    logger.debug(f"cobot_nounphrases output: {result}")
+    logger.debug(f"spacy_nounphrases output: {result}")
     total_time = time.time() - st_time
-    logger.info(f"cobot_nounphrases exec time: {total_time:.3f}s")
+    logger.info(f"spacy_nounphrases exec time: {total_time:.3f}s")
     return result
 
 

@@ -97,7 +97,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [],
+          "spacy_nounphrases": [],
           "ner": [
             []
           ],
@@ -290,7 +290,7 @@
               "detected": 1
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "chris evans"
           ],
           "attitude_classification": {
@@ -457,7 +457,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [],
+          "spacy_nounphrases": [],
           "ner": [
             []
           ],
@@ -609,7 +609,7 @@
               "detected": 1
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "chris evans"
           ],
           "attitude_classification": {

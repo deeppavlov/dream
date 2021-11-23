@@ -134,7 +134,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "star wars"
                         ],
                         "ner": [
@@ -659,7 +659,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "ner": [
                             []
                         ],
@@ -1020,7 +1020,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "star wars"
                         ],
                         "ner": [
@@ -1502,7 +1502,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "ner": [
                             []
                         ],

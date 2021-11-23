@@ -84,7 +84,7 @@ def another_topic_question(vars, all_titles):
     found_entity_substr_list = shared_memory.get("found_entity_substr", [])
     used_titles = shared_memory.get("used_titles", [])
     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-    nounphrases = annotations.get("cobot_nounphrases", [])
+    nounphrases = annotations.get("spacy_nounphrases", [])
     for nounphr in nounphrases:
         if (
             any([nounphr in curr_page.lower() for curr_page in curr_pages])

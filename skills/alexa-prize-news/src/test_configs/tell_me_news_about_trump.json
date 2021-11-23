@@ -51,7 +51,7 @@
               0.6439297199249268
             ]
           },
-          "cobot_nounphrases": [],
+          "spacy_nounphrases": [],
           "intent_catcher": {
             "doing_well": {
               "confidence": 0.0,
@@ -368,7 +368,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "some news",
             "trump"
           ],

@@ -84,7 +84,7 @@
                             "Entertainment_Books"
                         ]
                     },
-        "cobot_nounphrases":[
+        "spacy_nounphrases":[
            "the ski crime"
         ],
         "cobot_topics": {
