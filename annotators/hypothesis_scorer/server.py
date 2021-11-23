@@ -40,7 +40,7 @@ try:
             "is_best": True,
             "text": "Kong: Skull Island is a good action movie. What do you think about it?",
             "confidence": 1.0,
-            "cobot_convers_evaluator_annotator": {
+            "convers_evaluator_annotator": {
                 "isResponseOnTopic": 0.505,
                 "isResponseErroneous": 0.938,
                 "responseEngagesUser": 0.344,

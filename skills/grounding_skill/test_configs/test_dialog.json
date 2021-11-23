@@ -719,7 +719,7 @@
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.416,
                                     "isResponseErroneous": 0.868,
                                     "isResponseInteresting": 0.048,
@@ -752,7 +752,7 @@
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.886,
                                     "isResponseErroneous": 0.664,
                                     "isResponseInteresting": 0.068,
@@ -785,7 +785,7 @@
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.407,
                                     "isResponseErroneous": 0.885,
                                     "isResponseInteresting": 0.02,
@@ -1562,7 +1562,7 @@
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.416,
                                     "isResponseErroneous": 0.868,
                                     "isResponseInteresting": 0.048,
@@ -1595,7 +1595,7 @@
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.886,
                                     "isResponseErroneous": 0.664,
                                     "isResponseInteresting": 0.068,
@@ -1628,7 +1628,7 @@
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.407,
                                     "isResponseErroneous": 0.885,
                                     "isResponseInteresting": 0.02,

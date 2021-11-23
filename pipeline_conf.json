@@ -246,6 +246,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
+                    "annotators.entity_linking",
                     "annotators.cobot_nounphrases",
                     "annotators.entity_detection"
                 ]
@@ -957,6 +958,19 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
+            "dff_template_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-template-skill:8120/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_art_skill": {
                 "connector": {
                     "protocol": "http",
@@ -983,6 +997,17 @@
                 "previous_services": [
                     "skills"
                 ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "convers_evaluator_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://convers-evaluator-annotator:8004/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
             "cobot_nounphrases": {

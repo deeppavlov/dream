@@ -114,7 +114,7 @@ def respond():
                     "isResponseComprehensible": 0.0,
                     "isResponseErroneous": 0.0,
                 }
-                curr_scores += [annotation.get("cobot_convers_evaluator_annotator", default_conv_eval)]
+                curr_scores += [annotation.get("convers_evaluator_annotator", default_conv_eval)]
 
             curr_toxicities = np.array(curr_toxicities)
             curr_has_blacklisted = np.array(curr_has_blacklisted)
