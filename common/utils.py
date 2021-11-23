@@ -526,7 +526,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    # logger.debug(f'From combined {answer_probs} {model_name} {answer_labels}')
+
     return answer_probs, answer_labels
 
 
@@ -559,7 +559,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
     try:
         annotations = annotated_utterance["annotations"]
         answer = annotations[model_name]
-        # logger.info(f'Being processed plain annotation {answer}')
+
         answer = _process_text(answer)
         if isinstance(answer, list):
             if model_name == "sentiment_classification":
@@ -576,7 +576,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
                 answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         logger.warning(e)
-    # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
+
     return answer_probs, answer_labels
 
 
@@ -891,7 +891,6 @@ COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
 
 
 def get_entities(annotated_utterance, only_named=False, with_labels=False):
-    entities = None
     if not only_named:
         if "entity_detection" in annotated_utterance.get("annotations", {}):
             labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
@@ -980,8 +979,8 @@ def get_raw_entity_names_from_annotations(annotations):
                 entities = raw_el_output[0][0]
     except Exception as e:
         error_message = f"Wrong entity linking output format {raw_el_output} : {e}"
-        sentry_sdk.capture_exception(error_message)
-        logging.exception(error_message)
+        sentry_sdk.capture_exception(e)
+        logger.exception(error_message)
     return entities
 
 
@@ -1031,14 +1030,14 @@ def entity_to_label(entity):
         If entity is in wrong format we assume that it is already label but give exception
 
     """
-    logging.debug(f"Calling entity_to_label for {entity}")
+    logger.debug(f"Calling entity_to_label for {entity}")
     no_entity = not entity
     wrong_entity_type = not isinstance(entity, str)
     wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
     if no_entity or wrong_entity_type or wrong_entity_format:
         warning_text = f"Wrong entity format. We assume {entity} to be label but check the code"
         sentry_sdk.capture_exception(Exception(warning_text))
-        logging.exception(warning_text)
+        logger.exception(warning_text)
         return entity
     label = ""
     labels = request_triples_wikidata("find_label", [(entity, "")])
@@ -1048,10 +1047,10 @@ def entity_to_label(entity):
             label = labels[0].split('"')[1]
         else:
             label = labels[0]
-        logging.debug(f"Answer {label}")
+        logger.debug(f"Answer {label}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(Exception(e, "Exception in conversion of labels {labels}"))
+        logger.exception(Exception(e, "Exception in conversion of labels {labels}"))
     return label
 
 
@@ -1082,10 +1081,10 @@ def get_types_from_annotations(annotations, types, tocheck_relation="occupation"
                     mismatching_types = [type_to_typename[k] for k in found_types if k not in types]
                     if matching_types:
                         return entity, matching_types, mismatching_types
-            logging.warning("Relation to check not found")
+            logger.warning("Relation to check not found")
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(Exception(e, f"Exception in processing wp annotations {wp_annotations}"))
+        logger.exception(Exception(e, f"Exception in processing wp annotations {wp_annotations}"))
     return None, None, None
 
 
