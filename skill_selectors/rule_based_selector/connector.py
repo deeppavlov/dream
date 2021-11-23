@@ -111,6 +111,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr += turn_on_skills(
                     cobot_topics,
                     cobot_dialogact_topics,
+                    intent_catcher_intents,
                     user_uttr_text,
                     bot_uttr.get("text", ""),
                     available_skills=[
@@ -118,7 +119,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_coronavirus_skill",
                         "dff_funfact_skill",
                         "weather_skill",
-                        # "dff_celebrity_skill",
+                        "dff_short_story_skill",
                     ],
                 )
 
@@ -209,6 +210,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr += turn_on_skills(
                     cobot_topics,
                     cobot_dialogact_topics,
+                    intent_catcher_intents,
                     user_uttr_text,
                     bot_uttr.get("text", ""),
                     available_skills=[
@@ -220,7 +222,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_sport_skill",
                         "dff_music_skill",
                         "dff_science_skill",
-                        "dff_gossip_skill",  # 'dff_celebrity_skill',
+                        "dff_gossip_skill",
                         "game_cooperative_skill",
                         "weather_skill",
                         "dff_funfact_skill",
@@ -228,6 +230,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_coronavirus_skill",
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
+                        "dff_short_story_skill",
                     ],
                 )
 
@@ -270,8 +273,7 @@ class RuleBasedSkillSelectorConnector:
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            # asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_template_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")

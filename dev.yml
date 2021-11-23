@@ -148,8 +148,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
-    ports:
-      - 8057:8057
   small-talk-skill:
     volumes:
       - "./skills/small_talk_skill:/src"
