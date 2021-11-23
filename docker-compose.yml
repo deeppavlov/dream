@@ -184,7 +184,7 @@ services:
   badlisted-words:
     env_file: [.env]
     build:
-      context: ./annotators/BlacklistedWordsDetector/
+      context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
       - FLASK_APP=server

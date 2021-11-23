@@ -179,7 +179,7 @@ class CachedRequestsAPI:
             )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             sentry_sdk.capture_exception(e)
-            logger.exception("Blacklisted Annotator requests from News API Annotator Timeout")
+            logger.exception("Badlisted Annotator requests from News API Annotator Timeout")
             resp = requests.Response()
             resp.status_code = 504
 
@@ -190,7 +190,7 @@ class CachedRequestsAPI:
             )
             result = [False] * len(articles_to_check)
             sentry_sdk.capture_message(
-                f"Blacklisted Annotator requests from News API Annotator "
+                f"Badlisted Annotator requests from News API Annotator "
                 f" result status code is not 200: {resp}. result text: {resp.text}; "
                 f"result status: {resp.status_code}"
             )

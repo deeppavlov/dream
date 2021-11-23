@@ -24,7 +24,7 @@ work_dir = pathlib.Path("tmp")
 
 banned_responses = json.load((data_dir / "banned_responses_v2.json").open())
 # banned_responses += json.load((data_dir / "banned_responses_v3.json").open())
-black_list_file = pathlib.Path("../../annotators/BlacklistedWordsDetector/badlists/restricted_topics_badlist.txt")
+black_list_file = pathlib.Path("../../annotators/BadlistedWordsDetector/badlists/restricted_topics_badlist.txt")
 black_list = [i.strip() for i in (black_list_file.open()).readlines()]
 banned_phrases = json.load((data_dir / "banned_phrases.json").open())
 banned_phrases += [i for i in black_list if " " in i]
