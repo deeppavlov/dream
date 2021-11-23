@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "Tell me funny story.",
+                    "text": "hi.",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "Tell me a story.",
+                        "spelling_preprocessing": "hi",
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -19,37 +19,36 @@
                         },
                         "cobot_nounphrases": [],
                         "factoid_classification": {
-                            "factoid": 0.0,
-                            "conversational": 0.0
+                            "factoid": 0.009537393227219582,
+                            "conversational": 0.990462601184845
                         },
-                        "sentseg": {
-                            "punct_sent": "Tell me a story.",
-                            "segments": [
-                                "Tell me a story."
-                            ]
-                        },
+                        "conceptnet": {},
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.9977984428405762
+                                "General_ChatIntent": 0.9982210397720337
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9947741627693176
+                                "Other": 0.9222673773765564
                             },
                             "cobot_topics": {
-                                "Phatic": 0.9968889951705933
+                                "Phatic": 0.9989814758300781
                             },
                             "emotion_classification": {
-                                "neutral": 0.9990195035934448
+                                "neutral": 0.9996328353881836
                             },
                             "sentiment_classification": {
-                                "neutral": 0.5776568055152893
+                                "positive": 0.737922191619873
                             },
                             "toxic_classification": {
-                                "toxic": 0.0014232397079467773
+                                "toxic": 0.0014452040195465088
                             }
                         },
-                        "entity_detection": {},
-                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
@@ -97,8 +96,8 @@
                                 "detected": 0
                             },
                             "tell_me_a_story": {
-                                "confidence": 1.0,
-                                "detected": 1
+                                "confidence": 0.0,
+                                "detected": 0
                             },
                             "tell_me_more": {
                                 "confidence": 0.0,
@@ -141,25 +140,25 @@
                                 "detected": 0
                             },
                             "yes": {
-                                "confidence": 1.0,
-                                "detected": 1
+                                "confidence": 0.0,
+                                "detected": 0
                             }
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0019198574591428041,
-                                "command": 0.9592630863189697,
-                                "comment": 0.001472851145081222,
-                                "complaint": 0.0036342598032206297,
-                                "dev_command": 0.008973246440291405,
-                                "neg_answer": 0.002725402358919382,
-                                "open_question_factual": 0.0021622562780976295,
-                                "open_question_opinion": 0.002223768038675189,
-                                "opinion": 0.004447591491043568,
-                                "other_answers": 0.0009619678603485227,
-                                "pos_answer": 0.0059285471215844154,
-                                "statement": 0.003758950624614954,
-                                "yes_no_question": 0.0025281687267124653
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
                             }
                         ],
                         "ner": [
@@ -169,32 +168,19 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "tell me."
+                                "hi."
                             ]
                         },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "BUDAPEST \u2014 Prime Minister Viktor Orban of Hungary portrays himself as the defender of Christian Europe against migrants and multiculturalism. After years of his weakening of democratic institutions, the far-right strongman has prepared for coming ele... [1013 chars]",
-                                    "description": "BUDAPEST \u2014 Prime Minister Viktor Orban of Hungary portrays himself as the defender of Christian Europe against migrants and multiculturalism.",
-                                    "image": "https://static01.nyt.com/images/2021/09/11/world/11POPE-TOP/11POPE-TOP-facebookJumbo.jpg",
-                                    "publishedAt": "2021-09-11T09:16:24Z",
-                                    "source": {
-                                        "name": "The New York Times",
-                                        "url": "https://www.nytimes.com"
-                                    },
-                                    "title": "Pope Francis Treads Fine Line With Hungary's Viktor Orban",
-                                    "url": "https://www.nytimes.com/2021/09/11/world/europe/pope-francis-orban-hungary.html"
-                                },
-                                "which": "all"
-                            }
-                        ],
-                        "fact_random": [],
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
                         },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
@@ -202,11 +188,25 @@
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
                         },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        }
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours. The companies also will not be allowed to provide services to users who haven't logged in with real-n... [3065 chars]",
+                                    "description": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106924433-GettyImages-1234392254.jpg?v=1630329277",
+                                    "publishedAt": "2021-08-30T13:52:58Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "China to ban kids from playing online games for more than three hours per week",
+                                    "url": "https://www.cnbc.com/2021/08/30/china-to-ban-kids-from-playing-online-games-for-more-than-three-hours-per-week.html"
+                                },
+                                "which": "all"
+                            }
+                        ]
                     }
                 }
             ],
