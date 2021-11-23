@@ -51,6 +51,8 @@ log_file = work_dir / "logs.txt"
 
 response_encodings, responses = pickle.load(db_file.open("rb"))
 # %%
+
+
 def banned_responses_check(cand):
     for utterance in banned_responses:
         if utterance == cand:
