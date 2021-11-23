@@ -96,7 +96,7 @@ def _(slots: str) -> Callable:
 
 
 @save_to_slots.register
-def _(slots: Tuple[str]) -> Callable:
+def _(slots: tuple) -> Callable:
     def slot_decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def slot_wrapper(ctx: Context, actor: Actor) -> Iterable[str]:
@@ -164,7 +164,7 @@ def get_slot(prop: str) -> Callable:
 
 
 @save_to_slots("cur_genre")
-@CACHE.cache
+# @CACHE.cache
 def get_genre_regexp(ctx: Context, actor: Actor) -> Optional[str]:
     """
     Extract the genre from user request if present
@@ -178,7 +178,7 @@ def get_genre_regexp(ctx: Context, actor: Actor) -> Optional[str]:
 
 
 @save_to_slots("cur_genre")
-@CACHE.cache
+# @CACHE.cache
 def get_book_genre(ctx: Context, actor: Actor) -> Optional[str]:
     """Extract the book genre from wiki"""
     book_plain = get_slot("cur_book_plain")(ctx, actor)
@@ -186,7 +186,7 @@ def get_book_genre(ctx: Context, actor: Actor) -> Optional[str]:
 
 
 @save_to_slots(("cur_book_name", "cur_book_author", "cur_book_about"))
-@CACHE.cache
+# @CACHE.cache
 def get_book_by_genre(ctx: Context, actor: Actor) -> Optional[Tuple[str, str]]:
     """
     Extract book, author, and description by genre from BOOKREADS
@@ -205,7 +205,7 @@ def get_book_by_genre(ctx: Context, actor: Actor) -> Optional[Tuple[str, str]]:
 
 
 @save_to_slots("cur_author_best")
-@CACHE.cache
+# @CACHE.cache
 def get_book_by_author(ctx: Context, actor: Actor) -> Optional[str]:
     """
     Find a bookname for a given author
@@ -219,7 +219,7 @@ def get_book_by_author(ctx: Context, actor: Actor) -> Optional[str]:
 
 
 @save_to_slots("cur_book_about")
-@CACHE.cache
+# @CACHE.cache
 def about_bookreads(ctx: Context, actor: Actor) -> Optional[str]:
     bookname = get_slot("cur_book_name")(ctx, actor)
     reply = None
@@ -234,14 +234,14 @@ def about_bookreads(ctx: Context, actor: Actor) -> Optional[str]:
 
 
 @save_to_slots("cur_book_about")
-@CACHE.cache
+# @CACHE.cache
 def about_wiki(ctx: Context, actor: Actor) -> Optional[str]:
     plain_book = get_slot("cur_book_plain")(ctx, actor)
     return what_is_book_about(plain_book)
 
 
 @save_to_slots("cur_book_author")
-@CACHE.cache
+# @CACHE.cache
 def get_author_regexp(ctx: Context, actor: Actor) -> Optional[str]:
     """
     Extract the author name from user request if present
@@ -253,7 +253,7 @@ def get_author_regexp(ctx: Context, actor: Actor) -> Optional[str]:
 
 
 @save_to_slots(("cur_book_author", "cur_author_plain", "cur_author_best"))
-@CACHE.cache
+# @CACHE.cache
 def get_author(
     ctx: Context,
     actor: Actor
@@ -265,7 +265,7 @@ def get_author(
 
 
 @save_to_slots(("cur_book_name", "cur_book_plain", "cur_book_ago"))
-@CACHE.cache
+# @CACHE.cache
 def get_book(
     ctx: Context,
     actor: Actor
@@ -277,7 +277,7 @@ def get_book(
 
 
 @save_to_slots(("cur_book_movie", "cur_book_director"))
-@CACHE.cache
+# @CACHE.cache
 def get_movie(
     ctx: Context,
     actor: Actor
@@ -289,7 +289,7 @@ def get_movie(
 
 
 @save_to_slots("cur_book_ago")
-@CACHE.cache
+# @CACHE.cache
 def get_book_year(ctx: Context, actor: Actor) -> Optional[str]:
     book_plain = get_slot("cur_book_plain")(ctx, actor)
     if not book_plain:

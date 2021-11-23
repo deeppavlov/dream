@@ -80,7 +80,7 @@ def sentiment_detected(name: str="positive", threshold: float=0.6) -> Callable:
     return sentiment_detected_handler
 
 
-def check_flag(prop: str, default: bool) -> Callable:
+def check_flag(prop: str, default: bool = False) -> Callable:
     def check_flag_handler(
         ctx: Context,
         actor: Actor
@@ -115,9 +115,9 @@ def _(phrase: str) -> Callable:
 
 
 @is_last_used_phrase.register
-def _(phrase: List[str]) -> Callable:
+def _(phrase: list) -> Callable:
     def last_used_handler(ctx: Context, actor: Actor) -> bool:
-        return ((used := ctx.misc.get("used_phrases")) 
+        return ((used := ctx.misc.get("used_phrases", False)) 
         and used[-1] in map(id, phrase))
     
     return last_used_handler
@@ -270,7 +270,7 @@ dislikes_reading = cnd.any(
             re.IGNORECASE
         )),
         cnd.regexp(
-            re.compile(NOT_LIKE_PATTERN, re.IGNORECASE)
+            re.compile(NOT_LIKE_PATTERN)
         )
     ]
 )

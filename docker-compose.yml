@@ -1167,13 +1167,14 @@ services:
       args:
         SERVICE_PORT: 8120
         SERVICE_NAME: dff_template_skill
+        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
       context: .
       dockerfile: ./skills/dff_template_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 512M
         reservations:
-          memory: 128M
+          memory: 512M
 version: '3.7'

@@ -4,6 +4,7 @@ import itertools
 import random
 import sentry_sdk
 from typing import Any, Dict, Tuple, Set, Callable, Optional, Union
+import os
 from os import getenv
 import pathlib
 import _pickle as cPickle
@@ -18,7 +19,8 @@ from scenario.response import CURRENT_YEAR
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
-book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
+book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt" 
+# book_banned_words_file = os.path.join(os.getcwd(), "book_banned_words.txt")
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
 book_query_dict = cPickle.load(open("/global_data/book_query_dict.pkl", "rb"))
 

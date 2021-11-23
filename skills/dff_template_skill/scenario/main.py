@@ -34,7 +34,7 @@ from tools.wiki import (
     genre_of_book
 )
 
-fav_keys = loc_rsp.FAVOURITE_BOOK_ATTRS.keys()
+fav_keys = list(loc_rsp.FAVOURITE_BOOK_ATTRS.keys())
 random.shuffle(fav_keys)
 fav_keys = iter(fav_keys)
 
@@ -237,7 +237,8 @@ flows = {
     },
     "global_flow": {
         "start": {
-            RESPONSE: ""
+            RESPONSE: "",
+            TRANSITIONS: {("books_general", "book_start", 2): cnd.true()}
         },
         "fallback": {
             RESPONSE: "Anyway, let's talk about something else!",
@@ -306,7 +307,7 @@ flows = {
         "fav_start": {
             RESPONSE: loc_rsp.FAVOURITE_BOOK_PHRASES[0],
             TRANSITIONS: {
-                ("bot_fav_book", "name_fav"): int_cnd.is_yes_vars,
+                ("bot_fav_book", "fav_name"): int_cnd.is_yes_vars,
                 ("bot_fav_book", "fav_denied"): cnd.true()
             }
         },
@@ -556,7 +557,7 @@ flows = {
                         loc_cnd.adapter(loc_prs.get_slot("cur_book_about"))
                     ]
                 ),
-                ("books_general", "books_restart"): int_cnd.is_no_vars,
+                ("books_general", "book_restart"): int_cnd.is_no_vars,
                 lbl.to_fallback(0.4): cnd.true()
             }
         },
@@ -617,7 +618,11 @@ flows = {
                 "no_book_author": cnd.all(
                     [
                         loc_cnd.adapter(loc_prs.get_author),
-                        cnd.neg(loc_cnd.adapter(loc_prs.get_book_by_author))
+                        cnd.neg(loc_cnd.adapter(
+                            lambda ctx, actor: best_plain_book_by_author(
+                                loc_prs.get_author(ctx, actor)[1]
+                            )
+                        ))
                     ]
                 ),
                 "ask_question": cnd.true(),
@@ -654,5 +659,6 @@ flows = {
 }
 
 
-actor = Actor(flows, start_node_label=("global_flow", "start"), fallback_node_label=("global_flow", "fallback"))
+actor = Actor(flows, start_label=("global_flow", "start"), fallback_label=("global_flow", "fallback"))
 CACHE.update_actor_handlers(actor)
+logger.info(f"Actor created successfully")

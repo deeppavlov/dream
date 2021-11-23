@@ -108,6 +108,6 @@ def get_unused(phrases: List[str]) -> Callable:
 
 
 def genre_phrase(ctx: Context, actor: Actor):
-    genre = ctx.misc.get("slots", {}).get("cur_genre")
-    response = get_unused(FAVOURITE_GENRE_ANSWERS[genre])
+    genre = ctx.misc.get("slots", {}).get("cur_genre", "fiction")
+    response = get_unused(FAVOURITE_GENRE_ANSWERS[0][genre])
     return response
