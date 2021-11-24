@@ -1,6 +1,6 @@
 [
     [
-        "Yes, sure. In fifth grade, my teacher loathed me. She would do anything to make me cry and sent me to the principle’s office any chance she got. Don’t believe me? I’m left handed. So still, to this day, I get my hands confused. On this particular day, we were doing the Pledge of Allegiance and I had put my left hand to my chest (it’s supposed to be your right hand over your heart). She got mad at me, telling me that I wasn’t being ‘patriotic’ and sent me to the principal’s office. The principal and I were quite aquatinted at this point and so I told her why I was sent back to her office again, and she laughed. And laughed. I didn’t find it funny at all, I mean all the kids in my school thought I was a delinquent so they didn’t want to be my friend. My principal wrote on the back of my hands, L and R. ... Are you still intrigued?",
+        "Yes, sure. In second grade, I told everyone that I was leaving school before next semester to move to Hollywood to play Megan\u2019s cousin from Vermont on Drake and Josh. At first I just told my best friend, but then the whole school found out. I had people coming up to me and asking me for my autograph and a teacher even asked for a picture with me. When I showed up on the first day of school in third grade, I told everyone that the show was going off the air after the season finished (even though I had no knowledge of when it was ending), and so they wouldn\u2019t need me. ... Are you still intrigued?",
         0.85,
         {
             "dff_short_story_skill_state": {
@@ -14,7 +14,7 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "84356ec6-20d7-485c-98b7-d6f7b0d14b47",
+                    "id": "d755f4d5-4941-4a74-9ccf-6352d3085d04",
                     "labels": {
                         "0": [
                             "story_flow",
@@ -25,13 +25,13 @@
                         "0": "Tell me funny story."
                     },
                     "responses": {
-                        "0": "Yes, sure. In fifth grade, my teacher loathed me. She would do anything to make me cry and sent me to the principle’s office any chance she got. Don’t believe me? I’m left handed. So still, to this day, I get my hands confused. On this particular day, we were doing the Pledge of Allegiance and I had put my left hand to my chest (it’s supposed to be your right hand over your heart). She got mad at me, telling me that I wasn’t being ‘patriotic’ and sent me to the principal’s office. The principal and I were quite aquatinted at this point and so I told her why I was sent back to her office again, and she laughed. And laughed. I didn’t find it funny at all, I mean all the kids in my school thought I was a delinquent so they didn’t want to be my friend. My principal wrote on the back of my hands, L and R. ... Are you still intrigued?"
+                        "0": "Yes, sure. In second grade, I told everyone that I was leaving school before next semester to move to Hollywood to play Megan\u2019s cousin from Vermont on Drake and Josh. At first I just told my best friend, but then the whole school found out. I had people coming up to me and asking me for my autograph and a teacher even asked for a picture with me. When I showed up on the first day of school in third grade, I told everyone that the show was going off the air after the season finished (even though I had no knowledge of when it was ending), and so they wouldn\u2019t need me. ... Are you still intrigued?"
                     },
                     "misc": {
                         "stories_told": [
-                            "chicken nuggets"
+                            "drake and josh"
                         ],
-                        "story": "chicken nuggets",
+                        "story": "drake and josh",
                         "story_type": "funny"
                     },
                     "validation": false,

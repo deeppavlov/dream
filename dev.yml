@@ -402,7 +402,7 @@ services:
       - 8061:8061
   dff-short-story-skill:
     volumes:
-      - "./skills/dff_template_skill:/src"
+      - "./skills/dff_short_story_skill:/src"
       - "./common:/src/common"
     ports:
       - 8057:8057
