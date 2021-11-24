@@ -519,7 +519,7 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification" and "not_toxic" not in combined_classes["toxic_classification"]:
+        if model_name == "toxic_classification" and "factoid_classification" not in combined_annotations:
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
@@ -570,7 +570,8 @@ def _get_plain_annotations(annotated_utterance, model_name):
                 answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
         else:
             answer_probs = answer
-            if model_name == "toxic_classification" and "not_toxic" not in combined_classes["toxic_classification"]:
+            if model_name == "toxic_classification":
+                # this function is only for plain annotations (when toxic_classification is a separate annotator)
                 answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
             else:
                 answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
