@@ -488,12 +488,13 @@ services:
         SERVICE_NAME: program-y-wide
       context: .
       dockerfile: ./skills/program-y-wide/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8064 --reload
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 1024M
         reservations:
-          memory: 256M
+          memory: 1024M
 
   news-api-skill:
     env_file: [.env]
