@@ -65,11 +65,9 @@ def respond():
     selected_bot_attributes = []
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
-        curr_toxicities = []
-        curr_has_badlisted = []
-        curr_has_inappropriate = []
         curr_confidences = []
         curr_scores = []
+        curr_is_toxics = []
 
         try:
             curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
@@ -88,6 +86,7 @@ def respond():
                         logger.warning(f"Valid skill data without annotations: {skill_data}")
 
                 is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
+                curr_is_toxics.append(is_toxic_utterance)
 
                 if is_toxic_utterance:
                     with sentry_sdk.push_scope() as scope:
@@ -110,9 +109,7 @@ def respond():
                 }
                 curr_scores += [annotation.get("convers_evaluator_annotator", default_conv_eval)]
 
-            curr_toxicities = np.array(curr_toxicities)
-            curr_has_badlisted = np.array(curr_has_badlisted)
-            curr_has_inappropriate = np.array(curr_has_inappropriate)
+            curr_is_toxics = np.array(curr_is_toxics)
             curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
             # now we collected all current candidates and their annotations. select response among them
@@ -120,9 +117,7 @@ def respond():
                 curr_candidates,
                 curr_scores,
                 curr_confidences,
-                curr_toxicities,
-                curr_has_badlisted,
-                curr_has_inappropriate,
+                curr_is_toxics,
                 dialog,
                 all_prev_active_skills,
             )
@@ -174,7 +169,7 @@ def respond():
     )
 
 
-def rule_score_based_selection(dialog, candidates, scores, confidences, toxicities, bot_utterances):
+def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxics, bot_utterances):
     curr_single_scores = []
 
     bot_utt_counter = Counter(bot_utterances)
@@ -313,7 +308,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
             logger.info(
                 f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. "
-                f"Toxicity: {toxicities[i]}. Cand scores: {cand_scores}"
+                f"Toxicity: {is_toxics[i]}. Cand scores: {cand_scores}"
             )
             curr_single_scores.append(score)
         else:
@@ -323,7 +318,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
             score = CONV_EVAL_STRENGTH * score_conv_eval + curr_score
             logger.info(
                 f"Skill {skill_name} has final score: {score}. "
-                f"Toxicity: {toxicities[i]}. Cand scores: {cand_scores}"
+                f"Toxicity: {is_toxics[i]}. Cand scores: {cand_scores}"
             )
             curr_single_scores.append(score)
 
@@ -354,13 +349,13 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, toxiciti
 
 
 def select_response(
-    candidates, scores, confidences, toxicities, has_badlisted, has_inappropriate, dialog, all_prev_active_skills=None
+    candidates, scores, confidences, is_toxics, dialog, all_prev_active_skills=None
 ):
     # TOXICITY & BADLISTS checks
     n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(
-        scores, confidences, toxicities, has_badlisted, has_inappropriate
+        scores, confidences, is_toxics
     )
-    if n_toxic_candidates == len(toxicities):
+    if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
         return None, np.random.choice(MOST_DUMMY_RESPONSES), 1.0, {}, {}
 
@@ -379,7 +374,7 @@ def select_response(
         )
     else:
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
-            dialog, candidates, scores, confidences, toxicities, bot_utterances
+            dialog, candidates, scores, confidences, is_toxics, bot_utterances
         )
 
     logger.info(f"Best candidate: {best_candidate}")
