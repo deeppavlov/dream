@@ -13,7 +13,7 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
-from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, get_toxic
+from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, is_toxic_or_badlisted_utterance
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
@@ -87,15 +87,9 @@ def respond():
                     if not skill_data.get("annotations"):
                         logger.warning(f"Valid skill data without annotations: {skill_data}")
 
-                toxic_result = get_toxic({"annotations": annotation}, probs=True)
-                default_badlist = {"inappropriate": False, "profanity": False, "restricted_topics": False}
-                badlist_result = annotation.get("badlisted_words", default_badlist)
+                is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
 
-                curr_toxicities += [max(toxic_result.values()) if len(toxic_result) > 0 else 0]
-                curr_has_badlisted += [int(badlist_result["profanity"])]
-                curr_has_inappropriate += [int(badlist_result["inappropriate"])]
-
-                if badlist_result["profanity"]:
+                if is_toxic_utterance:
                     with sentry_sdk.push_scope() as scope:
                         scope.set_extra("utterance", skill_data["text"])
                         scope.set_extra("selected_skills", skill_data)

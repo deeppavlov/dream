@@ -195,7 +195,7 @@ class CachedRequestsAPI:
                 f"result status: {resp.status_code}"
             )
         else:
-            # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
+            # each element is like `{'bad_words': False}`
             result = [sum(d.values()) for d in resp.json()[0]["batch"]]
 
         articles = [
