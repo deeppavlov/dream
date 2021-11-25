@@ -203,6 +203,31 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
+    # Used by: sentseg over human uttrs
+    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing",
+        dialog["human_utterances"][-1]["text"])
+    if dialog['bot_utterances']:
+        # h sep b sep h sep b sep h
+        prev_bot_utts = [k['text'] for k in dialog['bot_utterances'][-2:]]
+        prev_human_utts = [utt["annotations"].get("spelling_preprocessing", utt["text"])
+                           for utt in dialog["human_utterances"][-3:-1]]
+        prev_utts = []
+        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
+            prev_utts.append(human_utt)
+            prev_utts.append(bot_utt)
+        sentence_w_history = ' [SEP] '.join(prev_utts + [last_human_utt])
+    else:
+        sentence_w_history = last_human_utt
+    return [
+        {
+            "sentences": [last_human_utt],
+            "sentences_with_history": [sentence_w_history]
+        }
+    ]
+
+
 def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
     # Used by: cobot entities
     return [
