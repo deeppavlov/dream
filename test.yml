@@ -44,9 +44,6 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
-#  cobot-convers-evaluator-annotator:
-#    volumes:
-#      - "~/.deeppavlov:/root/.deeppavlov"
   cobot-nounphrases:
   program-y:
   personality-catcher:
@@ -124,6 +121,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  convers-evaluator-annotator:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=2
   dff-coronavirus-skill:
   dff-short-story-skill:
   dff-template-skill:

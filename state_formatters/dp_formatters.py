@@ -203,6 +203,31 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
+    # Used by: sentseg over human uttrs
+    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing",
+        dialog["human_utterances"][-1]["text"])
+    if dialog['bot_utterances']:
+        # h sep b sep h sep b sep h
+        prev_bot_utts = [k['text'] for k in dialog['bot_utterances'][-2:]]
+        prev_human_utts = [utt["annotations"].get("spelling_preprocessing", utt["text"])
+                           for utt in dialog["human_utterances"][-3:-1]]
+        prev_utts = []
+        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
+            prev_utts.append(human_utt)
+            prev_utts.append(bot_utt)
+        sentence_w_history = ' [SEP] '.join(prev_utts + [last_human_utt])
+    else:
+        sentence_w_history = last_human_utt
+    return [
+        {
+            "sentences": [last_human_utt],
+            "sentences_with_history": [sentence_w_history]
+        }
+    ]
+
+
 def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
     # Used by: cobot entities
     return [
@@ -283,14 +308,7 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     return [{"sentences": [sent], "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]]}]
 
 
-def cobot_conv_eval_formatter_dialog(dialog: Dict) -> List[Dict]:
-    dialog = utils.get_last_n_turns(dialog, total_last_turns=4)
-    payload = utils.stop_formatter_dialog(dialog)
-    # print(f"formatter {payload}", flush=True)
-    return payload
-
-
-def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
+def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     conv = dict()
@@ -812,8 +830,8 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
             {
                 "text": hyp["text"],
                 "confidence": hyp.get("confidence", 0),
-                "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
-                    "cobot_convers_evaluator_annotator", {}
+                "convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                    "convers_evaluator_annotator", {}
                 ),
             }
         )
