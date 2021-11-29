@@ -16,8 +16,9 @@ from common.universal_templates import (
     is_switch_topic,
     tell_me_more,
 )
-from common.utils import get_intents, get_topics, get_sentiment, is_yes, is_no
 from common.utils import (
+    get_intents,
+    get_sentiment,
     is_question,
     is_opinion_request,
     is_opinion_expression,
@@ -68,7 +69,7 @@ def to_boolean(func: Callable) -> Callable:
     return adapter_wrapper
 
 
-def annot_adapter(func: Callable) -> Callable:
+def annot_utt_adapter(func: Callable) -> Callable:
     """
     Decorates Dream funcs that are fed annotated user utterances
     """
@@ -85,22 +86,27 @@ def annot_adapter(func: Callable) -> Callable:
     return annot_wrapper
 
 
-about_book = annot_adapter(about_book)
+about_book = annot_utt_adapter(about_book)
 
-is_question = annot_adapter(is_question)
+is_question = annot_utt_adapter(is_question)
 
-is_opinion_request = annot_adapter(is_opinion_request)
+is_opinion_request = annot_utt_adapter(is_opinion_request)
 
-is_opinion_expression = annot_adapter(is_opinion_expression)
+is_opinion_expression = annot_utt_adapter(is_opinion_expression)
 
-is_switch_topic = annot_adapter(is_switch_topic)
+is_switch_topic = annot_utt_adapter(is_switch_topic)
 
-tell_me_more = annot_adapter(tell_me_more)
+tell_me_more = annot_utt_adapter(tell_me_more)
 
 
 def sentiment_detected(name: str = "positive", threshold: float = 0.6) -> Callable:
     def sentiment_detected_handler(ctx: Context, actor: Actor) -> bool:
-        sentiment_probs = get_sentiment(ctx.last_request, probs=True)
+        if ctx.validation:
+            return False
+        last_request = (
+            ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+        )
+        sentiment_probs = get_sentiment(last_request, probs=True)
         return sentiment_probs.get(name, 0) >= threshold
 
     return sentiment_detected_handler
@@ -161,7 +167,8 @@ def is_proposed_skill(ctx: Context, actor: Actor) -> bool:
 def genrebook_request_detected(ctx: Context, actor: Actor) -> bool:
     """Reimplementation of the original function"""
     asked_fav = is_last_used_phrase(loc_rsp.WHAT_GENRE_FAV)(ctx, actor)
-    agreed_to_recommend = is_last_used_phrase(loc_rsp.GENRE_ADVICE_PHRASE)(ctx, actor) and is_yes(ctx, actor)
+    agreed_to_recommend = (is_last_used_phrase(loc_rsp.GENRE_ADVICE_PHRASE)(ctx, actor) 
+    and int_cnd.is_yes_vars(ctx, actor))
     asked_to_recommend = asked_to_offer_book(ctx, actor)
     genre_in_phrase = check_genre_regexp(ctx, actor)
     return any([asked_fav, agreed_to_recommend, asked_to_recommend]) and genre_in_phrase
@@ -421,8 +428,8 @@ exit_skill = cnd.any(
 )
 
 has_read_transitions = {
-    ("concrete_book_flow", "ask_opinion", 2): is_yes,
-    ("genre_flow", "not_read_genrebook", 1.9): cnd.any([is_no, hasnt_read]),
+    ("concrete_book_flow", "ask_opinion", 2): int_cnd.is_yes_vars,
+    ("genre_flow", "not_read_genrebook", 1.9): cnd.any([int_cnd.is_no_vars, hasnt_read]),
     ("genre_flow", "genrebook_info", 1.8): cnd.all(
         [about_in_slots, tell_me_more]
     ),
