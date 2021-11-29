@@ -137,7 +137,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in dff-movie-skill asr weather-skill program-y \
+    for container in dff-movie-skill asr dff-weather-skill program-y \
                      program-y-dangerous eliza program-y-wide \
                      dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
