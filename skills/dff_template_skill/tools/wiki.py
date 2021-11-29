@@ -12,7 +12,7 @@ from functools import lru_cache
 
 from dff.core import Context, Actor
 from common.custom_requests import request_entities_entitylinking, request_triples_wikidata
-from common.utils import get_entity_names_from_annotations, entity_to_label
+from common.utils import entity_to_label, get_raw_entity_names_from_annotations
 
 from scenario.response import CURRENT_YEAR
 
@@ -20,48 +20,18 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
 book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt" 
-# book_banned_words_file = os.path.join(os.getcwd(), "book_banned_words.txt")
 book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
 book_query_dict = cPickle.load(open("/global_data/book_query_dict.pkl", "rb"))
 
 
-def process_movie(
-    ent_label: str, 
-    ent_plain: str, 
-    ent_props: Dict[str, str]
-) -> Tuple[str, Union[str, None]]:
-    if "film director" in ent_props:
-        film_director = ent_props["film director"][0][0]
-    else:
-        film_director = get_author(ent_plain, mode="movie")
-    return ent_label, film_director
+AUTHOR_WIKI_TYPES = ["Q36180", "Q18814623", "Q482980", "Q4853732", "Q6625963"]
+BOOK_WIKI_TYPES = ["Q571", "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"]
+MOVIE_WIKI_TYPES = ["Q11424", "Q24856", "Q202866"]
 
 
-def process_author(
-    ent_label: str, 
-    ent_plain: str, 
-    ent_props: Dict[str, str]
-) -> Tuple[str, Union[str, None]]:
-    ent_label = " ".join(
-        [word for word in ent_label.split(" ") if len(word) > 1]
-    )
-    notable_work = ent_props.get("notable_work") # in many cases best books are fetched with the author entity
-    if not notable_work:
-        return ent_label, None
-    return ent_label, random.choice(notable_work)[0]
-
-
-def process_book(
-    ent_label: str, 
-    ent_plain: str, 
-    ent_props: Dict[str, str]
-) -> Tuple[str, Optional[str]]:
-    if "publication date" in ent_props:
-        publication_year = ent_props["publication date"][0][0]
-    else:
-        logger.warning("No publication date found")
-        publication_year = get_published_year(ent_plain)
-    return ent_label, get_n_years(publication_year)
+def is_wikidata_entity(entity: str) -> bool:
+    wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
+    return not wrong_entity_format
 
 
 def get_n_years(date: str) -> Optional[str]:
@@ -71,116 +41,102 @@ def get_n_years(date: str) -> Optional[str]:
     parsed_date = re.search(r"\d{4}", date)
     if not parsed_date:
         return None
-    n_years = int(parsed_date.group()) - CURRENT_YEAR
+    n_years = CURRENT_YEAR - int(parsed_date.group())
     if n_years == 0:
         return "Not so long "
     return f"{str(n_years)} years "
 
 
-WIKI_MAPPING: Dict[str, Dict[str, Union[Callable, Set[str]]]] = {
-    "author":{
-        "types": {"Q214917", "Q36180", "Q18844224", "Q18814623", "Q482980", "Q4853732", "Q6625963"},
-        "processing":process_author
-    },
-    "book":{
-        "types": {"Q571", "Q7725634", "Q1667921", "Q277759", "Q8261", "Q47461344"},
-        "processing":process_book
-    },
-    "movie":{
-        "types": {"Q11424", "Q24856", "Q202866"},
-        "processing":process_movie
-    }
-}
-
-
-def is_wikidata_entity(entity: str) -> bool:
-    wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
-    return not wrong_entity_format
-
-
-@lru_cache(maxsize=1)
-def get_sorted_entities(annotated_utterance: Dict[str, str]) -> Optional[Dict[str, Dict[str, str]]]:
-    """Get a sorted list of entities from wikidata annotations"""
-    found_entities = get_entity_names_from_annotations(annotated_utterance)
-    if not found_entities:
-        logger.warning(f'Entities not found in {annotated_utterance["annotations"].get("entity_linking", {})}')
-        return None
-    wikiparser_annot = annotated_utterance["annotations"].get("wiki_parser", {})
-    if isinstance(wikiparser_annot, list):
-        wikiparser_annot = wikiparser_annot[0]
-    entities = {
-        **wikiparser_annot.get("entities_info", {}),
-        **wikiparser_annot.get("topic_skill_entities_info", {}), 
-    }
-    #  sorting so that more relevant entities come first
-    keys = sorted(entities.keys(), key=lambda x: -len(str(entities[x])))
-    entities = {x: entities[x] for x in keys}
-    return entities
-
-
 def get_name(
-    ctx: Context,
-    mode: str,
-) -> Optional[Tuple[Optional[str], Optional[str]]]:
-    """Get an entity of the specified type from the last user request"""
-    annotated_utterance: Dict[str, str] = ctx.misc["agent"]["dialog"]["human_utterances"][-1]
-    entities = get_sorted_entities(annotated_utterance)
-    if not entities or len(entities) == 0:
-        return None
-    for entity in entities.items():
-        result_tuple = entity_processing(entity, mode)
-        if result_tuple:
-            break
-    return result_tuple
-
-
-def entity_processing(
-    entity: Tuple[str, Dict[str, str]],
-    mode: str,
+    annotated_phrase: dict,
+    mode="author",
 ) -> Optional[Tuple[str, str, str]]:
-    """Get specified information from a single entity"""
-    target_types = WIKI_MAPPING[mode]["types"]
-    ent_label, ent_props = entity
-    found_types = set([
-        *ent_props.get("types_2hop", []),
-        *ent_props.get("instance_of", [])
-    ])
-    logger.debug(f"Found types: {found_types}")
-    found_types = target_types.intersection(found_types)
-    if not found_types:
-        for _type in target_types:
-            request_answer = request_triples_wikidata(
-                "check_triplet",
-                [(ent_label, "P31", "forw")],
-                query_dict=book_query_dict
-            )
-            if isinstance(request_answer, list) and request_answer[0]:
-                found_types.add(_type)
-        logger.debug(f"Found types {found_types}")
-    if len(found_types) == 0:
-        logger.info(f"No intersection with {target_types}")
-        return None        
-    logger.debug(f"{mode} found")
-    ent_plain = label_to_entity(ent_label, ent_props, target_types)
-    processing = WIKI_MAPPING[mode]["processing"]
-    ent_label, attribute = processing(ent_label, ent_plain, ent_props)
-    return ent_label, ent_plain, attribute
-
-
-def label_to_entity(
-    ent_label: str,
-    ent_props: Dict[str, str],
-    types: Optional[Set[str]]=None
-) -> str:
-    """Obtain a plain entity name from its label"""
-    if not types:
-        types = {}
-    if "plain_entity" not in ent_props:
-        plain_entities, _ = request_entities_entitylinking(
-            ent_label, types=types, confidence_threshold=0.05
-        )
-        return plain_entities[0].strip()
-    return ent_props["plain_entity"].strip()
+    """
+    Extract wiki entities of the specified type
+    """
+    plain_entity, found_entity, n_years_ago, attribute, film_director = None, None, None, None, None
+    try:
+        all_found_entities = get_raw_entity_names_from_annotations(annotated_phrase.get("annotations", {}))
+        if not all_found_entities:
+            return None
+        logger.info(f"Found entities in annotations {all_found_entities}")
+        if mode == "author":
+            types = AUTHOR_WIKI_TYPES
+        elif mode == "book":
+            types = BOOK_WIKI_TYPES
+        elif mode == "movie":
+            types = MOVIE_WIKI_TYPES
+        else:
+            raise Exception(f"Wrong mode: {mode}")
+        n_years_ago = None
+        wp_annotations = annotated_phrase.get("annotations", {}).get("wiki_parser", {})
+        if isinstance(wp_annotations, list):
+            wp_annotations = wp_annotations[0]
+        toiterate_dict = wp_annotations.get("topic_skill_entities_info", {})
+        for key in wp_annotations.get("entities_info", {}):
+            if key not in toiterate_dict:
+                toiterate_dict[key] = wp_annotations["entities_info"][key]
+        keys = sorted(toiterate_dict, key=lambda x: -len(str(toiterate_dict[x])))
+        #  logger.debug(toiterate_dict)
+        #  To discern omonyms ( e.g serbian old king Stephen and Stephen King)
+        #  we sort by the length of wikidata dict -
+        # the more popular is the person the more info about it we have and the sooner we get it
+        toiterate_dict = {key: toiterate_dict[key] for key in keys}
+        for entity in toiterate_dict:
+            found_types = []
+            logger.debug(f"Examine {entity}")
+            logger.debug(found_types)
+            if "types_2hop" in toiterate_dict[entity]:
+                found_types.extend([j[0] for j in toiterate_dict[entity]["types_2hop"] if j[0] not in found_types])
+            logger.debug(found_types)
+            if "instance of" in toiterate_dict[entity]:
+                found_types.extend([j[0] for j in toiterate_dict[entity]["instance of"] if j[0] not in found_types])
+            logger.debug(found_types)
+            if not any([j in types for j in found_types]):
+                logger.warning(f"Querying wikidata for {entity}")
+                found_types = []
+                for type_ in types:
+                    request_answer = request_triples_wikidata(
+                        "check_triplet", [(entity, "P31", "forw")], query_dict=book_query_dict
+                    )
+                    if isinstance(request_answer, list) and request_answer[0]:
+                        found_types.append(type_)
+            logger.debug(f"Found types {found_types}")
+            logger.debug(f"Interception {[k for k in types if k in found_types]}")
+            if any([j in types for j in found_types]):
+                logger.debug(f"{mode} found")
+                found_entity = entity
+                if "plain_entity" not in toiterate_dict[entity]:
+                    logger.warning(f"No plain_entity found in annotation for {entity}")
+                    plain_entities, _ = request_entities_entitylinking(entity, types=types, confidence_threshold=0.05)
+                    plain_entity = plain_entities[0]
+                else:
+                    plain_entity = toiterate_dict[entity]["plain_entity"]
+                if mode == "book":
+                    if "publication date" in toiterate_dict[entity]:
+                        publication_year = toiterate_dict[entity]["publication date"][0][0]
+                    else:
+                        logger.warning("No publication date found in annotation for {entity}")
+                        publication_year = get_published_year(plain_entity)
+                    n_years_ago = get_n_years(publication_year)
+                elif mode == "movie":
+                    if "film director" in toiterate_dict[entity]:
+                        film_director = toiterate_dict[entity]["film producer"][0][0]
+                    else:
+                        film_director = get_author(plain_entity, mode="movie")
+                elif mode == "author":  # to get rid of abbreviations such as J R R Tolkien
+                    found_entity = " ".join([k for k in found_entity.split(" ") if len(k) > 1])
+                break
+            else:
+                logger.info(f"No interception with {types}")
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        return None
+    entity = found_entity
+    attribute = film_director if mode == "movie" else n_years_ago
+    logger.info(f"Answer for get_name {entity} {attribute}")
+    return entity, plain_entity, attribute
 
 
 def get_published_year(book_entity: str) -> Optional[str]:
@@ -214,14 +170,14 @@ def get_published_year(book_entity: str) -> Optional[str]:
     return published_year
 
 
-def author_genres(plain_author_name):
+def author_genres(plain_author_name: str) -> list:
     plain_genres = request_triples_wikidata(
         "find_object", [(plain_author_name, "P136", "forw")], query_dict=book_query_dict
     )
     return list(map(entity_to_label, plain_genres))
 
 
-def get_plain_genres(plain_bookname: str):
+def get_plain_genres(plain_bookname: str) -> list:
     plain_genres = request_triples_wikidata(
         "find_object", [(plain_bookname, "P136", "forw")], query_dict=book_query_dict
     )
@@ -286,10 +242,10 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
     annotated_phrase["text"] = annotated_phrase["text"].lower()
     if re.search(r"\bis\b", annotated_phrase["text"]):
         annotated_phrase["text"] = annotated_phrase["text"].split(" is ")[1]
-    plain_bookname, _ = get_name(annotated_phrase, "book", return_plain=True)
+    _, plain_bookname, _ = get_name(annotated_phrase, "book", return_plain=True)
     if plain_bookname is None:
         logger.debug(f"Getting plain author")
-        plain_author, _ = get_name(annotated_phrase, "author", return_plain=True)
+        _, plain_author, _ = get_name(annotated_phrase, "author", return_plain=True)
     else:
         logger.debug(f"Processing bookname in get_author {plain_bookname}")
         plain_author = get_author(plain_bookname, return_plain=True, mode="book")
@@ -355,13 +311,15 @@ def best_plain_book_by_author(
         logger.exception(f"Error processing {book_list}")
         return default_phrase
 
-def what_is_book_about(book: str) -> Optional[str]:
+def what_is_book_about(book: Optional[str] = None) -> Optional[str]:
+    if not book:
+        return None
     fact = None
     logger.info(f"Requesting for {book}")
     if is_wikidata_entity(book):
         plain_books = [book]
     else:
-        plain_books, _ = request_entities_entitylinking(book, types=WIKI_MAPPING["book"]["types"])
+        plain_books, _ = request_entities_entitylinking(book, types=BOOK_WIKI_TYPES)
         logger.info(f"After request {plain_books}")
     if plain_books:
         plain_book = plain_books[0]
