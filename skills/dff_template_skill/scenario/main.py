@@ -27,7 +27,7 @@ from common.movies import SWITCH_MOVIE_SKILL_PHRASE
 from common.science import OFFER_TALK_ABOUT_SCIENCE
 import scenario.condition as loc_cnd
 import scenario.processing as loc_prs
-from scenario.processing import CACHE, set_flag
+from scenario.processing import CACHE, add_to_used, set_flag
 import scenario.response as loc_rsp
 
 
@@ -48,8 +48,8 @@ ZERO_CONFIDENCE = 0.0
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("global_flow", "fallback", 2): loc_cnd.exit_skill,
-            ("books_general", "dislikes_reading", 2): loc_cnd.dislikes_reading,
+            ("global_flow", "fallback", 1.5): loc_cnd.exit_skill,
+            ("books_general", "dislikes_reading", 1.5): loc_cnd.dislikes_reading,
             ("books_general", "book_start"): cnd.all(
                 [
                     loc_cnd.is_proposed_skill,
@@ -110,7 +110,7 @@ flows = {
                             loc_cnd.asked_book_content,
                         ]
                     ),
-                    loc_cnd.is_no
+                    int_cnd.is_no_vars
                 ]
             ) ,
             ("concrete_book_flow", "tell_about", 1.2): cnd.all(
@@ -127,7 +127,7 @@ flows = {
                     cnd.any([loc_cnd.about_in_slots, loc_cnd.about_in_request]),
                 ]
             ),
-            ("concrete_book_flow", "offer_best", 1.2): cnd.all(
+            ("concrete_book_flow", "offer_best", 1.6): cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
                     loc_cnd.bestbook_in_request,
@@ -162,6 +162,13 @@ flows = {
                     cnd.any([loc_cnd.about_in_request, loc_cnd.movie_in_request]),
                 ]
             ),
+            ("concrete_book_flow", "ask_fav", 0.8): cnd.all(
+                [
+                    loc_cnd.check_unused(loc_rsp.WHAT_BOOK_IMPRESSED_MOST),
+                    loc_cnd.check_flag("user_fav_book_visited"),
+                    loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
+                ]
+            ),
             ("undetected_flow", "unrecognized_author", 0.7): cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
@@ -179,7 +186,7 @@ flows = {
             ("undetected_flow", "cannot_name", 0.7): cnd.all(
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.ALL_QUESTIONS_ABOUT_BOOK),
-                    cnd.any([loc_cnd.is_no, loc_cnd.doesnt_know]),
+                    cnd.any([int_cnd.is_no_vars, loc_cnd.doesnt_know]),
                     cnd.neg(loc_cnd.book_in_request),
                     cnd.neg(loc_cnd.author_in_request),
                     cnd.neg(loc_cnd.movie_in_request),
@@ -192,7 +199,7 @@ flows = {
                         loc_cnd.about_book
                     ]
                 ),
-                cnd.any([loc_cnd.is_yes, loc_cnd.no_entities]),
+                cnd.any([int_cnd.is_yes_vars, loc_cnd.no_entities]),
                 cnd.neg(loc_cnd.book_in_request),
                 cnd.neg(loc_cnd.author_in_request),
                 cnd.neg(loc_cnd.movie_in_request),
@@ -230,9 +237,8 @@ flows = {
                 "use_phrase": loc_prs.add_to_used(loc_rsp.START_PHRASE),
             },
             TRANSITIONS: {
-                ("books_general", "dislikes_reading", 2): loc_cnd.is_no,
-                ("books_general", "likes_reading", 2): loc_cnd.is_yes,
-                lbl.to_fallback(): cnd.true(),
+                ("books_general", "dislikes_reading", 2): int_cnd.is_no_vars,
+                ("books_general", "likes_reading", 2): cnd.true(),
             },
         },
         "book_restart": {
@@ -271,7 +277,7 @@ flows = {
                 1: loc_prs.set_flag("fav_book_start_visited", True)
             },
             TRANSITIONS: {
-                ("bot_fav_book", "fav_name", 2): loc_cnd.is_yes,
+                ("bot_fav_book", "fav_name", 2): int_cnd.is_yes_vars,
                 ("bot_fav_book", "fav_denied", 1.8): cnd.true(),
             },
         },
@@ -285,30 +291,32 @@ flows = {
                 1: loc_prs.set_flag("fav_book_restart_visited")
             },
             TRANSITIONS: {
-                ("bot_fav_book", "fav_name", 2): loc_cnd.is_yes,
+                ("bot_fav_book", "fav_name", 2): int_cnd.is_yes_vars,
                 ("bot_fav_book", "fav_denied", 1.8): cnd.true(),
             },
         },
         "fav_name": {
             RESPONSE: "{fav_book_init} " + loc_rsp.TELL_REQUEST,
             PROCESSING: {
-                "set_slots": loc_prs.save_next_key(
+                1: loc_prs.save_next_key(
                     fav_keys, loc_rsp.FAVOURITE_BOOK_ATTRS
                 ),
-                "fill_slots": int_prs.fill_responses_by_slots(),
+                2: loc_prs.add_to_used(loc_rsp.TELL_REQUEST),
+                3: int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {
-                lbl.forward(2): loc_cnd.is_yes,
+                lbl.forward(2): int_cnd.is_yes_vars,
                 ("bot_fav_book", "fav_denied"): cnd.true(),
             },
         },
         "fav_elaborate": {
             RESPONSE: "{cur_book_about} " + loc_rsp.TELL_REQUEST2,
             PROCESSING: {
-                1: int_prs.fill_responses_by_slots(),
+                1: loc_prs.add_to_used(loc_rsp.TELL_REQUEST2),
+                2: int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {
-                lbl.forward(2): loc_cnd.is_no,
+                lbl.forward(2): int_cnd.is_no_vars,
                 ("concrete_book_flow", "offer_date", 1.8): cnd.true(),  #!!!
             },
         },
@@ -319,8 +327,8 @@ flows = {
                 2: int_prs.set_confidence(BIT_LOWER_CONFIDENCE)
             },
             TRANSITIONS: {
-                lbl.to_fallback(2): loc_cnd.is_no,
-                ("books_general", "book_restart", 1.8): loc_cnd.is_yes,
+                lbl.to_fallback(2): int_cnd.is_no_vars,
+                ("books_general", "book_restart", 1.8): int_cnd.is_yes_vars,
             },
         },
     },
@@ -332,11 +340,11 @@ flows = {
             }
         },
         "ask_fav": {
-            RESPONSE: loc_rsp.append_unused(
-                initial="Fabulous! And ",
-                phrases=[loc_rsp.WHAT_BOOK_IMPRESSED_MOST]
-            ),
-            PROCESSING: {1: loc_prs.set_flag("user_fav_book_visited", True)},
+            RESPONSE: "Fabulous! And " + loc_rsp.WHAT_BOOK_IMPRESSED_MOST,
+            PROCESSING: {
+                1: loc_prs.set_flag("user_fav_book_visited", True),
+                2: add_to_used(loc_rsp.WHAT_BOOK_IMPRESSED_MOST)
+            },
             TRANSITIONS: {
                 lbl.forward(2): cnd.all([loc_cnd.told_fav_book, loc_cnd.book_in_request]),
                 ("undetected_flow", "ask_to_repeat", 0.5): cnd.any(
@@ -376,12 +384,18 @@ flows = {
             RESPONSE: loc_rsp.append_question(
                 initial="I see you love it."
                 "It is so wonderful that you read the books you love. "
-            )
+            ),
+            PROCESSING: {
+                1: int_prs.set_confidence(SUPER_CONFIDENCE)
+            }
         },
         "user_disliked": {
             RESPONSE: loc_rsp.append_question(
                 initial="It's OK. Maybe some other books will fit you better. "
             ),
+            PROCESSING: {
+                1: int_prs.set_confidence(SUPER_CONFIDENCE)
+            }
         },
         "offer_best": {
             RESPONSE: "You have a great taste in books! I also adore books by {cur_book_author}, "
@@ -406,7 +420,7 @@ flows = {
         },
         "tell_genre": {
             RESPONSE: loc_rsp.append_question(
-                initial="I believe that {cur_book_name} is {cur_genre}."
+                initial="I believe that {cur_book_name} is {cur_genre}. "
             ),
             PROCESSING: {
                 1: loc_prs.execute_response,
@@ -441,9 +455,9 @@ flows = {
             },
             TRANSITIONS: {
                 ("concrete_book_flow", "tell_date", 2): cnd.all(
-                    [loc_cnd.is_yes, loc_cnd.check_slot("cur_book_ago")]
+                    [int_cnd.is_yes_vars, loc_cnd.check_slot("cur_book_ago")]
                 ),
-                ("concrete_book_flow", "denied_information", 1.9): loc_cnd.is_no,
+                ("concrete_book_flow", "denied_information", 1.9): int_cnd.is_no_vars,
                 ("global_flow", "fallback", 0.5): cnd.true()
             }
         },
@@ -460,22 +474,23 @@ flows = {
             },
             TRANSITIONS: {
                 ("concrete_book_flow", "tell_date", 2): cnd.all(
-                    [loc_cnd.is_yes, loc_cnd.check_slot("cur_book_ago")]
+                    [int_cnd.is_yes_vars, loc_cnd.check_slot("cur_book_ago")]
                 ),
-                ("concrete_book_flow", "denied_information", 1.9): loc_cnd.is_no,
+                ("concrete_book_flow", "denied_information", 1.9): int_cnd.is_no_vars,
                 ("global_flow", "fallback", 0.5): cnd.true()
             }
         },
         "tell_date": {
-            RESPONSE: loc_rsp.append_unused(
-                initial="{cur_book_ago} ago!",
-                phrases=loc_rsp.DID_NOT_EXIST
-            ),
+            RESPONSE: "{cur_book_ago} ago! " + random.choice(loc_rsp.DID_NOT_EXIST),
             PROCESSING: {
                 1: loc_prs.get_book_year,
                 2: loc_prs.execute_response,
                 3: int_prs.fill_responses_by_slots(),
             },
+            TRANSITIONS: {
+                ("concrete_book_flow", "offer_genre", 2): loc_cnd.check_slot("cur_book_plain"),
+                ("undetected_flow", "change_branch", 1.9): cnd.true()
+            }
         },
         "denied_information": {
             RESPONSE: loc_rsp.append_question(
@@ -498,7 +513,7 @@ flows = {
                 },
             TRANSITIONS: {
                 ("return_genrebook", 2): loc_cnd.genrebook_in_slots,
-                ("concrete_book_flow", "denied_information", 1): loc_cnd.is_no
+                ("concrete_book_flow", "denied_information", 1): int_cnd.is_no_vars
             },
         },
         "return_genrebook": {
@@ -520,9 +535,9 @@ flows = {
             },
             TRANSITIONS: {
                 lbl.forward(): cnd.all(
-                    [loc_cnd.is_yes, loc_cnd.about_in_slots]
+                    [int_cnd.is_yes_vars, loc_cnd.about_in_slots]
                 ),
-                ("books_general", "book_restart"): loc_cnd.is_no,
+                ("books_general", "book_restart"): int_cnd.is_no_vars,
                 lbl.to_fallback(0.4): cnd.true(),
             },
         },
@@ -549,7 +564,7 @@ flows = {
         "bible_start": {
             RESPONSE: "I know that Bible is one of the most widespread books on Earth. "
             "It is the foundation stone of Christianity. Have you read the whole Bible?",
-            TRANSITIONS: {lbl.forward(2): loc_cnd.is_yes, ("bible_end", 1.9): cnd.true()},
+            TRANSITIONS: {lbl.forward(2): int_cnd.is_yes_vars, ("bible_end", 1.9): cnd.true()},
         },
         "bible_elaborate": {
             RESPONSE: "Unfortunately, as a socialbot, I don't have an immortal soul,"
@@ -582,7 +597,7 @@ flows = {
         },        
         "cannot_name": {
             RESPONSE: loc_rsp.append_question(
-                initial=loc_rsp.BOOK_ANY_PHRASE
+                initial=loc_rsp.BOOK_ANY_PHRASE + " "
             ),
         },
         "ask_question": {

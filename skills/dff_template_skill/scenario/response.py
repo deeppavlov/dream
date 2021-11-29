@@ -16,9 +16,9 @@ logger = logging.getLogger(__name__)
 START_PHRASE = "Books are my diamonds. Do you love reading?"
 UNCERTAINTY = [" It's not always easy to tell, of course.", " It's only my opinion, though."]
 FAVOURITE_BOOK_PHRASES = [
-    " Do you want to know what my favourite book is?",
-    " Do you want to know what my other favourite book is?",
-    " Do you want to hear about one more book that impressed me?",
+    "Do you want to know what my favourite book is?",
+    "Do you want to know what my other favourite book is?",
+    "Do you want to hear about one more book that impressed me?",
 ]
 OPINION_REQUEST_ON_BOOK_PHRASES = [
     "Did you enjoy this book?",
@@ -32,13 +32,13 @@ READ_BOOK_ADVICES = [
     "I think you will love this book!",
 ]
 
-DID_NOT_EXIST = [" I didn't exist in that time.", " I'm a bit too young to remember those times though."]
+DID_NOT_EXIST = ["I didn't exist at that time.", "I'm a bit too young to remember those times though."]
 
-HAVE_YOU_READ_BOOK = " Have you read it?"
+HAVE_YOU_READ_BOOK = "Have you read it?"
 ASK_ABOUT_OFFERED_BOOK = "It's a real showpiece. Have you read it?"
-TELL_REQUEST = " May I tell you something about this book?"
-TELL_REQUEST2 = " Would you like to hear something else about this book?"
-WHAT_BOOK_IMPRESSED_MOST = " What book impressed you the most?"
+TELL_REQUEST = "May I tell you something about this book?"
+TELL_REQUEST2 = "Would you like to hear something else about this book?"
+WHAT_BOOK_IMPRESSED_MOST = "What book impressed you the most?"
 WHEN_IT_WAS_PUBLISHED = "Do you know when it was first published?"
 WHAT_BOOK_LAST_READ = SWITCH_BOOK_SKILL_PHRASE
 BOOK_ANY_PHRASE = "I see you can't name it. Could you please name any book you have read?"
@@ -131,14 +131,14 @@ def genre_phrase(ctx: Context, actor: Actor):
     return response
 
 
-def append_question(initial: str) -> Callable:
+def append_question(initial: str, additional=None) -> Callable:
     def question_handler(ctx: Context, actor: Actor) -> str:
         """
         Implements the original booklink2reply intended to change the branch
         Exits the skill if no questions remain
         """
-        questions: List[str] = []
-        if not ctx.misc.get("flags", {}).get("user_fav_book_visited", False):
+        questions: List[str] = [] if not additional else [additional]
+        if not WHAT_BOOK_IMPRESSED_MOST in ctx.misc.get("used_phrases", []):
             questions.append(WHAT_BOOK_IMPRESSED_MOST)
         if not ctx.misc.get("flags", {}).get("fav_book_start_visited", False):
             questions.append(FAVOURITE_BOOK_PHRASES[0])
@@ -146,6 +146,7 @@ def append_question(initial: str) -> Callable:
             questions.extend(FAVOURITE_BOOK_PHRASES[1:])
         if not ctx.misc.get("flags", {}).get("user_fav_genre_visited", False):
             questions.append(WHAT_GENRE_FAV)
+        random.shuffle(questions)
         return append_unused(initial, questions, exit_on_exhaust=True)(ctx, actor)
     
     return question_handler

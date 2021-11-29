@@ -25,7 +25,7 @@ from common.utils import (
 
 import scenario.response as loc_rsp
 import scenario.universal as universal
-from scenario.universal import GENRE_PATTERN
+from scenario.universal import GENRE_PATTERN, get_slot
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(
@@ -86,10 +86,6 @@ def annot_adapter(func: Callable) -> Callable:
 
 
 about_book = annot_adapter(about_book)
-
-is_yes = annot_adapter(is_yes)
-
-is_no = annot_adapter(is_no)
 
 is_question = annot_adapter(is_question)
 
@@ -180,6 +176,7 @@ def is_side_or_stop(ctx: Context, actor: Actor) -> bool:
     )
     intents = set(get_intents(last_request, which="intent_catcher", probs=False))
     side_intent_present = len(intents.intersection(SIDE_INTENTS)) > 0
+    logger.debug("Side intent detected, exiting")
     return side_intent_present
 
 
@@ -242,15 +239,16 @@ def about_in_request(ctx: Context, actor: Actor) -> bool:
 def bestbook_in_request(ctx: Context, actor: Actor) -> bool:
     return bool(
         (author := universal.get_author(ctx, actor))
-        and universal.best_plain_book_by_author(author[1])
+        and (author[2]
+        or universal.best_plain_book_by_author(author[1]))
     )
 
 
 def date_in_slots(ctx: Context, actor: Actor) -> bool:
     return bool(
         (book := universal.get_book(ctx, actor))
-        and book[2] 
-        or check_slot("cur_book_ago")
+        and (book[2] 
+        or check_slot("cur_book_ago"))
     )
 
 
@@ -265,6 +263,13 @@ def genre_in_request(ctx: Context, actor: Actor) -> bool:
     return bool(
         (book := universal.get_book(ctx, actor)) and universal.genre_of_book(book[1])
     )
+
+
+def genre_in_slots(ctx: Context, actor: Actor) -> bool:
+    return bool(
+        (book_plain := get_slot("cur_book_plain")(ctx, actor)) 
+        and universal.genre_of_book(book_plain)
+    ) 
 
 
 def movie_in_request(ctx: Context, actor: Actor) -> bool:

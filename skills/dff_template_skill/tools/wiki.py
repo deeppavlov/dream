@@ -126,6 +126,8 @@ def get_name(
                         film_director = get_author(plain_entity, mode="movie")
                 elif mode == "author":  # to get rid of abbreviations such as J R R Tolkien
                     found_entity = " ".join([k for k in found_entity.split(" ") if len(k) > 1])
+                    if "notable work" in toiterate_dict[entity]:
+                        attribute = random.choice(toiterate_dict[entity]["notable work"])[1]
                 break
             else:
                 logger.info(f"No interception with {types}")
