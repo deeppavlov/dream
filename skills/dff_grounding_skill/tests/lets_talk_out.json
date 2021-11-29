@@ -3,7 +3,7 @@
         [
             "You just told me about star wars, right?",
             "You like to ask interesting questions.",
-            "You have so many interesting questions. I'm not sure about that."
+            "You have so many interesting questions. I'm ashamed, I don't know."
         ],
         [
             1.0,
@@ -93,13 +93,13 @@
                                     }
                                 ],
                                 [
-                                    "You have so many interesting questions. I'm not sure about that.",
+                                    "You have so many interesting questions. I'm ashamed, I don't know.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
-                                                "I'm not sure about that."
+                                                "I'm ashamed, I don't know."
                                             ]
                                         }
                                     },
@@ -118,7 +118,7 @@
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
-                                    "I'm not sure about that."
+                                    "I'm ashamed, I don't know."
                                 ]
                             }
                         },
@@ -216,13 +216,13 @@
                                     }
                                 ],
                                 [
-                                    "You have so many interesting questions. I'm not sure about that.",
+                                    "You have so many interesting questions. I'm ashamed, I don't know.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
-                                                "I'm not sure about that."
+                                                "I'm ashamed, I don't know."
                                             ]
                                         }
                                     },
@@ -241,7 +241,7 @@
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
-                                    "I'm not sure about that."
+                                    "I'm ashamed, I don't know."
                                 ]
                             }
                         },
@@ -339,13 +339,13 @@
                                     }
                                 ],
                                 [
-                                    "You have so many interesting questions. I'm not sure about that.",
+                                    "You have so many interesting questions. I'm ashamed, I don't know.",
                                     0.7,
                                     {
                                         "grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
-                                                "I'm not sure about that."
+                                                "I'm ashamed, I don't know."
                                             ]
                                         }
                                     },
@@ -364,7 +364,7 @@
                             "grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
-                                    "I'm not sure about that."
+                                    "I'm ashamed, I don't know."
                                 ]
                             }
                         },
@@ -382,7 +382,7 @@
                 "grounding_skill": {
                     "used_universal_intent_responses": [
                         "It's been really cool getting to know you better.",
-                        "I'm not sure about that."
+                        "I'm ashamed, I don't know."
                     ]
                 }
             }

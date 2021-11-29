@@ -44,7 +44,6 @@ def handler(requested_data, random_seed=None):
         try:
             # for tests
             if random_seed:
-                logger.error(f"{random_seed=}")
                 random.seed(int(random_seed))
             ctx = actor(ctx)
             responses.append(get_response(ctx, actor))

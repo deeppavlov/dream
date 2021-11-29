@@ -143,6 +143,7 @@ def generate_acknowledgement(last_human_utterances, curr_intents, curr_considere
 #####################################################################
 def get_unused_reply(intent, used_universal_intent_responses):
     available_resps = list(set(UNIVERSAL_INTENT_RESPONSES[intent]).difference(set(used_universal_intent_responses)))
+    available_resps = sorted(available_resps)
     if available_resps:
         reply = random.choice(available_resps)
     else:

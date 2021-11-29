@@ -2,7 +2,7 @@
     [
         [
             "Thank you for being so considerate with me on this.",
-            "I bet that you are so sincere'. There's nothing more comforting than to find out something new about you."
+            "I bet that you are so sincere'. I'm so much enjoying getting to know you."
         ],
         [
             0.5,
@@ -142,7 +142,7 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. There's nothing more comforting than to find out something new about you.",
+                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
                                     0.7,
                                     {
                                         "grounding_skill": {
@@ -155,7 +155,7 @@
                                                 "I hadn't really thought about it.",
                                                 "I'm not sure about that.",
                                                 "It's so embarrassing, but I don't know.",
-                                                "There's nothing more comforting than to find out something new about you."
+                                                "I'm so much enjoying getting to know you."
                                             ]
                                         }
                                     },
@@ -181,7 +181,7 @@
                                     "I hadn't really thought about it.",
                                     "I'm not sure about that.",
                                     "It's so embarrassing, but I don't know.",
-                                    "There's nothing more comforting than to find out something new about you."
+                                    "I'm so much enjoying getting to know you."
                                 ]
                             }
                         },
@@ -330,7 +330,7 @@
                                     {}
                                 ],
                                 [
-                                    "I bet that you are so sincere'. There's nothing more comforting than to find out something new about you.",
+                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
                                     0.7,
                                     {
                                         "grounding_skill": {
@@ -343,7 +343,7 @@
                                                 "I hadn't really thought about it.",
                                                 "I'm not sure about that.",
                                                 "It's so embarrassing, but I don't know.",
-                                                "There's nothing more comforting than to find out something new about you."
+                                                "I'm so much enjoying getting to know you."
                                             ]
                                         }
                                     },
@@ -369,7 +369,7 @@
                                     "I hadn't really thought about it.",
                                     "I'm not sure about that.",
                                     "It's so embarrassing, but I don't know.",
-                                    "There's nothing more comforting than to find out something new about you."
+                                    "I'm so much enjoying getting to know you."
                                 ]
                             }
                         },
@@ -394,7 +394,7 @@
                         "I hadn't really thought about it.",
                         "I'm not sure about that.",
                         "It's so embarrassing, but I don't know.",
-                        "There's nothing more comforting than to find out something new about you."
+                        "I'm so much enjoying getting to know you."
                     ]
                 }
             }
