@@ -1,12 +1,14 @@
 services:
-#  cobot-convers-evaluator-annotator:
-#    command: ["nginx", "-g", "daemon off;"]
-#    build:
-#      context: dp/proxy/
-#      dockerfile: Dockerfile
-#    environment:
-#      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-convers-evaluator-annotator
-#      - PORT=8004
+
+  convers-evaluator-annotator:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8004
+      - PORT=8004
+      
   program-y:
     command: ["nginx", "-g", "daemon off;"]
     build:
