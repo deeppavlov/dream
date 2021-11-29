@@ -41,5 +41,6 @@ RUN wget ${PRETRAINED_MODEL} -q -P /src/comet_commonsense/pretrained_models/ && 
 
 COPY $SERVICE_HOME/server.py $SERVICE_HOME/test_server.py $SERVICE_HOME/test.sh ./
 COPY $SERVICE_HOME/tests tests
+COPY ./common/ /src/common/
 
 CMD uvicorn server:app --host 0.0.0.0 --port ${SERVICE_PORT}
