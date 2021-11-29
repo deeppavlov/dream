@@ -47,7 +47,7 @@ def get_story_left(ctx: Context, actor: Actor) -> str:
     story_type = get_story_type(ctx, actor)
     stories_left = list(set(stories.get(story_type, [])) - set(ctx.misc.get("stories_told", [])))
     try:
-        return random.choice(stories_left)
+        return random.choice(sorted(stories_left))
     except Exception:
         return ""
 
@@ -57,10 +57,10 @@ def choose_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     story = get_story_left(ctx, actor)
     story_type = get_story_type(ctx, actor)
     setup = stories.get(story_type, {}).get(story, {}).get("setup", "")
-    what_happend_next_phrase = random.choice(phrases.get("what_happend_next", []))
+    what_happend_next_phrase = random.choice(sorted(phrases.get("what_happend_next", [])))
 
     # include sure if user defined a type of story at the beginnig, otherwise include nothing
-    sure_phrase = random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
+    sure_phrase = random.choice(sorted(phrases.get("sure", []))) if prev_node == "start_node" else ""
 
     ctx.misc["stories_told"] = ctx.misc.get("stories_told", []) + [story]
     ctx.misc["story"] = story
@@ -76,11 +76,11 @@ def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
 
         # include sure if user asked to tell a story, include nothing if agent proposed to tell a story
-        sure_phrase = random.choice(phrases.get("sure", [])) if prev_node == "start_node" else ""
-        return sure_phrase + " " + random.choice(phrases.get("which_story", []))
+        sure_phrase = random.choice(sorted(phrases.get("sure", []))) if prev_node == "start_node" else ""
+        return sure_phrase + " " + random.choice(sorted(phrases.get("which_story", [])))
     elif prev_node == "choose_story_node":
         int_ctx.set_can_continue(ctx, actor, "CANNOT_CONTINUE")
-        return random.choice(phrases.get("no", []))
+        return random.choice(sorted(phrases.get("no", [])))
     else:
         return "Ooops."
 
@@ -107,10 +107,10 @@ def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     # no stories
     elif prev_node == "which_story_node" and not story_type:
         int_ctx.set_can_continue(ctx, actor, "CAN_CONTINUE")
-        return random.choice(phrases.get("no_stories", []))
+        return random.choice(sorted(phrases.get("no_stories", [])))
 
     # if prev_node is tell_punchline_node or fallback_node
     else:
         int_ctx.set_can_continue(ctx, actor, "MUST_CONTINUE")
         int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(ctx, actor) else None
-        return random.choice(phrases.get("start_phrases", []))
+        return random.choice(sorted(phrases.get("start_phrases", [])))

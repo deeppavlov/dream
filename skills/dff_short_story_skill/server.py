@@ -58,7 +58,7 @@ def handler(requested_data, random_seed=None):
 
 # import pathlib
 # import json
-#
+
 # for in_file in pathlib.Path("tests").glob("./*_in.json"):
 #     logger.error(in_file)
 #     logger.info("Creating tests")
@@ -66,7 +66,7 @@ def handler(requested_data, random_seed=None):
 #     responses = handler(test_in, RANDOM_SEED)
 #     out_file = str(in_file).replace("in.json", "out.json")
 #     import common.test_utils as t_utils
-#
+
 #     t_utils.save_to_test(responses, out_file, indent=4)  # TEST
 
 try:

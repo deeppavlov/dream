@@ -1,6 +1,6 @@
 [
     [
-        "Yes, sure. In second grade, I told everyone that I was leaving school before next semester to move to Hollywood to play Megan\u2019s cousin from Vermont on Drake and Josh. At first I just told my best friend, but then the whole school found out. I had people coming up to me and asking me for my autograph and a teacher even asked for a picture with me. When I showed up on the first day of school in third grade, I told everyone that the show was going off the air after the season finished (even though I had no knowledge of when it was ending), and so they wouldn\u2019t need me. ... Are you still intrigued?",
+        "Yes, sure. This one is from another user. During my sophomore year of high school, we were doing silent work and my history teacher said that we could listen to music but if it was too loud he would \u201cbreak our headphones.\u201d so I\u2019m doing my work quietly with my music on low, and this obnoxious kid sitting next to me had his music really loud. I could hear it over my music but ignored it. My teacher thought it was me. So he comes up to me and ... Do you want to know what happend after?",
         0.85,
         {
             "dff_short_story_skill_state": {
@@ -14,7 +14,7 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "d755f4d5-4941-4a74-9ccf-6352d3085d04",
+                    "id": "adfc6b8f-4871-488a-b71d-99ea1e0d39ed",
                     "labels": {
                         "0": [
                             "story_flow",
@@ -25,13 +25,13 @@
                         "0": "Tell me funny story."
                     },
                     "responses": {
-                        "0": "Yes, sure. In second grade, I told everyone that I was leaving school before next semester to move to Hollywood to play Megan\u2019s cousin from Vermont on Drake and Josh. At first I just told my best friend, but then the whole school found out. I had people coming up to me and asking me for my autograph and a teacher even asked for a picture with me. When I showed up on the first day of school in third grade, I told everyone that the show was going off the air after the season finished (even though I had no knowledge of when it was ending), and so they wouldn\u2019t need me. ... Are you still intrigued?"
+                        "0": "Yes, sure. This one is from another user. During my sophomore year of high school, we were doing silent work and my history teacher said that we could listen to music but if it was too loud he would \u201cbreak our headphones.\u201d so I\u2019m doing my work quietly with my music on low, and this obnoxious kid sitting next to me had his music really loud. I could hear it over my music but ignored it. My teacher thought it was me. So he comes up to me and ... Do you want to know what happend after?"
                     },
                     "misc": {
                         "stories_told": [
-                            "drake and josh"
+                            "apple headphones"
                         ],
-                        "story": "drake and josh",
+                        "story": "apple headphones",
                         "story_type": "funny"
                     },
                     "validation": false,
