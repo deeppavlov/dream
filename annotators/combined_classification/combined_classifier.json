@@ -1,60 +1,182 @@
 {
-    "chainer": {
-        "in": [
-            "sentences"
+    "chainer":{
+        "in":[
+            "x",
+            "x_with_history"
         ],
-        "in_y": [
-            "y"
-        ],
-        "pipe": [
+        "pipe":[
             {
-                "class_name": "bert_preprocessor",
-                "vocab_file": "{MODEL_PATH}/vocab.txt",
-                "do_lower_case": false,
-                "max_seq_length": 32,
-                "in": [
-                    "sentences"
+                "class_name":"torch_transformers_preprocessor",
+                "vocab_file":"bert-base-uncased",
+                "max_seq_length":32,
+                "in":[
+                    "x"
                 ],
-                "out": [
-                    "bert_features"
+                "out":[
+                    "bert_features_x"
                 ]
             },
             {
-                "class_name": "bert_float_classifier",
-                "n_classes": 60,
-                "return_probas": true,
-                "one_hot_labels": true,
-                "multilabel": true,
-                "bert_config_file": "{MODEL_PATH}/bert_config.json",
-                "save_path": "{MODEL_PATH}/model",
-                "load_path": "{MODEL_PATH}/model",
-                "keep_prob": 0.5,
-                "learning_rate": 1e-05,
-                "learning_rate_drop_patience": 5,
-                "learning_rate_drop_div": 2.0,
+                "class_name":"torch_transformers_preprocessor",
+                "vocab_file":"bert-base-uncased",
+                "max_seq_length":64,
+                "in":[
+                    "x_with_history"
+                ],
+                "out":[
+                    "bert_features_x_with_history"
+                ]
+            },
+            {
+                "id":"multitask_pal_bert",
+                "class_name":"multitask_pal_bert",
+                "optimizer_parameters":{
+                    "lr":4e-5
+                },
+                "gradient_accumulation_steps":1,
+                "steps_per_epoch":1,
+                "learning_rate_drop_patience":2,
+                "learning_rate_drop_div":2.0,
+                "return_probas":true,
+                "multilabel": false,
+                "one_hot_labels":true,
+                "log_model_summary":false,
+                "save_path":"{MODELS_PATH}/model",
+                "load_path":"{MODELS_PATH}/model",
+                "tasks":{
+                    "topics":{
+                        "n_classes":22
+                    },
+                    "da_topics":{
+                        "n_classes":11
+                    },
+                    "da_intents":{
+                        "n_classes":11
+                    },
+                    "emo":{
+                        "n_classes":7
+                    },
+                    "sentiment":{
+                        "n_classes":3
+                    },
+                    "toxic":{
+                        "n_classes":8
+                    },
+                    "factoid":{"n_classes": 2}
+                },
+                "in_distribution":{
+                    "topics":1,
+                    "da_topics":1,
+                    "da_intents":1,
+                    "emo":1,
+                    "sentiment":1,
+                    "toxic":1,
+                    "factoid":1
+                },
+                "in":[
+                    "bert_features_x_with_history",                    
+                    "bert_features_x_with_history",
+                    "bert_features_x_with_history",
+                    "bert_features_x_with_history",
+                    "bert_features_x",
+                    "bert_features_x",
+                    "bert_features_x",
+                    "bert_features_x"
+                ],
+                "out":[
+                    "y_topics_pred",
+                    "y_da_topics_pred",
+                    "y_da_intents_pred",
+                    "y_emo_pred",
+                    "y_sentiment_pred",
+                    "y_toxic_pred",
+                    "y_factoid_pred"
+                ]
+            },
+            {
                 "in": [
-                    "bert_features"
+                    "y_topics_pred"
                 ],
                 "out": [
-                    "answer_list"
-                ]
+                    "y_topics_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_da_topics_pred"
+                ],
+                "out": [
+                    "y_da_topics_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_da_intents_pred"
+                ],
+                "out": [
+                    "y_da_intents_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_emo_pred"
+                ],
+                "out": [
+                    "y_emo_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_sentiment_pred"
+                ],
+                "out": [
+                    "y_sentiment_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_toxic_pred"
+                ],
+                "out": [
+                    "y_toxic_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
+            },
+            {
+                "in": [
+                    "y_factoid_pred"
+                ],
+                "out": [
+                    "y_factoid_pred_ids"
+                ],
+                "class_name": "proba2labels",
+                "max_proba": true
             }
         ],
-        "out": [
-            "answer_list"
+        "out":[
+            "y_topics_pred",
+            "y_da_topics_pred",
+            "y_da_intents_pred",
+            "y_emo_pred",
+            "y_sentiment_pred",
+            "y_toxic_pred",
+            "y_factoid_pred"
         ]
     },
-    "metadata": {
-        "variables": {
-            "ROOT_PATH": "~/.deeppavlov",
-            "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-            "MODEL_PATH": "/tmp",
-            "MODEL_NAME": "model"
-        },
-        "imports":["bert_float_classifier"],
-        "requirements": [
-            "{DEEPPAVLOV_PATH}/requirements/tf.txt",
-            "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"
-        ]
+    "metadata":{
+        "variables":{
+            "MODELS_PATH":"/tmp"
+        }
     }
 }
