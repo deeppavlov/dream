@@ -771,7 +771,7 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_program_y_dangerous_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_program_y_dangerous")
+    return utils.dff_formatter(dialog, "program_y_dangerous")
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:

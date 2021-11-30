@@ -66,7 +66,7 @@ services:
       - 8018:8018
   program-y-dangerous:
     volumes:
-      - "./skills/program_y:/src"
+      - "./skills/program_y_dangerous:/src"
       - "./common:/src/common"
     ports:
       - 8022:8022

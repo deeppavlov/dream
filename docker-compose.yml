@@ -203,7 +203,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8022
-        SERVICE_NAME: program_y
+        SERVICE_NAME: program_y_dangerous
       context: .
       dockerfile: ./skills/program_y_dangerous/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8022 --reload
