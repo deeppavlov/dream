@@ -387,7 +387,7 @@ services:
       - PORT=8087
 
     command: ["nginx", "-g", "daemon off;"]
-  grounding-skill:
+  dff-grounding-skill:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
