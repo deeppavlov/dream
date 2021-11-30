@@ -119,12 +119,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8032:8032
-  weather-skill:
-    volumes:
-      - "./skills/weather_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8037:8037
   emotion-skill:
     volumes:
       - "./skills/emotion_skill:/src"
@@ -406,6 +400,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8061:8061
+  dff-weather-skill:
+    volumes:
+      - "./skills/dff_weather_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8037:8037
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
