@@ -3,7 +3,7 @@
         "Robot activated. Awaiting your command Mate.",
         0.85,
         {
-            "program_y_state_batch": {
+            "program_y_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 0,
                 "history": {
