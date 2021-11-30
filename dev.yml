@@ -19,7 +19,7 @@ services:
       - 8006:8006
   program-y:
     volumes:
-      - "./skills/program-y:/src"
+      - "./skills/program_y:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008

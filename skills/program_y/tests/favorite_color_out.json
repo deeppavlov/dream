@@ -3,7 +3,7 @@
         "Green is my favorite color too!",
         0.85,
         {
-            "dff_template_skill_state": {
+            "program_y_state_batch": {
                 "shared_memory": {},
                 "previous_human_utter_index": 0,
                 "history": {
