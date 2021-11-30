@@ -118,7 +118,7 @@ class RuleBasedSkillSelectorConnector:
                         "news_api_skill",
                         "dff_coronavirus_skill",
                         "dff_funfact_skill",
-                        "weather_skill",
+                        "dff_weather_skill",
                         "dff_short_story_skill",
                     ],
                 )
@@ -127,7 +127,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("news_api_skill")
 
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
-                    skills_for_uttr.append("weather_skill")
+                    skills_for_uttr.append("dff_weather_skill")
 
                 if is_celebrity_mentioned:
                     skills_for_uttr.append("dff_gossip_skill")
@@ -224,7 +224,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_science_skill",
                         "dff_gossip_skill",
                         "game_cooperative_skill",
-                        "weather_skill",
+                        "dff_weather_skill",
                         "dff_funfact_skill",
                         "dff_travel_skill",
                         "dff_coronavirus_skill",
@@ -240,7 +240,7 @@ class RuleBasedSkillSelectorConnector:
 
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
-                    skills_for_uttr.append("weather_skill")
+                    skills_for_uttr.append("dff_weather_skill")
 
                 if if_turn_on_emotion(user_uttr, bot_uttr):
                     skills_for_uttr.append("emotion_skill")

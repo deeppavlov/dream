@@ -116,7 +116,7 @@ SKILL_TRIGGERS = {
         "cobot_topics": ["Games"],
         "intents": [],
     },
-    "weather_skill": {
+    "dff_weather_skill": {
         "compiled_patterns": [WEATHER_COMPILED_PATTERN],
         "previous_bot_patterns": [WEATHER_COMPILED_PATTERN],
         "cobot_dialogact_topics": [],
