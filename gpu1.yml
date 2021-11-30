@@ -127,7 +127,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
     restart: unless-stopped
-  grounding-skill:
+  dff-grounding-skill:
     restart: unless-stopped
   masked-lm:
     restart: unless-stopped

@@ -85,7 +85,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
-  grounding-skill:
+  dff-grounding-skill:
   masked-lm:
     environment:
       - CUDA_VISIBLE_DEVICES=8

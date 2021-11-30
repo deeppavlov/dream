@@ -414,7 +414,7 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
-		    "annotators.cobot_topics"
+                    "annotators.cobot_topics"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -776,13 +776,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "grounding_skill": {
+            "dff_grounding_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://grounding-skill:8080/grounding_skill"
+                    "url": "http://dff-grounding-skill:8080/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_grounding_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
