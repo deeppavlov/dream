@@ -23,7 +23,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "talking"
                         ],
                         "combined_classification": {
@@ -281,7 +281,7 @@
                             "factoid": 0.02494260109961033,
                             "conversational": 0.9750574231147766
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "conceptnet": {},
                         "sentseg": {
                             "punct_sent": "May be.",
