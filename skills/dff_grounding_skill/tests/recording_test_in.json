@@ -32,7 +32,7 @@
                                 "toxic": 0.0015038847923278809
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -250,7 +250,7 @@
                                 "Do you keep the secret information?"
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
