@@ -738,6 +738,10 @@ def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_art_skill")
 
 
+def dff_grounding_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_grounding_skill")
+
+
 def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_coronavirus_skill")
 
