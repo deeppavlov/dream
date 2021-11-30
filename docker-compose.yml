@@ -80,9 +80,6 @@ services:
   program-y:
     env_file: [.env]
     build:
-      args:
-        SERVICE_PORT: 8008
-        SERVICE_NAME: program-y
       context: .
       dockerfile: ./skills/program-y/Dockerfile
     deploy:
@@ -1180,7 +1177,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 128M
         reservations:
-          memory: 1024M
+          memory: 128M
 version: '3.7'
