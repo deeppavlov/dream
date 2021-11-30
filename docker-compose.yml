@@ -195,9 +195,9 @@ services:
     build:
       args:
         SERVICE_PORT: 8022
-        SERVICE_NAME: program-y-dangerous
+        SERVICE_NAME: program_y_dangerous
       context: .
-      dockerfile: ./skills/program-y-dangerous/Dockerfile
+      dockerfile: ./skills/program_y_dangerous/Dockerfile
     deploy:
       resources:
         limits:

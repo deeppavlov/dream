@@ -66,8 +66,8 @@ services:
       - 8018:8018
   program-y-dangerous:
     volumes:
-      - "./skills/program-y-dangerous:/src"
-      - "./skills/program-y-dangerous/logs:/tmp"
+      - "./skills/program_y_dangerous:/src"
+      - "./skills/program_y_dangerous/logs:/tmp"
       - "./common:/src/dream_aiml/src/common"
       - "./state_formatters:/src/dream_aiml/src/state_formatters"
     ports:
