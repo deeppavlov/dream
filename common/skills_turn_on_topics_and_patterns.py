@@ -106,7 +106,7 @@ SKILL_TOPICS = {
         "cobot_dialogact_topics": ["Entertainment_General"],
         "cobot_topics": ["Games"],
     },
-    "weather_skill": {
+    "dff_weather_skill": {
         "compiled_patterns": [WEATHER_COMPILED_PATTERN],
         "previous_bot_patterns": [WEATHER_COMPILED_PATTERN],
         "cobot_dialogact_topics": [],

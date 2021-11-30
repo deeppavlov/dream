@@ -62,7 +62,7 @@
     "-": [
         "dff_travel_skill",
         "dff_movie_skill",
-        "weather_skill",
+        "dff_weather_skill",
         "book_skill",
         "emotion_skill",
         "news_api_skill",

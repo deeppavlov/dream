@@ -153,15 +153,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8032
       - PORT=8032
 
-  weather-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8037
-      - PORT=8037
-
   emotion-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -602,6 +593,16 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8061
       - PORT=8061
     command: [ "nginx", "-g", "daemon off;" ]
+
+  dff-weather-skill:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8037
+      - PORT=8037
+
   dff-template-skill:
     build:
       context: dp/proxy/

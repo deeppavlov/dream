@@ -36,13 +36,13 @@ def get_nltk_sentiment(text):
 
 
 class CachedRequestsAPI:
-    NEWS_SERVICE_URL = f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&max=20&sortby=publishedAt&token="
-    ALL_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&max=20&sortby=publishedAt&token="
+    NEWS_SERVICE_URL = f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&max=5&sortby=publishedAt&token="
+    ALL_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&max=5&sortby=publishedAt&token="
     EXT_NEWS_SERVICE_URL = (
-        f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&expand=content&max=5" f"&sortby=publishedAt&token="
+        f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&expand=content&max=3&sortby=publishedAt&token="
     )
     EXT_ALL_NEWS_SERVICE_URL = (
-        f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&expand=content&max=5" f"&sortby=publishedAt&token="
+        f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&expand=content&max=3&sortby=publishedAt&token="
     )
 
     def __init__(self, renew_freq_time=3600):
