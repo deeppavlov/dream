@@ -3,7 +3,7 @@
         "Go ahead,, try to ask you a question.",
         0.85,
         {
-            "dff_template_skill_state": {
+            "program_y_wide_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 0,
                 "history": {

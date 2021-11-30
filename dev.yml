@@ -168,7 +168,7 @@ services:
       - 8068:8068
   program-y-wide:
     volumes:
-      - "./skills/program-y-wide:/src"
+      - "./skills/program_y_wide:/src"
       - "./common:/src/common"
     ports:
       - 8064:8064
