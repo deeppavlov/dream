@@ -1,0 +1,48 @@
+[
+    [
+        "Currently I have problems with getting weather in mockcity. But I would guess... Potato storm may wonder you. . And the temperature may be around 3 degrees Fahrenheit. Would you enjoy it?. What weather do you prefer? Warm, cold, rain, snow, hot?",
+        1.0,
+        {
+            "dff_weather_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "weather",
+                        "forecast"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "a62522d9-35e3-435d-a618-0cac0723698e",
+                    "labels": {
+                        "0": [
+                            "weather",
+                            "forecast"
+                        ]
+                    },
+                    "requests": {
+                        "0": "Tell me weather in mockcity."
+                    },
+                    "responses": {
+                        "0": "Currently I have problems with getting weather in mockcity. But I would guess... Potato storm may wonder you. . And the temperature may be around 3 degrees Fahrenheit. Would you enjoy it?. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

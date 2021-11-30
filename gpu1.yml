@@ -97,8 +97,6 @@ services:
     restart: unless-stopped
   book-skill:
     restart: unless-stopped
-  weather-skill:
-    restart: unless-stopped
   emotion-skill:
     restart: unless-stopped
   dummy-skill-dialog:
@@ -192,6 +190,8 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   dff-coronavirus-skill:
+    restart: unless-stopped
+  dff-weather-skill:
     restart: unless-stopped
   dff-template-skill:
     restart: unless-stopped

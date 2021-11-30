@@ -672,11 +672,11 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "weather_skill": {
+            "dff_weather_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://weather-skill:8037/respond"
+                    "url": "http://dff-weather-skill:8037/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
