@@ -3,7 +3,7 @@ import logging
 import pprint
 import random
 
-# import re
+import re
 import time
 from collections import Counter
 from os import getenv
