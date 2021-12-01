@@ -10,6 +10,7 @@ RUN pip install -r requirements.txt
 # Here you can make changes 
 RUN mkdir /global_data
 ARG QUERY_DICT
+RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
@@ -20,7 +21,6 @@ RUN python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
-RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}

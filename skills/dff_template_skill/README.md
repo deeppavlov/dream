@@ -11,5 +11,5 @@ CPU: AMD Ryzen 5 3500U @ 2.10GHz
 | Metric       | Average value |
 | ------------ | ------------- |
 | RAM          | ~ 385 MB      |
-| Startup time | ~  15.8s      |
-| Execute time | ~  3.985s     |
+| Startup time | ~  3.985s     |
+| Execute time | ~  2.687s     |

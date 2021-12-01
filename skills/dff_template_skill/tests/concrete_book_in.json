@@ -1,0 +1,578 @@
+{
+    "human_utter_index_batch": [
+        6
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "good.",
+                    "annotations": {
+                        "spelling_preprocessing": "good",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "factoid_classification": {
+                            "factoid": 0.0033986661583185196,
+                            "conversational": 0.9966013431549072
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9789630174636841
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9650295972824097
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.995302677154541
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9983533024787903
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.8686965703964233
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.004341781139373779
+                            }
+                        },
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "good.",
+                            "segments": [
+                                "good."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.3547624945640564,
+                                "command": 0.009604818187654018,
+                                "comment": 0.4204603135585785,
+                                "complaint": 0.006943962536752224,
+                                "dev_command": 0.014606788754463196,
+                                "neg_answer": 0.0023279532324522734,
+                                "open_question_factual": 0.004406822845339775,
+                                "open_question_opinion": 0.006281579378992319,
+                                "opinion": 0.10444508492946625,
+                                "other_answers": 0.0068004680797457695,
+                                "pos_answer": 0.02951447293162346,
+                                "statement": 0.03209903463721275,
+                                "yes_no_question": 0.007746204733848572
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 14,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 12,
+                                        "text": "it"
+                                    },
+                                    {
+                                        "end": 18,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 16,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 65,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 63,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "I have read It. It's an amazing book! Do you want to know when It was first published?",
+                                "yes, i want to know when it was first published. ",
+                                "84 years  ago! I didn't exist at that time.",
+                                "good."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.(AP Photo/Andrew ... [5222 chars]",
+                                    "description": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/7639bcefe34d44e2b24594c439b17b5f/3000.jpeg",
+                                    "publishedAt": "2021-12-01T06:04:53Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "Abortion rights at stake in historic Supreme Court arguments",
+                                    "url": "https://apnews.com/article/abortion-donald-trump-us-supreme-court-health-amy-coney-barrett-a3b5cf9621315e6c623dc80a790842d8"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "tell me.",
+                    "annotations": {
+                        "spelling_preprocessing": "tell me",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004438524600118399,
+                            "conversational": 0.9955614805221558
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9977984428405762
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9947741627693176
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9968889951705933
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9990195035934448
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.5776568055152893
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014232397079467773
+                            }
+                        },
+                        "cobot_nounphrases": [],
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "tell me.",
+                            "segments": [
+                                "tell me."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0024648469407111406,
+                                "command": 0.9638553857803345,
+                                "comment": 0.0017631046939641237,
+                                "complaint": 0.004160998854786158,
+                                "dev_command": 0.009109959937632084,
+                                "neg_answer": 0.0017790432320907712,
+                                "open_question_factual": 0.0013440484181046486,
+                                "open_question_opinion": 0.001662481459788978,
+                                "opinion": 0.002543418435379863,
+                                "other_answers": 0.0010130899026989937,
+                                "pos_answer": 0.004242786206305027,
+                                "statement": 0.004203299060463905,
+                                "yes_no_question": 0.001857444760389626
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.(AP Photo/Andrew ... [5222 chars]",
+                                    "description": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/7639bcefe34d44e2b24594c439b17b5f/3000.jpeg",
+                                    "publishedAt": "2021-12-01T06:04:53Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "Abortion rights at stake in historic Supreme Court arguments",
+                                    "url": "https://apnews.com/article/abortion-donald-trump-us-supreme-court-health-amy-coney-barrett-a3b5cf9621315e6c623dc80a790842d8"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 7,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "84 years  ago! I didn't exist at that time.",
+                                "good.",
+                                "Do you know what is the genre of this book?",
+                                "tell me."
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Do you know what is the genre of this book?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Do you know what is the genre of this book?",
+                            "segments": [
+                                "Do you know what is the genre of this book?"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "yes.",
+                                "84 years  ago! I didn't exist at that time.",
+                                "good.",
+                                "Do you know what is the genre of this book?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_template_skill"
+                }
+            ]
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "ff37c57b-f3b0-4352-b3f9-d008826e37ea",
+                "labels": {
+                    "4": [
+                        "concrete_book_flow",
+                        "tell_date"
+                    ],
+                    "5": [
+                        "concrete_book_flow",
+                        "offer_genre"
+                    ]
+                },
+                "misc": {
+                    "flags": {
+                        "book_skill_active": true
+                    },
+                    "slots": {
+                        "cur_book_ago": "84 years ",
+                        "cur_book_name": "hobbit",
+                        "cur_book_plain": "Q74287",
+                        "cur_genre": "a fairy tale"
+                    },
+                    "used_phrases": [
+                        140651401747504,
+                        140651402840656,
+                        140651402840656
+                    ]
+                },
+                "requests": {
+                    "4": "yes.",
+                    "5": "good."
+                },
+                "responses": {
+                    "4": "84 years  ago! I didn't exist at that time.",
+                    "5": "Do you know what is the genre of this book?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "books_general",
+                    "book_start"
+                ],
+                "1": [
+                    "books_general",
+                    "likes_reading"
+                ],
+                "2": [
+                    "books_general",
+                    "told_why"
+                ],
+                "3": [
+                    "concrete_book_flow",
+                    "offer_date"
+                ],
+                "4": [
+                    "concrete_book_flow",
+                    "tell_date"
+                ],
+                "5": [
+                    "concrete_book_flow",
+                    "offer_genre"
+                ]
+            },
+            "previous_human_utter_index": 5,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

@@ -1,0 +1,715 @@
+{
+    "human_utter_index_batch": [
+        7
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "cobot_nounphrases": [],
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 7,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0014236768474802375,
+                                "command": 0.0013703206786885858,
+                                "comment": 0.001052427338436246,
+                                "complaint": 0.00036329071735963225,
+                                "dev_command": 0.0007397738518193364,
+                                "neg_answer": 0.000830297009088099,
+                                "open_question_factual": 0.0003162444045301527,
+                                "open_question_opinion": 0.00041332223918288946,
+                                "opinion": 0.0006688100984320045,
+                                "other_answers": 0.000754121458157897,
+                                "pos_answer": 0.9896513223648071,
+                                "statement": 0.0018280948279425502,
+                                "yes_no_question": 0.0005881917895749211
+                            }
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WASHINGTON, Nov 30 (Reuters) - The U.S. is moving to require that all air travelers entering the country show a negative COVID-19 test performed within one day of departure in response to concerns about a new coronavirus variant, the Centers for Dise... [2744 chars]",
+                                    "description": "The U.S. is moving to require that all air travelers entering the country show a negative COVID-19 test performed within one day of departure in response to concerns about a new coronavirus variant, the Centers for Disease Control and Prevention (CDC) said late on Tuesday.",
+                                    "image": "https://www.reuters.com/resizer/jNOWIgYDw1hNuoV2WmORb5-ACAo=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/W2WXJ5L65VMB3B7A2U2PSQUKZE.jpg",
+                                    "publishedAt": "2021-12-01T07:34:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "Air travelers to U.S. set to face tougher COVID-19 testing",
+                                    "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/us-cdc-urges-americans-avoid-travel-niger-poland-over-covid-19-2021-11-30/"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "no.",
+                    "annotations": {
+                        "spelling_preprocessing": "no",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.7071344256401062
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8173004388809204
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9986573457717896
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984775185585022
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6736716032028198
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003819406032562256
+                            }
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004733121953904629,
+                            "conversational": 0.9952669143676758
+                        },
+                        "sentseg": {
+                            "punct_sent": "no.",
+                            "segments": [
+                                "no."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0007533021853305399,
+                                "command": 0.0009947222424671054,
+                                "comment": 0.0010807535145431757,
+                                "complaint": 0.017370564863085747,
+                                "dev_command": 0.0012517311843112111,
+                                "neg_answer": 0.9670693278312683,
+                                "open_question_factual": 0.0014003297546878457,
+                                "open_question_opinion": 0.0009827332105487585,
+                                "opinion": 0.0016927639953792095,
+                                "other_answers": 0.004028162453323603,
+                                "pos_answer": 0.001680502318777144,
+                                "statement": 0.0007250253111124039,
+                                "yes_no_question": 0.0009700527880340815
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "cobot_nounphrases": [],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WASHINGTON, Nov 30 (Reuters) - The U.S. is moving to require that all air travelers entering the country show a negative COVID-19 test performed within one day of departure in response to concerns about a new coronavirus variant, the Centers for Dise... [2744 chars]",
+                                    "description": "The U.S. is moving to require that all air travelers entering the country show a negative COVID-19 test performed within one day of departure in response to concerns about a new coronavirus variant, the Centers for Disease Control and Prevention (CDC) said late on Tuesday.",
+                                    "image": "https://www.reuters.com/resizer/jNOWIgYDw1hNuoV2WmORb5-ACAo=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/W2WXJ5L65VMB3B7A2U2PSQUKZE.jpg",
+                                    "publishedAt": "2021-12-01T07:34:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "Air travelers to U.S. set to face tougher COVID-19 testing",
+                                    "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/us-cdc-urges-americans-avoid-travel-niger-poland-over-covid-19-2021-11-30/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 8,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 23,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 0,
+                                        "text": "My other favourite book"
+                                    },
+                                    {
+                                        "end": 108,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 99,
+                                        "text": "this book"
+                                    },
+                                    {
+                                        "end": 265,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 257,
+                                        "text": "the book"
+                                    },
+                                    {
+                                        "end": 348,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 346,
+                                        "text": "it"
+                                    },
+                                    {
+                                        "end": 403,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 394,
+                                        "text": "this book"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 66,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "\"The NeverEnding Story\" by Michael Ende",
+                                        "start": 27,
+                                        "text": "\"The NeverEnding Story\" by Michael Ende"
+                                    },
+                                    {
+                                        "end": 138,
+                                        "ner": {
+                                            "offset": 21,
+                                            "type": "ORG"
+                                        },
+                                        "resolved": "\"The NeverEnding Story\" by Michael Ende",
+                                        "start": 115,
+                                        "text": "The \"NeverEnding Story\""
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "My other favourite book is \"The NeverEnding Story\" by Michael Ende. May I tell you something about My other favourite book?",
+                                "yes, you may tell i something about your other favourite book. ",
+                                "\"The NeverEnding Story\" by Michael Ende tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads My other favourite book, he suddenly moves into the world described there, as the only one who can save My other favourite book. Would you like to hear something else about My other favourite book?",
+                                "no, i wouldn't like to hear something else about your other favourite book. "
+                            ]
+                        },
+                        "fact_random": []
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": " The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it. Would you like to hear something else about this book?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it. Would you like to hear something else about this book?",
+                            "segments": [
+                                "The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop.",
+                                "While he reads the book, he suddenly moves into the world described there, as the only one who can save it.",
+                                "Would you like to hear something else about this book?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 3,
+                                    "start_pos": 1,
+                                    "text": "`` neverending",
+                                    "type": "ORG"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 14,
+                                    "start_pos": 13,
+                                    "text": "bastien",
+                                    "type": "PER"
+                                }
+                            ],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 28,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 5,
+                                        "text": "My other favourite book"
+                                    },
+                                    {
+                                        "end": 113,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 104,
+                                        "text": "this book"
+                                    },
+                                    {
+                                        "end": 270,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 262,
+                                        "text": "the book"
+                                    },
+                                    {
+                                        "end": 353,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 351,
+                                        "text": "it"
+                                    },
+                                    {
+                                        "end": 408,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My other favourite book",
+                                        "start": 399,
+                                        "text": "this book"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 71,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "\"The NeverEnding Story\" by Michael Ende",
+                                        "start": 32,
+                                        "text": "\"The NeverEnding Story\" by Michael Ende"
+                                    },
+                                    {
+                                        "end": 143,
+                                        "ner": {
+                                            "offset": 21,
+                                            "type": "ORG"
+                                        },
+                                        "resolved": "\"The NeverEnding Story\" by Michael Ende",
+                                        "start": 120,
+                                        "text": "The \"NeverEnding Story\""
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "yes.",
+                                "My other favourite book is \"The NeverEnding Story\" by Michael Ende. May I tell you something about My other favourite book?",
+                                "yes, you may tell i something about your other favourite book. ",
+                                "\"The NeverEnding Story\" by Michael Ende tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads My other favourite book, he suddenly moves into the world described there, as the only one who can save My other favourite book. Would you like to hear something else about My other favourite book?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_template_skill"
+                }
+            ]
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "c116eb2e-7823-4bc7-88fe-e4b442bd01ef",
+                "labels": {
+                    "5": [
+                        "bot_fav_book",
+                        "fav_name"
+                    ],
+                    "6": [
+                        "bot_fav_book",
+                        "fav_elaborate"
+                    ]
+                },
+                "misc": {
+                    "flags": {
+                        "book_skill_active": true
+                    },
+                    "slots": {
+                        "cur_book_about": " The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it.",
+                        "cur_book_ago": "42 years ",
+                        "cur_book_author": "Michael Ende",
+                        "cur_book_name": "The NeverEnding Story",
+                        "cur_book_plain": "Q463108",
+                        "cur_genre": "a novel",
+                        "fav_book_init": "My other favourite book is \"The NeverEnding Story\" by Michael Ende."
+                    },
+                    "used_phrases": [
+                        140651401970096,
+                        140651402775216,
+                        140651401970288,
+                        140651401970864,
+                        140651402116880
+                    ]
+                },
+                "requests": {
+                    "5": "yes.",
+                    "6": "yes."
+                },
+                "responses": {
+                    "5": "My other favourite book is \"The NeverEnding Story\" by Michael Ende. May I tell you something about this book?",
+                    "6": " The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it. Would you like to hear something else about this book?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "books_general",
+                    "book_start"
+                ],
+                "1": [
+                    "books_general",
+                    "likes_reading"
+                ],
+                "2": [
+                    "books_general",
+                    "told_why"
+                ],
+                "3": [
+                    "undetected_flow",
+                    "ask_to_repeat"
+                ],
+                "4": [
+                    "undetected_flow",
+                    "change_branch"
+                ],
+                "5": [
+                    "bot_fav_book",
+                    "fav_name"
+                ],
+                "6": [
+                    "bot_fav_book",
+                    "fav_elaborate"
+                ]
+            },
+            "previous_human_utter_index": 6,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+	"random_seed": 2718
+}

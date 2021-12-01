@@ -1,0 +1,103 @@
+[
+    [
+        "OK, let me ask you something else then, alright?",
+        0.9,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 7,
+                "history": {
+                    "0": [
+                        "books_general",
+                        "book_start"
+                    ],
+                    "1": [
+                        "books_general",
+                        "likes_reading"
+                    ],
+                    "2": [
+                        "books_general",
+                        "told_why"
+                    ],
+                    "3": [
+                        "undetected_flow",
+                        "ask_to_repeat"
+                    ],
+                    "4": [
+                        "undetected_flow",
+                        "change_branch"
+                    ],
+                    "5": [
+                        "bot_fav_book",
+                        "fav_name"
+                    ],
+                    "6": [
+                        "bot_fav_book",
+                        "fav_elaborate"
+                    ],
+                    "7": [
+                        "bot_fav_book",
+                        "fav_denied"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "c116eb2e-7823-4bc7-88fe-e4b442bd01ef",
+                    "labels": {
+                        "6": [
+                            "bot_fav_book",
+                            "fav_elaborate"
+                        ],
+                        "7": [
+                            "bot_fav_book",
+                            "fav_denied"
+                        ]
+                    },
+                    "requests": {
+                        "6": "yes.",
+                        "7": "no."
+                    },
+                    "responses": {
+                        "6": " The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it. Would you like to hear something else about this book?",
+                        "7": "OK, let me ask you something else then, alright?"
+                    },
+                    "misc": {
+                        "flags": {
+                            "book_skill_active": true,
+                            "denied_favorite": true
+                        },
+                        "slots": {
+                            "cur_book_about": " The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it.",
+                            "cur_book_ago": "42 years ",
+                            "cur_book_author": "Michael Ende",
+                            "cur_book_name": "The NeverEnding Story",
+                            "cur_book_plain": "Q463108",
+                            "cur_genre": "a novel",
+                            "fav_book_init": "My other favourite book is \"The NeverEnding Story\" by Michael Ende."
+                        },
+                        "used_phrases": [
+                            140651401970096,
+                            140651402775216,
+                            140651401970288,
+                            140651401970864,
+                            140651402116880
+                        ]
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

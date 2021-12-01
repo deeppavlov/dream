@@ -39,7 +39,7 @@ ASK_ABOUT_OFFERED_BOOK = "It's a real showpiece. Have you read it?"
 TELL_REQUEST = "May I tell you something about this book?"
 TELL_REQUEST2 = "Would you like to hear something else about this book?"
 WHAT_BOOK_IMPRESSED_MOST = "What book impressed you the most?"
-WHEN_IT_WAS_PUBLISHED = "Do you know when it was first published?"
+WHEN_IT_WAS_PUBLISHED = "Do you want to know when it was first published?"
 WHAT_BOOK_LAST_READ = SWITCH_BOOK_SKILL_PHRASE
 BOOK_ANY_PHRASE = "I see you can't name it. Could you please name any book you have read?"
 OFFER_FACT_ABOUT_BOOK  = "Would you like to hear a fact about it?"
@@ -62,7 +62,7 @@ FAVOURITE_BOOK_ATTRS = {
         "cur_genre": "a novel",
         "fav_book_init": f' My favourite book is "The catcher in the rye" by Jerome David Salinger.',
         "cur_book_about": f'The novel "The catcher in the rye" tells the story of a teenager '
-        f"who has been kicked out of a boarding school."
+        f"who has been kicked out of a boarding school. "
         f"This is my favourite story, it is truly fascinating."
     },
     "The NeverEnding Story": {
@@ -95,9 +95,11 @@ def append_unused(
     phrases: List[str], 
     exit_on_exhaust: bool=False
 ) -> Callable:
-
+    """
+    Return an unused or a least used response from a list of options
+    """
     def unused_handler(ctx: Context, actor: Actor) -> str:
-        """Return an unused response or probabilities of used ones"""
+        
         used = ctx.misc.get("used_phrases", [])
         confidences = [1] * len(phrases)
 
@@ -138,12 +140,18 @@ def append_question(initial: str, additional=None) -> Callable:
         Exits the skill if no questions remain
         """
         questions: List[str] = [] if not additional else [additional]
-        if not WHAT_BOOK_IMPRESSED_MOST in ctx.misc.get("used_phrases", []):
+        used = ctx.misc.get("used_phrases", [])
+        if not id(WHAT_BOOK_IMPRESSED_MOST) in used:
             questions.append(WHAT_BOOK_IMPRESSED_MOST)
-        if not ctx.misc.get("flags", {}).get("fav_book_start_visited", False):
+        
+        first_fav_named = id(FAVOURITE_BOOK_PHRASES[0]) in used
+        if not first_fav_named:
             questions.append(FAVOURITE_BOOK_PHRASES[0])
-        if not ctx.misc.get("flags", {}).get("fav_book_restart_visited", False):
+
+        second_fav_named = any([id(x) in used for x in FAVOURITE_BOOK_PHRASES[1:]])
+        if first_fav_named and not second_fav_named:
             questions.extend(FAVOURITE_BOOK_PHRASES[1:])
+
         if not ctx.misc.get("flags", {}).get("user_fav_genre_visited", False):
             questions.append(WHAT_GENRE_FAV)
         random.shuffle(questions)

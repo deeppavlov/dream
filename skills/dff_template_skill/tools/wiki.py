@@ -3,14 +3,11 @@ import logging
 import itertools
 import random
 import sentry_sdk
-from typing import Any, Dict, Tuple, Set, Callable, Optional, Union
-import os
+from typing import Dict, Tuple, Optional
 from os import getenv
 import pathlib
 import _pickle as cPickle
-from functools import lru_cache
 
-from dff.core import Context, Actor
 from common.custom_requests import request_entities_entitylinking, request_triples_wikidata
 from common.utils import entity_to_label, get_raw_entity_names_from_annotations
 
@@ -30,12 +27,15 @@ MOVIE_WIKI_TYPES = ["Q11424", "Q24856", "Q202866"]
 
 
 def is_wikidata_entity(entity: str) -> bool:
+    """Assert that a string is a wikidata entity"""
     wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
     return not wrong_entity_format
 
 
 def get_n_years(date: str) -> Optional[str]:
-    "Turn the obtained publication date into a reply slot"
+    """
+    Turn the obtained publication date into a reply slot
+    """
     if type(date) != str:
         return None
     parsed_date = re.search(r"\d{4}", date)
@@ -142,6 +142,9 @@ def get_name(
 
 
 def get_published_year(book_entity: str) -> Optional[str]:
+    """
+    Extract the publication date
+    """
     assert is_wikidata_entity(book_entity)
     book_entity = book_entity.strip()
     published_year = None
@@ -206,8 +209,14 @@ def genre_of_book(plain_bookname: str) -> Optional[str]:
         return None
 
 
-def get_author(plain_entity, return_plain=False, mode="book"):
-    # Input bookname output author name
+def get_author(
+    plain_entity: str,
+    return_plain=False,
+    mode="book"
+) -> Optional[str]:
+    """
+    Get the author for a plain book entity
+    """
     logger.info(f"Calling get_author for {plain_entity}")
     logger.debug(f"Search author with entity {plain_entity.upper()}")
     if mode == "book":
@@ -239,7 +248,13 @@ def get_author(plain_entity, return_plain=False, mode="book"):
             return None
 
 
-def parse_author_best_book(annotated_phrase, default_phrase=None):
+def parse_author_best_book(
+    annotated_phrase: Dict[str, str], 
+    default_phrase=None
+) -> Tuple[str, Optional[str]]:
+    """
+    Get one book from the 'notable work' list
+    """
     logger.debug(f'Calling parse_author_best_book for {annotated_phrase["text"]}')
     annotated_phrase["text"] = annotated_phrase["text"].lower()
     if re.search(r"\bis\b", annotated_phrase["text"]):
@@ -264,7 +279,7 @@ def parse_author_best_book(annotated_phrase, default_phrase=None):
         return default_phrase, None
 
 
-def get_booklist(plain_author_name):
+def get_booklist(plain_author_name: str) -> str:
     book_list = request_triples_wikidata(
         "find_object",
         [(plain_author_name, "P800", "forw"), (plain_author_name, "P50", "backw")],
@@ -283,7 +298,9 @@ def best_plain_book_by_author(
     plain_last_bookname: Optional[str] = None,
     top_n_best_books: int = 1
 ) -> Optional[str]:
-    """Given an author, look one of his books up"""
+    """
+    Look up a book for an author
+    """
     logger.debug(f"Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}")
     # best books
     last_bookname = "NO_BOOK"
@@ -313,7 +330,11 @@ def best_plain_book_by_author(
         logger.exception(f"Error processing {book_list}")
         return default_phrase
 
+
 def what_is_book_about(book: Optional[str] = None) -> Optional[str]:
+    """
+    Fetch facts for a book
+    """
     if not book:
         return None
     fact = None

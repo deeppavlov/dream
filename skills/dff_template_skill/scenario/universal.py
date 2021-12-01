@@ -116,7 +116,6 @@ def get_book_by_genre(ctx: Context, actor: Actor) -> Optional[Tuple[str, str]]:
             ctx.misc["used_phrases"] = used
             logger.info(f"fetched {book}")
             return book, author, description
-            
     return None
 
 

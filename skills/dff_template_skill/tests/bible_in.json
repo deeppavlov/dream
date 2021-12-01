@@ -1,0 +1,617 @@
+{
+    "human_utter_index_batch": [
+        4
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "The new testament.",
+                    "annotations": {
+                        "spelling_preprocessing": "The new testament",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.10352395474910736,
+                            "conversational": 0.8964760899543762
+                        },
+                        "cobot_nounphrases": [
+                            "the new testament"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "The new testament.",
+                            "segments": [
+                                "The new testament."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9564457535743713
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9975889921188354
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.6227456331253052,
+                                "Religion": 0.9954225420951843
+                            },
+                            "emotion_classification": {
+                                "anger": 0.5479119420051575,
+                                "joy": 0.5208660364151001,
+                                "neutral": 0.9888641834259033
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6499519944190979
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014781057834625244
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0007422055350616574,
+                                "command": 0.0032859891653060913,
+                                "comment": 0.0013797413557767868,
+                                "complaint": 0.0015873352531343699,
+                                "dev_command": 0.0022266763262450695,
+                                "neg_answer": 0.000578071631025523,
+                                "open_question_factual": 0.001576541573740542,
+                                "open_question_opinion": 0.0008679459569975734,
+                                "opinion": 0.02490239217877388,
+                                "other_answers": 0.0008675723220221698,
+                                "pos_answer": 0.0006289544980973005,
+                                "statement": 0.9601196050643921,
+                                "yes_no_question": 0.001237047603353858
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "new testament"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        4,
+                                        17
+                                    ],
+                                    "text": "new testament"
+                                }
+                            ]
+                        },
+                        "conceptnet": {
+                            "the new testament": {
+                                "Causes": [
+                                    "repentance",
+                                    "enlightenment",
+                                    "revelation"
+                                ],
+                                "CausesDesire": [
+                                    "read it",
+                                    "read bible",
+                                    "pray"
+                                ],
+                                "HasProperty": [
+                                    "very important",
+                                    "read",
+                                    "very important to human"
+                                ],
+                                "SymbolOf": [
+                                    "christianity",
+                                    "faith",
+                                    "islam"
+                                ]
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I enjoy reading so much! Books help me understand humans much better. Why do you enjoy reading?",
+                                "for no reason.",
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                                "The new testament."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.(AP Photo/Andrew ... [5222 chars]",
+                                    "description": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/7639bcefe34d44e2b24594c439b17b5f/3000.jpeg",
+                                    "publishedAt": "2021-12-01T06:04:53Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "Abortion rights at stake in historic Supreme Court arguments",
+                                    "url": "https://apnews.com/article/abortion-donald-trump-us-supreme-court-health-amy-coney-barrett-a3b5cf9621315e6c623dc80a790842d8"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "new testament",
+                                "news": {
+                                    "content": "The sign quotes a verse from the New Testament\nA religious billboard led to a highway collision in the West Kootenay Tuesday, Oct. 12, according to Mounties.\nGrand Forks RCMP said no one was hurt when, at around 3:15 p.m., a late model Subaru SUV cam... [1449 chars]",
+                                    "description": "The sign quotes a verse from the New Testament\nA religious billboard led to a highway collision in the West Kootenay Tuesday, Oct. 12, according to Mounties.",
+                                    "image": "https://www.caledoniacourier.com/wp-content/uploads/2021/10/26813463_web1_211020-GFG-JESUS_SIGN--CU_1-1024x683.jpg",
+                                    "publishedAt": "2021-10-13T19:15:00Z",
+                                    "source": {
+                                        "name": "Caledonia Courier",
+                                        "url": "https://www.caledoniacourier.com"
+                                    },
+                                    "title": "Driver blames \u2018Jesus sign\u2019 after Highway 3 collision",
+                                    "url": "https://www.caledoniacourier.com/news/driver-blames-jesus-sign-after-highway-3-collision/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "no.",
+                    "annotations": {
+                        "spelling_preprocessing": "no",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [],
+                        "factoid_classification": {
+                            "factoid": 0.004733121953904629,
+                            "conversational": 0.9952669143676758
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.7071344256401062
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8173004388809204
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9986573457717896
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984775185585022
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6736716032028198
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003819406032562256
+                            }
+                        },
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "no.",
+                            "segments": [
+                                "no."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0005498873069882393,
+                                "command": 0.000764154945500195,
+                                "comment": 0.0007041685748845339,
+                                "complaint": 0.009263645857572556,
+                                "dev_command": 0.0010196027578786016,
+                                "neg_answer": 0.9782261252403259,
+                                "open_question_factual": 0.0011422254610806704,
+                                "open_question_opinion": 0.0008234080160036683,
+                                "opinion": 0.0011427627177909017,
+                                "other_answers": 0.0025747495237737894,
+                                "pos_answer": 0.002011244185268879,
+                                "statement": 0.0007305336184799671,
+                                "yes_no_question": 0.0010474231094121933
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.(AP Photo/Andrew ... [5222 chars]",
+                                    "description": "Stephen Parlato of Boulder, Colo., holds a sign that reads \"Hands Off Roe!!!\" outside of the Supreme Court in Washington, Tuesday, Nov. 30, 2021, as activists begin to arrive ahead of arguments on abortion at the court in Washington.",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/7639bcefe34d44e2b24594c439b17b5f/3000.jpeg",
+                                    "publishedAt": "2021-12-01T06:04:53Z",
+                                    "source": {
+                                        "name": "Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "Abortion rights at stake in historic Supreme Court arguments",
+                                    "url": "https://apnews.com/article/abortion-donald-trump-us-supreme-court-health-amy-coney-barrett-a3b5cf9621315e6c623dc80a790842d8"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "bible",
+                                "news": {
+                                    "content": "FILE - Actor-director-writer Mel Brooks poses next to a framed poster of his 1974 film \"Blazing Saddles\" in Los Angeles on July 23, 1991. Brooks released a memoir, \"All About Me!: My Remarkable Life in Show Business.\" (AP Photo/Nick Ut, File)\nFILE - ... [12511 chars]",
+                                    "description": "FILE - Actor-director-writer Mel Brooks poses next to a framed poster of his 1974 film \"Blazing Saddles\" in Los Angeles on July 23, 1991. Brooks released a memoir, \"All About Me!",
+                                    "image": "https://storage.googleapis.com/afs-prod/media/01a0aa3befeb4cdfb76bb61aedc58b06/2626.jpeg",
+                                    "publishedAt": "2021-11-30T18:02:01Z",
+                                    "source": {
+                                        "name": "The Associated Press",
+                                        "url": "https://apnews.com"
+                                    },
+                                    "title": "Q&A: Mel Brooks, 95, is still riffing",
+                                    "url": "https://apnews.com/article/entertainment-lifestyle-new-york-brooklyn-billy-crystal-d6ff5c097cb7d07c9e8db8967e6c739d"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                                "The new testament.",
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                                "no, i haven't read the whole bible. "
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                            "segments": [
+                                "I know that Bible is one of the most widespread books on Earth.",
+                                "It is the foundation stone of Christianity.",
+                                "Have you read the whole Bible?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 4,
+                                    "start_pos": 3,
+                                    "text": "bible",
+                                    "type": "PER"
+                                }
+                            ],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "for no reason.",
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                                "The new testament.",
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_template_skill"
+                }
+            ]
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "910da091-73a0-4049-878c-f592f4c3930a",
+                "labels": {
+                    "2": [
+                        "books_general",
+                        "told_why"
+                    ],
+                    "3": [
+                        "bible_flow",
+                        "bible_start"
+                    ]
+                },
+                "misc": {
+                    "flags": {
+                        "book_skill_active": true
+                    },
+                    "used_phrases": [
+                        140651401747504,
+                        140651402840656,
+                        140651402840656
+                    ]
+                },
+                "requests": {
+                    "2": "for no reason.",
+                    "3": "The new testament."
+                },
+                "responses": {
+                    "2": "That's great. Outside of a dog, a book is man's best friend. What is the last book you've read?",
+                    "3": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "books_general",
+                    "book_start"
+                ],
+                "1": [
+                    "books_general",
+                    "likes_reading"
+                ],
+                "2": [
+                    "books_general",
+                    "told_why"
+                ],
+                "3": [
+                    "bible_flow",
+                    "bible_start"
+                ]
+            },
+            "previous_human_utter_index": 3,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

@@ -1,0 +1,94 @@
+[
+    [
+        "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?",
+        0.85,
+        {
+            "dff_template_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 6,
+                "history": {
+                    "0": [
+                        "books_general",
+                        "book_start"
+                    ],
+                    "1": [
+                        "books_general",
+                        "likes_reading"
+                    ],
+                    "2": [
+                        "books_general",
+                        "told_why"
+                    ],
+                    "3": [
+                        "concrete_book_flow",
+                        "offer_date"
+                    ],
+                    "4": [
+                        "concrete_book_flow",
+                        "tell_date"
+                    ],
+                    "5": [
+                        "concrete_book_flow",
+                        "offer_genre"
+                    ],
+                    "6": [
+                        "concrete_book_flow",
+                        "tell_genre"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "ff37c57b-f3b0-4352-b3f9-d008826e37ea",
+                    "labels": {
+                        "5": [
+                            "concrete_book_flow",
+                            "offer_genre"
+                        ],
+                        "6": [
+                            "concrete_book_flow",
+                            "tell_genre"
+                        ]
+                    },
+                    "requests": {
+                        "5": "good.",
+                        "6": "tell me."
+                    },
+                    "responses": {
+                        "5": "Do you know what is the genre of this book?",
+                        "6": "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?"
+                    },
+                    "misc": {
+                        "flags": {
+                            "book_skill_active": true
+                        },
+                        "slots": {
+                            "cur_book_ago": "84 years ",
+                            "cur_book_name": "hobbit",
+                            "cur_book_plain": "Q74287",
+                            "cur_genre": "a fairy tale"
+                        },
+                        "used_phrases": [
+                            140651401747504,
+                            140651402840656,
+                            140651402840656,
+                            140651401747984
+                        ]
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
