@@ -754,6 +754,10 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
+def dff_program_y_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y")
+
+
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_food_skill")
 
