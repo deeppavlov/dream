@@ -44,7 +44,7 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
-  cobot-nounphrases:
+  spacy-nounphrases:
   program-y:
   personality-catcher:
   sentseg:
@@ -52,7 +52,7 @@ services:
   sentrewrite:
   intent-responder:
   intent-catcher:
-  blacklisted-words:
+  badlisted-words:
   program-y-dangerous:
   dff-movie-skill:
   dff-gaming-skill:
@@ -67,11 +67,10 @@ services:
   asr:
   misheard-asr:
   book-skill:
-  weather-skill:
+  dff-weather-skill:
   emotion-skill:
   dummy-skill-dialog:
   meta-script-skill:
-  short-story-skill:
   small-talk-skill:
   game-cooperative-skill:
   program-y-wide:
@@ -85,7 +84,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
-  grounding-skill:
+  dff-grounding-skill:
   masked-lm:
     environment:
       - CUDA_VISIBLE_DEVICES=8
@@ -128,5 +127,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=2
   dff-coronavirus-skill:
+  dff-short-story-skill:
   dff-template-skill:
 version: '3.7'

@@ -7,7 +7,7 @@ services:
   kbqa:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot-nounphrases:
+  spacy-nounphrases:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   comet-atomic:

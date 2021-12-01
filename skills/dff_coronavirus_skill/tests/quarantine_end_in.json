@@ -19,11 +19,11 @@
                                 "Have you heard that the quarantine will end soon?"
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "1 very specific question",
                             "the quarantine"
                         ],
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

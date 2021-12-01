@@ -12,7 +12,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -23,7 +23,7 @@
                                 "What are my chances to recover from covid?"
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "my chances",
                             "covid"
                         ],

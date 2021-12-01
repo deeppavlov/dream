@@ -16,9 +16,9 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-BLACKLIST_ANNOTATOR_URL = getenv("BLACKLIST_ANNOTATOR_URL")
+BADLIST_ANNOTATOR_URL = getenv("BADLIST_ANNOTATOR_URL")
 
-BLACKLISTED_WORDS = re.compile(
+BADLISTED_WORDS = re.compile(
     r"\b(gun|shoot|die.?\b|murder|kill|victim|stolen" r"|decease|sick\b|sicken\b|sickness\b|hurt\b|hurting\b|ailing\b)",
     re.IGNORECASE,
 )
@@ -110,7 +110,7 @@ class CachedRequestsAPI:
             response = resp.json()
             response = response.get("articles", [])
             result = response
-        result = self.get_not_blacklisted_english_news(result)
+        result = self.get_not_badlisted_english_news(result)
         return result
 
     def send(self, topic="all", status="", prev_news_urls=None, return_list_of_news=False):
@@ -149,7 +149,7 @@ class CachedRequestsAPI:
             return []
 
     @staticmethod
-    def get_not_blacklisted_english_news(articles):
+    def get_not_badlisted_english_news(articles):
         articles_to_check = []
         for article in articles:
             title = article.get("title", "") or ""
@@ -175,11 +175,11 @@ class CachedRequestsAPI:
 
         try:
             resp = requests.request(
-                url=BLACKLIST_ANNOTATOR_URL, json={"sentences": articles_to_check}, method="POST", timeout=0.5
+                url=BADLIST_ANNOTATOR_URL, json={"sentences": articles_to_check}, method="POST", timeout=0.5
             )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             sentry_sdk.capture_exception(e)
-            logger.exception("Blacklisted Annotator requests from News API Annotator Timeout")
+            logger.exception("Badlisted Annotator requests from News API Annotator Timeout")
             resp = requests.Response()
             resp.status_code = 504
 
@@ -190,19 +190,19 @@ class CachedRequestsAPI:
             )
             result = [False] * len(articles_to_check)
             sentry_sdk.capture_message(
-                f"Blacklisted Annotator requests from News API Annotator "
+                f"Badlisted Annotator requests from News API Annotator "
                 f" result status code is not 200: {resp}. result text: {resp.text}; "
                 f"result status: {resp.status_code}"
             )
         else:
-            # each element is like `{'inappropriate': False, 'profanity': False, 'restricted_topics': False}`
+            # each element is like `{'bad_words': False}`
             result = [sum(d.values()) for d in resp.json()[0]["batch"]]
 
         articles = [
             article
             for article, is_black in zip(articles, result)
             if not is_black
-            and not BLACKLISTED_WORDS.search(f'{article.get("title", "")} {article.get("description", "")}')
+            and not BADLISTED_WORDS.search(f'{article.get("title", "")} {article.get("description", "")}')
         ]
 
         return articles

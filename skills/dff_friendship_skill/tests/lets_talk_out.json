@@ -1,6 +1,6 @@
 [
     [
-        "Hi, this is an Alexa Prize Socialbot! How are you doing today?",
+        "Hi, this is a DREAM Socialbot! How are you doing today?",
         1.0,
         {
             "dff_friendship_skill_state": {
@@ -12,7 +12,7 @@
                     "0": "State.SYS_HELLO"
                 },
                 "current_turn_dff_suspended": false,
-                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_HELLO_AND_CONTNIUE\", \"__stack__\": [], \"__user_utterance__\": \"hello\", \"__system_state__\": \"State.SYS_HELLO\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Hi, this is an Alexa Prize Socialbot! How are you doing today?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GREETING\\\"<__tuple__>\\\"State.USR_HELLO_AND_CONTNIUE\\\"\"}"
+                "dialogflow_state": "{\"vars\": {\"__state__\": \"State.USR_HELLO_AND_CONTNIUE\", \"__stack__\": [], \"__user_utterance__\": \"hello\", \"__system_state__\": \"State.SYS_HELLO\", \"__converged__\": \"True\", \"__goal_return_state__\": \"None\", \"__selected_response__\": \"Hi, this is a DREAM Socialbot! How are you doing today?\"}, \"gates\": {}, \"state\": \"<__tuple__>\\\"GREETING\\\"<__tuple__>\\\"State.USR_HELLO_AND_CONTNIUE\\\"\"}"
             },
             "dff_shared_state": {},
             "used_links": {},

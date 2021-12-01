@@ -18,12 +18,12 @@
                                 "Is there a vaccine for coronavirus?"
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "coronavirus"
                         ],
                         "combined_classification": {

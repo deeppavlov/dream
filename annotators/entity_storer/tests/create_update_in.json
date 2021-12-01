@@ -32,10 +32,10 @@
                                 "toxic": 0.002440035343170166
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "apples"
                         ],
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -330,7 +330,7 @@
                                 "toxic": 0.002875983715057373
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "cool.",
                             "segments": [
@@ -341,7 +341,7 @@
                             "entities": [],
                             "labelled_entities": []
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -465,7 +465,7 @@
                                 "You wanna hear my view on jewelry. I have no idea. Totally unrelated, Well, Do you want to talk about sports competitions?"
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "jewelry",
                             "my view",
                             "no idea",

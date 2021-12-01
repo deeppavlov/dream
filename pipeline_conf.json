@@ -83,7 +83,7 @@
                     "sentseg",
                     "ner",
                     "sentrewrite",
-                    "cobot_nounphrases"
+                    "spacy_nounphrases"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -122,11 +122,11 @@
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
-            "cobot_nounphrases": {
+            "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-nounphrases:8006/respond"
+                    "url": "http://spacy-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -156,11 +156,11 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "cobot_nounphrases": {
+            "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-nounphrases:8006/respond"
+                    "url": "http://spacy-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -182,15 +182,15 @@
                 ],
                 "previous_services": [
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "blacklisted_words": {
+            "badlisted_words": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://blacklisted-words:8018/blacklisted_words"
+                    "url": "http://badlisted-words:8018/badlisted_words"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -247,7 +247,7 @@
                 "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.entity_linking",
-                    "annotators.cobot_nounphrases",
+                    "annotators.spacy_nounphrases",
                     "annotators.entity_detection"
                 ]
             },
@@ -317,7 +317,7 @@
                 ],
                 "previous_services": [
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.spacy_nounphrases"
                 ]
             },
             "wiki_parser": {
@@ -399,7 +399,7 @@
                     "annotators.sentseg",
                     "annotators.ner",
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -414,7 +414,7 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
-		    "annotators.cobot_topics"
+                    "annotators.cobot_topics"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -444,7 +444,7 @@
                     "annotators"
                 ],
                 "required_previous_services": [
-                    "annotators.blacklisted_words",
+                    "annotators.badlisted_words",
                     "annotators.asr"
                 ],
                 "tags": [
@@ -672,13 +672,26 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "weather_skill": {
+            "dff_weather_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://weather-skill:8037/respond"
+                    "url": "http://dff-weather-skill:8037/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_short_story_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-short-story-skill:8057/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -776,13 +789,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "grounding_skill": {
+            "dff_grounding_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://grounding-skill:8080/grounding_skill"
+                    "url": "http://dff-grounding-skill:8080/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_grounding_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -986,11 +999,11 @@
             }
         },
         "post_skill_selector_annotators": {
-            "blacklisted_words": {
+            "badlisted_words": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://blacklisted-words:8018/blacklisted_words_batch"
+                    "url": "http://badlisted-words:8018/badlisted_words_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -1010,11 +1023,11 @@
                 "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "cobot_nounphrases": {
+            "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-nounphrases:8006/respond_batch"
+                    "url": "http://spacy-nounphrases:8006/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
