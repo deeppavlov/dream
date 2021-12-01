@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "weather",
                             "london"
                         ],
@@ -549,7 +549,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "cold weather"
                         ],
                         "factoid_classification": {

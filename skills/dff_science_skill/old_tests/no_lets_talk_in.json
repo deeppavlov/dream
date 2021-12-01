@@ -41,7 +41,7 @@
                                 "toxic": 0.0038194358348846436
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "no.",
                             "segments": [
@@ -267,7 +267,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "pets"
                         ],
                         "cobot_entities": {

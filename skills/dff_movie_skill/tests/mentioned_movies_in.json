@@ -16,7 +16,7 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
@@ -254,7 +254,7 @@
                             "factoid": 0.0055992756970226765,
                             "conversational": 0.994400680065155
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "movies"
                         ],
                         "sentseg": {

@@ -143,7 +143,7 @@
             "detected": 0
           }
         },
-        "cobot_nounphrases": [],
+        "spacy_nounphrases": [],
         "ner": [
           [
             {
@@ -464,7 +464,7 @@
             "neutral": 0.9992526173591614
           }
         },
-        "cobot_nounphrases": [
+        "spacy_nounphrases": [
           "chris evans"
         ],
         "intent_catcher": {
@@ -743,7 +743,7 @@
             "detected": 0
           }
         },
-        "cobot_nounphrases": [],
+        "spacy_nounphrases": [],
         "ner": [
           [
             {
@@ -1023,7 +1023,7 @@
             "neutral": 0.9992526173591614
           }
         },
-        "cobot_nounphrases": [
+        "spacy_nounphrases": [
           "chris evans"
         ],
         "intent_catcher": {

@@ -64,7 +64,7 @@
               0.7958859801292419
             ]
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
           ],
           "intent_catcher": {
             "doing_well": {
@@ -350,7 +350,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "reading"
           ],
           "attitude_classification": {
@@ -717,7 +717,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "long run",
             "companies",
             "comics",
@@ -1111,7 +1111,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "name"
           ],
           "attitude_classification": {
@@ -1415,7 +1415,7 @@
               0.8379353880882263
             ]
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "stan lee",
             "grandfather",
             "comic books",
@@ -1905,7 +1905,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "multiverse",
             "multiple universes",
             "characters",
@@ -2351,7 +2351,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "uncle",
             "college",
             "comics",
@@ -2749,7 +2749,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "one lifetime",
             "decade",
             "comics",
@@ -3083,7 +3083,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "classic tv show",
             "adam west",
             "movies",
@@ -3393,7 +3393,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "classic animated series",
             "newer ones",
             "good things",
@@ -3735,7 +3735,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "the trailers",
             "titan",
             "the \\\"dark",
@@ -3921,7 +3921,7 @@
               0.7958859801292419
             ]
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
           ],
           "intent_catcher": {
             "doing_well": {
@@ -4172,7 +4172,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "reading"
           ],
           "attitude_classification": {
@@ -4421,7 +4421,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "long run",
             "companies",
             "comics",
@@ -4711,7 +4711,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "name"
           ],
           "attitude_classification": {
@@ -4921,7 +4921,7 @@
               0.8379353880882263
             ]
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "stan lee",
             "grandfather",
             "comic books",
@@ -5263,7 +5263,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "multiverse",
             "multiple universes",
             "characters",
@@ -5571,7 +5571,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "uncle",
             "college",
             "comics",
@@ -5883,7 +5883,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "one lifetime",
             "decade",
             "comics",
@@ -6154,7 +6154,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "classic tv show",
             "adam west",
             "movies",
@@ -6406,7 +6406,7 @@
               "detected": 0
             }
           },
-          "cobot_nounphrases": [
+          "spacy_nounphrases": [
             "classic animated series",
             "newer ones",
             "good things",

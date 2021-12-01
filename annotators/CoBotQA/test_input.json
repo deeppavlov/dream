@@ -124,7 +124,7 @@
                         "factoid": 0.001073386985808611,
                         "conversational": 0.99892657995224
                     },
-                    "cobot_nounphrases": [
+                    "spacy_nounphrases": [
                         "michael jordan"
                     ],
                     "cobot_entities": {
@@ -397,7 +397,7 @@
                         "factoid": 0.001073386985808611,
                         "conversational": 0.99892657995224
                     },
-                    "cobot_nounphrases": [
+                    "spacy_nounphrases": [
                         "michael jordan"
                     ],
                     "cobot_entities": {

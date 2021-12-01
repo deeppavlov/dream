@@ -23,7 +23,7 @@
                                 "What are my chances to recover from covid?"
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "my chances",
                             "covid"
                         ],

@@ -43,7 +43,7 @@
                                 "Are you recording?"
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "recording"
                         ],
                         "factoid_classification": {
@@ -255,7 +255,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "the secret information"
                         ],
                         "factoid_classification": {

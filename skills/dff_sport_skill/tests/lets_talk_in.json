@@ -41,7 +41,7 @@
                                 "toxic": 0.0010571777820587158
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "sports"
                         ],
                         "sentseg": {

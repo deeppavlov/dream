@@ -41,7 +41,7 @@
                                 "toxic": 0.0014452040195465088
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "hi.",
                             "segments": [
@@ -260,7 +260,7 @@
                                 "toxic": 0.0012921690940856934
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "i watched movie her.",
                             "segments": [

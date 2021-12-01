@@ -9,7 +9,7 @@
                     "text": "I am very interested in 1 very specific question. Do you have coronavirus?",
                     "annotations": {
                         "spelling_preprocessing": "I am very interested in 1 very specific question. Do you have coronavirus?",
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "1 very specific question",
                             "coronavirus"
                         ],

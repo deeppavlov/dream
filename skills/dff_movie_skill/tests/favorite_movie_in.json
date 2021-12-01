@@ -41,7 +41,7 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "hi.",
                             "segments": [
@@ -251,7 +251,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "your favorite movie"
                         ],
                         "sentseg": {

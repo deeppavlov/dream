@@ -83,7 +83,7 @@
                     "sentseg",
                     "ner",
                     "sentrewrite",
-                    "cobot_nounphrases"
+                    "spacy_nounphrases"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -122,11 +122,11 @@
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
-            "cobot_nounphrases": {
+            "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-nounphrases:8006/respond"
+                    "url": "http://spacy-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -156,11 +156,11 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "cobot_nounphrases": {
+            "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-nounphrases:8006/respond"
+                    "url": "http://spacy-nounphrases:8006/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -182,7 +182,7 @@
                 ],
                 "previous_services": [
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -247,7 +247,7 @@
                 "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.entity_linking",
-                    "annotators.cobot_nounphrases",
+                    "annotators.spacy_nounphrases",
                     "annotators.entity_detection"
                 ]
             },
@@ -317,7 +317,7 @@
                 ],
                 "previous_services": [
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.spacy_nounphrases"
                 ]
             },
             "wiki_parser": {
@@ -399,7 +399,7 @@
                     "annotators.sentseg",
                     "annotators.ner",
                     "annotators.cobot_entities",
-                    "annotators.cobot_nounphrases"
+                    "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -1010,11 +1010,11 @@
                 "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "cobot_nounphrases": {
+            "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://cobot-nounphrases:8006/respond_batch"
+                    "url": "http://spacy-nounphrases:8006/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
