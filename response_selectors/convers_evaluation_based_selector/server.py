@@ -12,6 +12,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
+from common.greeting import greeting_spec
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, is_toxic_or_badlisted_utterance
 from tag_based_selection import tag_based_response_selection
@@ -26,7 +27,6 @@ from utils import (
     how_are_you_spec,
     what_i_can_do_spec,
     psycho_help_spec,
-    greeting_spec,
     misheard_with_spec1,
     misheard_with_spec2,
     alexa_abilities_spec,
@@ -384,7 +384,6 @@ def select_response(
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
-    greeting_spec = "this is an Alexa Prize Socialbot"
     if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
         # add greeting to the first bot uttr, if it's not already included
         best_text = "Hi, " + greeting_spec + "! " + best_text

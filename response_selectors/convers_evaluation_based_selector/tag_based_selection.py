@@ -8,6 +8,7 @@ import numpy as np
 import sentry_sdk
 from nltk.tokenize import sent_tokenize
 
+from common.greeting import greeting_spec
 from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.sensitive import is_sensitive_situation
@@ -32,7 +33,6 @@ from utils import (
     CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
-    greeting_spec,
     misheard_with_spec1,
     psycho_help_spec,
     misheard_with_spec2,
