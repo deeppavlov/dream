@@ -142,12 +142,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
-  short-story-skill:
-    volumes:
-      - "./skills/short_story_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8057:8057
   small-talk-skill:
     volumes:
       - "./skills/small_talk_skill:/src"
@@ -400,6 +394,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8061:8061
+  dff-short-story-skill:
+    volumes:
+      - "./skills/dff_short_story_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8057:8057
   dff-weather-skill:
     volumes:
       - "./skills/dff_weather_skill:/src"

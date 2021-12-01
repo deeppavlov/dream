@@ -111,6 +111,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr += turn_on_skills(
                     cobot_topics,
                     cobot_dialogact_topics,
+                    intent_catcher_intents,
                     user_uttr_text,
                     bot_uttr.get("text", ""),
                     available_skills=[
@@ -118,7 +119,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_coronavirus_skill",
                         "dff_funfact_skill",
                         "dff_weather_skill",
-                        # "dff_celebrity_skill",
+                        "dff_short_story_skill",
                     ],
                 )
 
@@ -209,6 +210,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr += turn_on_skills(
                     cobot_topics,
                     cobot_dialogact_topics,
+                    intent_catcher_intents,
                     user_uttr_text,
                     bot_uttr.get("text", ""),
                     available_skills=[
@@ -220,7 +222,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_sport_skill",
                         "dff_music_skill",
                         "dff_science_skill",
-                        "dff_gossip_skill",  # 'dff_celebrity_skill',
+                        "dff_gossip_skill",
                         "game_cooperative_skill",
                         "dff_weather_skill",
                         "dff_funfact_skill",
@@ -228,6 +230,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_coronavirus_skill",
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
+                        "dff_short_story_skill",
                     ],
                 )
 

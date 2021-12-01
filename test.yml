@@ -71,7 +71,6 @@ services:
   emotion-skill:
   dummy-skill-dialog:
   meta-script-skill:
-  short-story-skill:
   small-talk-skill:
   game-cooperative-skill:
   program-y-wide:
@@ -128,5 +127,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=2
   dff-coronavirus-skill:
+  dff-short-story-skill:
   dff-template-skill:
 version: '3.7'

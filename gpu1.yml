@@ -103,8 +103,6 @@ services:
     restart: unless-stopped
   meta-script-skill:
     restart: unless-stopped
-  short-story-skill:
-    restart: unless-stopped
   small-talk-skill:
     restart: unless-stopped
   game-cooperative-skill:
@@ -190,6 +188,8 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   dff-coronavirus-skill:
+    restart: unless-stopped
+  dff-short-story-skill:
     restart: unless-stopped
   dff-weather-skill:
     restart: unless-stopped
