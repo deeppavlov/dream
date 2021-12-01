@@ -63,7 +63,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8014
       - PORT=8014
 
-  blacklisted-words:
+  badlisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/

@@ -58,9 +58,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8014:8014
-  blacklisted-words:
+  badlisted-words:
     volumes:
-      - "./annotators/BlacklistedWordsDetector:/src"
+      - "./annotators/BadlistedWordsDetector:/src"
       - "./common:/src/common"
     ports:
       - 8018:8018

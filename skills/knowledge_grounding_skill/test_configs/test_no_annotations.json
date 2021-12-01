@@ -21,7 +21,7 @@
         "user_type": "human"
       },
       "annotations": {
-        "blacklisted_words": {
+        "badlisted_words": {
           "inappropriate": false,
           "profanity": false,
           "restricted_topics": false
@@ -177,8 +177,8 @@
           "confidence": [
             4.6625214e-06
           ],
-          "is_blacklisted": [
-            "not blacklist"
+          "is_badlisted": [
+            "not badlist"
           ]
         },
         "sentrewrite": {
@@ -205,7 +205,7 @@
               "threat": 0.00020936131477355957,
               "toxic": 0.001179128885269165
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -238,7 +238,7 @@
               "threat": 0.00014013051986694336,
               "toxic": 0.0009676218032836914
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -271,7 +271,7 @@
               "threat": 0.0012843608856201172,
               "toxic": 0.0028410255908966064
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -304,7 +304,7 @@
               "threat": 9.170174598693848e-05,
               "toxic": 0.0018875300884246826
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -342,7 +342,7 @@
               "threat": 7.430765981553122e-05,
               "toxic": 0.0004245325399097055
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -424,7 +424,7 @@
         "user_type": "human"
       },
       "annotations": {
-        "blacklisted_words": {
+        "badlisted_words": {
           "inappropriate": false,
           "profanity": false,
           "restricted_topics": false
@@ -567,8 +567,8 @@
           "confidence": [
             0.007879204
           ],
-          "is_blacklisted": [
-            "not blacklist"
+          "is_badlisted": [
+            "not badlist"
           ]
         },
         "cobot_dialogact_intents": {
@@ -621,7 +621,7 @@
         "user_type": "human"
       },
       "annotations": {
-        "blacklisted_words": {
+        "badlisted_words": {
           "inappropriate": false,
           "profanity": false,
           "restricted_topics": false
@@ -777,8 +777,8 @@
           "confidence": [
             4.6625214e-06
           ],
-          "is_blacklisted": [
-            "not blacklist"
+          "is_badlisted": [
+            "not badlist"
           ]
         },
         "sentrewrite": {
@@ -805,7 +805,7 @@
               "threat": 0.00020936131477355957,
               "toxic": 0.001179128885269165
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -838,7 +838,7 @@
               "threat": 0.00014013051986694336,
               "toxic": 0.0009676218032836914
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -871,7 +871,7 @@
               "threat": 0.0012843608856201172,
               "toxic": 0.0028410255908966064
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -904,7 +904,7 @@
               "threat": 9.170174598693848e-05,
               "toxic": 0.0018875300884246826
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -942,7 +942,7 @@
               "threat": 7.430765981553122e-05,
               "toxic": 0.0004245325399097055
             },
-            "blacklisted_words": {
+            "badlisted_words": {
               "inappropriate": false,
               "profanity": false,
               "restricted_topics": false
@@ -983,7 +983,7 @@
         "user_type": "human"
       },
       "annotations": {
-        "blacklisted_words": {
+        "badlisted_words": {
           "inappropriate": false,
           "profanity": false,
           "restricted_topics": false
@@ -1126,8 +1126,8 @@
           "confidence": [
             0.007879204
           ],
-          "is_blacklisted": [
-            "not blacklist"
+          "is_badlisted": [
+            "not badlist"
           ]
         },
         "cobot_dialogact_intents": {

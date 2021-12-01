@@ -21,7 +21,7 @@
                         "spacy_nounphrases": [
                             "star wars"
                         ],
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -630,7 +630,7 @@
                                 "What do you mean?"
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

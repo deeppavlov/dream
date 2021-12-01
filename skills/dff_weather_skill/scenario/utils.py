@@ -2,7 +2,7 @@ import json
 import re
 
 from common.utils import get_named_locations
-from scenario.constants import BLACKLISTED_LOCATIONS
+from scenario.constants import BADLISTED_LOCATIONS
 from tools.city_slot import OWMCitySlot
 from tools.weather_service import weather_forecast_now
 
@@ -27,7 +27,7 @@ def retrieve_location_entity_from_utterance(human_utter: dict) -> str:
         locations = get_named_locations(human_utter)
         if locations:
             location_name = locations[-1]
-    if location_name.lower().strip() in BLACKLISTED_LOCATIONS:
+    if location_name.lower().strip() in BADLISTED_LOCATIONS:
         location_name = ""
     return location_name
 

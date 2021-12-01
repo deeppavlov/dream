@@ -71,7 +71,7 @@ services:
     restart: unless-stopped
   intent-catcher:
     restart: unless-stopped
-  blacklisted-words:
+  badlisted-words:
     restart: unless-stopped
   program-y-dangerous:
     restart: unless-stopped

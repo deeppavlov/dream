@@ -24,7 +24,7 @@
                         "user_type": "human"
                     },
                     "annotations": {
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -168,8 +168,8 @@
                             "confidence": [
                                 6.390905e-05
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -540,7 +540,7 @@
                         "asr": {
                             "asr_confidence": "high"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -683,8 +683,8 @@
                             "confidence": [
                                 5.621038e-07
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -714,7 +714,7 @@
                                     "threat": 0.00020936131477355957,
                                     "toxic": 0.001179128885269165
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
@@ -747,7 +747,7 @@
                                     "threat": 0.0006617307662963867,
                                     "toxic": 0.0019788742065429688
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
@@ -780,7 +780,7 @@
                                     "threat": 7.25090503692627e-05,
                                     "toxic": 0.00039921290590427816
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
@@ -910,7 +910,7 @@
                         "user_type": "human"
                     },
                     "annotations": {
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -1054,8 +1054,8 @@
                             "confidence": [
                                 6.390905e-05
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -1383,7 +1383,7 @@
                         "asr": {
                             "asr_confidence": "high"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -1526,8 +1526,8 @@
                             "confidence": [
                                 5.621038e-07
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -1557,7 +1557,7 @@
                                     "threat": 0.00020936131477355957,
                                     "toxic": 0.001179128885269165
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
@@ -1590,7 +1590,7 @@
                                     "threat": 0.0006617307662963867,
                                     "toxic": 0.0019788742065429688
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
@@ -1623,7 +1623,7 @@
                                     "threat": 7.25090503692627e-05,
                                     "toxic": 0.00039921290590427816
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false

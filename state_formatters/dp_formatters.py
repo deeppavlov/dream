@@ -111,7 +111,7 @@ def personality_catcher_formatter_service(payload: List):
 def cobot_classifiers_formatter_service(payload: List):
     # Used by: cobot_classifiers_formatter, sentiment_formatter
     if len(payload) == 3:
-        return {"text": payload[0], "confidence": payload[1], "is_blacklisted": payload[2]}
+        return {"text": payload[0], "confidence": payload[1], "is_badlisted": payload[2]}
     elif len(payload) == 2:
         return {"text": payload[0], "confidence": payload[1]}
     elif len(payload) == 1:
@@ -352,7 +352,7 @@ def simple_batch_formatter_service(payload: List):
             payload["batch"][i] = {
                 "text": payload["batch"][i][0],
                 "confidence": payload["batch"][i][1],
-                "is_blacklisted": payload["batch"][i][2],
+                "is_badlisted": payload["batch"][i][2],
             }
         elif len(payload["batch"][i]) == 2:
             payload["batch"][i] = {"text": payload["batch"][i][0], "confidence": payload["batch"][i][1]}

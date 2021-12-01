@@ -70,7 +70,7 @@
            "confidence":0.7960726618766785,
            "text":"very_positive"
         },
-        "blacklisted_words":{
+        "badlisted_words":{
            "inappropriate": false,
            "profanity": false,
            "restricted_topics": true

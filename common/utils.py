@@ -1168,12 +1168,13 @@ def find_first_complete_sentence(sentences):
     return None
 
 
-def is_toxic_or_blacklisted_utterance(annotated_utterance):
+def is_toxic_or_badlisted_utterance(annotated_utterance):
     toxic_result = get_toxic(annotated_utterance, probs=False)
-    default_blacklist = {"inappropriate": False, "profanity": False, "restricted_topics": False}
-    blacklist_result = annotated_utterance.get("annotations", {}).get("blacklisted_words", default_blacklist)
+    default_badlist = {"bad_words": False}
+    badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return toxic_result or blacklist_result["profanity"] or blacklist_result["inappropriate"]
+    return bool(toxic_result) or any([badlist_result.get(bad, False)
+                                      for bad in ["bad_words", "inappropriate", "profanity"]])
 
 
 FACTOID_PATTERNS = re.compile(

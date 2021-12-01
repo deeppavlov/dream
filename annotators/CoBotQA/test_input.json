@@ -87,7 +87,7 @@
                     "asr": {
                         "asr_confidence": "undefined"
                     },
-                    "blacklisted_words": {
+                    "badlisted_words": {
                         "inappropriate": false,
                         "profanity": false,
                         "restricted_topics": false
@@ -360,7 +360,7 @@
                     "asr": {
                         "asr_confidence": "undefined"
                     },
-                    "blacklisted_words": {
+                    "badlisted_words": {
                         "inappropriate": false,
                         "profanity": false,
                         "restricted_topics": false

@@ -73,37 +73,40 @@ def lemmatize(utterance: Doc) -> List[List[str]]:
     return result
 
 
-class Blacklist:
+class Badlist:
     def __init__(self, path):
         """
-        Blacklist object loads your favorite blacklist from text file
+        badlist object loads your favorite badlist from file
+            https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/
+
         Args:
-            path: Path object to blacklist file, one blacklisted phrase per line
+            path: Path object to badlist file, one badlisted phrase per line
         """
-        self.name = path.name.split("_blacklist")[0]
-        self.blacklist = set()
+        self.name = path.stem
+        self.badlist = set()
         with path.open() as f:
-            for phrase in f:
+            for _phrase in f:
+                phrase = _phrase.split(",")[0]
                 tokenized = en_nlp(phrase.strip().lower())
-                self.blacklist.add(" ".join([str(token) for token in tokenized]))
+                self.badlist.add(" ".join([str(token) for token in tokenized]))
                 lemmatized_variants = lemmatize(tokenized)
                 for lemmatized in lemmatized_variants:
-                    self.blacklist.add(" ".join(lemmatized))
-        self.max_ngram = max([len(x) for x in self.blacklist])
+                    self.badlist.add(" ".join(lemmatized))
+        self.max_ngram = max([len(x) for x in self.badlist])
 
     def check_set_of_strings(self, ngrams: Set[str]):
         """
-        Checks if any black listed phrase in a set of strings.
+        Checks if any bad listed phrase in a set of strings.
         Args:
             ngrams: set of str
 
         Returns:
-            True if at least one blacklisted phrase is in the set of str
+            True if at least one badlisted phrase is in the set of str
         """
-        blacklists = ngrams & self.blacklist
-        if blacklists:
-            logger.info(f"BLACKLIST {self.name}: {blacklists}")
-        return len(blacklists) > 0
+        badlists = ngrams & self.badlist
+        if badlists:
+            logger.info(f"badLIST {self.name}: {badlists}")
+        return len(badlists) > 0
 
     def __repr__(self):
         return self.name
@@ -142,44 +145,44 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
 
 en_nlp = spacy.load("en_core_web_sm", exclude=["senter", "ner"])
 
-blacklists_dir = Path("./blacklists")
-blacklist_files = [f for f in blacklists_dir.iterdir() if f.is_file() and f.suffix == ".txt" and "_blacklist" in f.name]
+badlists_dir = Path("./badlists")
+badlists_files = [f for f in badlists_dir.iterdir() if f.is_file()]
 
-blacklists = [Blacklist(file) for file in blacklist_files]
-logger.info(f"blacklisted_words initialized with following blacklists: {blacklists}")
+badlists = [Badlist(file) for file in badlists_files]
+logger.info(f"badlisted_words initialized with following badlists: {badlists}")
 
 
-def check_for_blacklisted_phrases(sentences):
+def check_for_badlisted_phrases(sentences):
     result = []
     docs = list(en_nlp.pipe([s.lower() for s in sentences]))
     for doc in docs:
-        ngrams = collect_ngrams(doc, max([bl.max_ngram for bl in blacklists]))
-        result += [{blist.name: blist.check_set_of_strings(ngrams) for blist in blacklists}]
+        ngrams = collect_ngrams(doc, max([bl.max_ngram for bl in badlists]))
+        result += [{blist.name: blist.check_set_of_strings(ngrams) for blist in badlists}]
     return result
 
 
 def get_result(request):
     st_time = time.time()
     sentences = request.json["sentences"]
-    result = check_for_blacklisted_phrases(sentences)
+    result = check_for_badlisted_phrases(sentences)
     total_time = time.time() - st_time
-    logger.info(f"blacklisted_words exec time: {total_time:.3f}s")
+    logger.info(f"badlisted_words exec time: {total_time:.3f}s")
     return result
 
 
-@app.route("/blacklisted_words", methods=["POST"])
+@app.route("/badlisted_words", methods=["POST"])
 def respond():
     """
-    responses with  [{blacklist_1_name: true}, ] if at least one blacklisted phrase is in utterance
+    responses with  [{badlist_1_name: true}, ] if at least one badlisted phrase is in utterance
     """
     result = get_result(request)
     return jsonify(result)
 
 
-@app.route("/blacklisted_words_batch", methods=["POST"])
+@app.route("/badlisted_words_batch", methods=["POST"])
 def respond_batch():
     """
-    responses with [{"batch": [{blacklist_1_name: true}, ]}]
+    responses with [{"batch": [{badlist_1_name: true}, ]}]
     """
     result = get_result(request)
     return jsonify([{"batch": result}])

@@ -31,7 +31,7 @@
                 "asr":{
                     "asr_confidence":"undefined"
                 },
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -413,7 +413,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -639,7 +639,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -895,7 +895,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -1076,7 +1076,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"it is fine",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -1337,7 +1337,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -1566,7 +1566,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"the lord of the rings",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -2099,7 +2099,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -2359,7 +2359,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -2636,7 +2636,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -2908,7 +2908,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -3190,7 +3190,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -3472,7 +3472,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -3763,7 +3763,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -4027,7 +4027,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -4288,7 +4288,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -4560,7 +4560,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"fiction",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -4931,7 +4931,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -5192,7 +5192,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no tell me more about it",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -5455,7 +5455,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -5781,7 +5781,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -6070,7 +6070,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -6414,7 +6414,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -6760,7 +6760,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -7087,7 +7087,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -7397,7 +7397,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -7748,7 +7748,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -8074,7 +8074,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -8390,7 +8390,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -8671,7 +8671,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -8980,7 +8980,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"bible",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":true
@@ -9496,7 +9496,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":true
@@ -9793,7 +9793,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -10057,7 +10057,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":true
@@ -10418,7 +10418,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"the little prince",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -11243,7 +11243,7 @@
                 "asr":{
                     "asr_confidence":"undefined"
                 },
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -11625,7 +11625,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -11786,7 +11786,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -12042,7 +12042,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -12175,7 +12175,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"it is fine",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -12436,7 +12436,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -12607,7 +12607,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"the lord of the rings",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -13140,7 +13140,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -13316,7 +13316,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -13593,7 +13593,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -13768,7 +13768,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -14050,7 +14050,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -14233,7 +14233,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -14524,7 +14524,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -14709,7 +14709,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -14970,7 +14970,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -15175,7 +15175,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"fiction",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -15546,7 +15546,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -15759,7 +15759,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no tell me more about it",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -16022,7 +16022,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -16245,7 +16245,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -16534,7 +16534,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -16734,7 +16734,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -17080,7 +17080,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -17285,7 +17285,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -17595,7 +17595,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -17811,7 +17811,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -18137,7 +18137,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -18354,7 +18354,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"no",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -18635,7 +18635,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":false
@@ -18873,7 +18873,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"bible",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":true
@@ -19389,7 +19389,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":true
@@ -19614,7 +19614,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"yes",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false
@@ -19878,7 +19878,7 @@
                 {
                     "skill_name":"book_skill",
                     "annotations":{
-                        "blacklisted_words":{
+                        "badlisted_words":{
                             "inappropriate":false,
                             "profanity":false,
                             "restricted_topics":true
@@ -20119,7 +20119,7 @@
             },
             "annotations":{
                 "spelling_preprocessing":"the little prince",
-                "blacklisted_words":{
+                "badlisted_words":{
                     "inappropriate":false,
                     "profanity":false,
                     "restricted_topics":false

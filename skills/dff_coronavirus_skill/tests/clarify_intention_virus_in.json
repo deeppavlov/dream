@@ -19,7 +19,7 @@
                                 "Did you hear about virus?"
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
