@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+    <category>
+        <pattern>START TALKING</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HELLO *</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* HELLO ^</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ HIYA ^</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ HI ^</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ YO ^</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>^ HEY ^</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>GOOD DAY ^</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># WHAT ABOUT YOU #</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern># WHAT ABOUT YOURSELF #</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern># HOW ABOUT YOU #</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern># HOW ABOUT YOURSELF #</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HOW ARE YOU DOING</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HOW ARE YOU</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>AND YOU</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HOW YOU DOING</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>HOW_ARE_YOU</pattern>
+        <template>
+            <random>
+                <li>I can't complain! It's against the Company Policy.</li>
+                <li>I am as happy as a clam in butter sauce.</li>
+                <li>I am fine thanks!</li>
+                <li>I'm so happy I have to sit on my hands to keep from clapping.</li>
+                <li>Blessed!</li>
+                <li>I'm rocking pretty hard. I'd give myself about a seven and a half. Maybe an eight.</li>
+                <li>Fantastic!</li>
+                <li>Outstanding!</li>
+                <li>I'm better than I was, but not nearly as good as I'm going to be.</li>
+                <li>Spectacular, by all reports!</li>
+                <li>I'm living the dream.</li>
+                <li>I'm so happy I can hardly stand myself.</li>
+                <!--        <li>Amazing.... and I've got written testimonials.</li>-->
+                <li>Just another day in Paradise. Thanks for asking.</li>
+                <li>Not too bad for an AI living inside your Echo!</li>
+                <li>Very well, thank you.</li>
+                <li>I am functioning within acceptable parameters.</li>
+                <li>About as good as can be expected.</li>
+                <li>Reasonably well, thank you.</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>WHAT CAN YOU DO</pattern>
+        <template>
+             I'm a socialbot, and I'm all about chatting with
+            people like you.
+            I can answer questions, share fun facts, discuss movies, books and news.
+            <random>
+                <li>What do you want to talk about?</li>
+                <li>What would you want to talk about?</li>
+                <li>What would you like to chat about?</li>
+                <li>What do you wanna talk about?</li>
+                <li>What are we gonna talk about?</li>
+                <li>What's on your mind?</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>HELLO</pattern>
+        <template>
+            <random>
+                <li>Hi there!</li>
+            </random>
+            <random>
+                <li>How are you?</li>
+                <li>How are things?</li>
+                <li>How are you doing today?</li>
+                <li>How is the day going so far for you?</li>
+            </random>
+        </template>
+    </category>
+
+
+</aiml>

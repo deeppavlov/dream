@@ -19,12 +19,12 @@
                                 "Tell me about covid statistics in Russia."
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "russia",
                             "1 very specific question",
                             "covid statistics"
@@ -537,12 +537,12 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.545558512210846,

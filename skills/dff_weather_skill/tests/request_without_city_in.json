@@ -1,0 +1,283 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Tell me weather.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Tell me weather in London.",
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "weather"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9974457025527954,
+                            "conversational": 0.0025543677620589733
+                        },
+                        "conceptnet": {
+                            "weather": {
+                                "Causes": [
+                                    "snow",
+                                    "rain",
+                                    "weather"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "ski",
+                                    "go to work"
+                                ],
+                                "HasProperty": [
+                                    "hot",
+                                    "very hot",
+                                    "cold"
+                                ],
+                                "SymbolOf": [
+                                    "rain",
+                                    "cold",
+                                    "winter"
+                                ]
+                            }
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9679458141326904,
+                                "Information_RequestIntent": 0.9958388805389404
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9979375600814819
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.9739552140235901,
+                                "Weather_Time": 0.9993501901626587
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9980624914169312
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7010625600814819
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0009115040302276611
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "Tell me weather.",
+                            "segments": [
+                                "Tell me weather."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0017131564673036337,
+                                "command": 0.9696163535118103,
+                                "comment": 0.0012449567439034581,
+                                "complaint": 0.0030516311526298523,
+                                "dev_command": 0.008995480835437775,
+                                "neg_answer": 0.001427413895726204,
+                                "open_question_factual": 0.0016862007323652506,
+                                "open_question_opinion": 0.0017678278964012861,
+                                "opinion": 0.0022793940734118223,
+                                "other_answers": 0.0007646132144145668,
+                                "pos_answer": 0.0026610023342072964,
+                                "statement": 0.0026511535979807377,
+                                "yes_no_question": 0.002140837023034692
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Tell me weather."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Sen. Lindsey Graham Lindsey Olin GrahamOvernight Defense & National Security — Milley becomes lightning rod Joint Chiefs Chairman Milley becomes lightning rod on right GOP senators unveil bill designating Taliban as terrorist organization MORE (R-SC)... [2733 chars]",
+                                    "description": "Sen. Lindsey Graham (R-SC) said he expects to see law enforcement take a zero-tolerance approach in response to any violent behavior during a right-wing rally slated for Washington, D.C., this weekend.",
+                                    "image": "https://thehill.com/sites/default/files/grahamlindsey_060821gn3_lead.jpg",
+                                    "publishedAt": "2021-09-16T12:50:46Z",
+                                    "source": {
+                                        "name": "The Hill",
+                                        "url": "https://thehill.com"
+                                    },
+                                    "title": "Lindsey Graham: Police need 'to take a firm line' with Sept. 18 rally attendees",
+                                    "url": "https://thehill.com/homenews/senate/572539-lindsey-graham-police-need-to-take-a-firm-line-with-sept-18-rally-attendees"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "weather",
+                                "news": {
+                                    "content": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.\nThe agriculture ministry on Tuesday said that farms had sown 356,040 hectares of mostly winter wheat for the 2022 ... [907 chars]",
+                                    "description": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.",
+                                    "image": "https://www.agriculture.com/sites/all/themes/custom/sfg/favicon.ico",
+                                    "publishedAt": "2021-09-16T12:21:10Z",
+                                    "source": {
+                                        "name": "Successful Farming",
+                                        "url": "https://www.agriculture.com"
+                                    },
+                                    "title": "Conditions favour Ukrainian winter grain sowing, say forecasters",
+                                    "url": "https://www.agriculture.com/markets/newswire/conditions-favour-ukrainian-winter-grain-sowing-say-forecasters"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_weather_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

@@ -12,7 +12,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "Let's chat about minecraft",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -41,7 +41,7 @@
                             "factoid": 0.2867066264152527,
                             "conversational": 0.7132933735847473
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "minecraft"
                         ],
                         "sentseg": {

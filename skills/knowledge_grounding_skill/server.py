@@ -156,13 +156,13 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     return result_values
 
 
-def get_cobot_nounphrases(utt):
+def get_spacy_nounphrases(utt):
     cob_nounphs = get_entities(utt, only_named=False, with_labels=False)
-    cobot_nounphrases = []
+    spacy_nounphrases = []
     for ph in cob_nounphs:
         if not pos_tag([ph])[0][1].startswith("VB"):
-            cobot_nounphrases.append(ph)
-    return cobot_nounphrases
+            spacy_nounphrases.append(ph)
+    return spacy_nounphrases
 
 
 def get_intents_flags(utt):
@@ -282,10 +282,10 @@ def respond():
             user_input_text = dialog["human_utterances"][-1]["text"]
             bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
             switch_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
-            # cobot_nounphrases
-            cobot_nounphrases = get_cobot_nounphrases(dialog["human_utterances"][-1])
+            # spacy_nounphrases
+            spacy_nounphrases = get_spacy_nounphrases(dialog["human_utterances"][-1])
             nounphrases.append(
-                re.compile(join_sentences_in_or_pattern(cobot_nounphrases), re.IGNORECASE) if cobot_nounphrases else ""
+                re.compile(join_sentences_in_or_pattern(spacy_nounphrases), re.IGNORECASE) if spacy_nounphrases else ""
             )
             # entities
             curr_ents = get_named_entities(dialog["human_utterances"][-1])
@@ -325,7 +325,7 @@ def respond():
             # add nounphrases and entities to the knowledge
             if user_input_knowledge:
                 user_input_checked_sentence = (
-                    space_join(cobot_nounphrases)
+                    space_join(spacy_nounphrases)
                     + space_join(curr_ents)
                     + tokenize.sent_tokenize(user_input_knowledge)[0]
                 )
