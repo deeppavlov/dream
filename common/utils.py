@@ -110,6 +110,7 @@ high_priority_intents = {
 low_priority_intents = {"dont_understand", "what_time"}
 
 combined_classes = {
+    "factoid_classification": ["is_factoid", "is_conversational"],
     "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
     "toxic_classification": [
         "identity_hate",
@@ -119,6 +120,7 @@ combined_classes = {
         "sexual_explicit",
         "threat",
         "toxic",
+        "not_toxic"
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "cobot_topics": [
@@ -156,7 +158,8 @@ combined_classes = {
         "Science_and_Technology",
         "Sports",
         "Politics",
-    ],  # Inappropriate_Content
+        "Inappropriate_Content"
+    ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
         "General_ChatIntent",
@@ -516,15 +519,14 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification":
+        if model_name == "toxic_classification" and "factoid_classification" not in combined_annotations:
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
-
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    # logger.debug(f'From combined {answer_probs} {model_name} {answer_labels}')
+
     return answer_probs, answer_labels
 
 
@@ -557,7 +559,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
     try:
         annotations = annotated_utterance["annotations"]
         answer = annotations[model_name]
-        # logger.info(f'Being processed plain annotation {answer}')
+
         answer = _process_text(answer)
         if isinstance(answer, list):
             if model_name == "sentiment_classification":
@@ -569,12 +571,13 @@ def _get_plain_annotations(annotated_utterance, model_name):
         else:
             answer_probs = answer
             if model_name == "toxic_classification":
+                # this function is only for plain annotations (when toxic_classification is a separate annotator)
                 answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
             else:
                 answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         logger.warning(e)
-    # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
+
     return answer_probs, answer_labels
 
 
@@ -629,6 +632,27 @@ def get_toxic(annotated_utterance, probs=True, default_probs=None, default_label
     return _get_etc_model(
         annotated_utterance,
         "toxic_classification",
+        probs=probs,
+        default_probs=default_probs,
+        default_labels=default_labels,
+    )
+
+
+def get_factoid(annotated_utterance, probs=True, default_probs=None, default_labels=None):
+    """Function to get toxic classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with toxic probablilties, if probs == True, or toxic labels if probs != True
+    """
+    default_probs = {"is_conversational": 1} if default_probs is None else default_probs
+    default_labels = ["is_conversational"] if default_labels is None else default_labels
+    return _get_etc_model(
+        annotated_utterance,
+        "factoid_classification",
         probs=probs,
         default_probs=default_probs,
         default_labels=default_labels,
@@ -868,7 +892,6 @@ COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
 
 
 def get_entities(annotated_utterance, only_named=False, with_labels=False):
-    entities = None
     if not only_named:
         if "entity_detection" in annotated_utterance.get("annotations", {}):
             labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
@@ -957,8 +980,8 @@ def get_raw_entity_names_from_annotations(annotations):
                 entities = raw_el_output[0][0]
     except Exception as e:
         error_message = f"Wrong entity linking output format {raw_el_output} : {e}"
-        sentry_sdk.capture_exception(error_message)
-        logging.exception(error_message)
+        sentry_sdk.capture_exception(e)
+        logger.exception(error_message)
     return entities
 
 
@@ -1008,14 +1031,14 @@ def entity_to_label(entity):
         If entity is in wrong format we assume that it is already label but give exception
 
     """
-    logging.debug(f"Calling entity_to_label for {entity}")
+    logger.debug(f"Calling entity_to_label for {entity}")
     no_entity = not entity
     wrong_entity_type = not isinstance(entity, str)
     wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
     if no_entity or wrong_entity_type or wrong_entity_format:
         warning_text = f"Wrong entity format. We assume {entity} to be label but check the code"
         sentry_sdk.capture_exception(Exception(warning_text))
-        logging.exception(warning_text)
+        logger.exception(warning_text)
         return entity
     label = ""
     labels = request_triples_wikidata("find_label", [(entity, "")])
@@ -1025,10 +1048,10 @@ def entity_to_label(entity):
             label = labels[0].split('"')[1]
         else:
             label = labels[0]
-        logging.debug(f"Answer {label}")
+        logger.debug(f"Answer {label}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(Exception(e, "Exception in conversion of labels {labels}"))
+        logger.exception(Exception(e, "Exception in conversion of labels {labels}"))
     return label
 
 
@@ -1059,10 +1082,10 @@ def get_types_from_annotations(annotations, types, tocheck_relation="occupation"
                     mismatching_types = [type_to_typename[k] for k in found_types if k not in types]
                     if matching_types:
                         return entity, matching_types, mismatching_types
-            logging.warning("Relation to check not found")
+            logger.warning("Relation to check not found")
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(Exception(e, f"Exception in processing wp annotations {wp_annotations}"))
+        logger.exception(Exception(e, f"Exception in processing wp annotations {wp_annotations}"))
     return None, None, None
 
 
