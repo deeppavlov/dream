@@ -13,7 +13,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
 from common.fact_retrieval import topic_titles, find_topic_titles
-from common.wiki_skill import find_all_titles, find_paragraph, delete_hyperlinks, WIKI_BLACKLIST
+from common.wiki_skill import find_all_titles, find_paragraph, delete_hyperlinks, WIKI_BADLIST
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -121,7 +121,7 @@ def find_sentences(paragraphs):
         max_len = 50
         for sentence in sentences:
             words = re.findall(re_tokenizer, sentence)
-            if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, sentence):
+            if cur_len + len(words) < max_len and not re.findall(WIKI_BADLIST, sentence):
                 sentences_list.append(sentence)
                 cur_len += len(words)
     return sentences_list

@@ -12,7 +12,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -246,7 +246,7 @@
                                 "toxic": 0.0009157657623291016
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

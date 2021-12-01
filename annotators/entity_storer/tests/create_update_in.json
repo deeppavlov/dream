@@ -35,7 +35,7 @@
                         "spacy_nounphrases": [
                             "apples"
                         ],
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -341,7 +341,7 @@
                             "entities": [],
                             "labelled_entities": []
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

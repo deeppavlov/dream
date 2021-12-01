@@ -37,7 +37,7 @@
                                 "toxic": 0.0014452040195465088
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -245,7 +245,7 @@
                                 "toxic": 0.0026584863662719727
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

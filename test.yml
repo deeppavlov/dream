@@ -52,7 +52,7 @@ services:
   sentrewrite:
   intent-responder:
   intent-catcher:
-  blacklisted-words:
+  badlisted-words:
   program-y-dangerous:
   dff-movie-skill:
   dff-gaming-skill:

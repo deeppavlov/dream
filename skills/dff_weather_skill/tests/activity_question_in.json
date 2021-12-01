@@ -12,7 +12,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "Tell me weather in London.",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -544,7 +544,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "I prefer cold weather.",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -789,7 +789,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "Yes",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

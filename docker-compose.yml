@@ -8,7 +8,7 @@ services:
     environment:
       WAIT_HOSTS: "cobotqa:8081, convers-evaluator-annotator:8004,
         spacy-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
-        intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
+        intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
@@ -181,10 +181,10 @@ services:
         reservations:
           memory: 3.5G
 
-  blacklisted-words:
+  badlisted-words:
     env_file: [.env]
     build:
-      context: ./annotators/BlacklistedWordsDetector/
+      context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
       - FLASK_APP=server

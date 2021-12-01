@@ -37,7 +37,7 @@
                             "conversational": 0.990462601184845
                         },
                         "spacy_nounphrases": [],
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -252,7 +252,7 @@
                                 "toxic": 0.0010618269443511963
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

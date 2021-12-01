@@ -18,7 +18,7 @@
                                 "What should i do if have coronavirus?"
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

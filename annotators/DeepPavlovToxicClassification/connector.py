@@ -30,7 +30,7 @@ class BatchConnector:
             total_time = time.time() - st_time
             logger.info(f"DeepPavlovToxicClassification batch connector exec time: {total_time:.3f}s")
             # In connector [result] leads to bug, so it is not inside array like on
-            # conv eval and blacklist annotator
+            # conv eval and badlist annotator
             asyncio.create_task(callback(task_id=payload["task_id"], response={"batch": result}))
         except Exception as e:
             logger.exception(e)

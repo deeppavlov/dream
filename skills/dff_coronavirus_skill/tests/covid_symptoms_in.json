@@ -16,7 +16,7 @@
                             "factoid": 0.004948326386511326,
                             "conversational": 0.9950516819953918
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -263,7 +263,7 @@
                                 "34."
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false

@@ -1,4 +1,4 @@
-BLACKLISTED_LOCATIONS = {"is", "none", "ok", "okay"}
+BADLISTED_LOCATIONS = {"is", "none", "ok", "okay"}
 
 ZERO_CONF = 0.0
 QUESTION_CONF = 0.999
