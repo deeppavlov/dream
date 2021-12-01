@@ -42,7 +42,7 @@
                                 "toxic": 0.0027484893798828125
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "cobot_entities": {
                             "entities": [],
                             "labelled_entities": []

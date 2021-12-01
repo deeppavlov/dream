@@ -18,7 +18,7 @@
                                 "I like star wars too."
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "star wars"
                         ],
                         "blacklisted_words": {
@@ -623,7 +623,7 @@
                                 "toxic": 0.0012904107570648193
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "What do you mean?",
                             "segments": [

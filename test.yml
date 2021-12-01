@@ -44,7 +44,7 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
-  cobot-nounphrases:
+  spacy-nounphrases:
   program-y:
   personality-catcher:
   sentseg:

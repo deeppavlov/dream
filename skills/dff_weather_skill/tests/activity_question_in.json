@@ -17,7 +17,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "weather",
                             "london"
                         ],
@@ -549,7 +549,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "cold weather"
                         ],
                         "factoid_classification": {
@@ -794,7 +794,7 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "factoid_classification": {
                             "factoid": 0.01655726693570614,
                             "conversational": 0.9834427237510681

@@ -24,7 +24,7 @@
                                 "Should i have take vaccine?"
                             ]
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "1 very specific question",
                             "vaccine"
                         ],

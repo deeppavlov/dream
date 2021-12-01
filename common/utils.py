@@ -900,7 +900,7 @@ def get_entities(annotated_utterance, only_named=False, with_labels=False):
             if not with_labels:
                 entities = [ent["text"] for ent in entities]
         else:
-            entities = annotated_utterance.get("annotations", {}).get("cobot_nounphrases", [])
+            entities = annotated_utterance.get("annotations", {}).get("spacy_nounphrases", [])
             if with_labels:
                 # actually there are no labels for cobot nounphrases
                 # so, let's make it as for cobot_entities format
@@ -1003,7 +1003,7 @@ def get_entity_names_from_annotations(annotated_utterance, stopwords=None, defau
     for tmp in annotations.get("ner", []):
         if tmp and "text" in tmp[0]:
             named_entities.append(tmp[0]["text"])
-    for nounphrase in annotations.get("cobot_nounphrases", []):
+    for nounphrase in annotations.get("spacy_nounphrases", []):
         named_entities.append(nounphrase)
     for wikiparser_dict in annotations.get("wiki_parser", [{}]):
         for wiki_entity_name in wikiparser_dict:

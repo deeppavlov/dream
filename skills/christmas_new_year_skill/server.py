@@ -378,7 +378,7 @@ def share_info(dialog):
         if is_about_templates[topic]:
             logger.info(f"Found request for: {topic}")
             if topic == "gift":
-                nouns = curr_user_annot.get("cobot_nounphrases", [])
+                nouns = curr_user_annot.get("spacy_nounphrases", [])
                 if len(nouns) == 0:
                     gifted = "friend"
                     gift = np.random.choice(gift_ideas[gifted]).lower()

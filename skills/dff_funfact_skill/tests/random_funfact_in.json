@@ -42,7 +42,7 @@
                             "factoid": 0.016507098451256752,
                             "conversational": 0.9834928512573242
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "fun fact"
                         ],
                         "sentseg": {
@@ -307,7 +307,7 @@
                             "factoid": 0.016507098451256752,
                             "conversational": 0.9834928512573242
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "fun fact"
                         ],
                         "blacklisted_words": {

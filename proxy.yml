@@ -567,7 +567,7 @@ services:
       - PORT=8119
 
     command: [ "nginx", "-g", "daemon off;" ]
-  cobot-nounphrases:
+  spacy-nounphrases:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile

@@ -237,7 +237,7 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
                     "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
                 )
             ],
-            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])],
+            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("spacy_nounphrases", [])],
         }
     ]
 
@@ -764,7 +764,7 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
         "dff_wiki_skill",
         used_annotations=[
             "cobot_entities",
-            "cobot_nounphrases",
+            "spacy_nounphrases",
             "entity_linking",
             "factoid_classification",
             "wiki_parser",

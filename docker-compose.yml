@@ -7,7 +7,7 @@ services:
       dockerfile: dockerfile_agent
     environment:
       WAIT_HOSTS: "cobotqa:8081, convers-evaluator-annotator:8004,
-        cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
+        spacy-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
@@ -71,10 +71,10 @@ services:
         reservations:
           memory: 2G
 
-  cobot-nounphrases:
+  spacy-nounphrases:
     env_file: [.env]
     build:
-      context: ./annotators/cobot_nounphrases/
+      context: annotators/spacy_nounphrases/
     command: flask run -h 0.0.0.0 -p 8006
     environment:
       - FLASK_APP=server

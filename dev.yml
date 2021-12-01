@@ -12,9 +12,9 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
-  cobot-nounphrases:
+  spacy-nounphrases:
     volumes:
-      - "./annotators/cobot_nounphrases:/src"
+      - "./annotators/spacy_nounphrases:/src"
     ports:
       - 8006:8006
   program-y:
