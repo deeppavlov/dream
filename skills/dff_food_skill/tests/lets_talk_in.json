@@ -37,7 +37,7 @@
                                 "threat": 0.0011580884456634521
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "food"
                         ],
                         "cobot_entities": {

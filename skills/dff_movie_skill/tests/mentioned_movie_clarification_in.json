@@ -36,7 +36,7 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "blacklisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -261,7 +261,7 @@
                             "factoid": 0.01372464932501316,
                             "conversational": 0.986275315284729
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "dans",
                             "paris"
                         ],

@@ -12,9 +12,9 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
-  cobot-nounphrases:
+  spacy-nounphrases:
     volumes:
-      - "./annotators/cobot_nounphrases:/src"
+      - "./annotators/spacy_nounphrases:/src"
     ports:
       - 8006:8006
   program-y:
@@ -215,9 +215,9 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
-  grounding-skill:
+  dff-grounding-skill:
     volumes:
-      - "./skills/grounding_skill:/src"
+      - "./skills/dff_grounding_skill:/src"
       - "./common:/src/common"
     ports:
       - 8080:8080

@@ -21,7 +21,7 @@
                             "factoid": 0.002648997353389859,
                             "conversational": 0.9973510503768921
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "traveling"
                         ],
                         "combined_classification": {

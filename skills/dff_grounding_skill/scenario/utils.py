@@ -68,7 +68,7 @@ def get_entity_name(annotations):
     return entity_name
 
 
-with open("midas_acknowledgements.json", "r") as f:
+with open("./data/midas_acknowledgements.json", "r") as f:
     MIDAS_INTENT_ACKNOWLEDGMENTS = json.load(f)
 
 MIDAS_INTENT_ANALOGUES = {

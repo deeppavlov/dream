@@ -179,7 +179,7 @@ def get_main_info_annotations(annotated_utterance):
     topics = get_topics(annotated_utterance, which="all")
     named_entities = [ent[0]["text"] for ent in annotated_utterance.get("annotations", {}).get("ner", []) if ent]
     nounphrases = [
-        nounph for nounph in annotated_utterance.get("annotations", {}).get("cobot_nounphrases", []) if nounph
+        nounph for nounph in annotated_utterance.get("annotations", {}).get("spacy_nounphrases", []) if nounph
     ]
     return intents, topics, named_entities, nounphrases
 

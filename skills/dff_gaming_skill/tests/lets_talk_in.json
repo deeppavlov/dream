@@ -41,7 +41,7 @@
                             "factoid": 0.2867066264152527,
                             "conversational": 0.7132933735847473
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "minecraft"
                         ],
                         "sentseg": {

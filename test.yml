@@ -44,7 +44,7 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
-  cobot-nounphrases:
+  spacy-nounphrases:
   program-y:
   personality-catcher:
   sentseg:
@@ -84,7 +84,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
-  grounding-skill:
+  dff-grounding-skill:
   masked-lm:
     environment:
       - CUDA_VISIBLE_DEVICES=8

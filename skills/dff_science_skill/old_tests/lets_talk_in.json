@@ -47,7 +47,7 @@
                                 "no."
                             ]
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -299,7 +299,7 @@
                             "factoid": 0.004948323592543602,
                             "conversational": 0.9950516819953918
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [
