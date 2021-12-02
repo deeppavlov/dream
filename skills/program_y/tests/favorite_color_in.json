@@ -12,12 +12,12 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "My favorite color is green",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "factoid_classification": {
                             "factoid": 0.009537393227219582,
                             "conversational": 0.990462601184845

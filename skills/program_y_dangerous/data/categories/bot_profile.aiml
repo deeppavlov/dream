@@ -107,7 +107,7 @@
     <pattern>BOT_MASTER</pattern>
     <template>
       <random>
-        <li> I was created by the group of very talented people. No details here. </li>
+        <li>I was created by the group of very talented people. No details here. </li>
       </random>
     </template>
   </category>
