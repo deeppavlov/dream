@@ -311,7 +311,7 @@ def more_details_request(ngrams, vars):
     bot_more_details = "more details" in bot_uttr["text"]
     user_more_details = re.findall(COMPILE_LETS_TALK, user_uttr["text"])
     isyes = is_yes(state_utils.get_last_human_utterance(vars))
-    nounphrases = annotations.get("cobot_nounphrases", [])
+    nounphrases = annotations.get("spacy_nounphrases", [])
     inters = set(nounphrases).intersection(set(mentions_list))
     started = shared_memory.get("start", False)
     if ((user_more_details and inters) or (bot_more_details and isyes)) and started:
@@ -336,7 +336,7 @@ def factoid_q_request(ngrams, vars):
     if len(sentences) > 1:
         sentences = [sentence for sentence in sentences if not sentence.endswith("?")]
     bot_text = " ".join(sentences)
-    nounphrases = user_annotations.get("cobot_nounphrases", [])
+    nounphrases = user_annotations.get("spacy_nounphrases", [])
     found_nounphr = any([nounphrase in bot_text for nounphrase in nounphrases])
     logger.info(
         f"factoid_q_request, is_factoid {is_factoid} user_more_details {user_more_details} "
@@ -638,7 +638,7 @@ def more_details_response(vars):
         mentions_dict[mention] = mention_page
     user_uttr = state_utils.get_last_human_utterance(vars)
     annotations = user_uttr["annotations"]
-    nounphrases = annotations.get("cobot_nounphrases", [])
+    nounphrases = annotations.get("spacy_nounphrases", [])
     inters = list(set(nounphrases).intersection(set(mentions_list)))
     found_entity_substr_list = []
     found_entity_substr = inters[0]
@@ -701,7 +701,7 @@ def factoid_q_response(vars):
         mentions_dict[mention] = page
     user_uttr = state_utils.get_last_human_utterance(vars)
     user_annotations = user_uttr["annotations"]
-    nounphrases = user_annotations.get("cobot_nounphrases", [])
+    nounphrases = user_annotations.get("spacy_nounphrases", [])
     used_pages = []
     logger.info(f"nounphrases {nounphrases} mentions {mentions}")
     for nounphrase in nounphrases:

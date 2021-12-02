@@ -24,7 +24,7 @@ scenario_skills = {
     "dff_movie_skill",
     "personal_info_skill",  # 'short_story_skill',
     "book_skill",
-    "weather_skill",
+    "dff_weather_skill",
     "emotion_skill",
     "dummy_skill_dialog",
     "meta_script_skill",
@@ -900,7 +900,7 @@ def get_entities(annotated_utterance, only_named=False, with_labels=False):
             if not with_labels:
                 entities = [ent["text"] for ent in entities]
         else:
-            entities = annotated_utterance.get("annotations", {}).get("cobot_nounphrases", [])
+            entities = annotated_utterance.get("annotations", {}).get("spacy_nounphrases", [])
             if with_labels:
                 # actually there are no labels for cobot nounphrases
                 # so, let's make it as for cobot_entities format
@@ -1003,7 +1003,7 @@ def get_entity_names_from_annotations(annotated_utterance, stopwords=None, defau
     for tmp in annotations.get("ner", []):
         if tmp and "text" in tmp[0]:
             named_entities.append(tmp[0]["text"])
-    for nounphrase in annotations.get("cobot_nounphrases", []):
+    for nounphrase in annotations.get("spacy_nounphrases", []):
         named_entities.append(nounphrase)
     for wikiparser_dict in annotations.get("wiki_parser", [{}]):
         for wiki_entity_name in wikiparser_dict:
@@ -1168,12 +1168,13 @@ def find_first_complete_sentence(sentences):
     return None
 
 
-def is_toxic_or_blacklisted_utterance(annotated_utterance):
+def is_toxic_or_badlisted_utterance(annotated_utterance):
     toxic_result = get_toxic(annotated_utterance, probs=False)
-    default_blacklist = {"inappropriate": False, "profanity": False, "restricted_topics": False}
-    blacklist_result = annotated_utterance.get("annotations", {}).get("blacklisted_words", default_blacklist)
+    default_badlist = {"bad_words": False}
+    badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return toxic_result or blacklist_result["profanity"] or blacklist_result["inappropriate"]
+    return bool(toxic_result) or any([badlist_result.get(bad, False)
+                                      for bad in ["bad_words", "inappropriate", "profanity"]])
 
 
 FACTOID_PATTERNS = re.compile(

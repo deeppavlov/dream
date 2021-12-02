@@ -30,7 +30,7 @@ try:
             "i'm good how are you",
             "Spectacular, by all reports! Do you want to know what I can do?",
             "absolutely",
-            "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. "
+            "I'm a socialbot, and I'm all about chatting with people like you. "
             "I can answer questions, share fun facts, discuss movies, books and news. What do you want to talk about?",
             "let's talk about movies",
         ]

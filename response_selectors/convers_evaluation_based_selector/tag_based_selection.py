@@ -8,6 +8,7 @@ import numpy as np
 import sentry_sdk
 from nltk.tokenize import sent_tokenize
 
+from common.greeting import greeting_spec
 from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.sensitive import is_sensitive_situation
@@ -32,7 +33,6 @@ from utils import (
     CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
-    greeting_spec,
     misheard_with_spec1,
     psycho_help_spec,
     misheard_with_spec2,
@@ -179,7 +179,7 @@ def get_main_info_annotations(annotated_utterance):
     topics = get_topics(annotated_utterance, which="all")
     named_entities = [ent[0]["text"] for ent in annotated_utterance.get("annotations", {}).get("ner", []) if ent]
     nounphrases = [
-        nounph for nounph in annotated_utterance.get("annotations", {}).get("cobot_nounphrases", []) if nounph
+        nounph for nounph in annotated_utterance.get("annotations", {}).get("spacy_nounphrases", []) if nounph
     ]
     return intents, topics, named_entities, nounphrases
 
@@ -384,7 +384,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     for cand_id, cand_uttr in enumerate(candidates):
         if confidences[cand_id] == 0.0 and cand_uttr["skill_name"] not in ACTIVE_SKILLS:
-            logger.info(f"Dropping cand_id: {cand_id} due to toxicity/blacklists")
+            logger.info(f"Dropping cand_id: {cand_id} due to toxicity/badlists")
             continue
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(

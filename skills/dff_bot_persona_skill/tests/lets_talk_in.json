@@ -12,12 +12,12 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "ruth"
                         ],
                         "combined_classification": {
@@ -314,12 +314,12 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "your favorite number"
                         ],
                         "combined_classification": {

@@ -1,0 +1,420 @@
+[
+    [
+        [
+            "Thank you for being so considerate with me on this.",
+            "I bet that you are so sincere'. I'm so much enjoying getting to know you."
+        ],
+        [
+            0.5,
+            0.7
+        ],
+        [
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 13,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "10": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "11": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "12": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "3": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "4": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "5": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "6": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "7": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "8": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "9": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "13": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "12": "What are we talking about?",
+                            "13": "May be."
+                        },
+                        "responses": {
+                            "12": [
+                                [
+                                    "Thought we were talking about some travel stuff.",
+                                    1.0,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. It's so embarrassing, but I don't know.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "Well, maybe yes, maybe no. I'm not sure.",
+                                                "I have no idea.",
+                                                "I hadn't really thought about it.",
+                                                "I'm not sure about that.",
+                                                "It's so embarrassing, but I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "13": [
+                                [
+                                    "Thank you for being so considerate with me on this.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {}
+                                ],
+                                [
+                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "Well, maybe yes, maybe no. I'm not sure.",
+                                                "I have no idea.",
+                                                "I hadn't really thought about it.",
+                                                "I'm not sure about that.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "I'm so much enjoying getting to know you."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "I'm ashamed, I don't know.",
+                                    "I don't even know yes or no.",
+                                    "It's so embarrassing, but I don't know.",
+                                    "Well, maybe yes, maybe no. I'm not sure.",
+                                    "I have no idea.",
+                                    "I hadn't really thought about it.",
+                                    "I'm not sure about that.",
+                                    "It's so embarrassing, but I don't know.",
+                                    "I'm so much enjoying getting to know you."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": []
+            },
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 13,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "10": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "11": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "12": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "3": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "4": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "5": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "6": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "7": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "8": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "9": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "13": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "12": "What are we talking about?",
+                            "13": "May be."
+                        },
+                        "responses": {
+                            "12": [
+                                [
+                                    "Thought we were talking about some travel stuff.",
+                                    1.0,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. It's so embarrassing, but I don't know.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "Well, maybe yes, maybe no. I'm not sure.",
+                                                "I have no idea.",
+                                                "I hadn't really thought about it.",
+                                                "I'm not sure about that.",
+                                                "It's so embarrassing, but I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "13": [
+                                [
+                                    "Thank you for being so considerate with me on this.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {}
+                                ],
+                                [
+                                    "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "Well, maybe yes, maybe no. I'm not sure.",
+                                                "I have no idea.",
+                                                "I hadn't really thought about it.",
+                                                "I'm not sure about that.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "I'm so much enjoying getting to know you."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "I'm ashamed, I don't know.",
+                                    "I don't even know yes or no.",
+                                    "It's so embarrassing, but I don't know.",
+                                    "Well, maybe yes, maybe no. I'm not sure.",
+                                    "I have no idea.",
+                                    "I hadn't really thought about it.",
+                                    "I'm not sure about that.",
+                                    "It's so embarrassing, but I don't know.",
+                                    "I'm so much enjoying getting to know you."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": [],
+                "grounding_skill": {
+                    "used_universal_intent_responses": [
+                        "I'm ashamed, I don't know.",
+                        "I don't even know yes or no.",
+                        "It's so embarrassing, but I don't know.",
+                        "Well, maybe yes, maybe no. I'm not sure.",
+                        "I have no idea.",
+                        "I hadn't really thought about it.",
+                        "I'm not sure about that.",
+                        "It's so embarrassing, but I don't know.",
+                        "I'm so much enjoying getting to know you."
+                    ]
+                }
+            }
+        ],
+        [
+            {},
+            {}
+        ],
+        [
+            {
+                "can_continue": "can"
+            },
+            {
+                "can_continue": "can",
+                "response_parts": [
+                    "acknowlegdement",
+                    "body"
+                ],
+                "type": "universal_response"
+            }
+        ]
+    ]
+]

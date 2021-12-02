@@ -51,7 +51,7 @@ DO_YOU_HAVE_TEMPLATE = re.compile(
     re.IGNORECASE,
 )
 NOT_SWITCH_TEMPLATE = re.compile(r"(hot dog|doja cat)", re.IGNORECASE)
-ANIMAL_BLACKLIST = {"animal", "animals"}
+ANIMAL_BADLIST = {"animal", "animals"}
 
 breed_replace_dict = {"lab": "labrador"}
 pet_games = {"dog": ["frisbee", "hide and seek"], "cat": ["run and fetch"]}

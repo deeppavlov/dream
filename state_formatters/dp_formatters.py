@@ -111,7 +111,7 @@ def personality_catcher_formatter_service(payload: List):
 def cobot_classifiers_formatter_service(payload: List):
     # Used by: cobot_classifiers_formatter, sentiment_formatter
     if len(payload) == 3:
-        return {"text": payload[0], "confidence": payload[1], "is_blacklisted": payload[2]}
+        return {"text": payload[0], "confidence": payload[1], "is_badlisted": payload[2]}
     elif len(payload) == 2:
         return {"text": payload[0], "confidence": payload[1]}
     elif len(payload) == 1:
@@ -237,7 +237,7 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
                     "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
                 )
             ],
-            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])],
+            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("spacy_nounphrases", [])],
         }
     ]
 
@@ -352,7 +352,7 @@ def simple_batch_formatter_service(payload: List):
             payload["batch"][i] = {
                 "text": payload["batch"][i][0],
                 "confidence": payload["batch"][i][1],
-                "is_blacklisted": payload["batch"][i][2],
+                "is_badlisted": payload["batch"][i][2],
             }
         elif len(payload["batch"][i]) == 2:
             payload["batch"][i] = {"text": payload["batch"][i][0], "confidence": payload["batch"][i][1]}
@@ -738,12 +738,28 @@ def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_art_skill")
 
 
+def dff_grounding_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_grounding_skill")
+
+
 def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_coronavirus_skill")
 
 
+def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_short_story_skill")
+
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
+
+
+def dff_program_y_wide_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y_wide")
+
+
+def dff_program_y_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y")
 
 
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
@@ -760,7 +776,7 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
         "dff_wiki_skill",
         used_annotations=[
             "cobot_entities",
-            "cobot_nounphrases",
+            "spacy_nounphrases",
             "entity_linking",
             "factoid_classification",
             "wiki_parser",

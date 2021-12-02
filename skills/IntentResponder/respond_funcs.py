@@ -32,15 +32,15 @@ def exit_respond(dialog, response_phrases):
         offensiveness = "non-toxic"
     # offensiveness_confidence = annotation['cobot_offensiveness']['confidence']
     try:
-        is_blacklisted = annotation["cobot_offensiveness"]["is_blacklisted"] == "blacklist"
+        is_badlisted = annotation["cobot_offensiveness"]["is_badlisted"] == "badlist"
     except KeyError:
-        is_blacklisted = False
+        is_badlisted = False
     if len(dialog["utterances"]) < 4:
         response = random.choice(apology_bye_phrases)
     elif sentiment == "positive":
         positive = ["I'm glad to help you! ", "Thanks for the chat! ", "Cool! "]
         response = random.choice(positive) + response
-    elif offensiveness == "toxic" or is_blacklisted or sentiment == "negative":
+    elif offensiveness == "toxic" or is_badlisted or sentiment == "negative":
         response = random.choice(apology_bye_phrases)
     return response
 
