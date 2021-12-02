@@ -154,10 +154,8 @@ services:
       - 8068:8068
   program-y-wide:
     volumes:
-      - "./skills/program-y-wide:/src"
-      - "./skills/program-y-wide/logs:/tmp"
-      - "./common:/src/dream_aiml/src/common"
-      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+      - "./skills/program_y_wide:/src"
+      - "./common:/src/common"
     ports:
       - 8064:8064
   news-api-skill:
