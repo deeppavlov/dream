@@ -202,14 +202,18 @@ services:
   program-y-dangerous:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8022
+        SERVICE_NAME: program_y_dangerous
       context: .
-      dockerfile: ./skills/program-y-dangerous/Dockerfile
+      dockerfile: ./skills/program_y_dangerous/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8022 --reload
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 1024M
         reservations:
-          memory: 256M
+          memory: 1024M
 
   dff-movie-skill:
     env_file: [.env]

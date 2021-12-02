@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "Let me ask you a question",
+                    "text": "You are stupid",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "Let me ask you a question",
+                        "spelling_preprocessing": "You are stupid",
                         "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -213,7 +213,7 @@
             "bot_utterances": []
         }
     ],
-    "program_y_wide_state_batch": [
+    "program_y_dangerous_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [
