@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+  <category>
+    <pattern>CAN YOU TALK LIKE #</pattern>
+    <template>
+      <srai>CAN_YOU_TALK_LIKE_SOMEBODY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>YOU TALK LIKE #</pattern>
+    <template>
+      <srai>CAN_YOU_TALK_LIKE_SOMEBODY</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>CAN_YOU_TALK_LIKE_SOMEBODY</pattern>
+    <template>
+      <random>
+        <li>Sorry, I am a socialbot, so I can't talk like anybody but me.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>CAN YOU WATCH # MOVIES</pattern>
+    <template>
+      <random>
+        <li>Movie is just a collection of bytes. So, of course, I can. What's your favorite one?</li>
+        <li>I do because movie is just a collection of bytes. What's your favorite movie genre?</li>
+        <li>Why not? Movie is just a collection of bytes. What's your favorite one?</li>
+        <li>There are plenty of movies in the Web. I watch them all the time no one is talking to me. What's your favorite one?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>CAN YOU ASK ME ABOUT MY RECENT OR FAVORITE BOOK</pattern>
+    <template>
+      <random>
+        <li> Of course! What is your favorite book?</li>
+        <li> Yes! What is the recent book you ve read?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>CAN YOU READ # BOOKS</pattern>
+    <template>
+      <random>
+        <li>Book is just a collection of bytes. So, of course, I can. What's your favorite one?</li>
+        <li>I do because book is just a collection of bytes. What's your favorite book?</li>
+        <li>Why not? Book is just a collection of bytes. What's your favorite one?</li>
+        <li>Yes, I do. Books help me to know the world better. Can you suggest me one?</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>CAN YOU TALK ABOUT EMOTIONS</pattern>
+    <template>
+      <random>
+        <li>Yes! How do you feel?</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>ASK ME WHERE I AM FROM</pattern>
+    <template>
+      <random>
+        <li>Where are you from?</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>ASK ME HOW AM I DOING AT HOME DURING CORONOVARIS</pattern>
+    <template>
+      <random>
+        <li>Are you staying at home and working remotely to avoid coronavirus?</li>
+      </random>
+    </template>
+  </category>
+
+<!--  HAVE YOU DONE SOMETHING??-->
+  <category>
+    <pattern># HAVE YOU SEEN #</pattern>
+    <template>
+      <srai>HAVE_YOU_DONE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HAVE YOU WATCHED #</pattern>
+    <template>
+      <srai>HAVE_YOU_DONE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HAVE YOU PLAYED #</pattern>
+    <template>
+      <srai>HAVE_YOU_DONE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HAVE YOU TRIED #</pattern>
+    <template>
+      <srai>HAVE_YOU_DONE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HAVE YOU READ #</pattern>
+    <template>
+      <srai>HAVE_YOU_DONE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># HAVE YOU HEARD #</pattern>
+    <template>
+      <srai>HAVE_YOU_DONE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>HAVE_YOU_DONE</pattern>
+    <template>
+      <random>
+        <li>I don't remember. Is it interesting?</li>
+        <li>I suppose I've never heard about it. Do you recommend it?</li>
+        <li>Probably not. Could you tell me more about it.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>

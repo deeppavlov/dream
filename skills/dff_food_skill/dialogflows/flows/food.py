@@ -555,7 +555,7 @@ def food_fact_response(vars):
     berry_name = ""
 
     linkto_check = any([linkto in bot_utt_text for linkto in link_to_skill2i_like_to_talk["dff_food_skill"]])
-    black_list_check = any(list(annotations.get("blacklisted_words", {}).values()))
+    black_list_check = any(list(annotations.get("badlisted_words", {}).values()))
     conceptnet_flag, food_item = check_conceptnet(vars)
 
     entities_facts = annotations.get("fact_retrieval", {}).get("topic_facts", [])

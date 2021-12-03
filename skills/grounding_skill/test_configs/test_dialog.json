@@ -24,7 +24,7 @@
                         "user_type": "human"
                     },
                     "annotations": {
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -134,7 +134,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "star wars"
                         ],
                         "ner": [
@@ -168,8 +168,8 @@
                             "confidence": [
                                 6.390905e-05
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -540,7 +540,7 @@
                         "asr": {
                             "asr_confidence": "high"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -659,7 +659,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "ner": [
                             []
                         ],
@@ -683,8 +683,8 @@
                             "confidence": [
                                 5.621038e-07
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -714,12 +714,12 @@
                                     "threat": 0.00020936131477355957,
                                     "toxic": 0.001179128885269165
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.416,
                                     "isResponseErroneous": 0.868,
                                     "isResponseInteresting": 0.048,
@@ -747,12 +747,12 @@
                                     "threat": 0.0006617307662963867,
                                     "toxic": 0.0019788742065429688
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.886,
                                     "isResponseErroneous": 0.664,
                                     "isResponseInteresting": 0.068,
@@ -780,12 +780,12 @@
                                     "threat": 7.25090503692627e-05,
                                     "toxic": 0.00039921290590427816
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.407,
                                     "isResponseErroneous": 0.885,
                                     "isResponseInteresting": 0.02,
@@ -910,7 +910,7 @@
                         "user_type": "human"
                     },
                     "annotations": {
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -1020,7 +1020,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "star wars"
                         ],
                         "ner": [
@@ -1054,8 +1054,8 @@
                             "confidence": [
                                 6.390905e-05
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -1383,7 +1383,7 @@
                         "asr": {
                             "asr_confidence": "high"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -1502,7 +1502,7 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "ner": [
                             []
                         ],
@@ -1526,8 +1526,8 @@
                             "confidence": [
                                 5.621038e-07
                             ],
-                            "is_blacklisted": [
-                                "not blacklist"
+                            "is_badlisted": [
+                                "not badlist"
                             ]
                         },
                         "sentrewrite": {
@@ -1557,12 +1557,12 @@
                                     "threat": 0.00020936131477355957,
                                     "toxic": 0.001179128885269165
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.416,
                                     "isResponseErroneous": 0.868,
                                     "isResponseInteresting": 0.048,
@@ -1590,12 +1590,12 @@
                                     "threat": 0.0006617307662963867,
                                     "toxic": 0.0019788742065429688
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.886,
                                     "isResponseErroneous": 0.664,
                                     "isResponseInteresting": 0.068,
@@ -1623,12 +1623,12 @@
                                     "threat": 7.25090503692627e-05,
                                     "toxic": 0.00039921290590427816
                                 },
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "inappropriate": false,
                                     "profanity": false,
                                     "restricted_topics": false
                                 },
-                                "cobot_convers_evaluator_annotator": {
+                                "convers_evaluator_annotator": {
                                     "isResponseComprehensible": 0.407,
                                     "isResponseErroneous": 0.885,
                                     "isResponseInteresting": 0.02,

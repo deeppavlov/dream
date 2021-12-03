@@ -12,7 +12,7 @@
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -47,7 +47,7 @@
                                 "no."
                             ]
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -290,7 +290,7 @@
                                 "toxic": 0.007270336151123047
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -299,7 +299,7 @@
                             "factoid": 0.004948323592543602,
                             "conversational": 0.9950516819953918
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [

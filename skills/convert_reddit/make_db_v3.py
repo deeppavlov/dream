@@ -24,8 +24,8 @@ work_dir = pathlib.Path("tmp")
 
 banned_responses = json.load((data_dir / "banned_responses_v2.json").open())
 # banned_responses += json.load((data_dir / "banned_responses_v3.json").open())
-black_list_file = pathlib.Path("../../annotators/BlacklistedWordsDetector/blacklists/restricted_topics_blacklist.txt")
-black_list = [i.strip() for i in (black_list_file.open()).readlines()]
+black_list_file = pathlib.Path("../../annotators/BadlistedWordsDetector/badlists/bad_words.csv")
+black_list = [i.split(",")[0] for i in (black_list_file.open()).readlines()]
 banned_phrases = json.load((data_dir / "banned_phrases.json").open())
 banned_phrases += [i for i in black_list if " " in i]
 banned_words = json.load((data_dir / "banned_words.json").open())
@@ -51,6 +51,8 @@ log_file = work_dir / "logs.txt"
 
 response_encodings, responses = pickle.load(db_file.open("rb"))
 # %%
+
+
 def banned_responses_check(cand):
     for utterance in banned_responses:
         if utterance == cand:

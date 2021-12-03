@@ -14,8 +14,8 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "1434ef23-9924-4d9a-9eb0-d0c8042cd544",
-                    "node_labels": {
+                    "id": "300bad48-e06b-4689-a994-c1f98f2c47c8",
+                    "labels": {
                         "0": [
                             "simple",
                             "covid_symptoms"
@@ -27,10 +27,9 @@
                     "responses": {
                         "0": "According to the CDC website, The main warning signs of coronavirus are: difficulty breathing or shortness of breath, persistent pain or pressure in the chest, new confusion or inability to arouse, bluish lips or face. If you develop any of these signs, get a medical attention. Would you want to learn more?"
                     },
-                    "previous_index": 0,
-                    "current_index": 0,
                     "misc": {},
-                    "validation": false
+                    "validation": false,
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {

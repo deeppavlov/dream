@@ -1,0 +1,241 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Tell me funny story.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Tell me a story.",
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [],
+                        "factoid_classification": {
+                            "factoid": 0.0,
+                            "conversational": 0.0
+                        },
+                        "sentseg": {
+                            "punct_sent": "Tell me a story.",
+                            "segments": [
+                                "Tell me a story."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9977984428405762
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9947741627693176
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9968889951705933
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9990195035934448
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.5776568055152893
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014232397079467773
+                            }
+                        },
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0019198574591428041,
+                                "command": 0.9592630863189697,
+                                "comment": 0.001472851145081222,
+                                "complaint": 0.0036342598032206297,
+                                "dev_command": 0.008973246440291405,
+                                "neg_answer": 0.002725402358919382,
+                                "open_question_factual": 0.0021622562780976295,
+                                "open_question_opinion": 0.002223768038675189,
+                                "opinion": 0.004447591491043568,
+                                "other_answers": 0.0009619678603485227,
+                                "pos_answer": 0.0059285471215844154,
+                                "statement": 0.003758950624614954,
+                                "yes_no_question": 0.0025281687267124653
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "tell me."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "BUDAPEST \u2014 Prime Minister Viktor Orban of Hungary portrays himself as the defender of Christian Europe against migrants and multiculturalism. After years of his weakening of democratic institutions, the far-right strongman has prepared for coming ele... [1013 chars]",
+                                    "description": "BUDAPEST \u2014 Prime Minister Viktor Orban of Hungary portrays himself as the defender of Christian Europe against migrants and multiculturalism.",
+                                    "image": "https://static01.nyt.com/images/2021/09/11/world/11POPE-TOP/11POPE-TOP-facebookJumbo.jpg",
+                                    "publishedAt": "2021-09-11T09:16:24Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Pope Francis Treads Fine Line With Hungary's Viktor Orban",
+                                    "url": "https://www.nytimes.com/2021/09/11/world/europe/pope-francis-orban-hungary.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_short_story_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

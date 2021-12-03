@@ -1,0 +1,2 @@
+sed -i 's/logging.getLogger().isEnabledFor/None and logging.getLogger().isEnabledFor/g' $( python -c 'import programy.utils.logging.ylogger as module; print(module.__file__)' )
+sed -i 's/logging.config.dictConfig/# logging.config.dictConfig/g' $( python -c 'import programy.clients.client as module; print(module.__file__)' )

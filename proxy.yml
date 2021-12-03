@@ -1,12 +1,14 @@
 services:
-#  cobot-convers-evaluator-annotator:
-#    command: ["nginx", "-g", "daemon off;"]
-#    build:
-#      context: dp/proxy/
-#      dockerfile: Dockerfile
-#    environment:
-#      - PROXY_PASS=a737ad642c7cc4356a543c2c58779eb6-1162604519.us-west-2.elb.amazonaws.com/cobot-convers-evaluator-annotator
-#      - PORT=8004
+
+  convers-evaluator-annotator:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8004
+      - PORT=8004
+      
   program-y:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -61,7 +63,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8014
       - PORT=8014
 
-  blacklisted-words:
+  badlisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -151,15 +153,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8032
       - PORT=8032
 
-  weather-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8037
-      - PORT=8037
-
   emotion-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -204,15 +197,6 @@ services:
     environment:
       - PROXY_PASS=lnsigo.mipt.ru:8054
       - PORT=8054
-
-  short-story-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8057
-      - PORT=8057
 
   small-talk-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -394,7 +378,7 @@ services:
       - PORT=8087
 
     command: ["nginx", "-g", "daemon off;"]
-  grounding-skill:
+  dff-grounding-skill:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -574,7 +558,7 @@ services:
       - PORT=8119
 
     command: [ "nginx", "-g", "daemon off;" ]
-  cobot-nounphrases:
+  spacy-nounphrases:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -600,6 +584,25 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8061
       - PORT=8061
     command: [ "nginx", "-g", "daemon off;" ]
+
+  dff-short-story-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8057
+      - PORT=8057
+    command: [ "nginx", "-g", "daemon off;" ]
+
+  dff-weather-skill:
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8037
+      - PORT=8037
+    command: ["nginx", "-g", "daemon off;"]
+
   dff-template-skill:
     build:
       context: dp/proxy/

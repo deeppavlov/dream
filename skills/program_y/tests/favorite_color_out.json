@@ -1,0 +1,48 @@
+[
+    [
+        "Green is my favorite color too!",
+        0.85,
+        {
+            "program_y_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "story_flow",
+                        "start_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "3ce95946-562f-44b8-80cc-cb9239207dd1",
+                    "labels": {
+                        "0": [
+                            "story_flow",
+                            "start_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "My favorite color is green"
+                    },
+                    "responses": {
+                        "0": "Green is my favorite color too!"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

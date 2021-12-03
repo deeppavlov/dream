@@ -1,0 +1,881 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Tell me weather in London.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Tell me weather in London.",
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "weather",
+                            "london"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9995535016059875,
+                            "conversational": 0.00044644641457125545
+                        },
+                        "conceptnet": {
+                            "london": {
+                                "Causes": [
+                                    "poverty",
+                                    "pollution",
+                                    "bad reputation"
+                                ],
+                                "CausesDesire": [
+                                    "travel",
+                                    "go to play",
+                                    "see friend"
+                                ],
+                                "HasProperty": [
+                                    "expensive",
+                                    "big",
+                                    "very large"
+                                ],
+                                "SymbolOf": [
+                                    "england",
+                                    "japan",
+                                    "europe"
+                                ]
+                            },
+                            "weather": {
+                                "Causes": [
+                                    "snow",
+                                    "rain",
+                                    "weather"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "ski",
+                                    "go to work"
+                                ],
+                                "HasProperty": [
+                                    "hot",
+                                    "very hot",
+                                    "cold"
+                                ],
+                                "SymbolOf": [
+                                    "rain",
+                                    "cold",
+                                    "winter"
+                                ]
+                            }
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.5464200377464294,
+                                "Information_RequestIntent": 0.9894692897796631
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.999492883682251
+                            },
+                            "cobot_topics": {
+                                "SciTech": 0.8844426870346069,
+                                "Weather_Time": 0.9999619722366333
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9916366934776306
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6845933198928833
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0027963221073150635
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "Tell me weather in London.",
+                            "segments": [
+                                "Tell me weather in London."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.9999524354934692,
+                                "detected": 1
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.001907534315250814,
+                                "command": 0.9671372175216675,
+                                "comment": 0.001312284148298204,
+                                "complaint": 0.003782265353947878,
+                                "dev_command": 0.010640330612659454,
+                                "neg_answer": 0.0012577178422361612,
+                                "open_question_factual": 0.0021177600137889385,
+                                "open_question_opinion": 0.0020612895023077726,
+                                "opinion": 0.0018034938257187605,
+                                "other_answers": 0.0007047918625175953,
+                                "pos_answer": 0.0021262646187096834,
+                                "statement": 0.002741969423368573,
+                                "yes_no_question": 0.0024071307852864265
+                            }
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "london",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9916341304779053,
+                                    0.6478580832481384,
+                                    0.032098039984703064,
+                                    0.028500759974122047,
+                                    0.0167678389698267
+                                ],
+                                "entity_ids": [
+                                    "Q84",
+                                    "Q92561",
+                                    "Q6669761",
+                                    "Q1749384",
+                                    "Q6669754"
+                                ],
+                                "entity_pages": [
+                                    "London is the capital and largest city of England and the United Kingdom. The city stands on the River Thames in the south-east of England, at the head of its estuary leading to the North Sea. London has been a major settlement for two millennia. Londinium was founded by the Romans. The City of London, Londons ancient core and financial centre − an area of just and colloquially known as the Square Mile − retains boundaries that closely follow its medieval limits. The adjacent City of Westminster has for centuries been the location of much of the national government. Thirty-one additional boroughs north and south of the river also comprise modern London. London is governed by the mayor of London and the London Assembly.",
+                                    "London (pronounced ) is a city in southwestern Ontario, Canada, along the Quebec City–Windsor Corridor. The city had a population of 383,822 according to the 2016 Canadian census. London is at the confluence of the Thames River, approximately from both Toronto and Detroit; and about from Buffalo, New York. The city of London is a separated municipality, politically separate from Middlesex County, though it remains the county seat."
+                                ],
+                                "entity_pages_titles": [
+                                    "London",
+                                    "London, Ontario",
+                                    "London (2005 Indian film)",
+                                    "London (2005 American film)",
+                                    "London (1926 film)"
+                                ],
+                                "entity_substr": "london",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Tell me weather in London."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "london": {
+                                    "conf": 0.9916341304779053,
+                                    "country": [
+                                        [
+                                            "Q105092",
+                                            "Kingdom of Mercia"
+                                        ],
+                                        [
+                                            "Q105313",
+                                            "Kingdom of Wessex"
+                                        ],
+                                        [
+                                            "Q110888",
+                                            "Kingdom of Essex"
+                                        ],
+                                        [
+                                            "Q145",
+                                            "United Kingdom"
+                                        ],
+                                        [
+                                            "Q161885",
+                                            "Great Britain"
+                                        ],
+                                        [
+                                            "Q174193",
+                                            "United Kingdom of Great Britain and Ireland"
+                                        ],
+                                        [
+                                            "Q179876",
+                                            "Kingdom of England"
+                                        ],
+                                        [
+                                            "Q2277",
+                                            "Roman Empire"
+                                        ]
+                                    ],
+                                    "entity_label": "London",
+                                    "inception": [
+                                        [
+                                            "'+0047-00-00^^T'",
+                                            "0047"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q1066984",
+                                            "financial centre"
+                                        ],
+                                        [
+                                            "Q1637706",
+                                            "city with millions of inhabitants"
+                                        ],
+                                        [
+                                            "Q200250",
+                                            "metropolis"
+                                        ],
+                                        [
+                                            "Q5119",
+                                            "capital"
+                                        ],
+                                        [
+                                            "Q515",
+                                            "city"
+                                        ],
+                                        [
+                                            "Q717478",
+                                            "administrative territorial entity of the United Kingdom"
+                                        ]
+                                    ],
+                                    "located in": [
+                                        [
+                                            "Q105313",
+                                            "Kingdom of Wessex"
+                                        ],
+                                        [
+                                            "Q1137312",
+                                            "County of London"
+                                        ],
+                                        [
+                                            "Q179876",
+                                            "Kingdom of England"
+                                        ],
+                                        [
+                                            "Q21",
+                                            "England"
+                                        ],
+                                        [
+                                            "Q23306",
+                                            "Greater London"
+                                        ]
+                                    ],
+                                    "located next to body of water": [
+                                        [
+                                            "Q19686",
+                                            "River Thames"
+                                        ],
+                                        [
+                                            "Q19914",
+                                            "Grand Union Canal"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q84",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q717478",
+                                            "administrative territorial entity of the United Kingdom"
+                                        ],
+                                        [
+                                            "Q177634",
+                                            "community"
+                                        ],
+                                        [
+                                            "Q15916867",
+                                            "administrative territorial entity of a single country"
+                                        ],
+                                        [
+                                            "Q515",
+                                            "city"
+                                        ],
+                                        [
+                                            "Q7930989",
+                                            "city/town"
+                                        ],
+                                        [
+                                            "Q1066984",
+                                            "financial centre"
+                                        ],
+                                        [
+                                            "Q1549591",
+                                            "big city"
+                                        ],
+                                        [
+                                            "Q5119",
+                                            "capital"
+                                        ],
+                                        [
+                                            "Q16562419",
+                                            "political entity"
+                                        ],
+                                        [
+                                            "Q200250",
+                                            "metropolis"
+                                        ],
+                                        [
+                                            "Q702492",
+                                            "urban area"
+                                        ],
+                                        [
+                                            "Q1637706",
+                                            "city with millions of inhabitants"
+                                        ],
+                                        [
+                                            "Q486972",
+                                            "human settlement"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "london": {
+                                    "conf": 0.0167678389698267,
+                                    "entity_label": "London",
+                                    "genre": [
+                                        [
+                                            "Q130232",
+                                            "drama"
+                                        ],
+                                        [
+                                            "Q226730",
+                                            "silent film"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q84",
+                                            "London"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6669754",
+                                    "pos": 4,
+                                    "publication date": [
+                                        [
+                                            "'+1926-01-01^^T'",
+                                            "01 January 1926"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The NFL has named Kansas City Chiefs quarterback Patrick Mahomes as its AFC offensive player of the week for Week 1 of the 2021 NFL season.\nAFC Players of the Week! (Week 1) pic.twitter.com/wstlvYBhY1 — NFL (@NFL) September 15, 2021\nMahomes went 27 o... [716 chars]",
+                                    "description": "The NFL has named Kansas City Chiefs quarterback Patrick Mahomes as its AFC offensive player of the week for Week 1 of the 2021 NFL season. AFC Players of the Week!",
+                                    "image": "https://cdn.vox-cdn.com/thumbor/OjWx6dE177hsq891Hz5e0I_h2O4=/0x0:6521x3414/fit-in/1200x630/cdn.vox-cdn.com/uploads/chorus_asset/file/22852317/1339924074.jpg",
+                                    "publishedAt": "2021-09-15T13:15:59Z",
+                                    "source": {
+                                        "name": "Arrowhead Pride",
+                                        "url": "https://www.arrowheadpride.com"
+                                    },
+                                    "title": "Patrick Mahomes wins NFL’s Week 1 AFC offensive player of the week",
+                                    "url": "https://www.arrowheadpride.com/2021/9/15/22675332/patrick-mahomes-wins-nfls-week-1-afc-offensive-player-of-the-week-passing-joe-montana-hall-of-fame"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "london",
+                                "news": {
+                                    "content": "LONDON, Sept 15 (Reuters) - Environmental campaigners blocked parts of the M25 London orbital motorway on Wednesday, causing major disruption to some rush hour traffic around the British capital in their second such protest this week.\nInsulate Britai... [1880 chars]",
+                                    "description": "LONDON, Sept 15 (Reuters) - Environmental campaigners blocked parts of the M25 London orbital motorway on Wednesday, causing major disruption to some rush hour traffic around the British capital in their second such protest this week.",
+                                    "image": "https://www.reuters.com/pf/resources/images/reuters/reuters-default.png?d=52",
+                                    "publishedAt": "2021-09-15T04:00:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "Environmental activists block major London orbital motorway again",
+                                    "url": "https://www.reuters.com/world/uk/environmental-activists-block-major-london-orbital-motorway-again-2021-09-15/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "I prefer cold weather.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "I prefer cold weather.",
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "cold weather"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.23766659200191498,
+                            "conversational": 0.7623334527015686
+                        },
+                        "conceptnet": {
+                            "cold weather": {
+                                "Causes": [
+                                    "frostbite",
+                                    "cold",
+                                    "hypothermia"
+                                ],
+                                "CausesDesire": [
+                                    "ski",
+                                    "go for walk",
+                                    "go ski"
+                                ],
+                                "HasProperty": [
+                                    "hard to ski on",
+                                    "cold",
+                                    "bad for your health"
+                                ],
+                                "SymbolOf": [
+                                    "winter",
+                                    "cold",
+                                    "snow"
+                                ]
+                            }
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9996445775032043
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9983094930648804
+                            },
+                            "cobot_topics": {
+                                "Weather_Time": 0.9998409748077393
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.998259961605072
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.689949095249176
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.003251582384109497
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "I prefer cold weather.",
+                            "segments": [
+                                "I prefer cold weather."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012628238182514906,
+                                "command": 0.006533477921038866,
+                                "comment": 0.0029125039000064135,
+                                "complaint": 0.0013121262891218066,
+                                "dev_command": 0.002030446659773588,
+                                "neg_answer": 0.0022940021008253098,
+                                "open_question_factual": 0.002689708722755313,
+                                "open_question_opinion": 0.002060060855001211,
+                                "opinion": 0.9667980670928955,
+                                "other_answers": 0.0013249326730147004,
+                                "pos_answer": 0.0031791364308446646,
+                                "statement": 0.0062266020104289055,
+                                "yes_no_question": 0.0013760719448328018
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I prefer cold weather."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "PARIS — France reacted with fury on Thursday to President Biden’s announcement of a deal to help Australia deploy nuclear-powered submarines, calling it a “unilateral, brutal, unpredictable decision” that resembled the rash and sudden policy shifts c... [983 chars]",
+                                    "description": "French officials accused President Biden of acting like his predecessor, saying they were stabbed in the back and not consulted.",
+                                    "image": "https://static01.nyt.com/images/2021/09/16/world/16france-defense01/16france-defense01-facebookJumbo.jpg",
+                                    "publishedAt": "2021-09-16T14:49:37Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "France Is Outraged by U.S. Nuclear Submarine Deal With Australia",
+                                    "url": "https://www.nytimes.com/2021/09/16/world/europe/france-australia-uk-us-submarines.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "weather",
+                                "news": {
+                                    "content": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.\nThe agriculture ministry on Tuesday said that farms had sown 356,040 hectares of mostly winter wheat for the 2022 ... [907 chars]",
+                                    "description": "KYIV, Sept 16 (Reuters) - Ukraine has favourable conditions for ongoing 2022 winter grain sowing, weather forecasters said on Thursday.",
+                                    "image": "https://www.agriculture.com/sites/all/themes/custom/sfg/favicon.ico",
+                                    "publishedAt": "2021-09-16T12:21:10Z",
+                                    "source": {
+                                        "name": "Successful Farming",
+                                        "url": "https://www.agriculture.com"
+                                    },
+                                    "title": "Conditions favour Ukrainian winter grain sowing, say forecasters",
+                                    "url": "https://www.agriculture.com/markets/newswire/conditions-favour-ukrainian-winter-grain-sowing-say-forecasters"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "It is scattered clouds, temperature is around 67.6 Fahrenheits in London. Wind speed is about 1.0 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
+                    "annotations": {
+                        "sensteg": {
+                            "punct_sent": "It is broken clouds, temperature is around 71.0 degrees Fahrenheit in London. Wind speed is about 0.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?",
+                            "segments": [
+                                "It is broken clouds, temperature is around 71.",
+                                "0 degrees Fahrenheit in London.",
+                                "Wind speed is about 0.",
+                                "5 meters per second.",
+                                "What weather do you prefer?",
+                                "Warm, cold, rain, snow, hot?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "london",
+                                    "type": "LOC"
+                                }
+                            ],
+                            [],
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Tell me weather in London.",
+                                "It is broken clouds, temperature is around 71. 0 degrees Fahrenheit in London. Wind speed is about 0. 5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_weather_skill"
+                }
+            ]
+        }
+    ],
+    "dff_weather_skill_state_batch": [
+        {
+            "context": {
+                "id": "283ad82d-75b7-4a70-b0cb-c1431a3c72e9",
+                "misc": {},
+                "labels": {
+                    "0": [
+                        "weather",
+                        "forecast"
+                    ]
+                },
+                "requests": {
+                    "0": "Tell me weather in London."
+                },
+                "responses": {
+                    "0": "It is broken clouds, temperature is around 71.0 degrees Fahrenheit in London. Wind speed is about 0.5 meters per second. What weather do you prefer? Warm, cold, rain, snow, hot?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "weather",
+                    "forecast"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

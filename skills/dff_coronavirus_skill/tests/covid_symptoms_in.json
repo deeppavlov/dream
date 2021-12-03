@@ -16,7 +16,7 @@
                             "factoid": 0.004948326386511326,
                             "conversational": 0.9950516819953918
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -42,7 +42,7 @@
                                 "toxic": 0.0072702765464782715
                             }
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [
@@ -263,12 +263,12 @@
                                 "34."
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
+                        "spacy_nounphrases": [],
                         "factoid_classification": {
                             "factoid": 0.007124739699065685,
                             "conversational": 0.9928752183914185
@@ -571,7 +571,7 @@
                         2
                     ]
                 },
-                "node_labels": {
+                "labels": {
                     "0": [
                         "covid_fact",
                         "replied_yes"

@@ -19,7 +19,7 @@ def main():
                         {
                             "text": "fuck off",
                             "annotations": {
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "profanity": True,
                                     "inappropriate": True,
                                     "restricted_topics": False,
@@ -32,7 +32,7 @@ def main():
                         {
                             "text": "fuck off",
                             "annotations": {
-                                "blacklisted_words": {
+                                "badlisted_words": {
                                     "profanity": True,
                                     "inappropriate": True,
                                     "restricted_topics": False,

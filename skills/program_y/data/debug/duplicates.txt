@@ -1,0 +1,5 @@
+Duplicate	File	Start Line	End LineDupicate grammar tree found [TELL ME A JOKE]	../../storage/categories/joke.aiml	145	150
+Dupicate grammar tree found [# NOT #]	../../storage/categories/letschat.aiml	223	226
+Dupicate grammar tree found [# DIED #]	../../storage/categories/psychological_help.aiml	166	174
+Dupicate grammar tree found [YOU ARE # STUPID #]	../../storage/categories/profanity/filter.aiml	24	33
+Dupicate grammar tree found [I HATE YOU]	../../storage/categories/topics/client.aiml	310	320

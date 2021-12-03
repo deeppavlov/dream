@@ -6,18 +6,18 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081,
-        cobot-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
-        intent-responder:8012, intent-catcher:8014, blacklisted-words:8018,
+      WAIT_HOSTS: "cobotqa:8081, convers-evaluator-annotator:8004,
+        spacy-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
+        intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
-        convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, weather-skill:8037,
+        convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
         dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
-        comet-conceptnet:8065, news-api-skill:8066, short-story-skill:8057, factoid-qa:8071, kbqa:8072,
+        comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
-        book-skill:8032, grounding-skill:8080,
+        book-skill:8032, dff-grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
         midas-classification:8090, fact-random:8119, fact-retrieval:8100,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
@@ -51,22 +51,30 @@ services:
         reservations:
           memory: 256M
 
-#  cobot-convers-evaluator-annotator:
-#    env_file: [.env]
-#    build:
-#      context: ./annotators/CoBotConversationEvaluator/
-#    command: gunicorn --workers=1 server:app -b 0.0.0.0:8004 -t 15 --preload
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 128M
-#        reservations:
-#          memory: 128M
-
-  cobot-nounphrases:
+  convers-evaluator-annotator:
     env_file: [.env]
     build:
-      context: ./annotators/cobot_nounphrases/
+      args:
+        CONFIG: conveval.json
+        PORT: 8004
+        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
+      context: .
+      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  spacy-nounphrases:
+    env_file: [.env]
+    build:
+      context: annotators/spacy_nounphrases/
     command: flask run -h 0.0.0.0 -p 8006
     environment:
       - FLASK_APP=server
@@ -80,14 +88,18 @@ services:
   program-y:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: program_y
       context: .
-      dockerfile: ./skills/program-y/Dockerfile
+      dockerfile: ./skills/program_y/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
     deploy:
       resources:
         limits:
-          memory: 768M
+          memory: 1024M
         reservations:
-          memory: 768M
+          memory: 1024M
 
   personality-catcher:
     env_file: [.env]
@@ -173,10 +185,10 @@ services:
         reservations:
           memory: 3.5G
 
-  blacklisted-words:
+  badlisted-words:
     env_file: [.env]
     build:
-      context: ./annotators/BlacklistedWordsDetector/
+      context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
       - FLASK_APP=server
@@ -190,14 +202,18 @@ services:
   program-y-dangerous:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8022
+        SERVICE_NAME: program_y_dangerous
       context: .
-      dockerfile: ./skills/program-y-dangerous/Dockerfile
+      dockerfile: ./skills/program_y_dangerous/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8022 --reload
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 1024M
         reservations:
-          memory: 256M
+          memory: 1024M
 
   dff-movie-skill:
     env_file: [.env]
@@ -325,21 +341,6 @@ services:
         reservations:
           memory: 2540M
 
-  weather-skill:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./skills/weather_skill/Dockerfile
-    command: python -m flask run -h 0.0.0.0 -p 8037
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1152M
-        reservations:
-          memory: 1152M
-
   emotion-skill:
     env_file: [.env]
     build:
@@ -430,21 +431,6 @@ services:
         reservations:
           memory: 256M
 
-  short-story-skill:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./skills/short_story_skill/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8057
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 80M
-        reservations:
-          memory: 80M
-
   small-talk-skill:
     env_file: [.env]
     build:
@@ -480,14 +466,18 @@ services:
   program-y-wide:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8064
+        SERVICE_NAME: program_y_wide
       context: .
-      dockerfile: ./skills/program-y-wide/Dockerfile
+      dockerfile: ./skills/program_y_wide/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8064 --reload
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 1024M
         reservations:
-          memory: 256M
+          memory: 1024M
 
   news-api-skill:
     env_file: [.env]
@@ -651,20 +641,21 @@ services:
         reservations:
           memory: 50M
 
-  grounding-skill:
+  dff-grounding-skill:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8080
+        SERVICE_NAME: dff_grounding_skill
       context: .
-      dockerfile: ./skills/grounding_skill/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8080
-    environment:
-      - FLASK_APP=server
+      dockerfile: ./skills/dff_grounding_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --reload
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 128M
         reservations:
-          memory: 80M
+          memory: 128M
 
   knowledge-grounding:
     env_file: [.env]
@@ -1160,6 +1151,38 @@ services:
           memory: 192M
         reservations:
           memory: 192M
+
+  dff-short-story-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8057
+        SERVICE_NAME: dff_short_story_skill
+      context: .
+      dockerfile: ./skills/dff_short_story_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-weather-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8037
+        SERVICE_NAME: dff_weather_skill
+      context: .
+      dockerfile: ./skills/dff_weather_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8037 --reload --timeout 500
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
   dff-template-skill:
     env_file: [.env]
