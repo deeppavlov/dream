@@ -141,9 +141,7 @@ def calculate_single_convers_evaluator_score(cand_scores):
 def downscore_toxic_badlisted_responses(scores, confidences, is_toxics):
     # exclude toxic messages and messages with badlisted phrases
     ids = np.arange(len(confidences))[is_toxics]
-    logger.info(
-        f"Bot excluded utterances: {ids}. is_toxics: {is_toxics}"
-    )
+    logger.info(f"Bot excluded utterances: {ids}. is_toxics: {is_toxics}")
     scores[ids] = {
         "isResponseOnTopic": 0.0,
         "isResponseInteresting": 0.0,

@@ -15,12 +15,12 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 def transform(data):
     dialogs = []
     utterances = []
-    for past_uttr, past_response in zip(data['pastUtterances'], data['pastResponses']):
+    for past_uttr, past_response in zip(data["pastUtterances"], data["pastResponses"]):
         utterances.append(past_uttr)
         utterances.append(past_response)
-    utterances.append(data['currentUtterance'])
-    for hyp in data['hypotheses']:
-        dialogs.append(' [SEP]'.join(utterances + [hyp]))
+    utterances.append(data["currentUtterance"])
+    for hyp in data["hypotheses"]:
+        dialogs.append(" [SEP]".join(utterances + [hyp]))
     return dialogs
 
 
@@ -41,16 +41,17 @@ def batch_respond():
     t = time.time()
     data = transform(request.json)
     conv_eval_results = model(data)
-    key_annotations = ['isResponseComprehensible',
-                       'isResponseErroneous',
-                       'isResponseInteresting',
-                       'isResponseOnTopic',
-                       'responseEngagesUser']
+    key_annotations = [
+        "isResponseComprehensible",
+        "isResponseErroneous",
+        "isResponseInteresting",
+        "isResponseOnTopic",
+        "responseEngagesUser",
+    ]
     result = []
     for scores in conv_eval_results:
-        result.append({annotation: float(score) for annotation, score
-                       in zip(key_annotations, scores)})
-    logger.info(f'Conv eval exec time {round(time.time()-t, 2)} sec')
+        result.append({annotation: float(score) for annotation, score in zip(key_annotations, scores)})
+    logger.info(f"Conv eval exec time {round(time.time()-t, 2)} sec")
     return jsonify([{"batch": result}])
 
 
