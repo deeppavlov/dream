@@ -42,7 +42,7 @@ WHAT_BOOK_IMPRESSED_MOST = "What book impressed you the most?"
 WHEN_IT_WAS_PUBLISHED = "Do you want to know when it was first published?"
 WHAT_BOOK_LAST_READ = SWITCH_BOOK_SKILL_PHRASE
 BOOK_ANY_PHRASE = "I see you can't name it. Could you please name any book you have read?"
-OFFER_FACT_ABOUT_BOOK  = "Would you like to hear a fact about it?"
+OFFER_FACT_ABOUT_BOOK = "Would you like to hear a fact about it?"
 BOOK_SKILL_QUESTIONS = [WHAT_BOOK_LAST_READ, WHAT_BOOK_IMPRESSED_MOST]
 ALL_QUESTIONS_ABOUT_BOOK = QUESTIONS_ABOUT_BOOKS + BOOK_SKILL_QUESTIONS + ALL_LINKS_TO_BOOKS
 
@@ -57,49 +57,47 @@ FAVOURITE_BOOK_ATTRS = {
     "The Catcher in the Rye": {
         "cur_book_name": "The Catcher in the Rye",
         "cur_book_ago": f"{CURRENT_YEAR - 1951} years ",
-        "cur_book_plain": "Q183883", 
+        "cur_book_plain": "Q183883",
         "cur_book_author": "Jerome Salinger",
         "cur_genre": "a novel",
         "fav_book_init": f' My favourite book is "The catcher in the rye" by Jerome David Salinger.',
         "cur_book_about": f'The novel "The catcher in the rye" tells the story of a teenager '
         f"who has been kicked out of a boarding school. "
-        f"This is my favourite story, it is truly fascinating."
+        f"This is my favourite story, it is truly fascinating.",
     },
     "The NeverEnding Story": {
         "cur_book_name": "The NeverEnding Story",
         "cur_book_ago": f"{CURRENT_YEAR - 1979} years ",
-        "cur_book_plain": "Q463108", 
+        "cur_book_plain": "Q463108",
         "cur_book_author": "Michael Ende",
         "cur_genre": "a novel",
         "fav_book_init": f'My other favourite book is "The NeverEnding Story" by Michael Ende.',
         "cur_book_about": f' The "NeverEnding Story" tells the story of a troubled young boy Bastien '
         f"who escapes some pursuing bullies in an old book shop. "
         f"While he reads the book, he suddenly moves into the world described there, "
-        f"as the only one who can save it."        
+        f"as the only one who can save it.",
     },
     "The Little Prince": {
         "cur_book_name": "The Little Prince",
         "cur_book_ago": f"{CURRENT_YEAR - 1943} years ",
-        "cur_book_plain": "Q25338", 
+        "cur_book_plain": "Q25338",
         "cur_book_author": "Antoine de Saint-Exupéry",
         "cur_genre": "a novel",
         "fav_book_init": f'I was really impressed by the book "The Little Prince" ' f"by Antoine de Saint-Exupéry.",
         "cur_book_about": f" The Little Prince is a poetic tale, with watercolor illustrations by the author, "
         f"in which a pilot stranded in the desert meets a young prince "
-        f"visiting Earth from a tiny asteroid."        
-    },    
+        f"visiting Earth from a tiny asteroid.",
+    },
 }
 
-def append_unused(
-    initial:str,
-    phrases: List[str], 
-    exit_on_exhaust: bool=False
-) -> Callable:
+
+def append_unused(initial: str, phrases: List[str], exit_on_exhaust: bool = False) -> Callable:
     """
     Return an unused or a least used response from a list of options
     """
+
     def unused_handler(ctx: Context, actor: Actor) -> str:
-        
+
         used = ctx.misc.get("used_phrases", [])
         confidences = [1] * len(phrases)
 
@@ -111,20 +109,19 @@ def append_unused(
                 return initial + phrase
             confidences[idx] *= 0.4 ** times
 
+        if exit_on_exhaust:
+            label = ctx.last_label
+            actor.plot[label[0]][label[1]].transitions = {("global_flow", "fallback", 2): cnd.true()}
+            return initial
+
         target_idx = confidences.index(max(confidences))
         target_phrase = phrases[target_idx]
         used.append(id(target_phrase))
         ctx.misc["used_phrases"] = used
-
-        if exit_on_exhaust:
-            label = ctx.last_label
-            actor.plot[label[0]][label[1]].transitions = {
-                ("global_flow", "fallback", 2): cnd.true()
-            }
-            return initial
         return initial + target_phrase
-    
+
     return unused_handler
+
 
 def genre_phrase(ctx: Context, actor: Actor):
     genre = ctx.misc.get("slots", {}).get("cur_genre", "fiction")
@@ -143,7 +140,7 @@ def append_question(initial: str, additional=None) -> Callable:
         used = ctx.misc.get("used_phrases", [])
         if not id(WHAT_BOOK_IMPRESSED_MOST) in used:
             questions.append(WHAT_BOOK_IMPRESSED_MOST)
-        
+
         first_fav_named = id(FAVOURITE_BOOK_PHRASES[0]) in used
         if not first_fav_named:
             questions.append(FAVOURITE_BOOK_PHRASES[0])
@@ -156,5 +153,5 @@ def append_question(initial: str, additional=None) -> Callable:
             questions.append(WHAT_GENRE_FAV)
         random.shuffle(questions)
         return append_unused(initial, questions, exit_on_exhaust=True)(ctx, actor)
-    
+
     return question_handler

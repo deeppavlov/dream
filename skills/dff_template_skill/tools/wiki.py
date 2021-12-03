@@ -8,7 +8,10 @@ from os import getenv
 import pathlib
 import _pickle as cPickle
 
-from common.custom_requests import request_entities_entitylinking, request_triples_wikidata
+from common.custom_requests import (
+    request_entities_entitylinking,
+    request_triples_wikidata,
+)
 from common.utils import entity_to_label, get_raw_entity_names_from_annotations
 
 from scenario.response import CURRENT_YEAR
@@ -16,8 +19,8 @@ from scenario.response import CURRENT_YEAR
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
-book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt" 
-book_banned_words = set([line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()])
+book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
+book_banned_words = {line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()}
 book_query_dict = cPickle.load(open("/global_data/book_query_dict.pkl", "rb"))
 
 
@@ -36,7 +39,7 @@ def get_n_years(date: str) -> Optional[str]:
     """
     Turn the obtained publication date into a reply slot
     """
-    if type(date) != str:
+    if not isinstance(date, str):
         return None
     parsed_date = re.search(r"\d{4}", date)
     if not parsed_date:
@@ -54,7 +57,13 @@ def get_name(
     """
     Extract wiki entities of the specified type
     """
-    plain_entity, found_entity, n_years_ago, attribute, film_director = None, None, None, None, None
+    plain_entity, found_entity, n_years_ago, attribute, film_director = (
+        None,
+        None,
+        None,
+        None,
+        None,
+    )
     try:
         all_found_entities = get_raw_entity_names_from_annotations(annotated_phrase.get("annotations", {}))
         if not all_found_entities:
@@ -97,7 +106,9 @@ def get_name(
                 found_types = []
                 for type_ in types:
                     request_answer = request_triples_wikidata(
-                        "check_triplet", [(entity, "P31", "forw")], query_dict=book_query_dict
+                        "check_triplet",
+                        [(entity, "P31", "forw")],
+                        query_dict=book_query_dict,
                     )
                     if isinstance(request_answer, list) and request_answer[0]:
                         found_types.append(type_)
@@ -165,7 +176,7 @@ def get_published_year(book_entity: str) -> Optional[str]:
     year_candidates = re.findall(r"[\d]{3,4}", published_year)
     if year_candidates:
         try:
-            published_year: str = get_n_years(year_candidates[0]) # Changed to return a string
+            published_year: str = get_n_years(year_candidates[0])  # Changed to return a string
             assert published_year
         except Exception:
             # sentry_sdk.capture_exception(e)
@@ -209,11 +220,7 @@ def genre_of_book(plain_bookname: str) -> Optional[str]:
         return None
 
 
-def get_author(
-    plain_entity: str,
-    return_plain=False,
-    mode="book"
-) -> Optional[str]:
+def get_author(plain_entity: str, return_plain=False, mode="book") -> Optional[str]:
     """
     Get the author for a plain book entity
     """
@@ -222,7 +229,10 @@ def get_author(
     if mode == "book":
         author_list = request_triples_wikidata(
             "find_object",
-            [(plain_entity.upper(), "P50", "forw"), (plain_entity.upper(), "P800", "backw")],
+            [
+                (plain_entity.upper(), "P50", "forw"),
+                (plain_entity.upper(), "P800", "backw"),
+            ],
             query_dict=book_query_dict,
         )
     else:
@@ -237,21 +247,17 @@ def get_author(
     author_entity = sorted_author_list[0]
     if return_plain:
         logger.info(f"Answer {author_entity}")
-        return author_entity
+        return author_entity    
+    if is_wikidata_entity(author_entity):
+        author_name = entity_to_label(author_entity)
+        logger.info(f"Answer for get_author {author_name}")
+        return author_name
     else:
-        if is_wikidata_entity(author_entity):
-            author_name = entity_to_label(author_entity)
-            logger.info(f"Answer for get_author {author_name}")
-            return author_name
-        else:
-            logger.warning(f"Wrong entity {author_entity}")
-            return None
+        logger.warning(f"Wrong entity {author_entity}")
+        return None
 
 
-def parse_author_best_book(
-    annotated_phrase: Dict[str, str], 
-    default_phrase=None
-) -> Tuple[str, Optional[str]]:
+def parse_author_best_book(annotated_phrase: Dict[str, str], default_phrase=None) -> Tuple[str, Optional[str]]:
     """
     Get one book from the 'notable work' list
     """
@@ -270,13 +276,14 @@ def parse_author_best_book(
     if plain_author:
         logger.debug(f"author detected: {plain_author} bookname {plain_bookname}")
         plain_book = best_plain_book_by_author(
-            plain_author_name=plain_author, plain_last_bookname=plain_bookname, default_phrase=default_phrase
+            plain_author_name=plain_author,
+            plain_last_bookname=plain_bookname,
+            default_phrase=default_phrase,
         )
         logger.debug(f"Answer for parse_author_best_book is {(plain_book, plain_author)}")
         return plain_book, plain_author
-    else:
-        logger.debug("No author found")
-        return default_phrase, None
+    logger.debug("No author found")
+    return default_phrase, None
 
 
 def get_booklist(plain_author_name: str) -> str:
@@ -293,10 +300,10 @@ def get_booklist(plain_author_name: str) -> str:
 
 
 def best_plain_book_by_author(
-    plain_author_name: str, 
+    plain_author_name: str,
     default_phrase: str,
     plain_last_bookname: Optional[str] = None,
-    top_n_best_books: int = 1
+    top_n_best_books: int = 1,
 ) -> Optional[str]:
     """
     Look up a book for an author

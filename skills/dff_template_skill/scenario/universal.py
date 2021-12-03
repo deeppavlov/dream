@@ -5,13 +5,7 @@ import json
 
 from dff.core import Context, Actor
 
-from tools.wiki import (
-    get_name,
-    what_is_book_about,
-    get_published_year,
-    best_plain_book_by_author,
-    genre_of_book
-)
+from tools.wiki import get_name, what_is_book_about, get_published_year, best_plain_book_by_author, genre_of_book
 
 logger = logging.getLogger(__name__)
 
@@ -39,24 +33,20 @@ GENRE_DICT = {
 GENRE_PATTERN = "|".join(GENRE_DICT.keys())
 AUTHOR_PATTERN = re.compile(r"(?<=by )[A-Za-z][a-z]+( [A-Z][a-z]+){0,1}")
 
+
 def get_slot(prop: str) -> Callable:
     """
     Use adapter to insert as a condition or a processing function
     Checks if a slot value is in place
     """
-    def get_slot_handler(
-        ctx: Context,
-        actor: Actor
-    ) -> Optional[str]:
+
+    def get_slot_handler(ctx: Context, actor: Actor) -> Optional[str]:
         return ctx.misc.get("slots", {}).get(prop)
-    
+
     return get_slot_handler
 
 
-def get_book(
-    ctx: Context,
-    actor: Actor
-) -> Optional[Tuple[str, Optional[str]]]:
+def get_book(ctx: Context, actor: Actor) -> Optional[Tuple[str, Optional[str]]]:
     """
     Extract a book name from user request with wikiparser
     """
@@ -67,10 +57,7 @@ def get_book(
     return result
 
 
-def get_movie(
-    ctx: Context,
-    actor: Actor
-) -> Optional[Tuple[str, Optional[str]]]:
+def get_movie(ctx: Context, actor: Actor) -> Optional[Tuple[str, Optional[str]]]:
     """
     Extract a movie with wikiparser
     """
@@ -147,10 +134,7 @@ def get_author_regexp(ctx: Context, actor: Actor) -> Optional[str]:
     return None if not (x := author_candidate) else x.group()
 
 
-def get_author(
-    ctx: Context,
-    actor: Actor
-) -> Optional[Tuple[str, Optional[str], Optional[str]]]:
+def get_author(ctx: Context, actor: Actor) -> Optional[Tuple[str, Optional[str], Optional[str]]]:
     """
     Extract the author name from user request with wikiparser
     """
@@ -167,10 +151,7 @@ def get_book_by_author(ctx: Context, actor: Actor) -> Optional[str]:
     """
     author_plain = get_slot("cur_author_plain")(ctx, actor)
     prev_book = get_slot("cur_book_plain")(ctx, actor)
-    return best_plain_book_by_author(
-        plain_author_name=author_plain,
-        plain_last_bookname=prev_book
-    )
+    return best_plain_book_by_author(plain_author_name=author_plain, plain_last_bookname=prev_book)
 
 
 def get_book_year(ctx: Context, actor: Actor) -> Optional[str]:
