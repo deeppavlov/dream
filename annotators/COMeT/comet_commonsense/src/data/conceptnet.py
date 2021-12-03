@@ -46,7 +46,7 @@ class GenerationDataLoader(adata.DataLoader):
 
 
 def make_attention_mask(sequences):
-    return (sequences != 0).float().to(settings.CUDA_VISIBLE_DEVICES)
+    return (sequences != 0).float().to(settings.device)
 
 
 def do_example(text_encoder, event1, relation, event2):

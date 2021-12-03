@@ -125,7 +125,7 @@ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, 
 
 
 def set_atomic_inputs(input_event, category, data_loader, text_encoder):
-    XMB = torch.zeros(1, data_loader.max_event + 1).long().to(settings.CUDA_VISIBLE_DEVICES)
+    XMB = torch.zeros(1, data_loader.max_event + 1).long().to(settings.device)
     prefix, suffix = data.atomic_data.do_example(text_encoder, input_event, None, True, None)
     max_len = min(len(prefix), data_loader.max_event + 1)
 
@@ -192,12 +192,12 @@ def set_conceptnet_inputs(input_event, relation, text_encoder, max_e1, max_r, fo
 
     if len(e1_tokens) > max_e1:
         if force:
-            XMB = torch.zeros(1, len(e1_tokens) + max_r).long().to(settings.CUDA_VISIBLE_DEVICES)
+            XMB = torch.zeros(1, len(e1_tokens) + max_r).long().to(settings.device)
         else:
-            XMB = torch.zeros(1, max_e1 + max_r).long().to(settings.CUDA_VISIBLE_DEVICES)
+            XMB = torch.zeros(1, max_e1 + max_r).long().to(settings.device)
             return {}, True
     else:
-        XMB = torch.zeros(1, max_e1 + max_r).long().to(settings.CUDA_VISIBLE_DEVICES)
+        XMB = torch.zeros(1, max_e1 + max_r).long().to(settings.device)
 
     XMB[:, :len(e1_tokens)] = torch.LongTensor(e1_tokens)
     XMB[:, max_e1:max_e1 + len(rel_tokens)] = torch.LongTensor(rel_tokens)

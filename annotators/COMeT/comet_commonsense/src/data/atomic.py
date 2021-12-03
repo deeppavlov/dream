@@ -35,7 +35,7 @@ class GenerationDataLoader(DataLoader):
 
 
 def make_attention_mask(sequences):
-    return (sequences != 0).float().to(settings.CUDA_VISIBLE_DEVICES)
+    return (sequences != 0).float().to(settings.device)
 
 
 def find_underscore_length(seq):

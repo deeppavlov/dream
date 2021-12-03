@@ -232,7 +232,7 @@ class BeamSampler(TopKSampler):
 
             # Compute masks and expand beam
             expanded_ended = ended.unsqueeze(1).repeat(1, self.opt.eval.bs)
-            hypothesis_mask = expanded_ended * self.kill_mask.to(device=settings.CUDA_VISIBLE_DEVICES)
+            hypothesis_mask = expanded_ended * self.kill_mask.to(device=settings.device)
             hypothesis_mask = hypothesis_mask + (1 - expanded_ended)
 
             paper_results = False
