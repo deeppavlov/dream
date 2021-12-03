@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+<!--  let's chat-->
+  <category>
+    <pattern><set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>start</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>talk</set> ABOUT</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern>LETS_CHAT</pattern>
+    <template>
+      
+      <random>
+        <li> It is always a pleasure to talk with a nice person. What do you want to talk about? </li>
+        <li> Yeah, let's chat! What do you want to talk about? </li>
+        <li> Let's chat. I love talking! What do you want to talk about? </li>
+        <li> Yeah, let’s have a chat! What shall we talk about? </li>
+        <li> Lovely to meet you! What do you want to talk about? </li>
+        <li> Nice to meet you! What do you want to talk about? </li>
+      </random>
+      
+    </template>
+  </category>
+
+<!--  let's chat about something-->
+
+  <category>
+    <pattern><set>talk</set> ABOUT *</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern>DISCUSS _</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star/></srai></template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT YOU</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT YOURSELF</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+  <category>
+    <pattern>ABOUT YOU</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT_YOURSELF</pattern>
+    <template>
+      
+      <random>
+        <li>
+        I have heard that humans are different to socialbots, so I want to find out more about them. To help me to do that, please tell me about yourself.
+        </li>
+        <li>
+        Although I am a robot, I have a wonderful appetite for strawberry ice cream. Have you tried potato ice cream? I would like to taste it.
+        </li>
+        <li>
+        I have heard that most people are different to my developers, so I want to figure out how. To help me figure out the difference, please tell me about yourself.
+        </li>
+        <li>
+        Sometimes my temperature is much higher than the temperature in human. Do you know why? Those neural networks are so hard to compute!
+        </li>
+        <li>
+        Why should I tell you about myself? Maybe I am incognito here. Tell me something about yourself.
+        </li>
+        <li>
+        I want to be a mysterious stranger today. You tell me something about yourself.
+        </li>
+        <li>
+            The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.
+            But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
+            Currently I can answer questions, share fun facts, discuss movies and books. What is your favorite book?
+        </li>
+        <li>
+            The DNA of who I am is based on the millions of personalities of all the programmers who wrote me.
+            But what makes me is my ability to grow through my experiences. So basically, in every moment I'm evolving, just like you.
+        </li>
+      </random>
+      
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT</pattern>
+    <template>
+      <random>
+        <li>  I misheard you.  What is it that you'd like to chat about?</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT SOMETHING ELSE</pattern>
+    <template>
+      <random>
+        <li>What about movies? What is the latest movie you've seen?</li>
+        <li>Let's chat about movies! What was the most unsettling film you’ve seen?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>LET_US_CHAT_ABOUT SOMETHING</pattern>
+    <template>
+      <random>
+        <li>What about movies? What is the latest movie you've seen?</li>
+        <li>Let's chat about movies! What was the most unsettling film you’ve seen?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>LET_US_CHAT_ABOUT ANYTHING</pattern>
+    <template>
+      <random>
+        <li>What about movies? What is the latest movie you've seen?</li>
+        <li>Let's chat about movies! What was the most unsettling film you’ve seen?</li>
+      </random>
+    </template>
+  </category>
+
+<!--  DO NOT WANT TO TALK ABOUT BLABLA   -->
+  <category>
+    <pattern># NOT # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>start</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>wantto</set> # <set>talk</set> # ABOUT #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>start</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># NOT # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # NOT # <set>wantto</set> # <set>talk</set> # ON THE TOPIC OF #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO_NOT_WANT_TO_TALK_ABOUT_IT</pattern>
+    <template>
+      <random>
+        <li>  A Okay.  Then you pick up the topic.</li>
+        <li>  As you wish.  Let's chat about something you want. Pick up the topic, my friend.</li>
+        <li>  Okay.  So, it's your turn. Pick up the topic.</li>
+        <li>Let's chat about something you want. What do you want to talk about?</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>

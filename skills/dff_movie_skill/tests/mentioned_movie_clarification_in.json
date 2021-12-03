@@ -36,8 +36,8 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "cobot_nounphrases": [],
-                        "blacklisted_words": {
+                        "spacy_nounphrases": [],
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -252,7 +252,7 @@
                                 "toxic": 0.0010618269443511963
                             }
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -261,7 +261,7 @@
                             "factoid": 0.01372464932501316,
                             "conversational": 0.986275315284729
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "dans",
                             "paris"
                         ],

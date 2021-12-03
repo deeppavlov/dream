@@ -1,0 +1,48 @@
+[
+    [
+        "Hmm. Which particular city would you like a weather forecast for?",
+        1.0,
+        {
+            "dff_weather_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "weather",
+                        "location_request"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "4b09ed11-601d-4d2c-9530-03f4c9623e6d",
+                    "labels": {
+                        "0": [
+                            "weather",
+                            "location_request"
+                        ]
+                    },
+                    "requests": {
+                        "0": "Tell me weather."
+                    },
+                    "responses": {
+                        "0": "Hmm. Which particular city would you like a weather forecast for?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

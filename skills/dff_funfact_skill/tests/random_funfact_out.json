@@ -1,0 +1,49 @@
+[
+    [
+        "The hottest spot on the planet is in Libya. Would you like to talk about weather? Or would you like to hear another fun fact?",
+        1.0,
+        {
+            "dff_funfact_skill_state": {
+                "shared_memory": {
+                    "given_funfacts": [
+                        "The hottest spot on the planet is in Libya."
+                    ]
+                },
+                "previous_human_utter_index": 8,
+                "history": {
+                    "8": [
+                        "funfact",
+                        "random"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "ba6a7103-0664-4d81-b670-b93042792131",
+                    "labels": {
+                        "0": [
+                            "funfact",
+                            "random"
+                        ]
+                    },
+                    "requests": {
+                        "0": "fun fact."
+                    },
+                    "responses": {
+                        "0": "The hottest spot on the planet is in Libya. Would you like to talk about weather? Or would you like to hear another fun fact?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {},
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": {}
+        },
+        {},
+        {
+            "can_continue": "must"
+        }
+    ]
+]

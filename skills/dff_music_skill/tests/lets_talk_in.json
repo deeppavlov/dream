@@ -12,7 +12,7 @@
                             "asr_confidence": "undefined"
                         },
                         "spelling_preprocessing": "let's talk about music",
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
@@ -41,7 +41,7 @@
                                 "toxic": 0.0009880363941192627
                             }
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "music"
                         ],
                         "sentseg": {

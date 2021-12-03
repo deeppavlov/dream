@@ -152,7 +152,7 @@ def extract_breed(vars):
         user_uttr = state_utils.get_last_human_utterance(vars)
         annotations = user_uttr["annotations"]
         nounphrases = annotations.get("cobot_entities", {}).get("entities", []) + annotations.get(
-            "cobot_nounphrases", []
+            "spacy_nounphrases", []
         )
         nounphrases = list(set(nounphrases))
         nounphrases = [re.sub(r"(cat|cats|dog|dogs)", "", phr).replace("  ", " ").strip() for phr in nounphrases]

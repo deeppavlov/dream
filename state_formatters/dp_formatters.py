@@ -111,7 +111,7 @@ def personality_catcher_formatter_service(payload: List):
 def cobot_classifiers_formatter_service(payload: List):
     # Used by: cobot_classifiers_formatter, sentiment_formatter
     if len(payload) == 3:
-        return {"text": payload[0], "confidence": payload[1], "is_blacklisted": payload[2]}
+        return {"text": payload[0], "confidence": payload[1], "is_badlisted": payload[2]}
     elif len(payload) == 2:
         return {"text": payload[0], "confidence": payload[1]}
     elif len(payload) == 1:
@@ -203,6 +203,31 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
+    # Used by: sentseg over human uttrs
+    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing",
+        dialog["human_utterances"][-1]["text"])
+    if dialog['bot_utterances']:
+        # h sep b sep h sep b sep h
+        prev_bot_utts = [k['text'] for k in dialog['bot_utterances'][-2:]]
+        prev_human_utts = [utt["annotations"].get("spelling_preprocessing", utt["text"])
+                           for utt in dialog["human_utterances"][-3:-1]]
+        prev_utts = []
+        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
+            prev_utts.append(human_utt)
+            prev_utts.append(bot_utt)
+        sentence_w_history = ' [SEP] '.join(prev_utts + [last_human_utt])
+    else:
+        sentence_w_history = last_human_utt
+    return [
+        {
+            "sentences": [last_human_utt],
+            "sentences_with_history": [sentence_w_history]
+        }
+    ]
+
+
 def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
     # Used by: cobot entities
     return [
@@ -212,7 +237,7 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
                     "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
                 )
             ],
-            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("cobot_nounphrases", [])],
+            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("spacy_nounphrases", [])],
         }
     ]
 
@@ -283,14 +308,7 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     return [{"sentences": [sent], "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]]}]
 
 
-def cobot_conv_eval_formatter_dialog(dialog: Dict) -> List[Dict]:
-    dialog = utils.get_last_n_turns(dialog, total_last_turns=4)
-    payload = utils.stop_formatter_dialog(dialog)
-    # print(f"formatter {payload}", flush=True)
-    return payload
-
-
-def cobot_convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
+def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     conv = dict()
@@ -334,7 +352,7 @@ def simple_batch_formatter_service(payload: List):
             payload["batch"][i] = {
                 "text": payload["batch"][i][0],
                 "confidence": payload["batch"][i][1],
-                "is_blacklisted": payload["batch"][i][2],
+                "is_badlisted": payload["batch"][i][2],
             }
         elif len(payload["batch"][i]) == 2:
             payload["batch"][i] = {"text": payload["batch"][i][0], "confidence": payload["batch"][i][1]}
@@ -554,6 +572,22 @@ def kbqa_formatter_dialog(dialog: Dict):
     return [{"x_init": sentences, "entities": entities}]
 
 
+def fact_random_formatter_dialog(dialog: Dict):
+    # Used by: fact-random annotator
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list = []
+
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+
+    return [{"text": last_human_utt["text"], "entities": entity_substr_list}]
+
+
 def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
@@ -660,10 +694,6 @@ def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_friendship_skill")
 
 
-def dff_template_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_template")
-
-
 def dff_funfact_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_funfact_skill")
 
@@ -704,6 +734,62 @@ def dff_movie_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_movie_skill")
 
 
+def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_art_skill")
+
+
+def dff_grounding_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_grounding_skill")
+
+
+def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_coronavirus_skill")
+
+
+def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_short_story_skill")
+
+
+def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_template_skill")
+
+
+def dff_program_y_wide_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y_wide")
+
+
+def dff_program_y_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y")
+
+
+def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_food_skill")
+
+
+def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_bot_persona_skill")
+
+
+def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(
+        dialog,
+        "dff_wiki_skill",
+        used_annotations=[
+            "cobot_entities",
+            "spacy_nounphrases",
+            "entity_linking",
+            "factoid_classification",
+            "wiki_parser",
+            "cobot_topics",
+            "news_api_annotator",
+        ],
+    )
+
+
+def dff_program_y_dangerous_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y_dangerous")
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
@@ -714,38 +800,6 @@ def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
         hyps["context"].append(context)
         hyps["curr_utterance"].append(hyp["text"])
     return [hyps]
-
-
-def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_food_skill"
-    return utils.dff_formatter(dialog, service_name)
-
-
-def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_bot_persona_skill"
-    return utils.dff_formatter(dialog, service_name)
-
-
-def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_wiki_skill"
-    return utils.dff_formatter(
-        dialog,
-        service_name,
-        used_annotations=[
-            "cobot_entities",
-            "cobot_nounphrases",
-            "entity_linking",
-            "factoid_classification",
-            "wiki_parser",
-            "cobot_topics",
-            "news_api_annotator",
-        ],
-    )
-
-
-def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
-    service_name = f"dff_art_skill"
-    return utils.dff_formatter(dialog, service_name)
 
 
 def game_cooperative_skill_formatter(dialog: Dict):
@@ -792,8 +846,8 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
             {
                 "text": hyp["text"],
                 "confidence": hyp.get("confidence", 0),
-                "cobot_convers_evaluator_annotator": hyp.get("annotations", {}).get(
-                    "cobot_convers_evaluator_annotator", {}
+                "convers_evaluator_annotator": hyp.get("annotations", {}).get(
+                    "convers_evaluator_annotator", {}
                 ),
             }
         )

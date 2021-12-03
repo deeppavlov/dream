@@ -305,8 +305,8 @@ re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 used_types = set(itertools.chain.from_iterable([elem.get("types", []) for elem in used_types_dict]))
 used_substr = set(itertools.chain.from_iterable([elem.get("entity_substr", []) for elem in used_types_dict]))
-blacklist_words = {"yup", "true", "false", "boy", "boys", "meow", "people", "alexa", "alexa alexa"}
-blacklist_titles = {"ethymology", "terminology"}
+badlist_words = {"yup", "true", "false", "boy", "boys", "meow", "people", "alexa", "alexa alexa"}
+badlist_titles = {"ethymology", "terminology"}
 
 prohibited_topics = {
     "music",
@@ -394,7 +394,7 @@ CONF_DICT = {
     "WIKI_TOPIC": 0.99,
     "HIGH_CONF": 1.0,
 }
-WIKI_BLACKLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable| url )", re.IGNORECASE)
+WIKI_BADLIST = re.compile(r"(margin|\bfont\b|wikimedia|wikitable| url )", re.IGNORECASE)
 
 transfer_from_skills = {
     "dff_animals_skill": {
@@ -480,7 +480,7 @@ def find_entity_wp(annotations, bot_uttr, specific_types=None):
                 if current_types and not set(type_ids).intersection(current_types):
                     coherent_with_prev = False
                 in_not_used_types = set(type_ids).intersection(prohibited_types)
-                in_not_used_topics = entity.lower() in prohibited_topics or entity.lower() in blacklist_words
+                in_not_used_topics = entity.lower() in prohibited_topics or entity.lower() in badlist_words
                 token_conf = triplets["token_conf"]
                 conf = triplets["conf"]
                 found_animal = re.findall(ANIMALS_FIND_TEMPLATE, entity)
@@ -582,7 +582,7 @@ def find_entity_nounphr(annotations):
     for nounphr in nounphrases:
         nounphr_text = nounphr.get("text", "")
         nounphr_label = nounphr.get("label", "")
-        in_not_used_substr = nounphr_text.lower() in prohibited_topics or nounphr_text.lower() in blacklist_words
+        in_not_used_substr = nounphr_text.lower() in prohibited_topics or nounphr_text.lower() in badlist_words
         if nounphr_text in used_substr and not in_not_used_substr and nounphr_label != "number":
             found_entity_substr = nounphr_text
             conf_type = "WIKI_TOPIC"
@@ -768,7 +768,7 @@ def switch_wiki_skill_on_news(user_uttr, bot_uttr):
                     if (
                         elem["entity"] == nounphr["text"]
                         and "Q5" in find_entity_types(elem["entity"], user_uttr_annotations)
-                        and nounphr["text"] not in blacklist_words
+                        and nounphr["text"] not in badlist_words
                         and nounphr["text"] not in prohibited_topics
                     ):
                         return True
@@ -866,7 +866,7 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_
                     if (
                         rand_title.lower() == title.lower()
                         and rand_title != prev_title
-                        and rand_title.lower() not in blacklist_titles
+                        and rand_title.lower() not in badlist_titles
                         and not any([rand_title.lower() in curr_page.lower() for curr_page in curr_pages])
                     ):
                         found_title = rand_title
@@ -878,7 +878,7 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_
                         if (
                             rand_title.lower() in title.lower()
                             and rand_title != prev_title
-                            and rand_title.lower() not in blacklist_titles
+                            and rand_title.lower() not in badlist_titles
                             and not any([rand_title.lower() in curr_page.lower() for curr_page in curr_pages])
                         ):
                             found_title = rand_title
@@ -893,7 +893,7 @@ def choose_title(vars, all_titles, titles_we_use, prev_title, used_titles, curr_
             for title in titles_we_use:
                 if (
                     title.lower() not in used_titles
-                    and title.lower() not in blacklist_titles
+                    and title.lower() not in badlist_titles
                     and not any([title.lower() in curr_page.lower() for curr_page in curr_pages])
                 ):
                     found_title = title.lower()

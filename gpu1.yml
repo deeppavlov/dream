@@ -55,11 +55,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
     restart: unless-stopped
-#  cobot-convers-evaluator-annotator:
-#    restart: unless-stopped
-#    volumes:
-#      - "~/.deeppavlov:/root/.deeppavlov"
-  cobot-nounphrases:
+  spacy-nounphrases:
     restart: unless-stopped
   program-y:
     restart: unless-stopped
@@ -75,7 +71,7 @@ services:
     restart: unless-stopped
   intent-catcher:
     restart: unless-stopped
-  blacklisted-words:
+  badlisted-words:
     restart: unless-stopped
   program-y-dangerous:
     restart: unless-stopped
@@ -101,17 +97,11 @@ services:
     restart: unless-stopped
   book-skill:
     restart: unless-stopped
-  weather-skill:
-    restart: unless-stopped
   emotion-skill:
     restart: unless-stopped
   dummy-skill-dialog:
     restart: unless-stopped
   meta-script-skill:
-    restart: unless-stopped
-  short-story-skill:
-    restart: unless-stopped
-  coronavirus-skill:
     restart: unless-stopped
   small-talk-skill:
     restart: unless-stopped
@@ -135,7 +125,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
     restart: unless-stopped
-  grounding-skill:
+  dff-grounding-skill:
     restart: unless-stopped
   masked-lm:
     restart: unless-stopped
@@ -193,4 +183,16 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  convers-evaluator-annotator:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  dff-coronavirus-skill:
+    restart: unless-stopped
+  dff-short-story-skill:
+    restart: unless-stopped
+  dff-weather-skill:
+    restart: unless-stopped
+  dff-template-skill:
+    restart: unless-stopped
 version: '3.7'
