@@ -33,6 +33,8 @@ def append_previous(reply: str):
 
 
 def get_covid_fact(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if ctx.validation:
+        return ""
     used_facts = ctx.misc.get("used_covid_facts", [])
     fact_to_use = -1
     result = ""
@@ -54,6 +56,8 @@ def get_covid_fact(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def tell_subject_stats(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if ctx.validation:
+        return ""
     template1 = "The total number of registered coronavirus cases in {0} is {1} including {2} deaths."
     template2 = (
         "{0} is located in {1}. In this county, the total number of registered coronavirus "

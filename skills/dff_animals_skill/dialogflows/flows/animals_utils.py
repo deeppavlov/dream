@@ -5,7 +5,7 @@ import inflect
 import nltk
 import sentry_sdk
 
-from common.animals import ANIMAL_BLACKLIST
+from common.animals import ANIMAL_BADLIST
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
@@ -57,9 +57,9 @@ def find_in_animals_list(annotations):
     cobot_entities = annotations.get("cobot_entities", {}).get("entities", [])
     for entity in cobot_entities:
         lemm_entity = lemmatize_substr(entity)
-        if entity in animals_list and entity not in ANIMAL_BLACKLIST:
+        if entity in animals_list and entity not in ANIMAL_BADLIST:
             found_animal = entity
-        if lemm_entity in animals_list and entity not in ANIMAL_BLACKLIST:
+        if lemm_entity in animals_list and entity not in ANIMAL_BADLIST:
             found_animal = lemm_entity
     return found_animal
 

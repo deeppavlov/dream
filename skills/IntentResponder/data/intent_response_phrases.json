@@ -21,8 +21,8 @@
   "repeat" : [],
   "where_are_you_from": [
     "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other.",
-    "I live somewhere on the Earth. But I am participating in the Alexa Prize Challenge. So, I must keep those details secret.",
-    "This is a competition of socialbots, so I cannot tell you my location now."
+    "I live somewhere on the Earth. But I must keep those details secret.",
+    "I'm not sure, so I cannot tell you my location now."
   ],
   "lets_chat": [
     "Okay, let's chat. Would you like to discuss movies?",
@@ -30,22 +30,18 @@
     "Okay, let's chat. What would you like to talk about?"
   ],
   "who_made_you" : [
-    "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now.",
-    "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge.",
-    "I was built by one of the university teams participating in the Alexa Prize Challenge."
+    "I was built by the team of Moscow Institute of Physics and Technology."
   ],
   "what_is_your_name": [
-    "My name is a secret because I am participating in the Alexa Prize Challenge.",
-    "I cannot tell you my name because it's a secret for now.",
-    "My name can not be disclosed during the Alexa Prize Challenge."
+    "My name is DREAM Socialbot."
   ],
   "what_is_your_job": [
-    "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. What do you do?",
+    "I'm a socialbot, and I'm all about chatting with people like you. What do you do?",
     "I am chatting with people to give them an opportunity to become familiar with artificial intelligence. That's my job. Do you have a job?",
     "I am a socialbot, but some people call it artificial intelligence. And I just chat with people all the time. What do you think about A. I.?"
   ],
   "what_can_you_do": [
-    "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie?",
+    "I'm a socialbot, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie?",
     "I'm learning day by day. For now, I can answer a question, tell a joke or fact, discuss movies, books and news. What is your favorite book?",
     "I'm learning day by day. I can answer questions, tell you a joke or a fun fact, discuss movies, books and news. What would you like me to do?"
   ],

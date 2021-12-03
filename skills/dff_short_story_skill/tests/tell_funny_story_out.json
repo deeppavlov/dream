@@ -1,0 +1,54 @@
+[
+    [
+        "Yes, sure. This one is from another user. During my sophomore year of high school, we were doing silent work and my history teacher said that we could listen to music but if it was too loud he would \u201cbreak our headphones.\u201d so I\u2019m doing my work quietly with my music on low, and this obnoxious kid sitting next to me had his music really loud. I could hear it over my music but ignored it. My teacher thought it was me. So he comes up to me and ... Do you want to know what happend after?",
+        0.85,
+        {
+            "dff_short_story_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "story_flow",
+                        "choose_story_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "adfc6b8f-4871-488a-b71d-99ea1e0d39ed",
+                    "labels": {
+                        "0": [
+                            "story_flow",
+                            "choose_story_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "Tell me funny story."
+                    },
+                    "responses": {
+                        "0": "Yes, sure. This one is from another user. During my sophomore year of high school, we were doing silent work and my history teacher said that we could listen to music but if it was too loud he would \u201cbreak our headphones.\u201d so I\u2019m doing my work quietly with my music on low, and this obnoxious kid sitting next to me had his music really loud. I could hear it over my music but ignored it. My teacher thought it was me. So he comes up to me and ... Do you want to know what happend after?"
+                    },
+                    "misc": {
+                        "stories_told": [
+                            "apple headphones"
+                        ],
+                        "story": "apple headphones",
+                        "story_type": "funny"
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

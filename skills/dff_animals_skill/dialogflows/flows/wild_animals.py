@@ -22,7 +22,7 @@ from common.animals import (
     ANIMALS_WIKI_Q,
     ANIMALS_COBOT_Q,
     ANIMAL_MENTION_TEMPLATE,
-    ANIMAL_BLACKLIST,
+    ANIMAL_BADLIST,
 )
 from common.fact_retrieval import get_all_facts
 from common.universal_templates import if_chat_about_particular_topic
@@ -79,7 +79,7 @@ def animal_questions_request(ngrams, vars):
         and (
             found_bird
             or users_wild_animal
-            or (found_animal and found_animal not in ANIMAL_BLACKLIST)
+            or (found_animal and found_animal not in ANIMAL_BADLIST)
             or found_animal_in_list
             or found_animal_cnet
         )
@@ -103,7 +103,7 @@ def animal_questions_response(vars):
     animal_in_list = find_in_animals_list(annotations)
     found_bird = re.findall(r"(\bbird\b|\bbirds\b)", user_uttr["text"])
     facts = []
-    if animal_wp and animal_wp not in ANIMAL_BLACKLIST:
+    if animal_wp and animal_wp not in ANIMAL_BADLIST:
         facts = get_all_facts(annotations, "animal")
         if facts:
             state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
@@ -113,7 +113,7 @@ def animal_questions_response(vars):
             state_utils.save_to_shared_memory(vars, wild_animal_facts=facts)
 
     cur_animal = ""
-    if animal_wp and animal_wp not in ANIMAL_BLACKLIST:
+    if animal_wp and animal_wp not in ANIMAL_BADLIST:
         cur_animal = plural_nouns(animal_wp)
     elif animal_cnet:
         cur_animal = plural_nouns(animal_cnet)

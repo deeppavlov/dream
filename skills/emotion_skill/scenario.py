@@ -125,7 +125,7 @@ class EmotionSkillScenario:
             if len(step["next_step"]):
                 state = random.choice(step["next_step"])
         elif state == "sad_and_lonely" and just_asked_about_jokes and is_no:
-            reply = "Actually, I love jokes but not during this competition. Dead serious about that."
+            reply = "Actually, I love jokes but not now. Dead serious about that."
             confidence = 1.0
             state = ""
         elif state == "offered_advice":

@@ -6,23 +6,21 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-#  cobot-convers-evaluator-annotator:
-#    volumes:
-#      - "./annotators/CoBotConversationEvaluator:/src"
-#      - "~/.deeppavlov:/root/.deeppavlov"
-#    ports:
-#      - 8004:8004
-  cobot-nounphrases:
+  convers-evaluator-annotator:
     volumes:
-      - "./annotators/cobot_nounphrases:/src"
+      - "./annotators/ConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
+  spacy-nounphrases:
+    volumes:
+      - "./annotators/spacy_nounphrases:/src"
     ports:
       - 8006:8006
   program-y:
     volumes:
-      - "./skills/program-y:/src"
-      - "./skills/program-y/logs:/tmp"
-      - "./common:/src/dream_aiml/src/common"
-      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+      - "./skills/program_y:/src"
+      - "./common:/src/common"
     ports:
       - 8008:8008
   personality-catcher:
@@ -58,18 +56,16 @@ services:
       - "./common:/src/common"
     ports:
       - 8014:8014
-  blacklisted-words:
+  badlisted-words:
     volumes:
-      - "./annotators/BlacklistedWordsDetector:/src"
+      - "./annotators/BadlistedWordsDetector:/src"
       - "./common:/src/common"
     ports:
       - 8018:8018
   program-y-dangerous:
     volumes:
-      - "./skills/program-y-dangerous:/src"
-      - "./skills/program-y-dangerous/logs:/tmp"
-      - "./common:/src/dream_aiml/src/common"
-      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+      - "./skills/program_y_dangerous:/src"
+      - "./common:/src/common"
     ports:
       - 8022:8022
   dff-movie-skill:
@@ -119,12 +115,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8032:8032
-  weather-skill:
-    volumes:
-      - "./skills/weather_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8037:8037
   emotion-skill:
     volumes:
       - "./skills/emotion_skill:/src"
@@ -148,12 +138,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8054:8054
-  short-story-skill:
-    volumes:
-      - "./skills/short_story_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8057:8057
   small-talk-skill:
     volumes:
       - "./skills/small_talk_skill:/src"
@@ -168,10 +152,8 @@ services:
       - 8068:8068
   program-y-wide:
     volumes:
-      - "./skills/program-y-wide:/src"
-      - "./skills/program-y-wide/logs:/tmp"
-      - "./common:/src/dream_aiml/src/common"
-      - "./state_formatters:/src/dream_aiml/src/state_formatters"
+      - "./skills/program_y_wide:/src"
+      - "./common:/src/common"
     ports:
       - 8064:8064
   news-api-skill:
@@ -227,9 +209,9 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
-  grounding-skill:
+  dff-grounding-skill:
     volumes:
-      - "./skills/grounding_skill:/src"
+      - "./skills/dff_grounding_skill:/src"
       - "./common:/src/common"
     ports:
       - 8080:8080
@@ -406,6 +388,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8061:8061
+  dff-short-story-skill:
+    volumes:
+      - "./skills/dff_short_story_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8057:8057
+  dff-weather-skill:
+    volumes:
+      - "./skills/dff_weather_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8037:8037
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

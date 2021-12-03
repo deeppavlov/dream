@@ -15,7 +15,7 @@ ACTIVE_SKILLS = [
     "short_story_skill",
     "superbowl_skill",
     "valentines_dat_skill",
-    "weather_skill",
+    "dff_weather_skill",
     "wikidata_dial_skill",
     "comet_dialog_skill",
     "dff_animals_skill",

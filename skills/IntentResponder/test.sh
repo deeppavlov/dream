@@ -25,7 +25,7 @@ curl -H "Content-Type: application/json" -XPOST \
     "cobot_offensiveness": {
       "text": "non-toxic",
       "confidence":0.95,
-      "is_blacklisted":"not blacklist"
+      "is_badlisted":"not badlist"
     }
   },
   {
@@ -42,7 +42,7 @@ curl -H "Content-Type: application/json" -XPOST \
      "cobot_offensiveness": {
       "text": "non-toxic",
       "confidence":0.95,
-      "is_blacklisted":"not blacklist"
+      "is_badlisted":"not badlist"
     }
   }
   ]
@@ -75,7 +75,7 @@ curl -H "Content-Type: application/json" -XPOST \
  "cobot_offensiveness":{
      "text": "toxic",
      "confidence":0.95,
-     "is_blacklisted":"not blacklist"
+     "is_badlisted":"not badlist"
    }
  },
  {
@@ -92,7 +92,7 @@ curl -H "Content-Type: application/json" -XPOST \
  "cobot_offensiveness":{
      "text": "toxic",
      "confidence":0.95,
-     "is_blacklisted":"blacklist"
+     "is_badlisted":"badlist"
    }
  }
  ]

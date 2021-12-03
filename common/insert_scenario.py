@@ -19,7 +19,7 @@ from common.wiki_skill import (
     find_all_titles,
     used_types_dict,
     NEWS_MORE,
-    WIKI_BLACKLIST,
+    WIKI_BADLIST,
     QUESTION_TEMPLATES,
     QUESTION_TEMPLATES_SHORT,
     CONF_DICT,
@@ -147,7 +147,7 @@ def make_facts_str(paragraphs):
     for sentence in sentences:
         sanitized_sentence, mentions, mention_pages = delete_hyperlinks(sentence)
         words = nltk.word_tokenize(sanitized_sentence)
-        if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, sanitized_sentence):
+        if cur_len + len(words) < max_len and not re.findall(WIKI_BADLIST, sanitized_sentence):
             sentences_list.append(sanitized_sentence)
             cur_len += len(words)
             mentions_list += mentions
@@ -163,7 +163,7 @@ def make_facts_str(paragraphs):
         mention_pages_list += mention_pages
         for part in sentence_parts:
             words = nltk.word_tokenize(part)
-            if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, part):
+            if cur_len + len(words) < max_len and not re.findall(WIKI_BADLIST, part):
                 sentences_list.append(part)
                 cur_len += len(words)
             facts_str = ", ".join(sentences_list)

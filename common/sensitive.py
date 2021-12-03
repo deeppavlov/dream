@@ -27,15 +27,15 @@ def is_sensitive_topic_and_request(annotated_uttr):
     return False
 
 
-def is_blacklisted_words(annotated_uttr):
+def is_badlisted_words(annotated_uttr):
     user_uttr_annotations = annotated_uttr["annotations"]
-    blist_topics_detected = sum(user_uttr_annotations.get("blacklisted_words", {}).values())
+    blist_topics_detected = sum(user_uttr_annotations.get("badlisted_words", {}).values())
     if blist_topics_detected:
         return True
     return False
 
 
 def is_sensitive_situation(annotated_uttr):
-    if is_sensitive_topic_and_request(annotated_uttr) or is_blacklisted_words(annotated_uttr):
+    if is_sensitive_topic_and_request(annotated_uttr) or is_badlisted_words(annotated_uttr):
         return True
     return False

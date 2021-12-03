@@ -1,0 +1,316 @@
+[
+    [
+        [
+            "You've asked me whether i keep the secret information.",
+            "So, you wanna know whether i keep the secret information. Maybe, maybe not. I am sorry, I don't know."
+        ],
+        [
+            0.5,
+            0.7
+        ],
+        [
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 3,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "3": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "2": "Are you recording?",
+                            "3": "Do you keep the secret information?"
+                        },
+                        "responses": {
+                            "2": [
+                                [
+                                    "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon.com/alexaprivacy.",
+                                    1,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. It's so embarrassing, but I don't know.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "3": [
+                                [
+                                    "You've asked me whether i keep the secret information.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "So, you wanna know whether i keep the secret information. Maybe, maybe not. I am sorry, I don't know.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "Maybe, maybe not. I am sorry, I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "I'm ashamed, I don't know.",
+                                    "I don't even know yes or no.",
+                                    "It's so embarrassing, but I don't know.",
+                                    "Maybe, maybe not. I am sorry, I don't know."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": []
+            },
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 3,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "3": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "2": "Are you recording?",
+                            "3": "Do you keep the secret information?"
+                        },
+                        "responses": {
+                            "2": [
+                                [
+                                    "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon.com/alexaprivacy.",
+                                    1,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. It's so embarrassing, but I don't know.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "3": [
+                                [
+                                    "You've asked me whether i keep the secret information.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "So, you wanna know whether i keep the secret information. Maybe, maybe not. I am sorry, I don't know.",
+                                    0.7,
+                                    {
+                                        "grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "I'm ashamed, I don't know.",
+                                                "I don't even know yes or no.",
+                                                "It's so embarrassing, but I don't know.",
+                                                "Maybe, maybe not. I am sorry, I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "I'm ashamed, I don't know.",
+                                    "I don't even know yes or no.",
+                                    "It's so embarrassing, but I don't know.",
+                                    "Maybe, maybe not. I am sorry, I don't know."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": [],
+                "grounding_skill": {
+                    "used_universal_intent_responses": [
+                        "I'm ashamed, I don't know.",
+                        "I don't even know yes or no.",
+                        "It's so embarrassing, but I don't know.",
+                        "Maybe, maybe not. I am sorry, I don't know."
+                    ]
+                }
+            }
+        ],
+        [
+            {},
+            {}
+        ],
+        [
+            {
+                "can_continue": "can",
+                "response_parts": [
+                    "acknowledgement"
+                ]
+            },
+            {
+                "can_continue": "can",
+                "response_parts": [
+                    "acknowlegdement",
+                    "body"
+                ],
+                "type": "universal_response"
+            }
+        ]
+    ]
+]

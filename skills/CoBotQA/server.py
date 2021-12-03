@@ -77,7 +77,7 @@ def respond():
         sensitive_topics_detected = sensitive_topics & all_topics
         sensitive_dialogacts_detected = "?" in curr_uttr["text"] and (sensitive_dialogacts & all_intents)
         blist_topics_detected = (
-            curr_uttr.get("annotations", {}).get("blacklisted_words", {}).get("restricted_topics", False)
+            curr_uttr.get("annotations", {}).get("badlisted_words", {}).get("restricted_topics", False)
         )
         opinion_request_detected = ("Opinion_RequestIntent" in all_intents) or opinion_request_detected
         sensitive_case_request = sensitive_topics_detected and sensitive_dialogacts_detected

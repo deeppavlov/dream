@@ -19,12 +19,12 @@
                                 "Did you hear about virus?"
                             ]
                         },
-                        "blacklisted_words": {
+                        "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [
+                        "spacy_nounphrases": [
                             "1 very specific question",
                             "virus"
                         ],

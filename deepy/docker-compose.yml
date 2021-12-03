@@ -42,7 +42,7 @@ services:
       - 3004:3004
   program_y:
     build:
-      context: skills/program-y
+      context: skills/program_y
     ports:
       - 3005:3005
   intent_catcher:

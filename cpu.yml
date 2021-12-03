@@ -7,7 +7,7 @@ services:
   kbqa:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  cobot-nounphrases:
+  spacy-nounphrases:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   comet-atomic:
@@ -44,4 +44,9 @@ services:
       CUDA_VISIBLE_DEVICES: ""
   entity-detection:
     environment:
-      CUDA_VISIBLE_DEVICES: "" 
+      CUDA_VISIBLE_DEVICES: ""
+  convers-evaluator-annotator:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+
