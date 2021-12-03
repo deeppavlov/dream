@@ -27,5 +27,9 @@ class AppConfig(BaseSettings):
             return device
         return "cpu"
 
+    @property
+    def device(self):
+        return "cuda:0" if self.CUDA_VISIBLE_DEVICES != "cpu" else "cpu"
+
 
 settings = AppConfig()

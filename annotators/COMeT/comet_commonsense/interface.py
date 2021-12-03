@@ -22,7 +22,7 @@ class COMeTBaseEngine:
         self._n_vocab = len(self._text_encoder.encoder) + self._n_ctx
 
         self._model = interactive.make_model(self._opt, self._n_vocab, self._n_ctx, self._state_dict)
-        self._model.to(device=settings.CUDA_VISIBLE_DEVICES)
+        self._model.to(device=settings.device)
 
         self._input_event_model = None
         self._response_model = None
