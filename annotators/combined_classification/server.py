@@ -9,9 +9,15 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 from common.utils import combined_classes
 
-task_names = ['cobot_topics', 'cobot_dialogact_topics', 'cobot_dialogact_intents',
-              'emotion_classification', 'sentiment_classification',
-              'toxic_classification', 'factoid_classification']  # ORDER MATTERS!
+task_names = [
+    "cobot_topics",
+    "cobot_dialogact_topics",
+    "cobot_dialogact_intents",
+    "emotion_classification",
+    "sentiment_classification",
+    "toxic_classification",
+    "factoid_classification",
+]  # ORDER MATTERS!
 
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -34,21 +40,23 @@ def get_result(sentences, sentences_with_history):
         if sentences and sentences_with_history:
             res = model(sentences, sentences_with_history)
         else:
-            raise Exception(f"Empty list of sentences or sentences with history received."
-                            f"Sentences: {sentences} "
-                            f"Sentences with history: {sentences_with_history}")
+            raise Exception(
+                f"Empty list of sentences or sentences with history received."
+                f"Sentences: {sentences} "
+                f"Sentences with history: {sentences_with_history}"
+            )
 
         for name, value in zip(task_names, res):
             for i in range(len(value)):
-                is_toxic = ('toxic' in name and value[i][-1] < 0.5)
+                is_toxic = "toxic" in name and value[i][-1] < 0.5
                 if is_toxic:  # sum of probs of all toxic classes >0.5
                     value[i][-1] = 0
                     value[i] = [k / sum(value[i]) for k in value[i]]
                 for class_, prob in zip(combined_classes[name], value[i]):
                     if prob == max(value[i]):
-                        if class_ != 'not_toxic' and name == 'toxic_classification':
+                        if class_ != "not_toxic" and name == "toxic_classification":
                             prob = 1
-                        ans[i][name] = ({class_: float(prob)})
+                        ans[i][name] = {class_: float(prob)}
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -83,7 +91,7 @@ def respond():
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
-    sentences_with_hist = [' [SEP] '.join(s) for s in utterances_with_histories]
+    sentences_with_hist = [" [SEP] ".join(s) for s in utterances_with_histories]
     sentences = [s[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist)
 

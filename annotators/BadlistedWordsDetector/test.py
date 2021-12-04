@@ -9,17 +9,7 @@ def main():
     }
 
     result = requests.post(url, json=request_data).json()
-    gold_result = [
-        {
-            "bad_words": True
-        },
-        {
-            "bad_words": False
-        },
-        {
-            "bad_words": True
-        }
-    ]
+    gold_result = [{"bad_words": True}, {"bad_words": False}, {"bad_words": True}]
 
     assert result == gold_result, f"Got\n{result}\n, but expected:\n{gold_result}"
     print("Success")

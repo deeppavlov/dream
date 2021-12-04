@@ -164,12 +164,13 @@ SKILL_TRIGGERS = {
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
         "intents": ["tell_me_a_story"],
-    }
+    },
 }
 
 
-def turn_on_skills(cobot_topics, cobot_dialogact_topics, catched_intents,
-                   user_uttr_text, prev_bot_uttr_text, available_skills=None):
+def turn_on_skills(
+    cobot_topics, cobot_dialogact_topics, catched_intents, user_uttr_text, prev_bot_uttr_text, available_skills=None
+):
     """
     Function to turn on skills from SKILL_TRIGGERS based on
         - Cobot-topics, list of corresponding topics is in SKILL_TRIGGERS[skill_name][cobot_topics],
