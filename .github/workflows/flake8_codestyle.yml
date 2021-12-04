@@ -1,4 +1,4 @@
-name: run codestyle
+name: flake8 codestyle
 
 on: [pull_request]
   

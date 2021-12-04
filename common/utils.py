@@ -120,7 +120,7 @@ combined_classes = {
         "sexual_explicit",
         "threat",
         "toxic",
-        "not_toxic"
+        "not_toxic",
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "cobot_topics": [
@@ -158,7 +158,7 @@ combined_classes = {
         "Science_and_Technology",
         "Sports",
         "Politics",
-        "Inappropriate_Content"
+        "Inappropriate_Content",
     ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
@@ -1173,8 +1173,9 @@ def is_toxic_or_badlisted_utterance(annotated_utterance):
     default_badlist = {"bad_words": False}
     badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return bool(toxic_result) or any([badlist_result.get(bad, False)
-                                      for bad in ["bad_words", "inappropriate", "profanity"]])
+    return bool(toxic_result) or any(
+        [badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]]
+    )
 
 
 FACTOID_PATTERNS = re.compile(

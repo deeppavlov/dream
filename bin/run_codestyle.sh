@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pip3 install flake8==3.7.8
+pip3 install flake8
 
 for ARGUMENT in "$@"; do
 

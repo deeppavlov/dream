@@ -384,9 +384,7 @@ flows = {
             TRANSITIONS: {lbl.forward(2): cnd.true()},
         },
         "tell_genre": {
-            RESPONSE: loc_rsp.append_question(
-                initial="I believe that {cur_book_name} is {cur_genre}. "
-            ),
+            RESPONSE: loc_rsp.append_question(initial="I believe that {cur_book_name} is {cur_genre}. "),
             PROCESSING: {
                 "execute_response": loc_prs.execute_response,
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
@@ -551,9 +549,7 @@ flows = {
         },
         "cannot_name": {RESPONSE: loc_rsp.BOOK_ANY_PHRASE},
         "ask_question": {
-            RESPONSE: loc_rsp.append_question(
-                initial="Never heard about it. I will check it out later. "
-            ),
+            RESPONSE: loc_rsp.append_question(initial="Never heard about it. I will check it out later. "),
         },
         "unrecognized_author": {
             RESPONSE: loc_rsp.append_question(
@@ -561,9 +557,7 @@ flows = {
             ),
         },
         "no_book_author": {
-            RESPONSE: loc_rsp.append_question(
-                initial="{cur_book_author} is a wonderful writer! By the way, "
-            ),
+            RESPONSE: loc_rsp.append_question(initial="{cur_book_author} is a wonderful writer! By the way, "),
             PROCESSING: {
                 "get_author_regexp": loc_prs.get_author_regexp,
                 "execute_response": loc_prs.execute_response,
