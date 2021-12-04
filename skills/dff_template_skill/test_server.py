@@ -16,6 +16,8 @@ def handler(requested_data, random_seed):
 
 def run_test(handler):
     in_data, out_data = test_utils.get_dataset()
+    global_is_equal_flag = True
+    global_msg = ""
     for test_name in in_data:
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
@@ -25,8 +27,14 @@ def run_test(handler):
             is_equal_flag, ratio = test_utils.compare_text(ground_truth_text, hypothesis_text, 0.80)
             if not is_equal_flag:
                 msg = f"{msg} ratio = {ratio}"
-        assert is_equal_flag, msg
-        print("Success")
+        # assert is_equal_flag, msg
+        if is_equal_flag:
+            print("Success")
+        else:
+            print(is_equal_flag, msg)
+            global_msg += f"\nFailed test_name: {test_name} <-> msg: {msg}"
+            global_is_equal_flag = False
+    assert global_is_equal_flag, global_msg
 
 
 if __name__ == "__main__":
