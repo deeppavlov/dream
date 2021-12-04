@@ -247,7 +247,7 @@ def get_author(plain_entity: str, return_plain=False, mode="book") -> Optional[s
     author_entity = sorted_author_list[0]
     if return_plain:
         logger.info(f"Answer {author_entity}")
-        return author_entity    
+        return author_entity
     if is_wikidata_entity(author_entity):
         author_name = entity_to_label(author_entity)
         logger.info(f"Answer for get_author {author_name}")
