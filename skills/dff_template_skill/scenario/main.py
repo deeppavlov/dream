@@ -573,4 +573,4 @@ actor = Actor(
     start_label=("global_flow", "start"),
     fallback_label=("global_flow", "fallback"),
 )
-logger.info(f"Actor created successfully")
+logger.info("Actor created successfully")
