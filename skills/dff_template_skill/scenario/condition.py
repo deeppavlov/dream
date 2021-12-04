@@ -45,10 +45,10 @@ SIDE_INTENTS = {
     "who_made_you",
 }
 
-FAVORITE_PATTERN = r"fav|favou{0,1}rite|preferred|loved|beloved|fondling|best|most interesting"  # inherited from book utils + corrected
+FAVORITE_PATTERN = r"fav|favou{0,1}rite|preferred|loved|beloved|fondling|best|most interesting"  # extended
 FAVORITE_PREDICATES = r"like|prefer|love|adore|enjoy"
 CHRISTIANITY_PATTERN = (
-    r"(bibla\b|bible\b|bibel\b|scriptures\b|holy scripture\b|new testament\b)"  # inherited from book utils + corrected
+    r"(bibla\b|bible\b|bibel\b|scriptures\b|holy scripture\b|new testament\b)"  # extended
 )
 GENRE_SYNONYMS = r"(genre)|((kind|type|sort) of books)"
 BOOK_SYNONYMS = r"book|piece of literature|literary piece"
@@ -202,7 +202,7 @@ def user_favorite_factory(subject: str) -> str:
     """
     filled_template = rf"(my ({FAVORITE_PATTERN}) ({subject}) (is|are))|"
     rf"((['i]s|are) my ({FAVORITE_PATTERN}) ({subject}))|"
-    rf"(the best)|"
+    rf"(the best ({subject}))|"
     rf"(({subject}),{0,1} that i ({FAVORITE_PREDICATES})( the most)?)"
     return filled_template
 
@@ -373,10 +373,10 @@ dislikes_reading = cnd.any(
     [
         cnd.regexp(
             re.compile(
-                rf"((n['o]t (want|like) (to )?(go on|continue|hear|talk|discuss|speak|listen))|"
-                rf"(no more)|"
-                rf"(whatever)|"
-                rf"((stop|quit|exit)))",
+                r"((n['o]t (want|like) (to )?(go on|continue|hear|talk|discuss|speak|listen))|"
+                r"(no more)|"
+                r"(whatever)|"
+                r"((stop|quit|exit)))",
                 re.IGNORECASE,
             )
         ),

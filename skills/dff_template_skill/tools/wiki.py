@@ -267,7 +267,7 @@ def parse_author_best_book(annotated_phrase: Dict[str, str], default_phrase=None
         annotated_phrase["text"] = annotated_phrase["text"].split(" is ")[1]
     _, plain_bookname, _ = get_name(annotated_phrase, "book", return_plain=True)
     if plain_bookname is None:
-        logger.debug(f"Getting plain author")
+        logger.debug("Getting plain author")
         _, plain_author, _ = get_name(annotated_phrase, "author", return_plain=True)
     else:
         logger.debug(f"Processing bookname in get_author {plain_bookname}")

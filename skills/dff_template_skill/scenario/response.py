@@ -60,10 +60,10 @@ FAVOURITE_BOOK_ATTRS = {
         "cur_book_plain": "Q183883",
         "cur_book_author": "Jerome Salinger",
         "cur_genre": "a novel",
-        "fav_book_init": f' My favourite book is "The catcher in the rye" by Jerome David Salinger.',
-        "cur_book_about": f'The novel "The catcher in the rye" tells the story of a teenager '
-        f"who has been kicked out of a boarding school. "
-        f"This is my favourite story, it is truly fascinating.",
+        "fav_book_init": ' My favourite book is "The catcher in the rye" by Jerome David Salinger.',
+        "cur_book_about": 'The novel "The catcher in the rye" tells the story of a teenager '
+        "who has been kicked out of a boarding school. "
+        "This is my favourite story, it is truly fascinating.",
     },
     "The NeverEnding Story": {
         "cur_book_name": "The NeverEnding Story",
@@ -71,11 +71,11 @@ FAVOURITE_BOOK_ATTRS = {
         "cur_book_plain": "Q463108",
         "cur_book_author": "Michael Ende",
         "cur_genre": "a novel",
-        "fav_book_init": f'My other favourite book is "The NeverEnding Story" by Michael Ende.',
-        "cur_book_about": f' The "NeverEnding Story" tells the story of a troubled young boy Bastien '
-        f"who escapes some pursuing bullies in an old book shop. "
-        f"While he reads the book, he suddenly moves into the world described there, "
-        f"as the only one who can save it.",
+        "fav_book_init": 'My other favourite book is "The NeverEnding Story" by Michael Ende.',
+        "cur_book_about": ' The "NeverEnding Story" tells the story of a troubled young boy Bastien '
+        "who escapes some pursuing bullies in an old book shop. "
+        "While he reads the book, he suddenly moves into the world described there, "
+        "as the only one who can save it.",
     },
     "The Little Prince": {
         "cur_book_name": "The Little Prince",
@@ -83,10 +83,10 @@ FAVOURITE_BOOK_ATTRS = {
         "cur_book_plain": "Q25338",
         "cur_book_author": "Antoine de Saint-Exupéry",
         "cur_genre": "a novel",
-        "fav_book_init": f'I was really impressed by the book "The Little Prince" ' f"by Antoine de Saint-Exupéry.",
-        "cur_book_about": f" The Little Prince is a poetic tale, with watercolor illustrations by the author, "
-        f"in which a pilot stranded in the desert meets a young prince "
-        f"visiting Earth from a tiny asteroid.",
+        "fav_book_init": 'I was really impressed by the book "The Little Prince" ' "by Antoine de Saint-Exupéry.",
+        "cur_book_about": " The Little Prince is a poetic tale, with watercolor illustrations by the author, "
+        "in which a pilot stranded in the desert meets a young prince "
+        "visiting Earth from a tiny asteroid.",
     },
 }
 
