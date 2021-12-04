@@ -15,7 +15,7 @@ log = getLogger(__name__)
 
 
 def token_from_subtoken(units: tf.Tensor, mask: tf.Tensor) -> tf.Tensor:
-    """ Assemble token level units from subtoken level units
+    """Assemble token level units from subtoken level units
 
     Args:
         units: tf.Tensor of shape [batch_size, SUBTOKEN_seq_length, n_features]
@@ -128,11 +128,9 @@ def token_from_subtoken(units: tf.Tensor, mask: tf.Tensor) -> tf.Tensor:
 
     # prepare zeros for paddings
     # size: [batch_size * TOKEN_seq_length - n_words, n_features]
-    paddings = tf.zeros(tf.stack([tf.reduce_sum(max_token_seq_len - token_seq_lengths),
-                                  nf], 0), tf.float32)
+    paddings = tf.zeros(tf.stack([tf.reduce_sum(max_token_seq_len - token_seq_lengths), nf], 0), tf.float32)
 
-    tensor_flat = tf.dynamic_stitch([word_indices_flat, nonword_indices_flat],
-                                    [elements, paddings])
+    tensor_flat = tf.dynamic_stitch([word_indices_flat, nonword_indices_flat], [elements, paddings])
     # tensor_flat -> [x, x, x, x, x, 0, x, 0, 0]
 
     tensor = tf.reshape(tensor_flat, tf.stack([batch_size, max_token_seq_len, nf_int], 0))
@@ -143,7 +141,7 @@ def token_from_subtoken(units: tf.Tensor, mask: tf.Tensor) -> tf.Tensor:
     return tensor
 
 
-@register('bert_sequence_network')
+@register("bert_sequence_network")
 class BertSequenceNetwork(LRScheduledTFModel):
     """
     Basic class for BERT-based sequential architectures.
@@ -174,33 +172,37 @@ class BertSequenceNetwork(LRScheduledTFModel):
         clip_norm: clip gradients by norm
     """
 
-    def __init__(self,
-                 keep_prob: float,
-                 bert_config_file: str,
-                 pretrained_bert: str = None,
-                 attention_probs_keep_prob: float = None,
-                 hidden_keep_prob: float = None,
-                 encoder_layer_ids: List[int] = (-1,),
-                 encoder_dropout: float = 0.0,
-                 optimizer: str = None,
-                 weight_decay_rate: float = 1e-6,
-                 ema_decay: float = None,
-                 ema_variables_on_cpu: bool = True,
-                 freeze_embeddings: bool = False,
-                 learning_rate: float = 1e-3,
-                 bert_learning_rate: float = 2e-5,
-                 min_learning_rate: float = 1e-07,
-                 learning_rate_drop_patience: int = 20,
-                 learning_rate_drop_div: float = 2.0,
-                 load_before_drop: bool = True,
-                 clip_norm: float = 1.0,
-                 **kwargs) -> None:
-        super().__init__(learning_rate=learning_rate,
-                         learning_rate_drop_div=learning_rate_drop_div,
-                         learning_rate_drop_patience=learning_rate_drop_patience,
-                         load_before_drop=load_before_drop,
-                         clip_norm=clip_norm,
-                         **kwargs)
+    def __init__(
+        self,
+        keep_prob: float,
+        bert_config_file: str,
+        pretrained_bert: str = None,
+        attention_probs_keep_prob: float = None,
+        hidden_keep_prob: float = None,
+        encoder_layer_ids: List[int] = (-1,),
+        encoder_dropout: float = 0.0,
+        optimizer: str = None,
+        weight_decay_rate: float = 1e-6,
+        ema_decay: float = None,
+        ema_variables_on_cpu: bool = True,
+        freeze_embeddings: bool = False,
+        learning_rate: float = 1e-3,
+        bert_learning_rate: float = 2e-5,
+        min_learning_rate: float = 1e-07,
+        learning_rate_drop_patience: int = 20,
+        learning_rate_drop_div: float = 2.0,
+        load_before_drop: bool = True,
+        clip_norm: float = 1.0,
+        **kwargs
+    ) -> None:
+        super().__init__(
+            learning_rate=learning_rate,
+            learning_rate_drop_div=learning_rate_drop_div,
+            learning_rate_drop_patience=learning_rate_drop_patience,
+            load_before_drop=load_before_drop,
+            clip_norm=clip_norm,
+            **kwargs
+        )
         self.keep_prob = keep_prob
         self.encoder_layer_ids = encoder_layer_ids
         self.encoder_dropout = encoder_dropout
@@ -232,12 +234,14 @@ class BertSequenceNetwork(LRScheduledTFModel):
         if pretrained_bert is not None:
             pretrained_bert = str(expand_path(pretrained_bert))
 
-            if tf.train.checkpoint_exists(pretrained_bert) \
-                    and not (self.load_path and tf.train.checkpoint_exists(str(self.load_path.resolve()))):
-                log.info('[initializing model with Bert from {}]'.format(pretrained_bert))
+            if tf.train.checkpoint_exists(pretrained_bert) and not (
+                self.load_path and tf.train.checkpoint_exists(str(self.load_path.resolve()))
+            ):
+                log.info("[initializing model with Bert from {}]".format(pretrained_bert))
                 # Exclude optimizer and classification variables from saved variables
                 var_list = self._get_saveable_variables(
-                    exclude_scopes=('Optimizer', 'learning_rate', 'momentum', 'ner', 'EMA'))
+                    exclude_scopes=("Optimizer", "learning_rate", "momentum", "ner", "EMA")
+                )
                 saver = tf.train.Saver(var_list)
                 saver.restore(self.sess, pretrained_bert)
 
@@ -250,18 +254,19 @@ class BertSequenceNetwork(LRScheduledTFModel):
     def _init_graph(self) -> None:
         self.seq_lengths = tf.reduce_sum(self.y_masks_ph, axis=1)
 
-        self.bert = BertModel(config=self.bert_config,
-                              is_training=self.is_train_ph,
-                              input_ids=self.input_ids_ph,
-                              input_mask=self.input_masks_ph,
-                              token_type_ids=self.token_types_ph,
-                              use_one_hot_embeddings=False)
+        self.bert = BertModel(
+            config=self.bert_config,
+            is_training=self.is_train_ph,
+            input_ids=self.input_ids_ph,
+            input_mask=self.input_masks_ph,
+            token_type_ids=self.token_types_ph,
+            use_one_hot_embeddings=False,
+        )
 
-        with tf.variable_scope('ner'):
-            layer_weights = tf.get_variable('layer_weights_',
-                                            shape=len(self.encoder_layer_ids),
-                                            initializer=tf.ones_initializer(),
-                                            trainable=True)
+        with tf.variable_scope("ner"):
+            layer_weights = tf.get_variable(
+                "layer_weights_", shape=len(self.encoder_layer_ids), initializer=tf.ones_initializer(), trainable=True
+            )
             layer_mask = tf.ones_like(layer_weights)
             layer_mask = tf.nn.dropout(layer_mask, self.encoder_keep_prob_ph)
             layer_weights *= layer_mask
@@ -290,64 +295,51 @@ class BertSequenceNetwork(LRScheduledTFModel):
         return [self.bert.all_encoder_layers[i] for i in self.encoder_layer_ids]
 
     def _init_placeholders(self) -> None:
-        self.input_ids_ph = tf.placeholder(shape=(None, None),
-                                           dtype=tf.int32,
-                                           name='token_indices_ph')
-        self.input_masks_ph = tf.placeholder(shape=(None, None),
-                                             dtype=tf.int32,
-                                             name='token_mask_ph')
-        self.token_types_ph = \
-            tf.placeholder_with_default(tf.zeros_like(self.input_ids_ph, dtype=tf.int32),
-                                        shape=self.input_ids_ph.shape,
-                                        name='token_types_ph')
-        self.learning_rate_ph = tf.placeholder_with_default(0.0, shape=[], name='learning_rate_ph')
-        self.keep_prob_ph = tf.placeholder_with_default(1.0, shape=[], name='keep_prob_ph')
-        self.encoder_keep_prob_ph = tf.placeholder_with_default(1.0, shape=[], name='encoder_keep_prob_ph')
-        self.is_train_ph = tf.placeholder_with_default(False, shape=[], name='is_train_ph')
+        self.input_ids_ph = tf.placeholder(shape=(None, None), dtype=tf.int32, name="token_indices_ph")
+        self.input_masks_ph = tf.placeholder(shape=(None, None), dtype=tf.int32, name="token_mask_ph")
+        self.token_types_ph = tf.placeholder_with_default(
+            tf.zeros_like(self.input_ids_ph, dtype=tf.int32), shape=self.input_ids_ph.shape, name="token_types_ph"
+        )
+        self.learning_rate_ph = tf.placeholder_with_default(0.0, shape=[], name="learning_rate_ph")
+        self.keep_prob_ph = tf.placeholder_with_default(1.0, shape=[], name="keep_prob_ph")
+        self.encoder_keep_prob_ph = tf.placeholder_with_default(1.0, shape=[], name="encoder_keep_prob_ph")
+        self.is_train_ph = tf.placeholder_with_default(False, shape=[], name="is_train_ph")
 
     def _init_optimizer(self) -> None:
-        with tf.variable_scope('Optimizer'):
-            self.global_step = tf.get_variable('global_step',
-                                               shape=[],
-                                               dtype=tf.int32,
-                                               initializer=tf.constant_initializer(0),
-                                               trainable=False)
+        with tf.variable_scope("Optimizer"):
+            self.global_step = tf.get_variable(
+                "global_step", shape=[], dtype=tf.int32, initializer=tf.constant_initializer(0), trainable=False
+            )
             # default optimizer for Bert is Adam with fixed L2 regularization
 
         if self.optimizer is None:
-            self.train_op = \
-                self.get_train_op(self.loss,
-                                  learning_rate=self.learning_rate_ph,
-                                  optimizer=AdamWeightDecayOptimizer,
-                                  weight_decay_rate=self.weight_decay_rate,
-                                  beta_1=0.9,
-                                  beta_2=0.999,
-                                  epsilon=1e-6,
-                                  optimizer_scope_name='Optimizer',
-                                  exclude_from_weight_decay=["LayerNorm",
-                                                             "layer_norm",
-                                                             "bias",
-                                                             "EMA"])
+            self.train_op = self.get_train_op(
+                self.loss,
+                learning_rate=self.learning_rate_ph,
+                optimizer=AdamWeightDecayOptimizer,
+                weight_decay_rate=self.weight_decay_rate,
+                beta_1=0.9,
+                beta_2=0.999,
+                epsilon=1e-6,
+                optimizer_scope_name="Optimizer",
+                exclude_from_weight_decay=["LayerNorm", "layer_norm", "bias", "EMA"],
+            )
         else:
-            self.train_op = self.get_train_op(self.loss,
-                                              learning_rate=self.learning_rate_ph,
-                                              optimizer_scope_name='Optimizer')
+            self.train_op = self.get_train_op(
+                self.loss, learning_rate=self.learning_rate_ph, optimizer_scope_name="Optimizer"
+            )
 
         if self.optimizer is None:
-            with tf.variable_scope('Optimizer'):
+            with tf.variable_scope("Optimizer"):
                 new_global_step = self.global_step + 1
                 self.train_op = tf.group(self.train_op, [self.global_step.assign(new_global_step)])
 
         if self.ema_decay is not None:
-            _vars = self._get_trainable_variables(exclude_scopes=["Optimizer",
-                                                                  "LayerNorm",
-                                                                  "layer_norm",
-                                                                  "bias",
-                                                                  "learning_rate",
-                                                                  "momentum"])
+            _vars = self._get_trainable_variables(
+                exclude_scopes=["Optimizer", "LayerNorm", "layer_norm", "bias", "learning_rate", "momentum"]
+            )
 
-            self.ema = ExponentialMovingAverage(self.ema_decay,
-                                                variables_on_cpu=self.ema_variables_on_cpu)
+            self.ema = ExponentialMovingAverage(self.ema_decay, variables_on_cpu=self.ema_variables_on_cpu)
             self.train_op = self.ema.build(self.train_op, _vars, name="EMA")
         else:
             self.ema = None
@@ -355,22 +347,19 @@ class BertSequenceNetwork(LRScheduledTFModel):
     def get_train_op(self, loss: tf.Tensor, learning_rate: Union[tf.Tensor, float], **kwargs) -> tf.Operation:
         assert "learnable_scopes" not in kwargs, "learnable scopes unsupported"
         # train_op for bert variables
-        kwargs['learnable_scopes'] = ('bert/encoder', 'bert/embeddings')
+        kwargs["learnable_scopes"] = ("bert/encoder", "bert/embeddings")
         if self.freeze_embeddings:
-            kwargs['learnable_scopes'] = ('bert/encoder',)
+            kwargs["learnable_scopes"] = ("bert/encoder",)
         bert_learning_rate = learning_rate * self.bert_learning_rate_multiplier
-        bert_train_op = super().get_train_op(loss,
-                                             bert_learning_rate,
-                                             **kwargs)
+        bert_train_op = super().get_train_op(loss, bert_learning_rate, **kwargs)
         # train_op for ner head variables
-        kwargs['learnable_scopes'] = ('ner',)
-        head_train_op = super().get_train_op(loss,
-                                             learning_rate,
-                                             **kwargs)
+        kwargs["learnable_scopes"] = ("ner",)
+        head_train_op = super().get_train_op(loss, learning_rate, **kwargs)
         return tf.group(bert_train_op, head_train_op)
 
-    def _build_basic_feed_dict(self, input_ids: tf.Tensor, input_masks: tf.Tensor,
-                               token_types: Optional[tf.Tensor] = None, train: bool = False) -> dict:
+    def _build_basic_feed_dict(
+        self, input_ids: tf.Tensor, input_masks: tf.Tensor, token_types: Optional[tf.Tensor] = None, train: bool = False
+    ) -> dict:
         """Fills the feed_dict with the tensors defined in the basic class.
         You need to update this dict by the values of output placeholders
         and class-specific network inputs in your derived class.
@@ -382,22 +371,27 @@ class BertSequenceNetwork(LRScheduledTFModel):
         if token_types is not None:
             feed_dict[self.token_types_ph] = token_types
         if train:
-            feed_dict.update({
-                self.learning_rate_ph: max(self.get_learning_rate(), self.min_learning_rate),
-                self.keep_prob_ph: self.keep_prob,
-                self.encoder_keep_prob_ph: 1.0 - self.encoder_dropout,
-                self.is_train_ph: True,
-            })
+            feed_dict.update(
+                {
+                    self.learning_rate_ph: max(self.get_learning_rate(), self.min_learning_rate),
+                    self.keep_prob_ph: self.keep_prob,
+                    self.encoder_keep_prob_ph: 1.0 - self.encoder_dropout,
+                    self.is_train_ph: True,
+                }
+            )
 
         return feed_dict
 
     def _build_feed_dict(self, input_ids, input_masks, token_types=None, *args, **kwargs):
         raise NotImplementedError("You must implement _build_feed_dict in your derived class.")
 
-    def train_on_batch(self,
-                       input_ids: Union[List[List[int]], np.ndarray],
-                       input_masks: Union[List[List[int]], np.ndarray],
-                       *args, **kwargs) -> Dict[str, float]:
+    def train_on_batch(
+        self,
+        input_ids: Union[List[List[int]], np.ndarray],
+        input_masks: Union[List[List[int]], np.ndarray],
+        *args,
+        **kwargs
+    ) -> Dict[str, float]:
         """
 
         Args:
@@ -418,31 +412,27 @@ class BertSequenceNetwork(LRScheduledTFModel):
         if self.ema:
             self.sess.run(self.ema.switch_to_train_op)
         _, loss, lr = self.sess.run([self.train_op, self.loss, self.learning_rate_ph], feed_dict=feed_dict)
-        return {'loss': loss,
-                'head_learning_rate': float(lr),
-                'bert_learning_rate': float(lr) * self.bert_learning_rate_multiplier}
+        return {
+            "loss": loss,
+            "head_learning_rate": float(lr),
+            "bert_learning_rate": float(lr) * self.bert_learning_rate_multiplier,
+        }
 
-    def __call__(self,
-                 input_ids: Union[List[List[int]], np.ndarray],
-                 input_masks: Union[List[List[int]], np.ndarray],
-                 **kwargs) -> Union[List[List[int]], List[np.ndarray]]:
+    def __call__(
+        self, input_ids: Union[List[List[int]], np.ndarray], input_masks: Union[List[List[int]], np.ndarray], **kwargs
+    ) -> Union[List[List[int]], List[np.ndarray]]:
         raise NotImplementedError("You must implement method __call__ in your derived class.")
 
-    def save(self, exclude_scopes=('Optimizer', 'EMA/BackupVariables')) -> None:
+    def save(self, exclude_scopes=("Optimizer", "EMA/BackupVariables")) -> None:
         if self.ema:
             self.sess.run(self.ema.switch_to_train_op)
         return super().save(exclude_scopes=exclude_scopes)
 
-    def load(self,
-             exclude_scopes=('Optimizer',
-                             'learning_rate',
-                             'momentum',
-                             'EMA/BackupVariables'),
-             **kwargs) -> None:
+    def load(self, exclude_scopes=("Optimizer", "learning_rate", "momentum", "EMA/BackupVariables"), **kwargs) -> None:
         return super().load(exclude_scopes=exclude_scopes, **kwargs)
 
 
-@register('bert_sequence_tagger')
+@register("bert_sequence_tagger")
 class BertSequenceTagger(BertSequenceNetwork):
     """BERT-based model for text tagging. It predicts a label for every token (not subtoken) in the text.
     You can use it for sequence labeling tasks, such as morphological tagging or named entity recognition.
@@ -459,72 +449,78 @@ class BertSequenceTagger(BertSequenceNetwork):
         return_probas: set this to `True` if you need the probabilities instead of raw answers
     """
 
-    def __init__(self,
-                 n_tags: List[str],
-                 keep_prob: float,
-                 bert_config_file: str,
-                 pretrained_bert: str = None,
-                 attention_probs_keep_prob: float = None,
-                 hidden_keep_prob: float = None,
-                 use_crf=False,
-                 encoder_layer_ids: List[int] = (-1,),
-                 encoder_dropout: float = 0.0,
-                 optimizer: str = None,
-                 weight_decay_rate: float = 1e-6,
-                 use_birnn: bool = False,
-                 birnn_cell_type: str = 'lstm',
-                 birnn_hidden_size: int = 128,
-                 ema_decay: float = None,
-                 ema_variables_on_cpu: bool = True,
-                 return_probas: bool = False,
-                 freeze_embeddings: bool = False,
-                 learning_rate: float = 1e-3,
-                 bert_learning_rate: float = 2e-5,
-                 min_learning_rate: float = 1e-07,
-                 learning_rate_drop_patience: int = 20,
-                 learning_rate_drop_div: float = 2.0,
-                 load_before_drop: bool = True,
-                 clip_norm: float = 1.0,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        n_tags: List[str],
+        keep_prob: float,
+        bert_config_file: str,
+        pretrained_bert: str = None,
+        attention_probs_keep_prob: float = None,
+        hidden_keep_prob: float = None,
+        use_crf=False,
+        encoder_layer_ids: List[int] = (-1,),
+        encoder_dropout: float = 0.0,
+        optimizer: str = None,
+        weight_decay_rate: float = 1e-6,
+        use_birnn: bool = False,
+        birnn_cell_type: str = "lstm",
+        birnn_hidden_size: int = 128,
+        ema_decay: float = None,
+        ema_variables_on_cpu: bool = True,
+        return_probas: bool = False,
+        freeze_embeddings: bool = False,
+        learning_rate: float = 1e-3,
+        bert_learning_rate: float = 2e-5,
+        min_learning_rate: float = 1e-07,
+        learning_rate_drop_patience: int = 20,
+        learning_rate_drop_div: float = 2.0,
+        load_before_drop: bool = True,
+        clip_norm: float = 1.0,
+        **kwargs
+    ) -> None:
         self.n_tags = n_tags
         self.use_crf = use_crf
         self.use_birnn = use_birnn
         self.birnn_cell_type = birnn_cell_type
         self.birnn_hidden_size = birnn_hidden_size
         self.return_probas = return_probas
-        super().__init__(keep_prob=keep_prob,
-                         bert_config_file=bert_config_file,
-                         pretrained_bert=pretrained_bert,
-                         attention_probs_keep_prob=attention_probs_keep_prob,
-                         hidden_keep_prob=hidden_keep_prob,
-                         encoder_layer_ids=encoder_layer_ids,
-                         encoder_dropout=encoder_dropout,
-                         optimizer=optimizer,
-                         weight_decay_rate=weight_decay_rate,
-                         ema_decay=ema_decay,
-                         ema_variables_on_cpu=ema_variables_on_cpu,
-                         freeze_embeddings=freeze_embeddings,
-                         learning_rate=learning_rate,
-                         bert_learning_rate=bert_learning_rate,
-                         min_learning_rate=min_learning_rate,
-                         learning_rate_drop_div=learning_rate_drop_div,
-                         learning_rate_drop_patience=learning_rate_drop_patience,
-                         load_before_drop=load_before_drop,
-                         clip_norm=clip_norm,
-                         **kwargs)
+        super().__init__(
+            keep_prob=keep_prob,
+            bert_config_file=bert_config_file,
+            pretrained_bert=pretrained_bert,
+            attention_probs_keep_prob=attention_probs_keep_prob,
+            hidden_keep_prob=hidden_keep_prob,
+            encoder_layer_ids=encoder_layer_ids,
+            encoder_dropout=encoder_dropout,
+            optimizer=optimizer,
+            weight_decay_rate=weight_decay_rate,
+            ema_decay=ema_decay,
+            ema_variables_on_cpu=ema_variables_on_cpu,
+            freeze_embeddings=freeze_embeddings,
+            learning_rate=learning_rate,
+            bert_learning_rate=bert_learning_rate,
+            min_learning_rate=min_learning_rate,
+            learning_rate_drop_div=learning_rate_drop_div,
+            learning_rate_drop_patience=learning_rate_drop_patience,
+            load_before_drop=load_before_drop,
+            clip_norm=clip_norm,
+            **kwargs
+        )
 
     def _init_graph(self) -> None:
         self._init_placeholders()
 
         units = super()._init_graph()
 
-        with tf.variable_scope('ner'):
+        with tf.variable_scope("ner"):
             if self.use_birnn:
-                units, _ = bi_rnn(units,
-                                  self.birnn_hidden_size,
-                                  cell_type=self.birnn_cell_type,
-                                  seq_lengths=self.seq_lengths,
-                                  name='birnn')
+                units, _ = bi_rnn(
+                    units,
+                    self.birnn_hidden_size,
+                    cell_type=self.birnn_cell_type,
+                    seq_lengths=self.seq_lengths,
+                    name="birnn",
+                )
                 units = tf.concat(units, -1)
             # TODO: maybe add one more layer?
             logits = tf.layers.dense(units, units=self.n_tags, name="output_dense")
@@ -533,14 +529,12 @@ class BertSequenceTagger(BertSequenceNetwork):
 
             # CRF
             if self.use_crf:
-                transition_params = tf.get_variable('Transition_Params',
-                                                    shape=[self.n_tags, self.n_tags],
-                                                    initializer=tf.zeros_initializer())
-                log_likelihood, transition_params = \
-                    tf.contrib.crf.crf_log_likelihood(self.logits,
-                                                      self.y_ph,
-                                                      self.seq_lengths,
-                                                      transition_params)
+                transition_params = tf.get_variable(
+                    "Transition_Params", shape=[self.n_tags, self.n_tags], initializer=tf.zeros_initializer()
+                )
+                log_likelihood, transition_params = tf.contrib.crf.crf_log_likelihood(
+                    self.logits, self.y_ph, self.seq_lengths, transition_params
+                )
                 loss_tensor = -log_likelihood
                 self._transition_params = transition_params
 
@@ -553,27 +547,21 @@ class BertSequenceTagger(BertSequenceNetwork):
             if self.use_crf:
                 self.loss = tf.reduce_mean(loss_tensor)
             else:
-                self.loss = tf.losses.sparse_softmax_cross_entropy(labels=self.y_ph,
-                                                                   logits=self.logits,
-                                                                   weights=y_mask)
+                self.loss = tf.losses.sparse_softmax_cross_entropy(labels=self.y_ph, logits=self.logits, weights=y_mask)
 
     def _init_placeholders(self) -> None:
         super()._init_placeholders()
-        self.y_ph = tf.placeholder(shape=(None, None), dtype=tf.int32, name='y_ph')
-        self.y_masks_ph = tf.placeholder(shape=(None, None),
-                                         dtype=tf.int32,
-                                         name='y_mask_ph')
+        self.y_ph = tf.placeholder(shape=(None, None), dtype=tf.int32, name="y_ph")
+        self.y_masks_ph = tf.placeholder(shape=(None, None), dtype=tf.int32, name="y_mask_ph")
 
     def _decode_crf(self, feed_dict: Dict[tf.Tensor, np.ndarray]) -> List[np.ndarray]:
-        logits, trans_params, mask, seq_lengths = self.sess.run([self.logits,
-                                                                 self._transition_params,
-                                                                 self.y_masks_ph,
-                                                                 self.seq_lengths],
-                                                                feed_dict=feed_dict)
+        logits, trans_params, mask, seq_lengths = self.sess.run(
+            [self.logits, self._transition_params, self.y_masks_ph, self.seq_lengths], feed_dict=feed_dict
+        )
         # iterate over the sentences because no batching in viterbi_decode
         y_pred = []
         for logit, sequence_length in zip(logits, seq_lengths):
-            logit = logit[:int(sequence_length)]  # keep only the valid steps
+            logit = logit[: int(sequence_length)]  # keep only the valid steps
             viterbi_seq, viterbi_score = tf.contrib.crf.viterbi_decode(logit, trans_params)
             y_pred += [viterbi_seq]
         return y_pred
@@ -585,11 +573,13 @@ class BertSequenceTagger(BertSequenceNetwork):
             feed_dict[self.y_ph] = y
         return feed_dict
 
-    def __call__(self,
-                 input_ids: Union[List[List[int]], np.ndarray],
-                 input_masks: Union[List[List[int]], np.ndarray],
-                 y_masks: Union[List[List[int]], np.ndarray]) -> Union[List[List[int]], List[np.ndarray]]:
-        """ Predicts tag indices for a given subword tokens batch
+    def __call__(
+        self,
+        input_ids: Union[List[List[int]], np.ndarray],
+        input_masks: Union[List[List[int]], np.ndarray],
+        y_masks: Union[List[List[int]], np.ndarray],
+    ) -> Union[List[List[int]], List[np.ndarray]]:
+        """Predicts tag indices for a given subword tokens batch
 
         Args:
             input_ids: indices of the subwords
@@ -617,18 +607,13 @@ class BertSequenceTagger(BertSequenceNetwork):
 
 
 class ExponentialMovingAverage:
-    def __init__(self,
-                 decay: float = 0.999,
-                 variables_on_cpu: bool = True) -> None:
+    def __init__(self, decay: float = 0.999, variables_on_cpu: bool = True) -> None:
         self.decay = decay
         self.ema = tf.train.ExponentialMovingAverage(decay=decay)
-        self.var_device_name = '/cpu:0' if variables_on_cpu else None
+        self.var_device_name = "/cpu:0" if variables_on_cpu else None
         self.train_mode = None
 
-    def build(self,
-              minimize_op: tf.Tensor,
-              update_vars: List[tf.Variable] = None,
-              name: str = "EMA") -> tf.Tensor:
+    def build(self, minimize_op: tf.Tensor, update_vars: List[tf.Variable] = None, name: str = "EMA") -> tf.Tensor:
         with tf.variable_scope(name):
             if update_vars is None:
                 update_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
@@ -638,24 +623,22 @@ class ExponentialMovingAverage:
 
             with tf.device(self.var_device_name):
                 # Make backup variables
-                with tf.variable_scope('BackupVariables'):
-                    backup_vars = [tf.get_variable(var.op.name,
-                                                   dtype=var.value().dtype,
-                                                   trainable=False,
-                                                   initializer=var.initialized_value())
-                                   for var in update_vars]
+                with tf.variable_scope("BackupVariables"):
+                    backup_vars = [
+                        tf.get_variable(
+                            var.op.name, dtype=var.value().dtype, trainable=False, initializer=var.initialized_value()
+                        )
+                        for var in update_vars
+                    ]
 
                 def ema_to_weights():
-                    return tf.group(*(tf.assign(var, self.ema.average(var).read_value())
-                                      for var in update_vars))
+                    return tf.group(*(tf.assign(var, self.ema.average(var).read_value()) for var in update_vars))
 
                 def save_weight_backups():
-                    return tf.group(*(tf.assign(bck, var.read_value())
-                                      for var, bck in zip(update_vars, backup_vars)))
+                    return tf.group(*(tf.assign(bck, var.read_value()) for var, bck in zip(update_vars, backup_vars)))
 
                 def restore_weight_backups():
-                    return tf.group(*(tf.assign(var, bck.read_value())
-                                      for var, bck in zip(update_vars, backup_vars)))
+                    return tf.group(*(tf.assign(var, bck.read_value()) for var, bck in zip(update_vars, backup_vars)))
 
                 train_switch_op = restore_weight_backups()
                 with tf.control_dependencies([save_weight_backups()]):

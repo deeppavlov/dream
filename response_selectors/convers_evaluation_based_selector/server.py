@@ -318,8 +318,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
             score = CONV_EVAL_STRENGTH * score_conv_eval + curr_score
             logger.info(
-                f"Skill {skill_name} has final score: {score}. "
-                f"Toxicity: {is_toxics[i]}. Cand scores: {cand_scores}"
+                f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}. Cand scores: {cand_scores}"
             )
             curr_single_scores.append(score)
 
@@ -349,13 +348,9 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
     return best_candidate, best_id, curr_single_scores
 
 
-def select_response(
-    candidates, scores, confidences, is_toxics, dialog, all_prev_active_skills=None
-):
+def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev_active_skills=None):
     # TOXICITY & BADLISTS checks
-    n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(
-        scores, confidences, is_toxics
-    )
+    n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(scores, confidences, is_toxics)
     if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
         return None, np.random.choice(MOST_DUMMY_RESPONSES), 1.0, {}, {}
