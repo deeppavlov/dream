@@ -1,11 +1,11 @@
 [
     [
-        "My other favourite book is \"The NeverEnding Story\" by Michael Ende. May I tell you something about this book?",
+        "I've read it. It's an amazing book! Do you want to know when it was first published?",
         0.85,
         {
             "dff_template_skill_state": {
                 "shared_memory": {},
-                "previous_human_utter_index": 7,
+                "previous_human_utter_index": 5,
                 "history": {
                     "0": [
                         "books_general",
@@ -20,67 +20,54 @@
                         "told_why"
                     ],
                     "3": [
-                        "concrete_book_flow",
-                        "offer_date"
+                        "bible_flow",
+                        "bible_start"
                     ],
                     "4": [
-                        "concrete_book_flow",
-                        "tell_date"
+                        "bible_flow",
+                        "bible_elaborate"
                     ],
                     "5": [
                         "concrete_book_flow",
-                        "offer_genre"
-                    ],
-                    "6": [
-                        "concrete_book_flow",
-                        "tell_genre"
-                    ],
-                    "7": [
-                        "bot_fav_book",
-                        "fav_name"
+                        "offer_date"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "dc7116f7-0f64-4f5f-bc16-2e797ea32f8c",
+                    "id": "edbdb908-10c5-4887-a813-62f55d833ce6",
                     "labels": {
-                        "6": [
-                            "concrete_book_flow",
-                            "tell_genre"
+                        "4": [
+                            "bible_flow",
+                            "bible_elaborate"
                         ],
-                        "7": [
-                            "bot_fav_book",
-                            "fav_name"
+                        "5": [
+                            "concrete_book_flow",
+                            "offer_date"
                         ]
                     },
                     "requests": {
-                        "6": "tell me.",
-                        "7": "yes."
+                        "4": "yes.",
+                        "5": "Hobbit."
                     },
                     "responses": {
-                        "6": "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?",
-                        "7": "My other favourite book is \"The NeverEnding Story\" by Michael Ende. May I tell you something about this book?"
+                        "4": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
+                        "5": "I've read it. It's an amazing book! Do you want to know when it was first published?"
                     },
                     "misc": {
                         "flags": {
                             "book_skill_active": true
                         },
-                        "slots": {
-                            "cur_book_ago": "42 years ",
-                            "cur_book_name": "The NeverEnding Story",
-                            "cur_book_plain": "Q463108",
-                            "cur_genre": "a novel",
-                            "cur_book_author": "Michael Ende",
-                            "fav_book_init": "My other favourite book is \"The NeverEnding Story\" by Michael Ende.",
-                            "cur_book_about": " The \"NeverEnding Story\" tells the story of a troubled young boy Bastien who escapes some pursuing bullies in an old book shop. While he reads the book, he suddenly moves into the world described there, as the only one who can save it."
-                        },
                         "used_phrases": [
-                            140659711095024,
-                            140659712010736,
-                            140659711254400,
-                            140659711095216,
-                            140292076266480
-                        ]
+                            140403030105520,
+                            140403030779728,
+                            140403030734128,
+                            140403029930368
+                        ],
+                        "slots": {
+                            "cur_book_name": "hobbit",
+                            "cur_book_plain": "Q74287",
+                            "cur_book_ago": "84 years "
+                        }
                     },
                     "validation": false,
                     "actor_state": {}

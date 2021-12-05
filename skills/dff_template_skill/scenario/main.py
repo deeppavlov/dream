@@ -25,7 +25,6 @@ import scenario.response as loc_rsp
 
 
 fav_keys = list(loc_rsp.FAVOURITE_BOOK_ATTRS.keys())
-random.shuffle(fav_keys)
 fav_keys = iter(fav_keys)
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -450,7 +449,10 @@ flows = {
             },
         },
         "tell_date": {
-            RESPONSE: "{cur_book_ago} ago! " + random.choice(loc_rsp.DID_NOT_EXIST),
+            RESPONSE: loc_rsp.append_unused(
+                initial="{cur_book_ago} ago! ",
+                phrases=loc_rsp.DID_NOT_EXIST
+            ),
             PROCESSING: {
                 "get_book_year": loc_prs.get_book_year,
                 "execute_response": loc_prs.execute_response,

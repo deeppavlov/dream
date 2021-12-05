@@ -1,6 +1,6 @@
 {
     "human_utter_index_batch": [
-        7
+        5
     ],
     "dialog_batch": [
         {
@@ -17,11 +17,6 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "factoid_classification": {
-                            "factoid": 0.004438524600118399,
-                            "conversational": 0.9955614805221558
-                        },
-                        "cobot_nounphrases": [],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "Information_RequestIntent": 0.9977984428405762
@@ -42,6 +37,11 @@
                                 "toxic": 0.0014232397079467773
                             }
                         },
+                        "factoid_classification": {
+                            "factoid": 0.004438524600118399,
+                            "conversational": 0.9955614805221558
+                        },
+                        "cobot_nounphrases": [],
                         "conceptnet": {},
                         "sentseg": {
                             "punct_sent": "tell me.",
@@ -49,11 +49,6 @@
                                 "tell me."
                             ]
                         },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -144,6 +139,11 @@
                                 "detected": 1
                             }
                         },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
                         "midas_classification": [
                             {
                                 "appreciation": 0.0024648469407111406,
@@ -166,6 +166,24 @@
                             []
                         ],
                         "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Nick Saban finally found some rat poison to suit his taste.\nThe Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field. Former Crimson Tide defens... [999 chars]",
+                                    "description": "Nick Saban finally found some rat poison to suit his taste. The Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/12/Alabama-Nick-Saban-rat-poison.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-12-05T16:16:00Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Nick Saban thanks media for 'yummy' rat poison after Alabama win",
+                                    "url": "https://nypost.com/2021/12/05/nick-saban-thanks-media-for-yummy-rat-poison-after-alabama-win/"
+                                },
+                                "which": "all"
+                            }
+                        ],
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
@@ -176,39 +194,21 @@
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before.\nWicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school. At her doctor\u2019s... [3853 chars]",
-                                    "description": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before. Wicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school.",
-                                    "image": "https://i.guim.co.uk/img/media/c7355ea5f389a243c7f84a94bd8f7edc916efc42/0_0_5294_3176/master/5294.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=871a19e35641586417950c596f3617b8",
-                                    "publishedAt": "2021-12-04T11:02:00Z",
-                                    "source": {
-                                        "name": "The Guardian",
-                                        "url": "https://www.theguardian.com"
-                                    },
-                                    "title": "Supreme court case prompts California lawmaker to share her abortion experience",
-                                    "url": "https://www.theguardian.com/us-news/2021/dec/04/buffy-wicks-abortion-supreme-court-twitter"
-                                },
-                                "which": "all"
-                            }
-                        ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "84 years  ago! I am a bit too young to remember those times though.",
-                                "oh well.",
-                                "Do you know what is the genre of this book?",
-                                "tell me."
-                            ]
-                        },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
-                            "utt_num": 7,
+                            "utt_num": 5,
                             "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                                "Hobbit.",
+                                "Do you know what is the genre of this book?",
+                                "tell me."
+                            ]
                         }
                     }
                 },
@@ -224,6 +224,11 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "cobot_nounphrases": [],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.545558512210846,
@@ -245,17 +250,102 @@
                                 "toxic": 0.0072702765464782715
                             }
                         },
-                        "cobot_nounphrases": [],
-                        "factoid_classification": {
-                            "factoid": 0.004948326386511326,
-                            "conversational": 0.9950516819953918
-                        },
                         "conceptnet": {},
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [
                                 "yes."
                             ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
                         },
                         "topic_recommendation": [
                             "dff_movie_skill",
@@ -284,15 +374,6 @@
                         ],
                         "entity_detection": {},
                         "entity_linking": [],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "Do you know what is the genre of this book?",
-                                "tell me.",
-                                "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?",
-                                "yes, i want to know what your favourite book is. "
-                            ]
-                        },
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
@@ -303,20 +384,27 @@
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {}
+                        },
                         "news_api_annotator": [
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before.\nWicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school. At her doctor\u2019s... [3853 chars]",
-                                    "description": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before. Wicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school.",
-                                    "image": "https://i.guim.co.uk/img/media/c7355ea5f389a243c7f84a94bd8f7edc916efc42/0_0_5294_3176/master/5294.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=871a19e35641586417950c596f3617b8",
-                                    "publishedAt": "2021-12-04T11:02:00Z",
+                                    "content": "Nick Saban finally found some rat poison to suit his taste.\nThe Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field. Former Crimson Tide defens... [999 chars]",
+                                    "description": "Nick Saban finally found some rat poison to suit his taste. The Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/12/Alabama-Nick-Saban-rat-poison.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-12-05T16:16:00Z",
                                     "source": {
-                                        "name": "The Guardian",
-                                        "url": "https://www.theguardian.com"
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
                                     },
-                                    "title": "Supreme court case prompts California lawmaker to share her abortion experience",
-                                    "url": "https://www.theguardian.com/us-news/2021/dec/04/buffy-wicks-abortion-supreme-court-twitter"
+                                    "title": "Nick Saban thanks media for 'yummy' rat poison after Alabama win",
+                                    "url": "https://nypost.com/2021/12/05/nick-saban-thanks-media-for-yummy-rat-poison-after-alabama-win/"
                                 },
                                 "which": "all"
                             },
@@ -337,102 +425,14 @@
                                 "which": "bot"
                             }
                         ],
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 8,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 1.0,
-                                "detected": 1
-                            }
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Do you know what is the genre of this book?",
+                                "tell me.",
+                                "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?",
+                                "yes, i want to know what your favourite book is. "
+                            ]
                         }
                     }
                 }
@@ -461,12 +461,35 @@
                             []
                         ],
                         "sentrewrite": {
-                            "clusters": [],
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 6,
+                                        "ner": {
+                                            "offset": 5,
+                                            "type": "PER"
+                                        },
+                                        "resolved": "Hobbit",
+                                        "start": 0,
+                                        "text": "Hobbit"
+                                    },
+                                    {
+                                        "end": 82,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "Hobbit",
+                                        "start": 76,
+                                        "text": "hobbit"
+                                    }
+                                ]
+                            ],
                             "modified_sents": [
-                                "oh well.",
+                                "Hobbit.",
                                 "Do you know what is the genre of this book?",
                                 "tell me.",
-                                "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?"
+                                "I believe that Hobbit is a fairy tale. Do you want to know what my favourite book is?"
                             ]
                         }
                     },
@@ -479,13 +502,13 @@
         {
             "context": {
                 "actor_state": {},
-                "id": "dc7116f7-0f64-4f5f-bc16-2e797ea32f8c",
+                "id": "212fde0b-454b-4ad1-a63e-a4d71207a928",
                 "labels": {
-                    "5": [
+                    "3": [
                         "concrete_book_flow",
                         "offer_genre"
                     ],
-                    "6": [
+                    "4": [
                         "concrete_book_flow",
                         "tell_genre"
                     ]
@@ -501,19 +524,18 @@
                         "cur_genre": "a fairy tale"
                     },
                     "used_phrases": [
-                        140659711095024,
-                        140659712010736,
-                        140659711254400,
-                        140659711095216
+                        140403029917936,
+                        140403030788592,
+                        140403029918128
                     ]
                 },
                 "requests": {
-                    "5": "oh well.",
-                    "6": "tell me."
+                    "3": "Hobbit.",
+                    "4": "tell me."
                 },
                 "responses": {
-                    "5": "Do you know what is the genre of this book?",
-                    "6": "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?"
+                    "3": "Do you know what is the genre of this book?",
+                    "4": "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?"
                 },
                 "validation": false
             },
@@ -533,22 +555,14 @@
                 ],
                 "3": [
                     "concrete_book_flow",
-                    "offer_date"
-                ],
-                "4": [
-                    "concrete_book_flow",
-                    "tell_date"
-                ],
-                "5": [
-                    "concrete_book_flow",
                     "offer_genre"
                 ],
-                "6": [
+                "4": [
                     "concrete_book_flow",
                     "tell_genre"
                 ]
             },
-            "previous_human_utter_index": 6,
+            "previous_human_utter_index": 4,
             "shared_memory": {}
         }
     ],

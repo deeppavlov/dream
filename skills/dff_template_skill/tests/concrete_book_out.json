@@ -5,7 +5,7 @@
         {
             "dff_template_skill_state": {
                 "shared_memory": {},
-                "previous_human_utter_index": 7,
+                "previous_human_utter_index": 5,
                 "history": {
                     "0": [
                         "books_general",
@@ -21,45 +21,37 @@
                     ],
                     "3": [
                         "concrete_book_flow",
-                        "offer_date"
+                        "offer_genre"
                     ],
                     "4": [
                         "concrete_book_flow",
-                        "tell_date"
-                    ],
-                    "5": [
-                        "concrete_book_flow",
-                        "offer_genre"
-                    ],
-                    "6": [
-                        "concrete_book_flow",
                         "tell_genre"
                     ],
-                    "7": [
+                    "5": [
                         "bot_fav_book",
                         "fav_name"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "dc7116f7-0f64-4f5f-bc16-2e797ea32f8c",
+                    "id": "212fde0b-454b-4ad1-a63e-a4d71207a928",
                     "labels": {
-                        "6": [
+                        "4": [
                             "concrete_book_flow",
                             "tell_genre"
                         ],
-                        "7": [
+                        "5": [
                             "bot_fav_book",
                             "fav_name"
                         ]
                     },
                     "requests": {
-                        "6": "tell me.",
-                        "7": "yes."
+                        "4": "tell me.",
+                        "5": "yes."
                     },
                     "responses": {
-                        "6": "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?",
-                        "7": " My favourite book is \"The catcher in the rye\" by Jerome David Salinger. May I tell you something about this book?"
+                        "4": "I believe that hobbit is a fairy tale. Do you want to know what my favourite book is?",
+                        "5": " My favourite book is \"The catcher in the rye\" by Jerome David Salinger. May I tell you something about this book?"
                     },
                     "misc": {
                         "flags": {
@@ -75,11 +67,10 @@
                             "cur_book_about": "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, it is truly fascinating."
                         },
                         "used_phrases": [
-                            140659711095024,
-                            140659712010736,
-                            140659711254400,
-                            140659711095216,
-                            140659711095792
+                            140403029917936,
+                            140403030788592,
+                            140403029918128,
+                            140403029918704
                         ]
                     },
                     "validation": false,
