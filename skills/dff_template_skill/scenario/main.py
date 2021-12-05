@@ -205,7 +205,7 @@ flows = {
     "global_flow": {
         "start": {
             RESPONSE: "",
-            PROCESSING: {1: int_prs.set_can_continue(MUST_CONTINUE)},
+            PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
             TRANSITIONS: {("books_general", "book_start", 2): cnd.true()},
         },
         "fallback": {

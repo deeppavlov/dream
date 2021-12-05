@@ -1,272 +1,10 @@
 {
     "human_utter_index_batch": [
-        4
+        5
     ],
     "dialog_batch": [
         {
             "human_utterances": [
-                {
-                    "text": "the new testament.",
-                    "annotations": {
-                        "spelling_preprocessing": "the new testament",
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "blacklisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.01887902058660984,
-                            "conversational": 0.9811210036277771
-                        },
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.952994167804718
-                            },
-                            "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9948868751525879
-                            },
-                            "cobot_topics": {
-                                "Movies_TV": 0.9976483583450317
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9951903820037842
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.6289612054824829
-                            },
-                            "toxic_classification": {
-                                "insult": 0.001562744379043579
-                            }
-                        },
-                        "cobot_nounphrases": [
-                            "the new testament"
-                        ],
-                        "conceptnet": {
-                            "the new testament": {
-                                "Causes": [
-                                    "repentance",
-                                    "enlightenment",
-                                    "revelation"
-                                ],
-                                "CausesDesire": [
-                                    "read it",
-                                    "read bible",
-                                    "pray"
-                                ],
-                                "HasProperty": [
-                                    "very important",
-                                    "read",
-                                    "very important to human"
-                                ],
-                                "SymbolOf": [
-                                    "christianity",
-                                    "faith",
-                                    "islam"
-                                ]
-                            }
-                        },
-                        "sentseg": {
-                            "punct_sent": "the new testament.",
-                            "segments": [
-                                "the new testament."
-                            ]
-                        },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.0007422055350616574,
-                                "command": 0.0032859891653060913,
-                                "comment": 0.0013797413557767868,
-                                "complaint": 0.0015873352531343699,
-                                "dev_command": 0.0022266763262450695,
-                                "neg_answer": 0.000578071631025523,
-                                "open_question_factual": 0.001576541573740542,
-                                "open_question_opinion": 0.0008679459569975734,
-                                "opinion": 0.02490239217877388,
-                                "other_answers": 0.0008675723220221698,
-                                "pos_answer": 0.0006289544980973005,
-                                "statement": 0.9601196050643921,
-                                "yes_no_question": 0.001237047603353858
-                            }
-                        ],
-                        "entity_detection": {
-                            "entities": [
-                                "new testament"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "videoname",
-                                    "offsets": [
-                                        4,
-                                        17
-                                    ],
-                                    "text": "new testament"
-                                }
-                            ]
-                        },
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [],
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_random": [],
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "I enjoy reading so much! Books help me understand humans much better. Why do you enjoy reading?",
-                                "For no reason.",
-                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
-                                "the new testament."
-                            ]
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 4,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before.\nWicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school. At her doctor\u2019s... [3853 chars]",
-                                    "description": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before. Wicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school.",
-                                    "image": "https://i.guim.co.uk/img/media/c7355ea5f389a243c7f84a94bd8f7edc916efc42/0_0_5294_3176/master/5294.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=871a19e35641586417950c596f3617b8",
-                                    "publishedAt": "2021-12-04T11:02:00Z",
-                                    "source": {
-                                        "name": "The Guardian",
-                                        "url": "https://www.theguardian.com"
-                                    },
-                                    "title": "Supreme court case prompts California lawmaker to share her abortion experience",
-                                    "url": "https://www.theguardian.com/us-news/2021/dec/04/buffy-wicks-abortion-supreme-court-twitter"
-                                },
-                                "which": "all"
-                            },
-                            {
-                                "entity": "new testament",
-                                "news": {
-                                    "content": "The sign quotes a verse from the New Testament\nA religious billboard led to a highway collision in the West Kootenay Tuesday, Oct. 12, according to Mounties.\nGrand Forks RCMP said no one was hurt when, at around 3:15 p.m., a late model Subaru SUV cam... [1449 chars]",
-                                    "description": "The sign quotes a verse from the New Testament\nA religious billboard led to a highway collision in the West Kootenay Tuesday, Oct. 12, according to Mounties.",
-                                    "image": "https://www.caledoniacourier.com/wp-content/uploads/2021/10/26813463_web1_211020-GFG-JESUS_SIGN--CU_1-1024x683.jpg",
-                                    "publishedAt": "2021-10-13T19:15:00Z",
-                                    "source": {
-                                        "name": "Caledonia Courier",
-                                        "url": "https://www.caledoniacourier.com"
-                                    },
-                                    "title": "Driver blames \u2018Jesus sign\u2019 after Highway 3 collision",
-                                    "url": "https://www.caledoniacourier.com/news/driver-blames-jesus-sign-after-highway-3-collision/"
-                                },
-                                "which": "human"
-                            }
-                        ]
-                    }
-                },
                 {
                     "text": "yes.",
                     "annotations": {
@@ -276,12 +14,6 @@
                             "profanity": false,
                             "restricted_topics": false
                         },
-                        "cobot_nounphrases": [],
-                        "factoid_classification": {
-                            "factoid": 0.004948326386511326,
-                            "conversational": 0.9950516819953918
-                        },
-                        "conceptnet": {},
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.545558512210846,
@@ -303,20 +35,18 @@
                                 "toxic": 0.0072702765464782715
                             }
                         },
-                        "asr": {
-                            "asr_confidence": "undefined"
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
                         },
+                        "cobot_nounphrases": [],
+                        "conceptnet": {},
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [
                                 "yes."
                             ]
                         },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -407,6 +137,14 @@
                                 "detected": 1
                             }
                         },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
                         "midas_classification": [
                             {
                                 "appreciation": 0.0011744361836463213,
@@ -450,7 +188,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
-                                "the new testament.",
+                                "The new testament.",
                                 "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
                                 "yes, i have read the whole bible. "
                             ]
@@ -459,32 +197,618 @@
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before.\nWicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school. At her doctor\u2019s... [3853 chars]",
-                                    "description": "Early one morning this fall, the California state assemblywoman Buffy Wicks felt a type of pain she had never experienced before. Wicks, 44, found herself doubled over in pain, barely able to walk or get her daughter ready for school.",
-                                    "image": "https://i.guim.co.uk/img/media/c7355ea5f389a243c7f84a94bd8f7edc916efc42/0_0_5294_3176/master/5294.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=871a19e35641586417950c596f3617b8",
-                                    "publishedAt": "2021-12-04T11:02:00Z",
+                                    "content": "ATLANTA \u2014 Most of the time in November, Alabama barely held on. It started December by routing Georgia, the country\u2019s top-ranked team.\nThe upshot felt as familiar as anything in college football: Alabama, the reigning national champion suddenly cast ... [769 chars]",
+                                    "description": "ATLANTA \u2014 Most of the time in November, Alabama barely held on. It started December by routing Georgia, the country\u2019s top-ranked team.",
+                                    "image": "https://static01.nyt.com/images/2021/12/04/sports/04cfb-sec01/04cfb-sec01-facebookJumbo.jpg",
+                                    "publishedAt": "2021-12-05T10:50:00Z",
                                     "source": {
-                                        "name": "The Guardian",
-                                        "url": "https://www.theguardian.com"
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
                                     },
-                                    "title": "Supreme court case prompts California lawmaker to share her abortion experience",
-                                    "url": "https://www.theguardian.com/us-news/2021/dec/04/buffy-wicks-abortion-supreme-court-twitter"
+                                    "title": "Alabama Picks Apart Georgia, Setting Course for Another Playoff",
+                                    "url": "https://www.nytimes.com/2021/12/04/sports/ncaafootball/alabama-georgia-sec-championship.html"
                                 },
                                 "which": "all"
                             },
                             {
                                 "entity": "bible",
                                 "news": {
-                                    "content": "FILE - Actor-director-writer Mel Brooks poses next to a framed poster of his 1974 film \"Blazing Saddles\" in Los Angeles on July 23, 1991. Brooks released a memoir, \"All About Me!: My Remarkable Life in Show Business.\" (AP Photo/Nick Ut, File)\nFILE - ... [12515 chars]",
-                                    "description": "FILE - Actor-director-writer Mel Brooks poses next to a framed poster of his 1974 film \"Blazing Saddles\" in Los Angeles on July 23, 1991. Brooks released a memoir, \"All About Me!",
-                                    "image": "https://storage.googleapis.com/afs-prod/media/01a0aa3befeb4cdfb76bb61aedc58b06/2626.jpeg",
-                                    "publishedAt": "2021-11-30T18:02:01Z",
+                                    "content": "The Lee family says they anticipate the reading will take around seventy to eighty hours, around 8 to ten days, in all.\nCAMDEN, S.C. \u2014 You might have heard voices echoing throughout downtown Camden, thanks to a local couple who have organized a publi... [1755 chars]",
+                                    "description": "The Lee family says they anticipate the reading will take around seventy to eighty hours, around 8 to ten days, in all.",
+                                    "image": "https://media.wltx.com/assets/WLTX/images/cec125c4-2354-41e7-9904-d6f44eb2e1ba/cec125c4-2354-41e7-9904-d6f44eb2e1ba_1140x641.jpg",
+                                    "publishedAt": "2021-12-01T02:27:00Z",
                                     "source": {
-                                        "name": "The Associated Press",
-                                        "url": "https://apnews.com"
+                                        "name": "WLTX.com",
+                                        "url": "https://www.wltx.com"
                                     },
-                                    "title": "Q&A: Mel Brooks, 95, is still riffing",
-                                    "url": "https://apnews.com/article/entertainment-lifestyle-new-york-brooklyn-billy-crystal-d6ff5c097cb7d07c9e8db8967e6c739d"
+                                    "title": "Hear the Bible read in downtown Camden this week",
+                                    "url": "https://www.wltx.com/article/news/local/street-squad/kershaw-county/putting-faith-into-action/101-78cdc230-3fa5-48d8-8461-feec6b45b7ad"
+                                },
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "Hobbit.",
+                    "annotations": {
+                        "spelling_preprocessing": "Hobbit",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.043572090566158295,
+                            "conversational": 0.9564278721809387
+                        },
+                        "cobot_nounphrases": [
+                            "hobbit"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9994829893112183
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9984859824180603
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.997748613357544
+                            },
+                            "emotion_classification": {
+                                "joy": 0.508831262588501,
+                                "neutral": 0.9956690073013306
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6573148965835571
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0013045966625213623
+                            }
+                        },
+                        "conceptnet": {
+                            "hobbit": {
+                                "Causes": [
+                                    "fall down hill",
+                                    "fall down",
+                                    "climb mountain"
+                                ],
+                                "CausesDesire": [
+                                    "climb mountain",
+                                    "play game of chess",
+                                    "play game"
+                                ],
+                                "HasProperty": [
+                                    "old",
+                                    "dead",
+                                    "small"
+                                ],
+                                "SymbolOf": [
+                                    "us",
+                                    "space",
+                                    "christianity"
+                                ]
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "Hobbit.",
+                            "segments": [
+                                "Hobbit."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0005254006246104836,
+                                "command": 0.0008299135370180011,
+                                "comment": 0.0014415857149288058,
+                                "complaint": 0.0005012197652831674,
+                                "dev_command": 0.0004698382399510592,
+                                "neg_answer": 0.00040920719038695097,
+                                "open_question_factual": 0.0006692379829473794,
+                                "open_question_opinion": 0.0007769588264636695,
+                                "opinion": 0.9902811050415039,
+                                "other_answers": 0.000655903946608305,
+                                "pos_answer": 0.0005464060232043266,
+                                "statement": 0.0025709988549351692,
+                                "yes_no_question": 0.000322213105391711
+                            }
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 1,
+                                    "start_pos": 0,
+                                    "text": "hobbit",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "hobbit"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        0,
+                                        6
+                                    ],
+                                    "text": "hobbit"
+                                }
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.510536253452301,
+                                    0.3659169375896454,
+                                    0.21923066675662994,
+                                    0.7051779627799988,
+                                    0.27844151854515076
+                                ],
+                                "entity_ids": [
+                                    "Q74287",
+                                    "Q74229",
+                                    "Q612602",
+                                    "Q74359",
+                                    "Q1187415"
+                                ],
+                                "entity_pages": [
+                                    "The Hobbit, or There and Back Again is a childrens fantasy novel by English author J. R. R. Tolkien. It was published on 21 September 1937 to wide critical acclaim, being nominated for the Carnegie Medal and awarded a prize from the New York Herald Tribune for best juvenile fiction. The book remains popular and is recognized as a classic in childrens literature.",
+                                    "The Hobbit is a 1977 American animated musical television special created by Rankin/Bass, a studio known for their holiday specials, and animated by Topcraft, a precursor to Studio Ghibli. The film is an adaptation of the 1937 book of the same name by J. R. R. Tolkien, and was first broadcast on NBC in the United States on Sunday, November 27, 1977."
+                                ],
+                                "entity_pages_titles": [
+                                    "The Hobbit",
+                                    "The Hobbit (1977 film)",
+                                    "Christian Berm\u00fadez",
+                                    "Hobbit",
+                                    "The Hobbit (1985 film)"
+                                ],
+                                "entity_substr": "hobbit",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                                "yes, i have read the whole bible. ",
+                                "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
+                                "Hobbit."
+                            ]
+                        },
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "hobbit": {
+                                    "author": [
+                                        [
+                                            "Q892",
+                                            "J R R Tolkien"
+                                        ]
+                                    ],
+                                    "conf": 0.510536253452301,
+                                    "entity_label": "The Hobbit",
+                                    "genre": [
+                                        [
+                                            "Q10992055",
+                                            "speculative fiction novel"
+                                        ],
+                                        [
+                                            "Q21615367",
+                                            "children's novel"
+                                        ],
+                                        [
+                                            "Q3811649",
+                                            "juvenile fantasy"
+                                        ],
+                                        [
+                                            "Q699",
+                                            "fairy tale"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q79734",
+                                            "Middle-earth"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q74287",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1937-09-21^^T\"",
+                                            "21 September 1937"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "hobbit": {
+                                    "author": [
+                                        [
+                                            "Q892",
+                                            "J R R Tolkien"
+                                        ]
+                                    ],
+                                    "conf": 0.510536253452301,
+                                    "entity_label": "The Hobbit",
+                                    "genre": [
+                                        [
+                                            "Q10992055",
+                                            "speculative fiction novel"
+                                        ],
+                                        [
+                                            "Q21615367",
+                                            "children's novel"
+                                        ],
+                                        [
+                                            "Q3811649",
+                                            "juvenile fantasy"
+                                        ],
+                                        [
+                                            "Q699",
+                                            "fairy tale"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q79734",
+                                            "Middle-earth"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q74287",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1937-09-21^^T\"",
+                                            "21 September 1937"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {
+                                "hobbit": {
+                                    "age": 34,
+                                    "conf": 0.21923066675662994,
+                                    "country for sport": [
+                                        [
+                                            "Q96",
+                                            "Mexico"
+                                        ]
+                                    ],
+                                    "country of sitizenship": [
+                                        [
+                                            "Q96",
+                                            "Mexico"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1987-04-26^^T\"",
+                                            "26 April 1987"
+                                        ]
+                                    ],
+                                    "entity_label": "Hobbit Bermudez",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of sport team": [
+                                        [
+                                            "Q1426348",
+                                            "Chiapas F C "
+                                        ],
+                                        [
+                                            "Q164089",
+                                            "Mexico national football team"
+                                        ],
+                                        [
+                                            "Q164334",
+                                            "Mexico national under-20 football team"
+                                        ],
+                                        [
+                                            "Q459090",
+                                            "Club Am\u00e9rica"
+                                        ],
+                                        [
+                                            "Q606210",
+                                            "Quer\u00e9taro F C "
+                                        ],
+                                        [
+                                            "Q646596",
+                                            "Puebla F C "
+                                        ],
+                                        [
+                                            "Q849949",
+                                            "Atlante F C "
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q937857",
+                                            "association football player"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q612602",
+                                    "pos": 2,
+                                    "position played on team": [
+                                        [
+                                            "Q193592",
+                                            "midfielder"
+                                        ],
+                                        [
+                                            "Q280658",
+                                            "forward"
+                                        ]
+                                    ],
+                                    "sport": [
+                                        [
+                                            "Q2736",
+                                            "association football"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q18536342",
+                                            "competitive player"
+                                        ],
+                                        [
+                                            "Q937857",
+                                            "association football player"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "ATLANTA \u2014 Most of the time in November, Alabama barely held on. It started December by routing Georgia, the country\u2019s top-ranked team.\nThe upshot felt as familiar as anything in college football: Alabama, the reigning national champion suddenly cast ... [769 chars]",
+                                    "description": "ATLANTA \u2014 Most of the time in November, Alabama barely held on. It started December by routing Georgia, the country\u2019s top-ranked team.",
+                                    "image": "https://static01.nyt.com/images/2021/12/04/sports/04cfb-sec01/04cfb-sec01-facebookJumbo.jpg",
+                                    "publishedAt": "2021-12-05T10:50:00Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Alabama Picks Apart Georgia, Setting Course for Another Playoff",
+                                    "url": "https://www.nytimes.com/2021/12/04/sports/ncaafootball/alabama-georgia-sec-championship.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "hobbit",
+                                "news": {
+                                    "content": "EMBED >More News Videos A new series offers a rare look behind the scenes with Music legend Paul McCartney. In Hulu's \"McCartney 3, 2, 1\", He sat down with producer Rick Rubin for an intimate conversation about music... and much more.\nDirector Peter ... [2405 chars]",
+                                    "description": "EMBED >More News Videos A new series offers a rare look behind the scenes with Music legend Paul McCartney. In Hulu's \"McCartney 3, 2, 1\", He sat down with producer Rick Rubin for an intimate conversation about music... and much more.",
+                                    "image": "https://cdn.abcotvs.com/dip/images/11270800_11252021-kabc-4pm-geo-beatles-documentary-vid.jpg?w=1600",
+                                    "publishedAt": "2021-11-26T22:03:00Z",
+                                    "source": {
+                                        "name": "KABC-TV",
+                                        "url": "https://abc7.com"
+                                    },
+                                    "title": "'The Beatles: Get Back' was a labor of love for Peter Jackson, who spent 4 years editing docuseries",
+                                    "url": "https://abc7.com/beatles-get-back-peter-jackson-director/11270260/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "socialbot",
+                                "news": {
+                                    "content": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.\nThe Transform Technology Summits start October 13th with Low-Code/No Code: Enab... [5130 chars]",
+                                    "description": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.",
+                                    "image": "https://venturebeat.com/wp-content/themes/vb-news/img/favicon.ico",
+                                    "publishedAt": "2021-08-19T17:15:03Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Amazon taps its SocialBot challenge to boost conversational AI",
+                                    "url": "https://venturebeat.com/2021/08/19/amazon-taps-its-socialbot-challenge-to-boost-conversational-ai/"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "heaven",
+                                "news": {
+                                    "content": "Progressives are grousing that the tax and spending bill passed by the House doesn\u2019t include an \u201cenforcement mechanism\u201d to reduce greenhouse gases. If only. The fine print grants the Biden Administration new authority to force CO2 reductions across m... [407 chars]",
+                                    "description": "Progressives are grousing that the tax and spending bill passed by the House doesn\u2019t include an \u201cenforcement mechanism\u201d to reduce greenhouse gases. If only.",
+                                    "image": "https://images.wsj.net/im-445371/social",
+                                    "publishedAt": "2021-12-02T23:42:00Z",
+                                    "source": {
+                                        "name": "The Wall Street Journal",
+                                        "url": "https://www.wsj.com"
+                                    },
+                                    "title": "Pete Buttigieg\u2019s Highway to Green Heaven",
+                                    "url": "https://www.wsj.com/articles/pete-buttigiegs-highway-to-green-heaven-biden-administration-house-spending-bill-emissions-epa-11638481930"
                                 },
                                 "which": "bot"
                             }
@@ -494,24 +818,31 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                    "text": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                            "punct_sent": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
                             "segments": [
-                                "I know that Bible is one of the most widespread books on Earth.",
-                                "It is the foundation stone of Christianity.",
-                                "Have you read the whole Bible?"
+                                "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven.",
+                                "That's why I don't know much about religion.",
+                                "Apart from the Bible, What is your favorite book?"
                             ]
                         },
                         "ner": [
                             [
                                 {
                                     "confidence": 1,
-                                    "end_pos": 4,
-                                    "start_pos": 3,
-                                    "text": "bible",
-                                    "type": "PER"
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "socialbot",
+                                    "type": "LOC"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 25,
+                                    "start_pos": 24,
+                                    "text": "heaven",
+                                    "type": "LOC"
                                 }
                             ],
                             [],
@@ -520,10 +851,10 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "For no reason.",
-                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
-                                "the new testament.",
-                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?"
+                                "The new testament.",
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                                "yes, i have read the whole bible. ",
+                                "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?"
                             ]
                         }
                     },
@@ -536,15 +867,15 @@
         {
             "context": {
                 "actor_state": {},
-                "id": "9df8c782-6d18-4413-9710-f4d7cc0422d1",
+                "id": "af26ab71-fe94-430c-89a4-0a358c2d877c",
                 "labels": {
-                    "2": [
-                        "books_general",
-                        "told_why"
-                    ],
                     "3": [
                         "bible_flow",
                         "bible_start"
+                    ],
+                    "4": [
+                        "bible_flow",
+                        "bible_elaborate"
                     ]
                 },
                 "misc": {
@@ -552,17 +883,18 @@
                         "book_skill_active": true
                     },
                     "used_phrases": [
-                        140659711258032,
-                        140659711952624
+                        140497791036944,
+                        140497791874896,
+                        140497791784160
                     ]
                 },
                 "requests": {
-                    "2": "For no reason.",
-                    "3": "the new testament."
+                    "3": "The new testament.",
+                    "4": "yes."
                 },
                 "responses": {
-                    "2": "That's great. Outside of a dog, a book is man's best friend. What is the last book you've read?",
-                    "3": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?"
+                    "3": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                    "4": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?"
                 },
                 "validation": false
             },
@@ -583,9 +915,13 @@
                 "3": [
                     "bible_flow",
                     "bible_start"
+                ],
+                "4": [
+                    "bible_flow",
+                    "bible_elaborate"
                 ]
             },
-            "previous_human_utter_index": 3,
+            "previous_human_utter_index": 4,
             "shared_memory": {}
         }
     ],
@@ -596,7 +932,21 @@
         }
     ],
     "entities_batch": [
-        {}
+        {
+            "hobbit": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "hobbit",
+                        "human_utterance_index": 5,
+                        "previous_skill_name": "dff_template_skill"
+                    }
+                ],
+                "name": "hobbit"
+            }
+        }
     ],
     "used_links_batch": [
         {}
