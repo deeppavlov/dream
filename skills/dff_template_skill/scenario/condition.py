@@ -47,9 +47,7 @@ SIDE_INTENTS = {
 
 FAVORITE_PATTERN = r"fav|favou{0,1}rite|preferred|loved|beloved|fondling|best|most interesting"  # extended
 FAVORITE_PREDICATES = r"like|prefer|love|adore|enjoy"
-CHRISTIANITY_PATTERN = (
-    r"(bibla\b|bible\b|bibel\b|scriptures\b|holy scripture\b|new testament\b)"  # extended
-)
+CHRISTIANITY_PATTERN = r"(bibla\b|bible\b|bibel\b|scriptures\b|holy scripture\b|new testament\b)"  # extended
 GENRE_SYNONYMS = r"(genre)|((kind|type|sort) of books)"
 BOOK_SYNONYMS = r"book|piece of literature|literary piece"
 
