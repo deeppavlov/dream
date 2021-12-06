@@ -28,7 +28,8 @@ ACTIVE_SKILLS = [
     "dff_science_skill",
     "dff_gossip_skill",
     "small_talk_skill",
-    "dff_wiki_skill", "dff_art_skill",
+    "dff_wiki_skill",
+    "dff_art_skill",
 ]
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill",
