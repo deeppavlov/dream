@@ -957,14 +957,14 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: fact_retrieval_page.json
-        CONFIG_WIKI: page_extractor.json
-        CONFIG_WHOW: whow_page_extractor.json
+        CONFIG: configs/fact_retrieval_page.json
+        CONFIG_WIKI: configs/page_extractor.json
+        CONFIG_WHOW: configs/whow_page_extractor.json
         PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
       context: ./
-      dockerfile: annotators/fact_retrieval/DockerfileFactRetrievalEnt
+      dockerfile: annotators/fact_retrieval/Dockerfile
     command: flask run -h 0.0.0.0 -p 8100
     environment:
       - CUDA_VISIBLE_DEVICES=0

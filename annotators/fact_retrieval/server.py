@@ -21,28 +21,37 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 FILTER_FREQ = False
 
-config_name = os.getenv("CONFIG")
+CONFIG = os.getenv("CONFIG")
+CONFIG_PAGE_EXTRACTOR = os.getenv("CONFIG_WIKI")
+CONFIG_WOW_PAGE_EXTRACTOR = os.getenv("CONFIG_WHOW")
+
+DATA_GOOGLE_10K_ENG_NO_SWEARS = "common/google-10000-english-no-swears.txt"
+DATA_SENTENCES = "data/sentences.pickle"
 
 re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
-with open("google-10000-english-no-swears.txt", "r") as fl:
+with open(DATA_GOOGLE_10K_ENG_NO_SWEARS, "r") as fl:
     lines = fl.readlines()
     freq_words = [line.strip() for line in lines]
     freq_words = set(freq_words[:800])
 
-with open("sentences.pickle", "rb") as fl:
+with open("%s" % DATA_SENTENCES, "rb") as fl:
     test_sentences = pickle.load(fl)
 
 try:
-    fact_retrieval = build_model(config_name, download=True)
+    fact_retrieval = build_model(CONFIG, download=True)
     for i in range(50):
         utt = random.choice(test_sentences)
         test_res = fact_retrieval([utt], [utt], [["moscow"]], [[["Moscow"]]])
+
     with open("/root/.deeppavlov/downloads/wikidata/entity_types_sets.pickle", "rb") as fl:
         entity_types_sets = pickle.load(fl)
-    page_extractor = build_model("page_extractor.json", download=True)
+
+    page_extractor = build_model(CONFIG_PAGE_EXTRACTOR, download=True)
     logger.info("model loaded, test query processed")
-    whow_page_extractor = build_model("whow_page_extractor.json", download=True)
+
+    whow_page_extractor = build_model(CONFIG_WOW_PAGE_EXTRACTOR, download=True)
+
     with open("/root/.deeppavlov/downloads/wikihow/wikihow_topics.json", "r") as fl:
         wikihow_topics = json.load(fl)
 except Exception as e:
@@ -79,36 +88,6 @@ def get_wikihow_content(page_title):
         logger.exception(e)
 
     return page_content
-
-
-def check_utterance(question, bot_sentence):
-    question = question.lower()
-    bot_sentence = bot_sentence.lower()
-    check = False
-    lets_talk_phrases = [
-        "let's talk about",
-        "let us talk about",
-        "let's discuss",
-        "let us discuss",
-        "what do you think about",
-        "what's your opinion about",
-        "do you know",
-    ]
-    for phrase in lets_talk_phrases:
-        if phrase in question:
-            return True
-    greeting_phrases = [
-        "what do you wanna talk about",
-        "what do you want to talk about",
-        "what would you like to chat about",
-        "what are we gonna talk about",
-        "what are your hobbies",
-        "what are your interests",
-    ]
-    for phrase in greeting_phrases:
-        if phrase in bot_sentence:
-            return True
-    return check
 
 
 def find_sentences(paragraphs):
