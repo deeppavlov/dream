@@ -375,18 +375,18 @@ services:
   comet-atomic:
     env_file: [.env]
     build:
-      context: ./annotators/COMeT/
+      context: .
+      dockerfile: ./annotators/COMeT/Dockerfile
       args:
         GRAPH: atomic
+        SERVICE_HOME: ./annotators/COMeT
+        SERVICE_NAME: comet-atomic
+        SERVICE_PORT: 8053
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
-        TEST_SCRIPT: test_atomic.py
         DECODING_ALGO: beam-3
-    command: flask run -h 0.0.0.0 -p 8053 --without-threads
     environment:
       - CUDA_VISIBLE_DEVICES=0
-      - DEVICE=gpu_0
-      - FLASK_APP=server
     deploy:
       resources:
         limits:
@@ -397,18 +397,18 @@ services:
   comet-conceptnet:
     env_file: [.env]
     build:
-      context: ./annotators/COMeT/
+      context: .
+      dockerfile: ./annotators/COMeT/Dockerfile
       args:
         GRAPH: conceptnet
+        SERVICE_HOME: ./annotators/COMeT/
+        SERVICE_NAME: comet-conceptnet
+        SERVICE_PORT: 8065
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
         DECODING_ALGO: beam-3
-        TEST_SCRIPT: test_conceptnet.py
-    command: flask run -h 0.0.0.0 -p 8065 --without-threads
     environment:
       - CUDA_VISIBLE_DEVICES=0
-      - DEVICE=gpu_0
-      - FLASK_APP=server
     deploy:
       resources:
         limits:
