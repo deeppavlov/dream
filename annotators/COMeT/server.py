@@ -81,5 +81,5 @@ except Exception as exc:
 
 logger.info(f"{settings.SERVICE_NAME} is loaded and ready")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=settings.SERVICE_PORT, log_level="info")

@@ -73,12 +73,18 @@ def do_example(text_encoder, prefix, suffix, do_prefix, do_suffix):
     final_prefix, final_suffix = None, None
 
     if do_prefix:
-        final_prefix = handle_underscores(prefix, text_encoder, True) if "___" in prefix else \
-            text_encoder.encode([prefix], verbose=False)[0]
+        final_prefix = (
+            handle_underscores(prefix, text_encoder, True)
+            if "___" in prefix
+            else text_encoder.encode([prefix], verbose=False)[0]
+        )
 
     if do_suffix:
-        final_suffix = handle_underscores(suffix, text_encoder) if "_" in suffix else \
-            text_encoder.encode([suffix], verbose=False)[0]
+        final_suffix = (
+            handle_underscores(suffix, text_encoder)
+            if "_" in suffix
+            else text_encoder.encode([suffix], verbose=False)[0]
+        )
 
     return final_prefix, final_suffix
 
@@ -88,5 +94,5 @@ num_delimiter_tokens = {
     "hierarchy": 3,
     "hierarchy+label": 4,
     "category+hierarchy": 4,
-    "category+hierarchy+label": 5
+    "category+hierarchy+label": 5,
 }

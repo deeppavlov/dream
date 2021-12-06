@@ -41,8 +41,7 @@ def load_atomic_data(opt):
         opt.data.maxe1 = 17
         opt.data.maxe2 = 35
         opt.data.maxr = 1
-    path = "comet_commonsense/data/atomic/processed/generation/{}.pickle".format(
-        utils.make_name_string(opt.data))
+    path = "comet_commonsense/data/atomic/processed/generation/{}.pickle".format(utils.make_name_string(opt.data))
     data_loader = data.make_data_loader(opt, opt.data.categories)
     data_loader.load_data(path)
 
@@ -57,17 +56,14 @@ def load_conceptnet_data(opt):
             opt.data.maxr = 5
         else:
             opt.data.maxr = 1
-    path = "comet_commonsense/data/conceptnet/processed/generation/{}.pickle".format(
-        utils.make_name_string(opt.data))
+    path = "comet_commonsense/data/conceptnet/processed/generation/{}.pickle".format(utils.make_name_string(opt.data))
     data_loader = data.make_data_loader(opt)
     data_loader.load_data(path)
     return data_loader
 
 
 def make_model(opt, n_vocab, n_ctx, state_dict):
-    model = models.make_model(
-        opt, n_vocab, n_ctx,
-        return_acts=True, return_probs=False)
+    model = models.make_model(opt, n_vocab, n_ctx, return_acts=True, return_probs=False)
 
     models.load_state_dict(model, state_dict)
 
@@ -92,16 +88,14 @@ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, 
     if isinstance(category, (list, tuple)):
         outputs = {}
         for cat in category:
-            new_outputs = get_atomic_sequence(
-                input_event, model, sampler, data_loader, text_encoder, cat)
+            new_outputs = get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, cat)
             outputs.update(new_outputs)
         return outputs
     elif category == "all":
         outputs = {}
 
         for category in data_loader.categories:
-            new_outputs = get_atomic_sequence(
-                input_event, model, sampler, data_loader, text_encoder, category)
+            new_outputs = get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, category)
             outputs.update(new_outputs)
         return outputs
     else:
@@ -113,14 +107,12 @@ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, 
 
         with torch.no_grad():
 
-            batch = set_atomic_inputs(
-                input_event, category, data_loader, text_encoder)
+            batch = set_atomic_inputs(input_event, category, data_loader, text_encoder)
             max_event = data_loader.max_event + data.atomic_data.num_delimiter_tokens["category"]
             max_effect = data_loader.max_effect - data.atomic_data.num_delimiter_tokens["category"]
-            sampling_result = sampler.generate_sequence(
-                batch, model, data_loader, max_event, max_effect)
+            sampling_result = sampler.generate_sequence(batch, model, data_loader, max_event, max_effect)
 
-        sequence_all['beams'] = sampling_result["beams"]
+        sequence_all["beams"] = sampling_result["beams"]
         return {category: sequence_all}
 
 
@@ -144,16 +136,14 @@ def get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, relat
         outputs = {}
 
         for rel in relation:
-            new_outputs = get_conceptnet_sequence(
-                e1, model, sampler, data_loader, text_encoder, rel)
+            new_outputs = get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, rel)
             outputs.update(new_outputs)
         return outputs
     elif relation == "all":
         outputs = {}
 
         for relation in data.conceptnet_data.conceptnet_relations:
-            new_outputs = get_conceptnet_sequence(
-                e1, model, sampler, data_loader, text_encoder, relation)
+            new_outputs = get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, relation)
             outputs.update(new_outputs)
         return outputs
     else:
@@ -170,18 +160,17 @@ def get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, relat
                 relation_sequence = "<{}>".format(relation)
 
             batch, abort = set_conceptnet_inputs(
-                e1, relation_sequence, text_encoder,
-                data_loader.max_e1, data_loader.max_r, force)
+                e1, relation_sequence, text_encoder, data_loader.max_e1, data_loader.max_r, force
+            )
 
             if abort:
                 return {relation: sequence_all}
 
             sampling_result = sampler.generate_sequence(
-                batch, model, data_loader,
-                data_loader.max_e1 + data_loader.max_r,
-                data_loader.max_e2)
+                batch, model, data_loader, data_loader.max_e1 + data_loader.max_r, data_loader.max_e2
+            )
 
-        sequence_all['beams'] = sampling_result["beams"]
+        sequence_all["beams"] = sampling_result["beams"]
         return {relation: sequence_all}
 
 
@@ -199,8 +188,8 @@ def set_conceptnet_inputs(input_event, relation, text_encoder, max_e1, max_r, fo
     else:
         XMB = torch.zeros(1, max_e1 + max_r).long().to(settings.device)
 
-    XMB[:, :len(e1_tokens)] = torch.LongTensor(e1_tokens)
-    XMB[:, max_e1:max_e1 + len(rel_tokens)] = torch.LongTensor(rel_tokens)
+    XMB[:, : len(e1_tokens)] = torch.LongTensor(e1_tokens)
+    XMB[:, max_e1 : max_e1 + len(rel_tokens)] = torch.LongTensor(rel_tokens)
 
     batch = {}
     batch["sequences"] = XMB
