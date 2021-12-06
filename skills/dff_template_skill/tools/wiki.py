@@ -172,7 +172,7 @@ def get_published_year(book_entity: str) -> Optional[str]:
         if published_year_list and type(published_year_list[0]) == str:
             published_year = published_year_list[0]
         else:
-            published_year = ""
+            return None
     year_candidates = re.findall(r"[\d]{3,4}", published_year)
     if year_candidates:
         try:

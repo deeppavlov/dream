@@ -1,7 +1,7 @@
 [
     [
         "I've read it. It's an amazing book! Do you want to know when it was first published?",
-        0.85,
+        0.95,
         {
             "dff_template_skill_state": {
                 "shared_memory": {},
@@ -61,7 +61,7 @@
                             140403030105520,
                             140403030779728,
                             140403030734128,
-                            140403029930368
+                            140103053840256
                         ],
                         "slots": {
                             "cur_book_name": "hobbit",
