@@ -766,6 +766,10 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_bot_persona_skill")
 
 
+def dff_book_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_book_skill")
+
+
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(
         dialog,
