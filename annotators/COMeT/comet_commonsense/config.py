@@ -2,7 +2,7 @@ from typing import Optional, Union
 from pydantic import BaseSettings, validator
 from pathlib import Path
 
-PRETRAINED_MODEL_PATH_FOLDER = ["comet_commonsense", "pretrained_models"]
+PRETRAINED_MODEL_PATH_FOLDER = ["/data/comet_commonsense", "pretrained_models"]
 
 
 class AppConfig(BaseSettings):
