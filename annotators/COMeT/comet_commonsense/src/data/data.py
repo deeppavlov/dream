@@ -10,8 +10,7 @@ blank_token = "<blank>"
 
 def load_checkpoint(filename):
     if os.path.exists(filename):
-        checkpoint = torch.load(
-            filename, map_location=lambda storage, loc: storage)
+        checkpoint = torch.load(filename, map_location=lambda storage, loc: storage)
         return checkpoint
     raise FileNotFoundError("No model found at {}".format(filename))
 

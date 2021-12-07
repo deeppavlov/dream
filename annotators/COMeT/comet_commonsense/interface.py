@@ -90,12 +90,7 @@ class COMeTAtomic(COMeTBaseEngine):
 
     def _get_result(self, event: str, category: Sequence[str]) -> Dict:
         raw_result = interactive.get_atomic_sequence(
-            event,
-            self._model,
-            self._sampler,
-            self._data_loader,
-            self._text_encoder,
-            category
+            event, self._model, self._sampler, self._data_loader, self._text_encoder, category
         )
         return self.all_beams_cleanup(raw_result)
 
@@ -105,10 +100,7 @@ class COMeTAtomic(COMeTBaseEngine):
 
 class COMeTConceptNet(COMeTBaseEngine):
     def __init__(self, model_path, decoding_algorithm):
-        super().__init__(graph="conceptnet",
-                         model_path=model_path,
-                         decoding_algorithm=decoding_algorithm
-                         )
+        super().__init__(graph="conceptnet", model_path=model_path, decoding_algorithm=decoding_algorithm)
         self._input_event_model = schemas.ConceptNetInputEventModel
         self._response_model = schemas.ConceptNetResponseModel
         self._annotator_input_model = schemas.ConceptNetAnnotatorEventModel
@@ -122,12 +114,7 @@ class COMeTConceptNet(COMeTBaseEngine):
 
     def _get_result(self, event, category):
         raw_result = interactive.get_conceptnet_sequence(
-            event,
-            self._model,
-            self._sampler,
-            self._data_loader,
-            self._text_encoder,
-            category
+            event, self._model, self._sampler, self._data_loader, self._text_encoder, category
         )
         return self.all_beams_cleanup(raw_result)
 
@@ -148,14 +135,8 @@ class COMeTFactory:
 
     def __call__(self, model_path, decoding_algorithm):
         if self.graph == "atomic":
-            return COMeTAtomic(
-                model_path=model_path,
-                decoding_algorithm=decoding_algorithm
-            )
+            return COMeTAtomic(model_path=model_path, decoding_algorithm=decoding_algorithm)
         elif self.graph == "conceptnet":
-            return COMeTConceptNet(
-                model_path=model_path,
-                decoding_algorithm=decoding_algorithm
-            )
+            return COMeTConceptNet(model_path=model_path, decoding_algorithm=decoding_algorithm)
         else:
             raise ValueError(f"Graph {self.graph} does not exist!")
