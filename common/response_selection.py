@@ -1,6 +1,6 @@
 # this is a list of skills which are not one-lines
 ACTIVE_SKILLS = [
-    "book_skill",
+    "dff_book_skill",
     "christmas_new_year_skill",
     "dff_coronavirus_skill",
     "dummy_skill_dialog",

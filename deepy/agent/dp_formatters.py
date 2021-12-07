@@ -78,7 +78,7 @@ def skill_with_attributes_formatter_service(payload: Dict):
              **attributes},
              by ^ marked optional elements
     """
-    # Used by: book_skill_formatter, skill_with_attributes_formatter, news_skill, meta_script_skill, dummy_skill
+    # Used by: skill_with_attributes_formatter, news_skill, meta_script_skill, dummy_skill
     if isinstance(payload[0], list) and isinstance(payload[1], list):
         result = [{"text": hyp[0], "confidence": hyp[1]} for hyp in zip(*payload)]
     else:

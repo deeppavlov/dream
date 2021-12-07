@@ -148,7 +148,7 @@ def praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_respons
         shared_memory_ops.add_used_linkto_to_shared_memory(
             vars, common_gaming.special_links_to_movies["Harry Potter"][0]
         )
-    elif "book_skill" not in disliked_skills and book_link_to_id not in used_linkto_phrases_ids:
+    elif "dff_book_skill" not in disliked_skills and book_link_to_id not in used_linkto_phrases_ids:
         response = "Sounds cool! " + common_gaming.special_links_to_books["Harry Potter"][0]
         shared_memory_ops.add_used_linkto_to_shared_memory(
             vars, common_gaming.special_links_to_books["Harry Potter"][0]

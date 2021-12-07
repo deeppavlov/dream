@@ -66,7 +66,7 @@ services:
   personal-info-skill:
   asr:
   misheard-asr:
-  book-skill:
+  dff-book-skill:
   dff-weather-skill:
   emotion-skill:
   dummy-skill-dialog:
