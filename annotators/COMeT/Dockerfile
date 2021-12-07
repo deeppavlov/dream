@@ -10,7 +10,10 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 ENV PYTHONPATH /src/comet_commonsense/
 
-RUN mkdir /data
+RUN mkdir /data/
+RUN mkdir /data/models/
+RUN mkdir /data/comet_commonsense/
+
 WORKDIR /src
 
 COPY $SERVICE_HOME/requirements.txt ./
@@ -40,7 +43,7 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 RUN wget ${PRETRAINED_MODEL} -q -P /data/comet_commonsense/pretrained_models/ && \
     wget ${PREPROCESS_DATA} -q -P /data/comet_commonsense/data/${GRAPH}/processed/generation/
 
-COPY ./src/ ./
+COPY ./ ./
 COPY ./common/ /src/common/
 
 CMD uvicorn server:app --host 0.0.0.0 --port ${SERVICE_PORT}
