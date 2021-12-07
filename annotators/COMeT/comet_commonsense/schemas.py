@@ -13,9 +13,7 @@ class AtomicInputEventModel(BaseModel):
     @validator("category")
     def is_valid(cls, category):
         if not ATOMIC_VALID_EFFECTS.issuperset(category):
-            raise ValueError(
-                "Must consists only of: {}".format(ATOMIC_VALID_EFFECTS)
-            )
+            raise ValueError("Must consists only of: {}".format(ATOMIC_VALID_EFFECTS))
         return category
 
 
@@ -35,9 +33,7 @@ class ConceptNetInputBaseModel(BaseModel):
     @validator("category")
     def is_valid(cls, category):
         if not CONCEPTNET_VALID_RELATIONS.issuperset(category):
-            raise ValueError(
-                "Must consists only of: {}".format(CONCEPTNET_VALID_RELATIONS)
-            )
+            raise ValueError("Must consists only of: {}".format(CONCEPTNET_VALID_RELATIONS))
         return category
 
 
@@ -46,8 +42,11 @@ class ConceptNetInputEventModel(ConceptNetInputBaseModel):
 
 
 class ConceptNetAnnotatorEventModel(ConceptNetInputBaseModel):
-    nounphrases: Sequence[Sequence[str]] = [["basketball", "unicorn"], ["pancakes"],
-                                            ["ieaundy karianne rania tecca dot"]]
+    nounphrases: Sequence[Sequence[str]] = [
+        ["basketball", "unicorn"],
+        ["pancakes"],
+        ["ieaundy karianne rania tecca dot"],
+    ]
 
 
 class ConceptNetResponseModelPerCategory(BaseModel):
@@ -61,6 +60,4 @@ class ConceptNetResponseModel(BaseModel):
 
 
 class ConceptNetAnnotatorResponseModel(BaseModel):
-    __root__: List[
-        Dict[str, Dict[str, List[str]]]
-    ]
+    __root__: List[Dict[str, Dict[str, List[str]]]]
