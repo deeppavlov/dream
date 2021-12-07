@@ -4,19 +4,46 @@ import src.data.utils as data_utils
 import src.data.atomic as adata
 from config import settings
 
-conceptnet_relations = {'AtLocation', 'CapableOf', 'Causes', 'CausesDesire', 'CreatedBy', 'DefinedAs', 'DesireOf',
-                        'Desires', 'HasA',
-                        'HasFirstSubevent', 'HasLastSubevent',
-                        'HasPainCharacter', 'HasPainIntensity', 'HasPrerequisite', 'HasProperty', 'HasSubevent',
-                        'InheritsFrom',
-                        'InstanceOf', 'IsA', 'LocatedNear', 'LocationOfAction', 'MadeOf', 'MotivatedByGoal',
-                        'NotCapableOf', 'NotDesires', 'NotHasA', 'NotHasProperty', 'NotIsA', 'NotMadeOf', 'PartOf',
-                        'ReceivesAction',
-                        'RelatedTo', 'SymbolOf', 'UsedFor'}
+conceptnet_relations = {
+    "AtLocation",
+    "CapableOf",
+    "Causes",
+    "CausesDesire",
+    "CreatedBy",
+    "DefinedAs",
+    "DesireOf",
+    "Desires",
+    "HasA",
+    "HasFirstSubevent",
+    "HasLastSubevent",
+    "HasPainCharacter",
+    "HasPainIntensity",
+    "HasPrerequisite",
+    "HasProperty",
+    "HasSubevent",
+    "InheritsFrom",
+    "InstanceOf",
+    "IsA",
+    "LocatedNear",
+    "LocationOfAction",
+    "MadeOf",
+    "MotivatedByGoal",
+    "NotCapableOf",
+    "NotDesires",
+    "NotHasA",
+    "NotHasProperty",
+    "NotIsA",
+    "NotMadeOf",
+    "PartOf",
+    "ReceivesAction",
+    "RelatedTo",
+    "SymbolOf",
+    "UsedFor",
+}
 
 
 def split_camelcase(words):
-    splitted = {word: re.sub('(?<=[a-z])(?=[A-Z])', ' ', word).lower() for word in words}
+    splitted = {word: re.sub("(?<=[a-z])(?=[A-Z])", " ", word).lower() for word in words}
     return splitted
 
 
