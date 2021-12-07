@@ -141,7 +141,7 @@ def tell_age_risks(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         skill = "dff_movie_skill"
         response = f"{response} While staying at home, you may use a lot of different online cinema. "
     else:
-        skill = "book_skill"
+        skill = "dff_book_skill"
         response = f"{response} While staying at home, you may read a lot of different books. "
 
     # Here should be the phrase obtained from the link to the 'movie_skill' or the 'book_skill', but

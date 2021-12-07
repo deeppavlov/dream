@@ -215,7 +215,7 @@ class RuleBasedSkillSelectorConnector:
                     bot_uttr.get("text", ""),
                     available_skills=[
                         "dff_movie_skill",
-                        "book_skill",
+                        "dff_book_skill",
                         "news_api_skill",
                         "dff_food_skill",
                         "dff_animals_skill",
