@@ -25,8 +25,8 @@ def load_data(dataset, opt):
         data_loader = load_conceptnet_data(opt)
 
     # Initialize TextEncoder
-    encoder_path = "comet_commonsense/model/encoder_bpe_40000.json"
-    bpe_path = "comet_commonsense/model/vocab_40000.bpe"
+    encoder_path = "/data/comet_commonsense/model/encoder_bpe_40000.json"
+    bpe_path = "/data/comet_commonsense/model/vocab_40000.bpe"
     text_encoder = TextEncoder(encoder_path, bpe_path)
     text_encoder.encoder = data_loader.vocab_encoder
     text_encoder.decoder = data_loader.vocab_decoder
@@ -41,7 +41,7 @@ def load_atomic_data(opt):
         opt.data.maxe1 = 17
         opt.data.maxe2 = 35
         opt.data.maxr = 1
-    path = "comet_commonsense/data/atomic/processed/generation/{}.pickle".format(utils.make_name_string(opt.data))
+    path = "/data/comet_commonsense/data/atomic/processed/generation/{}.pickle".format(utils.make_name_string(opt.data))
     data_loader = data.make_data_loader(opt, opt.data.categories)
     data_loader.load_data(path)
 
@@ -56,7 +56,9 @@ def load_conceptnet_data(opt):
             opt.data.maxr = 5
         else:
             opt.data.maxr = 1
-    path = "comet_commonsense/data/conceptnet/processed/generation/{}.pickle".format(utils.make_name_string(opt.data))
+    path = "/data/comet_commonsense/data/conceptnet/processed/generation/{}.pickle".format(
+        utils.make_name_string(opt.data)
+    )
     data_loader = data.make_data_loader(opt)
     data_loader.load_data(path)
     return data_loader

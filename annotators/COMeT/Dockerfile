@@ -10,18 +10,22 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 ENV PYTHONPATH /src/comet_commonsense/
 
-WORKDIR /src
+COPY ./annotators/COMeT/requirements.txt /src/requirements.txt
 
-COPY $SERVICE_HOME/requirements.txt ./
-
-RUN pip install -r requirements.txt && \
+RUN pip install -r /src/requirements.txt && \
     python -m spacy download en
 
-COPY $SERVICE_HOME/comet_commonsense comet_commonsense
+COPY $SERVICE_HOME/ /src/
+COPY ./common/ /src/common/
+WORKDIR /src
 
-RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz -P /src/models/ && \
-    tar -xzf /src/models/model.tar.gz -C /src/comet_commonsense/ && \
-    rm -rf /src/models/
+RUN mkdir /data/
+RUN mkdir /data/models/
+RUN mkdir /data/comet_commonsense/
+
+RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz -P /data/models/ && \
+    tar -xzf /data/models/model.tar.gz -C /data/comet_commonsense/ && \
+    rm -rf /data/models/
 
 ARG GRAPH
 ARG PRETRAINED_MODEL
@@ -36,11 +40,9 @@ ENV DECODING_ALGO ${DECODING_ALGO}
 ENV SERVICE_NAME ${SERVICE_NAME}
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-RUN wget ${PRETRAINED_MODEL} -q -P /src/comet_commonsense/pretrained_models/ && \
-    wget ${PREPROCESS_DATA} -q -P /src/comet_commonsense/data/${GRAPH}/processed/generation/
+RUN wget ${PRETRAINED_MODEL} -q -P /data/comet_commonsense/pretrained_models/ && \
+    wget ${PREPROCESS_DATA} -q -P /data/comet_commonsense/data/${GRAPH}/processed/generation/
 
-COPY $SERVICE_HOME/server.py $SERVICE_HOME/test_server.py $SERVICE_HOME/test.sh ./
-COPY $SERVICE_HOME/tests tests
-COPY ./common/ /src/common/
+WORKDIR /src
 
 CMD uvicorn server:app --host 0.0.0.0 --port ${SERVICE_PORT}
