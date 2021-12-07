@@ -493,12 +493,12 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_template_skill"
+                    "active_skill": "dff_book_skill"
                 }
             ]
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_book_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},

@@ -858,12 +858,12 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_template_skill"
+                    "active_skill": "dff_book_skill"
                 }
             ]
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_book_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},
@@ -941,7 +941,7 @@
                     {
                         "full_name": "hobbit",
                         "human_utterance_index": 5,
-                        "previous_skill_name": "dff_template_skill"
+                        "previous_skill_name": "dff_book_skill"
                     }
                 ],
                 "name": "hobbit"

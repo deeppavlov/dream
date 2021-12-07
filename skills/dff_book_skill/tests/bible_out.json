@@ -3,7 +3,7 @@
         "I've read it. It's an amazing book! Do you want to know when it was first published?",
         0.95,
         {
-            "dff_template_skill_state": {
+            "dff_book_skill_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 5,
                 "history": {

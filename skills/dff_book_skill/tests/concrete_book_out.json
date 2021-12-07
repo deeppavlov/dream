@@ -3,7 +3,7 @@
         " My favourite book is \"The catcher in the rye\" by Jerome David Salinger. May I tell you something about this book?",
         0.85,
         {
-            "dff_template_skill_state": {
+            "dff_book_skill_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 5,
                 "history": {
