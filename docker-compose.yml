@@ -17,7 +17,7 @@ services:
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
-        book-skill:8032, dff-grounding-skill:8080,
+        dff-book-skill:8032, dff-grounding-skill:8080,
         dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
         midas-classification:8090, fact-random:8119, fact-retrieval:8100,
         dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
@@ -323,23 +323,6 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  book-skill:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./skills/book_skill/Dockerfile
-      args:
-        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
-    command: python -m flask run -h 0.0.0.0 -p 8032
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2540M
-        reservations:
-          memory: 2540M
 
   emotion-skill:
     env_file: [.env]
@@ -1183,6 +1166,23 @@ services:
           memory: 1G
         reservations:
           memory: 1G
+
+  dff-book-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8032
+        SERVICE_NAME: dff_book_skill
+        QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
+      context: .
+      dockerfile: ./skills/dff_book_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8032 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
 
   dff-template-skill:
     env_file: [.env]

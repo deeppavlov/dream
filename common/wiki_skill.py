@@ -421,7 +421,7 @@ transfer_from_skills = {
         "Q482994",  # album
     },
     "dff_movie_skill": {"Q11424", "Q24856", "Q10800557", "Q10798782", "Q2405480", "Q5398426", "Q15416", "Q2526255"},
-    "book_skill": {
+    "dff_book_skill": {
         "Q36180",
         "Q49757",
         "Q214917",

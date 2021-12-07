@@ -646,19 +646,6 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "book_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://book-skill:8032/book_skill"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
             "dff_coronavirus_skill": {
                 "connector": {
                     "protocol": "http",
@@ -971,13 +958,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_template_skill": {
+            "dff_book_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-template-skill:8120/respond"
+                    "url": "http://dff-book-skill:8032/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_book_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -991,6 +978,19 @@
                     "url": "http://dff-art-skill:8117/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_art_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_template_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-template-skill:8120/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

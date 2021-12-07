@@ -82,17 +82,6 @@ services:
       placement:
         constraints:
           - node.labels.with_gpu != true
-  book_skill:
-    build:
-      context: .
-      dockerfile: ./skills/book_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8032
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints:
-          - node.labels.with_gpu != true
   question-generator:
     build:
       context: ./services/question_generator/

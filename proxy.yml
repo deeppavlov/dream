@@ -144,7 +144,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8033
       - PORT=8033
 
-  book-skill:
+  dff-book-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/

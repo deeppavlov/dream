@@ -23,7 +23,7 @@ other_skills = {
 scenario_skills = {
     "dff_movie_skill",
     "personal_info_skill",  # 'short_story_skill',
-    "book_skill",
+    "dff_book_skill",
     "dff_weather_skill",
     "emotion_skill",
     "dummy_skill_dialog",
