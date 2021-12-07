@@ -56,7 +56,9 @@ def load_conceptnet_data(opt):
             opt.data.maxr = 5
         else:
             opt.data.maxr = 1
-    path = "/data/comet_commonsense/data/conceptnet/processed/generation/{}.pickle".format(utils.make_name_string(opt.data))
+    path = "/data/comet_commonsense/data/conceptnet/processed/generation/{}.pickle".format(
+        utils.make_name_string(opt.data)
+    )
     data_loader = data.make_data_loader(opt)
     data_loader.load_data(path)
     return data_loader
