@@ -43,7 +43,7 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 RUN wget ${PRETRAINED_MODEL} -q -P /data/comet_commonsense/pretrained_models/ && \
     wget ${PREPROCESS_DATA} -q -P /data/comet_commonsense/data/${GRAPH}/processed/generation/
 
-COPY ./ ./
+COPY ./ /src/
 COPY ./common/ /src/common/
 
 CMD uvicorn server:app --host 0.0.0.0 --port ${SERVICE_PORT}
