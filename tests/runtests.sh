@@ -74,7 +74,7 @@ if [[ "$MODE" == "" ]]; then
     MODE="all"
 fi
 
-if [[ "$MODE" == "clean" ]]; then
+if  [[ "$MODE" == "clean" ]]; then
     cleanup
     exit 0
 fi
