@@ -256,7 +256,7 @@
                                 "which": "bot"
                             }
                         ],
-                        "cobotqa_annotator": {
+                        "fact_random": {
                             "facts": [],
                             "response": ""
                         }
@@ -482,7 +482,7 @@
                                 "which": "all"
                             }
                         ],
-                        "cobotqa_annotator": {
+                        "fact_random": {
                             "facts": [],
                             "response": ""
                         }

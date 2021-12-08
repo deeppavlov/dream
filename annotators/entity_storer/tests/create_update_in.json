@@ -472,7 +472,7 @@
                             "sports competitions"
                         ]
                     },
-                    "active_skill": "grounding_skill"
+                    "active_skill": "dff_grounding_skill"
                 }
             ],
             "human": {

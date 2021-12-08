@@ -539,7 +539,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # =====user intent requires particular action=====
 
             CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
-            _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get("type", "") == "universal_response"
+            _is_grounding_reqda = (
+                skill_name == "dff_grounding_skill" and cand_uttr.get("type", "") == "universal_response"
+            )
             _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE  # no priority to prev active skill
             _can_continue = CAN_NOT_CONTINUE  # no priority to scripted skills
 
@@ -622,7 +624,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
 
-        if cand_uttr["skill_name"] == "grounding_skill" and "acknowledgement" in cand_uttr.get("response_parts", []):
+        if cand_uttr["skill_name"] == "dff_grounding_skill" and "acknowledgement" in cand_uttr.get(
+            "response_parts", []
+        ):
             acknowledgement_hypothesis = deepcopy(cand_uttr)
 
     logger.info(f"Current CASE: {CASE}")
@@ -685,9 +689,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
-        logger.info(
-            f"Best candidate contains prompt, question, request or length of > 200 symbols. " f"Do NOT add prompt."
-        )
+        logger.info("Best candidate contains prompt, question, request or length of > 200 symbols. Do NOT add prompt.")
         pass
     elif sum(categorized_prompts.values(), []):
         # best cand is 3d times in a row not scripted skill, let's append linkto
@@ -697,7 +699,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
 
         if _add_prompt_forcibly or prompt_decision() or (_no_script_two_times_in_a_row and _is_best_not_script):
-            logger.info(f"Decided to add a prompt to the best candidate.")
+            logger.info("Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
@@ -726,8 +728,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         and not best_resp_cont_ackn
     ):
         logger.info(
-            f"Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
-            f"and we decided to add an acknowledgement to the best candidate."
+            "Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
+            "and we decided to add an acknowledgement to the best candidate."
         )
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'
         best_candidate["response_parts"] = ["acknowledgement"] + best_candidate.get("response_parts", [])

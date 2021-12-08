@@ -101,11 +101,10 @@ class RuleBasedSkillSelectorConnector:
             elif is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("program_y_dangerous")
-                skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
-                skills_for_uttr.append("grounding_skill")
+                skills_for_uttr.append("dff_grounding_skill")
                 skills_for_uttr.append("dummy_skill")
 
                 skills_for_uttr += turn_on_skills(
@@ -181,9 +180,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("dff_wiki_skill")
                 if if_switch_test_skill(user_uttr, bot_uttr):
                     skills_for_uttr.append("dff_art_skill")
-                skills_for_uttr.append("grounding_skill")
+                skills_for_uttr.append("dff_grounding_skill")
                 skills_for_uttr.append("program_y")
-                skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
@@ -279,4 +277,4 @@ class RuleBasedSkillSelectorConnector:
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["program_y", "dummy_skill", "cobotqa"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["program_y", "dummy_skill"]))

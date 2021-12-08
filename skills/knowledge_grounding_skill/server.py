@@ -394,17 +394,17 @@ def respond():
                 annotations_depths.append({})
                 dial_ids.append(d_id)
 
-            cobotqa_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1 :])
-            if cobotqa_facts:
+            fact_random_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1 :])
+            if fact_random_facts:
                 user_input = {
-                    "checked_sentence": cobotqa_facts[-1][1],
-                    "knowledge": cobotqa_facts[-1][1],
+                    "checked_sentence": fact_random_facts[-1][1],
+                    "knowledge": fact_random_facts[-1][1],
                     "text": user_input_text,
                     "history": user_input_history,
-                    "cobotqa_fact": True,
+                    "fact_random_fact": True,
                 }
                 input_batch.append(user_input)
-                annotations_depths.append({"cobotqa": cobotqa_facts[-1][0]})
+                annotations_depths.append({"fact_random": fact_random_facts[-1][0]})
                 dial_ids.append(d_id)
 
             user_news = get_news(dialog["human_utterances"][-1], "human")
@@ -488,7 +488,7 @@ def respond():
                 curr_nounphrase_search = nounphrases[i].search(raw_responses[curr_i]) if nounphrases[i] else False
                 curr_entities_search = entities[i].search(raw_responses[curr_i]) if entities[i] else False
                 no_penalties = False
-                cobotqa_penalty = 0.0
+                fact_random_penalty = 0.0
 
                 topic = chosen_topics.get(i, "")
                 chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", "")
@@ -516,10 +516,10 @@ def respond():
                     no_penalties = True
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "news_api_fact "
-                elif input_batch[curr_i].get("cobotqa_fact", ""):
-                    cobotqa_penalty = annotations_depths[curr_i].get("cobotqa", 0.0)
+                elif input_batch[curr_i].get("fact_random_fact", ""):
+                    fact_random_penalty = annotations_depths[curr_i].get("fact_random", 0.0)
                     confidence = DEFAULT_CONFIDENCE
-                    attr["confidence_case"] += "cobotqa_fact "
+                    attr["confidence_case"] += "fact_random_fact "
                 elif curr_news_fact:
                     if curr_news_fact != "all":
                         confidence = NOUNPHRASE_ENTITY_CONFIDENCE
@@ -557,7 +557,7 @@ def respond():
                 if special_intents_flags[i]:
                     confidence = 0.0
                     attr["confidence_case"] += "special_intents "
-                    logger.debug(f"KG skill: found special_intents")
+                    logger.debug("KG skill: found special_intents")
                 greetings_farewells_flag = greetings_farewells_re.search(raw_responses[curr_i])
                 if greetings_farewells_flag:
                     confidence = 0.0
@@ -566,7 +566,7 @@ def respond():
 
                 penalties = (
                     annotations_depths[curr_i].get("retrieved_fact", 0.0)
-                    + cobotqa_penalty
+                    + fact_random_penalty
                     + already_was_active
                     + short_long_response
                     if not no_penalties

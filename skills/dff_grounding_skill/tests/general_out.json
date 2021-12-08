@@ -110,7 +110,7 @@
                                     "You have so many interesting questions. It's so embarrassing, but I don't know.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "I'm ashamed, I don't know.",
                                                 "I don't even know yes or no.",
@@ -145,7 +145,7 @@
                                     "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "I'm ashamed, I don't know.",
                                                 "I don't even know yes or no.",
@@ -171,7 +171,7 @@
                             ]
                         },
                         "misc": {
-                            "grounding_skill": {
+                            "dff_grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "I'm ashamed, I don't know.",
                                     "I don't even know yes or no.",
@@ -298,7 +298,7 @@
                                     "You have so many interesting questions. It's so embarrassing, but I don't know.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "I'm ashamed, I don't know.",
                                                 "I don't even know yes or no.",
@@ -333,7 +333,7 @@
                                     "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "I'm ashamed, I don't know.",
                                                 "I don't even know yes or no.",
@@ -359,7 +359,7 @@
                             ]
                         },
                         "misc": {
-                            "grounding_skill": {
+                            "dff_grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "I'm ashamed, I don't know.",
                                     "I don't even know yes or no.",
@@ -384,7 +384,7 @@
                 "used_links": {},
                 "age_group": "unknown",
                 "disliked_skills": [],
-                "grounding_skill": {
+                "dff_grounding_skill": {
                     "used_universal_intent_responses": [
                         "I'm ashamed, I don't know.",
                         "I don't even know yes or no.",

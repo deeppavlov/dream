@@ -440,7 +440,7 @@
                             ],
                             "topic_facts": []
                         },
-                        "cobotqa_annotator": {
+                        "fact_random": {
                             "facts": [
                                 {
                                     "entity": "minecraft",

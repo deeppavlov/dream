@@ -1,5 +1,5 @@
 # TODO: Do not change this file, it does not use
-from typing import List, Tuple
+from typing import List
 
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 @register("intents_based_selector")
 class RuleBasedSelector(Component):
     """
-    Rule-based on intents skill selector which choosing among Alice, AIML, CoBotQA and future chit-chat TransferTransfo
+    Rule-based on intents skill selector which choosing among Alice, AIML, and future chit-chat TransferTransfo
     """
 
     wh_words = {"what", "when", "where", "which", "who", "whom", "whose", "why", "how"}
@@ -40,11 +40,9 @@ class RuleBasedSelector(Component):
             if len(set(tokens).intersection(self.wh_words)) > 0:
                 skills_for_uttr.append("aiml")
                 skills_for_uttr.append("alice")
-                skills_for_uttr.append("cobotqa")
                 skills_for_uttr.append("transfertransfo")
             else:
                 skills_for_uttr.append("alice")
-                skills_for_uttr.append("cobotqa")
 
             skill_names.append(skills_for_uttr)
 

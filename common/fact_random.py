@@ -102,3 +102,18 @@ def get_facts(entity_substr_list: list, question: str) -> list:
     facts = _request_fact_service(entity_substr_list, question)
 
     return facts
+
+
+def get_facts_from_fact_random_annotations(utterance):
+    return utterance.get("annotations", {}).get("fact_random", [])
+
+
+def get_facts_for_entity_from_fact_random_annotations(utterance, entity):
+    result = []
+    for element in get_facts_from_fact_random_annotations(utterance):
+        ent = element.get("entity_substr", "")
+        fact = element.get("fact", "")
+        if fact and ent == entity:
+            result.append(fact)
+
+    return result

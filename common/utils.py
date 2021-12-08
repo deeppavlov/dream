@@ -34,7 +34,6 @@ scenario_skills = {
     "game_cooperative_skill",
 }
 retrieve_skills = {
-    "cobotqa",
     "program_y",
     "alice",
     "eliza",
@@ -104,7 +103,7 @@ high_priority_intents = {
         "where_are_you_from",
         "who_made_you",
     },
-    "grounding_skill": {"what_are_you_talking_about"},
+    "dff_grounding_skill": {"what_are_you_talking_about"},
 }
 
 low_priority_intents = {"dont_understand", "what_time"}
@@ -1199,7 +1198,7 @@ def is_special_factoid_question(annotated_utterance):
     return False
 
 
-COBOTQA_EXTRA_WORDS = re.compile(
+FACTS_EXTRA_WORDS = re.compile(
     r"(this might answer your question[:\,]? "
     r"|(according to|from) (wikipedia|wikihow)[:\,]? "
     r"|here's (something|what) I found (from|on) [a-zA-Z0-9\-\.]+:"

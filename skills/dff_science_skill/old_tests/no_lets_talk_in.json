@@ -225,7 +225,7 @@
                                 "yes_no_question": 0.0024524363689124584
                             }
                         ],
-                        "cobotqa_annotator": {
+                        "fact_random": {
                             "facts": [],
                             "response": ""
                         }
@@ -729,7 +729,7 @@
                                 "which": "human"
                             }
                         ],
-                        "cobotqa_annotator": {
+                        "fact_random": {
                             "facts": [
                                 {
                                     "entity": "pets",
