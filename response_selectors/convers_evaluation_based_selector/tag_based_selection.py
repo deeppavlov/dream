@@ -690,7 +690,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
         logger.info(
-            f"Best candidate contains prompt, question, request or length of > 200 symbols. " f"Do NOT add prompt."
+            "Best candidate contains prompt, question, request or length of > 200 symbols. Do NOT add prompt."
         )
         pass
     elif sum(categorized_prompts.values(), []):
@@ -701,7 +701,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
 
         if _add_prompt_forcibly or prompt_decision() or (_no_script_two_times_in_a_row and _is_best_not_script):
-            logger.info(f"Decided to add a prompt to the best candidate.")
+            logger.info("Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
@@ -730,8 +730,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         and not best_resp_cont_ackn
     ):
         logger.info(
-            f"Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
-            f"and we decided to add an acknowledgement to the best candidate."
+            "Acknowledgement is given, Final hypothesis contains only 1 sentence, no ackn in prev bot uttr,"
+            "and we decided to add an acknowledgement to the best candidate."
         )
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'
         best_candidate["response_parts"] = ["acknowledgement"] + best_candidate.get("response_parts", [])

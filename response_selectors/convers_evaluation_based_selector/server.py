@@ -95,7 +95,7 @@ def respond():
                         scope.set_extra("selected_skills", skill_data)
                         sentry_sdk.capture_message("response selector got candidate with badlisted phrases")
                         msg = (
-                            f"response selector got candidate with badlisted phrases:\n"
+                            "response selector got candidate with badlisted phrases:\n"
                             f"utterance: {skill_data['text']}\n"
                             f"skill name: {skill_data['skill_name']}"
                         )
@@ -361,7 +361,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
 
     if TAG_BASED_SELECTION:
-        logger.info(f"Tag based selection")
+        logger.info("Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(
             dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills
         )
