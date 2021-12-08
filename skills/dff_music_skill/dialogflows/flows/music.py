@@ -466,7 +466,7 @@ def genre_specific_response(vars):
             return "Oh, cool! I really like Bob Dylan, if you ask me. \
             Do you like him?"
         elif genre == "reggae":
-            return f'Reggae is very cool, it always sound sunny bright. \
+            return 'Reggae is very cool, it always sound sunny bright. \
             Did you know that "Don\'t worry, be happy" initially was written \
             by Bobby McFerrin and not Bob Marley?'
         elif genre == "country":
@@ -570,7 +570,7 @@ def genre_advice_response(vars):
             return "To me, that is crazy. Though they are not very popular in \
             the United States, they even were an inspiration to Kurt Cobain."
         elif genre == "all" or genre == "everything":
-            return f'You should check him out, especially "Space oddity". \
+            return 'You should check him out, especially "Space oddity". \
             It is really something special. \
             They even played it on a real Space Station!'
         elif genre == "nineties":
