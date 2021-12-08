@@ -539,7 +539,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # =====user intent requires particular action=====
 
             CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
-            _is_grounding_reqda = skill_name == "grounding_skill" and cand_uttr.get("type", "") == "universal_response"
+            _is_grounding_reqda = skill_name == "dff_grounding_skill" and cand_uttr.get("type", "") == "universal_response"
             _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE  # no priority to prev active skill
             _can_continue = CAN_NOT_CONTINUE  # no priority to scripted skills
 
@@ -622,7 +622,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
 
-        if cand_uttr["skill_name"] == "grounding_skill" and "acknowledgement" in cand_uttr.get("response_parts", []):
+        if cand_uttr["skill_name"] == "dff_grounding_skill" and "acknowledgement" in cand_uttr.get("response_parts", []):
             acknowledgement_hypothesis = deepcopy(cand_uttr)
 
     logger.info(f"Current CASE: {CASE}")

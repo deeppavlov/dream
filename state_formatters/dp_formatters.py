@@ -388,7 +388,7 @@ def utt_non_punct_dialog(dialog: Dict):
 
 def full_history_dialog(dialog: Dict):
     """
-    Used ONLY by: response selector and greeting_skill (turns on only for first 10 turns)
+    Used ONLY by: response selector
     """
     all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
     all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name][-15:]

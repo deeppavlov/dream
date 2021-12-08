@@ -209,8 +209,8 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             ):
                 logger.info("User wants to talk about particular topic")
                 # if user says `let's chat about blablabla`
-                if skill_names[i] == "cobotqa":
-                    logger.info("Particular topic. CoBotQA + Greeting to very big score.")
+                if skill_names[i] == "factoid_qa":
+                    logger.info("Particular topic. Facts + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
                     resp = candidates[i]["text"].replace("I don't have an opinion on that but I know some facts.", "")
                     candidates[i]["text"] = "Hi, " + greeting_spec + "! " + resp
@@ -258,7 +258,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         # we don't have 'cobotqa' anymore; instead we have factoid_qa
         elif (
-            skill_names[i] in ["factoid_qa", "cobotqa"]
+            skill_names[i] in ["factoid_qa"]
             and "Here's something I found on the web." in candidates[i]["text"]
         ):
             confidences[i] = 0.6
