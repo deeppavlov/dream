@@ -4,7 +4,6 @@ import os
 import random
 import re
 
-# from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
