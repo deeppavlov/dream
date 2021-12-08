@@ -6,7 +6,7 @@ services:
       context: ./
       dockerfile: dockerfile_agent
     environment:
-      WAIT_HOSTS: "cobotqa:8081, convers-evaluator-annotator:8004,
+      WAIT_HOSTS: "convers-evaluator-annotator:8004,
         spacy-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
         sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
@@ -35,21 +35,6 @@ services:
   mongo:
     command: mongod
     image: mongo:4.0.0
-
-  cobotqa:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./skills/CoBotQA/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8081
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   convers-evaluator-annotator:
     env_file: [.env]

@@ -43,7 +43,6 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  cobotqa:
   spacy-nounphrases:
   program-y:
   personality-catcher:

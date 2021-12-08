@@ -221,12 +221,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8080:8080
-  cobotqa:
-    volumes:
-      - "./skills/CoBotQA:/src"
-      - "./common:/src/common"
-    ports:
-      - 8081:8081
   text-qa:
     volumes:
       - "./services/text_qa:/src"
