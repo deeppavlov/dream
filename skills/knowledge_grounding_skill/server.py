@@ -557,7 +557,7 @@ def respond():
                 if special_intents_flags[i]:
                     confidence = 0.0
                     attr["confidence_case"] += "special_intents "
-                    logger.debug(f"KG skill: found special_intents")
+                    logger.debug("KG skill: found special_intents")
                 greetings_farewells_flag = greetings_farewells_re.search(raw_responses[curr_i])
                 if greetings_farewells_flag:
                     confidence = 0.0

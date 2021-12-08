@@ -237,9 +237,9 @@ BANNED_WORDS_IN_NOUNS_FOR_OPINION_EXPRESSION_COMPILED = join_words_in_or_pattern
 )
 
 
-def del_list_inplace(l, id_to_del):
+def del_list_inplace(_list, id_to_del):
     for i in sorted(id_to_del, reverse=True):
-        del l[i]
+        del _list[i]
 
 
 def remove_intersections_of_entities(entity, subjects):
