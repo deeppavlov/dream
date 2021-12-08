@@ -487,7 +487,7 @@
                 "current_index": 12,
                 "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
                 "misc": {
-                    "grounding_skill": {
+                    "dff_grounding_skill": {
                         "used_universal_intent_responses": [
                             "I'm ashamed, I don't know.",
                             "I don't even know yes or no.",
@@ -541,7 +541,7 @@
                             "You have so many interesting questions. It's so embarrassing, but I don't know.",
                             0.7,
                             {
-                                "grounding_skill": {
+                                "dff_grounding_skill": {
                                     "used_universal_intent_responses": [
                                         "I'm ashamed, I don't know.",
                                         "I don't even know yes or no.",
@@ -580,7 +580,7 @@
                             "You have so many interesting questions. I hadn't really thought about it.",
                             0.6,
                             {
-                                "grounding_skill": {
+                                "dff_grounding_skill": {
                                     "used_universal_intent_responses": [
                                         "I'm ashamed, I don't know.",
                                         "I don't even know yes or no.",

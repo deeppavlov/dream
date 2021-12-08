@@ -55,7 +55,7 @@
                                     "I bet that you are so sincere'. It's been really cool getting to know you better.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better."
                                             ]
@@ -96,7 +96,7 @@
                                     "You have so many interesting questions. I'm ashamed, I don't know.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
                                                 "I'm ashamed, I don't know."
@@ -115,7 +115,7 @@
                             ]
                         },
                         "misc": {
-                            "grounding_skill": {
+                            "dff_grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
                                     "I'm ashamed, I don't know."
@@ -178,7 +178,7 @@
                                     "I bet that you are so sincere'. It's been really cool getting to know you better.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better."
                                             ]
@@ -219,7 +219,7 @@
                                     "You have so many interesting questions. I'm ashamed, I don't know.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
                                                 "I'm ashamed, I don't know."
@@ -238,7 +238,7 @@
                             ]
                         },
                         "misc": {
-                            "grounding_skill": {
+                            "dff_grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
                                     "I'm ashamed, I don't know."
@@ -301,7 +301,7 @@
                                     "I bet that you are so sincere'. It's been really cool getting to know you better.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better."
                                             ]
@@ -342,7 +342,7 @@
                                     "You have so many interesting questions. I'm ashamed, I don't know.",
                                     0.7,
                                     {
-                                        "grounding_skill": {
+                                        "dff_grounding_skill": {
                                             "used_universal_intent_responses": [
                                                 "It's been really cool getting to know you better.",
                                                 "I'm ashamed, I don't know."
@@ -361,7 +361,7 @@
                             ]
                         },
                         "misc": {
-                            "grounding_skill": {
+                            "dff_grounding_skill": {
                                 "used_universal_intent_responses": [
                                     "It's been really cool getting to know you better.",
                                     "I'm ashamed, I don't know."
@@ -379,7 +379,7 @@
                 "used_links": {},
                 "age_group": "unknown",
                 "disliked_skills": [],
-                "grounding_skill": {
+                "dff_grounding_skill": {
                     "used_universal_intent_responses": [
                         "It's been really cool getting to know you better.",
                         "I'm ashamed, I don't know."

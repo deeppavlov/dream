@@ -840,7 +840,7 @@
                 "current_index": 1,
                 "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
                 "misc": {
-                    "grounding_skill": {
+                    "dff_grounding_skill": {
                         "used_universal_intent_responses": [
                             "It's been really cool getting to know you better."
                         ]
@@ -883,7 +883,7 @@
                             "I bet that you are so sincere'. It's been really cool getting to know you better.",
                             0.7,
                             {
-                                "grounding_skill": {
+                                "dff_grounding_skill": {
                                     "used_universal_intent_responses": [
                                         "It's been really cool getting to know you better."
                                     ]
