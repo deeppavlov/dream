@@ -728,7 +728,16 @@
                                 },
                                 "which": "human"
                             }
-                        ]
+                        ],
+                        "fact_random": {
+                            "facts": [
+                                {
+                                    "entity": "pets",
+                                    "fact": "A pet, or companion animal, is an animal kept primarily for a person's company or entertainment rather than as a working animal, livestock or a laboratory animal. Popular pets are often considered to have attractive appearances, intelligence and relatable personalities, but some pets may be taken in on an altruistic basis and accepted by the owner regardless of these characteristics."
+                                }
+                            ],
+                            "response": "A pet, or companion animal, is an animal kept primarily for a person's company or entertainment rather than as a working animal, livestock or a laboratory animal. Popular pets are often considered to have attractive appearances, intelligence and relatable personalities, but some pets may be taken in on an altruistic basis and accepted by the owner regardless of these characteristics."
+                        }
                     }
                 }
             ],
