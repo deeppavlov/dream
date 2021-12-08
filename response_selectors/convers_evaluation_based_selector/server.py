@@ -257,10 +257,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             else:
                 confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
         # we don't have 'cobotqa' anymore; instead we have factoid_qa
-        elif (
-            skill_names[i] in ["factoid_qa"]
-            and "Here's something I found on the web." in candidates[i]["text"]
-        ):
+        elif skill_names[i] in ["factoid_qa"] and "Here's something I found on the web." in candidates[i]["text"]:
             confidences[i] = 0.6
         elif (
             skill_names[i] == "factoid_qa"
