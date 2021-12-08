@@ -14,7 +14,7 @@ for ARGUMENT in "$@"; do
 done
 
 if [[ "$DIFF_BRANCH" == "" ]]; then
-    DIFF_BRANCH="commonb"
+    DIFF_BRANCH="dev"
 fi
 
 res=$(git diff --cached --name-only --diff-filter=ACMR origin/$DIFF_BRANCH | grep \.py\$ | tr -d "[:blank:]")
