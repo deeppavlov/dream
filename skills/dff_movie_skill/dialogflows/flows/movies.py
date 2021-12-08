@@ -550,14 +550,10 @@ def clarify_movie_title_again_request(ngrams, vars):
                 # logger.info("After 1st, 2nd clarification. Extracted the same movie title. Offer talk about movies.")
                 pass
             else:
-                logger.info(
-                    "After 1st, 2nd clarification. Extracted another movie title. Clarify for the second time."
-                )
+                logger.info("After 1st, 2nd clarification. Extracted another movie title. Clarify for the second time.")
                 flag = True
         elif not is_clarified_second_time:
-            logger.info(
-                "After 1st clarification. Didn't extracted movie title. Ask for title for the second time."
-            )
+            logger.info("After 1st clarification. Didn't extracted movie title. Ask for title for the second time.")
             flag = True
     return flag
 
@@ -585,9 +581,7 @@ def did_not_extracted_movie_title_after_clarification_request(ngrams, vars):
         if len(movies_ids) > 0:
             movies_ids = [mid for mid in movies_ids if mid != movie_id]
             if len(movies_ids) == 0:
-                logger.info(
-                    "After 1st, 2nd clarification. Extracted the same movie title. Offer talk about movies."
-                )
+                logger.info("After 1st, 2nd clarification. Extracted the same movie title. Offer talk about movies.")
                 flag = True
             else:
                 # logger.info("After 1st, 2nd clarification. Extracted another movie title. "

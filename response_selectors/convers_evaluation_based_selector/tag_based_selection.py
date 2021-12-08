@@ -689,9 +689,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
-        logger.info(
-            "Best candidate contains prompt, question, request or length of > 200 symbols. Do NOT add prompt."
-        )
+        logger.info("Best candidate contains prompt, question, request or length of > 200 symbols. Do NOT add prompt.")
         pass
     elif sum(categorized_prompts.values(), []):
         # best cand is 3d times in a row not scripted skill, let's append linkto
