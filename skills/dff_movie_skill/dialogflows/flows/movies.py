@@ -1521,7 +1521,8 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LETS_CHAT_ABOUT_MOVIES: lets_chat_about_movies_request,
         State.SYS_FAQ: faq_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
-        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM: user_was_asked_about_movie_title_and_declined_recommendations_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM:
+            user_was_asked_about_movie_title_and_declined_recommendations_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
         State.SYS_MENTIONED_MOVIES: mentioned_movies_request,
     },
@@ -1676,7 +1677,8 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_EXTRACTED_MOVIE_TITLE: popular_movie_title_extracted_request,
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
-        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM: user_was_asked_about_movie_title_and_declined_recommendations_request,
+        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM:
+            user_was_asked_about_movie_title_and_declined_recommendations_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
         State.SYS_OFFER_CONTINUE_MOVIE_TALK: no_requests_request,
     },
