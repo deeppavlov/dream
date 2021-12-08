@@ -256,7 +256,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
         )
         prev_what_to_talk_about_greeting = len(prev_what_to_talk_about_outputs) > 0 and bot_uttr.get(
             "active_skill", ""
-        ) in ["greeting_skill", "dff_friendship_skill", "program_y"]
+        ) in ["dff_friendship_skill", "program_y"]
 
         if (not prev_what_to_talk_about_greeting and can_offer_topic) or talk_about_user_topic:
             # if person wants to talk about something particular and we have extracted some topic - do that!

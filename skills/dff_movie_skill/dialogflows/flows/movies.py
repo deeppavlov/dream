@@ -46,7 +46,7 @@ from common.utils import (
     get_not_used_template,
     find_first_complete_sentence,
     get_all_not_used_templates,
-    COBOTQA_EXTRA_WORDS,
+    FACTS_EXTRA_WORDS,
 )
 from nltk.tokenize import sent_tokenize
 from dialogflows.flows.utils import (
@@ -895,7 +895,7 @@ def collect_and_save_facts_about_location(movie_id, vars):
 
         used_facts = shared_memory.get("used_facts", [])
         facts_about_movies = get_all_not_used_templates(used_facts, facts_about_movies)
-        facts_about_movies = [COBOTQA_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_movies if len(fact)]
+        facts_about_movies = [FACTS_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_movies if len(fact)]
 
         if len(facts_about_movies):
             state_utils.save_to_shared_memory(
@@ -926,7 +926,7 @@ def give_more_fact_request(ngrams, vars):
     return flag
 
 
-def generate_fact_from_cobotqa_response(vars):
+def generate_fact_from_fact_random_response(vars):
     # USR_HAVE_YOU_HEARD_FACT
     try:
         movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
@@ -1783,7 +1783,7 @@ simplified_dialogflow.set_error_successor(State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW,
 #  SYS_GIVE_FACT_ABOUT_MOVIE
 
 simplified_dialogflow.add_system_transition(
-    State.SYS_GIVE_FACT_ABOUT_MOVIE, State.USR_HAVE_YOU_HEARD_FACT, generate_fact_from_cobotqa_response
+    State.SYS_GIVE_FACT_ABOUT_MOVIE, State.USR_HAVE_YOU_HEARD_FACT, generate_fact_from_fact_random_response
 )
 # share fact if available, if no fact - offer recommendations
 

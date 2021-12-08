@@ -41,7 +41,7 @@ from common.travel import (
     TOO_SIMPLE_TRAVEL_FACTS,
 )
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_intents, get_sentiment, get_named_locations, COBOTQA_EXTRA_WORDS, get_entities
+from common.utils import get_intents, get_sentiment, get_named_locations, FACTS_EXTRA_WORDS, get_entities
 from common.fact_random import get_fact
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -793,7 +793,7 @@ def collect_and_save_facts_about_location(location, vars):
                 LOCATION_FACTS_BUFFER = {}
             LOCATION_FACTS_BUFFER[location] = facts_about_location
 
-    facts_about_location = [COBOTQA_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_location if len(fact)]
+    facts_about_location = [FACTS_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if not TOO_SIMPLE_TRAVEL_FACTS.search(fact)]
 
