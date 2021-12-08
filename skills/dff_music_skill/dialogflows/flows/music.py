@@ -5,7 +5,6 @@ import os
 import random
 import re
 
-# from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
@@ -832,11 +831,6 @@ def end_response(vars):
 
 # def music_fact_response(vars):
 #     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-#     # nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-#     # fact = ""
-#     # if nounphr:
-#     #     fact = send_cobotqa(f"fact about {nounphr[0]}")
-#     #     if "here" in fact.lower():
 #     fact = annotations.get("odqa", {}).get("answer_sentence", "")
 #     try:
 #         state_utils.set_confidence(vars)
