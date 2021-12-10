@@ -106,6 +106,45 @@ pipeline {
       }
     }
 
+    stage('Test dialog') {
+
+      steps {
+        script {
+          startTime = currentBuild.duration
+          notify('start')
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests.sh MODE=test_dialog'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              notify('failed', duration, e.getMessage())
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+            notify('success', duration)
+          }
+        }
+        aborted {
+          script {
+            notify('aborted')
+          }
+        }
+        always {
+          script {
+            archiveArtifacts artifacts: 'tests/dream/output/*', fingerprint: true
+          }
+        }
+      }
+    }
+
     stage('Test skills') {
       steps {
         script {
