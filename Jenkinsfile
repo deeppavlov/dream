@@ -107,11 +107,9 @@ pipeline {
     }
 
     stage('Test dialog') {
-
       steps {
         script {
           startTime = currentBuild.duration
-          notify('start')
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
@@ -119,7 +117,6 @@ pipeline {
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
-              notify('failed', duration, e.getMessage())
               throw e
             }
           }
@@ -129,17 +126,6 @@ pipeline {
         success {
           script {
             int duration = (currentBuild.duration - startTime) / 1000
-            notify('success', duration)
-          }
-        }
-        aborted {
-          script {
-            notify('aborted')
-          }
-        }
-        always {
-          script {
-            archiveArtifacts artifacts: 'tests/dream/output/*', fingerprint: true
           }
         }
       }
