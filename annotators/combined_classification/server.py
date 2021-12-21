@@ -80,22 +80,26 @@ except Exception as e:
 
 @app.route("/model", methods=["POST"])
 def respond():
+    t = time.time()
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"7in1 result: {answer}")
+    logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify(answer)
 
 
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
+    t = time.time()
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
     sentences_with_hist = [" [SEP] ".join(s) for s in utterances_with_histories]
     sentences = [s[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"7in1 batch result: {answer}")
+    logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
 
 
