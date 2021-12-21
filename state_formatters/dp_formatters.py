@@ -287,7 +287,7 @@ def hypothesis_histories_list(dialog: Dict):
         for utt in dialog["utterances"]:
             utterances_histories.append(utt["text"])
         # hyp["text"] is a string. We need to pass here list of strings.
-        utterances_histories.append([hyp["text"]])
+        utterances_histories.append(hyp["text"])
         utterances_histories_batch.append(utterances_histories)
 
     return [{"utterances_with_histories": utterances_histories_batch}]
