@@ -94,7 +94,6 @@ def respond():
 def batch_respond():
     t = time.time()
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
-    logger.info(f"Batch input {utterances_with_histories}")
     sentences_with_hist = [" [SEP] ".join(s) for s in utterances_with_histories]
     sentences = [s[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist)
