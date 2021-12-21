@@ -60,7 +60,75 @@ By default, `proxy.yml` contains all available proxy definitions.
 
 
 # Components
+## Annotators
 
+| Name                    | Requirements | Description |
+|-------------------------| --- |-------------| 
+| Spelling preprocessing  | req | desc        |
+| Sentseg                 | req | desc        |
+| Spacy nounphrases       | req | desc        |
+| Conceptnet              | req | desc        |
+| Badlisted words         | req | desc        |
+| ASR                     | req | desc        |
+| Factoid classification  | req | desc        |
+| Intent catcher          | req | desc        |
+| Fact random             | req | desc        |
+| Fact retrieval          | req | desc        |
+| NER                     | req | desc        |
+| Entity detection        | req | desc        |
+| KBQA                    | req | desc        |
+| Entity linking          | req | desc        |
+| Wiki parser             | req | desc        |
+| Sentrewrite             | req | desc        |
+| Midas classification    | req | desc        |
+| Combined classification | req | desc        |
+| Entity sorter           | req | desc        |
+| News API annotator      | req | desc        |
+| Topic recommendation    | req | desc        |
+| User persona extractor  | req | desc        |
+
+## Skills
+| Name                      | Requirements | Description |
+|---------------------------| --- |-------------| 
+| DFF Sports skill          | req | desc        |
+| Eliza                     | req | desc        |
+| Program Y                 | req | desc        |
+| Personality Catcher       | req | desc        |
+| Intent Responder          | req | desc        |
+| Dummy Skill               | req | desc        |
+| Alexa Handler             | req | desc        |
+| Dummy Skill Dialog        | req | desc        |
+| Misheard ASR              | req | desc        |
+| DFF Movie skill           | req | desc        |
+| Emotion skill             | req | desc        |
+| Convert Reddit            | req | desc        |
+| Personal Info skill       | req | desc        |
+| DFF Coronavirus skill     | req | desc        |
+| DFF Weather skill         | req | desc        |
+| DFF Short Story skill     | req | desc        |
+| Meta Script skill         | req | desc        |
+| Short Story skill         | req | desc        |
+| Small Talk skill          | req | desc        |
+| Game Cooperative skill    | req | desc        |
+| Program Y Wide            | req | desc        |
+| News API skill            | req | desc        |
+| Comet Dialog skill        | req | desc        |
+| DFF Grounding skill       | req | desc        |
+| Factoid QA                | req | desc        |
+| DFF Animals skill         | req | desc        |
+| DFF Gaming skill          | req | desc        |
+| DFF Friendship skill      | req | desc        |
+| Knowledge Grounding skill | req | desc        |
+| DFF Travel skill          | req | desc        |
+| DFF Food skill            | req | desc        |
+| DFF Science skill         | req | desc        |
+| DFF Music skill           | req | desc        |
+| DFF Funfact skill         | req | desc        |
+| DFF Gossip skill          | req | desc        |
+| DFF Bot Persona skill     | req | desc        |
+| DFF Wiki skill            | req | desc        |
+| DFF Book skill            | req | desc        |
+| DFF Art skill             | req | desc        |
 
 
 # Papers
