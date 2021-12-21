@@ -251,7 +251,7 @@ def get_fact_random_annotations_from_human_utterance(ctx: Context, actor: Actor)
 
 
 def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity) -> list:
-    fact_random_annotations = get_fact_random_annotations_from_human_utterance(ctx, actor)
+    fact_random_results = get_fact_random_annotations_from_human_utterance(ctx, actor)
     facts_for_entity = []
     for fact in fact_random_results.get("facts", []):
         is_same_entity = fact.get("entity_substr", "").lower() == entity.lower()
