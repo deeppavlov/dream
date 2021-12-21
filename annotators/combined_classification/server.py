@@ -80,6 +80,7 @@ except Exception as e:
 
 @app.route("/model", methods=["POST"])
 def respond():
+    t = time.time()
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist)
