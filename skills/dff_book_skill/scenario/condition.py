@@ -132,7 +132,7 @@ def _(phrase: str) -> Callable:
         if ctx.validation:
             return False
         last_response = ctx.last_response
-        if isinstance(response, list):
+        if isinstance(last_response, list):
             return phrase in last_response
         else:
             return False
@@ -147,7 +147,7 @@ def _(phrase: list) -> Callable:
         if ctx.validation:
             return False
         last_response = ctx.last_response
-        if isinstance(response, list):
+        if isinstance(last_response, list):
             return any([item in last_response for item in phrase])
         else:
             return False
