@@ -1175,9 +1175,7 @@ def is_toxic_or_badlisted_utterance(annotated_utterance):
     default_badlist = {"bad_words": False}
     badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return toxic_result or any(
-        [badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]]
-    )
+    return toxic_result or any([badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]])
 
 
 FACTOID_PATTERNS = re.compile(
