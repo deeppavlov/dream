@@ -10,11 +10,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=5
-  factoid-classification:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
   text-qa:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -79,6 +74,8 @@ services:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=2
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

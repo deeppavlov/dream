@@ -198,12 +198,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8077:8077
-  factoid-classification:
-    volumes:
-      - "./annotators/DeepPavlovFactoidClassification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8073:8073
   mongo:
     ports:
       - 27017:27017

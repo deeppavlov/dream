@@ -209,19 +209,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             },
-            "factoid_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://factoid-classification:8073/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:dp_classes_formatter_service",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation"
-            },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
