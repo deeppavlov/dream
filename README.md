@@ -2,11 +2,7 @@
 
 **DeepPavlov Dream** is a platform for creating multi-skill chatbots.
 
-Please refer to our [readthedocs documentation](https://deeppavlov-agent.readthedocs.io).
-
-- [Alexa Bot README](README-alexa.md)
-- Travis Tests Status on dev branch: [![Build Status](https://travis-ci.com/sld/dp-agent-alexa.svg?token=iYvsyXT3Gi1yjduLqC6t&branch=dev)](https://travis-ci.com/sld/dp-agent-alexa)
-- Jenkins Tests Status on dev branch: [![Build Status](http://lnsigo.mipt.ru:8080/buildStatus/icon?job=assistant%2Fdev)](http://lnsigo.mipt.ru:8080/job/dp-multibranch/job/dev/)
+To get architecture documentation, please refer to DeepPavlov Agent [readthedocs documentation](https://deeppavlov-agent.readthedocs.io).
 
 
 # Distributions
@@ -22,20 +18,37 @@ This way all the requests will be redirected to DeepPavlov API, so you don't hav
 
 1. Clone the repo
 
-    ```git clone https://github.com/deepmipt/dream```
+   ```git clone https://github.com/deepmipt/dream```
 
-2. Run
 
-    ```docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml up --build```
-    
-    `dev.yml` includes volume bindings for easier debugging;
+2. Install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/) 
 
-    `proxy.yml` is a list of proxied containers. See [proxy usage](#proxy-usage).
+   If you get a "Permission denied" error running docker-compose, make sure to [configure your docker user](https://docs.docker.com/engine/install/linux-postinstall/) correctly.
+
+
+3. Run
+
+   ```docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml up --build```
+
+   - `docker-compose.yml` is your main deployment configuration;
+
+   - `dev.yml` includes volume bindings for easier debugging;
+
+   - `proxy.yml` is a list of proxied containers. See [proxy usage](#proxy-usage).
 
 
 ### Deploying components locally
 
-Any components which are not included in `proxy.yml` will be deployed locally.
+Any components included in `docker-compose.yml` and not included in `proxy.yml` will be deployed locally.
+Depending on your needs, you can:
+   - Run ```docker-compose up --build``` to deploy everything on your machine.
+   - Remove the components you need to deploy locally from `proxy.yml` and run
+   
+      ```docker-compose -f docker-compose.yml -f proxy.yml up --build```.
+
+**Please note, that DeepPavlov Dream components require a lot of resources.**
+Refer to the [components](#components) section to see estimated requirements for each component.
+
 
 
 # Proxy usage
@@ -54,9 +67,9 @@ convers-evaluator-annotator:
 ```
 and include this config in your deployment command:
 ```
-docker-compose -f docker-compose.yml -f proxy.yml up
+docker-compose -f docker-compose.yml -f proxy.yml up --build
 ```
-By default, `proxy.yml` contains all available proxy definitions.   
+By default, `proxy.yml` contains all available proxy definitions.
 
 
 # Components
@@ -88,47 +101,46 @@ By default, `proxy.yml` contains all available proxy definitions.
 | User persona extractor  | req | desc        |
 
 ## Skills
-| Name                      | Requirements | Description |
-|---------------------------| --- |-------------| 
-| DFF Sports skill          | req | desc        |
-| Eliza                     | req | desc        |
-| Program Y                 | req | desc        |
-| Personality Catcher       | req | desc        |
-| Intent Responder          | req | desc        |
-| Dummy Skill               | req | desc        |
-| Alexa Handler             | req | desc        |
-| Dummy Skill Dialog        | req | desc        |
-| Misheard ASR              | req | desc        |
-| DFF Movie skill           | req | desc        |
-| Emotion skill             | req | desc        |
-| Convert Reddit            | req | desc        |
-| Personal Info skill       | req | desc        |
-| DFF Coronavirus skill     | req | desc        |
-| DFF Weather skill         | req | desc        |
-| DFF Short Story skill     | req | desc        |
-| Meta Script skill         | req | desc        |
-| Short Story skill         | req | desc        |
-| Small Talk skill          | req | desc        |
-| Game Cooperative skill    | req | desc        |
-| Program Y Wide            | req | desc        |
-| News API skill            | req | desc        |
-| Comet Dialog skill        | req | desc        |
-| DFF Grounding skill       | req | desc        |
-| Factoid QA                | req | desc        |
-| DFF Animals skill         | req | desc        |
-| DFF Gaming skill          | req | desc        |
-| DFF Friendship skill      | req | desc        |
+| Name                    | Requirements | Description |
+|-------------------------| --- |-------------| 
+| DFF Sports skill        | req | desc        |
+| Eliza                   | req | desc        |
+| Program Y               | req | desc        |
+| Personality Catcher     | req | desc        |
+| Intent Responder        | req | desc        |
+| Dummy Skill             | req | desc        |
+| Dummy Skill Dialog      | req | desc        |
+| Misheard ASR            | req | desc        |
+| DFF Movie skill         | req | desc        |
+| Emotion skill           | req | desc        |
+| Convert Reddit          | req | desc        |
+| Personal Info skill     | req | desc        |
+| DFF Coronavirus skill   | req | desc        |
+| DFF Weather skill       | req | desc        |
+| DFF Short Story skill   | req | desc        |
+| Meta Script skill       | req | desc        |
+| Short Story skill       | req | desc        |
+| Small Talk skill        | req | desc        |
+| Game Cooperative skill  | req | desc        |
+| Program Y Wide          | req | desc        |
+| News API skill          | req | desc        |
+| Comet Dialog skill      | req | desc        |
+| DFF Grounding skill     | req | desc        |
+| Factoid QA              | req | desc        |
+| DFF Animals skill       | req | desc        |
+| DFF Gaming skill        | req | desc        |
+| DFF Friendship skill    | req | desc        |
 | Knowledge Grounding skill | req | desc        |
-| DFF Travel skill          | req | desc        |
-| DFF Food skill            | req | desc        |
-| DFF Science skill         | req | desc        |
-| DFF Music skill           | req | desc        |
-| DFF Funfact skill         | req | desc        |
-| DFF Gossip skill          | req | desc        |
-| DFF Bot Persona skill     | req | desc        |
-| DFF Wiki skill            | req | desc        |
-| DFF Book skill            | req | desc        |
-| DFF Art skill             | req | desc        |
+| DFF Travel skill        | req | desc        |
+| DFF Food skill          | req | desc        |
+| DFF Science skill       | req | desc        |
+| DFF Music skill         | req | desc        |
+| DFF Funfact skill       | req | desc        |
+| DFF Gossip skill        | req | desc        |
+| DFF Bot Persona skill   | req | desc        |
+| DFF Wiki skill          | req | desc        |
+| DFF Book skill          | req | desc        |
+| DFF Art skill           | req | desc        |
 
 
 # Papers
