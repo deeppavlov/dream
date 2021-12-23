@@ -181,7 +181,7 @@
                     "annotators.spelling_preprocessing"
                 ],
                 "previous_services": [
-                    "annotators.cobot_entities",
+                    "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
@@ -316,7 +316,7 @@
                     "annotators.ner"
                 ],
                 "previous_services": [
-                    "annotators.cobot_entities",
+                    "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ]
             },
@@ -389,7 +389,7 @@
             "news_api_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://news-api-annotator:8112/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
@@ -398,7 +398,7 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
                     "annotators.ner",
-                    "annotators.cobot_entities",
+                    "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
@@ -414,7 +414,7 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
-                    "annotators.cobot_topics"
+                    "annotators.combined_classification"
                 ],
                 "state_manager_method": "add_annotation"
             },
