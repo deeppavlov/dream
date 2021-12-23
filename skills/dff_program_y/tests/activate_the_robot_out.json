@@ -1,9 +1,9 @@
 [
     [
-        "Green is my favorite color too!",
+        "Robot activated. Awaiting your command Mate.",
         0.85,
         {
-            "program_y_state": {
+            "dff_program_y_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 0,
                 "history": {
@@ -14,7 +14,7 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "3ce95946-562f-44b8-80cc-cb9239207dd1",
+                    "id": "8bc369fa-a2e8-4b7d-8bed-a06f0122b07f",
                     "labels": {
                         "0": [
                             "story_flow",
@@ -22,10 +22,10 @@
                         ]
                     },
                     "requests": {
-                        "0": "My favorite color is green"
+                        "0": "ACTIVATE THE ROBOT"
                     },
                     "responses": {
-                        "0": "Green is my favorite color too!"
+                        "0": "Robot activated. Awaiting your command Mate."
                     },
                     "misc": {},
                     "validation": false,

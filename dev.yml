@@ -17,9 +17,9 @@ services:
       - "./annotators/spacy_nounphrases:/src"
     ports:
       - 8006:8006
-  program-y:
+  dff-program-y:
     volumes:
-      - "./skills/program_y:/src"
+      - "./skills/dff_program_y:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008
@@ -62,9 +62,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  program-y-dangerous:
+  dff-program-y-dangerous:
     volumes:
-      - "./skills/program_y_dangerous:/src"
+      - "./skills/dff_program_y_dangerous:/src"
       - "./common:/src/common"
     ports:
       - 8022:8022
@@ -156,9 +156,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8068:8068
-  program-y-wide:
+  dff-program-y-wide:
     volumes:
-      - "./skills/program_y_wide:/src"
+      - "./skills/dff_program_y_wide:/src"
       - "./common:/src/common"
     ports:
       - 8064:8064

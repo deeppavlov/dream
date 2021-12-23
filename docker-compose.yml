@@ -7,12 +7,12 @@ services:
       dockerfile: dockerfile_agent
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-        spacy-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
+        spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
         intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
-        sentrewrite:8017, ner:8021, program-y-dangerous:8022, dff-movie-skill:8023,
+        sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023,
         convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
-        dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, program-y-wide:8064,
+        dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, dff-program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
         factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
@@ -70,14 +70,14 @@ services:
         reservations:
           memory: 256M
 
-  program-y:
+  dff-program-y:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8008
-        SERVICE_NAME: program_y
+        SERVICE_NAME: dff_program_y
       context: .
-      dockerfile: ./skills/program_y/Dockerfile
+      dockerfile: ./skills/dff_program_y/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
     deploy:
       resources:
@@ -184,14 +184,14 @@ services:
         reservations:
           memory: 256M
 
-  program-y-dangerous:
+  dff-program-y-dangerous:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8022
-        SERVICE_NAME: program_y_dangerous
+        SERVICE_NAME: dff_program_y_dangerous
       context: .
-      dockerfile: ./skills/program_y_dangerous/Dockerfile
+      dockerfile: ./skills/dff_program_y_dangerous/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8022 --reload
     deploy:
       resources:
@@ -431,14 +431,14 @@ services:
         reservations:
           memory: 256M
 
-  program-y-wide:
+  dff-program-y-wide:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8064
-        SERVICE_NAME: program_y_wide
+        SERVICE_NAME: dff_program_y_wide
       context: .
-      dockerfile: ./skills/program_y_wide/Dockerfile
+      dockerfile: ./skills/dff_program_y_wide/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8064 --reload
     deploy:
       resources:

@@ -479,11 +479,11 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "program_y": {
+            "dff_program_y": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://program-y:8008/respond"
+                    "url": "http://dff-program-y:8008/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -568,11 +568,11 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "program_y_dangerous": {
+            "dff_program_y_dangerous": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://program-y-dangerous:8022/respond"
+                    "url": "http://dff-program-y-dangerous:8022/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_dangerous_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -724,11 +724,11 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "program_y_wide": {
+            "dff_program_y_wide": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://program-y-wide:8064/respond"
+                    "url": "http://dff-program-y-wide:8064/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_wide_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

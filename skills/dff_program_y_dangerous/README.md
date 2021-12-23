@@ -8,11 +8,11 @@
 
 ```bash
 # create local.yml
-python utils/create_local_yml.py -s program-y -s convers-evaluation-selector 
+python utils/create_local_yml.py -s dff-program-y -s convers-evaluation-selector 
 # build service
 docker-compose -f docker-compose.yml -f local.yml up -d --build 
 # run tests
-docker-compose -f docker-compose.yml -f local.yml exec program-y bash test.sh
+docker-compose -f docker-compose.yml -f local.yml exec dff-program-y bash test.sh
 # run a dialog with the agent
 docker-compose -f docker-compose.yml -f local.yml exec agent python -m deeppavlov_agent.run
 ```

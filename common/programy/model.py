@@ -1,3 +1,4 @@
+from typing import Union
 import pathlib
 import uuid
 import logging
@@ -28,38 +29,51 @@ class DataFileBot(EmbeddedDataFileBot):
         return response
 
 
+def path_filter(path: Union[pathlib.Path, list]):
+    if isinstance(path, list):
+        return [path_filter(i) for i in path if path_filter(i)]
+    if isinstance(path, pathlib.Path):
+        if path.exists() and path.is_dir() and [path_filter(i) for i in path.glob("./*") if path_filter(i)]:
+            return path
+        elif path.exists() and path.is_file():
+            return path
+
+
 def get_configuration_files(storage: pathlib.Path = pathlib.Path("data")):
     storage = pathlib.Path(storage)
     files = {
         "aiml": [storage / "categories"],
-        # "learnf": [storage / "categories/learnf"],
+        "learnf": [storage / "categories/learnf"],
         "sets": [storage / "sets"],
         "maps": [storage / "maps"],
         "rdfs": [storage / "rdfs"],
-        # "properties": storage / "properties/properties.txt",
-        # "defaults": storage / "properties/defaults.txt",
+        "properties": storage / "properties/properties.txt",
+        "defaults": storage / "properties/defaults.txt",
         "denormals": storage / "lookups/denormal.txt",
         "normals": storage / "lookups/normal.txt",
         "genders": storage / "lookups/gender.txt",
         "persons": storage / "lookups/person.txt",
         "person2s": storage / "lookups/person2.txt",
-        # "triggers": storage / "triggers/triggers.txt",
-        # "regexes": storage / "regex/regex-templates.txt",
+        "triggers": storage / "triggers/triggers.txt",
+        "regexes": storage / "regex/regex-templates.txt",
         "usergroups": storage / "security/usergroups.yaml",
         "spellings": storage / "spelling/corpus.txt",
         "preprocessors": storage / "processing/preprocessors.conf",
         "postprocessors": storage / "processing/postprocessors.conf",
-        # "postquestionprocessors": storage / "processing/postquestionprocessors.conf",
+        "postquestionprocessors": storage / "processing/postquestionprocessors.conf",
         "licenses": storage / "licenses/license.keys",
-        # "conversations": storage / "conversations",
+        "conversations": storage / "conversations",
         "duplicates": storage / "debug/duplicates.txt",
         "errors": storage / "debug/errors.txt",
-        # "services": storage / "services",
+        "services": storage / "services",
     }
+    files = {name: path_filter(path) for name, path in files.items()}
+    files = {name: path for name, path in files.items() if path}
+
     for name in files:
         files[name] = str(files[name]) if isinstance(files[name], pathlib.Path) else [str(i) for i in files[name]]
     return files
 
 
 def get_programy_model(storage: pathlib.Path = pathlib.Path("data")):
-    return DataFileBot(get_configuration_files(storage))
+    return DataFileBot(get_configuration_files(storage), defaults=True)
