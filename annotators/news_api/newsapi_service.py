@@ -36,16 +36,16 @@ def get_nltk_sentiment(text):
 
 
 class CachedRequestsAPI:
-    NEWS_SERVICE_URL = f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&max=5&sortby=publishedAt&token="
-    ALL_NEWS_SERVICE_URL = f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&max=5&sortby=publishedAt&token="
+    NEWS_SERVICE_URL = "https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&max=20&sortby=publishedAt&token="
+    ALL_NEWS_SERVICE_URL = "https://gnews.io/api/v4/top-headlines?country=us&lang=en&max=20&sortby=publishedAt&token="
     EXT_NEWS_SERVICE_URL = (
-        f"https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&expand=content&max=3&sortby=publishedAt&token="
+        "https://gnews.io/api/v4/search?q=TOPIC&country=us&lang=en&expand=content&max=20&sortby=publishedAt&token="
     )
     EXT_ALL_NEWS_SERVICE_URL = (
-        f"https://gnews.io/api/v4/top-headlines?country=us&lang=en&expand=content&max=3&sortby=publishedAt&token="
+        "https://gnews.io/api/v4/top-headlines?country=us&lang=en&expand=content&max=20&sortby=publishedAt&token="
     )
 
-    def __init__(self, renew_freq_time=3600):
+    def __init__(self, renew_freq_time):
         self.renew_freq_time = renew_freq_time
         self.first_renew_time = datetime.now()
         self.prev_renew_times = {}
@@ -78,7 +78,7 @@ class CachedRequestsAPI:
         for ind, api_key in enumerate(self._api_keys):
             try:
                 request_address = self._construct_address(topic, api_key, return_list_of_news)
-                resp = requests.get(url=request_address, timeout=0.7)
+                resp = requests.get(url=request_address, timeout=1.5)
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
@@ -190,7 +190,7 @@ class CachedRequestsAPI:
             )
             result = [False] * len(articles_to_check)
             sentry_sdk.capture_message(
-                f"Badlisted Annotator requests from News API Annotator "
+                "Badlisted Annotator requests from News API Annotator "
                 f" result status code is not 200: {resp}. result text: {resp.text}; "
                 f"result status: {resp.status_code}"
             )
