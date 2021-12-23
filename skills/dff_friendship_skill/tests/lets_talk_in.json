@@ -215,7 +215,7 @@
                                 "which": "all"
                             }
                         ],
-                        "cobotqa_annotator": {
+                        "fact_random": {
                             "facts": [],
                             "response": ""
                         }

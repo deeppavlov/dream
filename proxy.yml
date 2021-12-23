@@ -144,7 +144,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8033
       - PORT=8033
 
-  book-skill:
+  dff-book-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -304,15 +304,6 @@ services:
     environment:
       - PROXY_PASS=lnsigo.mipt.ru:8077
       - PORT=8077
-
-    command: ["nginx", "-g", "daemon off;"]
-  cobotqa:
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8081
-      - PORT=8081
 
     command: ["nginx", "-g", "daemon off;"]
   knowledge-grounding:

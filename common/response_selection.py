@@ -1,6 +1,6 @@
 # this is a list of skills which are not one-lines
 ACTIVE_SKILLS = [
-    "book_skill",
+    "dff_book_skill",
     "christmas_new_year_skill",
     "dff_coronavirus_skill",
     "dummy_skill_dialog",
@@ -28,7 +28,8 @@ ACTIVE_SKILLS = [
     "dff_science_skill",
     "dff_gossip_skill",
     "small_talk_skill",
-    "dff_wiki_skill, dff_art_skill",
+    "dff_wiki_skill",
+    "dff_art_skill",
 ]
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill",

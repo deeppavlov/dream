@@ -53,8 +53,6 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  cobotqa:
-    restart: unless-stopped
   spacy-nounphrases:
     restart: unless-stopped
   dff-program-y:
@@ -95,7 +93,7 @@ services:
     restart: unless-stopped
   misheard-asr:
     restart: unless-stopped
-  book-skill:
+  dff-book-skill:
     restart: unless-stopped
   emotion-skill:
     restart: unless-stopped

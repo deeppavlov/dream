@@ -46,7 +46,7 @@ from common.utils import (
     get_not_used_template,
     find_first_complete_sentence,
     get_all_not_used_templates,
-    COBOTQA_EXTRA_WORDS,
+    FACTS_EXTRA_WORDS,
 )
 from nltk.tokenize import sent_tokenize
 from dialogflows.flows.utils import (
@@ -99,7 +99,7 @@ class State(Enum):
     USR_WAS_OFFERED_RECOMMENDATIONS = auto()
     USR_ASKED_HAVE_SEEN_MOVIE = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED = auto()
-    SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM = auto()
+    SYS_ASKED_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM = auto()
     SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED = auto()
 
     SYS_OFFER_CONTINUE_MOVIE_TALK = auto()
@@ -158,9 +158,9 @@ def no_requests_request(ngrams, vars):
     flag = condition_utils.no_special_switch_off_requests(vars)
 
     if flag:
-        logger.info(f"No special requests in user utterances")
+        logger.info("No special requests in user utterances")
         return True
-    logger.info(f"Special requests in user utterances")
+    logger.info("Special requests in user utterances")
     return False
 
 
@@ -173,7 +173,7 @@ def not_watched_request(ngrams, vars):
     # SYS_USER_NOT_WATCH_MOVIE
     human_uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
     if NOT_WATCHED_TEMPLATE.search(human_uttr_text):
-        logger.info(f"Not watched in user utterance")
+        logger.info("Not watched in user utterance")
         return True
     return False
 
@@ -198,7 +198,7 @@ def user_not_like_movies_request(ngrams, vars):
     # SYS_NOT_LIKE_MOVIES
     human_uttr_text = state_utils.get_last_human_utterance(vars).get("text", "")
     if NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE.search(human_uttr_text):
-        logger.info(f"Not like movies in user utterances")
+        logger.info("Not like movies in user utterances")
         return True
     return False
 
@@ -209,7 +209,7 @@ def user_not_like_movies_response(vars):
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         state_utils.save_to_shared_memory(vars, current_status="")
-        return f"Anyway. I adore movies because for me it's almost the only opportunity to explore the human world."
+        return "Anyway. I adore movies because for me it's almost the only opportunity to explore the human world."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -234,23 +234,23 @@ def user_was_asked_about_movie_title(vars):
 
 def user_was_asked_about_movie_title_request(ngrams, vars):
     if user_was_asked_about_movie_title(vars):
-        logger.info(f"User was asked movie title question")
+        logger.info("User was asked movie title question")
         return True
     return False
 
 
 def user_refused_movie_title_question_request(ngrams, vars):
     if user_was_asked_about_movie_title(vars) and condition_utils.is_no_vars(vars):
-        logger.info(f"User was asked movie title question AND said NO.")
+        logger.info("User was asked movie title question AND said NO.")
         return True
     return False
 
 
-def user_was_asked_about_movie_title_and_declined_recommendations_request(ngrams, vars):
+def asked_movie_title_and_declined_recommendations_request(ngrams, vars):
     declined_recommendations_previously = state_utils.get_shared_memory(vars).get("recommendations_declined", False)
     was_asked_movie_title_question = user_was_asked_about_movie_title_request(ngrams, vars)
     if was_asked_movie_title_question and declined_recommendations_previously:
-        logger.info(f"User was asked movie title question AND declined recommendations before that.")
+        logger.info("User was asked movie title question AND declined recommendations before that.")
         return True
     return False
 
@@ -270,14 +270,14 @@ def lets_chat_about_movies_request(ngrams, vars):
     )
 
     if user_lets_chat_about:
-        logger.info(f"Let's chat about movies in user utterances")
+        logger.info("Let's chat about movies in user utterances")
         return True
     return False
 
 
 def lets_chat_about_movies_response(vars):
     # USR_ASK_MOVIE_TITLE_QUESTION
-    logger.info(f"Bot asks user's opinion about movies.")
+    logger.info("Bot asks user's opinion about movies.")
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
@@ -298,14 +298,14 @@ def mentioned_movies_request(ngrams, vars):
     # SYS_MENTIONED_MOVIES
     # this check if any mentions of movies in user utterance
     if MOVIE_COMPILED_PATTERN.search(state_utils.get_last_human_utterance(vars).get("text", "")):
-        logger.info(f"Mentioned movies in user utterances")
+        logger.info("Mentioned movies in user utterances")
         return True
     return False
 
 
 def not_confident_lets_chat_about_movies_response(vars):
     # USR_ASK_MOVIE_TITLE_QUESTION
-    logger.info(f"Bot asks user's opinion about movies.")
+    logger.info("Bot asks user's opinion about movies.")
     try:
         if state_utils.get_last_bot_utterance(vars).get("active_skill", "") == "dff_movie_skill":
             prephrase = f"{get_movie_template('lets_move_on')} "
@@ -348,7 +348,7 @@ def extract_mentions(vars, check_full_utterance=False):
         if "annotations" not in curr_human_uttr:
             curr_human_uttr["annotations"] = {}
         logger.info(
-            f"For mentions extraction cobot_entities annotation "
+            "For mentions extraction cobot_entities annotation "
             f"'{curr_human_uttr['annotations'].get('cobot_entities')}' is replaced with '{new_cobot_entities}'"
         )
         curr_human_uttr["annotations"]["cobot_entities"] = new_cobot_entities
@@ -422,7 +422,7 @@ def to_be_clarified_movie_title_extracted_request(ngrams, vars):
 
 def movie_title_clarification_response(vars):
     # USR_MOVIE_TITLE_CLARIFICATION
-    logger.info(f"Bot clarifies movie title.")
+    logger.info("Bot clarifies movie title.")
     try:
         movies_ids, unique_persons, mentioned_genres = extract_mentions(vars, check_full_utterance=True)
         movie_id, movie_title = extract_movie_title(vars, movies_ids)
@@ -435,10 +435,9 @@ def movie_title_clarification_response(vars):
 
         if len(movies_ids) == 0 and user_was_asked_for_movie_title_or_clarification:
             logger.info(
-                f"Previously bot clarified movie title, no title extracted from current utterance. "
-                f"Clarify as Prompt."
+                "Previously bot clarified movie title, no title extracted from current utterance. Clarify as Prompt."
             )
-            response = f"{get_movie_template('dont_know_movie_title_at_all')} " f"{CLARIFY_WHAT_MOVIE_TO_DISCUSS}"
+            response = f"{get_movie_template('dont_know_movie_title_at_all')} {CLARIFY_WHAT_MOVIE_TO_DISCUSS}"
             state_utils.set_confidence(vars, END_SCENARIO_OFFER_CONFIDENCE)
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
             state_utils.save_to_shared_memory(vars, current_status="movie_prompt")
@@ -449,7 +448,7 @@ def movie_title_clarification_response(vars):
                 f"`{state_utils.get_last_human_utterance(vars)['text']}`."
             )
             response = (
-                f"{get_movie_template('clarification_template', movie_type=movie_type)} " f"{movie_type} {movie_title}?"
+                f"{get_movie_template('clarification_template', movie_type=movie_type)} {movie_type} {movie_title}?"
             )
 
             numvotes = templates.imdb.get_info_about_movie(movie_title, "numVotes")
@@ -500,18 +499,18 @@ def clarified_movie_title_confirmed_request(ngrams, vars):
     )
     flag = False
     if is_yes:
-        logger.info(f"After 1st, 2nd clarification. User confirmed movie title. Start script.")
+        logger.info("After 1st, 2nd clarification. User confirmed movie title. Start script.")
         flag = True
     elif len(movies_ids) > 0 and not is_no:
         movies_ids = [mid for mid in movies_ids if mid != movie_id]
         if not is_clarified_second_time and len(movies_ids) == 0:
-            logger.info(f"After 1st clarification. Extracted the same movie title. Start script.")
+            logger.info("After 1st clarification. Extracted the same movie title. Start script.")
             flag = True
         elif not is_clarified_second_time:
-            # logger.info(f"After 1st clarification. Extracted another movie title. Clarify for the second time.")
+            # logger.info("After 1st clarification. Extracted another movie title. Clarify for the second time.")
             pass
         else:
-            logger.info(f"After 2nd clarification. Extracted the same or another movie title. Start script.")
+            logger.info("After 2nd clarification. Extracted the same or another movie title. Start script.")
             flag = True
     return flag
 
@@ -530,36 +529,31 @@ def clarify_movie_title_again_request(ngrams, vars):
     )
     flag = False
     if is_yes:
-        # logger.info(f"After 1st, 2nd clarification. User confirmed movie title. Start script.")
+        # logger.info("After 1st, 2nd clarification. User confirmed movie title. Start script.")
         pass
     elif len(movies_ids) > 0 and not is_no:
         movies_ids = [mid for mid in movies_ids if mid != movie_id]
         if not is_clarified_second_time and len(movies_ids) == 0:
-            # logger.info(f"After 1st clarification. Extracted the same movie title. Start script.")
+            # logger.info("After 1st clarification. Extracted the same movie title. Start script.")
             pass
         elif not is_clarified_second_time:
-            logger.info(f"After 1st clarification. Extracted another movie title. Clarify for the second time.")
+            logger.info("After 1st clarification. Extracted another movie title. Clarify for the second time.")
             flag = True
         else:
-            # logger.info(f"After 2nd clarification. Extracted the same or another movie title. Start script.")
+            # logger.info("After 2nd clarification. Extracted the same or another movie title. Start script.")
             pass
     elif is_no:
-        logger.info(f"After 1st, 2nd clarification. User rejects offered movie title.")
+        logger.info("After 1st, 2nd clarification. User rejects offered movie title.")
         if len(movies_ids) > 0:
             movies_ids = [mid for mid in movies_ids if mid != movie_id]
             if len(movies_ids) == 0:
-                # logger.info(f"After 1st, 2nd clarification. Extracted the same movie title. "
-                #             f"Offer talk about movies.")
+                # logger.info("After 1st, 2nd clarification. Extracted the same movie title. Offer talk about movies.")
                 pass
             else:
-                logger.info(
-                    f"After 1st, 2nd clarification. Extracted another movie title. " f"Clarify for the second time."
-                )
+                logger.info("After 1st, 2nd clarification. Extracted another movie title. Clarify for the second time.")
                 flag = True
         elif not is_clarified_second_time:
-            logger.info(
-                f"After 1st clarification. Didn't extracted movie title. " f"Ask for title for the second time."
-            )
+            logger.info("After 1st clarification. Didn't extracted movie title. Ask for title for the second time.")
             flag = True
     return flag
 
@@ -578,32 +572,30 @@ def did_not_extracted_movie_title_after_clarification_request(ngrams, vars):
     )
     flag = False
     if is_yes:
-        # logger.info(f"After 1st, 2nd clarification. User confirmed movie title. Start script.")
+        # logger.info("After 1st, 2nd clarification. User confirmed movie title. Start script.")
         pass
     elif len(movies_ids) > 0 and not is_no:
         pass
     elif is_no:
-        logger.info(f"After 1st, 2nd clarification. User rejects offered movie title.")
+        logger.info("After 1st, 2nd clarification. User rejects offered movie title.")
         if len(movies_ids) > 0:
             movies_ids = [mid for mid in movies_ids if mid != movie_id]
             if len(movies_ids) == 0:
-                logger.info(
-                    f"After 1st, 2nd clarification. Extracted the same movie title. " f"Offer talk about movies."
-                )
+                logger.info("After 1st, 2nd clarification. Extracted the same movie title. Offer talk about movies.")
                 flag = True
             else:
-                # logger.info(f"After 1st, 2nd clarification. Extracted another movie title. "
-                #             f"Clarify for the second time.")
+                # logger.info("After 1st, 2nd clarification. Extracted another movie title. "
+                #             "Clarify for the second time.")
                 pass
         elif not is_clarified_second_time:
-            # logger.info(f"After 1st clarification. Didn't extracted movie title. "
-            #             f"Ask for title for the second time.")
+            # logger.info("After 1st clarification. Didn't extracted movie title. "
+            #             "Ask for title for the second time.")
             pass
         else:
-            logger.info(f"After 2nd clarification. Didn't extracted movie title. Stop at all.")
+            logger.info("After 2nd clarification. Didn't extracted movie title. Stop at all.")
             flag = True
     else:
-        logger.info(f"After 1st, 2nd clarification. Not yes, not no, no movie titles extracted. Stop at all.")
+        logger.info("After 1st, 2nd clarification. Not yes, not no, no movie titles extracted. Stop at all.")
         flag = True
     return flag
 
@@ -626,7 +618,7 @@ def praise_random_actor_from_cast(movie_id, top_n_actors=2):
 
 def movie_request_opinion_response(vars):
     # USR_MOVIE_REQUEST_OPINION
-    logger.info(f"Bot asks user's opinion about the movie.")
+    logger.info("Bot asks user's opinion about the movie.")
     try:
         user_was_asked_for_movie_title_or_clarification = user_was_asked_about_movie_title(vars)
         user_was_asked_for_movie_title_or_clarification |= state_utils.get_shared_memory(vars).get(
@@ -759,7 +751,7 @@ def ask_do_you_know_question_response(vars):
 
             response = f"{ack} {praise_to_director_or_writer_or_visuals} {response}"
         else:
-            logger.info(f"No appropriate info for Do you know question found. Ask for another movie.")
+            logger.info("No appropriate info for Do you know question found. Ask for another movie.")
             response = not_confident_lets_chat_about_movies_response(vars)
         return response
     except Exception as exc:
@@ -774,7 +766,7 @@ def do_you_know_question_need_to_be_checked_request(ngrams, vars):
     prev_status = state_utils.get_shared_memory(vars).get("current_status", "")
 
     if prev_status == "do_you_know_question" and "Do you know " in prev_bot_uttr_text:
-        logger.info(f"Answer to Do you know question to be checked")
+        logger.info("Answer to Do you know question to be checked")
         return True
     return False
 
@@ -810,15 +802,15 @@ def check_answer_to_do_you_know_question_response(vars):
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
                     response = f"Great! {result}"
                 else:
-                    response = f"Great!"
+                    response = "Great!"
             elif is_no or is_do_not_know:
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
-                    response = f"Seems like I also can't find this information."
+                    response = "Seems like I also can't find this information."
                 else:
                     response = f"{result}"
             else:
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
-                    response = f"Never mind, I can't verify this information now."
+                    response = "Never mind, I can't verify this information now."
                 else:
                     response = f"Oops! No. {result}"
         elif "the genre of the" in question_text:
@@ -834,21 +826,21 @@ def check_answer_to_do_you_know_question_response(vars):
                 response = f"Great! {result}"
             elif is_yes:
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
-                    response = f"Great!"
+                    response = "Great!"
                 else:
                     response = f"Great! {result}"
             elif is_no or is_do_not_know:
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
-                    response = f"Seems like I also can't find this information."
+                    response = "Seems like I also can't find this information."
                 else:
                     response = f"{result}"
             else:
                 if "Sorry, I don't know" in result or len(result.strip()) == 0:
-                    response = f"Never mind, I can't verify this information now."
+                    response = "Never mind, I can't verify this information now."
                 else:
                     response = f"Oops! No. {result}"
         else:
-            response = f"Never mind, I can't verify this information now."
+            response = "Never mind, I can't verify this information now."
 
         state_utils.set_confidence(vars, HIGH_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
@@ -895,7 +887,7 @@ def collect_and_save_facts_about_location(movie_id, vars):
 
         used_facts = shared_memory.get("used_facts", [])
         facts_about_movies = get_all_not_used_templates(used_facts, facts_about_movies)
-        facts_about_movies = [COBOTQA_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_movies if len(fact)]
+        facts_about_movies = [FACTS_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_movies if len(fact)]
 
         if len(facts_about_movies):
             state_utils.save_to_shared_memory(
@@ -922,11 +914,11 @@ def give_more_fact_request(ngrams, vars):
                 # we have already said 2 facts, no more facts!
                 flag = False
     if flag:
-        logger.info(f"User was offered facts before, so offer more facts")
+        logger.info("User was offered facts before, so offer more facts")
     return flag
 
 
-def generate_fact_from_cobotqa_response(vars):
+def generate_fact_from_fact_random_response(vars):
     # USR_HAVE_YOU_HEARD_FACT
     try:
         movie_id = state_utils.get_shared_memory(vars).get("current_movie_id", "")
@@ -951,7 +943,7 @@ def generate_fact_from_cobotqa_response(vars):
             state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_SCENARIO)
             state_utils.save_to_shared_memory(vars, current_status="fact")
         else:
-            logger.info(f"No appropriate fact found. Offer recommendations.")
+            logger.info("No appropriate fact found. Offer recommendations.")
             response = bot_offers_movie_recommendation_response(vars)
 
         return response
@@ -971,7 +963,7 @@ def faq_request(ngrams, vars):
     # SYS_FAQ
     response, _, _ = templates.faq(vars["agent"]["dialog"])
     if response:
-        logger.info(f"Movie FAQ request")
+        logger.info("Movie FAQ request")
         return True
 
     return False
@@ -1020,7 +1012,7 @@ def opinion_expression_about_popular_movie_request(ngrams, vars):
         movie_id = movies_ids[-1]
         response, _, _ = templates.get_user_opinion(vars["agent"]["dialog"], attitude)
         if is_popular_movie(movie_id) == "popular" and response:
-            logger.info(f"Current user utterance is opinion expression about popular movie.")
+            logger.info("Current user utterance is opinion expression about popular movie.")
             return True
 
     return False
@@ -1037,7 +1029,7 @@ def opinion_expression_about_popular_movie_request(ngrams, vars):
 #         movie_id = movies_ids[-1]
 #         response, _, _ = templates.get_user_opinion(vars["agent"]["dialog"], attitude)
 #         if is_popular_movie(movie_id) == "known" and response:
-#             logger.info(f"Current user utterance is opinion expression about known movie.")
+#             logger.info("Current user utterance is opinion expression about known movie.")
 #             return True
 #
 #     return False
@@ -1052,7 +1044,7 @@ def opinion_expression_about_popular_movie_request(ngrams, vars):
 #     if expressed_opinion and unique_persons:
 #         response, _, _ = templates.get_user_opinion(vars["agent"]["dialog"], attitude)
 #         if response:
-#             logger.info(f"Current user utterance is opinion expression about movie persons.")
+#             logger.info("Current user utterance is opinion expression about movie persons.")
 #             return True
 #
 #     return False
@@ -1067,7 +1059,7 @@ def opinion_expression_about_movie_genres_request(ngrams, vars):
     if expressed_opinion and mentioned_genres:
         response, _, _ = templates.get_user_opinion(vars["agent"]["dialog"], attitude)
         if response:
-            logger.info(f"Current user utterance is opinion expression about movie genres.")
+            logger.info("Current user utterance is opinion expression about movie genres.")
             return True
 
     return False
@@ -1105,7 +1097,7 @@ def opinion_requests_about_movie_request(ngrams, vars):
         movie_id = movies_ids[-1]
         response, _, _ = templates.give_opinion(vars["agent"]["dialog"])
         if is_popular_movie(movie_id) in ["popular", "known"] and response:
-            logger.info(f"Current user utterance is opinion request about popular movie.")
+            logger.info("Current user utterance is opinion request about popular movie.")
             return True
 
     return False
@@ -1152,7 +1144,7 @@ def opinion_requests_about_genre_request(ngrams, vars):
     if expressed_opinion and mentioned_genres:
         response, _, _ = templates.give_opinion(vars["agent"]["dialog"])
         if response:
-            logger.info(f"Current user utterance is opinion request about movie genre.")
+            logger.info("Current user utterance is opinion request about movie genre.")
             return True
 
     return False
@@ -1223,7 +1215,7 @@ def recommendations_requested(vars):
     user_agrees = condition_utils.is_yes_vars(vars)
 
     if recom_request or (recom_offer and user_agrees):
-        logger.info(f"User wants to get movies recommendations.")
+        logger.info("User wants to get movies recommendations.")
         return True
     return False
 
@@ -1231,7 +1223,7 @@ def recommendations_requested(vars):
 def recommendations_request(ngrams, vars):
     # SYS_USER_REQUESTS_MOVIE_RECOMMENDATION
     if recommendations_requested(vars):
-        logger.info(f"User requests movie recommendations")
+        logger.info("User requests movie recommendations")
         return True
     return False
 
@@ -1241,14 +1233,14 @@ def recommendations_declined(vars):
     user_disagrees = condition_utils.is_no_vars(vars)
 
     if recom_offer and user_disagrees:
-        logger.info(f"User doesn't want to get movies recommendations.")
+        logger.info("User doesn't want to get movies recommendations.")
         return True
     return False
 
 
 def recommendations_declined_request(ngrams, vars):
     if recommendations_declined(vars):
-        logger.info(f"User declined movie recommendations")
+        logger.info("User declined movie recommendations")
         return True
     return False
 
@@ -1304,7 +1296,7 @@ def bot_recommends_movie_response(vars):
         else:
             response = (
                 f"Sorry, seems like I have no more recommendations of {genre_movies}. "
-                f"What movie can you recommend to me?"
+                "What movie can you recommend to me?"
             )
             state_utils.save_to_shared_memory(vars, current_status="movie_prompt")
 
@@ -1481,7 +1473,7 @@ def user_wants_to_continue_movie_talk_request(ngrams, vars):
     user_agrees = condition_utils.is_yes_vars(vars)
 
     if offer and user_agrees:
-        logger.info(f"User wants to continue movie talk.")
+        logger.info("User wants to continue movie talk.")
         return True
     return False
 
@@ -1521,7 +1513,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_LETS_CHAT_ABOUT_MOVIES: lets_chat_about_movies_request,
         State.SYS_FAQ: faq_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
-        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM: user_was_asked_about_movie_title_and_declined_recommendations_request,
+        State.SYS_ASKED_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM: asked_movie_title_and_declined_recommendations_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
         State.SYS_MENTIONED_MOVIES: mentioned_movies_request,
     },
@@ -1534,10 +1526,10 @@ simplified_dialogflow.set_error_successor(State.USR_START, State.SYS_ERR)
 simplified_dialogflow.add_system_transition(State.SYS_FAQ, State.USR_FAQ, faq_response)
 
 ##################################################################################################################
-#  SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM
+#  SYS_ASKED_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM
 
 simplified_dialogflow.add_system_transition(
-    State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM,
+    State.SYS_ASKED_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM,
     State.USR_WAS_OFFERED_TO_CONTINUE_MOVIE_TALK,
     bot_asks_to_continue_movie_talk_response,
 )
@@ -1676,7 +1668,7 @@ simplified_dialogflow.add_user_serial_transitions(
         State.SYS_EXTRACTED_MOVIE_TITLE: popular_movie_title_extracted_request,
         State.SYS_CLARIFY_MOVIE_TITLE: to_be_clarified_movie_title_extracted_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_AND_REFUSED: user_refused_movie_title_question_request,
-        State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM: user_was_asked_about_movie_title_and_declined_recommendations_request,
+        State.SYS_ASKED_QUESTION_NO_MOVIE_EXTRACTED_NO_RECOM: asked_movie_title_and_declined_recommendations_request,
         State.SYS_USR_WAS_ASKED_MOVIE_TITLE_QUESTION_NO_MOVIE_EXTRACTED: user_was_asked_about_movie_title_request,
         State.SYS_OFFER_CONTINUE_MOVIE_TALK: no_requests_request,
     },
@@ -1783,7 +1775,7 @@ simplified_dialogflow.set_error_successor(State.USR_CHECK_ANSWER_TO_DO_YOU_KNOW,
 #  SYS_GIVE_FACT_ABOUT_MOVIE
 
 simplified_dialogflow.add_system_transition(
-    State.SYS_GIVE_FACT_ABOUT_MOVIE, State.USR_HAVE_YOU_HEARD_FACT, generate_fact_from_cobotqa_response
+    State.SYS_GIVE_FACT_ABOUT_MOVIE, State.USR_HAVE_YOU_HEARD_FACT, generate_fact_from_fact_random_response
 )
 # share fact if available, if no fact - offer recommendations
 

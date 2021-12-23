@@ -200,8 +200,8 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     curr_intents = get_current_intents(dialog["human_utterances"][-1])
     # currently unused this part because it's specific formatter need to be implemented
     human_attr = {}
-    human_attr["grounding_skill"] = ctx.misc.get("grounding_skill", {})
-    human_attr["grounding_skill"]["used_universal_intent_responses"] = human_attr["grounding_skill"].get(
+    human_attr["dff_grounding_skill"] = ctx.misc.get("dff_grounding_skill", {})
+    human_attr["dff_grounding_skill"]["used_universal_intent_responses"] = human_attr["dff_grounding_skill"].get(
         "used_universal_intent_responses", []
     )
     attr = {}
@@ -213,11 +213,11 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     def universal_response(intent):
         nonlocal reply, human_attr, attr
         # for now return random reply UNIVERSAL_INTENT_RESPONSES
-        reply = get_unused_reply(intent, human_attr["grounding_skill"]["used_universal_intent_responses"])
-        human_attr["grounding_skill"]["used_universal_intent_responses"] += [reply]
+        reply = get_unused_reply(intent, human_attr["dff_grounding_skill"]["used_universal_intent_responses"])
+        human_attr["dff_grounding_skill"]["used_universal_intent_responses"] += [reply]
         attr = {"response_parts": ["body"], "type": "universal_response"}
 
-    ctx.misc["grounding_skill"] = human_attr["grounding_skill"]
+    ctx.misc["dff_grounding_skill"] = human_attr["dff_grounding_skill"]
 
     for intent in curr_intents:
         if intent in UNIVERSAL_INTENT_RESPONSES:

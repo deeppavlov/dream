@@ -34,7 +34,7 @@ We also do not store extra information. Current entity dict is the following:
                 {
                     "human_utterance_index": 6,
                     "full_name": "jewelry",
-                    "skill_name": "grounding_skill"
+                    "skill_name": "dff_grounding_skill"
                 }
             ],
             "human_attitude": null,

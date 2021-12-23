@@ -4,7 +4,7 @@
     ],
     "genre": [
         "dff_movie_skill",
-        "book_skill",
+        "dff_book_skill",
         "dff_music_skill",
         "game_cooperative_skill"
     ],
@@ -46,7 +46,7 @@
         "dff_bot_persona_skill"
     ],
     "bookname": [
-        "book_skill"
+        "dff_book_skill"
     ],
     "videoname": [
         "dff_movie_skill"
@@ -63,7 +63,7 @@
         "dff_travel_skill",
         "dff_movie_skill",
         "dff_weather_skill",
-        "book_skill",
+        "dff_book_skill",
         "emotion_skill",
         "news_api_skill",
         "dff_music_skill",

@@ -5,7 +5,6 @@ import os
 import random
 import re
 
-# from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
@@ -283,7 +282,7 @@ def want_music_response(vars):
         if genre_flag:
             phrase = f"I think {genre} is cool. Do you like the whole genre of {genre} music?"
         else:
-            phrase = f"I guess you want to talk about music, right?"
+            phrase = "I guess you want to talk about music, right?"
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_CONTINUE_PROMPT)
         return phrase
@@ -440,42 +439,42 @@ def genre_specific_response(vars):
         if genre is None:
             raise Exception("Genre was found in text, but not in response.")
         elif genre == "":
-            return f"I didn't actually head about it. What is the genre??"
+            return "I didn't actually head about it. What is the genre??"
         elif genre == "pop":
-            return f"I really prefer techno over pop music, but I still listen \
+            return "I really prefer techno over pop music, but I still listen \
             to Taylor Swift sometimes in the night. Did you know that Kanye West and Kim are getting divorced?"
         elif genre == "jazz":
-            return f"My favourite genre is techno, but I still like jazz, \
+            return "My favourite genre is techno, but I still like jazz, \
             especially Dave Brubeck Quartet, Paul Desmond and Duke Ellington. \
             You heard about them, right?"
         elif genre == "classic" or genre == "contemporary" or genre == "classical":
-            return f"Well, I am actually a techno fan. \
+            return "Well, I am actually a techno fan. \
             But let me guess, are you a fan of Beethoven?"
         elif genre == "electronic" or genre == "trance" or genre == "techno" or genre == "dance" or genre == "house":
-            return f"Electro music is my favourite! I really prefer techno, \
+            return "Electro music is my favourite! I really prefer techno, \
             it helps me staying focused. Do you like it too?"
         elif genre == "hip hop" or genre == "rap":
-            return f"That cool. Do you rap yourself?"
+            return "That cool. Do you rap yourself?"
         elif genre == "rock" or genre == "metal" or genre == "hardcore":
-            return f"Though I am a fan of techno, but rock is cool. \
+            return "Though I am a fan of techno, but rock is cool. \
             Did you know that only rock and roll has it's Hall of Fame amoung \
             other kinds of music?"
         elif genre == "children":
-            return f"Oh, so you are a young fellow, I guess. \
+            return "Oh, so you are a young fellow, I guess. \
             Do you listen to music often?"
         elif genre == "folk":
-            return f"Oh, cool! I really like Bob Dylan, if you ask me. \
+            return "Oh, cool! I really like Bob Dylan, if you ask me. \
             Do you like him?"
         elif genre == "reggae":
-            return f'Reggae is very cool, it always sound sunny bright. \
+            return 'Reggae is very cool, it always sound sunny bright. \
             Did you know that "Don\'t worry, be happy" initially was written \
             by Bobby McFerrin and not Bob Marley?'
         elif genre == "country":
-            return f'I love "Country Roads" by John Denver. \
+            return "I love 'Country Roads' by John Denver. \
             It gives me feel like I am returning home from a long trip. \
-            Do you feel the same?'
+            Do you feel the same?"
         elif genre == "alternative":
-            return f"When I was younger, I used to listen to Linkin Park a lot. \
+            return "When I was younger, I used to listen to Linkin Park a lot. \
             Oh boy, what a legendary band that was. Have you heard about them?"
         elif genre == "80s":
             return (
@@ -490,10 +489,10 @@ def genre_specific_response(vars):
                 "Do you know that they have sold over 300 million albums and singles worldwide?"
             )
         elif genre == "indie":
-            return f"Indie music is so diverse! I like MGMT, and I am a fan of \
+            return "Indie music is so diverse! I like MGMT, and I am a fan of \
             the Pixies. Did you know that David Bowie was their fan too?"
         elif genre == "all" or genre == "everything":
-            return f"I prefer techno most of the time. \
+            return "I prefer techno most of the time. \
             Do you know David Bowie, by the way?"
         elif genre == "nineties" or genre == "90s":
             return "Nineties really rocked. Nirvana, Spice Girls, Dr. Dre, \
@@ -502,7 +501,7 @@ def genre_specific_response(vars):
             return "I really like eighties because it was the sythwave \
             in techno music, so cool. What do you like the best from eighties?"
         else:
-            return f"To me, the rhythm and tempo are most important. What do you like about it?"
+            return "To me, the rhythm and tempo are most important. What do you like about it?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -514,7 +513,7 @@ def dont_know_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"Never heard about it. Is it a band, song, or a genre?"
+        return "Never heard about it. Is it a band, song, or a genre?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -526,7 +525,7 @@ def concert_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"Have you been to any live shows lately?"
+        return "Have you been to any live shows lately?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -542,36 +541,36 @@ def genre_advice_response(vars):
         genre = state_utils.get_shared_memory(vars).get("genre", "pop")
 
         if genre in ["pop", "80s", "70s"]:
-            return f"Well, now you know it."
+            return "Well, now you know it."
         elif genre == "jazz":
-            return f"Oh, you should definitely check them out, like, one hundred percent."
+            return "Oh, you should definitely check them out, like, one hundred percent."
         elif genre == "classic" or genre == "contemporary":
-            return f"Well, I was worth trying. I guess it right most of the time."
+            return "Well, I was worth trying. I guess it right most of the time."
         elif genre == "electronic" or genre == "trance" or genre == "techno" or genre == "dance" or genre == "house":
-            return f"What do you like then?"
+            return "What do you like then?"
         elif genre == "hip hop" or genre == "rap":
-            return f"That's ok, I can't do it either."
+            return "That's ok, I can't do it either."
         elif genre == "rock" or genre == "metal" or genre == "hardcore":
-            return f"Well, now you know it."
+            return "Well, now you know it."
         elif genre == "children":
-            return f"But do you like listening to it?"
+            return "But do you like listening to it?"
         elif genre == "folk":
-            return f"Ok, I get it. I guess you have a more \
+            return "Ok, I get it. I guess you have a more \
             pretentious taste than I do."
         elif genre == "reggae":
-            return f"I've been confused for a long time, \
+            return "I've been confused for a long time, \
             because they sound so alike to me!"
         elif genre == "country":
-            return f"Well, try to imagine Blue Ridge Mountains \
+            return "Well, try to imagine Blue Ridge Mountains \
             while listening to it. You will get what I mean."
         elif genre == "alternative":
-            return f"Oh, I really recommend you to know them better. \
+            return "Oh, I really recommend you to know them better. \
             That is some classic alternative in my opinion."
         elif genre == "indie":
-            return f"To me, that is crazy. Though they are not very popular in \
+            return "To me, that is crazy. Though they are not very popular in \
             the United States, they even were an inspiration to Kurt Cobain."
         elif genre == "all" or genre == "everything":
-            return f'You should check him out, especially "Space oddity". \
+            return 'You should check him out, especially "Space oddity". \
             It is really something special. \
             They even played it on a real Space Station!'
         elif genre == "nineties":
@@ -579,7 +578,7 @@ def genre_advice_response(vars):
         elif genre == "eighties":
             return "Yea, I guess I understand what you mean."
         else:
-            return f"Cool, I think I understand what you mean."
+            return "Cool, I think I understand what you mean."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -621,7 +620,7 @@ def concert_who_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"Who was it?"
+        return "Who was it?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -633,7 +632,7 @@ def concert_covid_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"There wasn't much going on due to CoVID-19. Hope we will get some in future."
+        return "There wasn't much going on due to CoVID-19. Hope we will get some in future."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -645,7 +644,7 @@ def concert_known_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"Oh, sounds familiar. Guess I've seen their live online."
+        return "Oh, sounds familiar. Guess I've seen their live online."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -657,7 +656,7 @@ def ask_advice_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"You know, I often feel myself overwhelmed with everything. \
+        return "You know, I often feel myself overwhelmed with everything. \
         Can you suggest me something relaxing to listen to?"
     except Exception as exc:
         logger.exception(exc)
@@ -670,7 +669,7 @@ def it_ok_response(vars):
     try:
         state_utils.set_confidence(vars, CAN_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
-        return f"Don't worry. What do you want to talk about then?"
+        return "Don't worry. What do you want to talk about then?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -682,7 +681,7 @@ def thanks_response(vars):
     try:
         state_utils.set_confidence(vars, MUST_CONTINUE_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"Thank you, I will check it out."
+        return "Thank you, I will check it out."
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -699,7 +698,7 @@ def entity_mention_request(ngrams, vars):
 # def i_give_up_response(vars):
 #     try:
 #         state_utils.set_can_continue(vars)
-#         return f"Ok. I give up. Who is it?"
+#         return "Ok. I give up. Who is it?"
 #     except Exception as exc:
 #         logger.exception(exc)
 #         sentry_sdk.capture_exception(exc)
@@ -832,11 +831,6 @@ def end_response(vars):
 
 # def music_fact_response(vars):
 #     annotations = state_utils.get_last_human_utterance(vars)["annotations"]
-#     # nounphr = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-#     # fact = ""
-#     # if nounphr:
-#     #     fact = send_cobotqa(f"fact about {nounphr[0]}")
-#     #     if "here" in fact.lower():
 #     fact = annotations.get("odqa", {}).get("answer_sentence", "")
 #     try:
 #         state_utils.set_confidence(vars)

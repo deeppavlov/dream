@@ -37,7 +37,7 @@ SKILL_TRIGGERS = {
         ],
         "intents": [],
     },
-    "book_skill": {
+    "dff_book_skill": {
         "compiled_patterns": [BOOK_PATTERN],
         "previous_bot_patterns": [BOOK_PATTERN],
         "cobot_dialogact_topics": ["Entertainment_General", "Entertainment_Books"],

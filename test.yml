@@ -43,7 +43,6 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  cobotqa:
   spacy-nounphrases:
   dff-program-y:
   personality-catcher:
@@ -66,7 +65,7 @@ services:
   personal-info-skill:
   asr:
   misheard-asr:
-  book-skill:
+  dff-book-skill:
   dff-weather-skill:
   emotion-skill:
   dummy-skill-dialog:

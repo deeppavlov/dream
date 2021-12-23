@@ -41,7 +41,7 @@ from common.travel import (
     TOO_SIMPLE_TRAVEL_FACTS,
 )
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_intents, get_sentiment, get_named_locations, COBOTQA_EXTRA_WORDS, get_entities
+from common.utils import get_intents, get_sentiment, get_named_locations, FACTS_EXTRA_WORDS, get_entities
 from common.fact_random import get_fact
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -177,9 +177,9 @@ def no_requests_request(ngrams, vars):
     flag = condition_utils.no_special_switch_off_requests(vars)
 
     if flag:
-        logger.info(f"No dialog breakdown or request intents in user utterances")
+        logger.info("No dialog breakdown or request intents in user utterances")
         return True
-    logger.info(f"Dialog breakdown and request intents in user utterances")
+    logger.info("Dialog breakdown and request intents in user utterances")
     return False
 
 
@@ -210,7 +210,7 @@ def mentioned_travelling_request(ngrams, vars):
         TRAVELLING_TEMPLATE.search(state_utils.get_last_human_utterance(vars)["text"])
         and "interstellar" not in state_utils.get_last_human_utterance(vars)["text"]
     ):
-        logger.info(f"Mentioned travelling in user utterances")
+        logger.info("Mentioned travelling in user utterances")
         return True
     return False
 
@@ -225,14 +225,14 @@ def lets_chat_about_travelling_request(ngrams, vars):
     )
 
     if user_lets_chat_about_travelling and "interstellar" not in state_utils.get_last_human_utterance(vars)["text"]:
-        logger.info(f"Let's chat about travelling in user utterances")
+        logger.info("Let's chat about travelling in user utterances")
         return True
     return False
 
 
 def lets_chat_about_travelling_response(vars):
     # USR_OPINION_TRAVELLING
-    logger.info(f"Bot asks user's opinion about travelling.")
+    logger.info("Bot asks user's opinion about travelling.")
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         used_questions = shared_memory.get("used_opinion_request_about_travelling", [])
@@ -268,7 +268,7 @@ def like_about_travelling_request(ngrams, vars):
     user_positive = positive_sentiment_request(ngrams, vars)
 
     if linkto_opinion_about_travelling and (user_agrees or user_positive):
-        logger.info(f"User likes travelling in user utterances")
+        logger.info("User likes travelling in user utterances")
         return True
     return False
 
@@ -285,14 +285,14 @@ def dislike_about_travelling_request(ngrams, vars):
     user_positive = negative_sentiment_request(ngrams, vars)
 
     if linkto_opinion_about_travelling and (user_agrees or user_positive):
-        logger.info(f"User dislike travelling in user utterances")
+        logger.info("User dislike travelling in user utterances")
         return True
     return False
 
 
 def not_like_travelling_response(vars):
     # USR_NOT_TRAVELLING_PREF
-    logger.info(f"Bot asks why user does not like travelling.")
+    logger.info("Bot asks why user does not like travelling.")
     try:
         if user_was_asked_for_location(vars):
             state_utils.set_confidence(vars, SUPER_CONFIDENCE)
@@ -313,7 +313,7 @@ def not_like_travelling_response(vars):
 def linkto_personal_info_response(vars):
     # USR_ASK_ABOUT_ORIGIN
     responses = ["Okay. Where are from?", "Then let's talk about you. Where are you from?"]
-    logger.info(f"Bot asks user about his/her origin/home town.")
+    logger.info("Bot asks user about his/her origin/home town.")
     try:
         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
         confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
@@ -339,11 +339,11 @@ def user_mention_named_entity_loc_request(ngrams, vars):
     )
     prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
     if weather_forecast or prev_active_skill == "dff_weather_skill":
-        logger.info(f"Found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
+        logger.info("Found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
         return False
 
     if len(user_mentioned_locations) > 0:
-        logger.info(f"Found mentioned named locations in user utterances")
+        logger.info("Found mentioned named locations in user utterances")
         return True
     return False
 
@@ -372,11 +372,11 @@ def user_not_mention_named_entity_loc_request(ngrams, vars):
     )
     prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
     if weather_forecast or prev_active_skill == "dff_weather_skill":
-        logger.info(f"Not found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
+        logger.info("Not found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
         return False
 
     if asked_for_loc and len(user_mentioned_locations) == 0:
-        logger.info(f"Not found mentioned named locations in user utterances")
+        logger.info("Not found mentioned named locations in user utterances")
         return True
     return False
 
@@ -392,11 +392,11 @@ def user_refused_to_mention_named_entity_loc_request(ngrams, vars):
     )
     prev_active_skill = state_utils.get_last_bot_utterance(vars).get("active_skill", "")
     if weather_forecast or prev_active_skill == "dff_weather_skill":
-        logger.info(f"Not found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
+        logger.info("Not found mentioned named locations in user utterances BUT it's about weather. Don't respond.")
         return False
 
     if asked_for_loc and (len(user_mentioned_locations) == 0 or (is_no and not nowhere_found)):
-        logger.info(f"Not found mentioned named locations in user utterances")
+        logger.info("Not found mentioned named locations in user utterances")
         return True
     return False
 
@@ -419,7 +419,7 @@ def have_bot_been_in(vars):
 def have_bot_been_in_request(ngrams, vars):
     # SYS_HAVE_BOT_BEEN
     if have_bot_been_in(vars):
-        logger.info(f"User asks if bot have been in LOC in user utterances")
+        logger.info("User asks if bot have been in LOC in user utterances")
         return True
     return False
 
@@ -493,7 +493,7 @@ def _user_have_been_in_request(vars):
 def user_have_been_in_request(ngrams, vars):
     # SYS_USR_HAVE_BEEN
     if _user_have_been_in_request(vars):
-        logger.info(f"User says he/she was in LOC in user utterances")
+        logger.info("User says he/she was in LOC in user utterances")
         return True
     return False
 
@@ -551,7 +551,7 @@ def user_no_or_disliked_request(ngrams, vars):
     # on this request we will answer with new question about other locations
     flag = no_request(ngrams, vars) or negative_sentiment_request(ngrams, vars)
     if flag:
-        logger.info(f"User disagrees or have negative sentiment in user utterances")
+        logger.info("User disagrees or have negative sentiment in user utterances")
         return True
     return False
 
@@ -559,7 +559,7 @@ def user_no_or_disliked_request(ngrams, vars):
 def user_disliked_mentioned_by_user_loc_response(vars):
     # USR_DISLIKE_AND_WHAT_LOC_NOT_CONF
     try:
-        logger.info(f"Bot acknowledges user dislike loc and asks a question about some other LOC.")
+        logger.info("Bot acknowledges user dislike loc and asks a question about some other LOC.")
 
         if condition_utils.is_no_vars(vars):
             confidence = SUPER_CONFIDENCE
@@ -606,7 +606,7 @@ def user_have_not_been_in_request(ngrams, vars):
     if (bot_asks_have_you_been_and_user_disagrees and len(bot_mentioned_locations) > 0) or (
         user_says_not_been_in and len(user_mentioned_locations) > 0
     ):
-        logger.info(f"User says he/she has not been in LOC in user utterances")
+        logger.info("User says he/she has not been in LOC in user utterances")
         return True
     return False
 
@@ -728,7 +728,7 @@ def like_travelling_acknowledgement(vars):
 def confident_ask_question_about_travelling_response(vars):
     # USR_WHAT_LOC_CONF
     try:
-        logger.info(f"Bot confidently asks a question about some LOC.")
+        logger.info("Bot confidently asks a question about some LOC.")
 
         # socialbot's opinion about travelling, if we previously asked user, and user likes travelling
         bot_likes_travel = like_travelling_acknowledgement(vars)
@@ -754,7 +754,7 @@ def confident_ask_question_about_travelling_response(vars):
 def not_confident_ask_question_about_travelling_response(vars):
     # USR_WHAT_LOC_NOT_CONF
     try:
-        logger.info(f"Bot not confidently asks a question about some LOC.")
+        logger.info("Bot not confidently asks a question about some LOC.")
 
         confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, HIGH_CONFIDENCE, DEFAULT_CONFIDENCE)
         state_utils.set_confidence(vars, confidence)
@@ -793,7 +793,7 @@ def collect_and_save_facts_about_location(location, vars):
                 LOCATION_FACTS_BUFFER = {}
             LOCATION_FACTS_BUFFER[location] = facts_about_location
 
-    facts_about_location = [COBOTQA_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_location if len(fact)]
+    facts_about_location = [FACTS_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if not TOO_SIMPLE_TRAVEL_FACTS.search(fact)]
 
@@ -920,8 +920,8 @@ def share_fact_about_loc_response(vars):
 def requested_but_not_found_loc_response(vars):
     # USR_WHAT_LOC_NOT_CONF
     logger.info(
-        f"Bot acknowledges that bot had asked question but user didn't give LOC. "
-        f"Bot not confidently asks a question about some LOC."
+        "Bot acknowledges that bot had asked question but user didn't give LOC. "
+        "Bot not confidently asks a question about some LOC."
     )
     try:
         if user_was_asked_for_location(vars) and condition_utils.no_requests(vars):

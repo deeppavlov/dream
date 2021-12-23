@@ -43,7 +43,7 @@ def respond():
 
     facts = find_facts(entities)
 
-    response = [{"text": text, "facts": facts}]
+    response = [{"response": text, "facts": facts}]
 
     total_time = time.time() - st_time
     logger.info(f"fact_random exec time: {total_time:.3f}s")

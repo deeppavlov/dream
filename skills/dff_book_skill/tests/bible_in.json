@@ -1,0 +1,964 @@
+{
+    "human_utter_index_batch": [
+        5
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "cobot_nounphrases": [],
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0011744361836463213,
+                                "command": 0.0012431021314114332,
+                                "comment": 0.000866158283315599,
+                                "complaint": 0.000308301649056375,
+                                "dev_command": 0.0006835751119069755,
+                                "neg_answer": 0.0009709555888548493,
+                                "open_question_factual": 0.0003353930951561779,
+                                "open_question_opinion": 0.00041243297164328396,
+                                "opinion": 0.0005713750724680722,
+                                "other_answers": 0.0006873204838484526,
+                                "pos_answer": 0.9906424880027771,
+                                "statement": 0.0015131826512515545,
+                                "yes_no_question": 0.0005912062479183078
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Nick Saban finally found some rat poison to suit his taste.\nThe Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field. Former Crimson Tide defens... [999 chars]",
+                                    "description": "Nick Saban finally found some rat poison to suit his taste. The Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/12/Alabama-Nick-Saban-rat-poison.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-12-05T16:16:00Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Nick Saban thanks media for 'yummy' rat poison after Alabama win",
+                                    "url": "https://nypost.com/2021/12/05/nick-saban-thanks-media-for-yummy-rat-poison-after-alabama-win/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "bible",
+                                "news": {
+                                    "content": "The Lee family says they anticipate the reading will take around seventy to eighty hours, around 8 to ten days, in all.\nCAMDEN, S.C. \u2014 You might have heard voices echoing throughout downtown Camden, thanks to a local couple who have organized a publi... [1755 chars]",
+                                    "description": "The Lee family says they anticipate the reading will take around seventy to eighty hours, around 8 to ten days, in all.",
+                                    "image": "https://media.wltx.com/assets/WLTX/images/cec125c4-2354-41e7-9904-d6f44eb2e1ba/cec125c4-2354-41e7-9904-d6f44eb2e1ba_1140x641.jpg",
+                                    "publishedAt": "2021-12-01T02:27:00Z",
+                                    "source": {
+                                        "name": "WLTX.com",
+                                        "url": "https://www.wltx.com"
+                                    },
+                                    "title": "Hear the Bible read in downtown Camden this week",
+                                    "url": "https://www.wltx.com/article/news/local/street-squad/kershaw-county/putting-faith-into-action/101-78cdc230-3fa5-48d8-8461-feec6b45b7ad"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                                "the new testament.",
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                                "yes, i have read the whole bible. "
+                            ]
+                        },
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "Hobbit.",
+                    "annotations": {
+                        "spelling_preprocessing": "Hobbit",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "cobot_nounphrases": [
+                            "hobbit"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9994829893112183
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9984859824180603
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.997748613357544
+                            },
+                            "emotion_classification": {
+                                "joy": 0.508831262588501,
+                                "neutral": 0.9956690073013306
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6573148965835571
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0013045966625213623
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.043572090566158295,
+                            "conversational": 0.9564278721809387
+                        },
+                        "conceptnet": {
+                            "hobbit": {
+                                "Causes": [
+                                    "fall down hill",
+                                    "fall down",
+                                    "climb mountain"
+                                ],
+                                "CausesDesire": [
+                                    "climb mountain",
+                                    "play game of chess",
+                                    "play game"
+                                ],
+                                "HasProperty": [
+                                    "old",
+                                    "dead",
+                                    "small"
+                                ],
+                                "SymbolOf": [
+                                    "us",
+                                    "space",
+                                    "christianity"
+                                ]
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "Hobbit.",
+                            "segments": [
+                                "Hobbit."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0005254006246104836,
+                                "command": 0.0008299135370180011,
+                                "comment": 0.0014415857149288058,
+                                "complaint": 0.0005012197652831674,
+                                "dev_command": 0.0004698382399510592,
+                                "neg_answer": 0.00040920719038695097,
+                                "open_question_factual": 0.0006692379829473794,
+                                "open_question_opinion": 0.0007769588264636695,
+                                "opinion": 0.9902811050415039,
+                                "other_answers": 0.000655903946608305,
+                                "pos_answer": 0.0005464060232043266,
+                                "statement": 0.0025709988549351692,
+                                "yes_no_question": 0.000322213105391711
+                            }
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 1,
+                                    "start_pos": 0,
+                                    "text": "hobbit",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "hobbit"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        0,
+                                        6
+                                    ],
+                                    "text": "hobbit"
+                                }
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                                "yes, i have read the whole bible. ",
+                                "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
+                                "Hobbit."
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.510536253452301,
+                                    0.3659169375896454,
+                                    0.21923066675662994,
+                                    0.7051779627799988,
+                                    0.27844151854515076
+                                ],
+                                "entity_ids": [
+                                    "Q74287",
+                                    "Q74229",
+                                    "Q612602",
+                                    "Q74359",
+                                    "Q1187415"
+                                ],
+                                "entity_pages": [
+                                    "The Hobbit, or There and Back Again is a childrens fantasy novel by English author J. R. R. Tolkien. It was published on 21 September 1937 to wide critical acclaim, being nominated for the Carnegie Medal and awarded a prize from the New York Herald Tribune for best juvenile fiction. The book remains popular and is recognized as a classic in childrens literature.",
+                                    "The Hobbit is a 1977 American animated musical television special created by Rankin/Bass, a studio known for their holiday specials, and animated by Topcraft, a precursor to Studio Ghibli. The film is an adaptation of the 1937 book of the same name by J. R. R. Tolkien, and was first broadcast on NBC in the United States on Sunday, November 27, 1977."
+                                ],
+                                "entity_pages_titles": [
+                                    "The Hobbit",
+                                    "The Hobbit (1977 film)",
+                                    "Christian Berm\u00fadez",
+                                    "Hobbit",
+                                    "The Hobbit (1985 film)"
+                                ],
+                                "entity_substr": "hobbit",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "hobbit": {
+                                    "author": [
+                                        [
+                                            "Q892",
+                                            "J R R Tolkien"
+                                        ]
+                                    ],
+                                    "conf": 0.510536253452301,
+                                    "entity_label": "The Hobbit",
+                                    "genre": [
+                                        [
+                                            "Q10992055",
+                                            "speculative fiction novel"
+                                        ],
+                                        [
+                                            "Q21615367",
+                                            "children's novel"
+                                        ],
+                                        [
+                                            "Q3811649",
+                                            "juvenile fantasy"
+                                        ],
+                                        [
+                                            "Q699",
+                                            "fairy tale"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q79734",
+                                            "Middle-earth"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q74287",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1937-09-21^^T\"",
+                                            "21 September 1937"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "hobbit": {
+                                    "author": [
+                                        [
+                                            "Q892",
+                                            "J R R Tolkien"
+                                        ]
+                                    ],
+                                    "conf": 0.510536253452301,
+                                    "entity_label": "The Hobbit",
+                                    "genre": [
+                                        [
+                                            "Q10992055",
+                                            "speculative fiction novel"
+                                        ],
+                                        [
+                                            "Q21615367",
+                                            "children's novel"
+                                        ],
+                                        [
+                                            "Q3811649",
+                                            "juvenile fantasy"
+                                        ],
+                                        [
+                                            "Q699",
+                                            "fairy tale"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q79734",
+                                            "Middle-earth"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q74287",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1937-09-21^^T\"",
+                                            "21 September 1937"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q47461344",
+                                            "written work"
+                                        ],
+                                        [
+                                            "Q234460",
+                                            "text"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ],
+                                        [
+                                            "Q7725634",
+                                            "literary work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {
+                                "hobbit": {
+                                    "age": 34,
+                                    "conf": 0.21923066675662994,
+                                    "country for sport": [
+                                        [
+                                            "Q96",
+                                            "Mexico"
+                                        ]
+                                    ],
+                                    "country of sitizenship": [
+                                        [
+                                            "Q96",
+                                            "Mexico"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1987-04-26^^T\"",
+                                            "26 April 1987"
+                                        ]
+                                    ],
+                                    "entity_label": "Hobbit Bermudez",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of sport team": [
+                                        [
+                                            "Q1426348",
+                                            "Chiapas F C "
+                                        ],
+                                        [
+                                            "Q164089",
+                                            "Mexico national football team"
+                                        ],
+                                        [
+                                            "Q164334",
+                                            "Mexico national under-20 football team"
+                                        ],
+                                        [
+                                            "Q459090",
+                                            "Club Am\u00e9rica"
+                                        ],
+                                        [
+                                            "Q606210",
+                                            "Quer\u00e9taro F C "
+                                        ],
+                                        [
+                                            "Q646596",
+                                            "Puebla F C "
+                                        ],
+                                        [
+                                            "Q849949",
+                                            "Atlante F C "
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q937857",
+                                            "association football player"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q612602",
+                                    "pos": 2,
+                                    "position played on team": [
+                                        [
+                                            "Q193592",
+                                            "midfielder"
+                                        ],
+                                        [
+                                            "Q280658",
+                                            "forward"
+                                        ]
+                                    ],
+                                    "sport": [
+                                        [
+                                            "Q2736",
+                                            "association football"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q18536342",
+                                            "competitive player"
+                                        ],
+                                        [
+                                            "Q937857",
+                                            "association football player"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Nick Saban finally found some rat poison to suit his taste.\nThe Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field. Former Crimson Tide defens... [999 chars]",
+                                    "description": "Nick Saban finally found some rat poison to suit his taste. The Alabama coach has often used the term \u201crat poison\u201d to refer to media storylines, positive or negative, that could distract his team from its play on the field.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/12/Alabama-Nick-Saban-rat-poison.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-12-05T16:16:00Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Nick Saban thanks media for 'yummy' rat poison after Alabama win",
+                                    "url": "https://nypost.com/2021/12/05/nick-saban-thanks-media-for-yummy-rat-poison-after-alabama-win/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "hobbit",
+                                "news": {
+                                    "content": "EMBED >More News Videos A new series offers a rare look behind the scenes with Music legend Paul McCartney. In Hulu's \"McCartney 3, 2, 1\", He sat down with producer Rick Rubin for an intimate conversation about music... and much more.\nDirector Peter ... [2405 chars]",
+                                    "description": "EMBED >More News Videos A new series offers a rare look behind the scenes with Music legend Paul McCartney. In Hulu's \"McCartney 3, 2, 1\", He sat down with producer Rick Rubin for an intimate conversation about music... and much more.",
+                                    "image": "https://cdn.abcotvs.com/dip/images/11270800_11252021-kabc-4pm-geo-beatles-documentary-vid.jpg?w=1600",
+                                    "publishedAt": "2021-11-26T22:03:00Z",
+                                    "source": {
+                                        "name": "KABC-TV",
+                                        "url": "https://abc7.com"
+                                    },
+                                    "title": "'The Beatles: Get Back' was a labor of love for Peter Jackson, who spent 4 years editing docuseries",
+                                    "url": "https://abc7.com/beatles-get-back-peter-jackson-director/11270260/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "socialbot",
+                                "news": {
+                                    "content": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.\nThe Transform Technology Summits start October 13th with Low-Code/No Code: Enab... [5130 chars]",
+                                    "description": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.",
+                                    "image": "https://venturebeat.com/wp-content/themes/vb-news/img/favicon.ico",
+                                    "publishedAt": "2021-08-19T17:15:03Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Amazon taps its SocialBot challenge to boost conversational AI",
+                                    "url": "https://venturebeat.com/2021/08/19/amazon-taps-its-socialbot-challenge-to-boost-conversational-ai/"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "heaven",
+                                "news": {
+                                    "content": "Progressives are grousing that the tax and spending bill passed by the House doesn\u2019t include an \u201cenforcement mechanism\u201d to reduce greenhouse gases. If only. The fine print grants the Biden Administration new authority to force CO2 reductions across m... [407 chars]",
+                                    "description": "Progressives are grousing that the tax and spending bill passed by the House doesn\u2019t include an \u201cenforcement mechanism\u201d to reduce greenhouse gases. If only.",
+                                    "image": "https://images.wsj.net/im-445371/social",
+                                    "publishedAt": "2021-12-02T23:42:00Z",
+                                    "source": {
+                                        "name": "The Wall Street Journal",
+                                        "url": "https://www.wsj.com"
+                                    },
+                                    "title": "Pete Buttigieg\u2019s Highway to Green Heaven",
+                                    "url": "https://www.wsj.com/articles/pete-buttigiegs-highway-to-green-heaven-biden-administration-house-spending-bill-emissions-epa-11638481930"
+                                },
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?",
+                            "segments": [
+                                "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven.",
+                                "That's why I don't know much about religion.",
+                                "Apart from the Bible, What is your favorite book?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "socialbot",
+                                    "type": "LOC"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 25,
+                                    "start_pos": 24,
+                                    "text": "heaven",
+                                    "type": "LOC"
+                                }
+                            ],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "the new testament.",
+                                "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                                "yes, i have read the whole bible. ",
+                                "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_book_skill"
+                }
+            ]
+        }
+    ],
+    "dff_book_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "edbdb908-10c5-4887-a813-62f55d833ce6",
+                "labels": {
+                    "3": [
+                        "bible_flow",
+                        "bible_start"
+                    ],
+                    "4": [
+                        "bible_flow",
+                        "bible_elaborate"
+                    ]
+                },
+                "misc": {
+                    "flags": {
+                        "book_skill_active": true
+                    },
+                    "used_phrases": [
+                        140403030105520,
+                        140403030779728,
+                        140403030734128
+                    ]
+                },
+                "requests": {
+                    "3": "the new testament.",
+                    "4": "yes."
+                },
+                "responses": {
+                    "3": "I know that Bible is one of the most widespread books on Earth. It is the foundation stone of Christianity. Have you read the whole Bible?",
+                    "4": "Unfortunately, as a socialbot, I don't have an immortal soul, so I don't think I will ever go to Heaven. That's why I don't know much about religion. Apart from the Bible, What is your favorite book?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "books_general",
+                    "book_start"
+                ],
+                "1": [
+                    "books_general",
+                    "likes_reading"
+                ],
+                "2": [
+                    "books_general",
+                    "told_why"
+                ],
+                "3": [
+                    "bible_flow",
+                    "bible_start"
+                ],
+                "4": [
+                    "bible_flow",
+                    "bible_elaborate"
+                ]
+            },
+            "previous_human_utter_index": 4,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "hobbit": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "hobbit",
+                        "human_utterance_index": 5,
+                        "previous_skill_name": "dff_book_skill"
+                    }
+                ],
+                "name": "hobbit"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

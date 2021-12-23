@@ -28,8 +28,8 @@ SPECIAL_SKILLS = {
         "dummy_skill",
         "news_api_skill",
         "convert_reddit",
-        "grounding_skill",
-        "book_skill",
+        "dff_grounding_skill",
+        "dff_book_skill",
         "dff_movie_skill",
         "dff_music_skill",
         "dff_animals_skill",
@@ -37,7 +37,6 @@ SPECIAL_SKILLS = {
         "dff_food_skill",
         "dff_weather_skill",
         "dff_bot_persona_skill",
-        "book_skill",
         "dff_gaming_skill",
         "dff_gossip_skill",
         "dff_science_skill",
@@ -74,7 +73,7 @@ def main():
     for pred_r, true_r, skill in zip(pred_data, true_data, active_skills):
         true_sents = set([sent.lower().replace("\n", " ").replace("  ", " ") for sent in true_r[2:]])
         acceptable_skill_names = true_r[0]
-        assert skill != "exception", print("ERROR: exception in gold phrases".format(pred_r[-1], true_sents))
+        assert skill != "exception", print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
 
         passed_acceptable_skills = True
         passed_gold_phrases = True

@@ -290,7 +290,7 @@ def hypothesis_histories_list(dialog: Dict):
         utterances_histories.append([hyp["text"]])
         utterances_histories_batch.append(utterances_histories)
 
-    return [{"utterances_histories": utterances_histories_batch}]
+    return [{"utterances_with_histories": utterances_histories_batch}]
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:
@@ -388,7 +388,7 @@ def utt_non_punct_dialog(dialog: Dict):
 
 def full_history_dialog(dialog: Dict):
     """
-    Used ONLY by: response selector and greeting_skill (turns on only for first 10 turns)
+    Used ONLY by: response selector
     """
     all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
     all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name][-15:]
@@ -764,6 +764,10 @@ def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_bot_persona_skill")
+
+
+def dff_book_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_book_skill")
 
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
