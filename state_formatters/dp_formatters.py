@@ -290,7 +290,7 @@ def hypothesis_histories_list(dialog: Dict):
         utterances_histories.append([hyp["text"]])
         utterances_histories_batch.append(utterances_histories)
 
-    return [{"utterances_histories": utterances_histories_batch}]
+    return [{"utterances_with_histories": utterances_histories_batch}]
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:
