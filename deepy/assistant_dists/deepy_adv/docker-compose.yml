@@ -68,8 +68,16 @@ services:
     command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3007 --timeout=100 server:app
   sentseg:
     build:
-      context: ./annotators/sent_seg/
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3008 -t 100
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 3008
+    environment:
+      - FLASK_APP=server
     ports:
       - 3008:3008
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
 version: "3.7"
