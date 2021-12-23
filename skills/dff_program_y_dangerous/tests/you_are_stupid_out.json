@@ -1,6 +1,6 @@
 [
     [
-        "Could you be more kind to me and talk about something else?",
+        "Huh. Sorry, sometimes I can say something really confusing. You can try to ask me in more simple way.",
         0.85,
         {
             "program_y_dangerous_state": {
@@ -14,7 +14,7 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "58ea4369-75b1-4012-9995-32ae360f2d12",
+                    "id": "830e4e39-7fd2-4bc7-ae12-bc3d7bfa5c7d",
                     "labels": {
                         "0": [
                             "story_flow",
@@ -25,7 +25,7 @@
                         "0": "You are stupid"
                     },
                     "responses": {
-                        "0": "Could you be more kind to me and talk about something else?"
+                        "0": "Huh. Sorry, sometimes I can say something really confusing. You can try to ask me in more simple way."
                     },
                     "misc": {},
                     "validation": false,

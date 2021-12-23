@@ -45,7 +45,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   cobotqa:
   spacy-nounphrases:
-  program-y:
+  dff-program-y:
   personality-catcher:
   sentseg:
   convers-evaluation-selector:
@@ -53,7 +53,7 @@ services:
   intent-responder:
   intent-catcher:
   badlisted-words:
-  program-y-dangerous:
+  dff-program-y-dangerous:
   dff-movie-skill:
   dff-gaming-skill:
   ner:
@@ -73,7 +73,7 @@ services:
   meta-script-skill:
   small-talk-skill:
   game-cooperative-skill:
-  program-y-wide:
+  dff-program-y-wide:
   news-api-skill:
   news-api-annotator:
   factoid-qa:
