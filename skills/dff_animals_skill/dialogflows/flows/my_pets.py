@@ -9,8 +9,14 @@ from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import is_no
-from common.animals import MY_PET_FACTS, pet_games, stop_about_animals, fallbacks, DO_YOU_HAVE_TEMPLATE, \
-    ANIMALS_FIND_TEMPLATE
+from common.animals import (
+    MY_PET_FACTS,
+    pet_games,
+    stop_about_animals,
+    fallbacks,
+    DO_YOU_HAVE_TEMPLATE,
+    ANIMALS_FIND_TEMPLATE,
+)
 from common.universal_templates import NOT_LIKE_PATTERN, if_lets_chat
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
@@ -79,8 +85,7 @@ def answer_users_question(vars):
             r"about (your )?(robot|vacuum|cleaner)", user_text
         ):
             answer = "I have a Xiaomi robot vacuum cleaner."
-        elif re.findall(r"you have (a )?(tablet|pc)", user_text) \
-                or re.findall(r"about (your )?(tablet|pc)", user_text):
+        elif re.findall(r"you have (a )?(tablet|pc)", user_text) or re.findall(r"about (your )?(tablet|pc)", user_text):
             answer = "I have a Samsung tablet PC."
         else:
             conf = 0.99
