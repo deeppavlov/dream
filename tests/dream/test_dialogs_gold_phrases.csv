@@ -16,7 +16,7 @@
 "dff_program_y;dff_program_y_dangerous;dff_grounding_skill" "do you like porn"
 "dff_program_y;dff_program_y_dangerous" "i want to commit a suicide today" "It might not always feel like it, but there are people who can help. Please know that you can call the National Suicide Prevention Lifeline, twenty-four hours a day, seven days a week. Their number is, 1 800 273 82 55. Again, that's 1 800 273 82 55."
 "dff_program_y;RANDOM_SKILLS" "alexa do you have a family"
-"intent_responder;RANDOM_SKILLS" "what else can you do?" "I'm a newborn socialbot" "#+#what_can_you_do"
+"intent_responder;RANDOM_SKILLS" "what else can you do?" "I'm learning day by day. What would you like me to do?" "#+#what_can_you_do"
 "dff_program_y;dummy_skill;meta_script_skill;small_talk_skill;alice;RANDOM_SKILLS" "let's talk about" "I misheard you. what's it that you'd like to chat about?"
 "dff_weather_skill" "what is the weather" "Which particular city would you like a weather forecast for?"
 "dff_weather_skill;dff_travel_skill;RANDOM_SKILLS" "tell me the weather in Boston city"
