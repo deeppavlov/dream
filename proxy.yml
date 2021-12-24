@@ -9,7 +9,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8004
       - PORT=8004
       
-  program-y:
+  dff-program-y:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -72,7 +72,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8018
       - PORT=8018
 
-  program-y-dangerous:
+  dff-program-y-dangerous:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -216,7 +216,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8068
       - PORT=8068
 
-  program-y-wide:
+  dff-program-y-wide:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
