@@ -79,7 +79,8 @@ def answer_users_question(vars):
             r"about (your )?(robot|vacuum|cleaner)", user_text
         ):
             answer = "I have a Xiaomi robot vacuum cleaner."
-        elif re.findall(r"you have (a )?(tablet|pc)", user_text) or re.findall(r"about (your )?(tablet|pc)", user_text):
+        elif re.findall(r"you have (a )?(tablet|pc)", user_text) \
+                or re.findall(r"about (your )?(tablet|pc)", user_text):
             answer = "I have a Samsung tablet PC."
         else:
             conf = 0.99
