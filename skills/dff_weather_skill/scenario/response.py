@@ -5,7 +5,6 @@ from common.dff.integration.condition import is_yes_vars
 from common.dff.integration.context import (
     get_dialog,
     get_last_human_utterance,
-    get_new_link_to,
     get_shared_memory,
     save_to_shared_memory,
     set_can_continue,
