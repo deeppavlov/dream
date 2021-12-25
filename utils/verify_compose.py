@@ -20,7 +20,9 @@ def get_services(compose_file: str) -> set:
 def verify_compose():
     compose = get_services('docker-compose.yml')
     compose.remove('agent')
+    compose.remove('mongo')
     dev = get_services('dev.yml')
+    dev.remove('mongo')
     proxy = get_services('proxy.yml')
     assert not (compose - dev), f'Following services from docker-compose.yml are missing in dev.yml: {compose - dev}'
     assert not (compose - proxy), f'Following services from docker-compose.yml are missing in proxy.yml: ' \
