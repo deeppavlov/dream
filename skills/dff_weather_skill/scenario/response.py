@@ -63,10 +63,7 @@ def activity_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str
         preferred_weather = shared_memory.get("preferred_weather", "")
         save_to_shared_memory(ctx, actor, preferred_weather="")
         if preferred_weather:
-            if "?" not in WEATHER_DICT[preferred_weather]["answer"]:
-                response = f"{WEATHER_DICT[preferred_weather]['answer']} {link['phrase']}"
-            else:
-                response = WEATHER_DICT[preferred_weather]["answer"]
+            response = WEATHER_DICT[preferred_weather]["answer"]
     else:
         set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
         set_confidence(ctx, actor, ZERO_CONF)
