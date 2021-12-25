@@ -10,7 +10,6 @@ from common.dff.integration.context import (
     set_can_continue,
     set_confidence,
 )
-from common.link import SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from scenario.condition import homeland_forecast_requested_condition
 from scenario.constants import MISSED_CITY_CONF, QUESTION_PHRASE, SMALLTALK_CONF, SORRY_PHRASE, ZERO_CONF
 from scenario.processing import forecast_intent_processing
