@@ -52,11 +52,7 @@
                 "cross_states": {},
                 "cross_links": {}
             },
-            "used_links": {
-                "dff_sport_skill": [
-                    "Do you like sports?"
-                ]
-            },
+            "used_links": {},
             "age_group": "unknown",
             "disliked_skills": []
         },
