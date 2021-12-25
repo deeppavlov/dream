@@ -4,7 +4,7 @@ import random
 from typing import Any, Callable, Optional, Iterator
 
 from common.dff.integration.processing import save_slots_to_ctx
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 import scenario.universal as universal
 

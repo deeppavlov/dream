@@ -2,7 +2,7 @@ import logging
 import os
 import random
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 import common.constants as common_constants
 import common.news as common_news

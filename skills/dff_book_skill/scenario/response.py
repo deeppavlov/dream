@@ -4,8 +4,8 @@ import datetime
 import json
 import random
 
-from dff.core import Context, Actor
-import dff.conditions as cnd
+from df_engine.core import Context, Actor
+import df_engine.conditions as cnd
 
 from common.books import QUESTIONS_ABOUT_BOOKS, SWITCH_BOOK_SKILL_PHRASE
 from common.gaming import ALL_LINKS_TO_BOOKS
