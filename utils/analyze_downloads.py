@@ -1,4 +1,3 @@
-
 import argparse
 from collections import defaultdict
 from pathlib import Path
@@ -10,8 +9,8 @@ from deeppavlov.download import get_configs_downloads
 from git import Repo
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--compose_file', help='path to compose file to analyze', default='docker-compose.yml')
-parser.add_argument('-v', help='print url and model name', action='store_true')
+parser.add_argument("--compose_file", help="path to compose file to analyze", default="docker-compose.yml")
+parser.add_argument("-v", help="print url and model name", action="store_true")
 args = parser.parse_args()
 
 with open(args.compose_file) as f:
@@ -19,14 +18,14 @@ with open(args.compose_file) as f:
 
 downloads = defaultdict(list)
 
-repo = Repo('/pavlov/DeepPavlov')
+repo = Repo("/pavlov/DeepPavlov")
 origin = repo.remotes.origin
 
-for service_name, service_args in data['services'].items():
-    if service_args.get('build', {}).get('args', {}).get('SRC_DIR') is not None:
-        commit = service_args['build']['args'].get('COMMIT', 'master')
+for service_name, service_args in data["services"].items():
+    if service_args.get("build", {}).get("args", {}).get("SRC_DIR") is not None:
+        commit = service_args["build"]["args"].get("COMMIT", "master")
         repo.git.checkout(commit)
-        config_path = Path(service_args['build']['args']['SRC_DIR']) / service_args['build']['args']['CONFIG']
+        config_path = Path(service_args["build"]["args"]["SRC_DIR"]) / service_args["build"]["args"]["CONFIG"]
         try:
             config_downloads = dict(get_configs_downloads(config_path))
             for url, paths in config_downloads.items():
@@ -34,8 +33,8 @@ for service_name, service_args in data['services'].items():
                 resp = requests.get(md5_url)
                 assert resp.status_code == 200, md5_url
                 for line in resp.text.splitlines():
-                    _md5, f_name = line.split(' ', maxsplit=1)
-                    if f_name.startswith('*'):
+                    _md5, f_name = line.split(" ", maxsplit=1)
+                    if f_name.startswith("*"):
                         f_name = f_name[1:]
                     else:
                         raise ValueError

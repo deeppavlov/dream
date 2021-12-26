@@ -14,21 +14,22 @@ def load_yaml(path: Path) -> dict:
 
 def get_services(compose_file: str) -> set:
     data = load_yaml(repo_root / compose_file)
-    return set(data['services'])
+    return set(data["services"])
 
 
 def verify_compose():
-    compose = get_services('docker-compose.yml')
-    compose.remove('agent')
-    compose.remove('mongo')
-    dev = get_services('dev.yml')
-    dev.remove('mongo')
-    proxy = get_services('proxy.yml')
-    assert not (compose - dev), f'Following services from docker-compose.yml are missing in dev.yml: {compose - dev}'
-    assert not (compose - proxy), f'Following services from docker-compose.yml are missing in proxy.yml: ' \
-                                  f'{compose - proxy}'
-    print('OK')
+    compose = get_services("docker-compose.yml")
+    compose.remove("agent")
+    compose.remove("mongo")
+    dev = get_services("dev.yml")
+    dev.remove("mongo")
+    proxy = get_services("proxy.yml")
+    assert not (compose - dev), f"Following services from docker-compose.yml are missing in dev.yml: {compose - dev}"
+    assert not (compose - proxy), (
+        f"Following services from docker-compose.yml are missing in proxy.yml: " f"{compose - proxy}"
+    )
+    print("OK")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     verify_compose()
