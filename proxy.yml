@@ -270,15 +270,6 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8072
       - PORT=8072
 
-  factoid-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8073
-      - PORT=8073
-
   spelling-preprocessing:
     build:
       context: dp/proxy/

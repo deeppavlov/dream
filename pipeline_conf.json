@@ -2,12 +2,12 @@
     "connectors": {
         "sentseg": {
             "protocol": "http",
-            "timeout": 1,
+            "timeout": 1.5,
             "url": "http://sentseg:8011/sentseg"
         },
         "ner": {
             "protocol": "http",
-            "timeout": 1,
+            "timeout": 1.5,
             "url": "http://ner:8021/ner"
         },
         "sentrewrite": {
@@ -207,19 +207,6 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:asr_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
-            },
-            "factoid_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://factoid-classification:8073/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:dp_classes_formatter_service",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
                 "state_manager_method": "add_annotation"
             },
             "intent_catcher": {
@@ -652,7 +639,7 @@
                     "timeout": 2,
                     "url": "http://dff-weather-skill:8037/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_weather_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

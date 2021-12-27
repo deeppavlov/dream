@@ -109,7 +109,7 @@ def get_news(uttr, which):
 def get_fact_random(utterances):
     result_values = []
     for i, uttr in enumerate(utterances):
-        values = uttr.get("annotations", {}).get("fact_random", [])
+        values = uttr.get("annotations", {}).get("fact_random", {}).get("facts", [])
         if values:
             for v in values:
                 value = v.get("fact", "")

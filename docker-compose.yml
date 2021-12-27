@@ -14,7 +14,7 @@ services:
         eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
         dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, dff-program-y-wide:8064,
         comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
-        factoid-classification:8073, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
+        spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
         knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
         dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
         dff-book-skill:8032, dff-grounding-skill:8080,
@@ -504,7 +504,7 @@ services:
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=''
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -576,24 +576,6 @@ services:
           memory: 5G
         reservations:
           memory: 5G
-
-  factoid-classification:
-    env_file: [.env]
-    build:
-      args:
-        CONFIG: factoid_classification.json
-        PORT: 8073
-        SRC_DIR: annotators/DeepPavlovFactoidClassification
-      context: ./
-      dockerfile: dp/dockerfile_skill_gpu
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
 
   spelling-preprocessing:
     env_file: [.env]
