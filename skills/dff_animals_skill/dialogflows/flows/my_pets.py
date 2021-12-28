@@ -9,8 +9,15 @@ from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import is_no
-from common.animals import MY_PET_FACTS, pet_games, stop_about_animals, fallbacks, DO_YOU_HAVE_TEMPLATE
-from common.universal_templates import NOT_LIKE_PATTERN
+from common.animals import (
+    MY_PET_FACTS,
+    pet_games,
+    stop_about_animals,
+    fallbacks,
+    DO_YOU_HAVE_TEMPLATE,
+    ANIMALS_FIND_TEMPLATE,
+)
+from common.universal_templates import NOT_LIKE_PATTERN, if_lets_chat
 import dialogflows.scopes as scopes
 from dialogflows.flows.my_pets_states import State as MyPetsState
 from dialogflows.flows.animals_states import State as AnimalsState
@@ -179,6 +186,8 @@ def about_pet_request(ngrams, vars):
         flag = False
     if ("do you have pets" in bot_uttr["text"].lower() or bot_asked_pet) and isno:
         flag = True
+    if if_lets_chat(user_uttr) and not re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
+        flag = False
     logger.info(f"about_pet_request={flag}")
     return flag
 

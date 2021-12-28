@@ -5,13 +5,11 @@ from common.dff.integration.condition import is_yes_vars
 from common.dff.integration.context import (
     get_dialog,
     get_last_human_utterance,
-    get_new_link_to,
     get_shared_memory,
     save_to_shared_memory,
     set_can_continue,
     set_confidence,
 )
-from common.link import SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED
 from scenario.condition import homeland_forecast_requested_condition
 from scenario.constants import MISSED_CITY_CONF, QUESTION_PHRASE, SMALLTALK_CONF, SORRY_PHRASE, ZERO_CONF
 from scenario.processing import forecast_intent_processing
@@ -57,17 +55,13 @@ def activity_question_response(ctx: Context, actor: Actor, *args, **kwargs) -> s
 def activity_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = ""
     if is_yes_vars(ctx, actor):
-        set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+        set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
         set_confidence(ctx, actor, SMALLTALK_CONF)
         shared_memory = get_shared_memory(ctx, actor)
         preferred_weather = shared_memory.get("preferred_weather", "")
         save_to_shared_memory(ctx, actor, preferred_weather="")
         if preferred_weather:
-            if "?" not in WEATHER_DICT[preferred_weather]["answer"]:
-                link = get_new_link_to(ctx, actor, SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED)
-                response = f"{WEATHER_DICT[preferred_weather]['answer']} {link['phrase']}"
-            else:
-                response = WEATHER_DICT[preferred_weather]["answer"]
+            response = WEATHER_DICT[preferred_weather]["answer"]
     else:
         set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
         set_confidence(ctx, actor, ZERO_CONF)

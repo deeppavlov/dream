@@ -12,12 +12,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=5
-  factoid-classification:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
   text-qa:
     restart: unless-stopped
     volumes:

@@ -285,9 +285,12 @@ def hypothesis_histories_list(dialog: Dict):
     for hyp in hypotheses:
         utterances_histories = []
         for utt in dialog["utterances"]:
-            utterances_histories.append(utt["text"])
+            utt_text = utt["text"]
+            if isinstance(utt_text, list):
+                utt_text = " ".join(utt_text)
+            utterances_histories.append(utt_text)
         # hyp["text"] is a string. We need to pass here list of strings.
-        utterances_histories.append([hyp["text"]])
+        utterances_histories.append(hyp["text"])
         utterances_histories_batch.append(utterances_histories)
 
     return [{"utterances_with_histories": utterances_histories_batch}]
@@ -768,6 +771,10 @@ def dff_bot_persona_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_book_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_book_skill")
+
+
+def dff_weather_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_weather_skill")
 
 
 def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
