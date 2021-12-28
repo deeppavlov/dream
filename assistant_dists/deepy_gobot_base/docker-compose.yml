@@ -1,36 +1,22 @@
 services:
   agent:
-    build:
-      context: agent
-    container_name: agent
-    depends_on:
-      - mongo
-    ports:
-      - 4242:4242
-    tty: true
-    command: python -m deeppavlov_agent.run -ch http_client --cors
+    volumes:
+      - "./assistant_dists/deepy_gobot_base:/dp-agent"
   spelling_preprocessing:
     build:
       context: annotators/spelling_preprocessing
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3001 --timeout=100
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3881 --timeout=100
     ports:
-      - 3001:3001
+      - 3881:3881
   harvesters_maintenance_gobot_skill:
     build:
       context: skills/harvesters_maintenance_gobot_skill_deepy
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3882 --timeout=1000
     ports:
       - 3882:3882
-  mongo:
-    command: mongod
-    image: mongo:4.0.0
-    ports:
-      - 27017:27017
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   rule_based_response_selector:
     build:
-      context: selectors/rule_based_response_selector
+      context: response_selectors/rule_based_response_selector
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3883
     volumes: []
     ports:
@@ -45,5 +31,5 @@ services:
     build:
       context: skills/program_y_deepy
     ports:
-      - 3005:3005
+      - 3885:3885
 version: "3.7"

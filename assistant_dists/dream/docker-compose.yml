@@ -1,5 +1,7 @@
 services:
   agent:
+    volumes:
+      - "./assistant_dists/dream:/dp-agent"
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
           spacy-nounphrases:8006, program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
