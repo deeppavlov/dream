@@ -1,6 +1,6 @@
 import logging
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 from common.programy.model import get_programy_model
 

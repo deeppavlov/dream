@@ -3,7 +3,7 @@ import re
 import logging
 import json
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 from tools.wiki import get_name, what_is_book_about, get_published_year, best_plain_book_by_author, genre_of_book
 

@@ -1,4 +1,4 @@
-from dff.core import Actor, Context
+from df_engine.core import Actor, Context
 
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 from common.dff.integration.condition import is_yes_vars
