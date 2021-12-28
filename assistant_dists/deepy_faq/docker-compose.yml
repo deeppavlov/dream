@@ -15,20 +15,17 @@ services:
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3001 --timeout=100
     ports:
       - 3001:3001
-  harvesters_maintenance_skill:
+  faq_skill:
     build:
-      context: skills/harvesters_maintenance_skill
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3002
-    volumes: []
+      context: skills/faq_skill
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3010 --timeout=1000
     ports:
-      - 3002:3002
+      - 3010:3010
   mongo:
     command: mongod
     image: mongo:4.0.0
     ports:
       - 27017:27017
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   rule_based_response_selector:
     build:
       context: selectors/rule_based_response_selector
@@ -38,7 +35,7 @@ services:
       - 3003:3003
   emotion_classification:
     build:
-      context: annotators/emotion_classification
+      context: annotators/emotion_classification_deepy
     command: python -m deeppavlov riseapi emo_bert.json -p 3004
     ports:
       - 3004:3004
