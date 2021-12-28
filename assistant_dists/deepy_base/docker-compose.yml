@@ -17,7 +17,7 @@ services:
       - 3001:3001
   harvesters_maintenance_skill:
     build:
-      context: skills/harvesters_maintenance_skill
+      context: skills/harvesters_maintenance_skill_deepy
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3002
     volumes: []
     ports:
@@ -44,7 +44,7 @@ services:
       - 3004:3004
   program_y:
     build:
-      context: skills/program_y
+      context: skills/program_y_deepy
     ports:
       - 3005:3005
 version: "3.7"
