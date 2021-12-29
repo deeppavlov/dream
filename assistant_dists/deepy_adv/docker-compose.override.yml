@@ -50,6 +50,8 @@ services:
       context: .
       dockerfile: ./skills/dff_program_y/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3555 --reload
+    ports:
+      - 3555:3555
     deploy:
       resources:
         limits:
