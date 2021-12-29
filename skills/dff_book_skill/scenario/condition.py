@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Callable, Any
+from typing import Callable, Any, Union
 import sentry_sdk
 from os import getenv
 import functools
@@ -127,31 +127,20 @@ def is_last_used_phrase(phrase: Any) -> None:
 
 
 @is_last_used_phrase.register
-def _(phrase: str) -> Callable:
+def _(phrase: Union[str, list]) -> Callable:
     def last_used_handler(ctx: Context, actor: Actor) -> bool:
         if ctx.validation:
             return False
         last_response = ctx.last_response
         if last_response is None:
             return False
-        return phrase in last_response
+        if isinstance(phrase, str):
+            return phrase in last_response
+        elif isinstance(phrase, list):
+            return any([item in last_response for item in phrase])
+        else:
+            raise NotImplementedError(f"Incorrect data type {type(phrase)} in phrase check.") 
         # return (used := ctx.misc.get("used_phrases", False)) and used[-1] == id(phrase)
-
-    return last_used_handler
-
-
-@is_last_used_phrase.register
-def _(phrase: list) -> Callable:
-    def last_used_handler(ctx: Context, actor: Actor) -> bool:
-        if ctx.validation:
-            return False
-        last_response = ctx.last_response
-        if last_response is None:
-            return False
-        return any([item in last_response for item in phrase])
-        # return (used := ctx.misc.get("used_phrases", False)) and used[-1] in map(
-        #     id, phrase
-        # )
 
     return last_used_handler
 
