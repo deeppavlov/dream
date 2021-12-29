@@ -1,5 +1,0 @@
-{
-    "host": "mongo",
-    "port": 27017,
-    "name": "dp_agent"
-}
