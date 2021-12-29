@@ -1,11 +1,9 @@
 import logging
 import time
 import random
-import re
 import json
 
 from flask import Flask, request, jsonify
-from os import getenv
 
 from deeppavlov import build_model
 from deeppavlov.core.common.file import read_yaml, read_json
