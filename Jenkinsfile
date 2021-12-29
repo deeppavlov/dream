@@ -74,9 +74,6 @@ pipeline {
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh '''
-                    cat test.yml
-              '''
               sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
             }
             catch (Exception e) {
