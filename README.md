@@ -7,51 +7,87 @@ To get architecture documentation, please refer to DeepPavlov Agent [readthedocs
 
 # Distributions
 
-We've already included two distributions: Deepy and a full-sized Dream chatbot.
+We've already included five distributions: Four of them are based on lightweight Deepy socialbot
+and one is a full-sized Dream chatbot.
+
+### Deepy Base
+
+### Deepy Advanced
+
+### Deepy FAQ
+
+### Deepy GoBot
+
+### Dream
+Full version of DeepPavlov Dream chatbot.
 
 
 # Quick Start
 
-### Deploying via proxy
-The easiest way to try out Dream is to deploy it via proxy.
-This way all the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
+## Clone the repo
 
-1. Clone the repo
-
-   ```git clone https://github.com/deepmipt/dream```
+```git clone https://github.com/deepmipt/dream.git```
 
 
-2. Install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/) 
+## Install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/) 
 
-   If you get a "Permission denied" error running docker-compose, make sure to [configure your docker user](https://docs.docker.com/engine/install/linux-postinstall/) correctly.
-
-
-3. Run
-
-   ```docker-compose -f docker-compose.yml -f dev.yml -f proxy.yml up --build```
-
-   - `docker-compose.yml` is your main deployment configuration;
-
-   - `dev.yml` includes volume bindings for easier debugging;
-
-   - `proxy.yml` is a list of proxied containers. See [proxy usage](#proxy-usage).
+If you get a "Permission denied" error running docker-compose, make sure to [configure your docker user](https://docs.docker.com/engine/install/linux-postinstall/) correctly.
 
 
-### Deploying components locally
+## Run any of the distributions
+### Deepy Base
 
-Any components included in `docker-compose.yml` and not included in `proxy.yml` will be deployed locally.
-Depending on your needs, you can:
-   - Run ```docker-compose up --build``` to deploy everything on your machine.
-   - Remove the components you need to deploy locally from `proxy.yml` and run
-   
-      ```docker-compose -f docker-compose.yml -f proxy.yml up --build```.
+`docker-compose -f docker-compose.yml -f assistant_dists/deepy_base/docker-compose.override.yml up --build`
 
+### Deepy Advanced
+
+`docker-compose -f docker-compose.yml -f assistant_dists/deepy_adv/docker-compose.override.yml up --build`
+
+### Deepy FAQ
+
+`docker-compose -f docker-compose.yml -f assistant_dists/deepy_faq/docker-compose.override.yml up --build`
+
+### Deepy GoBot
+
+`docker-compose -f docker-compose.yml -f assistant_dists/deepy_gobot_base/docker-compose.override.yml up --build`
+
+### Dream (via proxy)
+
+The easiest way to try out Dream is to deploy it via proxy. 
+All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
+See [proxy usage](#proxy-usage) for details.
+
+`docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build`
+
+### Dream (locally)
 **Please note, that DeepPavlov Dream components require a lot of resources.**
-Refer to the [components](#components) section to see estimated requirements for each component.
+Refer to the [components](#components) section to see estimated requirements.
+
+`docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml up --build`
+
+We've also included a config with GPU allocations for multi-GPU environments.
+
+`AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml up`
 
 
+## Let's chat
+In a separate terminal tab run:
 
-# Proxy usage
+`docker-compose exec agent python -m deeppavlov_agent.run`
+
+Enter your username and have a chat with Dream!
+
+
+# Configuration and proxy usage
+Dream uses several docker-compose configuration files:
+
+`./docker-compose.yml` is the core config which includes containers for DeepPavlov Agent and mongo database;
+
+`./assistant_dists/*/docker-compose.override.yml` lists all components for the distribution; 
+
+`./assistant_dists/dream/dev.yml` includes volume bindings for easier Dream debugging;
+
+`./assistant_dists/dream/proxy.yml` is a list of proxied containers.
 
 If your deployment resources are limited, you can replace containers with their proxied copies hosted by DeepPavlov.
 To do this, override those container definitions inside `proxy.yml`, e.g.:
@@ -62,13 +98,13 @@ convers-evaluator-annotator:
     context: dp/proxy/
     dockerfile: Dockerfile
   environment:
-    - PROXY_PASS=lnsigo.mipt.ru:8004
+    - PROXY_PASS=dream.deeppavlov.ai:8004
     - PORT=8004
 ```
 and include this config in your deployment command:
-```
-docker-compose -f docker-compose.yml -f proxy.yml up --build
-```
+
+`docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build`
+
 By default, `proxy.yml` contains all available proxy definitions.
 
 
