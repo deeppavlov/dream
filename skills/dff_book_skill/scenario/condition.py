@@ -139,7 +139,7 @@ def _(phrase: Union[str, list]) -> Callable:
         elif isinstance(phrase, list):
             return any([item in last_response for item in phrase])
         else:
-            raise NotImplementedError(f"Incorrect data type {type(phrase)} in phrase check.") 
+            raise NotImplementedError(f"Incorrect data type {type(phrase)} in phrase check.")
         # return (used := ctx.misc.get("used_phrases", False)) and used[-1] == id(phrase)
 
     return last_used_handler
