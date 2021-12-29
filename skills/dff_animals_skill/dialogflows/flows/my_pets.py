@@ -186,7 +186,7 @@ def about_pet_request(ngrams, vars):
         flag = False
     if ("do you have pets" in bot_uttr["text"].lower() or bot_asked_pet) and isno:
         flag = True
-    if if_lets_chat(user_uttr) and not re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
+    if if_lets_chat(user_uttr["text"]) and not re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
         flag = False
     logger.info(f"about_pet_request={flag}")
     return flag

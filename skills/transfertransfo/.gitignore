@@ -1,9 +1,0 @@
-.vscode
-experiments/
-data/
-dataset_cache*
-runs/
-ParlAI/
-__pycache__
-models
-tests/*results.json

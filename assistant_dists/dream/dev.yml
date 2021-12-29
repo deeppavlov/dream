@@ -2,8 +2,6 @@
 services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
-    volumes:
-      - ".:/dp-agent"
     ports:
       - 4242:4242
   convers-evaluator-annotator:
