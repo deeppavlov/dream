@@ -33,21 +33,24 @@
             "faq_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://faq_skill:3710/respond"
+                    "url": "http://faq_skill:3772/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
                 "state_manager_method": "add_hypothesis",
                 "previous_services": ["annotators"]
             },
-            "program_y": {
+            "dff_program_y": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://program_y:3775/api/rest/v1.0/ask"
+                    "timeout": 2,
+                    "url": "http://dff-program-y:3775/respond"
                 },
-                "dialog_formatter": "dp_formatters:programy_formatter_dialog",
-                "response_formatter": "dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["annotators"],
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
                 "state_manager_method": "add_hypothesis"
             }
         },
