@@ -22,7 +22,7 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://spelling_preprocessing:3001/response"
+                    "url": "http://spelling_preprocessing:3771/response"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",
@@ -33,21 +33,24 @@
             "faq_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://faq_skill:3010/respond"
+                    "url": "http://faq_skill:3772/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
                 "state_manager_method": "add_hypothesis",
                 "previous_services": ["annotators"]
             },
-            "program_y": {
+            "dff_program_y": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://program_y:3005/api/rest/v1.0/ask"
+                    "timeout": 2,
+                    "url": "http://dff-program-y:3775/respond"
                 },
-                "dialog_formatter": "dp_formatters:programy_formatter_dialog",
-                "response_formatter": "dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["annotators"],
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
                 "state_manager_method": "add_hypothesis"
             }
         },
@@ -56,7 +59,7 @@
                 "connector": {
                     "protocol": "python",
                     "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3004/model"
+                    "url": "http://emotion_classification:3774/model"
                 },
               "dialog_formatter": "dp_formatters:hypotheses_list",
               "response_formatter": "dp_formatters:simple_formatter_service",
@@ -68,7 +71,7 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3003/respond"
+                    "url": "http://rule_based_response_selector:3773/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_response_selector_formatter_service",

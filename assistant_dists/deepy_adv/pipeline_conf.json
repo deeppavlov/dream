@@ -22,7 +22,7 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://spelling_preprocessing:3001/response"
+                    "url": "http://spelling_preprocessing:3551/response"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",
@@ -31,7 +31,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://entity_linking:3006/model"
+                    "url": "http://entity_linking:3556/model"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:entity_linking_formatter",
@@ -40,7 +40,7 @@
             "sentseg": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://sentseg:3008/sentseg"
+                    "url": "http://sentseg:3558/sentseg"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",
@@ -49,32 +49,40 @@
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://intent_catcher:3007/catch"
+                    "timeout": 1,
+                    "url": "http://intent-catcher:3557/detect"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
             }
         },
         "skills": {
             "harvesters_maintenance_gobot_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://harvesters_maintenance_gobot_skill:3002/respond"
+                    "url": "http://harvesters_maintenance_gobot_skill:3552/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
                 "state_manager_method": "add_hypothesis",
                 "previous_services": ["annotators"]
             },
-            "program_y": {
+            "dff_program_y": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://program_y:3005/api/rest/v1.0/ask"
+                    "timeout": 2,
+                    "url": "http://dff-program-y:3555/respond"
                 },
-                "dialog_formatter": "dp_formatters:programy_formatter_dialog",
-                "response_formatter": "dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": ["annotators"],
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
                 "state_manager_method": "add_hypothesis"
             }
         },
@@ -83,7 +91,7 @@
                 "connector": {
                     "protocol": "python",
                     "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3004/model"
+                    "url": "http://emotion_classification:3554/model"
                 },
               "dialog_formatter": "dp_formatters:hypotheses_list",
               "response_formatter": "dp_formatters:simple_formatter_service",
@@ -95,7 +103,7 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3003/respond"
+                    "url": "http://rule_based_response_selector:3553/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_response_selector_formatter_service",
