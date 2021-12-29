@@ -7,16 +7,20 @@ To get architecture documentation, please refer to DeepPavlov Agent [readthedocs
 
 # Distributions
 
-We've already included five distributions: Four of them are based on lightweight Deepy socialbot
+We've already included five distributions: four of them are based on lightweight Deepy socialbot
 and one is a full-sized Dream chatbot.
 
 ### Deepy Base
+Base version of Lunar assistant
 
 ### Deepy Advanced
+Advanced version of Lunar assistant
 
 ### Deepy FAQ
+FAQ version of Lunar assistant
 
 ### Deepy GoBot
+Goal-oriented version of Lunar assistant
 
 ### Dream
 Full version of DeepPavlov Dream chatbot.
