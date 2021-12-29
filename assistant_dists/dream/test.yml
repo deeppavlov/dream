@@ -2,6 +2,7 @@ services:
   agent:
     volumes:
       - "/cephfs/home/ignatov/artifacts:/output"
+      - "./tests/:/dp-agent/tests/"
     ports:
       - ${AGENT_PORT}:4242
   kbqa:
