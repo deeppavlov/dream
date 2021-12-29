@@ -31,7 +31,7 @@ app = FastAPI()
 
 
 @app.post("/sample")
-async def create_upload_file(file: UploadFile = File(...)):
+async def embed_file(file: UploadFile = File(...)):
     global embed
     embed = load_embedding(file.file)
     return 200

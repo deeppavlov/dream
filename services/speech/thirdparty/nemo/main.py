@@ -1,7 +1,7 @@
 import re
 
 import requests
-from deeppavlov import build_model, configs
+from deeppavlov import build_model
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
 from num2words import num2words
