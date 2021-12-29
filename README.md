@@ -23,7 +23,13 @@ FAQ version of Lunar assistant
 Goal-oriented version of Lunar assistant
 
 ### Dream
-Full version of DeepPavlov Dream chatbot.
+Full version of DeepPavlov DREAM Socialbot. This is almost the same version of the socialbot as at 
+[the end of Alexa Prize Challenge 4](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf)
+Some API services are replaced with trainable models. Some services (e.g., News Annotator, Game Skill, Weather Skill) 
+using APIs require private keys, most of them can be obtained for free. If you want to use them. just add to the 
+environmental variables (e.g., `dream/.env`). The presented version of the DREAM Socialbot consumes a lot of resources 
+because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
+We provide DEMO of the DREAM Socialbot on [our web-site](https://demo.deeppavlov.ai).
 
 
 # Quick Start
