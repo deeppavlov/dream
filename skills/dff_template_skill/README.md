@@ -1,7 +1,7 @@
 # DialogFlow Framework Template
-Changes can only be made in the `dialogflows` directory.
+Changes should only be made in the `dialogflows` directory.
 
-Template has dialog flows based on programy (`repeating`) and based on valila python (`greeting`).
+Template includes two dialog flows: one based on programy (`repeating`), and one based on vanilla python DSL (`greeting`).
 
 ```bash
 python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector 
@@ -14,7 +14,7 @@ docker-compose -f docker-compose.yml -f local.yml exec dff-template-skill bash t
 ```
 
 
-# Important changes in files of the agent
+# Important changes in configuration files of the Dream Distribution
 docker-compose.yml
 ```yml
   dff-template-skill:
@@ -75,7 +75,7 @@ def DFF_TEMPLATE_formatter(dialog: Dict) -> List[Dict]:
 
 
 # Tests
-## Test creating
+## Building Test
 
 The file `server.py` contains this code
 
@@ -110,7 +110,7 @@ def respond():
     return jsonify(responses)
 
 ```
-## Test using
+## Running Tests
 Tests are used for two way:
 
 - service initialization in `server.py`
@@ -128,7 +128,7 @@ except Exception as exc:
 - service testing by `test.sh` execution
 
 
-## Test extending
+## Extending Tests
 If you use service based on random behavior you can send `random_seed` in your service. You can find corespond lines in `server.py`
 ```python
     ... # some code
@@ -146,7 +146,7 @@ For answer comparison we use `common.test_utils`:
 You can use them for you custom comparison.
 
 
-## Links between dff skills
+## Creating Links Between DFF Skills
 1. Making a link (example of link from dff\_animals\_skill to dff\_wiki_skill)
 ```python
     import common.dialogflow_framework.utils.state as state_utils
@@ -208,7 +208,7 @@ Then in skill\_selectors/rule\_based_selector/connector.py:
 
 4. Reverse transition (from dff\_wiki\_skill to dff\_animals_skill in our example) is made the way.
 
-## Insert scenario parser to a dff skill
+## CUSTOM: Insert scenario parser for an old dff skill (NOT APPLICABLE FOR EXTERNAL DEVELOPERS)
 
 ```python
     ... # some imports
