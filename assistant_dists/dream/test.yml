@@ -79,7 +79,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=2
+      - CUDA_VISIBLE_DEVICES=8
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -87,7 +87,7 @@ services:
   dff-grounding-skill:
   masked-lm:
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=7
   dff-friendship-skill:
   entity-storer:
   knowledge-grounding-skill:
@@ -102,13 +102,13 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=7
   dff-bot-persona-skill:
   dff-funfact-skill:
   dff-gossip-skill:
   hypothesis-scorer:
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=7
   dff-wiki-skill:
   topic-recommendation:
   user-persona-extractor:
@@ -120,12 +120,12 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=8
   convers-evaluator-annotator:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=2
+      - CUDA_VISIBLE_DEVICES=8
   dff-coronavirus-skill:
   dff-short-story-skill:
   dff-template-skill:
