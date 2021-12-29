@@ -49,7 +49,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
-                    "skill_selectors"
+                    "annotators"
                 ],
                 "state_manager_method": "add_hypothesis"
             }
