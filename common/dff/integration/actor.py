@@ -9,7 +9,7 @@ from sentry_sdk.integrations.logging import ignore_logger
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 ignore_logger("root")
 

@@ -1,6 +1,6 @@
 import logging
 
-from dff.core import Actor, Context
+from df_engine.core import Actor, Context
 
 from common.dff.integration.condition import is_yes_vars
 from common.funfact import FUNFACT_COMPILED_PATTERN

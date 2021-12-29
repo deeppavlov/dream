@@ -1,8 +1,8 @@
 import logging
 import re
 
-import dff.conditions as cnd
-from dff.core import Context, Actor
+import df_engine.conditions as cnd
+from df_engine.core import Context, Actor
 
 import common.dff.integration.condition as int_cnd
 from common.utils import get_emotions

@@ -4,7 +4,7 @@ import sentry_sdk
 from os import getenv
 from typing import Any, Tuple
 
-from dff.core import Actor, Context
+from df_engine.core import Actor, Context
 import common.dff.integration.response as int_rsp
 from common.constants import MUST_CONTINUE
 from common.greeting import GREETING_QUESTIONS

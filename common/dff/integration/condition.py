@@ -3,7 +3,7 @@ import re
 
 from nltk.stem import WordNetLemmatizer
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 import common.utils as common_utils
 import common.universal_templates as universal_templates

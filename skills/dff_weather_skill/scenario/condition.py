@@ -1,4 +1,4 @@
-from dff.core import Actor, Context
+from df_engine.core import Actor, Context
 
 from common.dff.integration.context import get_last_bot_utterance, get_last_human_utterance
 from common.universal_templates import if_chat_about_particular_topic

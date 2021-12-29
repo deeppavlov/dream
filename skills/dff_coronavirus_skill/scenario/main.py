@@ -1,10 +1,10 @@
 import logging
 import re
 
-from dff.core.keywords import PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
-from dff.core import Actor
-import dff.conditions as cnd
-import dff.responses as rsp
+from df_engine.core.keywords import PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
+from df_engine.core import Actor
+import df_engine.conditions as cnd
+import df_engine.responses as rsp
 
 import common.books as common_books
 import common.dff.integration.condition as int_cnd

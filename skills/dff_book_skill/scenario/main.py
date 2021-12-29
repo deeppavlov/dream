@@ -9,10 +9,10 @@ from os import getenv
 import random
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
-from dff.core.keywords import PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, LOCAL
-from dff.core import Actor
-import dff.conditions as cnd
-import dff.labels as lbl
+from df_engine.core.keywords import PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, LOCAL
+from df_engine.core import Actor
+import df_engine.conditions as cnd
+import df_engine.labels as lbl
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
