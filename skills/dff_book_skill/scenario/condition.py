@@ -144,6 +144,8 @@ def _(phrase: list) -> Callable:
         if ctx.validation:
             return False
         last_response = ctx.last_response
+        if last_response is None:
+            return False
         return any([item in last_response for item in phrase])
         # return (used := ctx.misc.get("used_phrases", False)) and used[-1] in map(
         #     id, phrase
