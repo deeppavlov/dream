@@ -22,7 +22,7 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://spelling_preprocessing:3001/response"
+                    "url": "http://spelling_preprocessing:3881/response"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",
@@ -33,7 +33,7 @@
             "harvesters_maintenance_gobot_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://harvesters_maintenance_gobot_skill:3002/respond"
+                    "url": "http://harvesters_maintenance_gobot_skill:3882/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
@@ -43,7 +43,7 @@
             "program_y": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://program_y:3005/api/rest/v1.0/ask"
+                    "url": "http://program_y:3885/api/rest/v1.0/ask"
                 },
                 "dialog_formatter": "dp_formatters:programy_formatter_dialog",
                 "response_formatter": "dp_formatters:skill_with_attributes_formatter_service",
@@ -56,7 +56,7 @@
                 "connector": {
                     "protocol": "python",
                     "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3004/model"
+                    "url": "http://emotion_classification:3884/model"
                 },
               "dialog_formatter": "dp_formatters:hypotheses_list",
               "response_formatter": "dp_formatters:simple_formatter_service",
@@ -68,7 +68,7 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3003/respond"
+                    "url": "http://rule_based_response_selector:3883/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_response_selector_formatter_service",

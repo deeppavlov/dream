@@ -51,7 +51,7 @@ services:
       context: ./annotators/intent_catcher_deepy/
     ports:
       - 3557:3557
-    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3887 --timeout=100 server:app
+    command: gunicorn --workers=1 --name=catcher --bind 0.0.0.0:3557 --timeout=100 server:app
   sentseg:
     build:
       context: ./annotators/SentSeg/
