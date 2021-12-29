@@ -240,6 +240,8 @@ DREAM Architecture is presented in the following image:
 
 DeepPavlov Dream is licensed under Apache 2.0.
 
+Eliza (see `dream/skills/eliza`) is licensed under MIT License.
+
 
 ## Report creating
 For making certification `xlsx` - file with bot responses, you can use `xlsx_responder.py` script by executing
