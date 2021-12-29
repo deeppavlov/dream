@@ -132,6 +132,8 @@ def _(phrase: str) -> Callable:
         if ctx.validation:
             return False
         last_response = ctx.last_response
+        if last_response is None:
+            return False
         return phrase in last_response
         # return (used := ctx.misc.get("used_phrases", False)) and used[-1] == id(phrase)
 
