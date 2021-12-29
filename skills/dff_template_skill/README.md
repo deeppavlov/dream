@@ -14,7 +14,7 @@ docker-compose -f docker-compose.yml -f local.yml exec dff-template-skill bash t
 ```
 
 
-# Importan changes in files of the agent
+# Important changes in files of the agent
 docker-compose.yml
 ```yml
   dff-template-skill:
