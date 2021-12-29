@@ -42,27 +42,27 @@ If you get a "Permission denied" error running docker-compose, make sure to [con
 
 ### Run one of the Dream distributions
 
-####**Deepy Base**
+#### **Deepy Base**
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_base/docker-compose.override.yml up --build
 ```
 
-####**Deepy Advanced**
+#### **Deepy Advanced**
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_adv/docker-compose.override.yml up --build
 ```
 
-####**Deepy FAQ**
+#### **Deepy FAQ**
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_faq/docker-compose.override.yml up --build
 ```
 
-####**Deepy GoBot**
+#### **Deepy GoBot**
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_gobot_base/docker-compose.override.yml up --build
 ```
 
-####**Dream (via proxy)**
+#### **Dream (via proxy)**
 The easiest way to try out Dream is to deploy it via proxy. 
 All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
 See [proxy usage](#proxy-usage) for details.
@@ -70,7 +70,7 @@ See [proxy usage](#proxy-usage) for details.
 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build
 ```
 
-####**Dream (locally)**
+#### **Dream (locally)**
 
 **Please note, that DeepPavlov Dream components require a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
