@@ -12,36 +12,39 @@ and one is a full-sized Dream chatbot.
 
 ### Deepy Base
 Base version of Lunar assistant. 
-Deepy Base contains Spelling Preprocessing annotator, 
-template-based Harvesters Maintenance Skill 
+Deepy Base contains Spelling Preprocessing annotator,
+template-based Harvesters Maintenance Skill,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy Advanced
 Advanced version of Lunar assistant. 
-Deepy Advanced contains Spelling Preprocessing, Sentence Segmentation, 
-Entity Linking and Intent Catcher annotators, Harvesters Maintenance GoBot Skill for goal-oriented responses 
+Deepy Advanced contains Spelling Preprocessing, Sentence Segmentation,
+Entity Linking and Intent Catcher annotators, Harvesters Maintenance GoBot Skill for goal-oriented responses,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy FAQ
 FAQ version of Lunar assistant. 
 Deepy FAQ contains Spelling Preprocessing annotator, 
-template-based Frequently Asked Questions Skill 
+template-based Frequently Asked Questions Skill,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy GoBot
-Goal-oriented version of Lunar assistant. 
-Deepy Base contains Spelling Preprocessing annotator, 
-Harvesters Maintenance GoBot Skill for goal-oriented responses 
+Goal-oriented version of Lunar assistant.
+Deepy GoBot Base contains Spelling Preprocessing annotator,
+Harvesters Maintenance GoBot Skill for goal-oriented responses,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Dream
-Full version of DeepPavlov DREAM Socialbot. This is almost the same version of the socialbot as at 
-[the end of Alexa Prize Challenge 4](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf)
-Some API services are replaced with trainable models. Some services (e.g., News Annotator, Game Skill, Weather Skill) 
-using APIs require private keys, most of them can be obtained for free. If you want to use them. just add to the 
-environmental variables (e.g., `dream/.env`). The presented version of the DREAM Socialbot consumes a lot of resources 
+Full version of DeepPavlov DREAM Socialbot.
+This is almost the same version of the socialbot as at 
+[the end of Alexa Prize Challenge 4](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf).
+Some API services are replaced with trainable models.
+Some services (e.g., News Annotator, Game Skill, Weather Skill) require private keys for underlying APIs,
+most of them can be obtained for free.
+If you want to use these services in local deployments, add your keys to the environmental variables (e.g., `./.env`).
+This version of DREAM Socialbot consumes a lot of resources 
 because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
-We provide DEMO of the DREAM Socialbot on [our web-site](https://demo.deeppavlov.ai).
+We provide a demo of DREAM Socialbot on [our website](https://demo.deeppavlov.ai).
 
 
 # Quick Start
