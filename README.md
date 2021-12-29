@@ -73,6 +73,10 @@ By default, `proxy.yml` contains all available proxy definitions.
 
 
 # Components
+
+DREAM Architecture is presented in the following image:
+![DREAM](DREAM.png)
+
 ## Annotators
 
 | Name                        | Requirements             | Description                                                                                                                                                                                                                    |
