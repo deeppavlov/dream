@@ -11,16 +11,28 @@ We've already included five distributions: four of them are based on lightweight
 and one is a full-sized Dream chatbot.
 
 ### Deepy Base
-Base version of Lunar assistant
+Base version of Lunar assistant. 
+Deepy Base contains Spelling Preprocessing annotator, 
+template-based Harvesters Maintenance Skill 
+and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy Advanced
-Advanced version of Lunar assistant
+Advanced version of Lunar assistant. 
+Deepy Advanced contains Spelling Preprocessing, Sentence Segmentation, 
+Entity Linking and Intent Catcher annotators, Harvesters Maintenance GoBot Skill for goal-oriented responses 
+and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy FAQ
-FAQ version of Lunar assistant
+FAQ version of Lunar assistant. 
+Deepy FAQ contains Spelling Preprocessing annotator, 
+template-based Frequently Asked Questions Skill 
+and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy GoBot
-Goal-oriented version of Lunar assistant
+Goal-oriented version of Lunar assistant. 
+Deepy Base contains Spelling Preprocessing annotator, 
+Harvesters Maintenance GoBot Skill for goal-oriented responses 
+and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Dream
 Full version of DeepPavlov DREAM Socialbot. This is almost the same version of the socialbot as at 
