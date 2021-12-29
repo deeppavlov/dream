@@ -18,9 +18,12 @@ def get_services(compose_file: str) -> set:
 
 
 def verify_compose():
-    compose = get_services("docker-compose.yml")
-    compose.remove("agent")
-    compose.remove("mongo")
+    compose = get_services("docker-compose.override.yml")
+    for el in ["agent", "mongo"]:
+        try:
+            compose.remove(el)
+        except KeyError:
+            pass
     dev = get_services("dev.yml")
     dev.remove("mongo")
     proxy = get_services("proxy.yml")
