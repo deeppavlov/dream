@@ -1,6 +1,6 @@
 from typing import Optional
 
-from dff.core import Actor, Context, Node
+from df_engine.core import Actor, Context, Node
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.dff.integration.context import set_can_continue, set_confidence

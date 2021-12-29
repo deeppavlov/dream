@@ -1,9 +1,9 @@
 import logging
 
-from dff.core.keywords import RESPONSE, TRANSITIONS
-from dff.core import Actor
-import dff.labels as lbl
-import dff.conditions as cnd
+from df_engine.core.keywords import RESPONSE, TRANSITIONS
+from df_engine.core import Actor
+import df_engine.labels as lbl
+import df_engine.conditions as cnd
 
 from .responses import grounding_response
 

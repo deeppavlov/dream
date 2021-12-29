@@ -1,10 +1,10 @@
 import logging
 import re
 
-from dff.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
-from dff.core import Actor
-import dff.conditions as cnd
-import dff.labels as lbl
+from df_engine.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
+from df_engine.core import Actor
+import df_engine.conditions as cnd
+import df_engine.labels as lbl
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 # For example, the separation can be tied to the topic of the dialog.
 # In our example, there is one flow called greeting_flow.
 
-# Inside each flow, we can describe a sub-dialog using keyword `GRAPH` from dff.core.keywords module.
+# Inside each flow, we can describe a sub-dialog using keyword `GRAPH` from df_engine.core.keywords module.
 # Here we can also use keyword `GLOBAL_TRANSITIONS`, which we have considered in other examples.
 
 # `GRAPH` describes a sub-dialog using linked nodes, each node has the keywords `RESPONSE` and `TRANSITIONS`.

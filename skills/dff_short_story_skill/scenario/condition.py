@@ -2,7 +2,7 @@ import logging
 import re
 from . import response as loc_rsp
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 logger = logging.getLogger(__name__)
 

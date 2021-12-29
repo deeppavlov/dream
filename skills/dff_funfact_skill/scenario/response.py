@@ -2,7 +2,7 @@ import copy
 import logging
 import random
 
-from dff.core import Actor, Context
+from df_engine.core import Actor, Context
 
 from common.constants import MUST_CONTINUE
 from common.dff.integration.context import (

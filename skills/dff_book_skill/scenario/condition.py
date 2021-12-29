@@ -5,8 +5,8 @@ import sentry_sdk
 from os import getenv
 import functools
 
-from dff.core import Context, Actor
-import dff.conditions as cnd
+from df_engine.core import Context, Actor
+import df_engine.conditions as cnd
 
 from common.books import about_book, BOOK_PATTERN, book_skill_was_proposed
 from common.dff.integration import condition as int_cnd

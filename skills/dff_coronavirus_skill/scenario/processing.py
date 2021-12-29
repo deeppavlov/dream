@@ -1,7 +1,7 @@
 import logging
 import random
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 from tools.detectors import get_subject, get_age
 from tools.statistics import covid_data_server as cds

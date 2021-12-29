@@ -18,9 +18,6 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  factoid-classification:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   knowledge-grounding:
     environment:
       CUDA_VISIBLE_DEVICES: ""
