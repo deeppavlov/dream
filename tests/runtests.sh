@@ -145,8 +145,8 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      dff-book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
                      dff-grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-random fact-retrieval news-api-skill hypothesis-scorer \
-                     dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
+                     fact-random fact-retrieval hypothesis-scorer \
+                     dff-gossip-skill dff-wiki-skill topic-recommendation dff-science-skill\
                      user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill; do
 
         echo "Run tests for $container"
