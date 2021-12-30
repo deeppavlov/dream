@@ -127,7 +127,7 @@ def is_last_used_phrase(phrase: Any) -> None:
 
 
 @is_last_used_phrase.register
-def _(phrase: Union[str, list]) -> Callable:
+def _(phrase) -> Callable:
     def last_used_handler(ctx: Context, actor: Actor) -> bool:
         if ctx.validation:
             return False
