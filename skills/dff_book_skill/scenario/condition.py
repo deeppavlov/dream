@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Callable, Any, Union
+from typing import Callable, Any
 import sentry_sdk
 from os import getenv
 import functools
