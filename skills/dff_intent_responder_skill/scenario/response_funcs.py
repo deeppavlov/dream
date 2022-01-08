@@ -1,0 +1,152 @@
+#!/usr/bin/env python
+
+import json
+import random
+import common.utils as common_utils
+import common.dff.integration.context as int_ctx
+from datetime import datetime
+from df_engine.core import Actor, Context
+
+INTENT_RESPONSES_PATH = "/src/scenario/data/intent_response_phrases.json"
+
+def exit_respond(ctx: Context, actor: Actor, intention: str):
+    response_phrases = load_responses("exit")
+    apology_bye_phrases = [
+        "Sorry, have a great day!",
+        "Sorry to bother you, see you next time!",
+        "My bad. Have a great time!",
+        "Didn't mean to be rude. Talk to you next time.",
+        "Sorry for interrupting you. Talk to you soon.",
+        "Terribly sorry. Have a great day!",
+        "Thought you wanted to chat. My bad. See you soon!",
+        "Oh, sorry. Have a great day!",
+    ]
+    utts = get_human_utterances(ctx, actor) #{} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"] #int_ctx.get_last_human_utterance(ctx, actor)
+    response = random.choice(response_phrases).strip()  # Neutral response
+    annotations = utt["annotations"]
+
+    sentiment = int_ctx.get_human_sentiment(ctx, actor)
+#    try:
+#        sentiment = common_utils.get_sentiment(utt, probs=False)[0]
+#    except KeyError:
+#        sentiment = "neutral"
+    offensiveness, is_badlisted = "", False
+    try:
+        offensiveness = annotation["cobot_offensiveness"]["text"]
+    except KeyError:
+        offensiveness = "non-toxic"
+    try:
+        is_badlisted = annotation["cobot_offensiveness"]["is_badlisted"] == "badlist"
+    except KeyError:
+        is_badlisted = False
+
+    if len(utts) < 4:
+        response = random.choice(apology_bye_phrases)
+    elif sentiment == "positive":
+        positive = ["I'm glad to help you! ", "Thanks for the chat! ", "Cool! "]
+        response = random.choice(positive) + response
+    elif offensiveness == "toxic" or is_badlisted or sentiment == "negative":
+        response = random.choice(apology_bye_phrases)
+    return response
+
+def repeat_respond(ctx: Context, actor: Actor, intention: str):
+    utterances_bot = int_ctx.get_bot_utterances(ctx, actor)
+    utterances_human = get_human_utterances(ctx, actor)
+    WHAT_BOT_PHRASES = ["did i say something confusing", "you sound shocked", "if you want me to repeat"]
+    bot_phrases = [utt.get("text", "") if isinstance(utt, dict) else utt for utt in utterances_bot]
+    if len(utterances_human) >= 2:
+        responder_phrase = utterances_human[-2]["text"].lower()
+        if any([bot_ptrn in responder_phrase for bot_ptrn in WHAT_BOT_PHRASES]):
+            bot_utt = ""
+            for bot_phrase in bot_phrases[::-1]:
+                if bot_phrase != bot_phrases[-1]:
+                    bot_utt = bot_phrase
+                    break
+        else:
+            bot_utt = utterances_human[-2]["text"]
+    else:
+        bot_utt = ""
+    return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
+
+'''
+def where_are_you_from_respond(dialog, response_phrases):
+    already_known_user_property = dialog["human"]["profile"].get("homeland", None)
+    if already_known_user_property is None:
+        response = random.choice(response_phrases).strip() + " Where are you from?"
+    else:
+        already_known_user_property = dialog["human"]["profile"].get("location", None)
+        if already_known_user_property is None:
+            response = random.choice(response_phrases).strip() + " What is your location?"
+        else:
+            response = random.choice(response_phrases).strip()
+    return response
+'''
+
+def random_respond(ctx: Context, actor: Actor, intention: str):
+    response_phrases = load_responses(intention)
+    if isinstance(response_phrases, dict):
+        #if dialog["seen"]:
+        #    response = random.choice(response_phrases["last"]).strip()
+        #else:
+        response = random.choice(response_phrases["first"]).strip()
+    else:
+        response = random.choice(response_phrases).strip()
+
+    # TODO: somehow response sometimes is dict
+    if type(response) == dict:
+        #if dialog["seen"]:
+        #    response = random.choice(response["last"]).strip()
+        #else:
+        response = random.choice(response["first"]).strip()
+    return response
+
+'''
+def random_respond_with_question_asking(dialog, response_phrases):
+    utt = dialog["utterances"][-1]["text"]
+    response = random_respond(dialog, response_phrases)
+    if "you" in utt:
+        you = "you"
+    else:
+        you = "yours"
+    response = f"{response}. And {you}?"
+    return response
+
+def what_time_respond(dialog, response_phrases):
+    time = datetime.utcnow()
+    response = f"It is {time.hour} hours and {time.minute} minutes by U. T. C. What a time to be alive!"
+    return response
+
+def what_is_current_dialog_id_respond(dialog, response_phrases):
+    dialog_id = dialog["dialog_id"]
+    response = f"Dialog id is: {dialog_id}"
+    return response
+'''
+
+def get_respond_funcs():
+    return {
+        "exit": exit_respond,
+        "repeat": repeat_respond,
+        "where_are_you_from": where_are_you_from_respond,
+        "get_dialog_id": what_is_current_dialog_id_respond,
+        "who_made_you": random_respond,
+        "what_is_your_name": random_respond,
+        "what_is_your_job": random_respond,
+        "what_can_you_do": random_respond,
+        "what_time": what_time_respond,
+        "dont_understand": random_respond,
+        # "stupid": random_respond,
+        "choose_topic": random_respond,
+        "cant_do": random_respond,
+        "tell_me_a_story": random_respond,
+    }
+
+responses_file = None
+def load_responses(intent: str):
+    global responses_file
+    if responses_file is None:
+        with open(INTENT_RESPONSES_PATH, "r") as fp:
+            responses_file = json.load(fp)
+    return responses_file[intent]
+
+def get_human_utterances(ctx: Context, actor: Actor) -> list:
+    return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]

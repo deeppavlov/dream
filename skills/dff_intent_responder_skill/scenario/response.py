@@ -1,6 +1,7 @@
-import copy
 import logging
-import random
+import common.utils as common_utils
+import common.dff.integration.context as int_ctx
+import scenario.response_funcs as response_funcs
 
 from df_engine.core import Actor, Context
 
@@ -12,46 +13,23 @@ from common.dff.integration.context import (
     set_can_continue,
     set_confidence,
 )
-from common.fact_random import get_fact
-from common.funfact import FUNFACT_LIST, make_question
-from common.utils import get_topics
 
 logger = logging.getLogger(__name__)
 
-CONF_HIGH = 1.0
-CONF_ZERO = 0.0
+def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
-def exit_respond(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    apology_bye_phrases = [
-        "Sorry, have a great day!",
-        "Sorry to bother you, see you next time!",
-        "My bad. Have a great time!",
-        "Didn't mean to be rude. Talk to you next time.",
-        "Sorry for interrupting you. Talk to you soon.",
-        "Terribly sorry. Have a great day!",
-        "Thought you wanted to chat. My bad. See you soon!",
-        "Oh, sorry. Have a great day!",
-    ]
-
+    intents_by_catcher = common_utils.get_intents(
+        int_ctx.get_last_human_utterance(ctx, actor), probs=False, which="intent_catcher"
+    )
+    
     response = ""
-    set_confidence(ctx, actor, CONF_HIGH)
-    set_can_continue(ctx, actor, MUST_CONTINUE)
-    response = random.choice(apology_bye_phrases)
-    '''
-    funfact_list = copy.deepcopy(FUNFACT_LIST)
-    random.shuffle(funfact_list)
-    shared_memory = get_shared_memory(ctx, actor)
-    given_funfacts = []
-    if shared_memory:
-        given_funfacts = shared_memory.get("given_funfacts", [])
-    for funfact, topic in funfact_list:
-        if funfact not in given_funfacts:
-            given_funfacts.append(funfact)
-            save_to_shared_memory(ctx, actor, given_funfacts=given_funfacts)
-            link_question = make_question(topic)
-            response = f"{funfact} {link_question}"
-            break
-    if not response:
-        set_confidence(ctx, actor, CONF_ZERO)
-    '''
+    if (len(intents_by_catcher) > 0):
+        intention = intents_by_catcher[0]
+        logger.debug(f"Intent is defined as {intention}")
+        funcs = response_funcs.get_respond_funcs()[intention]
+        response = funcs(ctx, actor, intention)
+    else:
+        logger.debug("Intent is not defined")
+        response = response_funcs.random_respond(ctx, actor, "dont_understand")
+
     return response
