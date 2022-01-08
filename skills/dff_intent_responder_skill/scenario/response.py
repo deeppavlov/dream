@@ -30,6 +30,10 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         response = funcs(ctx, actor, intention)
     else:
         logger.debug("Intent is not defined")
-        response = response_funcs.random_respond(ctx, actor, "dont_understand")
+        response = default_response(ctx, actor)
 
     return response
+
+def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("default response")
+    return response_funcs.random_respond(ctx, actor, "dont_understand")

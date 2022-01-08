@@ -18,11 +18,17 @@ flows = {
         "fallback": {RESPONSE: "", PROCESSING: {"set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE)}},
     },
     GLOBAL: {
-        TRANSITIONS: {("context_driven_response", "intent_catcher"): loc_cnd.intent_catcher_exists_condition},
+        TRANSITIONS: {
+            ("context_driven_response", "intent_catcher"): loc_cnd.intent_catcher_exists_condition,
+            ("simple", "default"): cnd.true()
+        },
     },
     "context_driven_response": {
         "intent_catcher": {RESPONSE: rsp.intent_catcher_response},
     },
+    "simple": {
+        "default": {RESPONSE: rsp.default_response},
+    }
 }
 
 actor = Actor(flows, start_label=("service", "start"), fallback_label=("service", "fallback"))

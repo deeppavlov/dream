@@ -10,7 +10,7 @@ from df_engine.core import Actor, Context
 INTENT_RESPONSES_PATH = "/src/scenario/data/intent_response_phrases.json"
 
 def exit_respond(ctx: Context, actor: Actor, intention: str):
-    response_phrases = load_responses("exit")
+    response_phrases = load_responses(intention)
     apology_bye_phrases = [
         "Sorry, have a great day!",
         "Sorry to bother you, see you next time!",
@@ -23,7 +23,7 @@ def exit_respond(ctx: Context, actor: Actor, intention: str):
     ]
     utts = get_human_utterances(ctx, actor) #{} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"] #int_ctx.get_last_human_utterance(ctx, actor)
     response = random.choice(response_phrases).strip()  # Neutral response
-    annotations = utt["annotations"]
+    annotations = utts[-1]["annotations"]
 
     sentiment = int_ctx.get_human_sentiment(ctx, actor)
 #    try:
@@ -32,11 +32,11 @@ def exit_respond(ctx: Context, actor: Actor, intention: str):
 #        sentiment = "neutral"
     offensiveness, is_badlisted = "", False
     try:
-        offensiveness = annotation["cobot_offensiveness"]["text"]
+        offensiveness = annotations["cobot_offensiveness"]["text"]
     except KeyError:
         offensiveness = "non-toxic"
     try:
-        is_badlisted = annotation["cobot_offensiveness"]["is_badlisted"] == "badlist"
+        is_badlisted = annotations["cobot_offensiveness"]["is_badlisted"] == "badlist"
     except KeyError:
         is_badlisted = False
 
@@ -68,9 +68,14 @@ def repeat_respond(ctx: Context, actor: Actor, intention: str):
         bot_utt = ""
     return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
 
-'''
-def where_are_you_from_respond(dialog, response_phrases):
-    already_known_user_property = dialog["human"]["profile"].get("homeland", None)
+def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
+    response_phrases = load_responses(intention)
+    dialog = int_ctx.get_dialog(ctx, actor)
+    human_profile_exists = "human" in dialog and "profile" in dialog["human"]
+
+    already_known_user_property = None
+    if human_profile_exists:
+        already_known_user_property = dialog["human"]["profile"].get("homeland", None)
     if already_known_user_property is None:
         response = random.choice(response_phrases).strip() + " Where are you from?"
     else:
@@ -80,7 +85,6 @@ def where_are_you_from_respond(dialog, response_phrases):
         else:
             response = random.choice(response_phrases).strip()
     return response
-'''
 
 def random_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = load_responses(intention)
@@ -100,10 +104,9 @@ def random_respond(ctx: Context, actor: Actor, intention: str):
         response = random.choice(response["first"]).strip()
     return response
 
-'''
-def random_respond_with_question_asking(dialog, response_phrases):
-    utt = dialog["utterances"][-1]["text"]
-    response = random_respond(dialog, response_phrases)
+def random_respond_with_question_asking(ctx: Context, actor: Actor, intention: str):
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    response = random_respond(ctx, actor, intention)
     if "you" in utt:
         you = "you"
     else:
@@ -111,16 +114,17 @@ def random_respond_with_question_asking(dialog, response_phrases):
     response = f"{response}. And {you}?"
     return response
 
-def what_time_respond(dialog, response_phrases):
+def what_time_respond(ctx: Context, actor: Actor, intention: str):
     time = datetime.utcnow()
     response = f"It is {time.hour} hours and {time.minute} minutes by U. T. C. What a time to be alive!"
     return response
 
-def what_is_current_dialog_id_respond(dialog, response_phrases):
-    dialog_id = dialog["dialog_id"]
+def what_is_current_dialog_id_respond(ctx: Context, actor: Actor, intention: str):
+    dialog = int_ctx.get_dialog(ctx, actor)
+    #TODO: figure out how to calculate dialog_id
+    dialog_id = "unknown" #dialog["dialog_id"]
     response = f"Dialog id is: {dialog_id}"
     return response
-'''
 
 def get_respond_funcs():
     return {
