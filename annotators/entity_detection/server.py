@@ -39,13 +39,12 @@ def get_result(request):
 
     utterances_list = []
     utterances_nums = []
-    for n, utterances in enumerate(last_utterances):
-        for elem in utterances:
-            if len(elem) > 0:
-                if elem[-1] not in {".", "!", "?"}:
-                    elem = f"{elem}."
-                utterances_list.append(elem.lower())
-                utterances_nums.append(n)
+    for n, utterance in enumerate(last_utterances):
+        if len(utterance) > 0:
+            if utterance[-1] not in {".", "!", "?"}:
+                utterance = f"{utterance}."
+            utterances_list.append(utterance.lower())
+            utterances_nums.append(n)
 
     utt_entities_batch = [{} for _ in last_utterances]
     utt_entities = {}
