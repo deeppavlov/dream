@@ -20,6 +20,7 @@ try:
     entity_detection_alexa = build_model(config_name, download=True)
     entity_detection_lcquad = build_model("entity_detection_lcquad.json", download=True)
     entity_detection_alexa(["what is the capital of russia"])
+    entity_detection_lcquad(["what is the capital of russia"])
     logger.info("entity detection model is loaded.")
 except Exception as e:
     sentry_sdk.capture_exception(e)
