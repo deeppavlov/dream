@@ -115,6 +115,9 @@ docker-compose exec agent python -m deeppavlov_agent.run
 Enter your username and have a chat with Dream!
 
 
+### Let's talk via HTTP API
+Once you've started the bot, DeepPavlov's Agent API will run on `http://localhost:4242'. You can learn about its API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
+
 # Configuration and proxy usage
 Dream uses several docker-compose configuration files:
 
