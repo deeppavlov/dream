@@ -24,10 +24,10 @@ flows = {
         },
     },
     "context_driven_response": {
-        "intent_catcher": {RESPONSE: rsp.intent_catcher_response},
+        "intent_catcher": {RESPONSE: rsp.intent_catcher_response, PROCESSING: {"set_confidence": rsp.set_confidence_from_input}},
     },
     "simple": {
-        "default": {RESPONSE: rsp.default_response},
+        "default": {RESPONSE: rsp.default_response, PROCESSING: {"set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE)}},
     }
 }
 

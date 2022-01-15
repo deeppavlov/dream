@@ -1,0 +1,228 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I am so happy to hear that, bye",
+                    "annotations": {
+                        "spelling_preprocessing": "I am so happy to hear that, bye",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "I am so happy to hear that, bye",
+                            "segments": [
+                                "I am so happy to hear that, bye"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9005724191665649
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.963884711265564
+                            },
+                            "cobot_topics": {
+                                "Food_Drink": 0.9673930406570435
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995616674423218
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7167532444000244
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0013474822044372559
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9995326995849609,
+                            "conversational": 0.0004673534131143242
+                        },
+                        "conceptnet": {},
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "get_dialog_id": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.146,
+                                "detected": 1
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0026648922357708216,
+                                "command": 0.008758030831813812,
+                                "comment": 0.002409746404737234,
+                                "complaint": 0.007643893826752901,
+                                "dev_command": 0.004679771605879068,
+                                "neg_answer": 0.0038797997403889894,
+                                "open_question_factual": 0.9065764546394348,
+                                "open_question_opinion": 0.03304518386721611,
+                                "opinion": 0.013296815566718578,
+                                "other_answers": 0.002938095945864916,
+                                "pos_answer": 0.0023175119422376156,
+                                "statement": 0.006367524154484272,
+                                "yes_no_question": 0.005422457121312618
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "My battery is full. You can remove the charger",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "My battery is full. You can remove the charger",
+                            "segments": [
+                                "My battery is full. You can remove the charger"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ]
+                    },
+                    "active_skill": "dff_intent_responder_skill"
+                }
+			]
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

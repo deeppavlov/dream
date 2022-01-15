@@ -1,0 +1,48 @@
+[
+    [
+        "I'm a socialbot, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie?",
+        0.146,
+        {
+            "age_group": "unknown",
+            "dff_intent_responder_skill_state": {
+                "context": {
+                    "actor_state": {},
+                    "id": "25e9e37a-f2a2-4af8-b8c2-f4c95808df5a",
+                    "labels": {
+                        "0": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "misc": {},
+                    "requests": {
+                        "0": "I am so happy to hear that, bye"
+                    },
+                    "responses": {
+                        "0": "I'm a socialbot, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie?"
+                    },
+                    "validation": false
+                },
+                "current_turn_dff_suspended": false,
+                "history": {
+                    "0": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "previous_human_utter_index": 0,
+                "shared_memory": {}
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "disliked_skills": [],
+            "used_links": {}
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

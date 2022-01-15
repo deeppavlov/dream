@@ -21,7 +21,7 @@ def exit_respond(ctx: Context, actor: Actor, intention: str):
         "Thought you wanted to chat. My bad. See you soon!",
         "Oh, sorry. Have a great day!",
     ]
-    utts = get_human_utterances(ctx, actor) #{} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"] #int_ctx.get_last_human_utterance(ctx, actor)
+    utts = get_human_utterances(ctx, actor)
     response = random.choice(response_phrases).strip()  # Neutral response
     annotations = utts[-1]["annotations"]
 

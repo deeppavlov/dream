@@ -1,0 +1,48 @@
+[
+    [
+        "Sorry, have a great day!",
+        0.146,
+        {
+            "age_group": "unknown",
+            "dff_intent_responder_skill_state": {
+                "context": {
+                    "actor_state": {},
+                    "id": "91bae6f2-3989-443f-9c48-6184a25036d9",
+                    "labels": {
+                        "0": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "misc": {},
+                    "requests": {
+                        "0": "I am so happy to hear that, bye"
+                    },
+                    "responses": {
+                        "0": "Sorry, have a great day!"
+                    },
+                    "validation": false
+                },
+                "current_turn_dff_suspended": false,
+                "history": {
+                    "0": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "previous_human_utter_index": 0,
+                "shared_memory": {}
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "disliked_skills": [],
+            "used_links": {}
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
