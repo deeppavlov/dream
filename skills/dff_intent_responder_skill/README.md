@@ -29,3 +29,9 @@ gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
 * Execution time: 46 ms
 * Starting time: 1.5 sec
 * RAM: 45 MB
+
+## Change history
+### Jan 8, 2022
+The dialogue skill **skills\dff-intent-responder-skill** was created based on **skills\IntentResponder** service to refactor old code with the usage of the new dff framework. The new service repeats the previous service logic which is based on the intention detection from the payload of the inbound HTTP request. The intention from the latest human_utterances element with "detected"=1 and the highest confidence is selected and the appropriate response is created; the confidence value is sent to output without change. If no input intention is detected, then a default response with 'dont_understand' logic is sent.
+### Jan 15, 2022
+Tests for all input intentions including a default case are added.
