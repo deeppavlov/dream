@@ -4,7 +4,7 @@
         0.146,
         {
             "age_group": "unknown",
-            "dff_intent_responder_skill_state": {
+            "dff_template_skill_state": {
                 "context": {
                     "actor_state": {},
                     "id": "c5c0e283-3149-4527-abdf-f712970f8641",

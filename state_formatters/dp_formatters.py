@@ -746,8 +746,27 @@ def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_short_story_skill")
 
 
+# def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
+#     return utils.dff_formatter(dialog, "dff_template_skill")
+
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_template_skill")
+    # template for intent responder
+    # get called_intents
+    intents = list(dialog["utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
+    called_intents = {intent: False for intent in intents}
+    for utt in dialog["human_utterances"][-5:-1]:
+        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
+        for intent in called:
+            called_intents[intent] = True
+
+    # get dialog_id
+    dialog_id = dialog.get("dialog_id", "unknown")
+
+    batches = utils.dff_formatter(dialog, "dff_template_skill")
+    batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
+    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog_id
+    return batches
 
 
 def dff_program_y_wide_formatter(dialog: Dict) -> List[Dict]:

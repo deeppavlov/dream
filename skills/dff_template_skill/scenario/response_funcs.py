@@ -2,7 +2,6 @@
 
 import json
 import random
-import common.utils as common_utils
 import common.dff.integration.context as int_ctx
 from datetime import datetime
 from df_engine.core import Actor, Context
@@ -10,8 +9,12 @@ from df_engine.core import Actor, Context
 INTENT_RESPONSES_PATH = "/src/scenario/data/intent_response_phrases.json"
 
 
+with open(INTENT_RESPONSES_PATH, "r") as fp:
+    RESPONSES = json.load(fp)
+
+
 def exit_respond(ctx: Context, actor: Actor, intention: str):
-    response_phrases = load_responses(intention)
+    response_phrases = RESPONSES[intention]
     apology_bye_phrases = [
         "Sorry, have a great day!",
         "Sorry to bother you, see you next time!",
@@ -72,7 +75,7 @@ def repeat_respond(ctx: Context, actor: Actor, intention: str):
 
 
 def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
-    response_phrases = load_responses(intention)
+    response_phrases = RESPONSES[intention]
     dialog = int_ctx.get_dialog(ctx, actor)
     human_profile_exists = "human" in dialog and "profile" in dialog["human"]
 
@@ -91,7 +94,7 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
 
 
 def random_respond(ctx: Context, actor: Actor, intention: str):
-    response_phrases = load_responses(intention)
+    response_phrases = RESPONSES[intention]
     if isinstance(response_phrases, dict):
         # if dialog["seen"]:
         #    response = random.choice(response_phrases["last"]).strip()
@@ -128,8 +131,7 @@ def what_time_respond(ctx: Context, actor: Actor, intention: str):
 
 def what_is_current_dialog_id_respond(ctx: Context, actor: Actor, intention: str):
     dialog = int_ctx.get_dialog(ctx, actor)
-    # TODO: figure out how to calculate dialog_id
-    dialog_id = "unknown"  # dialog["dialog_id"]
+    dialog_id = dialog.get("dialog_id", "unknown")
     response = f"Dialog id is: {dialog_id}"
     return response
 
@@ -151,17 +153,6 @@ def get_respond_funcs():
         "cant_do": random_respond,
         "tell_me_a_story": random_respond,
     }
-
-
-responses_file = None
-
-
-def load_responses(intent: str):
-    global responses_file
-    if responses_file is None:
-        with open(INTENT_RESPONSES_PATH, "r") as fp:
-            responses_file = json.load(fp)
-    return responses_file[intent]
 
 
 def get_human_utterances(ctx: Context, actor: Actor) -> list:

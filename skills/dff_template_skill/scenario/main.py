@@ -2,7 +2,7 @@ import logging
 
 import df_engine.conditions as cnd
 from df_engine.core import Actor
-from df_engine.core.keywords import GLOBAL, LOCAL, PROCESSING, RESPONSE, TRANSITIONS
+from df_engine.core.keywords import GLOBAL, PROCESSING, RESPONSE, TRANSITIONS
 
 import scenario.response as rsp
 import scenario.condition as loc_cnd

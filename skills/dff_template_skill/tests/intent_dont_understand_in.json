@@ -194,7 +194,7 @@
                             []
                         ]
                     },
-                    "active_skill": "dff_intent_responder_skill"
+                    "active_skill": "dff_template_skill"
                 }
 			]
         }
