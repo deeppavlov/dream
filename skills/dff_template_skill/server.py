@@ -5,14 +5,17 @@ import time
 import os
 import random
 
-import sentry_sdk
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
+import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-import test_server
+
 from common.dff.integration.actor import load_ctxs, get_response
+
 from scenario.main import actor
+
+# import test_server
 
 
 ignore_logger("root")
@@ -47,7 +50,7 @@ def handler(requested_data, random_seed=None):
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("", 0.0, {}, {}, {}))
+            responses.append(("", 1.0, {}, {}, {}))
 
     total_time = time.time() - st_time
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
@@ -55,7 +58,7 @@ def handler(requested_data, random_seed=None):
 
 
 try:
-    test_server.run_test(handler)
+    # test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
@@ -63,7 +66,6 @@ except Exception as exc:
     raise exc
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
-
 
 # import pathlib
 # import json
@@ -80,9 +82,9 @@ logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/test_in.json",indent=4)  # TEST
+    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
     # responses = handler(request.json, RANDOM_SEED)  # TEST
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/test_out.json",indent=4)  # TEST
+    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
     responses = handler(request.json)
     return jsonify(responses)
 
