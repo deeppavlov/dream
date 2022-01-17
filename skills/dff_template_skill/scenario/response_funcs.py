@@ -9,6 +9,7 @@ from df_engine.core import Actor, Context
 
 INTENT_RESPONSES_PATH = "/src/scenario/data/intent_response_phrases.json"
 
+
 def exit_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = load_responses(intention)
     apology_bye_phrases = [
@@ -26,10 +27,10 @@ def exit_respond(ctx: Context, actor: Actor, intention: str):
     annotations = utts[-1]["annotations"]
 
     sentiment = int_ctx.get_human_sentiment(ctx, actor)
-#    try:
-#        sentiment = common_utils.get_sentiment(utt, probs=False)[0]
-#    except KeyError:
-#        sentiment = "neutral"
+    #    try:
+    #        sentiment = common_utils.get_sentiment(utt, probs=False)[0]
+    #    except KeyError:
+    #        sentiment = "neutral"
     offensiveness, is_badlisted = "", False
     try:
         offensiveness = annotations["cobot_offensiveness"]["text"]
@@ -48,6 +49,7 @@ def exit_respond(ctx: Context, actor: Actor, intention: str):
     elif offensiveness == "toxic" or is_badlisted or sentiment == "negative":
         response = random.choice(apology_bye_phrases)
     return response
+
 
 def repeat_respond(ctx: Context, actor: Actor, intention: str):
     utterances_bot = int_ctx.get_bot_utterances(ctx, actor)
@@ -68,6 +70,7 @@ def repeat_respond(ctx: Context, actor: Actor, intention: str):
         bot_utt = ""
     return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
 
+
 def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = load_responses(intention)
     dialog = int_ctx.get_dialog(ctx, actor)
@@ -86,23 +89,25 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
             response = random.choice(response_phrases).strip()
     return response
 
+
 def random_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = load_responses(intention)
     if isinstance(response_phrases, dict):
-        #if dialog["seen"]:
+        # if dialog["seen"]:
         #    response = random.choice(response_phrases["last"]).strip()
-        #else:
+        # else:
         response = random.choice(response_phrases["first"]).strip()
     else:
         response = random.choice(response_phrases).strip()
 
     # TODO: somehow response sometimes is dict
     if type(response) == dict:
-        #if dialog["seen"]:
+        # if dialog["seen"]:
         #    response = random.choice(response["last"]).strip()
-        #else:
+        # else:
         response = random.choice(response["first"]).strip()
     return response
+
 
 def random_respond_with_question_asking(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
@@ -114,17 +119,20 @@ def random_respond_with_question_asking(ctx: Context, actor: Actor, intention: s
     response = f"{response}. And {you}?"
     return response
 
+
 def what_time_respond(ctx: Context, actor: Actor, intention: str):
     time = datetime.utcnow()
     response = f"It is {time.hour} hours and {time.minute} minutes by U. T. C. What a time to be alive!"
     return response
 
+
 def what_is_current_dialog_id_respond(ctx: Context, actor: Actor, intention: str):
     dialog = int_ctx.get_dialog(ctx, actor)
-    #TODO: figure out how to calculate dialog_id
-    dialog_id = "unknown" #dialog["dialog_id"]
+    # TODO: figure out how to calculate dialog_id
+    dialog_id = "unknown"  # dialog["dialog_id"]
     response = f"Dialog id is: {dialog_id}"
     return response
+
 
 def get_respond_funcs():
     return {
@@ -144,13 +152,17 @@ def get_respond_funcs():
         "tell_me_a_story": random_respond,
     }
 
+
 responses_file = None
+
+
 def load_responses(intent: str):
     global responses_file
     if responses_file is None:
         with open(INTENT_RESPONSES_PATH, "r") as fp:
             responses_file = json.load(fp)
     return responses_file[intent]
+
 
 def get_human_utterances(ctx: Context, actor: Actor) -> list:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]

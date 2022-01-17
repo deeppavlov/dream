@@ -406,10 +406,4 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
-  dff-intent-responder-skill:
-    volumes:
-      - ./skills/dff_intent_responder_skill:/src
-      - ./common:/src/common
-    ports:
-      - 8121:8121
 version: "3.7"
