@@ -1,57 +1,30 @@
 {
     "human_utter_index_batch": [
-        0
+        4
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "I am so happy to hear that, bye",
+                    "text": "can you whisper?",
                     "annotations": {
-                        "spelling_preprocessing": "I am so happy to hear that, bye",
+                        "spelling_preprocessing": "can you whisper?",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
                         "sentseg": {
-                            "punct_sent": "I am so happy to hear that, bye",
+                            "punct_sent": "can you whisper?",
                             "segments": [
-                                "I am so happy to hear that, bye"
+                                "can you whisper?"
                             ]
                         },
-                        "badlisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
-                        },
                         "spacy_nounphrases": [],
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9005724191665649
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.963884711265564
-                            },
-                            "cobot_topics": {
-                                "Food_Drink": 0.9673930406570435
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9995616674423218
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.7167532444000244
-                            },
-                            "toxic_classification": {
-                                "toxic": 0.0013474822044372559
-                            }
+                        "badlisted_words": {
+                            "bad_words": false
                         },
-                        "factoid_classification": {
-                            "factoid": 0.9995326995849609,
-                            "conversational": 0.0004673534131143242
-                        },
-                        "conceptnet": {},
                         "intent_catcher": {
                             "cant_do": {
-                                "confidence": 0.146,
+                                "confidence": 1.0,
                                 "detected": 1
                             },
                             "choose_topic": {
@@ -139,42 +112,362 @@
                                 "detected": 0
                             }
                         },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.0026648922357708216,
-                                "command": 0.008758030831813812,
-                                "comment": 0.002409746404737234,
-                                "complaint": 0.007643893826752901,
-                                "dev_command": 0.004679771605879068,
-                                "neg_answer": 0.0038797997403889894,
-                                "open_question_factual": 0.9065764546394348,
-                                "open_question_opinion": 0.03304518386721611,
-                                "opinion": 0.013296815566718578,
-                                "other_answers": 0.002938095945864916,
-                                "pos_answer": 0.0023175119422376156,
-                                "statement": 0.006367524154484272,
-                                "yes_no_question": 0.005422457121312618
-                            }
-                        ],
                         "ner": [
                             []
                         ],
-                        "fact_random": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "User_InstructionIntent": 0.9997400641441345
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999860525131226
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9999483823776245
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999946355819702
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9980579018592834
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9999842643737793
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999984502792358
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "whisper"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        8,
+                                        15
+                                    ],
+                                    "text": "whisper"
+                                }
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.005867197178304195,
+                                "command": 0.2318090796470642,
+                                "comment": 0.004846526309847832,
+                                "complaint": 0.0075864242389798164,
+                                "dev_command": 0.03501557931303978,
+                                "neg_answer": 0.0026664184406399727,
+                                "open_question_factual": 0.016926785930991173,
+                                "open_question_opinion": 0.010962910950183868,
+                                "opinion": 0.0017059812089428306,
+                                "other_answers": 0.0026916363276541233,
+                                "pos_answer": 0.004976416006684303,
+                                "statement": 0.00794446375221014,
+                                "yes_no_question": 0.6670005321502686
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
                         "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, can't do that. Do you want to chat?",
+                                "exit.",
+                                "Sorry for interrupting you. Talk to you soon.",
+                                "can you whisper?"
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "\u201cWe watched him release the first hostage,\u201d Mr. Akram said, describing how an hour later, he watched as the other three hostages were released through the fire door.\nGulbar Akram said the last time he saw his brother was three months ago, at the fune... [1015 chars]",
+                                    "description": "\u201cWe watched him release the first hostage,\u201d Mr. Akram said, describing how an hour later, he watched as the other three hostages were released through the fire door.",
+                                    "image": "https://static01.nyt.com/images/2022/01/17/world/17uk-hostagetaker-1sub/17uk-hostagetaker-1sub-facebookJumbo.jpg",
+                                    "publishedAt": "2022-01-17T18:28:00Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Texas Synagogue Hostage Taker Had \u2018Mental Health Issues,\u2019 Brother in U.K. Says",
+                                    "url": "https://www.nytimes.com/2022/01/17/world/europe/texas-synagogue-hostage-taker-family.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "whisper",
+                                "news": {
+                                    "content": "Dune: A Whisper of Caladan Seas is a new comic book one-shot diving into the world of Frank Herbert's classic.\nBack in August we revealed the first striking covers for another \"Dune\" tie-in comic book from Boom! Studios titled \"Dune: A Whisper of Cal... [3006 chars]",
+                                    "description": "Dune: A Whisper of Caladan Seas is a new comic book one-shot diving into the world of Frank Herbert's classic. Back in August we revealed the first striking covers for another \"Dune\" tie-in comic book from Boom!",
+                                    "image": "https://cdn.mos.cms.futurecdn.net/gzmdgxdAmFRvs96m9brkYY-1200-80.jpg",
+                                    "publishedAt": "2022-01-15T12:26:22Z",
+                                    "source": {
+                                        "name": "Space.com",
+                                        "url": "https://www.space.com"
+                                    },
+                                    "title": "Brace yourself for a peek at Boom!'s new 'Dune' comic book 'A Whisper of Caladan Seas #1'",
+                                    "url": "https://www.space.com/dune-a-whisper-of-caladan-seas-comic-book"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "can you whisper?"
+                        },
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
-                            "utt_num": 1,
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "whisper": {
+                                "SymbolOf": [
+                                    "love",
+                                    "passion",
+                                    "purity"
+                                ],
+                                "HasProperty": [
+                                    "loud",
+                                    "dangerous",
+                                    "bad"
+                                ],
+                                "Causes": [
+                                    "pain",
+                                    "pain in your foot",
+                                    "hurt feel"
+                                ],
+                                "CausesDesire": [
+                                    "sing",
+                                    "flirt",
+                                    "play piano"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "see you.",
+                    "annotations": {
+                        "spelling_preprocessing": "see you",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "see you.",
+                            "segments": [
+                                "see you."
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9972172975540161
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999220371246338
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.999992847442627
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999655485153198
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999967813491821
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.999554455280304
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999557733535767
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0251671951264143,
+                                "command": 0.2903004288673401,
+                                "comment": 0.028093503788113594,
+                                "complaint": 0.057751331478357315,
+                                "dev_command": 0.15444745123386383,
+                                "neg_answer": 0.0065726893953979015,
+                                "open_question_factual": 0.04793605953454971,
+                                "open_question_opinion": 0.012233549728989601,
+                                "opinion": 0.017104903236031532,
+                                "other_answers": 0.007007350213825703,
+                                "pos_answer": 0.011313465423882008,
+                                "statement": 0.28200697898864746,
+                                "yes_no_question": 0.06006515398621559
+                            }
+                        ],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry for interrupting you. Talk to you soon.",
+                                "can you whisper?",
+                                "Sorry, can't do that. Do you want to chat?",
+                                "see you."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "see you."
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "\u201cWe watched him release the first hostage,\u201d Mr. Akram said, describing how an hour later, he watched as the other three hostages were released through the fire door.\nGulbar Akram said the last time he saw his brother was three months ago, at the fune... [1015 chars]",
+                                    "description": "\u201cWe watched him release the first hostage,\u201d Mr. Akram said, describing how an hour later, he watched as the other three hostages were released through the fire door.",
+                                    "image": "https://static01.nyt.com/images/2022/01/17/world/17uk-hostagetaker-1sub/17uk-hostagetaker-1sub-facebookJumbo.jpg",
+                                    "publishedAt": "2022-01-17T18:28:00Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Texas Synagogue Hostage Taker Had \u2018Mental Health Issues,\u2019 Brother in U.K. Says",
+                                    "url": "https://www.nytimes.com/2022/01/17/world/europe/texas-synagogue-hostage-taker-family.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
                             "wiki_skill_entities_info": {}
                         }
                     }
@@ -182,27 +475,112 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "My battery is full. You can remove the charger",
+                    "text": "Sorry, can't do that. Do you want to chat?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "My battery is full. You can remove the charger",
+                            "punct_sent": "Sorry, can't do that. Do you want to chat?",
                             "segments": [
-                                "My battery is full. You can remove the charger"
+                                "Sorry, can't do that.",
+                                "Do you want to chat?"
                             ]
                         },
                         "ner": [
+                            [],
                             []
-                        ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "exit.",
+                                "Sorry for interrupting you. Talk to you soon.",
+                                "can you whisper?",
+                                "Sorry, can't do that. Do you want to chat?"
+                            ]
+                        }
                     },
                     "active_skill": "dff_template_skill"
                 }
-			]
+            ],
+            "called_intents": {
+                "cant_do": true,
+                "choose_topic": false,
+                "doing_well": false,
+                "dont_understand": false,
+                "exit": true,
+                "lets_chat_about": false,
+                "no": false,
+                "opinion_request": false,
+                "repeat": false,
+                "stupid": false,
+                "tell_me_a_story": false,
+                "tell_me_more": false,
+                "topic_switching": false,
+                "weather_forecast_intent": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": false,
+                "what_is_your_name": false,
+                "what_time": false,
+                "where_are_you_from": false,
+                "who_made_you": false,
+                "yes": false
+            },
+            "dialog_id": "da497a6d4694dff13bff0e53615a5b19"
+        }
+    ],
+    "dff_template_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "16363944-daf6-4b3d-abcb-e115a0c3405c",
+                "labels": {
+                    "2": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "3": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "2": "exit.",
+                    "3": "can you whisper?"
+                },
+                "responses": {
+                    "2": "Sorry for interrupting you. Talk to you soon.",
+                    "3": "Sorry, can't do that. Do you want to chat?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "1": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "2": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "3": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ]
+            },
+            "previous_human_utter_index": 3,
+            "shared_memory": {}
         }
     ],
     "dff_shared_state_batch": [
         {
-            "cross_states": {},
-            "cross_links": {}
+            "cross_links": {},
+            "cross_states": {}
         }
     ],
     "entities_batch": [
@@ -219,6 +597,5 @@
     ],
     "clarification_request_flag_batch": [
         false
-    ],
-    "random_seed": 2718
+    ]
 }

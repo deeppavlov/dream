@@ -92,25 +92,24 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
             response = random.choice(response_phrases).strip()
     return response
 
-
 def random_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = RESPONSES[intention]
+   dialog = int_ctx.get_dialog(ctx, actor)
     if isinstance(response_phrases, dict):
-        # if dialog["seen"]:
-        #    response = random.choice(response_phrases["last"]).strip()
-        # else:
-        response = random.choice(response_phrases["first"]).strip()
+        if dialog["seen"]:
+            response = random.choice(response_phrases["last"]).strip()
+        else:
+            response = random.choice(response_phrases["first"]).strip()
     else:
         response = random.choice(response_phrases).strip()
 
     # TODO: somehow response sometimes is dict
     if type(response) == dict:
-        # if dialog["seen"]:
-        #    response = random.choice(response["last"]).strip()
-        # else:
-        response = random.choice(response["first"]).strip()
+        if dialog["seen"]:
+            response = random.choice(response["last"]).strip()
+        else:
+            response = random.choice(response["first"]).strip()
     return response
-
 
 def random_respond_with_question_asking(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
