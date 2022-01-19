@@ -8,7 +8,7 @@
                  {
                    "text": "let's talk about smartphones.",
                    "annotations": {
-                     "cobot_nounphrases": [],
+                     "spacy_nounphrases": [],
                      "sentseg": {
                        "punct_sent": "let's talk about smartphones.",
                        "segments": ["let's talk about smartphones."]

@@ -96,7 +96,7 @@ def get_news_for_current_entity(entity, curr_uttr, discussed_news):
         if news_el["entity"] == entity:
             return news_el["news"]
 
-    result = get_news_about_topic(entity, NEWS_API_ANNOTATOR_URL, discussed_news=discussed_news)
+    result = get_news_about_topic(entity, NEWS_API_ANNOTATOR_URL, discussed_news=discussed_news, timeout_value=1.5)
     if result:
         return result
 

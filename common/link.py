@@ -38,9 +38,8 @@ from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, C
 skills_phrases_map = {
     "news_api_skill": set(news.skill_trigger_phrases()),
     "dff_movie_skill": set(movies.skill_trigger_phrases()),
-    "book_skill": set(books.skill_trigger_phrases()),
+    "dff_book_skill": set(books.skill_trigger_phrases()),
     "emotion_skill": set(emotion.skill_trigger_phrases()),
-    # 'weather_skill': set(weather.skill_trigger_phrases()),
     "personal_info_skill": set(personal_info.skill_trigger_phrases()),
     "game_cooperative_skill": set(game_cooperative_skill.skill_trigger_phrases()),
     # TODO: Add smalltalk skill phrases that is not identical to meta_script_skill
@@ -56,7 +55,7 @@ skills_phrases_map = {
 }
 # TODO: adding new skill above, add here a conversational topic to the list, it will be used to offer topic in greeting
 LIST_OF_SCRIPTED_TOPICS = {
-    "book_skill": "books",
+    "dff_book_skill": "books",
     "news_api_skill": "news",
     "dff_animals_skill": "pets",
     # "dff_celebrity_skill": "celebrities"
@@ -75,7 +74,6 @@ SKILLS_FOR_LINKING = set(skills_phrases_map.keys())
 
 LOW_RATED_SKILLS = {
     "emotion_skill",
-    # "weather_skill",
     "personal_info_skill",
 }
 SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference(LOW_RATED_SKILLS)
@@ -83,12 +81,12 @@ SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED = set(skills_phrases_map.keys()).difference
 # assuming that all skills weights are equal to 1 by default
 # it is used to control amount of link_to phrases to specific skills
 skills_link_to_weights = {
-    "coronavirus_skill": 0.25,
+    "dff_coronavirus_skill": 0.25,
 }
 
 link_to_skill2key_words = {
     "dff_movie_skill": ["movie"],
-    "book_skill": ["book"],
+    "dff_book_skill": ["book"],
     "game_cooperative_skill": ["game"],
     # 'dff_gaming_skill': ["game"],   # TODO: add when will be merged
     "dff_travel_skill": ["travel"],
@@ -101,7 +99,7 @@ link_to_skill2key_words = {
 }
 
 link_to_skill2i_like_to_talk = {
-    "book_skill": [
+    "dff_book_skill": [
         "I'm choosing what book should I read next. What is the last book you have ever read?",
         "I have just read once again my favourite book. What is the last book you have ever read?",
     ],

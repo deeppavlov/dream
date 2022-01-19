@@ -29,8 +29,8 @@ def ask_user_when_he_started_to_play_minecraft_response(vars, candidate_game_id_
         vars, candidate_game_id_is_already_set
     )
     response = (
-        f"Perfect taste! Minecraft is the best game ever! I dived into the game right after I was created. "
-        f"And what about you? When did you start to play Minecraft?"
+        "Perfect taste! Minecraft is the best game ever! I dived into the game right after I was created. "
+        "And what about you? When did you start to play Minecraft?"
     )
     human_uttr = state_utils.get_last_human_utterance(vars)
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
@@ -96,8 +96,8 @@ def tell_about_building_hogwarts_in_minecraft_ask_what_interesting_user_built(
     must_continue=False,
 ):
     response = (
-        f"I had a great time building a copy of the Hogwarts castle "
-        f"from Harry Potter. What is the most interesting thing you built?"
+        "I had a great time building a copy of the Hogwarts castle "
+        "from Harry Potter. What is the most interesting thing you built?"
     )
     if must_continue:
         state_utils.set_confidence(vars, confidence=common_nlg.CONF_1)
@@ -134,7 +134,7 @@ def praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_respons
     disliked_skills = state_utils.get_disliked_skills(vars)
     used_linkto_phrases_ids = shared_memory_ops.get_used_linkto_phrase_ids(vars)
     logger.info(
-        f"(praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_response)"
+        "(praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_response)"
         f"LINKTO_RESPONSES_TO_LINKTO_IDS: {shared_memory_ops.LINKTO_RESPONSES_TO_LINKTO_IDS}"
     )
     book_link_to_id = shared_memory_ops.LINKTO_RESPONSES_TO_LINKTO_IDS[
@@ -148,7 +148,7 @@ def praise_user_achievement_in_minecraft_and_try_to_link_to_harry_potter_respons
         shared_memory_ops.add_used_linkto_to_shared_memory(
             vars, common_gaming.special_links_to_movies["Harry Potter"][0]
         )
-    elif "book_skill" not in disliked_skills and book_link_to_id not in used_linkto_phrases_ids:
+    elif "dff_book_skill" not in disliked_skills and book_link_to_id not in used_linkto_phrases_ids:
         response = "Sounds cool! " + common_gaming.special_links_to_books["Harry Potter"][0]
         shared_memory_ops.add_used_linkto_to_shared_memory(
             vars, common_gaming.special_links_to_books["Harry Potter"][0]

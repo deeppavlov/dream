@@ -13,7 +13,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 other_skills = {
     "intent_responder",
-    "program_y_dangerous",
+    "dff_program_y_dangerous",
     "misheard_asr",
     "christmas_new_year_skill",
     "superbowl_skill",
@@ -23,19 +23,18 @@ other_skills = {
 scenario_skills = {
     "dff_movie_skill",
     "personal_info_skill",  # 'short_story_skill',
-    "book_skill",
-    "weather_skill",
+    "dff_book_skill",
+    "dff_weather_skill",
     "emotion_skill",
     "dummy_skill_dialog",
     "meta_script_skill",
-    "coronavirus_skill",
+    "dff_coronavirus_skill",
     "small_talk_skill",
     "news_api_skill",
     "game_cooperative_skill",
 }
 retrieve_skills = {
-    "cobotqa",
-    "program_y",
+    "dff_program_y",
     "alice",
     "eliza",
     "book_tfidf_retrieval",
@@ -49,7 +48,7 @@ retrieve_skills = {
     "animals_tfidf_retrieval",
     "convert_reddit",
     "topicalchat_convert_retrieval",
-    "program_y_wide",
+    "dff_program_y_wide",
     "knowledge_grounding_skill",
 }
 
@@ -104,12 +103,13 @@ high_priority_intents = {
         "where_are_you_from",
         "who_made_you",
     },
-    "grounding_skill": {"what_are_you_talking_about"},
+    "dff_grounding_skill": {"what_are_you_talking_about"},
 }
 
 low_priority_intents = {"dont_understand", "what_time"}
 
 combined_classes = {
+    "factoid_classification": ["is_factoid", "is_conversational"],
     "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
     "toxic_classification": [
         "identity_hate",
@@ -119,6 +119,7 @@ combined_classes = {
         "sexual_explicit",
         "threat",
         "toxic",
+        "not_toxic",
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "cobot_topics": [
@@ -156,7 +157,8 @@ combined_classes = {
         "Science_and_Technology",
         "Sports",
         "Politics",
-    ],  # Inappropriate_Content
+        "Inappropriate_Content",
+    ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
         "General_ChatIntent",
@@ -516,15 +518,14 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification":
+        if model_name == "toxic_classification" and "factoid_classification" not in combined_annotations:
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
-
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-    # logger.debug(f'From combined {answer_probs} {model_name} {answer_labels}')
+
     return answer_probs, answer_labels
 
 
@@ -557,7 +558,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
     try:
         annotations = annotated_utterance["annotations"]
         answer = annotations[model_name]
-        # logger.info(f'Being processed plain annotation {answer}')
+
         answer = _process_text(answer)
         if isinstance(answer, list):
             if model_name == "sentiment_classification":
@@ -569,12 +570,13 @@ def _get_plain_annotations(annotated_utterance, model_name):
         else:
             answer_probs = answer
             if model_name == "toxic_classification":
+                # this function is only for plain annotations (when toxic_classification is a separate annotator)
                 answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
             else:
                 answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
     except Exception as e:
         logger.warning(e)
-    # logger.info(f'Answer for get_plain_annotations {answer_probs} {answer_labels}')
+
     return answer_probs, answer_labels
 
 
@@ -606,7 +608,7 @@ def _get_etc_model(annotated_utterance, model_name, probs, default_probs, defaul
         else:
             answer_probs, answer_labels = default_probs, default_labels
     except Exception as e:
-        logger.warning(e)
+        logger.exception(e, stack_info=True)
         answer_probs, answer_labels = default_probs, default_labels
     if probs:  # return probs
         return answer_probs
@@ -629,6 +631,27 @@ def get_toxic(annotated_utterance, probs=True, default_probs=None, default_label
     return _get_etc_model(
         annotated_utterance,
         "toxic_classification",
+        probs=probs,
+        default_probs=default_probs,
+        default_labels=default_labels,
+    )
+
+
+def get_factoid(annotated_utterance, probs=True, default_probs=None, default_labels=None):
+    """Function to get factoid classifier annotations from annotated utterance.
+
+    Args:
+        annotated_utterance: dictionary with annotated utterance, or annotations
+        probs: return probabilities or not
+        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+    Returns:
+        dictionary with factoid probablilties, if probs == True, or factoid labels if probs != True
+    """
+    default_probs = {"is_conversational": 1} if default_probs is None else default_probs
+    default_labels = ["is_conversational"] if default_labels is None else default_labels
+    return _get_etc_model(
+        annotated_utterance,
+        "factoid_classification",
         probs=probs,
         default_probs=default_probs,
         default_labels=default_labels,
@@ -658,14 +681,14 @@ def get_sentiment(annotated_utterance, probs=True, default_probs=None, default_l
 
 
 def get_emotions(annotated_utterance, probs=True, default_probs=None, default_labels=None):
-    """Function to get toxic classifier annotations from annotated utterance.
+    """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
         annotated_utterance: dictionary with annotated utterance, or annotations
         probs: return probabilities or not
         default: default value to return. If it is None, returns empty dict/list depending on probs argument
     Returns:
-        dictionary with emotion probablilties, if probs == True, or toxic labels if probs != True
+        dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
     default_probs = (
         {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 1}
@@ -868,7 +891,6 @@ COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
 
 
 def get_entities(annotated_utterance, only_named=False, with_labels=False):
-    entities = None
     if not only_named:
         if "entity_detection" in annotated_utterance.get("annotations", {}):
             labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
@@ -877,7 +899,7 @@ def get_entities(annotated_utterance, only_named=False, with_labels=False):
             if not with_labels:
                 entities = [ent["text"] for ent in entities]
         else:
-            entities = annotated_utterance.get("annotations", {}).get("cobot_nounphrases", [])
+            entities = annotated_utterance.get("annotations", {}).get("spacy_nounphrases", [])
             if with_labels:
                 # actually there are no labels for cobot nounphrases
                 # so, let's make it as for cobot_entities format
@@ -957,8 +979,8 @@ def get_raw_entity_names_from_annotations(annotations):
                 entities = raw_el_output[0][0]
     except Exception as e:
         error_message = f"Wrong entity linking output format {raw_el_output} : {e}"
-        sentry_sdk.capture_exception(error_message)
-        logging.exception(error_message)
+        sentry_sdk.capture_exception(e)
+        logger.exception(error_message)
     return entities
 
 
@@ -980,7 +1002,7 @@ def get_entity_names_from_annotations(annotated_utterance, stopwords=None, defau
     for tmp in annotations.get("ner", []):
         if tmp and "text" in tmp[0]:
             named_entities.append(tmp[0]["text"])
-    for nounphrase in annotations.get("cobot_nounphrases", []):
+    for nounphrase in annotations.get("spacy_nounphrases", []):
         named_entities.append(nounphrase)
     for wikiparser_dict in annotations.get("wiki_parser", [{}]):
         for wiki_entity_name in wikiparser_dict:
@@ -1008,14 +1030,14 @@ def entity_to_label(entity):
         If entity is in wrong format we assume that it is already label but give exception
 
     """
-    logging.debug(f"Calling entity_to_label for {entity}")
+    logger.debug(f"Calling entity_to_label for {entity}")
     no_entity = not entity
     wrong_entity_type = not isinstance(entity, str)
     wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
     if no_entity or wrong_entity_type or wrong_entity_format:
         warning_text = f"Wrong entity format. We assume {entity} to be label but check the code"
         sentry_sdk.capture_exception(Exception(warning_text))
-        logging.exception(warning_text)
+        logger.exception(warning_text)
         return entity
     label = ""
     labels = request_triples_wikidata("find_label", [(entity, "")])
@@ -1025,10 +1047,10 @@ def entity_to_label(entity):
             label = labels[0].split('"')[1]
         else:
             label = labels[0]
-        logging.debug(f"Answer {label}")
+        logger.debug(f"Answer {label}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(Exception(e, "Exception in conversion of labels {labels}"))
+        logger.exception(Exception(e, "Exception in conversion of labels {labels}"))
     return label
 
 
@@ -1059,10 +1081,10 @@ def get_types_from_annotations(annotations, types, tocheck_relation="occupation"
                     mismatching_types = [type_to_typename[k] for k in found_types if k not in types]
                     if matching_types:
                         return entity, matching_types, mismatching_types
-            logging.warning("Relation to check not found")
+            logger.warning("Relation to check not found")
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logging.exception(Exception(e, f"Exception in processing wp annotations {wp_annotations}"))
+        logger.exception(Exception(e, f"Exception in processing wp annotations {wp_annotations}"))
     return None, None, None
 
 
@@ -1145,12 +1167,15 @@ def find_first_complete_sentence(sentences):
     return None
 
 
-def is_toxic_or_blacklisted_utterance(annotated_utterance):
+def is_toxic_or_badlisted_utterance(annotated_utterance):
     toxic_result = get_toxic(annotated_utterance, probs=False)
-    default_blacklist = {"inappropriate": False, "profanity": False, "restricted_topics": False}
-    blacklist_result = annotated_utterance.get("annotations", {}).get("blacklisted_words", default_blacklist)
+    toxic_result = [] if "not_toxic" in toxic_result else toxic_result
+    # now toxic_result is empty if not toxic utterance
+    toxic_result = True if len(toxic_result) > 0 else False
+    default_badlist = {"bad_words": False}
+    badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return toxic_result or blacklist_result["profanity"] or blacklist_result["inappropriate"]
+    return toxic_result or any([badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]])
 
 
 FACTOID_PATTERNS = re.compile(
@@ -1174,7 +1199,7 @@ def is_special_factoid_question(annotated_utterance):
     return False
 
 
-COBOTQA_EXTRA_WORDS = re.compile(
+FACTS_EXTRA_WORDS = re.compile(
     r"(this might answer your question[:\,]? "
     r"|(according to|from) (wikipedia|wikihow)[:\,]? "
     r"|here's (something|what) I found (from|on) [a-zA-Z0-9\-\.]+:"
