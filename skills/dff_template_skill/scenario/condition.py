@@ -1331,7 +1331,7 @@ def entities(**kwargs):
 
 def wants_to_see(item_name: str):
     def has_cond(ctx: Context, actor: Actor, *args, **kwargs):
-        match = re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*go\sto.*)|(.*\slook\sat\s)|"
+        match = re.search(r"((.*i\swant\sto\s)|(.*i\swanna\s)|(.*go\sto.*)|(.*\slook\sat\s)|"
                           r"(.*show\sme\s)|(.*tell\sme\s))(?P<item>.*)", ctx.last_request, re.I)
         if match:
             item = match.group('item')
