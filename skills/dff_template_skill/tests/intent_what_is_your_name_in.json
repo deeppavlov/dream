@@ -1,14 +1,14 @@
 {
     "human_utter_index_batch": [
-        16
+        9
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "what can you talk about?",
+                    "text": "Where are you from?",
                     "annotations": {
-                        "spelling_preprocessing": "what can you talk about",
+                        "spelling_preprocessing": "Where are you from",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
@@ -17,47 +17,42 @@
                         },
                         "spacy_nounphrases": [],
                         "sentseg": {
-                            "punct_sent": "what can you talk about?",
+                            "punct_sent": "Where are you from?",
                             "segments": [
-                                "what can you talk about?"
+                                "Where are you from?"
                             ]
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.5468308329582214
+                                "Information_RequestIntent": 0.9976382255554199
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.97646164894104
+                                "Other": 0.9995998740196228
                             },
                             "cobot_topics": {
-                                "Phatic": 0.8997307419776917
+                                "Phatic": 0.9999850988388062
                             },
                             "emotion_classification": {
-                                "neutral": 0.9999897480010986
+                                "neutral": 0.9999915361404419
                             },
                             "factoid_classification": {
-                                "is_conversational": 0.9999985694885254
+                                "is_conversational": 0.9997586607933044
                             },
                             "sentiment_classification": {
-                                "negative": 0.9960941672325134
+                                "neutral": 0.9997532963752747
                             },
                             "toxic_classification": {
-                                "not_toxic": 0.9999969005584717
+                                "not_toxic": 0.999995231628418
                             }
                         },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
                                 "detected": 0
                             },
                             "choose_topic": {
-                                "confidence": 1.0,
-                                "detected": 1
+                                "confidence": 0.0,
+                                "detected": 0
                             },
                             "doing_well": {
                                 "confidence": 0.0,
@@ -128,8 +123,8 @@
                                 "detected": 0
                             },
                             "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
+                                "confidence": 1.0,
+                                "detected": 1
                             },
                             "who_made_you": {
                                 "confidence": 0.0,
@@ -140,41 +135,42 @@
                                 "detected": 0
                             }
                         },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
                         "ner": [
                             []
                         ],
+                        "entity_detection": {},
                         "midas_classification": [
                             {
-                                "appreciation": 0.005805430002510548,
-                                "command": 0.041125837713479996,
-                                "comment": 0.0025300937704741955,
-                                "complaint": 0.0075712851248681545,
-                                "dev_command": 0.007556609343737364,
-                                "neg_answer": 0.004828800912946463,
-                                "open_question_factual": 0.5376251935958862,
-                                "open_question_opinion": 0.3648827075958252,
-                                "opinion": 0.006371543277055025,
-                                "other_answers": 0.0035350671969354153,
-                                "pos_answer": 0.0033172545954585075,
-                                "statement": 0.003364065894857049,
-                                "yes_no_question": 0.011486077681183815
+                                "appreciation": 0.0027974345721304417,
+                                "command": 0.0058496748097240925,
+                                "comment": 0.0025749458000063896,
+                                "complaint": 0.010895498096942902,
+                                "dev_command": 0.004854203667491674,
+                                "neg_answer": 0.004030757583677769,
+                                "open_question_factual": 0.9161516427993774,
+                                "open_question_opinion": 0.02493928000330925,
+                                "opinion": 0.00946198869496584,
+                                "other_answers": 0.0031007302459329367,
+                                "pos_answer": 0.00220314203761518,
+                                "statement": 0.008217692375183105,
+                                "yes_no_question": 0.004923079162836075
                             }
                         ],
-                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "I am a socialbot, and I am all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie? #+#what_can_you_do",
-                                "you are not making any sense.",
-                                "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand",
-                                "what can you talk about?"
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "who made you?",
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "Where are you from?"
                             ]
-                        },
-                        "entity_linking": [],
-                        "conceptnet": {},
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
                         },
                         "kbqa": {
                             "answer": "",
@@ -183,13 +179,17 @@
                         },
                         "fact_random": {
                             "facts": [],
-                            "response": "what can you talk about?"
+                            "response": "Where are you from?"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
                         },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
-                            "utt_num": 16,
+                            "utt_num": 9,
                             "wiki_skill_entities_info": {}
                         },
                         "news_api_annotator": [
@@ -208,54 +208,59 @@
                                     "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
                                 },
                                 "which": "all"
+                            },
+                            {
+                                "entity": "moscow institute of physics",
+                                "news": {},
+                                "which": "bot"
                             }
                         ]
                     }
                 },
                 {
-                    "text": "do you know how to sing?",
+                    "text": "introduce yourself.",
                     "annotations": {
-                        "spelling_preprocessing": "do you know how to sing",
+                        "spelling_preprocessing": "introduce yourself",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
+                        "spacy_nounphrases": [],
                         "badlisted_words": {
                             "bad_words": false
                         },
-                        "spacy_nounphrases": [],
                         "sentseg": {
-                            "punct_sent": "do you know how to sing?",
+                            "punct_sent": "introduce yourself.",
                             "segments": [
-                                "do you know how to sing?"
+                                "introduce yourself."
                             ]
                         },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.752985417842865
+                                "Information_DeliveryIntent": 0.8080158233642578
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9214637875556946
+                                "Other": 0.9991046786308289
                             },
                             "cobot_topics": {
-                                "Phatic": 0.5593611001968384
+                                "Travel_Geo": 0.34582415223121643
                             },
                             "emotion_classification": {
-                                "neutral": 0.9999909400939941
+                                "neutral": 0.9997722506523132
                             },
                             "factoid_classification": {
-                                "is_conversational": 0.9165544509887695
+                                "is_conversational": 0.9998695850372314
                             },
                             "sentiment_classification": {
-                                "neutral": 0.9985027313232422
+                                "neutral": 0.7235747575759888
                             },
                             "toxic_classification": {
-                                "not_toxic": 0.9999903440475464
+                                "not_toxic": 0.9999600648880005
                             }
                         },
                         "intent_catcher": {
                             "cant_do": {
-                                "confidence": 1.0,
-                                "detected": 1
+                                "confidence": 0.0,
+                                "detected": 0
                             },
                             "choose_topic": {
                                 "confidence": 0.0,
@@ -322,8 +327,8 @@
                                 "detected": 0
                             },
                             "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
+                                "confidence": 0.9999731779098511,
+                                "detected": 1
                             },
                             "what_time": {
                                 "confidence": 0.0,
@@ -342,83 +347,46 @@
                                 "detected": 0
                             }
                         },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "entity_detection": {
-                            "entities": [
-                                "sing"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "misc",
-                                    "offsets": [
-                                        19,
-                                        23
-                                    ],
-                                    "text": "sing"
-                                }
-                            ]
-                        },
-                        "ner": [
-                            []
-                        ],
                         "midas_classification": [
                             {
-                                "appreciation": 0.006587546318769455,
-                                "command": 0.09676484018564224,
-                                "comment": 0.005322946701198816,
-                                "complaint": 0.013582480140030384,
-                                "dev_command": 0.032169438898563385,
-                                "neg_answer": 0.0038030361756682396,
-                                "open_question_factual": 0.013426334597170353,
-                                "open_question_opinion": 0.009077813476324081,
-                                "opinion": 0.0014847076963633299,
-                                "other_answers": 0.003342011710628867,
-                                "pos_answer": 0.009915085509419441,
-                                "statement": 0.011167866177856922,
-                                "yes_no_question": 0.7933558821678162
+                                "appreciation": 0.010892647318542004,
+                                "command": 0.7336281538009644,
+                                "comment": 0.005103215109556913,
+                                "complaint": 0.02067321538925171,
+                                "dev_command": 0.14496436715126038,
+                                "neg_answer": 0.0024191737174987793,
+                                "open_question_factual": 0.007597881834954023,
+                                "open_question_opinion": 0.0052649048157036304,
+                                "opinion": 0.008669200353324413,
+                                "other_answers": 0.0026175023522228003,
+                                "pos_answer": 0.004529756493866444,
+                                "statement": 0.043365247547626495,
+                                "yes_no_question": 0.010274818167090416
                             }
                         ],
+                        "conceptnet": {},
                         "entity_linking": [],
-                        "conceptnet": {
-                            "sing": {
-                                "SymbolOf": [
-                                    "passion",
-                                    "love",
-                                    "creativity"
-                                ],
-                                "HasProperty": [
-                                    "fun",
-                                    "fun to listen to",
-                                    "good"
-                                ],
-                                "Causes": [
-                                    "you feel good",
-                                    "relaxation",
-                                    "sing"
-                                ],
-                                "CausesDesire": [
-                                    "sing",
-                                    "play piano",
-                                    "play guitar"
-                                ]
-                            }
-                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand",
-                                "what can you talk about?",
-                                "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
-                                "do you know how to sing?"
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "Where are you from?",
+                                "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
+                                "introduce yourself."
                             ]
                         },
                         "fact_random": {
                             "facts": [],
-                            "response": "do you know how to sing?"
+                            "response": "introduce yourself."
                         },
                         "kbqa": {
                             "answer": "",
@@ -433,7 +401,7 @@
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
-                            "utt_num": 17,
+                            "utt_num": 10,
                             "wiki_skill_entities_info": {}
                         },
                         "news_api_annotator": [
@@ -454,20 +422,20 @@
                                 "which": "all"
                             },
                             {
-                                "entity": "sing",
+                                "entity": "socialbot",
                                 "news": {
-                                    "content": "Just because you can play an instrument doesn\u2019t necessarily mean you have a great singing voice. For vocally-challenged musicians, Casio\u2019s latest digital keyboard features a built-in vocal synthesizer. Basically, a musician can play a voice in the sa... [3721 chars]",
-                                    "description": "Just because you can play an instrument doesn\u2019t necessarily mean you have a great singing voice. For vocally-challenged musicians, Casio\u2019s latest digital keyboard features a built-in vocal synthesizer.",
-                                    "image": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/b643ac791274b3b6a965bda53e72481a.gif",
-                                    "publishedAt": "2022-01-20T18:00:00Z",
+                                    "content": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.\nThe Transform Technology Summits start October 13th with Low-Code/No Code: Enab... [5130 chars]",
+                                    "description": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.",
+                                    "image": "https://venturebeat.com/wp-content/themes/vb-news/img/favicon.ico",
+                                    "publishedAt": "2021-08-19T17:15:03Z",
                                     "source": {
-                                        "name": "Gizmodo",
-                                        "url": "https://gizmodo.com"
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
                                     },
-                                    "title": "Casio CT-S1000V Keyboard Can Sing Any Lyrics",
-                                    "url": "https://gizmodo.com/casio-s-new-keyboard-can-literally-sing-any-lyrics-1848376935"
+                                    "title": "Amazon taps its SocialBot challenge to boost conversational AI",
+                                    "url": "https://venturebeat.com/2021/08/19/amazon-taps-its-socialbot-challenge-to-boost-conversational-ai/"
                                 },
-                                "which": "human"
+                                "which": "bot"
                             }
                         ]
                     }
@@ -475,17 +443,27 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
+                    "text": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
+                            "punct_sent": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
                             "segments": [
-                                "I am very into books and movies actually.",
-                                "And I like to talk about animals and food.",
-                                "#+#choose_topic"
+                                "As a socialbot, I live in a cloud.",
+                                "If you want to know me better, let's spend more time talking to each other.",
+                                "Where are you from?",
+                                "#+#where_are_you_from"
                             ]
                         },
                         "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 3,
+                                    "start_pos": 2,
+                                    "text": "socialbot",
+                                    "type": "LOC"
+                                }
+                            ],
                             [],
                             [],
                             []
@@ -493,10 +471,10 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "you are not making any sense.",
-                                "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand",
-                                "what can you talk about?",
-                                "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic"
+                                "who made you?",
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "Where are you from?",
+                                "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from"
                             ]
                         }
                     },
@@ -505,9 +483,9 @@
             ],
             "called_intents": {
                 "cant_do": false,
-                "choose_topic": true,
+                "choose_topic": false,
                 "doing_well": false,
-                "dont_understand": true,
+                "dont_understand": false,
                 "exit": false,
                 "lets_chat_about": false,
                 "no": false,
@@ -515,16 +493,16 @@
                 "repeat": false,
                 "stupid": false,
                 "tell_me_a_story": false,
-                "tell_me_more": true,
+                "tell_me_more": false,
                 "topic_switching": false,
                 "weather_forecast_intent": false,
                 "what_are_you_talking_about": false,
-                "what_can_you_do": true,
+                "what_can_you_do": false,
                 "what_is_your_job": false,
                 "what_is_your_name": false,
                 "what_time": false,
-                "where_are_you_from": false,
-                "who_made_you": false,
+                "where_are_you_from": true,
+                "who_made_you": true,
                 "yes": false
             },
             "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
@@ -536,44 +514,28 @@
                 "actor_state": {},
                 "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
                 "labels": {
-                    "10": [
+                    "4": [
                         "context_driven_response",
                         "intent_catcher"
                     ],
-                    "9": [
+                    "5": [
                         "context_driven_response",
                         "intent_catcher"
                     ]
                 },
                 "misc": {},
                 "requests": {
-                    "10": "what can you talk about?",
-                    "9": "you are not making any sense."
+                    "4": "who made you?",
+                    "5": "Where are you from?"
                 },
                 "responses": {
-                    "10": "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
-                    "9": "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand"
+                    "4": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                    "5": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from"
                 },
                 "validation": false
             },
             "current_turn_dff_suspended": false,
             "history": {
-                "10": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "13": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "14": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "15": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
                 "3": [
                     "context_driven_response",
                     "intent_catcher"
@@ -597,13 +559,9 @@
                 "8": [
                     "context_driven_response",
                     "intent_catcher"
-                ],
-                "9": [
-                    "context_driven_response",
-                    "intent_catcher"
                 ]
             },
-            "previous_human_utter_index": 15,
+            "previous_human_utter_index": 8,
             "shared_memory": {}
         }
     ],
@@ -614,21 +572,7 @@
         }
     ],
     "entities_batch": [
-        {
-            "any sense": {
-                "bot_attitude": null,
-                "bot_encounters": [],
-                "human_attitude": "like",
-                "human_encounters": [
-                    {
-                        "full_name": "any sense",
-                        "human_utterance_index": 14,
-                        "previous_skill_name": "dff_template_skill"
-                    }
-                ],
-                "name": "any sense"
-            }
-        }
+        {}
     ],
     "used_links_batch": [
         {}

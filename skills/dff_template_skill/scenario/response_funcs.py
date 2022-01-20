@@ -94,7 +94,7 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
 
 def random_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = RESPONSES[intention]
-   dialog = int_ctx.get_dialog(ctx, actor)
+    dialog = int_ctx.get_dialog(ctx, actor)
     if isinstance(response_phrases, dict):
         if dialog["seen"]:
             response = random.choice(response_phrases["last"]).strip()

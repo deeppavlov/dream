@@ -1,63 +1,37 @@
 {
     "human_utter_index_batch": [
-        16
+        4
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "what can you talk about?",
+                    "text": "stop this bot.",
                     "annotations": {
-                        "spelling_preprocessing": "what can you talk about",
+                        "spelling_preprocessing": "stop this bot",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
                         "badlisted_words": {
                             "bad_words": false
                         },
-                        "spacy_nounphrases": [],
+                        "spacy_nounphrases": [
+                            "this bot"
+                        ],
                         "sentseg": {
-                            "punct_sent": "what can you talk about?",
+                            "punct_sent": "stop this bot.",
                             "segments": [
-                                "what can you talk about?"
+                                "stop this bot."
                             ]
                         },
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.5468308329582214
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.97646164894104
-                            },
-                            "cobot_topics": {
-                                "Phatic": 0.8997307419776917
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9999897480010986
-                            },
-                            "factoid_classification": {
-                                "is_conversational": 0.9999985694885254
-                            },
-                            "sentiment_classification": {
-                                "negative": 0.9960941672325134
-                            },
-                            "toxic_classification": {
-                                "not_toxic": 0.9999969005584717
-                            }
-                        },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
                                 "detected": 0
                             },
                             "choose_topic": {
-                                "confidence": 1.0,
-                                "detected": 1
+                                "confidence": 0.0,
+                                "detected": 0
                             },
                             "doing_well": {
                                 "confidence": 0.0,
@@ -68,8 +42,8 @@
                                 "detected": 0
                             },
                             "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
+                                "confidence": 1.0,
+                                "detected": 1
                             },
                             "lets_chat_about": {
                                 "confidence": 0.0,
@@ -140,301 +114,78 @@
                                 "detected": 0
                             }
                         },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "User_InstructionIntent": 0.9999518394470215
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.999966025352478
+                            },
+                            "cobot_topics": {
+                                "SciTech": 0.9998132586479187
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9923678040504456
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9871318340301514
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9998714923858643
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9997690320014954
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.02823326736688614,
+                                "command": 0.47478771209716797,
+                                "comment": 0.022364214062690735,
+                                "complaint": 0.17964129149913788,
+                                "dev_command": 0.21054881811141968,
+                                "neg_answer": 0.00968626607209444,
+                                "open_question_factual": 0.012707412242889404,
+                                "open_question_opinion": 0.012279631569981575,
+                                "opinion": 0.0037366764154285192,
+                                "other_answers": 0.006453178357332945,
+                                "pos_answer": 0.00633029080927372,
+                                "statement": 0.015562125481665134,
+                                "yes_no_question": 0.01766909845173359
+                            }
+                        ],
                         "ner": [
                             []
                         ],
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.005805430002510548,
-                                "command": 0.041125837713479996,
-                                "comment": 0.0025300937704741955,
-                                "complaint": 0.0075712851248681545,
-                                "dev_command": 0.007556609343737364,
-                                "neg_answer": 0.004828800912946463,
-                                "open_question_factual": 0.5376251935958862,
-                                "open_question_opinion": 0.3648827075958252,
-                                "opinion": 0.006371543277055025,
-                                "other_answers": 0.0035350671969354153,
-                                "pos_answer": 0.0033172545954585075,
-                                "statement": 0.003364065894857049,
-                                "yes_no_question": 0.011486077681183815
-                            }
-                        ],
-                        "entity_detection": {},
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "I am a socialbot, and I am all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie? #+#what_can_you_do",
-                                "you are not making any sense.",
-                                "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand",
-                                "what can you talk about?"
-                            ]
-                        },
-                        "entity_linking": [],
-                        "conceptnet": {},
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_random": {
-                            "facts": [],
-                            "response": "what can you talk about?"
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 16,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
-                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
-                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
-                                    "publishedAt": "2022-01-20T19:30:00Z",
-                                    "source": {
-                                        "name": "TVLine",
-                                        "url": "https://tvline.com"
-                                    },
-                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
-                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
-                                },
-                                "which": "all"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "text": "do you know how to sing?",
-                    "annotations": {
-                        "spelling_preprocessing": "do you know how to sing",
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "badlisted_words": {
-                            "bad_words": false
-                        },
-                        "spacy_nounphrases": [],
-                        "sentseg": {
-                            "punct_sent": "do you know how to sing?",
-                            "segments": [
-                                "do you know how to sing?"
-                            ]
-                        },
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.752985417842865
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.9214637875556946
-                            },
-                            "cobot_topics": {
-                                "Phatic": 0.5593611001968384
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9999909400939941
-                            },
-                            "factoid_classification": {
-                                "is_conversational": 0.9165544509887695
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.9985027313232422
-                            },
-                            "toxic_classification": {
-                                "not_toxic": 0.9999903440475464
-                            }
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 1.0,
-                                "detected": 1
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "entity_detection": {
                             "entities": [
-                                "sing"
+                                "bot"
                             ],
                             "labelled_entities": [
                                 {
                                     "label": "misc",
                                     "offsets": [
-                                        19,
-                                        23
+                                        10,
+                                        13
                                     ],
-                                    "text": "sing"
+                                    "text": "bot"
                                 }
                             ]
                         },
-                        "ner": [
-                            []
-                        ],
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.006587546318769455,
-                                "command": 0.09676484018564224,
-                                "comment": 0.005322946701198816,
-                                "complaint": 0.013582480140030384,
-                                "dev_command": 0.032169438898563385,
-                                "neg_answer": 0.0038030361756682396,
-                                "open_question_factual": 0.013426334597170353,
-                                "open_question_opinion": 0.009077813476324081,
-                                "opinion": 0.0014847076963633299,
-                                "other_answers": 0.003342011710628867,
-                                "pos_answer": 0.009915085509419441,
-                                "statement": 0.011167866177856922,
-                                "yes_no_question": 0.7933558821678162
-                            }
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
                         ],
                         "entity_linking": [],
-                        "conceptnet": {
-                            "sing": {
-                                "SymbolOf": [
-                                    "passion",
-                                    "love",
-                                    "creativity"
-                                ],
-                                "HasProperty": [
-                                    "fun",
-                                    "fun to listen to",
-                                    "good"
-                                ],
-                                "Causes": [
-                                    "you feel good",
-                                    "relaxation",
-                                    "sing"
-                                ],
-                                "CausesDesire": [
-                                    "sing",
-                                    "play piano",
-                                    "play guitar"
-                                ]
-                            }
-                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand",
-                                "what can you talk about?",
-                                "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
-                                "do you know how to sing?"
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "i did not hear you.",
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "stop this bot."
                             ]
-                        },
-                        "fact_random": {
-                            "facts": [],
-                            "response": "do you know how to sing?"
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 17,
-                            "wiki_skill_entities_info": {}
                         },
                         "news_api_annotator": [
                             {
@@ -454,35 +205,303 @@
                                 "which": "all"
                             },
                             {
-                                "entity": "sing",
+                                "entity": "bot",
                                 "news": {
-                                    "content": "Just because you can play an instrument doesn\u2019t necessarily mean you have a great singing voice. For vocally-challenged musicians, Casio\u2019s latest digital keyboard features a built-in vocal synthesizer. Basically, a musician can play a voice in the sa... [3721 chars]",
-                                    "description": "Just because you can play an instrument doesn\u2019t necessarily mean you have a great singing voice. For vocally-challenged musicians, Casio\u2019s latest digital keyboard features a built-in vocal synthesizer.",
-                                    "image": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/b643ac791274b3b6a965bda53e72481a.gif",
-                                    "publishedAt": "2022-01-20T18:00:00Z",
+                                    "content": "There have been many changes to the Rift as the new season arrived with the new year. In the LCK, it seems the meta is very bot-centric. However, there are some players that seemed to still be living in 2021. Nongshim RedForce top laner Kim \u201cCanna\u201d C... [3347 chars]",
+                                    "description": "There have been many changes to the Rift as the new season arrived with the new year. In the LCK, it seems the meta is very bot-centric.",
+                                    "image": "https://static.invenglobal.com/upload/image/2022/01/15/o1642267905419510.jpeg",
+                                    "publishedAt": "2022-01-15T17:32:48Z",
                                     "source": {
-                                        "name": "Gizmodo",
-                                        "url": "https://gizmodo.com"
+                                        "name": "InvenGlobal",
+                                        "url": "https://www.invenglobal.com"
                                     },
-                                    "title": "Casio CT-S1000V Keyboard Can Sing Any Lyrics",
-                                    "url": "https://gizmodo.com/casio-s-new-keyboard-can-literally-sing-any-lyrics-1848376935"
+                                    "title": "NS Canna: \"The top lane isn\u2019t that different from last year.\"",
+                                    "url": "https://www.invenglobal.com/articles/16176/ns-canna-the-top-lane-isnt-that-different-from-last-year"
                                 },
                                 "which": "human"
                             }
-                        ]
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "stop this bot."
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "bot": {
+                                "SymbolOf": [
+                                    "computer",
+                                    "genius",
+                                    "math"
+                                ],
+                                "HasProperty": [
+                                    "mechanical",
+                                    "skilled",
+                                    "fast"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "bankruptcy",
+                                    "die"
+                                ],
+                                "CausesDesire": [
+                                    "fix computer",
+                                    "work",
+                                    "improve your life"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "what? come again.",
+                    "annotations": {
+                        "spelling_preprocessing": "what come again",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "what? come again.",
+                            "segments": [
+                                "what?",
+                                "come again."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "ClarificationIntent": 0.9999499320983887
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999638795852661
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999920129776001
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9986459612846375
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.7330408096313477
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9963127970695496
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999985933303833
+                            }
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003343055257573724,
+                                "command": 0.004563309717923403,
+                                "comment": 0.008166654966771603,
+                                "complaint": 0.920906662940979,
+                                "dev_command": 0.008219100534915924,
+                                "neg_answer": 0.016612902283668518,
+                                "open_question_factual": 0.011057836934924126,
+                                "open_question_opinion": 0.0035862824879586697,
+                                "opinion": 0.003152345772832632,
+                                "other_answers": 0.007223968394100666,
+                                "pos_answer": 0.0020661824382841587,
+                                "statement": 0.005015276372432709,
+                                "yes_no_question": 0.006086411420255899
+                            },
+                            {
+                                "appreciation": 0.005187890492379665,
+                                "command": 0.8482842445373535,
+                                "comment": 0.0025760403368622065,
+                                "complaint": 0.023622015491127968,
+                                "dev_command": 0.06365357339382172,
+                                "neg_answer": 0.003279327880591154,
+                                "open_question_factual": 0.005991458427160978,
+                                "open_question_opinion": 0.0035994311328977346,
+                                "opinion": 0.0026160171255469322,
+                                "other_answers": 0.0020213318057358265,
+                                "pos_answer": 0.0032540406100451946,
+                                "statement": 0.02783408761024475,
+                                "yes_no_question": 0.008080578409135342
+                            }
+                        ],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "stop this bot.",
+                                "Sorry for interrupting you. Talk to you soon. #+#exit",
+                                "what? come again."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what? come again."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        }
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
+                    "text": "Sorry for interrupting you. Talk to you soon. #+#exit",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
+                            "punct_sent": "Sorry for interrupting you. Talk to you soon. #+#exit",
                             "segments": [
-                                "I am very into books and movies actually.",
-                                "And I like to talk about animals and food.",
-                                "#+#choose_topic"
+                                "Sorry for interrupting you.",
+                                "Talk to you soon.",
+                                "#+#exit"
                             ]
                         },
                         "ner": [
@@ -493,10 +512,10 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "you are not making any sense.",
-                                "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand",
-                                "what can you talk about?",
-                                "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic"
+                                "i did not hear you.",
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "stop this bot.",
+                                "Sorry for interrupting you. Talk to you soon. #+#exit"
                             ]
                         }
                     },
@@ -505,21 +524,21 @@
             ],
             "called_intents": {
                 "cant_do": false,
-                "choose_topic": true,
+                "choose_topic": false,
                 "doing_well": false,
-                "dont_understand": true,
-                "exit": false,
+                "dont_understand": false,
+                "exit": true,
                 "lets_chat_about": false,
                 "no": false,
                 "opinion_request": false,
-                "repeat": false,
+                "repeat": true,
                 "stupid": false,
                 "tell_me_a_story": false,
-                "tell_me_more": true,
+                "tell_me_more": false,
                 "topic_switching": false,
                 "weather_forecast_intent": false,
                 "what_are_you_talking_about": false,
-                "what_can_you_do": true,
+                "what_can_you_do": false,
                 "what_is_your_job": false,
                 "what_is_your_name": false,
                 "what_time": false,
@@ -536,74 +555,28 @@
                 "actor_state": {},
                 "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
                 "labels": {
-                    "10": [
-                        "context_driven_response",
-                        "intent_catcher"
-                    ],
-                    "9": [
+                    "0": [
                         "context_driven_response",
                         "intent_catcher"
                     ]
                 },
                 "misc": {},
                 "requests": {
-                    "10": "what can you talk about?",
-                    "9": "you are not making any sense."
+                    "0": "stop this bot."
                 },
                 "responses": {
-                    "10": "I am very into books and movies actually. And I like to talk about animals and food. #+#choose_topic",
-                    "9": "Sorry, I might sound confusing, I am still learning. What do you want to talk about? #+#dont_understand"
+                    "0": "Sorry for interrupting you. Talk to you soon. #+#exit"
                 },
                 "validation": false
             },
             "current_turn_dff_suspended": false,
             "history": {
-                "10": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "13": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "14": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "15": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
                 "3": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "4": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "5": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "6": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "7": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "8": [
-                    "context_driven_response",
-                    "intent_catcher"
-                ],
-                "9": [
                     "context_driven_response",
                     "intent_catcher"
                 ]
             },
-            "previous_human_utter_index": 15,
+            "previous_human_utter_index": 3,
             "shared_memory": {}
         }
     ],
@@ -614,21 +587,7 @@
         }
     ],
     "entities_batch": [
-        {
-            "any sense": {
-                "bot_attitude": null,
-                "bot_encounters": [],
-                "human_attitude": "like",
-                "human_encounters": [
-                    {
-                        "full_name": "any sense",
-                        "human_utterance_index": 14,
-                        "previous_skill_name": "dff_template_skill"
-                    }
-                ],
-                "name": "any sense"
-            }
-        }
+        {}
     ],
     "used_links_batch": [
         {}

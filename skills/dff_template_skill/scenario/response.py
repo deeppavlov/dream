@@ -44,7 +44,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.debug("Intent is not defined")
         #response = default_response(ctx, actor)
     if response == "":
-        self.logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
+        logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
 
     return response
 
