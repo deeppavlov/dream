@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 def intent_catcher_exists_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.validation:
+        return False
 
     intents_by_catcher = common_utils.get_intents(
         int_ctx.get_last_human_utterance(ctx, actor), probs=False, which="intent_catcher"

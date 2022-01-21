@@ -42,7 +42,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         # and to append special token with intent_name
     else:
         logger.debug("Intent is not defined")
-        #response = default_response(ctx, actor)
+
     if response == "":
         logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
 
@@ -52,7 +52,6 @@ def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
     logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
     return ""
-    #return response_funcs.random_respond(ctx, actor, "dont_understand")
 
 def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
     _, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
