@@ -8,13 +8,13 @@
 
 ```bash
 # create local.yml
-python utils/create_local_yml.py -s dff-template-skill
+python utils/create_local_yml.py -d assistant_dists/dream/ -s dff-template-skill
 # build service
-docker-compose -f docker-compose.yml -f local.yml up -d --build dff-template-skill
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/local.yml up -d --build dff-template-skill
 # run tests
-docker-compose -f docker-compose.yml -f local.yml exec dff-template-skill bash test.sh
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/local.yml  exec dff-template-skill bash test.sh
 # run a dialog with the agent
-docker-compose -f docker-compose.yml -f local.yml exec agent python -m deeppavlov_agent.run
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/local.yml exec agent python -m deeppavlov_agent.run
 ```
 
 ## Quickstart without docker
