@@ -1,0 +1,62 @@
+services:
+  agent:
+    volumes:
+      - "./assistant_dists/deepy_base:/dp-agent"
+      - "./skill_selectors/:/dp-agent/skill_selectors/"
+      - "./state_formatters/:/dp-agent/state_formatters/"
+      - "./skills/:/dp-agent/skills/"
+      - "./common/:/dp-agent/common/"
+    environment:
+      WAIT_HOSTS: "spelling_preprocessing:3661, harvesters_maintenance_skill:3662, rule_based_response_selector:3663,
+        emotion_classification:3664, dff-program-y:3668"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+
+  spelling_preprocessing:
+    build:
+      context: annotators/spelling_preprocessing
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3661 --timeout=100
+    ports:
+      - 3661:3661
+
+  harvesters_maintenance_skill:
+    build:
+      context: skills/harvesters_maintenance_skill_deepy
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3662
+    volumes: []
+    ports:
+      - 3662:3662
+
+  rule_based_response_selector:
+    build:
+      context: response_selectors/rule_based_response_selector
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3663
+    volumes: []
+    ports:
+      - 3663:3663
+
+  emotion_classification:
+    build:
+      context: annotators/emotion_classification_deepy
+    command: python -m deeppavlov riseapi emo_bert.json -p 3664
+    ports:
+      - 3664:3664
+
+  dff-program-y:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 3668
+        SERVICE_NAME: dff_program_y
+      context: .
+      dockerfile: ./skills/dff_program_y/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3668 --reload
+    ports:
+      - 3668:3668
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 1024M
+
+version: "3.7"

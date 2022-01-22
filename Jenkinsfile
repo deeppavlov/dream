@@ -74,9 +74,6 @@ pipeline {
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh '''
-                    cat test.yml
-              '''
               sh 'tests/runtests.sh MODE=clean && tests/runtests.sh MODE=start'
             }
             catch (Exception e) {
@@ -101,6 +98,31 @@ pipeline {
         aborted {
           script {
             sh 'tests/runtests.sh MODE=clean'
+          }
+        }
+      }
+    }
+
+    stage('Test dialog') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests.sh MODE=test_dialog'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
           }
         }
       }

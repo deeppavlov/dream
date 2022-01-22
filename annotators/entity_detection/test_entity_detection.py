@@ -5,8 +5,8 @@ def main():
     url = "http://0.0.0.0:8103/respond"
 
     request_data = [
-        {"last_utterances": [["what is the capital of russia?"]]},
-        {"last_utterances": [["let's talk about politics."]]},
+        {"sentences": ["what is the capital of russia?"]},
+        {"sentences": ["let's talk about politics."]},
     ]
 
     gold_results = [
