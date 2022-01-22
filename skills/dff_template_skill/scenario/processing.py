@@ -2,14 +2,14 @@ import logging
 import re
 import json
 from . import condition as loc_cnd
-from dff.core import Node, Context, Actor
+from df_engine.core import Context, Actor
 
 
 logger = logging.getLogger(__name__)
 # ....
 
 
-def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def extract_members(ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     members = ["John", "Len*on", "Ringo", "Star*", "Paul", "McCartn*y", "George", "Har*ison"]
     members_re = "|".join(members)
@@ -27,10 +27,10 @@ def extract_members(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
         slots["beatles_member"] = "George Harrison"
         ctx.misc["slots"] = slots
 
-    return node_label, node
+    return ctx
 
 
-def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def extract_inst(ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     insts = ["trumpet", "drums", "guitar", "accordion", "bagpipe", "banjo", "bugle", "cello", "clarinet", "cymbal", 
              "flute", "horn", "harmonica", "harp", "keyboard", "maracase", "organ", "flute", "piano", "recorder",
@@ -53,10 +53,10 @@ def extract_inst(node_label: str, node: Node, ctx: Context, actor: Actor, *args,
     else:
         slots["instrument_intro"] = "All right, let me show you instruments that we have here! "
         ctx.misc["slots"] = slots
-    return node_label, node
+    return ctx
 
 
-def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def extract_albums(ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     albums = [
         "Please Please Me",
@@ -77,10 +77,10 @@ def extract_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *arg
         slots["album_name"] = extracted_album
         ctx.misc["slots"] = slots
 
-    return node_label, node
+    return ctx
 
 
-def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def slot_filling_albums(ctx: Context, actor: Actor, *args, **kwargs):
     slots = ctx.misc.get("slots", {})
     slots["sgt_peppers"] = "George Martin played a significant role in recording most of the band’s albums, including their arguably greatest success — Sgt Pepper’s Lonely Hearts Club Band."
     slots["a_hard_days_night_corr"] = "And you're right, A Hard Day's Night it was! "
@@ -102,14 +102,16 @@ def slot_filling_albums(node_label: str, node: Node, ctx: Context, actor: Actor,
         elif ctx.misc.get("first_album") is None and slot_name == "first_album":
             ctx.misc["first_album"] = True
         elif ctx.misc.get("first_album") is not None:
-            if ctx.misc["first_album"] == True and slot_name == "first_album":
+            if ctx.misc["first_album"] and slot_name == "first_album":
                 slot_value = ""
-        node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
+        processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
+        processed_node.response = processed_node.response.replace("{" f"{slot_name}" "}", slot_value)
+        ctx.a_s["processed_node"] = processed_node
 
-    return node_label, node
+    return ctx
 
 
-def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def extract_song_id(ctx: Context, actor: Actor, *args, **kwargs):
     songs = [
         "Hey Jude",
         "Don't Let Me Down",
@@ -148,29 +150,35 @@ def extract_song_id(node_label: str, node: Node, ctx: Context, actor: Actor, *ar
             if extracted_song[0].lower() == k.lower():
                 song_id = songs_ids[k]
 
-    node.misc = {"command": "goto", "objectId": song_id}
+    processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
+    processed_node.misc = {"command": "goto", "objectId": song_id}
+    ctx.a_s["processed_node"] = processed_node
 
-    return node_label, node
+    return ctx
 
 
-def fill_slots(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def fill_slots(ctx: Context, actor: Actor, *args, **kwargs):
+    processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
     for slot_name, slot_value in ctx.misc.get("slots", {}).items():
-        node.response = node.response.replace("{" f"{slot_name}" "}", slot_value)
-    return node_label, node
+        processed_node.response = processed_node.response.replace("{" f"{slot_name}" "}", slot_value)
+    ctx.a_s["processed_node"] = processed_node
+    return ctx
 
 
-def increment_album_counter(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def increment_album_counter(ctx: Context, actor: Actor, *args, **kwargs):
     ctx.misc["album_counter"] = ctx.misc.get("album_counter", 0) + 1
-    return node_label, node
+    return ctx
 
 
-def add_misc_to_response(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
-    node.response = f"{node.response} {json.dumps(node.misc)}"
-    return node_label, node
+def add_misc_to_response(ctx: Context, actor: Actor, *args, **kwargs):
+    processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
+    processed_node.response = f"{processed_node.response} {json.dumps(processed_node.misc)}"
+    ctx.a_s["processed_node"] = processed_node
+    return ctx
 
 
 
-def extract_members_id(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+def extract_members_id(ctx: Context, actor: Actor, *args, **kwargs):
     members = [
         "Paul McCartney",
         "Ringo Starr",
@@ -208,13 +216,15 @@ def extract_members_id(node_label: str, node: Node, ctx: Context, actor: Actor, 
             if extracted_member[0].lower() == k.lower():
                 id = members_ids[k]
 
-    node.misc = {"command": "goto", "objectId": id}
+    processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
+    processed_node.misc = {"command": "goto", "objectId": id}
+    ctx.a_s["processed_node"] = processed_node
 
-    return node_label, node
+    return ctx
 
 
 def add_node_name(name: str):
-    def node_name(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+    def node_name(ctx: Context, actor: Actor, *args, **kwargs):
         ctx.misc["current_node"] = name
-        return node_label, node
+        return ctx
     return node_name

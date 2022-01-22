@@ -1,7 +1,7 @@
 import logging
 import re
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 import nltk
 from nltk import word_tokenize
 from nltk.util import ngrams
@@ -1285,7 +1285,7 @@ def has_entities(entity_types):
 def entities(**kwargs):
     slot_info = list(kwargs.items())
 
-    def extract_entities(node_label: str, node: Node, ctx: Context, actor: Actor, *args, **kwargs):
+    def extract_entities(ctx: Context, actor: Actor, *args, **kwargs):
         slot_values = ctx.misc.get("agent", {}).get("shared_memory", {}).get("slot_values", {})
         for slot_name, slot_types in slot_info:
             if isinstance(slot_types, str):
@@ -1299,7 +1299,7 @@ def entities(**kwargs):
                     if extracted_entity:
                         slot_values[slot_name] = extracted_entity
                         ctx.misc["agent"]["shared_memory"]["slot_values"] = slot_values
-        return node_label, node
+        return ctx
 
     return extract_entities
 
