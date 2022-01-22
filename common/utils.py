@@ -638,14 +638,14 @@ def get_toxic(annotated_utterance, probs=True, default_probs=None, default_label
 
 
 def get_factoid(annotated_utterance, probs=True, default_probs=None, default_labels=None):
-    """Function to get toxic classifier annotations from annotated utterance.
+    """Function to get factoid classifier annotations from annotated utterance.
 
     Args:
         annotated_utterance: dictionary with annotated utterance, or annotations
         probs: return probabilities or not
         default: default value to return. If it is None, returns empty dict/list depending on probs argument
     Returns:
-        dictionary with toxic probablilties, if probs == True, or toxic labels if probs != True
+        dictionary with factoid probablilties, if probs == True, or factoid labels if probs != True
     """
     default_probs = {"is_conversational": 1} if default_probs is None else default_probs
     default_labels = ["is_conversational"] if default_labels is None else default_labels
@@ -681,14 +681,14 @@ def get_sentiment(annotated_utterance, probs=True, default_probs=None, default_l
 
 
 def get_emotions(annotated_utterance, probs=True, default_probs=None, default_labels=None):
-    """Function to get toxic classifier annotations from annotated utterance.
+    """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
         annotated_utterance: dictionary with annotated utterance, or annotations
         probs: return probabilities or not
         default: default value to return. If it is None, returns empty dict/list depending on probs argument
     Returns:
-        dictionary with emotion probablilties, if probs == True, or toxic labels if probs != True
+        dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
     default_probs = (
         {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 1}
@@ -1169,12 +1169,13 @@ def find_first_complete_sentence(sentences):
 
 def is_toxic_or_badlisted_utterance(annotated_utterance):
     toxic_result = get_toxic(annotated_utterance, probs=False)
+    toxic_result = [] if "not_toxic" in toxic_result else toxic_result
+    # now toxic_result is empty if not toxic utterance
+    toxic_result = True if len(toxic_result) > 0 else False
     default_badlist = {"bad_words": False}
     badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return bool(toxic_result) or any(
-        [badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]]
-    )
+    return toxic_result or any([badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]])
 
 
 FACTOID_PATTERNS = re.compile(

@@ -218,13 +218,17 @@ def get_nounphrases_from_human_utterance(vars):
 
 
 def get_fact_random_annotations_from_human_utterance(vars):
-    return vars["agent"]["dialog"]["human_utterances"][-1].get("annotations", {}).get("fact_random", [])
+    return (
+        vars["agent"]["dialog"]["human_utterances"][-1]
+        .get("annotations", {})
+        .get("fact_random", {"facts": [], "response": ""})
+    )
 
 
 def get_fact_for_particular_entity_from_human_utterance(vars, entity):
     fact_random_results = get_fact_random_annotations_from_human_utterance(vars)
     facts_for_entity = []
-    for fact in fact_random_results:
+    for fact in fact_random_results.get("facts", []):
         is_same_entity = fact.get("entity_substr", "").lower() == entity.lower()
         is_sorry = "Sorry, I don't know" in fact.get("fact", "")
         if is_same_entity and not is_sorry:

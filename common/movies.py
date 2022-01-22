@@ -9,9 +9,7 @@ MOVIE_SKILL_CHECK_PHRASE = "the recent movie"
 
 
 SWITCH_MOVIE_SKILL_PHRASE = (
-    f"Great idea! "
-    f"Cinemas are closed because of the pandemic but I watch a lot of movies online. "
-    f"What is {MOVIE_SKILL_CHECK_PHRASE} you've watched?"
+    f"Great idea! " f"I watch a lot of movies online. " f"What is {MOVIE_SKILL_CHECK_PHRASE} you've watched?"
 )
 
 
