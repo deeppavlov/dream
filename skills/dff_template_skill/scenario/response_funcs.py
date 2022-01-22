@@ -6,7 +6,7 @@ import common.dff.integration.context as int_ctx
 from datetime import datetime
 from df_engine.core import Actor, Context
 
-INTENT_RESPONSES_PATH = "/src/scenario/data/intent_response_phrases.json"
+INTENT_RESPONSES_PATH = "scenario/data/intent_response_phrases.json"
 
 
 with open(INTENT_RESPONSES_PATH, "r") as fp:
@@ -30,10 +30,6 @@ def exit_respond(ctx: Context, actor: Actor, intention: str):
     annotations = utts[-1]["annotations"]
 
     sentiment = int_ctx.get_human_sentiment(ctx, actor)
-    #    try:
-    #        sentiment = common_utils.get_sentiment(utt, probs=False)[0]
-    #    except KeyError:
-    #        sentiment = "neutral"
     offensiveness, is_badlisted = "", False
     try:
         offensiveness = annotations["cobot_offensiveness"]["text"]
@@ -92,6 +88,7 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
             response = random.choice(response_phrases).strip()
     return response
 
+
 def random_respond(ctx: Context, actor: Actor, intention: str):
     response_phrases = RESPONSES[intention]
     dialog = int_ctx.get_dialog(ctx, actor)
@@ -110,6 +107,7 @@ def random_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = random.choice(response["first"]).strip()
     return response
+
 
 def random_respond_with_question_asking(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)

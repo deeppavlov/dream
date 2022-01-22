@@ -13,7 +13,9 @@ def intent_catcher_exists_condition(ctx: Context, actor: Actor, *args, **kwargs)
         return False
 
     intents_by_catcher = common_utils.get_intents(
-        int_ctx.get_last_human_utterance(ctx, actor), probs=False, which="intent_catcher"
+        int_ctx.get_last_human_utterance(ctx, actor),
+        probs=False,
+        which="intent_catcher",
     )
 
     response_funcs = get_respond_funcs()
