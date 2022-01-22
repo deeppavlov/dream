@@ -1,0 +1,88 @@
+{
+    "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say."
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": ["last_chance"]
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else."
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": ["timeout"]
+        },
+        "annotators": {
+            "spelling_preprocessing": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://spelling_preprocessing:3881/response"
+                },
+                "dialog_formatter": "dp_formatters:last_utt_dialog",
+                "response_formatter": "dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "skills": {
+            "harvesters_maintenance_gobot_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://harvesters_maintenance_gobot_skill:3882/respond"
+                },
+                "dialog_formatter": "dp_formatters:full_dialog",
+                "response_formatter": "dp_formatters:base_skill_formatter",
+                "state_manager_method": "add_hypothesis",
+                "previous_services": ["annotators"]
+            },
+            "dff_program_y": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-program-y:3885/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "state_manager_method": "add_hypothesis"
+            }
+        },
+        "response_annotators": {
+            "emotion_classification": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "connectors:BatchConnector",
+                    "url": "http://emotion_classification:3884/model"
+                },
+              "dialog_formatter": "dp_formatters:hypotheses_list",
+              "response_formatter": "dp_formatters:simple_formatter_service",
+              "previous_services": ["skills"],
+              "state_manager_method": "add_hypothesis_annotation_batch"
+            }
+        },
+        "response_selectors": {
+            "rule_based_response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://rule_based_response_selector:3883/respond"
+                },
+                "dialog_formatter": "dp_formatters:full_dialog",
+                "response_formatter": "dp_formatters:base_response_selector_formatter_service",
+                "previous_services": ["response_annotators"],
+                "state_manager_method": "add_bot_utterance"
+            }
+        }
+    },
+    "connectors": {}
+}
+
+
+
+

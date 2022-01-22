@@ -1,0 +1,688 @@
+{
+    "human_utter_index_batch": [
+        13
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "What are we talking about?",
+                    "annotations": {
+                        "spelling_preprocessing": "What are we talking about?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "What are we talking about?",
+                            "segments": [
+                                "What are we talking about?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "talking"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9962807893753052,
+                                "Information_RequestIntent": 0.8038203716278076
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9994251132011414
+                            },
+                            "cobot_topics": {
+                                "Celebrities": 0.9548467397689819,
+                                "Phatic": 0.99821937084198
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995923042297363
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7220349311828613
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0007182061672210693
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0016731355572119355,
+                            "conversational": 0.99832683801651
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "talking": {
+                                "Causes": [
+                                    "conversation",
+                                    "talk",
+                                    "confusion"
+                                ],
+                                "CausesDesire": [
+                                    "talk to someone",
+                                    "talk",
+                                    "communicate"
+                                ],
+                                "HasProperty": [
+                                    "bad",
+                                    "important to person",
+                                    "fun"
+                                ],
+                                "SymbolOf": [
+                                    "knowledge",
+                                    "danger",
+                                    "death"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.9990766048431396,
+                                "detected": 1
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {},
+                        "fact_random": [],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 2,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "We",
+                                        "start": 0,
+                                        "text": "We"
+                                    },
+                                    {
+                                        "end": 54,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "We",
+                                        "start": 52,
+                                        "text": "we"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "We are discussing celebrities, right?",
+                                "No.",
+                                "",
+                                "What are We talking about?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 13,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.\nNicholas is forecast to approach the central Texas Coast Monday as a tropical storm, according to the N... [5909 chars]",
+                                    "description": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.",
+                                    "image": "https://www.click2houston.com/resizer/Kj83Sj_OzH7k2duMuF29Opdgz_o=/800x533/smart/filters:format(jpeg):strip_exif(true):strip_icc(true):no_upscale(true):quality(65)/cloudfront-us-east-1.images.arcpublishing.com/gmg/MSYXFXUZJBFZ5C3CNGRWSEGY2I.jpg",
+                                    "publishedAt": "2021-09-13T03:01:47Z",
+                                    "source": {
+                                        "name": "KPRC Click2Houston",
+                                        "url": "https://www.click2houston.com"
+                                    },
+                                    "title": "LIST: The Houston-area school districts closed Monday due to Tropical Storm Nicholas",
+                                    "url": "https://www.click2houston.com/news/local/2021/09/13/list-the-houston-are-school-districts-closed-monday-due-to-tropical-storm-nicholas/"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "May be.",
+                    "annotations": {
+                        "spelling_preprocessing": "May be",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9991601705551147
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.7754509449005127
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.9943876266479492
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9991111159324646
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7170981168746948
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0030447542667388916
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.02494260109961033,
+                            "conversational": 0.9750574231147766
+                        },
+                        "spacy_nounphrases": [],
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "May be.",
+                            "segments": [
+                                "May be."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.012310853227972984,
+                                "command": 0.016604077070951462,
+                                "comment": 0.06073936074972153,
+                                "complaint": 0.007279867306351662,
+                                "dev_command": 0.005979250650852919,
+                                "neg_answer": 0.011921793222427368,
+                                "open_question_factual": 0.004270344506949186,
+                                "open_question_opinion": 0.0032700644806027412,
+                                "opinion": 0.3360585868358612,
+                                "other_answers": 0.04300548881292343,
+                                "pos_answer": 0.28024905920028687,
+                                "statement": 0.21269835531711578,
+                                "yes_no_question": 0.005612859968096018
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "",
+                                "What are we talking about?",
+                                "Thought we were talking about some travel stuff.",
+                                "May be."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 14,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.\nNicholas is forecast to approach the central Texas Coast Monday as a tropical storm, according to the N... [5909 chars]",
+                                    "description": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.",
+                                    "image": "https://www.click2houston.com/resizer/Kj83Sj_OzH7k2duMuF29Opdgz_o=/800x533/smart/filters:format(jpeg):strip_exif(true):strip_icc(true):no_upscale(true):quality(65)/cloudfront-us-east-1.images.arcpublishing.com/gmg/MSYXFXUZJBFZ5C3CNGRWSEGY2I.jpg",
+                                    "publishedAt": "2021-09-13T03:01:47Z",
+                                    "source": {
+                                        "name": "KPRC Click2Houston",
+                                        "url": "https://www.click2houston.com"
+                                    },
+                                    "title": "LIST: The Houston-area school districts closed Monday due to Tropical Storm Nicholas",
+                                    "url": "https://www.click2houston.com/news/local/2021/09/13/list-the-houston-are-school-districts-closed-monday-due-to-tropical-storm-nicholas/"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Thought we were talking about some travel stuff.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Thought we were talking about some travel stuff.",
+                            "segments": [
+                                "Thought we were talking about some travel stuff."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "No.",
+                                "",
+                                "What are we talking about?",
+                                "Thought we were talking about some travel stuff."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_grounding_skill"
+                }
+            ]
+        }
+    ],
+    "dff_grounding_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 12,
+                "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
+                "misc": {
+                    "dff_grounding_skill": {
+                        "used_universal_intent_responses": [
+                            "I'm ashamed, I don't know.",
+                            "I don't even know yes or no.",
+                            "It's so embarrassing, but I don't know.",
+                            "Well, maybe yes, maybe no. I'm not sure.",
+                            "I have no idea.",
+                            "I hadn't really thought about it.",
+                            "I'm not sure about that.",
+                            "It's so embarrassing, but I don't know."
+                        ]
+                    }
+                },
+                "node_labels": {
+                    "12": [
+                        "grounding",
+                        "grounding_response_node"
+                    ],
+                    "9": [
+                        "grounding",
+                        "grounding_response_node"
+                    ]
+                },
+                "previous_index": 12,
+                "requests": {
+                    "12": "What are we talking about?",
+                    "9": "Do you want to talk?"
+                },
+                "responses": {
+                    "12": [
+                        [
+                            "Thought we were talking about some travel stuff.",
+                            1.0,
+                            {},
+                            {},
+                            {
+                                "can_continue": "must"
+                            }
+                        ],
+                        [
+                            "You like to ask interesting questions.",
+                            0.5,
+                            {},
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowledgement"
+                                ]
+                            }
+                        ],
+                        [
+                            "You have so many interesting questions. It's so embarrassing, but I don't know.",
+                            0.7,
+                            {
+                                "dff_grounding_skill": {
+                                    "used_universal_intent_responses": [
+                                        "I'm ashamed, I don't know.",
+                                        "I don't even know yes or no.",
+                                        "It's so embarrassing, but I don't know.",
+                                        "Well, maybe yes, maybe no. I'm not sure.",
+                                        "I have no idea.",
+                                        "I hadn't really thought about it.",
+                                        "I'm not sure about that.",
+                                        "It's so embarrassing, but I don't know."
+                                    ]
+                                }
+                            },
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowlegdement",
+                                    "body"
+                                ],
+                                "type": "universal_response"
+                            }
+                        ]
+                    ],
+                    "9": [
+                        [
+                            "You like to ask interesting questions.",
+                            0.5,
+                            {},
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowledgement"
+                                ]
+                            }
+                        ],
+                        [
+                            "You have so many interesting questions. I hadn't really thought about it.",
+                            0.6,
+                            {
+                                "dff_grounding_skill": {
+                                    "used_universal_intent_responses": [
+                                        "I'm ashamed, I don't know.",
+                                        "I don't even know yes or no.",
+                                        "It's so embarrassing, but I don't know.",
+                                        "Well, maybe yes, maybe no. I'm not sure.",
+                                        "I have no idea.",
+                                        "I hadn't really thought about it."
+                                    ]
+                                }
+                            },
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowlegdement",
+                                    "body"
+                                ],
+                                "type": "universal_response"
+                            }
+                        ]
+                    ]
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "1": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "10": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "11": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "12": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "2": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "3": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "4": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "5": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "6": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "7": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "8": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "9": [
+                    "grounding",
+                    "grounding_response_node"
+                ]
+            },
+            "previous_human_utter_index": 12,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

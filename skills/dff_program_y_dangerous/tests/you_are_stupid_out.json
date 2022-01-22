@@ -1,0 +1,48 @@
+[
+    [
+        "Huh. Sorry, sometimes I can say something really confusing. You can try to ask me in more simple way.",
+        0.85,
+        {
+            "dff_program_y_dangerous_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "story_flow",
+                        "start_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "d70fb8c6-8bdb-47e8-83f9-2fc6f009c1d5",
+                    "labels": {
+                        "0": [
+                            "story_flow",
+                            "start_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "You are stupid"
+                    },
+                    "responses": {
+                        "0": "Huh. Sorry, sometimes I can say something really confusing. You can try to ask me in more simple way."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

@@ -9,7 +9,7 @@ import sentry_sdk
 import requests
 
 import dialogflows.scopes as scopes
-from common.fact_random import get_facts
+from common.fact_random import get_fact
 from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
@@ -789,7 +789,7 @@ def user_positive_or_neutral_about_comp_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
         competition = shared_memory.get("kind_of_comp", "")
         if competition:
-            fact_about_discussed_competition = get_facts(f"fact about {competition}")
+            fact_about_discussed_competition = get_fact(competition, f"fact about {competition}")
         else:
             fact_about_discussed_competition = ""
         if fact_about_discussed_competition and competition:

@@ -34,7 +34,7 @@ ENV IGDB_GAME_GENRES /data/igdb_game_genres.json
 ENV IGDB_GAME_THEMES /data/igdb_game_themes.json
 ENV LINKTOS_BASED_ON_GAME_THEMES_AND_GENRES /data/linktos_based_on_game_themes_and_genres.json
 ENV LINKTOS_SPECIAL /data/linktos_special.json
-COPY skills/book_skill/bookreads_data.json ${BOOKREADS_DATA}
+COPY skills/dff_book_skill/bookreads_data.json ${BOOKREADS_DATA}
 
 ENV MINECRAFT_HOW_TOS /data/minecraft_how_tos.json
 

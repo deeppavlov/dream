@@ -1,5 +1,0 @@
-services:
-  entity-detection:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-version: '3.7'

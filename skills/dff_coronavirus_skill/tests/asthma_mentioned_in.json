@@ -1,0 +1,296 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "What should i do if have coronavirus?",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "What should i do if have coronavirus?",
+                        "sentseg": {
+                            "punct_sent": "What should i do if have coronavirus?",
+                            "segments": [
+                                "What should i do if have coronavirus?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "coronavirus"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9987860321998596,
+                            "conversational": 0.0012139953905716538
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.8373830914497375
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9910799264907837
+                            },
+                            "cobot_topics": {
+                                "Other": 0.9440146684646606
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.999570369720459
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6754112243652344
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.002279609441757202
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "coronavirus": {
+                                "Causes": [
+                                    "death",
+                                    "die",
+                                    "illness"
+                                ],
+                                "CausesDesire": [
+                                    "have checkup",
+                                    "die",
+                                    "take vitamin"
+                                ],
+                                "HasProperty": [
+                                    "fatal",
+                                    "contagious",
+                                    "deadly"
+                                ],
+                                "SymbolOf": [
+                                    "bacteria",
+                                    "disease",
+                                    "virus"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.007198998238891363,
+                                "command": 0.005250187590718269,
+                                "comment": 0.0025792038068175316,
+                                "complaint": 0.00407634861767292,
+                                "dev_command": 0.005514752119779587,
+                                "neg_answer": 0.0035729934461414814,
+                                "open_question_factual": 0.05687845125794411,
+                                "open_question_opinion": 0.8858408331871033,
+                                "opinion": 0.01018211804330349,
+                                "other_answers": 0.004590626340359449,
+                                "pos_answer": 0.003018166869878769,
+                                "statement": 0.0011089923791587353,
+                                "yes_no_question": 0.010188257321715355
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "coronavirus"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        25,
+                                        36
+                                    ],
+                                    "text": "coronavirus"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "coronavirus",
+                                "news": {
+                                    "content": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus.\nCurrently, 1 in 7 patients in the hospital is being treated for COVID-19.\nA week ago, that number was 1 in 8.\nTo ... [734 chars]",
+                                    "description": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus. Currently, 1 in 7 patients in the hospital is being treated for COVID-19.",
+                                    "image": "https://fox8.com/wp-content/uploads/sites/12/2021/09/GettyImages-523533754.jpg?w=1280",
+                                    "publishedAt": "2021-09-07T13:23:24Z",
+                                    "source": {
+                                        "name": "WJW FOX 8 News Cleveland",
+                                        "url": "https://fox8.com"
+                                    },
+                                    "title": "Ohio coronavirus hospitalizations",
+                                    "url": "https://fox8.com/news/coronavirus/coronavirus-in-ohio-hospitalizations-on-the-rise-in-every-age-group/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "What should i do if have coronavirus?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

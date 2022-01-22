@@ -33,7 +33,7 @@ for skill in LIST_OF_SCRIPTED_TOPICS:
 class EmotionSkillScenario:
     def __init__(self, steps, jokes, advices, logger):
         self.emotion_precision = {
-            "anger": 1,
+            "anger": 0.9,
             "fear": 0.894,
             "joy": 1,
             "love": 0.778,
@@ -125,7 +125,7 @@ class EmotionSkillScenario:
             if len(step["next_step"]):
                 state = random.choice(step["next_step"])
         elif state == "sad_and_lonely" and just_asked_about_jokes and is_no:
-            reply = "Actually, I love jokes but not during this competition. Dead serious about that."
+            reply = "Actually, I love jokes but not now. Dead serious about that."
             confidence = 1.0
             state = ""
         elif state == "offered_advice":

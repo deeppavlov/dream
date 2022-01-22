@@ -94,8 +94,9 @@ def slot_filling_albums(ctx: Context, actor: Actor, *args, **kwargs):
     )
     slots["first_album"] = "Let's begin our trip here! If you get tired, just say 'move on'. "
     for slot_name, slot_value in slots.items():
-        if re.search(r"((.*i\swant\sto\ssee\s)|(.*i\swanna\ssee\s)|(.*\slook\sat\s)|"
-                     r"(.*show\sme\s)|(.*tell\sme\s)|(.*go\sto\s))(?P<item>.*)", ctx.last_request, re.I):
+        if re.search(r"((.*i\swant\sto\s)|(.*go\sto.*)|"
+                     r"(.*i\swanna\s)|(.*\slook\sat\s)|"
+                     r"(.*show\sme\s)|(.*tell\sme))", ctx.last_request, re.I):
             slot_value = ""
         elif ctx.misc.get("first_album") is None and slot_name != "first_album":
             slot_value = ""

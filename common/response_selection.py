@@ -1,8 +1,8 @@
 # this is a list of skills which are not one-lines
 ACTIVE_SKILLS = [
-    "book_skill",
+    "dff_book_skill",
     "christmas_new_year_skill",
-    "coronavirus_skill",
+    "dff_coronavirus_skill",
     "dummy_skill_dialog",
     "emotion_skill",
     "game_cooperative_skill",
@@ -15,7 +15,7 @@ ACTIVE_SKILLS = [
     "short_story_skill",
     "superbowl_skill",
     "valentines_dat_skill",
-    "weather_skill",
+    "dff_weather_skill",
     "wikidata_dial_skill",
     "comet_dialog_skill",
     "dff_animals_skill",
@@ -28,7 +28,8 @@ ACTIVE_SKILLS = [
     "dff_science_skill",
     "dff_gossip_skill",
     "small_talk_skill",
-    "dff_wiki_skill, dff_art_skill",
+    "dff_wiki_skill",
+    "dff_art_skill",
 ]
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill",
@@ -39,7 +40,7 @@ UNPREDICTABLE_SKILLS = [
     "knowledge_grounding_skill",
 ]
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
-NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "program_y_dangerous"]
+NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "intent_responder", "misheard_asr", "dff_program_y_dangerous"]
 
 COMPLETELY_CHANGING_THE_SUBJECT_PHRASES = [
     "Completely changing the subject,",

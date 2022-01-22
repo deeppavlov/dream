@@ -1,0 +1,48 @@
+[
+    [
+        "As a socialbot, I don't have coronavirus. I hope you won't have it either.",
+        0.95,
+        {
+            "dff_coronavirus_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "simple",
+                        "bot_has_covid"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "5ab3a48a-a3cc-43b3-bf8e-aa48cf3ec52e",
+                    "labels": {
+                        "0": [
+                            "simple",
+                            "bot_has_covid"
+                        ]
+                    },
+                    "requests": {
+                        "0": "I am very interested in 1 very specific question. Do you have coronavirus?"
+                    },
+                    "responses": {
+                        "0": "As a socialbot, I don't have coronavirus. I hope you won't have it either."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

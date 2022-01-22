@@ -29,7 +29,7 @@ scenario_skills = [
     "dff_science_skill",
     "dff_music_skill",
     "game_cooperative_skill",
-    "book_skill",
+    "dff_book_skill",
     "dff_movie_skill",
     "dff_gossip_skill",
 ]
@@ -38,7 +38,7 @@ topic2skill = {
     "Movies_TV": "dff_movie_skill",
     "Music": "dff_music_skill",
     "SciTech": "dff_science_skill",
-    "Literature": "book_skill",
+    "Literature": "dff_book_skill",
     "Travel_Geo": "dff_travel_skill",
     "Celebrities": "dff_gossip_skill",
     "Games": "game_cooperative_skill",

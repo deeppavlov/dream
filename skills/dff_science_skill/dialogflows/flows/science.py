@@ -4,7 +4,6 @@ import os
 import random
 import re
 
-# from CoBotQA.cobotqa_service import send_cobotqa
 from enum import Enum, auto
 
 import sentry_sdk
@@ -206,7 +205,7 @@ def request_science_topic_response(vars):
             )
             ack = f"{NICE_CHAT_ACKS[next_index]}"
             body = (
-                f"Okay, There are many scientific topics that could be discussed, "
+                "Okay, There are many scientific topics that could be discussed, "
                 "when I learn something new I will be ready to talk to you about it."
             )
             return " ".join([ack, body])
@@ -229,7 +228,7 @@ def request_science_topic_response(vars):
             ack = f"{NICE_CHAT_ACKS[next_index]}"
             body = f"So, maybe next? Do you wanna talk about {current_topic}?"
         else:
-            ack = f"I think people who are interested in science are special."
+            ack = "I think people who are interested in science are special."
             body = f"I like to talk about a variety of scientific topics. Do you wanna talk about {current_topic}?"
         state_utils.add_acknowledgement_to_response_parts(vars)
         if linkto_yes(vars):
@@ -304,7 +303,7 @@ def no_science_response(vars):
         state_utils.set_confidence(vars, confidence=CONF_100)
         state_utils.set_can_continue(vars, continue_flag=CAN_NOT_CONTINUE)
         state_utils.save_to_shared_memory(vars, current_status="")
-        return f"Okay, if I'm always ready to talk about science, the achievements of humanity inspire me. "
+        return "Okay, if I'm always ready to talk about science, the achievements of humanity inspire me. "
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)

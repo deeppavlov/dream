@@ -1,0 +1,48 @@
+[
+    [
+        "I suppose you are asking about coronavirus. Is it right?",
+        1,
+        {
+            "dff_coronavirus_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "subject_undetected",
+                        "clarify_intention"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "4acc2c16-00ae-4367-9221-f6235804dfc0",
+                    "labels": {
+                        "0": [
+                            "subject_undetected",
+                            "clarify_intention"
+                        ]
+                    },
+                    "requests": {
+                        "0": "I am very interested in 1 very specific question. Did you hear about virus?"
+                    },
+                    "responses": {
+                        "0": "I suppose you are asking about coronavirus. Is it right?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

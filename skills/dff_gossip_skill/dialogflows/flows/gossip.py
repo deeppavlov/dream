@@ -14,7 +14,7 @@ import common.utils as common_utils
 import common.constants as common_constants
 import common.news as general_this_news
 from common.gossip import talk_about_gossip, skill_trigger_phrases
-from common.fact_random import get_facts
+from common.fact_random import get_fact
 
 import dialogflows.scenarios.gossip as this_gossip
 import common.gossip as common_gossip
@@ -661,7 +661,7 @@ def usr_event_to_person_response(vars):
 
 def get_cobot_fact(celebrity_name, given_facts):
     logger.debug(f"Calling cobot_fact for {celebrity_name} {given_facts}")
-    answer = get_facts(f"fact about {celebrity_name}")
+    answer = get_fact(celebrity_name, f"fact about {celebrity_name}")
     if answer is None:
         error_message = f"Answer from random fact or fact about {celebrity_name} not obtained"
         logger.error(error_message)

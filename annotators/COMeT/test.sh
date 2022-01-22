@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python $TEST_SCRIPT
+python test_server.py
