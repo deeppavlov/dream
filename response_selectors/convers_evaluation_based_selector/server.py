@@ -197,7 +197,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         curr_score = None
         is_misheard = misheard_with_spec1 in candidates[i]["text"] or misheard_with_spec2 in candidates[i]["text"]
         intent_name = get_intent_name(candidates[i]["text"])
-        is_intent_candidate = (skill_names[i] == "intent_responder" or skill_names[i] == "program_y") and intent_name
+        is_intent_candidate = (skill_names[i] in ["dff_intent_responder_skill", "dff_program_y_skill"]) and intent_name
         is_intent_candidate = is_intent_candidate and intent_name not in low_priority_intents
         # print("is intent candidate? " + str(is_intent_candidate), flush=True)
 
@@ -377,36 +377,36 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
-    # if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
-    #     # add greeting to the first bot uttr, if it's not already included
-    #     best_text = "Hi, " + greeting_spec + "! " + best_text
+    if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
+        # add greeting to the first bot uttr, if it's not already included
+        best_text = "Hi, " + greeting_spec + "! " + best_text
 
-    # while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.0:
-    #     curr_single_scores[int(best_id)] = 0.0
-    #     best_id = np.argmax(curr_single_scores)
-    #     best_skill_name = candidates[best_id]["skill_name"]
-    #     best_text = candidates[best_id]["text"]
-    #     best_confidence = candidates[best_id]["confidence"]
-    #     best_human_attributes = candidates[best_id].get("human_attributes", {})
-    #     best_bot_attributes = candidates[best_id].get("bot_attributes", {})
-    #     if sum(curr_single_scores) == 0.0:
-    #         break
+    while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.0:
+        curr_single_scores[int(best_id)] = 0.0
+        best_id = np.argmax(curr_single_scores)
+        best_skill_name = candidates[best_id]["skill_name"]
+        best_text = candidates[best_id]["text"]
+        best_confidence = candidates[best_id]["confidence"]
+        best_human_attributes = candidates[best_id].get("human_attributes", {})
+        best_bot_attributes = candidates[best_id].get("bot_attributes", {})
+        if sum(curr_single_scores) == 0.0:
+            break
 
-    # if dialog["human"]["profile"].get("name", False) and best_skill_name != "personal_info_skill":
-    #     name = dialog["human"]["profile"].get("name", False)
-    #     if len(dialog["bot_utterances"]) >= 1:
-    #         if re.search(r"\b" + name + r"\b", dialog["bot_utterances"][-1]["text"]):
-    #             pass
-    #         else:
-    #             if random.random() <= CALL_BY_NAME_PROBABILITY:
-    #                 best_text = f"{name}, {best_text}"
-    #     else:
-    #         # if dialog is just started (now it's impossible)
-    #         if random.random() <= CALL_BY_NAME_PROBABILITY:
-    #             best_text = f"{name}, {best_text}"
+    if dialog["human"]["profile"].get("name", False) and best_skill_name != "personal_info_skill":
+        name = dialog["human"]["profile"].get("name", False)
+        if len(dialog["bot_utterances"]) >= 1:
+            if re.search(r"\b" + name + r"\b", dialog["bot_utterances"][-1]["text"]):
+                pass
+            else:
+                if random.random() <= CALL_BY_NAME_PROBABILITY:
+                    best_text = f"{name}, {best_text}"
+        else:
+            # if dialog is just started (now it's impossible)
+            if random.random() <= CALL_BY_NAME_PROBABILITY:
+                best_text = f"{name}, {best_text}"
 
-    # if dialog["human_utterances"][-1]["text"] == "/get_dialog_id":
-    #     best_text = "Your dialog's id: " + str(dialog["dialog_id"])
+    if dialog["human_utterances"][-1]["text"] == "/get_dialog_id":
+        best_text = "Your dialog's id: " + str(dialog["dialog_id"])
 
     return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
 

@@ -327,7 +327,7 @@ def dp_classes_formatter_service(payload: List):
 
 def base_formatter_service(payload: List) -> List[Dict]:
     """
-    Used by: dummy_skill_formatter, intent_responder_formatter, transfertransfo_formatter,
+    Used by: dummy_skill_formatter, transfertransfo_formatter,
     aiml_formatter, alice_formatter, tfidf_formatter
     """
     if len(payload[0]) > 0 and payload[1] > 0.0:
@@ -634,24 +634,6 @@ def short_story_formatter_dialog(dialog: Dict):
     ]
 
 
-def intent_responder_formatter_dialog(dialog: Dict):
-    # Used by: intent_responder
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    intents = list(dialog["utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
-    called_intents = {intent: False for intent in intents}
-    for utt in dialog["human_utterances"][-5:-1]:
-        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
-        for intent in called:
-            called_intents[intent] = True
-    dialog["called_intents"] = called_intents
-    dialog["utterances"] = dialog["utterances"][-(utils.LAST_N_TURNS * 2 + 1) :]
-    for utt in dialog["utterances"]:
-        if "sentseg" in utt["annotations"]:
-            utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
-    return [{"dialogs": [dialog]}]
-
-
 def attitude_formatter_service(payload: List):
     # Used by: attitude_formatter
     payload = payload[0]
@@ -749,13 +731,11 @@ def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_short_story_skill")
 
 
-# def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
-#     return utils.dff_formatter(dialog, "dff_template_skill")
-
-
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
-    # template for intent responder
-    # get called_intents
+    return utils.dff_formatter(dialog, "dff_template_skill")
+
+
+def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
     intents = list(dialog["utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
     called_intents = {intent: False for intent in intents}
     for utt in dialog["human_utterances"][-5:-1]:
@@ -763,12 +743,9 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
         for intent in called:
             called_intents[intent] = True
 
-    # get dialog_id
-    dialog_id = dialog.get("dialog_id", "unknown")
-
-    batches = utils.dff_formatter(dialog, "dff_template_skill")
+    batches = utils.dff_formatter(dialog, "dff_intent_responder_skill")
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
-    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog_id
+    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
 
 
