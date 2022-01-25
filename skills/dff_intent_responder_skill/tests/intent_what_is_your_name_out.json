@@ -3,7 +3,7 @@
         "My name is DREAM Socialbot. #+#what_is_your_name",
         0.9999731779098511,
         {
-            "dff_template_skill_state": {
+            "dff_intent_responder_skill_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 9,
                 "history": {

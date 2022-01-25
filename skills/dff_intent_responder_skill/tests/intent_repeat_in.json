@@ -519,7 +519,7 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_template_skill"
+                    "active_skill": "dff_intent_responder_skill"
                 }
             ],
             "called_intents": {
@@ -549,7 +549,7 @@
             "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_intent_responder_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},

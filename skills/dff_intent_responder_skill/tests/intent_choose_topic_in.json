@@ -465,7 +465,7 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_template_skill"
+                    "active_skill": "dff_intent_responder_skill"
                 }
             ],
             "called_intents": {
@@ -495,7 +495,7 @@
             "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
         }
     ],
-    "dff_template_skill_state_batch": [
+    "dff_intent_responder_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},
@@ -584,7 +584,7 @@
                     {
                         "full_name": "any sense",
                         "human_utterance_index": 14,
-                        "previous_skill_name": "dff_template_skill"
+                        "previous_skill_name": "dff_intent_responder_skill"
                     }
                 ],
                 "name": "any sense"
