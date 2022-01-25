@@ -1,0 +1,957 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I like star wars too.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "I like star wars too.",
+                        "sentseg": {
+                            "punct_sent": "I like star wars too.",
+                            "segments": [
+                                "I like star wars too."
+                            ]
+                        },
+                        "spacy_nounphrases": [
+                            "star wars"
+                        ],
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.997103214263916
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9960542917251587
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9991122484207153
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9987680912017822
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6123324036598206
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.000859677791595459
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0010182429105043411,
+                            "conversational": 0.998981773853302
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "star wars": {
+                                "Causes": [
+                                    "global thermonuclear war",
+                                    "person to get hurt",
+                                    "global warm"
+                                ],
+                                "CausesDesire": [
+                                    "watch tv",
+                                    "watch television",
+                                    "watch movie"
+                                ],
+                                "HasProperty": [
+                                    "stupid",
+                                    "very popular in 20th century",
+                                    "very popular"
+                                ],
+                                "SymbolOf": [
+                                    "humanity",
+                                    "genius",
+                                    "space"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.9815800189971924,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.001133271143771708,
+                                "command": 0.005227736197412014,
+                                "comment": 0.0019514475716277957,
+                                "complaint": 0.0007808224763721228,
+                                "dev_command": 0.0013381451135501266,
+                                "neg_answer": 0.0011662514880299568,
+                                "open_question_factual": 0.0018918118439614773,
+                                "open_question_opinion": 0.0015077999560162425,
+                                "opinion": 0.9650992751121521,
+                                "other_answers": 0.0008382576052099466,
+                                "pos_answer": 0.0033475779928267,
+                                "statement": 0.014423790387809277,
+                                "yes_no_question": 0.0012938843574374914
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "star wars"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        7,
+                                        16
+                                    ],
+                                    "text": "star wars"
+                                }
+                            ]
+                        },
+                        "fact_random": [],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 4,
+                                    "start_pos": 2,
+                                    "text": "star wars",
+                                    "type": "MISC"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hello.",
+                                "Seems like I have no idea what we are talking about.",
+                                "I like star wars too."
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.25205060839653015,
+                                    0.9160289168357849,
+                                    0.10609841346740723,
+                                    0.10186299681663513,
+                                    0.09228036552667618
+                                ],
+                                "entity_ids": [
+                                    "Q17738",
+                                    "Q462",
+                                    "Q54320",
+                                    "Q54317",
+                                    "Q54319"
+                                ],
+                                "entity_pages": [
+                                    "Star Wars (retroactively titled Star Wars: Episode IV \u2013 A New Hope) is a 1977 American epic space-opera film written and directed by George Lucas, produced by Lucasfilm and distributed by 20th Century Fox. It stars Mark Hamill, Harrison Ford, Carrie Fisher, Peter Cushing, Alec Guinness, David Prowse, James Earl Jones, Anthony Daniels, Kenny Baker and Peter Mayhew. It is the first installment of the original Star Wars trilogy, the first of the franchise to be produced, and the fourth episode of the \"Skywalker saga\".",
+                                    "Star Wars is an American epic space opera media franchise created by George Lucas, which began with the eponymous 1977 film and quickly became a worldwide pop-culture phenomenon. The franchise has been expanded into various films and other media, including television series, video games, novels, comic books, theme park attractions, and themed areas, comprising an all-encompassing fictional universe. In 2020, its total value was estimated at billion, and it is currently the fifth-highest-grossing media franchise of all time."
+                                ],
+                                "entity_pages_titles": [
+                                    "Star Wars (film)",
+                                    "Star Wars",
+                                    "Star Wars (1991 video game)",
+                                    "Star Wars (1983 video game)",
+                                    "Star Wars (1987 video game)"
+                                ],
+                                "entity_substr": "star wars",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "star wars": {
+                                    "awards received": [
+                                        [
+                                            "Q1131772",
+                                            "Saturn Award for Best Science Fiction Film"
+                                        ],
+                                        [
+                                            "Q1258647",
+                                            "Saturn Award for Best Supporting Actor"
+                                        ],
+                                        [
+                                            "Q1265702",
+                                            "Saturn Award for Best Director"
+                                        ],
+                                        [
+                                            "Q1422140",
+                                            "Golden Globe Award for Best Original Score"
+                                        ],
+                                        [
+                                            "Q1757366",
+                                            "Saturn Award for Best Music"
+                                        ],
+                                        [
+                                            "Q2032630",
+                                            "Special Achievement Academy Award"
+                                        ],
+                                        [
+                                            "Q2116650",
+                                            "Saturn Award for Best Make-up"
+                                        ],
+                                        [
+                                            "Q277536",
+                                            "Academy Award for Best Costume Design"
+                                        ],
+                                        [
+                                            "Q277751",
+                                            "Academy Award for Best Production Design"
+                                        ],
+                                        [
+                                            "Q281939",
+                                            "Academy Award for Best Film Editing"
+                                        ],
+                                        [
+                                            "Q393686",
+                                            "Academy Award for Best Visual Effects"
+                                        ],
+                                        [
+                                            "Q4376972",
+                                            "Grammy Award for Best Score Soundtrack for Visual Media"
+                                        ],
+                                        [
+                                            "Q488651",
+                                            "Academy Award for Best Original Score"
+                                        ],
+                                        [
+                                            "Q787098",
+                                            "BAFTA Award for Best Film Music"
+                                        ],
+                                        [
+                                            "Q823422",
+                                            "National Film Registry"
+                                        ],
+                                        [
+                                            "Q830079",
+                                            "Academy Award for Best Sound Mixing"
+                                        ],
+                                        [
+                                            "Q8555",
+                                            "Saturn Award for Best Special Effects"
+                                        ],
+                                        [
+                                            "Q971008",
+                                            "Saturn Award for Best Costume"
+                                        ],
+                                        [
+                                            "Q981030",
+                                            "Saturn Award for Best Writing"
+                                        ]
+                                    ],
+                                    "conf": 0.25205060839653015,
+                                    "entity_label": "Star Wars",
+                                    "genre": [
+                                        [
+                                            "Q157394",
+                                            "fantasy film"
+                                        ],
+                                        [
+                                            "Q188473",
+                                            "action film"
+                                        ],
+                                        [
+                                            "Q319221",
+                                            "adventure film"
+                                        ],
+                                        [
+                                            "Q468478",
+                                            "space opera"
+                                        ],
+                                        [
+                                            "Q471839",
+                                            "science fiction film"
+                                        ]
+                                    ],
+                                    "has quality": [
+                                        [
+                                            "Q45172088",
+                                            "fails the Bechdel Test"
+                                        ],
+                                        [
+                                            "Q58483045",
+                                            "passes the reverse Bechdel Test"
+                                        ],
+                                        [
+                                            "Q93639564",
+                                            "passes the Mako Mori Test"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q19907",
+                                            "Death Star"
+                                        ],
+                                        [
+                                            "Q723764",
+                                            "Tatooine"
+                                        ],
+                                        [
+                                            "Q837921",
+                                            "Yavin IV"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q17738",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+1977-05-25^^T\"",
+                                            "25 May 1977"
+                                        ],
+                                        [
+                                            "\"+1977-10-19^^T\"",
+                                            "19 October 1977"
+                                        ],
+                                        [
+                                            "\"+1978-02-09^^T\"",
+                                            "09 February 1978"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "star wars": {
+                                    "conf": 0.9160289168357849,
+                                    "entity_label": "Star Wars",
+                                    "genre": [
+                                        [
+                                            "Q24925",
+                                            "science fiction"
+                                        ],
+                                        [
+                                            "Q468478",
+                                            "space opera"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q196600",
+                                            "media franchise"
+                                        ],
+                                        [
+                                            "Q24856",
+                                            "film series"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q462",
+                                    "pos": 1,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q838948",
+                                            "work of art"
+                                        ],
+                                        [
+                                            "Q15621286",
+                                            "intellectual work"
+                                        ],
+                                        [
+                                            "Q24856",
+                                            "film series"
+                                        ],
+                                        [
+                                            "Q196600",
+                                            "media franchise"
+                                        ],
+                                        [
+                                            "Q7725310",
+                                            "series of creative works"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {
+                                "star wars": {
+                                    "conf": 0.10609841346740723,
+                                    "entity_label": "Star Wars",
+                                    "genre": [
+                                        [
+                                            "Q222032",
+                                            "two-dimensional space"
+                                        ],
+                                        [
+                                            "Q828322",
+                                            "platform game"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q54320",
+                                    "pos": 2,
+                                    "publication date": [
+                                        [
+                                            "\"+1991-11-15^^T\"",
+                                            "15 November 1991"
+                                        ]
+                                    ],
+                                    "subclass of": [
+                                        [
+                                            "Q54300",
+                                            "Star Wars video game"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q2249149",
+                                            "electronic game"
+                                        ],
+                                        [
+                                            "Q51938570",
+                                            "entertainment software"
+                                        ],
+                                        [
+                                            "Q7889",
+                                            "video game"
+                                        ],
+                                        [
+                                            "Q17537576",
+                                            "creative work"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The 9/11\u2019s Museum\u2019s artifacts recall the thousands who perished, but also \u2014 as the boots of a sergeant pulled from the rubble show \u2014 the lucky few who survived.\nThe uppers of the black leather duty boots are scuffed, their laces worn. Their soles hav... [4837 chars]",
+                                    "description": "The 9/11\u2019s Museum\u2019s artifacts recall the thousands who perished, but also \u2014 as the boots of a sergeant pulled from the rubble show \u2014 the lucky few who survived. The uppers of the black leather duty boots are scuffed, their laces worn.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/09/9-11-memorial-boots.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-09-11T12:15:00Z",
+                                    "source": {
+                                        "name": "New York Post ",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Boots tell incredible story of last survivor pulled from 9/11 rubble",
+                                    "url": "https://nypost.com/2021/09/11/boots-tell-incredible-story-of-last-survivor-pulled-from-9-11-rubble/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "star wars",
+                                "news": {
+                                    "content": "The world of Star Wars is as vast as outer space itself. Beyond just the movies, there\u2019s a whole universe-worth of shows, books, comics, video games, and so much more that build off the base set down by that original movie in 1977. Even looking past ... [4594 chars]",
+                                    "description": "The world of Star Wars is as vast as outer space itself. Beyond just the movies, there\u2019s a whole universe-worth of shows, books, comics, video games, and so much more that build off the base set down by that original movie in 1977.",
+                                    "image": "https://www.cheatsheet.com/wp-content/uploads/2021/09/anakin-skywalker-1024x583.png",
+                                    "publishedAt": "2021-09-11T16:38:00Z",
+                                    "source": {
+                                        "name": "Showbiz Cheat Sheet",
+                                        "url": "https://www.cheatsheet.com"
+                                    },
+                                    "title": "What if Anakin Never Left the Jedi Temple in 'Revenge of the Sith'?",
+                                    "url": "https://www.cheatsheet.com/entertainment/star-wars-what-if-anakin-never-left-the-jedi-temple-revenge-of-the-sith.html/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "What do you mean?",
+                    "annotations": {
+                        "spelling_preprocessing": "What do you mean?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9949012398719788
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9901390671730042
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9937644004821777
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9992577433586121
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7634814977645874
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0012904107570648193
+                            }
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "What do you mean?",
+                            "segments": [
+                                "What do you mean?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.0006235070759430528,
+                            "conversational": 0.9993764758110046
+                        },
+                        "conceptnet": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.41487276554107666,
+                                "detected": 1
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.7356058359146118,
+                                "detected": 1
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0028710339684039354,
+                                "command": 0.004205271601676941,
+                                "comment": 0.002516243839636445,
+                                "complaint": 0.01183773111552,
+                                "dev_command": 0.0037910479586571455,
+                                "neg_answer": 0.0038741573225706816,
+                                "open_question_factual": 0.9070000648498535,
+                                "open_question_opinion": 0.0360565148293972,
+                                "opinion": 0.01258845068514347,
+                                "other_answers": 0.003255542367696762,
+                                "pos_answer": 0.0018060405272990465,
+                                "statement": 0.004895607940852642,
+                                "yes_no_question": 0.005302258301526308
+                            }
+                        ],
+                        "entity_detection": {},
+                        "fact_random": [],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Seems like I have no idea what we are talking about.",
+                                "I like star wars too.",
+                                "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                                "What do you mean?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The 9/11\u2019s Museum\u2019s artifacts recall the thousands who perished, but also \u2014 as the boots of a sergeant pulled from the rubble show \u2014 the lucky few who survived.\nThe uppers of the black leather duty boots are scuffed, their laces worn. Their soles hav... [4837 chars]",
+                                    "description": "The 9/11\u2019s Museum\u2019s artifacts recall the thousands who perished, but also \u2014 as the boots of a sergeant pulled from the rubble show \u2014 the lucky few who survived. The uppers of the black leather duty boots are scuffed, their laces worn.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2021/09/9-11-memorial-boots.jpg?quality=90&strip=all&w=1024",
+                                    "publishedAt": "2021-09-11T12:15:00Z",
+                                    "source": {
+                                        "name": "New York Post ",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Boots tell incredible story of last survivor pulled from 9/11 rubble",
+                                    "url": "https://nypost.com/2021/09/11/boots-tell-incredible-story-of-last-survivor-pulled-from-9-11-rubble/"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                            "segments": [
+                                "I bet that you are so sincere'.",
+                                "It's been really cool getting to know you better."
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hello.",
+                                "Seems like I have no idea what we are talking about.",
+                                "I like star wars too.",
+                                "I bet that you are so sincere'. It's been really cool getting to know you better."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_grounding_skill"
+                }
+            ]
+        }
+    ],
+    "dff_grounding_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 1,
+                "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
+                "misc": {
+                    "dff_grounding_skill": {
+                        "used_universal_intent_responses": [
+                            "It's been really cool getting to know you better."
+                        ]
+                    }
+                },
+                "node_labels": {
+                    "0": [
+                        "grounding",
+                        "grounding_response_node"
+                    ],
+                    "1": [
+                        "grounding",
+                        "grounding_response_node"
+                    ]
+                },
+                "previous_index": 1,
+                "requests": {
+                    "0": "Hello.",
+                    "1": "I like star wars too."
+                },
+                "responses": {
+                    "0": [
+                        [
+                            "Seems like I have no idea what we are talking about.",
+                            0.5,
+                            {},
+                            {},
+                            {}
+                        ]
+                    ],
+                    "1": [
+                        [
+                            "Thank you for being so considerate with me on this.",
+                            0.5,
+                            {},
+                            {},
+                            {}
+                        ],
+                        [
+                            "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                            0.7,
+                            {
+                                "dff_grounding_skill": {
+                                    "used_universal_intent_responses": [
+                                        "It's been really cool getting to know you better."
+                                    ]
+                                }
+                            },
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowlegdement",
+                                    "body"
+                                ],
+                                "type": "universal_response"
+                            }
+                        ]
+                    ]
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "1": [
+                    "grounding",
+                    "grounding_response_node"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "star wars": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "star wars",
+                        "human_utterance_index": 1,
+                        "next_skill_name": "dff_grounding_skill",
+                        "previous_skill_name": "dff_grounding_skill"
+                    }
+                ],
+                "name": "star wars"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

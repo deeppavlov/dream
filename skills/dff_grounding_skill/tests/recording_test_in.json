@@ -1,0 +1,726 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Are you recording?",
+                    "annotations": {
+                        "spelling_preprocessing": "Are you recording?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.999451220035553
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.9995741844177246
+                            },
+                            "cobot_topics": {
+                                "Psychology": 0.15459391474723816
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9984784722328186
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7326107025146484
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0015038847923278809
+                            }
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "Are you recording?",
+                            "segments": [
+                                "Are you recording?"
+                            ]
+                        },
+                        "spacy_nounphrases": [
+                            "recording"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.02374301850795746,
+                            "conversational": 0.9762569665908813
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "recording": {
+                                "Causes": [
+                                    "false information",
+                                    "false alarm",
+                                    "sound loss"
+                                ],
+                                "CausesDesire": [
+                                    "record music",
+                                    "hear news",
+                                    "write program"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "good",
+                                    "loud"
+                                ],
+                                "SymbolOf": [
+                                    "computer",
+                                    "knowledge",
+                                    "intelligence"
+                                ]
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.9996176958084106,
+                                "detected": 1
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0040801530703902245,
+                                "command": 0.02333139255642891,
+                                "comment": 0.005008669104427099,
+                                "complaint": 0.014790506102144718,
+                                "dev_command": 0.017272423952817917,
+                                "neg_answer": 0.0029103781562298536,
+                                "open_question_factual": 0.026337141171097755,
+                                "open_question_opinion": 0.006384847220033407,
+                                "opinion": 0.0013116331538185477,
+                                "other_answers": 0.0019864458590745926,
+                                "pos_answer": 0.002689120825380087,
+                                "statement": 0.005379206035286188,
+                                "yes_no_question": 0.8885180950164795
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "So, you wanna know how i protect your information. I am ashamed, I don't know.",
+                                "Do you protect information?",
+                                "So, you wanna know whether i protect information. I don't even know yes or no.",
+                                "Are you recording?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.\nNicholas is forecast to approach the central Texas Coast Monday as a tropical storm, according to the N... [5909 chars]",
+                                    "description": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.",
+                                    "image": "https://www.click2houston.com/resizer/Kj83Sj_OzH7k2duMuF29Opdgz_o=/800x533/smart/filters:format(jpeg):strip_exif(true):strip_icc(true):no_upscale(true):quality(65)/cloudfront-us-east-1.images.arcpublishing.com/gmg/MSYXFXUZJBFZ5C3CNGRWSEGY2I.jpg",
+                                    "publishedAt": "2021-09-13T03:01:47Z",
+                                    "source": {
+                                        "name": "KPRC Click2Houston",
+                                        "url": "https://www.click2houston.com"
+                                    },
+                                    "title": "LIST: The Houston-area school districts closed Monday due to Tropical Storm Nicholas",
+                                    "url": "https://www.click2houston.com/news/local/2021/09/13/list-the-houston-are-school-districts-closed-monday-due-to-tropical-storm-nicholas/"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "Do you keep the secret information?",
+                    "annotations": {
+                        "spelling_preprocessing": "Do you keep the secret information?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "Do you keep the secret information?",
+                            "segments": [
+                                "Do you keep the secret information?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "the secret information"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9105405807495117,
+                            "conversational": 0.08945939689874649
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9956701993942261,
+                                "Information_DeliveryIntent": 0.7847074270248413
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9986449480056763
+                            },
+                            "cobot_topics": {
+                                "Games": 0.6812836527824402,
+                                "Phatic": 0.9979826211929321
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995898008346558
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6880817413330078
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0012325048446655273
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0028743629809468985,
+                                "command": 0.012875215150415897,
+                                "comment": 0.0038635041564702988,
+                                "complaint": 0.004394453018903732,
+                                "dev_command": 0.00876258872449398,
+                                "neg_answer": 0.0026260041631758213,
+                                "open_question_factual": 0.026369336992502213,
+                                "open_question_opinion": 0.00817138236016035,
+                                "opinion": 0.002047724789008498,
+                                "other_answers": 0.0022538788616657257,
+                                "pos_answer": 0.0026655595283955336,
+                                "statement": 0.007892265915870667,
+                                "yes_no_question": 0.9152038097381592
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "information"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        23,
+                                        34
+                                    ],
+                                    "text": "information"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "conceptnet": {
+                            "the secret information": {
+                                "Causes": [
+                                    "person to be deceive",
+                                    "fear",
+                                    "distrust"
+                                ],
+                                "CausesDesire": [
+                                    "go on internet",
+                                    "hide",
+                                    "spy"
+                                ],
+                                "HasProperty": [
+                                    "safe",
+                                    "secret",
+                                    "important"
+                                ],
+                                "SymbolOf": [
+                                    "christianity",
+                                    "islam",
+                                    "secret society"
+                                ]
+                            }
+                        },
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "So, you wanna know whether i protect information. I don't even know yes or no.",
+                                "Are you recording?",
+                                "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon. com/alexaprivacy.",
+                                "Do you keep the secret information?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.\nNicholas is forecast to approach the central Texas Coast Monday as a tropical storm, according to the N... [5909 chars]",
+                                    "description": "Some Houston-area schools districts have canceled Monday classes due to the threat of severe weather posed by approaching Tropical Storm Nicholas.",
+                                    "image": "https://www.click2houston.com/resizer/Kj83Sj_OzH7k2duMuF29Opdgz_o=/800x533/smart/filters:format(jpeg):strip_exif(true):strip_icc(true):no_upscale(true):quality(65)/cloudfront-us-east-1.images.arcpublishing.com/gmg/MSYXFXUZJBFZ5C3CNGRWSEGY2I.jpg",
+                                    "publishedAt": "2021-09-13T03:01:47Z",
+                                    "source": {
+                                        "name": "KPRC Click2Houston",
+                                        "url": "https://www.click2houston.com"
+                                    },
+                                    "title": "LIST: The Houston-area school districts closed Monday due to Tropical Storm Nicholas",
+                                    "url": "https://www.click2houston.com/news/local/2021/09/13/list-the-houston-are-school-districts-closed-monday-due-to-tropical-storm-nicholas/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "information",
+                                "news": {
+                                    "content": "Cars for export are seen at a port in Lianyungang, Jiangsu province, China April 2, 2020. China Daily via REUTERS\nBEIJING, Sept 13 (Reuters) - China has \"too many\" electric vehicle (EV) makers and the government will encourage consolidation, Industry... [988 chars]",
+                                    "description": "Cars for export are seen at a port in Lianyungang, Jiangsu province, China April 2, 2020.",
+                                    "image": "https://www.reuters.com/resizer/bPvhh9WjwxIwGvRrmlQcXUgAFkI=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/4Z4T4HYMNZOV7N3HJ2PLFDFQRU.jpg",
+                                    "publishedAt": "2021-09-13T04:00:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "China to consolidate overcrowded electric vehicle industry - minister",
+                                    "url": "https://www.reuters.com/business/autos-transportation/china-has-too-many-auto-companies-now-consolidation-needed-minister-2021-09-13/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "amazon",
+                                "news": {
+                                    "content": "Hey Comcast, y'all should really just publish your TV app on the Play Store already. This weird stuff, limiting it to Sony TVs or Amazon's Fire TV platform, just isn't cool. People are paying you a lot (just, a LOT) to watch TV, you should let them w... [1643 chars]",
+                                    "description": "Hey Comcast, y'all should really just publish your TV app on the Play Store already. This weird stuff, limiting it to Sony TVs or Amazon's Fire TV platform, just isn't cool.",
+                                    "image": "https://www.androidpolice.com/wp-content/uploads/2021/09/12/xfinity.jpg",
+                                    "publishedAt": "2021-09-12T18:09:55Z",
+                                    "source": {
+                                        "name": "Android Police",
+                                        "url": "https://www.androidpolice.com"
+                                    },
+                                    "title": "The latest Xfinity streaming app works fine on Android TV",
+                                    "url": "https://www.androidpolice.com/2021/09/12/the-latest-xfinity-streaming-app-works-fine-on-android-tv-heres-how-to-sideload-it/"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "comalexaprivacy",
+                                "news": {},
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon.com/alexaprivacy.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon.com/alexaprivacy.",
+                            "segments": [
+                                "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed.",
+                                "On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound.",
+                                "You can learn more by visiting amazon.",
+                                "com/alexaprivacy."
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 6,
+                                    "text": "amazon",
+                                    "type": "LOC"
+                                }
+                            ],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 1,
+                                    "start_pos": 0,
+                                    "text": "com/alexaprivacy",
+                                    "type": "ORG"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Do you protect information?",
+                                "So, you wanna know whether i protect information. I don't even know yes or no.",
+                                "Are you recording?",
+                                "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon. com/alexaprivacy."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_grounding_skill"
+                }
+            ]
+        }
+    ],
+    "dff_grounding_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 2,
+                "id": "9e214f6d-f493-4f89-851f-6d9876a18a96",
+                "misc": {
+                    "dff_grounding_skill": {
+                        "used_universal_intent_responses": [
+                            "I'm ashamed, I don't know.",
+                            "I don't even know yes or no.",
+                            "It's so embarrassing, but I don't know."
+                        ]
+                    }
+                },
+                "node_labels": {
+                    "1": [
+                        "grounding",
+                        "grounding_response_node"
+                    ],
+                    "2": [
+                        "grounding",
+                        "grounding_response_node"
+                    ]
+                },
+                "previous_index": 2,
+                "requests": {
+                    "1": "Do you protect information?",
+                    "2": "Are you recording?"
+                },
+                "responses": {
+                    "1": [
+                        [
+                            "You've asked me whether i protect information.",
+                            0.5,
+                            {},
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowledgement"
+                                ]
+                            }
+                        ],
+                        [
+                            "So, you wanna know whether i protect information. I don't even know yes or no.",
+                            0.99,
+                            {
+                                "dff_grounding_skill": {
+                                    "used_universal_intent_responses": [
+                                        "I'm ashamed, I don't know.",
+                                        "I don't even know yes or no."
+                                    ]
+                                }
+                            },
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowlegdement",
+                                    "body"
+                                ],
+                                "type": "universal_response"
+                            }
+                        ]
+                    ],
+                    "2": [
+                        [
+                            "I am designed to protect your privacy, so I only listen after your device detects the wake word or if the action button is pushed. On Echo devices, you will always know when your request is being processed because a blue light indicator will appear or an audio tone will sound. You can learn more by visiting amazon.com/alexaprivacy.",
+                            1,
+                            {},
+                            {},
+                            {
+                                "can_continue": "must"
+                            }
+                        ],
+                        [
+                            "You like to ask interesting questions.",
+                            0.5,
+                            {},
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowledgement"
+                                ]
+                            }
+                        ],
+                        [
+                            "You have so many interesting questions. It's so embarrassing, but I don't know.",
+                            0.7,
+                            {
+                                "dff_grounding_skill": {
+                                    "used_universal_intent_responses": [
+                                        "I'm ashamed, I don't know.",
+                                        "I don't even know yes or no.",
+                                        "It's so embarrassing, but I don't know."
+                                    ]
+                                }
+                            },
+                            {},
+                            {
+                                "response_parts": [
+                                    "acknowlegdement",
+                                    "body"
+                                ],
+                                "type": "universal_response"
+                            }
+                        ]
+                    ]
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "1": [
+                    "grounding",
+                    "grounding_response_node"
+                ],
+                "2": [
+                    "grounding",
+                    "grounding_response_node"
+                ]
+            },
+            "previous_human_utter_index": 2,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

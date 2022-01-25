@@ -18,7 +18,7 @@ from common.wiki_skill import (
     NEWS_MORE,
     QUESTION_TEMPLATES,
     QUESTION_TEMPLATES_SHORT,
-    WIKI_BLACKLIST,
+    WIKI_BADLIST,
 )
 from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
@@ -129,7 +129,7 @@ def make_facts_str(paragraphs):
     for sentence in sentences:
         sanitized_sentence, mentions, mention_pages = delete_hyperlinks(sentence)
         words = nltk.word_tokenize(sanitized_sentence)
-        if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, sanitized_sentence):
+        if cur_len + len(words) < max_len and not re.findall(WIKI_BADLIST, sanitized_sentence):
             sentences_list.append(sanitized_sentence)
             cur_len += len(words)
             mentions_list += mentions
@@ -145,7 +145,7 @@ def make_facts_str(paragraphs):
         mention_pages_list += mention_pages
         for part in sentence_parts:
             words = nltk.word_tokenize(part)
-            if cur_len + len(words) < max_len and not re.findall(WIKI_BLACKLIST, part):
+            if cur_len + len(words) < max_len and not re.findall(WIKI_BADLIST, part):
                 sentences_list.append(part)
                 cur_len += len(words)
             facts_str = ", ".join(sentences_list)

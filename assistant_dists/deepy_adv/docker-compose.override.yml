@@ -1,0 +1,108 @@
+services:
+  agent:
+    volumes:
+      - "./assistant_dists/deepy_adv:/dp-agent"
+      - "./skill_selectors/:/dp-agent/skill_selectors/"
+      - "./state_formatters/:/dp-agent/state_formatters/"
+      - "./skills/:/dp-agent/skills/"
+      - "./common/:/dp-agent/common/"
+    environment:
+      WAIT_HOSTS: "spelling_preprocessing:3551, harvesters_maintenance_gobot_skill:3552,
+        rule_based_response_selector:3553, emotion_classification:3554, dff-program-y:3555, entity_linking:3556,
+        intent-catcher:3557, sentseg:3558"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+
+  spelling_preprocessing:
+    build:
+      context: annotators/spelling_preprocessing
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3551 --timeout=100
+    ports:
+      - 3551:3551
+
+  harvesters_maintenance_gobot_skill:
+    build:
+      context: skills/harvesters_maintenance_gobot_skill_deepy
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3552 --timeout=1000
+    ports:
+      - 3552:3552
+
+  rule_based_response_selector:
+    build:
+      context: response_selectors/rule_based_response_selector
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3553
+    volumes: []
+    ports:
+      - 3553:3553
+
+  emotion_classification:
+    build:
+      context: annotators/emotion_classification_deepy
+    command: python -m deeppavlov riseapi emo_bert.json -p 3554
+    ports:
+      - 3554:3554
+
+  dff-program-y:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 3555
+        SERVICE_NAME: dff_program_y
+      context: .
+      dockerfile: ./skills/dff_program_y/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3555 --reload
+    ports:
+      - 3555:3555
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 1024M
+
+  entity_linking:
+    build:
+      args:
+        CONFIG: entity_linking_deepy.json
+        PORT: 3556
+        SRC_DIR: annotators/entity_linking_deepy
+      context: ./
+      dockerfile: annotators/entity_linking_deepy/Dockerfile
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 3556:3556
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
+
+  intent-catcher:
+    env_file: [.env]
+    build:
+      context: ./annotators/IntentCatcher/
+    ports:
+      - 3557:3557
+    command:  python -m flask run -h 0.0.0.0 -p 3557 --without-threads
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
+
+  sentseg:
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 3558
+    environment:
+      - FLASK_APP=server
+    ports:
+      - 3558:3558
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+version: "3.7"

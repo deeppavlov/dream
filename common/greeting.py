@@ -1,6 +1,8 @@
 import re
 
-HI_THIS_IS_ALEXA = "Hi, this is an Alexa Prize Socialbot!"
+greeting_spec = "this is a DREAM Socialbot"  # "this is an Alexa Prize Socialbot"
+HI_THIS_IS_ALEXA = f"Hi, {greeting_spec}!"
+
 
 WHAT_DO_YOU_DO_RESPONSES = [
     "You know, yesterday was a great day for me! I've had a lot of fun conversations and managed to play my "
@@ -113,7 +115,7 @@ GIVE_ME_CHANCE_TO_CHEER_UP = [
 ]
 
 LIST_ACTIVITIES_RESPONSE = (
-    "I'm a socialbot running inside Alexa, and I'm all about chatting with people like you. "
+    "I'm a socialbot, and I'm all about chatting with people like you. "
     "I can answer questions, share fun facts, discuss movies, books and news."
 )
 

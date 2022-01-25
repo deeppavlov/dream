@@ -1,0 +1,774 @@
+{
+    "human_utter_index_batch": [
+        8
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "yes",
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "cobot_nounphrases": [
+                            "a boarding school",
+                            "the novel",
+                            "the story",
+                            "the rye",
+                            "my favourite story",
+                            "this book",
+                            "a teenager"
+                        ],
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012384664732962847,
+                                "command": 0.001441272790543735,
+                                "comment": 0.0009164000512100756,
+                                "complaint": 0.0003570342669263482,
+                                "dev_command": 0.0007623442215844989,
+                                "neg_answer": 0.0009839636040851474,
+                                "open_question_factual": 0.0003251796879339963,
+                                "open_question_opinion": 0.0004000497283414006,
+                                "opinion": 0.0006564101204276085,
+                                "other_answers": 0.0006844658055342734,
+                                "pos_answer": 0.9903168678283691,
+                                "statement": 0.0013382160104811192,
+                                "yes_no_question": 0.0005792254814878106
+                            }
+                        ],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": [],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 17,
+                                        "ner": {
+                                            "offset": 14,
+                                            "type": "PER"
+                                        },
+                                        "resolved": "My favourite book",
+                                        "start": 0,
+                                        "text": "My favourite book"
+                                    },
+                                    {
+                                        "end": 112,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My favourite book",
+                                        "start": 103,
+                                        "text": "this book"
+                                    },
+                                    {
+                                        "end": 336,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "My favourite book",
+                                        "start": 327,
+                                        "text": "this book"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 234,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "This",
+                                        "start": 230,
+                                        "text": "This"
+                                    },
+                                    {
+                                        "end": 260,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "This",
+                                        "start": 258,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "My favourite book is \"The catcher in the rye\" by Jerome David Salinger. May I tell you something about My favourite book?",
+                                "yes, you may tell i something about your favourite book. ",
+                                "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, This is truly fascinating. Would you like to hear something else about My favourite book?",
+                                "yes, i would like to hear something else about your favourite book. "
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 8,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nRaquel Leviss and James Kennedy have called off their engagement.\nThe \u201cVanderpump Rules\u201d stars made... [1508 chars]",
+                                    "description": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nRaquel Leviss and James Kennedy have called off their engagement.",
+                                    "image": "https://pagesix.com/wp-content/uploads/sites/3/2021/12/raquel-levis-james-kennedy-breakup.jpg?quality=90&strip=all&w=1200",
+                                    "publishedAt": "2021-12-05T18:18:00Z",
+                                    "source": {
+                                        "name": "Page Six",
+                                        "url": "https://pagesix.com"
+                                    },
+                                    "title": "Raquel Leviss and James Kennedy split",
+                                    "url": "https://pagesix.com/2021/12/05/vanderpump-rules-raquel-leviss-and-james-kennedy-split/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "rye",
+                                "news": {
+                                    "content": "A very large increase in the prices of agricultural produce has been observed in the last two weeks. The supply is negligible, but the prices are high. Only maize is in stock, but its harvest is nearing the end.\nThey are increasing cereal prices and ... [5322 chars]",
+                                    "description": "A very large increase in the prices of agricultural produce has been observed in the last two weeks. The supply is negligible, but the prices are high.",
+                                    "image": "https://pliki.farmer.pl/i/13/84/57/138457_940.jpg",
+                                    "publishedAt": "2021-11-18T18:03:58Z",
+                                    "source": {
+                                        "name": "Spark Chronicles",
+                                        "url": "https://sparkchronicles.com"
+                                    },
+                                    "title": "Cereal prices up. Wheat up to PLN 1,300 / t, and rye and triticale PLN 1,000",
+                                    "url": "https://sparkchronicles.com/cereal-prices-up-wheat-up-to-pln-1300-t-and-rye-and-triticale-pln-1000/"
+                                },
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "blacklisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0011627164203673601,
+                                "command": 0.0011578130070120096,
+                                "comment": 0.0009235460311174393,
+                                "complaint": 0.00032313656993210316,
+                                "dev_command": 0.0007105269469320774,
+                                "neg_answer": 0.0009765243157744408,
+                                "open_question_factual": 0.0003068819351028651,
+                                "open_question_opinion": 0.0003983272472396493,
+                                "opinion": 0.0006401409045793116,
+                                "other_answers": 0.0007684772135689855,
+                                "pos_answer": 0.9907816052436829,
+                                "statement": 0.0012765687424689531,
+                                "yes_no_question": 0.0005737384199164808
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 115,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "This",
+                                        "start": 111,
+                                        "text": "This"
+                                    },
+                                    {
+                                        "end": 141,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "This",
+                                        "start": 139,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 217,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 208,
+                                        "text": "this book"
+                                    },
+                                    {
+                                        "end": 238,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 236,
+                                        "text": "it"
+                                    },
+                                    {
+                                        "end": 242,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 240,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 289,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 287,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, This is truly fascinating. Would you like to hear something else about this book?",
+                                "yes, i would like to hear something else about this book. ",
+                                "I have read this book. this book's an amazing book! Do you want to know when this book was first published?",
+                                "yes, i want to know when this book was first published. "
+                            ]
+                        },
+                        "cobot_nounphrases": [],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nRaquel Leviss and James Kennedy have called off their engagement.\nThe \u201cVanderpump Rules\u201d stars made... [1508 chars]",
+                                    "description": "Click to email this to a friend (Opens in new window)\nClick to share on Twitter (Opens in new window)\nClick to share on Facebook (Opens in new window)\nRaquel Leviss and James Kennedy have called off their engagement.",
+                                    "image": "https://pagesix.com/wp-content/uploads/sites/3/2021/12/raquel-levis-james-kennedy-breakup.jpg?quality=90&strip=all&w=1200",
+                                    "publishedAt": "2021-12-05T18:18:00Z",
+                                    "source": {
+                                        "name": "Page Six",
+                                        "url": "https://pagesix.com"
+                                    },
+                                    "title": "Raquel Leviss and James Kennedy split",
+                                    "url": "https://pagesix.com/2021/12/05/vanderpump-rules-raquel-leviss-and-james-kennedy-split/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 9,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I've read it. It's an amazing book! Do you want to know when it was first published?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I have read it. It's an amazing book! Do you want to know when it was first published?",
+                            "segments": [
+                                "I have read it.",
+                                "It's an amazing book!",
+                                "Do you want to know when it was first published?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 120,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "This",
+                                        "start": 116,
+                                        "text": "This"
+                                    },
+                                    {
+                                        "end": 146,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "This",
+                                        "start": 144,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 222,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 213,
+                                        "text": "this book"
+                                    },
+                                    {
+                                        "end": 243,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 241,
+                                        "text": "it"
+                                    },
+                                    {
+                                        "end": 247,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 245,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 294,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "this book",
+                                        "start": 292,
+                                        "text": "it"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "yes.",
+                                "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, This is truly fascinating. Would you like to hear something else about this book?",
+                                "yes, i would like to hear something else about this book. ",
+                                "I have read this book. this book's an amazing book! Do you want to know when this book was first published?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_book_skill"
+                }
+            ]
+        }
+    ],
+    "dff_book_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "598d5054-2cab-4f59-b00b-950fcfafa201",
+                "labels": {
+                    "6": [
+                        "bot_fav_book",
+                        "fav_elaborate"
+                    ],
+                    "7": [
+                        "concrete_book_flow",
+                        "offer_date"
+                    ]
+                },
+                "misc": {
+                    "flags": {
+                        "book_skill_active": true
+                    },
+                    "slots": {
+                        "cur_book_about": "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, it is truly fascinating.",
+                        "cur_book_ago": "71 years ",
+                        "cur_book_author": "Jerome Salinger",
+                        "cur_book_name": "The Catcher in the Rye",
+                        "cur_book_plain": "Q183883",
+                        "cur_genre": "a novel",
+                        "fav_book_init": " My favourite book is \"The catcher in the rye\" by Jerome David Salinger."
+                    },
+                    "used_phrases": [
+                        140403029917936,
+                        140403030788592,
+                        140403029918128,
+                        140403029918704,
+                        140403030052624,
+                        140403030052736
+                    ]
+                },
+                "requests": {
+                    "6": "yes.",
+                    "7": "yes."
+                },
+                "responses": {
+                    "6": "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, it is truly fascinating. Would you like to hear something else about this book?",
+                    "7": "I've read it. It's an amazing book! Do you want to know when it was first published?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "books_general",
+                    "book_start"
+                ],
+                "1": [
+                    "books_general",
+                    "likes_reading"
+                ],
+                "2": [
+                    "books_general",
+                    "told_why"
+                ],
+                "3": [
+                    "undetected_flow",
+                    "ask_to_repeat"
+                ],
+                "4": [
+                    "undetected_flow",
+                    "change_branch"
+                ],
+                "5": [
+                    "bot_fav_book",
+                    "fav_name"
+                ],
+                "6": [
+                    "bot_fav_book",
+                    "fav_elaborate"
+                ],
+                "7": [
+                    "concrete_book_flow",
+                    "offer_date"
+                ]
+            },
+            "previous_human_utter_index": 7,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}

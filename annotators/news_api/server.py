@@ -25,7 +25,7 @@ setup_metrics(app)
 N_FACTS_TO_CHOSE = 3
 ASYNC_SIZE = int(os.environ.get("ASYNC_SIZE", 5))
 
-NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=3600)  # time in seconds
+NEWS_API_REQUESTOR = CachedRequestsAPI(renew_freq_time=7200)  # time in seconds
 
 ARTICLES_PATTERN = re.compile(r"\b(a|an|the)\b", re.IGNORECASE)
 EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE = re.compile(r"[^a-zA-Z0-9 ]")

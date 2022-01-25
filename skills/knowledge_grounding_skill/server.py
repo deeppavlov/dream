@@ -109,7 +109,7 @@ def get_news(uttr, which):
 def get_fact_random(utterances):
     result_values = []
     for i, uttr in enumerate(utterances):
-        values = uttr.get("annotations", {}).get("fact_random", [])
+        values = uttr.get("annotations", {}).get("fact_random", {}).get("facts", [])
         if values:
             for v in values:
                 value = v.get("fact", "")
@@ -156,13 +156,13 @@ def get_annotations_from_dialog(utterances, annotator_name, key_name=None):
     return result_values
 
 
-def get_cobot_nounphrases(utt):
+def get_spacy_nounphrases(utt):
     cob_nounphs = get_entities(utt, only_named=False, with_labels=False)
-    cobot_nounphrases = []
+    spacy_nounphrases = []
     for ph in cob_nounphs:
         if not pos_tag([ph])[0][1].startswith("VB"):
-            cobot_nounphrases.append(ph)
-    return cobot_nounphrases
+            spacy_nounphrases.append(ph)
+    return spacy_nounphrases
 
 
 def get_intents_flags(utt):
@@ -282,10 +282,10 @@ def respond():
             user_input_text = dialog["human_utterances"][-1]["text"]
             bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
             switch_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr)
-            # cobot_nounphrases
-            cobot_nounphrases = get_cobot_nounphrases(dialog["human_utterances"][-1])
+            # spacy_nounphrases
+            spacy_nounphrases = get_spacy_nounphrases(dialog["human_utterances"][-1])
             nounphrases.append(
-                re.compile(join_sentences_in_or_pattern(cobot_nounphrases), re.IGNORECASE) if cobot_nounphrases else ""
+                re.compile(join_sentences_in_or_pattern(spacy_nounphrases), re.IGNORECASE) if spacy_nounphrases else ""
             )
             # entities
             curr_ents = get_named_entities(dialog["human_utterances"][-1])
@@ -325,7 +325,7 @@ def respond():
             # add nounphrases and entities to the knowledge
             if user_input_knowledge:
                 user_input_checked_sentence = (
-                    space_join(cobot_nounphrases)
+                    space_join(spacy_nounphrases)
                     + space_join(curr_ents)
                     + tokenize.sent_tokenize(user_input_knowledge)[0]
                 )
@@ -394,17 +394,17 @@ def respond():
                 annotations_depths.append({})
                 dial_ids.append(d_id)
 
-            cobotqa_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1 :])
-            if cobotqa_facts:
+            fact_random_facts = get_fact_random(dialog["utterances"][-anntr_history_len * 2 - 1 :])
+            if fact_random_facts:
                 user_input = {
-                    "checked_sentence": cobotqa_facts[-1][1],
-                    "knowledge": cobotqa_facts[-1][1],
+                    "checked_sentence": fact_random_facts[-1][1],
+                    "knowledge": fact_random_facts[-1][1],
                     "text": user_input_text,
                     "history": user_input_history,
-                    "cobotqa_fact": True,
+                    "fact_random_fact": True,
                 }
                 input_batch.append(user_input)
-                annotations_depths.append({"cobotqa": cobotqa_facts[-1][0]})
+                annotations_depths.append({"fact_random": fact_random_facts[-1][0]})
                 dial_ids.append(d_id)
 
             user_news = get_news(dialog["human_utterances"][-1], "human")
@@ -488,7 +488,7 @@ def respond():
                 curr_nounphrase_search = nounphrases[i].search(raw_responses[curr_i]) if nounphrases[i] else False
                 curr_entities_search = entities[i].search(raw_responses[curr_i]) if entities[i] else False
                 no_penalties = False
-                cobotqa_penalty = 0.0
+                fact_random_penalty = 0.0
 
                 topic = chosen_topics.get(i, "")
                 chosen_topic_fact_flag = input_batch[curr_i].get("chosen_topic_fact", "")
@@ -516,10 +516,10 @@ def respond():
                     no_penalties = True
                     confidence = HIGHEST_CONFIDENCE
                     attr["confidence_case"] += "news_api_fact "
-                elif input_batch[curr_i].get("cobotqa_fact", ""):
-                    cobotqa_penalty = annotations_depths[curr_i].get("cobotqa", 0.0)
+                elif input_batch[curr_i].get("fact_random_fact", ""):
+                    fact_random_penalty = annotations_depths[curr_i].get("fact_random", 0.0)
                     confidence = DEFAULT_CONFIDENCE
-                    attr["confidence_case"] += "cobotqa_fact "
+                    attr["confidence_case"] += "fact_random_fact "
                 elif curr_news_fact:
                     if curr_news_fact != "all":
                         confidence = NOUNPHRASE_ENTITY_CONFIDENCE
@@ -557,7 +557,7 @@ def respond():
                 if special_intents_flags[i]:
                     confidence = 0.0
                     attr["confidence_case"] += "special_intents "
-                    logger.debug(f"KG skill: found special_intents")
+                    logger.debug("KG skill: found special_intents")
                 greetings_farewells_flag = greetings_farewells_re.search(raw_responses[curr_i])
                 if greetings_farewells_flag:
                     confidence = 0.0
@@ -566,7 +566,7 @@ def respond():
 
                 penalties = (
                     annotations_depths[curr_i].get("retrieved_fact", 0.0)
-                    + cobotqa_penalty
+                    + fact_random_penalty
                     + already_was_active
                     + short_long_response
                     if not no_penalties

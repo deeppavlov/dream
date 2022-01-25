@@ -11,7 +11,7 @@
         "load_path": "{DOWNLOADS_PATH}/odqa/enwiki_latest_hyperlinks.db"
       },
       {
-        "class_name": "page_preprocessor:PagePreprocessor",
+        "class_name": "common.page_preprocessor:PagePreprocessor",
         "in": ["doc_text"],
         "out": ["processed_pages", "main_pages"]
       }

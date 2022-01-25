@@ -1,0 +1,37 @@
+{
+  "chainer": {
+    "in": ["entity_pages"],
+    "pipe": [
+      {
+        "class_name": "wiki_sqlite_vocab",
+        "in": ["entity_pages"],
+        "out": ["doc_text"],
+        "join_docs": false,
+        "shuffle": false,
+        "load_path": "{DOWNLOADS_PATH}/odqa/enwiki_latest_topic.db"
+      },
+      {
+        "class_name": "common.page_preprocessor:PagePreprocessor",
+        "in": ["doc_text"],
+        "out": ["processed_pages", "main_pages"]
+      }
+    ],
+    "out": ["processed_pages", "main_pages"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "requirements": [
+    ],
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/datasets/wikipedia/enwiki_latest_topic.db",
+        "subdir": "{DOWNLOADS_PATH}/odqa"
+      }
+    ]
+  }
+}
