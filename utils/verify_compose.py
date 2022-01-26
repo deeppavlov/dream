@@ -16,7 +16,7 @@ parser.add_argument(
         "Relative or full path to Dream distribution containing "
         "docker-compose.override.yml, dev.yml and proxy.yml, "
         "e.g. ./assistant_dists/dream"
-    )
+    ),
 )
 options = parser.parse_args()
 
