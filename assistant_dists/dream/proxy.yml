@@ -8,7 +8,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8004
       - PORT=8004
 
-  dff-program-y:
+  dff-program-y-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -71,7 +71,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8018
       - PORT=8018
 
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
@@ -215,7 +215,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8068
       - PORT=8068
 
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/

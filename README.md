@@ -243,7 +243,7 @@ Dream Architecture is presented in the following image:
 
 DeepPavlov Dream is licensed under Apache 2.0.
 
-Program-y (see `dream/skills/dff_program_y`, `dream/skills/dff_program_y_wide`, `dream/skills/dff_program_y_dangerous`) 
+Program-y (see `dream/skills/dff_program_y_skill`, `dream/skills/dff_program_y_wide_skill`, `dream/skills/dff_program_y_dangerous_skill`) 
 is licensed under Apache 2.0.
 Eliza (see `dream/skills/eliza`) is licensed under MIT License.
 
