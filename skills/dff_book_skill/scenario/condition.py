@@ -129,7 +129,7 @@ def is_last_used_phrase(phrase: Any) -> None:
 @is_last_used_phrase.register
 def _(phrase: str) -> Callable:
     def last_used_handler(ctx: Context, actor: Actor) -> bool:
-        if ctx.validation:
+        if ctx.last_response is None or ctx.validation:
             return False
         last_response = ctx.last_response
         return phrase in last_response
@@ -141,7 +141,7 @@ def _(phrase: str) -> Callable:
 @is_last_used_phrase.register
 def _(phrase: list) -> Callable:
     def last_used_handler(ctx: Context, actor: Actor) -> bool:
-        if ctx.validation:
+        if ctx.last_response is None or ctx.validation:
             return False
         last_response = ctx.last_response
         return any([item in last_response for item in phrase])

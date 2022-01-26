@@ -20,6 +20,7 @@ try:
     entity_detection_alexa = build_model(config_name, download=True)
     entity_detection_lcquad = build_model("entity_detection_lcquad.json", download=True)
     entity_detection_alexa(["what is the capital of russia"])
+    entity_detection_lcquad(["what is the capital of russia"])
     logger.info("entity detection model is loaded.")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -34,18 +35,17 @@ DOUBLE_SPACES = re.compile(r"\s+")
 
 def get_result(request):
     st_time = time.time()
-    last_utterances = request.json.get("last_utterances", [])
+    last_utterances = request.json.get("sentences", [])
     logger.info(f"input (the last utterances): {last_utterances}")
 
     utterances_list = []
     utterances_nums = []
-    for n, utterances in enumerate(last_utterances):
-        for elem in utterances:
-            if len(elem) > 0:
-                if elem[-1] not in {".", "!", "?"}:
-                    elem = f"{elem}."
-                utterances_list.append(elem.lower())
-                utterances_nums.append(n)
+    for n, utterance in enumerate(last_utterances):
+        if len(utterance) > 0:
+            if utterance[-1] not in {".", "!", "?"}:
+                utterance = f"{utterance}."
+            utterances_list.append(utterance.lower())
+            utterances_nums.append(n)
 
     utt_entities_batch = [{} for _ in last_utterances]
     utt_entities = {}
