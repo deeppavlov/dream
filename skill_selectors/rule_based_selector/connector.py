@@ -41,7 +41,7 @@ class RuleBasedSkillSelectorConnector:
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
             high_priority_intent_detected = any(
-                [k for k in intent_catcher_intents if k in high_priority_intents["intent_responder"]]
+                [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
             )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
 
@@ -97,7 +97,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
             elif high_priority_intent_detected:
                 # process intent with corresponding IntentResponder
-                skills_for_uttr.append("intent_responder")
+                skills_for_uttr.append("dff_intent_responder_skill")
             elif is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
                 # process user utterance with sensitive content, "safe mode"
                 skills_for_uttr.append("dff_program_y_dangerous")
@@ -174,7 +174,7 @@ class RuleBasedSkillSelectorConnector:
                             skills_for_uttr.append(hyp["skill_name"])
 
                 if low_priority_intent_detected:
-                    skills_for_uttr.append("intent_responder")
+                    skills_for_uttr.append("dff_intent_responder_skill")
                 switch_wiki_skill, _ = if_switch_wiki_skill(user_uttr, bot_uttr)
                 if switch_wiki_skill or switch_wiki_skill_on_news(user_uttr, bot_uttr):
                     skills_for_uttr.append("dff_wiki_skill")
