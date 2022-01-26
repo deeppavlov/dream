@@ -213,7 +213,7 @@
             "bot_utterances": []
         }
     ],
-    "program_y_wide_state_batch": [
+    "dff_program_y_wide_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [
