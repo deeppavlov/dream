@@ -18,15 +18,15 @@ def get_services(compose_file: str) -> set:
 
 
 def verify_compose():
-    compose = get_services("docker-compose.override.yml")
+    compose = get_services("assistant_dists/dream/docker-compose.override.yml")
     for el in ["agent", "mongo"]:
         try:
             compose.remove(el)
         except KeyError:
             pass
-    dev = get_services("dev.yml")
+    dev = get_services("assistant_dists/dream/dev.yml")
     dev.remove("mongo")
-    proxy = get_services("proxy.yml")
+    proxy = get_services("assistant_dists/dream/proxy.yml")
     assert not (compose - dev), f"Following services from docker-compose.yml are missing in dev.yml: {compose - dev}"
     assert not (compose - proxy), (
         f"Following services from docker-compose.yml are missing in proxy.yml: " f"{compose - proxy}"
