@@ -46,8 +46,7 @@ def verify_compose():
         compose - dev
     ), f"Following services from docker-compose.override.yml are missing in dev.yml: {compose - dev}"
     assert not (compose - proxy), (
-        f"Following services from docker-compose.override.yml are missing in proxy.yml: "
-        f"{compose - proxy}"
+        f"Following services from docker-compose.override.yml are missing in proxy.yml: " f"{compose - proxy}"
     )
     print(f"{assistant_dist_dir} is OK")
 
