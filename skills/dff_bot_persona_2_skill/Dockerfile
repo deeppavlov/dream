@@ -13,6 +13,7 @@ RUN python -m spacy download en
 RUN python -m spacy download en_core_web_sm
 RUN python -m spacy download en_core_web_md
 RUN python -m nltk.downloader vader_lexicon
+RUN python -m nltk.downloader omw-1.4
 
 COPY common/dialogflow_framework/scripts /scripts
 
