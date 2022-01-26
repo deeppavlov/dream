@@ -42,9 +42,9 @@ services:
       - "./annotators/SentRewrite:/src"
     ports:
       - 8017:8017
-  intent-responder:
+  dff-intent-responder-skill:
     volumes:
-      - "./skills/IntentResponder:/src"
+      - "./skills/dff_intent_responder_skill:/src"
       - "./common:/src/common"
     ports:
       - 8012:8012

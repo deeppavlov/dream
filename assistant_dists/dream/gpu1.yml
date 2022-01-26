@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
   sentrewrite:
     restart: unless-stopped
-  intent-responder:
+  dff-intent-responder-skill:
     restart: unless-stopped
   intent-catcher:
     restart: unless-stopped
