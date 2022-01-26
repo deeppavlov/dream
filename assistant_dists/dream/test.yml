@@ -48,7 +48,7 @@ services:
   sentseg:
   convers-evaluation-selector:
   sentrewrite:
-  intent-responder:
+  dff-intent-responder-skill:
   intent-catcher:
   badlisted-words:
   dff-program-y-dangerous:

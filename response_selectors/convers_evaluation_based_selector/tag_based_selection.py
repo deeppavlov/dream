@@ -594,7 +594,10 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         # a bit of rule based help
         is_misheard = misheard_with_spec1 in cand_uttr["text"] or misheard_with_spec2 in cand_uttr["text"]
         intent_name = get_intent_name(cand_uttr["text"])
-        is_intent_candidate = intent_name and cand_uttr["skill_name"] in ["intent_responder", "program_y"]
+        is_intent_candidate = intent_name and cand_uttr["skill_name"] in [
+            "dff_intent_responder_skill",
+            "dff_program_y_skill",
+        ]
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"

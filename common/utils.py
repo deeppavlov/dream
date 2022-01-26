@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
 other_skills = {
-    "intent_responder",
+    "dff_intent_responder_skill",
     "dff_program_y_dangerous",
     "misheard_asr",
     "christmas_new_year_skill",
@@ -93,7 +93,7 @@ service_intents = {
 }
 
 high_priority_intents = {
-    "intent_responder": {
+    "dff_intent_responder_skill": {
         "cant_do",
         "exit",
         "repeat",

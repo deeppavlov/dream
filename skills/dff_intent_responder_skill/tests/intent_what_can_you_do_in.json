@@ -1,0 +1,650 @@
+{
+    "human_utter_index_batch": [
+        13
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "tell me more about yourself.",
+                    "annotations": {
+                        "spelling_preprocessing": "tell me more about yourself",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "tell me more about yourself.",
+                            "segments": [
+                                "tell me more about yourself."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9999755620956421
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999668598175049
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.3584584593772888
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999953508377075
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999990463256836
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9999918937683105
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999949932098389
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.002291712211444974,
+                                "command": 0.9706923961639404,
+                                "comment": 0.0013403712073341012,
+                                "complaint": 0.002624867483973503,
+                                "dev_command": 0.007983487099409103,
+                                "neg_answer": 0.0011179308639839292,
+                                "open_question_factual": 0.0015314696356654167,
+                                "open_question_opinion": 0.002111839596182108,
+                                "opinion": 0.002192902844399214,
+                                "other_answers": 0.0007538581266999245,
+                                "pos_answer": 0.002451535314321518,
+                                "statement": 0.0030440958216786385,
+                                "yes_no_question": 0.0018635503947734833
+                            }
+                        ],
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 66,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "yourself",
+                                        "start": 63,
+                                        "text": "you"
+                                    },
+                                    {
+                                        "end": 131,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "yourself",
+                                        "start": 123,
+                                        "text": "yourself"
+                                    },
+                                    {
+                                        "end": 197,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "yourself",
+                                        "start": 189,
+                                        "text": "yourself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "I am a socialbot, and I am all about chatting with people like yourself. What do you do? #+#what_is_your_job",
+                                "tell me more about yourself.",
+                                "I really do not know what to answer.",
+                                "tell me more about yourself."
+                            ]
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "tell me more about yourself."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 13,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "what are your skills?",
+                    "annotations": {
+                        "spelling_preprocessing": "what are your skills",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spacy_nounphrases": [
+                            "your skills"
+                        ],
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "what are your skills?",
+                            "segments": [
+                                "what are your skills?"
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9999778270721436
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999339580535889
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9995296001434326
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999920129776001
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999970197677612
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9336612224578857
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999923706054688
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "skills"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        14,
+                                        20
+                                    ],
+                                    "text": "skills"
+                                }
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0026920968666672707,
+                                "command": 0.0072446162812411785,
+                                "comment": 0.002316491212695837,
+                                "complaint": 0.00611990736797452,
+                                "dev_command": 0.004656548146158457,
+                                "neg_answer": 0.0034736967645585537,
+                                "open_question_factual": 0.9099420309066772,
+                                "open_question_opinion": 0.03780107945203781,
+                                "opinion": 0.010855509899556637,
+                                "other_answers": 0.0033545151818543673,
+                                "pos_answer": 0.002099708653986454,
+                                "statement": 0.004238353576511145,
+                                "yes_no_question": 0.005205543711781502
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I really do not know what to answer.",
+                                "tell me more about yourself.",
+                                "I really do not know what to answer.",
+                                "what are your skills?"
+                            ]
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what are your skills?"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 14,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "skills": {
+                                "SymbolOf": [
+                                    "skill",
+                                    "knowledge",
+                                    "meditation"
+                                ],
+                                "HasProperty": [
+                                    "important",
+                                    "important to person",
+                                    "useful"
+                                ],
+                                "Causes": [
+                                    "you become good",
+                                    "learn",
+                                    "you learn"
+                                ],
+                                "CausesDesire": [
+                                    "compete",
+                                    "play game",
+                                    "learn"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "skills",
+                                "news": {
+                                    "content": "Birthdate Co.\nBirthdate Co. is a small biz that, in addition to their popular birthdate candles, also makes birthdate books designed to help you discover more about your personality.\nPromising review: \"I love this candle so much! I want to get one fo... [492 chars]",
+                                    "description": "Birthdate Co.\nBirthdate Co. is a small biz that, in addition to their popular birthdate candles, also makes birthdate books designed to help you discover more about your personality. Promising review: \"I love this candle so much!",
+                                    "image": "https://img.buzzfeed.com/buzzfeed-static/static/2022-01/14/22/enhanced/68a1902f26c4/original-7669-1642198399-11.jpg?crop=1581:830;0,0%26downsize=1250:*",
+                                    "publishedAt": "2022-01-20T15:01:03Z",
+                                    "source": {
+                                        "name": "BuzzFeed",
+                                        "url": "https://www.buzzfeed.com"
+                                    },
+                                    "title": "27 Valentine\u2019s Day Gifts That Show You Pay Attention",
+                                    "url": "https://www.buzzfeed.com/bross/valentines-day-gifts-from-small-businesses"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I really do not know what to answer.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I really do not know what to answer.",
+                            "segments": [
+                                "I really do not know what to answer."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "tell me more about yourself.",
+                                "I really do not know what to answer.",
+                                "tell me more about yourself.",
+                                "I really do not know what to answer."
+                            ]
+                        }
+                    },
+                    "active_skill": "dummy_skill"
+                }
+            ],
+            "called_intents": {
+                "cant_do": false,
+                "choose_topic": false,
+                "doing_well": false,
+                "dont_understand": false,
+                "exit": false,
+                "lets_chat_about": false,
+                "no": false,
+                "opinion_request": false,
+                "repeat": false,
+                "stupid": false,
+                "tell_me_a_story": false,
+                "tell_me_more": true,
+                "topic_switching": false,
+                "weather_forecast_intent": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": true,
+                "what_is_your_name": true,
+                "what_time": false,
+                "where_are_you_from": false,
+                "who_made_you": false,
+                "yes": false
+            },
+            "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
+        }
+    ],
+    "dff_intent_responder_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
+                "labels": {
+                    "6": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "7": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "6": "introduce yourself.",
+                    "7": "what do you do?"
+                },
+                "responses": {
+                    "6": "My name is DREAM Socialbot. #+#what_is_your_name",
+                    "7": "I'm a socialbot, and I'm all about chatting with people like you. What do you do? #+#what_is_your_job"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "10": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "3": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "4": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "5": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "6": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "7": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "8": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "9": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ]
+            },
+            "previous_human_utter_index": 10,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
