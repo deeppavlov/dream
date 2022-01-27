@@ -8,9 +8,9 @@ services:
       - "./common/:/dp-agent/common/"
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
-          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023,
+          spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+          personality-catcher:8010, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
+          sentrewrite:8017, ner:8021, dff-program-y-dangerous-skill:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
           eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
           dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, dff-program-y-wide-skill:8064,
