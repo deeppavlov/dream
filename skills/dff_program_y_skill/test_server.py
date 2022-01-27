@@ -22,6 +22,8 @@ def run_test(handler):
         if LANGUAGE == "RUSSIAN" and "RU" not in test_name:
             # if russian language, skip english tests
             continue
+        elif LANGUAGE == "ENGLISH" and "RU" in test_name:
+            continue
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
         is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis, ignored_keys=["id"])
