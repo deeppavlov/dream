@@ -1,2 +1,2 @@
-spacy==3.0.6
-emora_stdm==1.95
+click==7.1.2
+nltk==3.5

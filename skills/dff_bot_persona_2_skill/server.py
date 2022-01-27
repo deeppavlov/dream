@@ -11,10 +11,11 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 
-import common.dialogflow_framework.utils.dialogflow_for_persona2 as dialogflow_utils
-import common.dialogflow_framework.programy.text_preprocessing as text_utils
-import dialogflows.main as main_dialogflow
+from common.dff.integration.actor import load_ctxs, get_response
+
+from scenario.main import actor
 # import test_server
+
 
 ignore_logger("root")
 
@@ -23,57 +24,35 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
-
-DF = main_dialogflow.composite_dialogflow
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 def handler(requested_data, random_seed=None):
     st_time = time.time()
-    dialog_batch = requested_data.get("dialog_batch", [])
-    human_utter_index_batch = requested_data.get("human_utter_index_batch", [0] * len(dialog_batch))
-    state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
-    logger.info(f"STATE_BATCH = {state_batch}")
-    entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
-    used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
-    disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
+    ctxs = load_ctxs(requested_data)
     random_seed = requested_data.get("random_seed", random_seed)  # for tests
 
     responses = []
-    for human_utter_index, dialog, state, entities, used_links, disliked_skills in zip(
-        human_utter_index_batch, dialog_batch, state_batch, entities_batch, used_links_batch, disliked_skills_batch
-    ):
+    for ctx in ctxs:
         try:
             # for tests
             if random_seed:
                 random.seed(int(random_seed))
-
-            text = dialog["human_utterances"][-1]["text"]
-            text = text_utils.clean_text(text)
-
-            dialogflow_utils.load_into_dialogflow(
-                DF, human_utter_index, dialog, state, entities, used_links, disliked_skills
-            )
-            text, confidence, can_continue = dialogflow_utils.run_turn(DF, text)
-            state, used_links, disliked_skills = dialogflow_utils.get_dialog_state(DF)
-
-            human_attr = {f"{SERVICE_NAME}_state": state, "used_links": used_links, "disliked_skills": disliked_skills}
-            logger.info(f"HUMAN_ATTR = {human_attr}")
-            hype_attr = {"can_continue": can_continue}
-
-            responses.append((text, confidence, human_attr, {}, hype_attr))
+            ctx = actor(ctx)
+            responses.append(get_response(ctx, actor))
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("", 0.0, {}, {}, {}))
+            responses.append(("", 1.0, {}, {}, {}))
 
-        total_time = time.time() - st_time
-        logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
+    total_time = time.time() - st_time
+    logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
     return responses
 
 
@@ -94,7 +73,6 @@ def respond():
     # responses = handler(request.json, RANDOM_SEED)  # TEST
     # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
     responses = handler(request.json)
-    logger.info(responses)
     return jsonify(responses)
 
 

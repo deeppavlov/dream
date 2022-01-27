@@ -3,21 +3,8 @@ FROM python:3.9.1
 # Do not change anything in this section 
 WORKDIR /src
 
-COPY common/dialogflow_framework/requirements.txt .
+COPY common/dff/requirements.txt .
 RUN pip install -r requirements.txt
-
-COPY skills/dff_bot_persona_2_skill/requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
-RUN python -m spacy download en
-RUN python -m spacy download en_core_web_sm
-RUN python -m spacy download en_core_web_md
-RUN python -m nltk.downloader vader_lexicon
-RUN python -m nltk.downloader omw-1.4
-
-COPY common/dialogflow_framework/scripts /scripts
-
-RUN bash /scripts/programy_logger_off.sh
 
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
@@ -27,6 +14,7 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
+RUN python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
@@ -39,4 +27,3 @@ HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${S
 
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
-
