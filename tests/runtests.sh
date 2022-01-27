@@ -127,7 +127,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     dockercompose_cmd exec -T agent sh -c 'cd /pavlov/DeepPavlov && git fetch --all --tags --prune && git checkout 0.14.1 && cd /dp-agent/ && python utils/analyze_downloads.py --compose_file assistant_dists/dream/docker-compose.override.yml'
 
     echo "Testing docker-compose files"
-    dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py
+    dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py -d assistant_dists/dream
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
