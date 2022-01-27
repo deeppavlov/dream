@@ -3,7 +3,7 @@
         "Swearing is like using the horn on your car.",
         0.85,
         {
-            "dff_program_y_dangerous_state": {
+            "dff_program_y_dangerous_skill_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 0,
                 "history": {

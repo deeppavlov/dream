@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "ACTIVATE THE ROBOT",
+                    "text": "My favorite color is green",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "ACTIVATE THE ROBOT",
+                        "spelling_preprocessing": "My favorite color is green",
                         "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -213,7 +213,7 @@
             "bot_utterances": []
         }
     ],
-    "program_y_state_batch": [
+    "dff_program_y_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [
