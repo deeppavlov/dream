@@ -1,6 +1,8 @@
 FROM tensorflow/tensorflow:1.15.2-gpu
 
-RUN apt-get update && apt-get install git -y
+RUN apt-get -y update && \
+    apt-get install -y software-properties-common && \
+    apt-get update && apt-get install git -y
 
 ARG CONFIG
 ARG COMMIT=0.13.0
@@ -19,6 +21,7 @@ RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 COPY $SRC_DIR /src
 
 WORKDIR /src
+
 RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
