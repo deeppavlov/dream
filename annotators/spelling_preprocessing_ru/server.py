@@ -18,7 +18,7 @@ config_name = os.getenv("CONFIG")
 try:
     spelling_preprocessing_model = build_model(config_name, download=True)
     r = "я ге видел малако"
-    logger.info(f"Original: {r}. Corrected: {spelling_preprocessing_model(r)}")
+    logger.info(f"Original: {r}. Corrected: {spelling_preprocessing_model([r])}")
     logger.info("spelling_preprocessing model is loaded.")
 except Exception as e:
     sentry_sdk.capture_exception(e)
