@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "My favorite color is green",
+                    "text": "You are stupid",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "My favorite color is green",
+                        "spelling_preprocessing": "You are stupid",
                         "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -213,7 +213,7 @@
             "bot_utterances": []
         }
     ],
-    "program_y_state_batch": [
+    "dff_program_y_dangerous_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [

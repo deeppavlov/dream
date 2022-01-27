@@ -109,7 +109,7 @@ AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/do
 In a separate terminal tab run:
 
 ```
-docker-compose exec agent python -m deeppavlov_agent.run
+docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream/pipeline_conf.json
 ```
 
 Enter your username and have a chat with Dream!
@@ -243,7 +243,7 @@ Dream Architecture is presented in the following image:
 
 DeepPavlov Dream is licensed under Apache 2.0.
 
-Program-y (see `dream/skills/dff_program_y`, `dream/skills/dff_program_y_wide`, `dream/skills/dff_program_y_dangerous`) 
+Program-y (see `dream/skills/dff_program_y_skill`, `dream/skills/dff_program_y_wide_skill`, `dream/skills/dff_program_y_dangerous_skill`) 
 is licensed under Apache 2.0.
 Eliza (see `dream/skills/eliza`) is licensed under MIT License.
 

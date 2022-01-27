@@ -1,7 +1,8 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
+    volumes:
+      - ".:/dp-agent"
     ports:
       - 4242:4242
   convers-evaluator-annotator:
@@ -15,9 +16,9 @@ services:
       - "./annotators/spacy_nounphrases:/src"
     ports:
       - 8006:8006
-  dff-program-y:
+  dff-program-y-skill:
     volumes:
-      - "./skills/dff_program_y:/src"
+      - "./skills/dff_program_y_skill:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008
@@ -60,9 +61,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
     volumes:
-      - "./skills/dff_program_y_dangerous:/src"
+      - "./skills/dff_program_y_dangerous_skill:/src"
       - "./common:/src/common"
     ports:
       - 8022:8022
@@ -154,9 +155,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8068:8068
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     volumes:
-      - "./skills/dff_program_y_wide:/src"
+      - "./skills/dff_program_y_wide_skill:/src"
       - "./common:/src/common"
     ports:
       - 8064:8064
