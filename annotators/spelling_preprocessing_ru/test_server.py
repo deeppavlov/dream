@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8103/respond"
+    url = "http://0.0.0.0:8074/respond"
 
     request_data = [
         {"sentences": ["what is the capital of russia?"]},

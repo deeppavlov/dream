@@ -11,7 +11,7 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/entity_detection/requirements.txt /src/requirements.txt
+COPY ./annotators/spelling_preprocessing_ru/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
@@ -23,4 +23,4 @@ RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8103
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8074

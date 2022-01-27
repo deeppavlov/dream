@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-python test_entity_detection.py
+python test_server.py
