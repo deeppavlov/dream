@@ -957,10 +957,33 @@ services:
   neo4j:
     image: neo4j:4.2.5
     ports:
-      - 8474:7474
-      - 8687:7687
+      - 7474:7474
+      - 7687:7687
+      - 7473:7473
+    volumes:
+       - ~/neo4j/data:/data
+       - ~/neo4j/import:/import
     environment:
+      # HOW TO CREATE ENV PARAMS FOR NEO4J:
+        # "NEO4J_" AS PREFIX #SEPARATOR(aka ".") AS "_" # _ AS "__"
       NEO4J_AUTH: none
+      NEO4J_dbms_connector_bolt_listen__address: "0.0.0.0:7687"
+      NEO4J_dbms_connector_https_listen__address: "0.0.0.0:7473"
+      NEO4J_dbms_connector_http_listen__address: "0.0.0.0:7474"
+      NEO4J_dbms_connector_bolt_advertised__address: "localhost:7687"
+      NEO4J_dbms_connector_https_advertised__address: "localhost:7473"
+      NEO4J_dbms_connector_http_advertised__address: "localhost:7474"
+      # If routing traffic via a proxy, or if port mappings are in use,
+      # it is possible to specify advertised_address for each connector individually
+      NEO4J_dbms_memory_heap_initial__size: 4G
+      NEO4J_dbms_memory_heap_max__size: 4G
+      NEO4J_dbms_memory_pagecache_size: 4G
+      # Adjust configuration for the database on heap and memory to avoid page-faults.
+      # To help handle larger volumes of transactions, you can increase some configuration settings
+      # for the database and restart the instance for them to take effect.
+      # Usually, you can create or update 1M records in a single transaction per 2 GB of heap. In neo4j.conf:
+          #dbms.memory.heap.initial_size and dbms.memory.heap.max_size: set to at least 4G.
+          #dbms.memory.pagecache.size: ideally, value large enough to keep the whole database in memory.
 
   graph-db:
     env_file: [.env]
