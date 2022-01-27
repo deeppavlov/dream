@@ -26,7 +26,7 @@
             "bot_utterances": []
         }
     ],
-    "program_y_state_batch": [
+    "dff_program_y_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [

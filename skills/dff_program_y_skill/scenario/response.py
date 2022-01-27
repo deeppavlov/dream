@@ -1,3 +1,4 @@
+from os import getenv
 import logging
 
 from df_engine.core import Context, Actor
@@ -5,10 +6,12 @@ from df_engine.core import Context, Actor
 from common.programy.model import get_programy_model
 
 logger = logging.getLogger(__name__)
+LANGUAGE = getenv("LANGUAGE")
+model_folder = "data_ru" if LANGUAGE == "RUSSIAN" else "data"
 
 try:
     logger.info("Start to load model")
-    model = get_programy_model("data")
+    model = get_programy_model(model_folder)
     logger.info("Load model")
 except Exception as e:
     logger.exception(e)
