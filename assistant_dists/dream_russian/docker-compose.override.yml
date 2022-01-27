@@ -199,6 +199,7 @@ services:
         PORT: 8074
         SRC_DIR: annotators/spelling_preprocessing_ru
       context: ./
+      dockerfile: annotators/spelling_preprocessing_ru/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
