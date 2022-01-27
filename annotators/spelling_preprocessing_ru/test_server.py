@@ -5,22 +5,10 @@ def main():
     url = "http://0.0.0.0:8074/respond"
 
     request_data = [
-        {"sentences": ["what is the capital of russia?"]},
-        {"sentences": ["let's talk about politics."]},
+        {"sentences": ["я ге видел малако"]}
     ]
 
-    gold_results = [
-        [
-            {
-                "entities": ["capital", "russia"],
-                "labelled_entities": [
-                    {"text": "capital", "offsets": [12, 19], "label": "misc"},
-                    {"text": "russia", "offsets": [23, 29], "label": "location"},
-                ],
-            }
-        ],
-        [{"entities": ["politics"], "labelled_entities": [{"text": "politics", "offsets": [17, 25], "label": "misc"}]}],
-    ]
+    gold_results = ["я не видел малакон"]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):
