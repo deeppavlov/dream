@@ -6,8 +6,9 @@ import common.test_utils as test_utils
 
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-LANGUAGE = os.getenv("LANGUAGE")
+LANGUAGE = os.getenv("LANGUAGE", "ENGLISH")
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
+print(f"Selected dff-program-y-skill: {LANGUAGE} language.")
 
 
 def handler(requested_data, random_seed):

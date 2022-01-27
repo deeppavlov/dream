@@ -6,8 +6,9 @@ from df_engine.core import Context, Actor
 from common.programy.model import get_programy_model
 
 logger = logging.getLogger(__name__)
-LANGUAGE = getenv("LANGUAGE")
+LANGUAGE = getenv("LANGUAGE", "ENGLISH")
 model_folder = "data_ru" if LANGUAGE == "RUSSIAN" else "data"
+logger.info(f"Selected dff-program-y-skill: {LANGUAGE} language.")
 
 try:
     logger.info("Start to load model")
