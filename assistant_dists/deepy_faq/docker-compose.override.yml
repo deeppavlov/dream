@@ -8,7 +8,7 @@ services:
       - "./common/:/dp-agent/common/"
     environment:
       WAIT_HOSTS: "spelling_preprocessing:3771, faq_skill:3772, rule_based_response_selector:3773,
-        emotion_classification:3774, dff-program-y:3775"
+        emotion_classification:3774, dff-program-y-skill:3775"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   spelling_preprocessing:
@@ -40,14 +40,14 @@ services:
     ports:
       - 3774:3774
 
-  dff-program-y:
+  dff-program-y-skill:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 3775
-        SERVICE_NAME: dff_program_y
+        SERVICE_NAME: dff_program_y_skill
       context: .
-      dockerfile: ./skills/dff_program_y/Dockerfile
+      dockerfile: ./skills/dff_program_y_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3775 --reload
     ports:
       - 3775:3775

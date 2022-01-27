@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "F U",
+                    "text": "Let me ask you a question",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "F U",
+                        "spelling_preprocessing": "Let me ask you a question",
                         "badlisted_words": {
                             "inappropriate": false,
                             "profanity": false,
@@ -213,7 +213,7 @@
             "bot_utterances": []
         }
     ],
-    "program_y_dangerous_state_batch": [
+    "dff_program_y_wide_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [

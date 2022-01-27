@@ -749,12 +749,12 @@ def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
     return batches
 
 
-def dff_program_y_wide_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "program_y_wide")
+def dff_program_y_wide_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_program_y_wide_skill")
 
 
-def dff_program_y_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "program_y")
+def dff_program_y_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_program_y_skill")
 
 
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
@@ -789,8 +789,8 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     )
 
 
-def dff_program_y_dangerous_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "program_y_dangerous")
+def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:

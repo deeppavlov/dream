@@ -3,7 +3,7 @@
         "Robot activated. Awaiting your command Mate.",
         0.85,
         {
-            "dff_program_y_state": {
+            "dff_program_y_skill_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 0,
                 "history": {

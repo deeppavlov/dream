@@ -49,7 +49,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spacy-nounphrases:
     restart: unless-stopped
-  dff-program-y:
+  dff-program-y-skill:
     restart: unless-stopped
   personality-catcher:
     restart: unless-stopped
@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
   badlisted-words:
     restart: unless-stopped
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
     restart: unless-stopped
   dff-movie-skill:
     restart: unless-stopped
@@ -99,7 +99,7 @@ services:
     restart: unless-stopped
   game-cooperative-skill:
     restart: unless-stopped
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     restart: unless-stopped
   news-api-skill:
     restart: unless-stopped
