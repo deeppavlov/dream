@@ -100,7 +100,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
                 # process user utterance with sensitive content, "safe mode"
-                skills_for_uttr.append("dff_program_y_dangerous")
+                skills_for_uttr.append("dff_program_y_dangerous_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
@@ -181,7 +181,7 @@ class RuleBasedSkillSelectorConnector:
                 if if_switch_test_skill(user_uttr, bot_uttr):
                     skills_for_uttr.append("dff_art_skill")
                 skills_for_uttr.append("dff_grounding_skill")
-                skills_for_uttr.append("dff_program_y")
+                skills_for_uttr.append("dff_program_y_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
@@ -196,7 +196,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("convert_reddit")
                     skills_for_uttr.append("comet_dialog_skill")
-                    skills_for_uttr.append("dff_program_y_wide")
+                    skills_for_uttr.append("dff_program_y_wide_skill")
 
                 if is_factoid:
                     skills_for_uttr.append("factoid_qa")
@@ -277,4 +277,4 @@ class RuleBasedSkillSelectorConnector:
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_program_y", "dummy_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_program_y_skill", "dummy_skill"]))

@@ -13,7 +13,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 other_skills = {
     "dff_intent_responder_skill",
-    "dff_program_y_dangerous",
+    "dff_program_y_dangerous_skill",
     "misheard_asr",
     "christmas_new_year_skill",
     "superbowl_skill",
@@ -34,7 +34,7 @@ scenario_skills = {
     "game_cooperative_skill",
 }
 retrieve_skills = {
-    "dff_program_y",
+    "dff_program_y_skill",
     "alice",
     "eliza",
     "book_tfidf_retrieval",
@@ -48,7 +48,7 @@ retrieve_skills = {
     "animals_tfidf_retrieval",
     "convert_reddit",
     "topicalchat_convert_retrieval",
-    "dff_program_y_wide",
+    "dff_program_y_wide_skill",
     "knowledge_grounding_skill",
 }
 
