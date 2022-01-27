@@ -1,4 +1,5 @@
 from os import getenv
+from pathlib import Path
 import logging
 
 from df_engine.core import Context, Actor
@@ -12,7 +13,7 @@ logger.info(f"Selected dff-program-y-skill: {LANGUAGE} language.")
 
 try:
     logger.info("Start to load model")
-    model = get_programy_model(model_folder)
+    model = get_programy_model(Path(model_folder))
     logger.info("Load model")
 except Exception as e:
     logger.exception(e)
