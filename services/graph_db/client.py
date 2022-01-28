@@ -4,7 +4,7 @@ from neo4j import GraphDatabase
 class HelloWorldExample:
 
     def __init__(self, uri, user, password):
-        self.driver = GraphDatabase.driver((uri) , auth=(user, password))
+        self.driver = GraphDatabase.driver((uri) , auth=(user, password), encrypted=False)
         self.node_id = 0
         self.relation_id = 0
 
