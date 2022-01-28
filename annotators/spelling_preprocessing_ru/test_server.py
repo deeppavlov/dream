@@ -4,9 +4,7 @@ import requests
 def main():
     url = "http://0.0.0.0:8074/respond"
 
-    request_data = [
-        {"sentences": ["я ге видел малако"]}
-    ]
+    request_data = [{"sentences": ["я ге видел малако"]}]
 
     gold_results = ["я не видел малакон"]
 
