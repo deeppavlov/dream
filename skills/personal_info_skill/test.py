@@ -7,23 +7,11 @@ SKILL_URL = "http://0.0.0.0:8030/respond"
 dialogs = {
     "dialogs": [
         {
-            "utterances": [
-                {
-                    "text": "my name is john",
-                    "annotations": {
-                        "ner": [[{"text": "john", "type": "PER"}]]
-                    }
-                }
-            ],
+            "utterances": [{"text": "my name is john", "annotations": {"ner": [[{"text": "john", "type": "PER"}]]}}],
             "bot_utterances": [],
             "human": {"attributes": {}, "profile": {"name": None}},
             "human_utterances": [
-                {
-                    "text": "my name is john",
-                    "annotations": {
-                        "ner": [[{"text": "john", "type": "PER"}]]
-                    }
-                }
+                {"text": "my name is john", "annotations": {"ner": [[{"text": "john", "type": "PER"}]]}}
             ],
         }
     ]
