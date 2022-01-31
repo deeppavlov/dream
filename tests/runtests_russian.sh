@@ -56,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f assistant_dists/dream_russian/docker-compose.override.yml -f assistant_dists/dream_russian/test.yml"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
@@ -107,24 +107,24 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     GOLD_OUTPUT_FILE="GOLD-"$(date '+%Y-%m-%d_%H-%M-%S')".csv"
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Warmup for tests"
-    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream_russian/test_response.py
 
     echo "Test workflow bug and asr"
     dockercompose_cmd exec -T -u $(id -u) agent python3 tests/test_workflow_bug_and_asr.py
 
     echo "Pass dialogs from dp-agent"
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
-        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream/test_dialogs_gold_phrases.csv -of tests/dream/output/$GOLD_OUTPUT_FILE
+        utils/http_api_test.py -u http://0.0.0.0:4242 -cf tests/dream_russian/test_dialogs_gold_phrases.csv -of tests/dream_russian/output/$GOLD_OUTPUT_FILE
 
     echo "Assert passed dialogs"
     if [[ "$DEVICE" == "cpu" ]]; then
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 20
+        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream_russian/assert_test_dialogs.py -pred_f tests/dream_russian/output/$GOLD_OUTPUT_FILE -true_f tests/dream_russian/test_dialogs_gold_phrases.csv -time_limit 20
     else
-        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/assert_test_dialogs.py -pred_f tests/dream/output/$GOLD_OUTPUT_FILE -true_f tests/dream/test_dialogs_gold_phrases.csv -time_limit 10
+        dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream_russian/assert_test_dialogs.py -pred_f tests/dream_russian/output/$GOLD_OUTPUT_FILE -true_f tests/dream_russian/test_dialogs_gold_phrases.csv -time_limit 10
     fi
 
     echo "Testing file conflicts"
-    dockercompose_cmd exec -T agent sh -c 'cd /pavlov/DeepPavlov && git fetch --all --tags --prune && git checkout 0.14.1 && cd /dp-agent/ && python utils/analyze_downloads.py --compose_file assistant_dists/dream/docker-compose.override.yml'
+    dockercompose_cmd exec -T agent sh -c 'cd /pavlov/DeepPavlov && git fetch --all --tags --prune && git checkout 0.14.1 && cd /dp-agent/ && python utils/analyze_downloads.py --compose_file assistant_dists/dream_russian/docker-compose.override.yml'
 
     echo "Testing docker-compose files"
     dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py -d assistant_dists/dream
@@ -137,17 +137,9 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in dff-movie-skill asr dff-weather-skill dff-program-y-skill \
-                     dff-program-y-dangerous-skill eliza dff-program-y-wide-skill spacy-nounphrases \
-                     dummy-skill-dialog intent-catcher dff-short-story-skill comet-atomic \
-                     comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
-                     entity-linking kbqa text-qa wiki-parser convert-reddit convers-evaluator-annotator \
-                     dff-book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
-                     dff-grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
-                     dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-random fact-retrieval hypothesis-scorer dff-intent-responder-skill \
-                     dff-gossip-skill dff-wiki-skill topic-recommendation dff-science-skill\
-                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill; do
+    for container in dff-program-y-skill intent-catcher convers-evaluation-selector personal-info-skill \
+                     entity-linking wiki-parser convert-reddit ner badlisted-words sentseg spelling-preprocessing \
+                     dff-friendship-skill dff-intent-responder-skill entity-detection; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
@@ -175,15 +167,15 @@ fi
 if [[ "$MODE" == "infer_questions" || "$MODE" == "all" ]]; then
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing questions to Alexa"
-    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream/test_response.py
+    dockercompose_cmd exec -T -u $(id -u) agent python3 tests/dream_russian/test_response.py
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
         utils/xlsx_responder.py --url http://0.0.0.0:4242 \
-        --input 'tests/dream/test_questions.xlsx' \
-        --output 'tests/dream/output/test_questions_output.xlsx'
+        --input 'tests/dream_russian/test_questions.xlsx' \
+        --output 'tests/dream_russian/output/test_questions_output.xlsx'
 
     echo "Computing Q&A metrics"
     dockercompose_cmd exec -T -u $(id -u) agent python3 \
-        tests/dream/compute_qa_metrics.py \
-        --pred_file 'tests/dream/output/test_questions_output.xlsx' \
-        --output 'tests/dream/output/qa_metrics.txt'
+        tests/dream_russian/compute_qa_metrics.py \
+        --pred_file 'tests/dream_russian/output/test_questions_output.xlsx' \
+        --output 'tests/dream_russian/output/qa_metrics.txt'
 fi
