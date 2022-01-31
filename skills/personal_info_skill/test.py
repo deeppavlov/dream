@@ -1,28 +1,37 @@
 import requests
 
 
-NEWS_API_SKILL_URL = "http://0.0.0.0:8066/respond"
+SKILL_URL = "http://0.0.0.0:8030/respond"
 
-topic = "sport"
+
 dialogs = {
     "dialogs": [
         {
-            "utterances": [],
+            "utterances": [
+                {
+                    "text": f"my name is john",
+                    "annotations": {
+                        "ner": [[{"text": "john", "type": "PER"}]]
+                    }
+                }
+            ],
             "bot_utterances": [],
-            "human": {"attributes": {}},
+            "human": {"attributes": {}, "profile": {"name": None}},
             "human_utterances": [
                 {
-                    "text": f"news about {topic}",
-                    "annotations": {"ner": [[{"text": topic}]], "cobot_topics": {"text": ["News"]}},
+                    "text": f"my name is john",
+                    "annotations": {
+                        "ner": [[{"text": "john", "type": "PER"}]]
+                    }
                 }
             ],
         }
     ]
 }
-
-result = requests.post(NEWS_API_SKILL_URL, json=dialogs, timeout=1.5)
+gold = "Nice to meet you, john."
+result = requests.post(SKILL_URL, json=dialogs, timeout=2)
 result = result.json()
 
-assert result[0][1] == 1.0 and result[0][-1]["news_topic"] == "sport", print(result)
+assert result[0][0] == "Nice to meet you, John.", print(result)
 
 print("SUCCESS")
