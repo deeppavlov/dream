@@ -9,7 +9,7 @@ dialogs = {
         {
             "utterances": [
                 {
-                    "text": f"my name is john",
+                    "text": "my name is john",
                     "annotations": {
                         "ner": [[{"text": "john", "type": "PER"}]]
                     }
@@ -19,7 +19,7 @@ dialogs = {
             "human": {"attributes": {}, "profile": {"name": None}},
             "human_utterances": [
                 {
-                    "text": f"my name is john",
+                    "text": "my name is john",
                     "annotations": {
                         "ner": [[{"text": "john", "type": "PER"}]]
                     }

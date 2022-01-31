@@ -1,28 +1,32 @@
 import requests
 
 
-NEWS_API_SKILL_URL = "http://0.0.0.0:8066/respond"
+SKILL_URL = "http://0.0.0.0:8054/meta_script"
 
-topic = "sport"
 dialogs = {
     "dialogs": [
         {
-            "utterances": [],
+            "utterances": [
+                {
+                    "text": "jessy played piano",
+                    "annotations": {},
+                }
+            ],
             "bot_utterances": [],
             "human": {"attributes": {}},
             "human_utterances": [
                 {
-                    "text": f"news about {topic}",
-                    "annotations": {"ner": [[{"text": topic}]], "cobot_topics": {"text": ["News"]}},
+                    "text": "jessy played piano",
+                    "annotations": {},
                 }
             ],
         }
     ]
 }
 
-result = requests.post(NEWS_API_SKILL_URL, json=dialogs, timeout=1.5)
+result = requests.post(SKILL_URL, json=dialogs, timeout=1.5)
 result = result.json()
-
-assert result[0][1] == 1.0 and result[0][-1]["news_topic"] == "sport", print(result)
+gold = "what does playing piano"
+assert result[0][1][0] == 0.8 and gold in result[0][0][0], print(result)
 
 print("SUCCESS")
