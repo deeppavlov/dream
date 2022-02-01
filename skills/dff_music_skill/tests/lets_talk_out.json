@@ -31,8 +31,8 @@
         {
             "can_continue": "must",
             "response_parts": [
-                "body",
-                "acknowledgement"
+                "acknowledgement",
+                "body"
             ]
         }
     ]
