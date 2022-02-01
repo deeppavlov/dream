@@ -31,7 +31,8 @@
         {
             "can_continue": "must",
             "response_parts": [
-                "body"
+                "body",
+                "prompt"
             ]
         }
     ]
