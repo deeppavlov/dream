@@ -734,7 +734,7 @@ class MovieSkillTemplates:
                 replies = [
                     f"{name} is one of the {profession}s of {movie}. "
                     f"But I can't say whether they did a good work or not.",
-                    f"{name} as a professional {profession} deserves acknowledgment for work to {movie}!",
+                    f"{name} as a professional {profession} deserves acknowledgement for work to {movie}!",
                 ]
                 return random.choice(replies), [[name, profession, attitude]], self.person_highest_confidence
             if attitude == "unknown":
@@ -832,7 +832,7 @@ class MovieSkillTemplates:
                 name = names[attitudes.index("positive")]
                 replies = [
                     f"They are of the same high level {profession}s in {movie}.",
-                    f"They deserve acknowledgment for their work in {movie}.",
+                    f"They deserve acknowledgement for their work in {movie}.",
                 ]
                 return (
                     random.choice(replies),
