@@ -26,7 +26,7 @@ dialogs = {
 
 result = requests.post(SKILL_URL, json=dialogs, timeout=1.5)
 result = result.json()
-gold = "what does playing piano"
+gold = "piano"
 assert result[0][1][0] == 0.8 and gold in result[0][0][0], print(result)
 
 print("SUCCESS")
