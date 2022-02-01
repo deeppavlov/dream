@@ -645,7 +645,7 @@ class MovieSkillTemplates:
                         profession = list(current_professions)[0]
                     attitudes = [self.imdb.generate_opinion_about_movie_person(name, profession) for name in names]
                     if "very_positive" in attitudes and len(np.unique(attitudes)) == 1:
-                        reply = f"That's a really hard question. I can't choose one. Let's say I like both!"
+                        reply = "That's a really hard question. I can't choose one. Let's say I like both!"
                         subject_attitudes = []
                         for name in names:
                             subject_attitudes += [[name, profession, "very_positive"]]
@@ -948,7 +948,7 @@ class MovieSkillTemplates:
             replies = [
                 f"I have never heard about {name}.",
                 f"I don't know who {name} is.",
-                f"I don't know who is it.",
+                "I don't know who is it.",
                 f"I can't say because I don't know who {name} is.",
                 f"I can't say because I have never heard about {name}.",
             ]
