@@ -18,10 +18,9 @@ dialogs = {
                         "cobot_topics": {"text": ["News"]},
                         "news_api_annotator": {
                             "entity": topic,
-                            "news": {
-                                "title": "Some News about Sport.",
-                                "content": "Some News about Sport."
-                            }}},
+                            "news": {"title": "Some News about Sport.", "content": "Some News about Sport."},
+                        },
+                    },
                 }
             ],
         }
