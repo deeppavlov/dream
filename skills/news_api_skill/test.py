@@ -16,7 +16,12 @@ dialogs = {
                     "annotations": {
                         "ner": [[{"text": topic}]],
                         "cobot_topics": {"text": ["News"]},
-                        "news_api_annotator": {"entity": topic, "news": {"title": "Some News about Sport."}}},
+                        "news_api_annotator": {
+                            "entity": topic,
+                            "news": {
+                                "title": "Some News about Sport.",
+                                "content": "Some News about Sport."
+                            }}},
                 }
             ],
         }
