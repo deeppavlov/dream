@@ -234,7 +234,7 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
         confidence = ALMOST_SUPER_CONF
     if ackn and not is_toxic_or_badlisted_utterance(dialog["human_utterances"][-1]):
         reply = f"{ackn} {reply}"
-        attr["response_parts"] = ["acknowlegdement", "body"]
+        attr["response_parts"] = ["acknowledgement", "body"]
     return reply, confidence, human_attr, {}, attr
 
 
