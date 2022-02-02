@@ -202,9 +202,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 256M
         reservations:
-          memory: 50M
+          memory: 256M
 
   dff-friendship-skill:
     env_file: [.env]
