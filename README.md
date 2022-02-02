@@ -229,7 +229,7 @@ Dream Architecture is presented in the following image:
 | DFF Sports Skill          | 100 MiB RAM             | DFF-based skill to discuss sports                                                                                                                                                                                  |
 | DFF Travel skill          | 90 MiB RAM              | DFF-based skill to discuss travel                                                                                                                                                                                  |
 | DFF Weather skill         | 1.4 GiB RAM             | **[New DFF version]** uses the OpenWeatherMap service to get the forecast for the user's location                                                                                                                  |
-| DFF Wiki skill            | 160 MiB RAM             | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgments                                                                                                      |
+| DFF Wiki skill            | 160 MiB RAM             | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                                                                                                      |
 
 # Papers
 ### Alexa Prize 3

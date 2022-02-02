@@ -13,7 +13,14 @@ dialogs = {
             "human_utterances": [
                 {
                     "text": f"news about {topic}",
-                    "annotations": {"ner": [[{"text": topic}]], "cobot_topics": {"text": ["News"]}},
+                    "annotations": {
+                        "ner": [[{"text": topic}]],
+                        "cobot_topics": {"text": ["News"]},
+                        "news_api_annotator": {
+                            "entity": topic,
+                            "news": {"title": "Some News about Sport.", "content": "Some News about Sport."},
+                        },
+                    },
                 }
             ],
         }

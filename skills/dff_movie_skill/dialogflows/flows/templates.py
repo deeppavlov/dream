@@ -645,7 +645,7 @@ class MovieSkillTemplates:
                         profession = list(current_professions)[0]
                     attitudes = [self.imdb.generate_opinion_about_movie_person(name, profession) for name in names]
                     if "very_positive" in attitudes and len(np.unique(attitudes)) == 1:
-                        reply = f"That's a really hard question. I can't choose one. Let's say I like both!"
+                        reply = "That's a really hard question. I can't choose one. Let's say I like both!"
                         subject_attitudes = []
                         for name in names:
                             subject_attitudes += [[name, profession, "very_positive"]]
@@ -734,7 +734,7 @@ class MovieSkillTemplates:
                 replies = [
                     f"{name} is one of the {profession}s of {movie}. "
                     f"But I can't say whether they did a good work or not.",
-                    f"{name} as a professional {profession} deserves acknowledgment for work to {movie}!",
+                    f"{name} as a professional {profession} deserves acknowledgement for work to {movie}!",
                 ]
                 return random.choice(replies), [[name, profession, attitude]], self.person_highest_confidence
             if attitude == "unknown":
@@ -832,7 +832,7 @@ class MovieSkillTemplates:
                 name = names[attitudes.index("positive")]
                 replies = [
                     f"They are of the same high level {profession}s in {movie}.",
-                    f"They deserve acknowledgment for their work in {movie}.",
+                    f"They deserve acknowledgement for their work in {movie}.",
                 ]
                 return (
                     random.choice(replies),
@@ -948,7 +948,7 @@ class MovieSkillTemplates:
             replies = [
                 f"I have never heard about {name}.",
                 f"I don't know who {name} is.",
-                f"I don't know who is it.",
+                "I don't know who is it.",
                 f"I can't say because I don't know who {name} is.",
                 f"I can't say because I have never heard about {name}.",
             ]
