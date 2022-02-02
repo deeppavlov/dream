@@ -304,11 +304,11 @@ def if_acknowledgement_in_previous_bot_utterance(dialog):
     if len(dialog["bot_utterances"]) > 0 and len(dialog["human_utterances"]) > 1:
         prev_bot_uttr_text = dialog["bot_utterances"][-1]["text"].lower()
         prev_human_uttr = dialog["human_utterances"][-2]
-        acknowledgments = []
+        acknowledgements = []
         for hyp in prev_human_uttr["hypotheses"]:
-            if hyp.get("response_parts", []) == ["acknowledgment"]:
-                acknowledgments += [hyp["text"].lower()]
-        for ackn in acknowledgments:
+            if hyp.get("response_parts", []) == ["acknowledgement"]:
+                acknowledgements += [hyp["text"].lower()]
+        for ackn in acknowledgements:
             if ackn in prev_bot_uttr_text:
                 return True
     return False
