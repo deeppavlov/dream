@@ -110,7 +110,7 @@ def handler(requested_data, random_seed=None):
             }
             hype_attr = {"can_continue": can_continue}
             if response_parts:
-                hype_attr["response_parts"] = response_parts
+                hype_attr["response_parts"] = sorted(response_parts)
 
             responses.append((text, confidence, human_attr, {}, hype_attr))
         except Exception as exc:
