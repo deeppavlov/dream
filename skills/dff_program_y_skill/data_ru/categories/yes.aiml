@@ -22,29 +22,19 @@
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
-    <category>
-        <pattern>YES</pattern>
-        <template>
-            <random>
-                <li>Хорошо.</li>
-                <li>Интересно.</li>
-            </random>
-        </template>
-    </category>
-
    <category>
         <pattern>ДА</pattern>
         <template>
             <srai>YES</srai>
         </template>
-    </category>
+   </category>
 
    <category>
         <pattern>КОНЕЧНО</pattern>
         <template>
             <srai>YES</srai>
         </template>
-    </category>
+   </category>
 
     <category>
         <pattern>АГА</pattern>
@@ -77,6 +67,16 @@
         <pattern>РАЗУМЕЕТСЯ</pattern>
         <template>
             <srai>YES</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>YES</pattern>
+        <template>
+            <random>
+                <li>Хорошо.</li>
+                <li>Интересно.</li>
+            </random>
         </template>
     </category>
 

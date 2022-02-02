@@ -22,7 +22,12 @@
 
     <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
 
-
+    <category>
+        <pattern>НЕТ</pattern>
+        <template>
+            <srai>NO</srai>
+        </template>
+    </category>
     <category>
         <pattern>НЕТ НЕТ</pattern>
         <template>

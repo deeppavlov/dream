@@ -8,7 +8,8 @@
     </template>
   </category>
 
-  <category>ГДЕ # ТЫ ЖИВЕШЬ</pattern>
+  <category>
+    <pattern>ГДЕ # ТЫ ЖИВЕШЬ</pattern>
     <template>
       <srai>LIVE_PLACE</srai>
     </template>
