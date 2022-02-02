@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  ner:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  entity-detection:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+
