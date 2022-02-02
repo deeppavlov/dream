@@ -266,6 +266,7 @@ pipeline {
     cleanup {
       script {
         if (started) {
+          sh './tests/runtests.sh MODE=clean'
           sh './tests/runtests_russian.sh MODE=clean'
         }
       }
