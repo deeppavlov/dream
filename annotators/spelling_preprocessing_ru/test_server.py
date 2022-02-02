@@ -6,7 +6,7 @@ def main():
 
     request_data = [{"sentences": ["я ге видел малако"]}]
 
-    gold_results = ["я не видел малакон"]
+    gold_results = [["я не видел малакон"]]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):
