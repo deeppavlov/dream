@@ -138,7 +138,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
 
     for container in dff-program-y-skill intent-catcher convers-evaluation-selector personal-info-skill \
-                     entity-linking wiki-parser convert-reddit ner badlisted-words sentseg spelling-preprocessing \
+                     entity-linking wiki-parser convert-reddit badlisted-words sentseg spelling-preprocessing \
                      dff-friendship-skill dff-intent-responder-skill entity-detection; do
 
         echo "Run tests for $container"
