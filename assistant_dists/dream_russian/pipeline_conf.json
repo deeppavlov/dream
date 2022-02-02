@@ -25,12 +25,6 @@
                             "Please tell me, what did you say."
                         ]
                     },
-                    "sentrewrite": {
-                        "clusters": [],
-                        "modified_sents": [
-                            "Sorry, something went wrong inside. Please tell me, what did you say."
-                        ]
-                    },
                     "ner": [
                         []
                     ]
@@ -52,12 +46,6 @@
                         "segments": [
                             "Sorry, I need to think more on that.",
                             "Let's talk about something else."
-                        ]
-                    },
-                    "sentrewrite": {
-                        "clusters": [],
-                        "modified_sents": [
-                            "Sorry, I need to think more on that. Let's talk about something else."
                         ]
                     },
                     "ner": [
