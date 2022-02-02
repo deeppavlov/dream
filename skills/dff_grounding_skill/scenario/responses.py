@@ -14,7 +14,7 @@ from common.sensitive import is_sensitive_topic_and_request
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_entities, is_toxic_or_badlisted_utterance, is_no
 
-from .utils import MIDAS_INTENT_ACKNOWLEDGMENTS, get_midas_intent_acknowledgement
+from .utils import MIDAS_INTENT_ACKNOWLEDGEMENTS, get_midas_intent_acknowledgement
 from .responses_utils import (
     PRIVACY_REPLY,
     DONTKNOW_PHRASE,
@@ -165,7 +165,7 @@ def generate_acknowledgement_response(ctx: Context) -> REPLY_TYPE:
     """
     dialog = ctx.misc["agent"]["dialog"]
     curr_intents = get_current_intents(dialog["human_utterances"][-1])
-    curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGMENTS]
+    curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGEMENTS]
 
     ackn_response = ""
     attr = {}
@@ -234,7 +234,7 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
         confidence = ALMOST_SUPER_CONF
     if ackn and not is_toxic_or_badlisted_utterance(dialog["human_utterances"][-1]):
         reply = f"{ackn} {reply}"
-        attr["response_parts"] = ["acknowlegdement", "body"]
+        attr["response_parts"] = ["acknowledgement", "body"]
     return reply, confidence, human_attr, {}, attr
 
 
