@@ -102,7 +102,13 @@ services:
   ner:
     env_file: [.env]
     build:
-      context: ./annotators/NER_ru/
+      args:
+        CONFIG: ner_uncased_rus_bert_torch.json
+        PORT: 8021
+        SRC_DIR: annotators/NER_ru
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        context: ./
+        dockerfile: annotators/NER_ru/Dockerfile
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
