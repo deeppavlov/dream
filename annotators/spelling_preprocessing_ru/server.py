@@ -31,8 +31,8 @@ def respond():
     st_time = time.time()
 
     sentences = request.json["sentences"]
-
-    corrected_sentences = [spelling_preprocessing_model(text.lower()) for text in sentences]
+    sentences = [text.lower() for text in sentences]
+    corrected_sentences = spelling_preprocessing_model(sentences)
 
     total_time = time.time() - st_time
     logger.info(f"spelling_preprocessing exec time: {total_time:.3f}s")
