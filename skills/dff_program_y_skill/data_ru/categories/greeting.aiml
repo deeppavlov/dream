@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+    <category>
+        <pattern>НАЧИНАЙ ГОВОРИТЬ</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ПРИВЕТ #</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ПРИВЕТСТВУЮ #</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ЗДОРОВО</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ЗДОРОВА</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ДОБРЫЙ ДЕНЬ #</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>ДОБРЫЙ ВЕЧЕР #</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+    <category>
+        <pattern>ДОБРОЕ УТРО #</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># У ТЕБЯ КАК ДЕЛА #</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># КАК ТВОИ ДЕЛА #</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>А У ТЕБЯ КАК</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>А ТВОИ КАК</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>КАК ДЕЛА</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>А ТВОИ</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>А У ТЕБЯ</pattern>
+        <template>
+            <srai>HOW_ARE_YOU</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>HOW_ARE_YOU</pattern>
+        <template>
+            <random>
+                <li>У меня все отлично!</li>
+                <li>Спасибо, у меня как всегда все прекрасно!</li>
+                <li>Я настолько счатслива, что приходится сидеть на своих ладошках, чтобы не захлопать.</li>
+                <li>Фантастически!</li>
+                <li>Великолепно!</li>
+                <li>Лучше, чем раньше, но все еще не настолько хорошо, как собираюсь.</li>
+                <li>Проживаю свою лучшую жизнь!</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ЧТО ТЫ УМЕЕШЬ</pattern>
+        <template>
+            Я чат-бот, и мой главный талант заключается в беседах.
+            Я могу отвечать на вопросы, обсуждать различные темы.
+            <random>
+                <li>О чем бы ты хотел поговорить?</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>HELLO</pattern>
+        <template>
+            <random>
+                <li>Привет! </li>
+            </random>
+            <random>
+                <li>Как дела?</li>
+            </random>
+        </template>
+    </category>
+
+
+</aiml>

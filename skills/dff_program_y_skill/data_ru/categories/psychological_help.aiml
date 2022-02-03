@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+  <category>
+    <pattern><set>suicide</set></pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># Я <set>wantto</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>wishfor</set> # <set>commitment</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>gonna</set> # <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>commit</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># Я <set>wishfor</set> # <set>suicide</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>wantto</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>gonna</set> # <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>suicideverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_SUICIDE</srai>
+    </template>
+  </category>
+
+
+  <category>
+    <pattern>I_WANT_TO_COMMIT_SUICIDE</pattern>
+    <template>
+      <random>
+        <li>Всегда есть люди, готовые помочь. Воспользуйтесь специальной службой поддержки в тяжелых ситуациях.</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern># Я <set>wantto</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>wishfor</set> # <set>commitment</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>gonna</set> # <set>commit</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>wishfor</set> # <set>crime</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>wantto</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>gonna</set> # <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+  <category>
+    <pattern># Я <set>crimeverb</set> #</pattern>
+    <template>
+      <srai>I_WANT_TO_COMMIT_CRIME</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>I_WANT_TO_COMMIT_CRIME</pattern>
+    <template>
+      <random>
+        <li>Всегда есть люди, готовые помочь. Воспользуйтесь специальной службой поддержки в тяжелых ситуациях.</li>
+      </random>
+    </template>
+  </category>
+
+
+<!--  MY smb died -->
+
+  <category>
+    <pattern># <set>my</set> # УБИТ #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># <set>my</set> # ПОГИБ #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern># <set>my</set> # УМЕР #</pattern>
+    <template>
+      <srai>MY_SMB_DIED</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>MY_SMB_DIED</pattern>
+    <template>
+      <random>
+        <li>Утрата - это всегда тяжело. Позвольте попробовать отвлечь вас беседой.</li>
+        <li>Мне жаль слышать об этом.</li>
+        <li>Примите мои искренние соболезнования.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>
