@@ -62,6 +62,7 @@ services:
       args:
         SERVICE_PORT: 8008
         SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: ENGLISH
       context: .
       dockerfile: ./skills/dff_program_y_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
