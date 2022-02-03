@@ -13,7 +13,7 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/spelling_preprocessing_ru/requirements.txt /src/requirements.txt
+COPY ./annotators/NER_ru/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
