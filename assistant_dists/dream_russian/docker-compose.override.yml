@@ -102,7 +102,7 @@ services:
   ner:
     env_file: [.env]
     build:
-      context: ./annotators/NER/
+      context: ./annotators/NER_ru/
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
