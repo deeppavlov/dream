@@ -147,7 +147,7 @@
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/ner_uncased_rus_bert_torch.tar.gz",
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/ner_uncased_rus_bert_torch.tar.gz",
         "subdir": "{MODELS_PATH}"
       }
     ]
