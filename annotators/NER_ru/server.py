@@ -51,7 +51,7 @@ def get_result(request):
             dialog_ids.append(i)
 
     tokens_batch, tags_batch = ner_model(samples)
-    good_preds = [[convert_prediction(s, token, tag) for token, tag in zip(tokens, tags)]
+    good_preds = [[convert_prediction(s, token, tag) for token, tag in zip(tokens, tags) if tag != "O"]
                   for s, tokens, tags in zip(samples, tokens_batch, tags_batch)]
     dialog_ids = np.array(dialog_ids)
 
