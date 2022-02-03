@@ -83,7 +83,7 @@ class Badlist:
         Args:
             path: Path object to badlist file, one badlisted phrase per line
         """
-        self.name = path.stem
+        self.name = path.stem.replace("_ru", "")
         self.badlist = set()
         with path.open() as f:
             for _phrase in f:
