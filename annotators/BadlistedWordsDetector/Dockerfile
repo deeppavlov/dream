@@ -7,6 +7,9 @@ RUN pip install -r /src/requirements.txt
 RUN spacy download en_core_web_sm
 RUN spacy download ru_core_news_sm
 
+ARG LANGUAGE
+ENV LANGUAGE ${LANGUAGE}
+
 COPY . /src/
 WORKDIR /src
 
