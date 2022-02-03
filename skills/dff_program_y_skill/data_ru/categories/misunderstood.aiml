@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <category>
+    <pattern># Я # НЕ СПРАШИВАЛ #</pattern>
+    <template>
+      <random>
+        <li>Возможно я плохо поняла тебя. Можешь, пожалуйста, сформулировать попроще? </li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># Я # НЕ СПРАШИВАЮ #</pattern>
+    <template>
+      <random>
+        <li>Возможно я плохо поняла тебя. Можешь, пожалуйста, сформулировать попроще? </li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern># Я # НЕ СПРАШИВАЛА #</pattern>
+    <template>
+      <random>
+        <li>Возможно я плохо поняла тебя. Можешь, пожалуйста, сформулировать попроще? </li>
+      </random>
+    </template>
+  </category>
+
+
+  <category>
+    <pattern># ЭТО БЫЛО # <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ЭТО ЗВУЧИТ <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ЭТО<set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+
+  <category>
+    <pattern># ТЫ <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ТЫ ТАКОЙ <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ТЫ САМЫЙ <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ТЫ ТАКАЯ <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ТЫ САМАЯ <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+  <category>
+    <pattern># ТЫ НАСТОЛЬКО <set>stupid</set> #</pattern>
+    <template><srai>THAT_IS_STUPID</srai></template>
+  </category>
+
+  <category>
+    <pattern>THAT_IS_STUPID</pattern>
+    <template>
+      <random>
+        <li>Да... Иногда я говорю действительно странные вещи. Извини, я все еще учусь.</li>
+      </random>
+    </template>
+  </category>
+
+
+</aiml>
