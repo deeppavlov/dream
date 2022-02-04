@@ -276,7 +276,8 @@ class DummySkillConnector:
                 for i, nphrase in enumerate(curr_nounphrases):
                     for fact_id in NP_FACTS.get(nphrase, []):
                         facts_same_nps += [
-                            f"Well, now that you've mentioned {nphrase}, I've remembered this. {FACTS_MAP[str(fact_id)]}. "
+                            f"Well, now that you've mentioned {nphrase}, I've remembered this. "
+                            f"{FACTS_MAP[str(fact_id)]}. "
                             f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
                         ]
 
