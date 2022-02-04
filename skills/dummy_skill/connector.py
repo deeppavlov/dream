@@ -22,6 +22,7 @@ from common.link import (
     skills_phrases_map,
     compose_linkto_with_connection_phrase,
 )
+from common.remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
@@ -36,274 +37,32 @@ ASK_QUESTION_PROB = 0.7
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
-np_remove_list = [
-    "'s",
-    "i",
-    "me",
-    "my",
-    "myself",
-    "we",
-    "our",
-    "ours",
-    "ourselves",
-    "you",
-    "you're",
-    "you've",
-    "you'll",
-    "you'd",
-    "your",
-    "yours",
-    "yourself",
-    "yourselves",
-    "he",
-    "him",
-    "his",
-    "himself",
-    "she",
-    "she's",
-    "her",
-    "hers",
-    "herself",
-    "it",
-    "it's",
-    "its",
-    "itself",
-    "they",
-    "them",
-    "their",
-    "theirs",
-    "themselves",
-    "what",
-    "which",
-    "who",
-    "whom",
-    "this",
-    "that",
-    "that'll",
-    "these",
-    "those",
-    "am",
-    "is",
-    "are",
-    "was",
-    "were",
-    "be",
-    "been",
-    "being",
-    "have",
-    "has",
-    "had",
-    "having",
-    "do",
-    "does",
-    "did",
-    "doing",
-    "a",
-    "an",
-    "the",
-    "and",
-    "but",
-    "if",
-    "or",
-    "because",
-    "as",
-    "until",
-    "while",
-    "of",
-    "at",
-    "by",
-    "for",
-    "with",
-    "about",
-    "against",
-    "between",
-    "into",
-    "through",
-    "during",
-    "before",
-    "after",
-    "above",
-    "below",
-    "to",
-    "from",
-    "up",
-    "down",
-    "in",
-    "out",
-    "on",
-    "off",
-    "over",
-    "under",
-    "again",
-    "further",
-    "then",
-    "once",
-    "here",
-    "there",
-    "when",
-    "where",
-    "why",
-    "how",
-    "all",
-    "any",
-    "both",
-    "each",
-    "few",
-    "more",
-    "most",
-    "other",
-    "some",
-    "such",
-    "no",
-    "nor",
-    "not",
-    "only",
-    "own",
-    "same",
-    "so",
-    "than",
-    "too",
-    "very",
-    "s",
-    "t",
-    "can",
-    "will",
-    "just",
-    "don",
-    "don't",
-    "should",
-    "should've",
-    "now",
-    "d",
-    "ll",
-    "m",
-    "o",
-    "re",
-    "ve",
-    "y",
-    "ain",
-    "aren",
-    "aren't",
-    "couldn",
-    "couldn't",
-    "didn",
-    "didn't",
-    "doesn",
-    "doesn't",
-    "hadn",
-    "hadn't",
-    "hasn",
-    "hasn't",
-    "haven",
-    "haven't",
-    "isn",
-    "isn't",
-    "ma",
-    "mightn",
-    "mightn't",
-    "mustn",
-    "mustn't",
-    "needn",
-    "needn't",
-    "shan",
-    "shan't",
-    "shouldn",
-    "shouldn't",
-    "wasn",
-    "wasn't",
-    "weren",
-    "weren't",
-    "won",
-    "won't",
-    "wouldn",
-    "wouldn't",
-    "my name",
-    "your name",
-    "wow",
-    "yeah",
-    "yes",
-    "ya",
-    "cool",
-    "okay",
-    "more",
-    "some more",
-    " a lot",
-    "a bit",
-    "another one",
-    "something else",
-    "something",
-    "anything",
-    "someone",
-    "anyone",
-    "play",
-    "mean",
-    "a lot",
-    "a little",
-    "a little bit",
-]
-
-np_ignore_list = [
-    "boring",
-    "radio",
-    "type",
-    "call",
-    "fun",
-    "fall",
-    "name",
-    "names",
-    "lgbtq families",
-    "day",
-    "murder",
-    "amazon",
-    "take",
-    "interest",
-    "days",
-    "year",
-    "years",
-    "sort",
-    "fan",
-    "going",
-    "death",
-    "part",
-    "end",
-    "watching",
-    "thought",
-    "thoughts",
-    "man",
-    "men",
-    "listening",
-    "big fan",
-    "fans",
-    "rapping",
-    "reading",
-    "going",
-    "thing",
-    "hanging",
-    "best thing",
-    "wife",
-    "things",
-    "nothing",
-    "everything",
-]
-
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
 
 np_ignore_expr = re.compile(
-    "(" + "|".join([r"\b%s\b" % word for word in np_ignore_list + TOP_FREQUENT_UNIGRAMS]) + ")", re.IGNORECASE
+    "(" + "|".join([r"\b%s\b" % word for word in NP_IGNORE_LIST + TOP_FREQUENT_UNIGRAMS]) + ")", re.IGNORECASE
 )
-np_remove_expr = re.compile("(" + "|".join([r"\b%s\b" % word for word in np_remove_list]) + ")", re.IGNORECASE)
+np_remove_expr = re.compile("(" + "|".join([r"\b%s\b" % word for word in NP_REMOVE_LIST]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r"\s\s+")
 ASK_ME_QUESTION_PATTERN = re.compile(
     r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE
 )
 
-donotknow_answers = [
-    "What do you want to talk about?",
-    "I am a bit confused. What would you like to chat about?",
-    "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
-    "Sorry, I didn't catch that. What would you like to chat about?",
-]
+donotknow_answers = {
+    "ENGLISH": [
+        "What do you want to talk about?",
+        "I am a bit confused. What would you like to chat about?",
+        "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+        "Sorry, I didn't catch that. What would you like to chat about?",
+    ],
+    "RUSSIAN": [
+        "О чем ты хочешь поговорить?",
+        "Кажется, я немного потерялась. О чем ты хочешь поговорить?",
+        "Извини, возможно я не совсем поняла, что ты имеешь в виду. О чем ты хочешь поговорить?",
+        "Извини, я не уловила информацию. О чем ты хочешь поболтать?",
+    ]
+}
 
 with open("skills/dummy_skill/questions_map.json", "r") as f:
     QUESTIONS_MAP = json.load(f)
@@ -443,14 +202,17 @@ class DummySkillConnector:
             human_attrs = []
             bot_attrs = []
             attrs = []
-
-            cands += [choice(donotknow_answers)]
+            is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"])
+            if is_russian:
+                cands += [choice(donotknow_answers["RUSSIAN"])]
+            else:
+                cands += [choice(donotknow_answers["ENGLISH"])]
             confs += [0.5]
             attrs += [{"type": "dummy"}]
             human_attrs += [{}]
             bot_attrs += [{}]
 
-            if len(dialog["utterances"]) > 14 and not is_sensitive_case:
+            if len(dialog["utterances"]) > 14 and not is_sensitive_case and not is_russian:
                 questions_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for q_id in NP_QUESTIONS.get(nphrase, []):
@@ -465,7 +227,7 @@ class DummySkillConnector:
                     bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
-            if link_to_question:
+            if link_to_question and not is_russian:
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
                 _prev_active_skill = (
@@ -509,15 +271,16 @@ class DummySkillConnector:
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
 
-            facts_same_nps = []
-            for i, nphrase in enumerate(curr_nounphrases):
-                for fact_id in NP_FACTS.get(nphrase, []):
-                    facts_same_nps += [
-                        f"Well, now that you've mentioned {nphrase}, I've remembered this. {FACTS_MAP[str(fact_id)]}. "
-                        f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
-                    ]
+            if not is_russian:
+                facts_same_nps = []
+                for i, nphrase in enumerate(curr_nounphrases):
+                    for fact_id in NP_FACTS.get(nphrase, []):
+                        facts_same_nps += [
+                            f"Well, now that you've mentioned {nphrase}, I've remembered this. {FACTS_MAP[str(fact_id)]}. "
+                            f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
+                        ]
 
-            if len(facts_same_nps) > 0 and not is_sensitive_case:
+            if len(facts_same_nps) > 0 and not is_sensitive_case and not is_russian:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
                 confs += [0.5]

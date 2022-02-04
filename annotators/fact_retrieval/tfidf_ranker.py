@@ -24,7 +24,7 @@ from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.estimator import Component
 from deeppavlov.core.common.file import read_json
 from deeppavlov.core.commands.utils import expand_path
-from remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
+from common.remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
 
 logger = getLogger(__name__)
 
