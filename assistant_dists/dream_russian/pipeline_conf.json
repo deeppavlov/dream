@@ -177,8 +177,7 @@
                     "annotators.ner"
                 ],
                 "previous_services": [
-                    "annotators.entity_detection",
-                    "annotators.spacy_nounphrases"
+                    "annotators.entity_detection"
                 ]
             },
             "wiki_parser": {
@@ -333,30 +332,6 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "convers_evaluator_annotator": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://convers-evaluator-annotator:8004/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "spacy_nounphrases": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://spacy-nounphrases:8006/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
@@ -364,45 +339,6 @@
                     "url": "http://entity-detection:8103/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "midas_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://midas-classification:8090/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_last_uttr",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "combined_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://combined-classification:8087/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "hypothesis_scorer": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://hypothesis-scorer:8110/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_scorer_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"
