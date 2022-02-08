@@ -15,6 +15,7 @@ from spacy.tokens import Doc, Token
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+LANGUAGE = getenv("LANGUAGE", "ENGLISH")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -82,12 +83,12 @@ class Badlist:
         Args:
             path: Path object to badlist file, one badlisted phrase per line
         """
-        self.name = path.stem
+        self.name = path.stem.replace("_ru", "")
         self.badlist = set()
         with path.open() as f:
             for _phrase in f:
                 phrase = _phrase.split(",")[0]
-                tokenized = en_nlp(phrase.strip().lower())
+                tokenized = nlp_pipeline(phrase.strip().lower())
                 self.badlist.add(" ".join([str(token) for token in tokenized]))
                 lemmatized_variants = lemmatize(tokenized)
                 for lemmatized in lemmatized_variants:
@@ -143,18 +144,25 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
     return all_ngrams
 
 
-en_nlp = spacy.load("en_core_web_sm", exclude=["senter", "ner"])
+if LANGUAGE == "RUSSIAN":
+    nlp_pipeline = spacy.load("ru_core_news_sm", exclude=["senter", "ner"])
+    badlists_dir = Path("./badlists")
+    badlists_files = [f for f in badlists_dir.iterdir() if f.is_file() and "_ru" in f.name]
 
-badlists_dir = Path("./badlists")
-badlists_files = [f for f in badlists_dir.iterdir() if f.is_file()]
+    badlists = [Badlist(file) for file in badlists_files]
+    logger.info(f"badlisted_words initialized with following badlists: {badlists}")
+else:
+    nlp_pipeline = spacy.load("en_core_web_sm", exclude=["senter", "ner"])
+    badlists_dir = Path("./badlists")
+    badlists_files = [f for f in badlists_dir.iterdir() if f.is_file() and "_ru" not in f.name]
 
-badlists = [Badlist(file) for file in badlists_files]
-logger.info(f"badlisted_words initialized with following badlists: {badlists}")
+    badlists = [Badlist(file) for file in badlists_files]
+    logger.info(f"badlisted_words initialized with following badlists: {badlists}")
 
 
 def check_for_badlisted_phrases(sentences):
     result = []
-    docs = list(en_nlp.pipe([s.lower() for s in sentences]))
+    docs = list(nlp_pipeline.pipe([s.lower() for s in sentences]))
     for doc in docs:
         ngrams = collect_ngrams(doc, max([bl.max_ngram for bl in badlists]))
         result += [{blist.name: blist.check_set_of_strings(ngrams) for blist in badlists}]
