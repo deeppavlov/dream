@@ -56,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f test.yml"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
@@ -124,7 +124,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     fi
 
     echo "Testing file conflicts"
-    dockercompose_cmd exec -T agent sh -c 'cd /pavlov/DeepPavlov && git fetch --all --tags --prune && git checkout 0.14.1 && cd /dp-agent/ && python utils/analyze_downloads.py'
+    dockercompose_cmd exec -T agent sh -c 'cd /pavlov/DeepPavlov && git fetch --all --tags --prune && git checkout 0.14.1 && cd /dp-agent/ && python utils/analyze_downloads.py --compose_file assistant_dists/dream/docker-compose.override.yml'
 
     echo "Testing docker-compose files"
     dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py
@@ -137,17 +137,17 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in dff-movie-skill asr weather-skill program-y \
-                     program-y-dangerous eliza program-y-wide \
-                     dummy-skill-dialog intent-catcher short-story-skill comet-atomic \
+    for container in dff-movie-skill asr dff-weather-skill dff-program-y \
+                     dff-program-y-dangerous eliza dff-program-y-wide spacy-nounphrases \
+                     dummy-skill-dialog intent-catcher dff-short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
-                     entity-linking kbqa text-qa wiki-parser convert-reddit \
-                     book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
-                     grounding-skill dff-friendship-skill masked-lm entity-storer \
+                     entity-linking kbqa text-qa wiki-parser convert-reddit convers-evaluator-annotator \
+                     dff-book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
+                     dff-grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-random fact-retrieval news-api-skill hypothesis-scorer \
-                     dff-gossip-skill news-api-annotator dff-wiki-skill topic-recommendation dff-science-skill\
-                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill; do
+                     fact-random fact-retrieval hypothesis-scorer \
+                     dff-gossip-skill dff-wiki-skill topic-recommendation dff-science-skill\
+                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

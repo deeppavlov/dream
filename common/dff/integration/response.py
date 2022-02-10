@@ -1,7 +1,7 @@
 import logging
 from typing import Union
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 
 logger = logging.getLogger(__name__)

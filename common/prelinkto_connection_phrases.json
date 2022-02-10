@@ -1,7 +1,7 @@
 [
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_movie_skill"
         ],
         "phrases": [
@@ -99,7 +99,7 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "game_cooperative_skill"
         ],
         "phrases": [
@@ -110,7 +110,7 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_travel_skill"
         ],
         "phrases": [
@@ -121,7 +121,7 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_animals_skill"
         ],
         "phrases": [
@@ -133,7 +133,7 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_sport_skill"
         ],
         "phrases": [
@@ -144,7 +144,7 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_food_skill"
         ],
         "phrases": [
@@ -156,7 +156,7 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_music_skill"
         ],
         "phrases": [
@@ -167,14 +167,14 @@
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_gossip_skill"
         ],
         "phrases": []
     },
     {
         "skill_pair": [
-            "book_skill",
+            "dff_book_skill",
             "dff_science_skill"
         ],
         "phrases": [

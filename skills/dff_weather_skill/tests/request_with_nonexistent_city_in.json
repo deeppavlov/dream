@@ -1,0 +1,531 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Tell me weather in mockcity.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Tell me weather in mockcity.",
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "weather",
+                            "mockcity"
+                        ],
+                        "factoid_classification": {
+                            "factoid": 0.9995546936988831,
+                            "conversational": 0.0004453235014807433
+                        },
+                        "conceptnet": {
+                            "mockcity": {
+                                "Causes": [
+                                    "death",
+                                    "war",
+                                    "riot"
+                                ],
+                                "CausesDesire": [
+                                    "fly in sky",
+                                    "fly kite",
+                                    "fly"
+                                ],
+                                "HasProperty": [
+                                    "alive",
+                                    "yellow",
+                                    "colorful"
+                                ],
+                                "SymbolOf": [
+                                    "cat",
+                                    "cheese",
+                                    "dog"
+                                ]
+                            },
+                            "weather": {
+                                "Causes": [
+                                    "snow",
+                                    "rain",
+                                    "weather"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "ski",
+                                    "go to work"
+                                ],
+                                "HasProperty": [
+                                    "hot",
+                                    "very hot",
+                                    "cold"
+                                ],
+                                "SymbolOf": [
+                                    "rain",
+                                    "cold",
+                                    "winter"
+                                ]
+                            }
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.7454321384429932,
+                                "Information_RequestIntent": 0.9140355587005615
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9663711190223694
+                            },
+                            "cobot_topics": {
+                                "Weather_Time": 0.9999995827674866
+                            },
+                            "emotion_classification": {
+                                "anger": 0.537294328212738,
+                                "joy": 0.5190792083740234,
+                                "neutral": 0.9478458166122437
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.5779114961624146
+                            },
+                            "toxic_classification": {
+                                "insult": 0.0033301115036010742
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "Tell me weather in mockcity.",
+                            "segments": [
+                                "Tell me weather in mockcity."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.9999998807907104,
+                                "detected": 1
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0017684150952845812,
+                                "command": 0.9672186374664307,
+                                "comment": 0.001179907820187509,
+                                "complaint": 0.0030030158814042807,
+                                "dev_command": 0.010861510410904884,
+                                "neg_answer": 0.0012507113860920072,
+                                "open_question_factual": 0.0020962820854038,
+                                "open_question_opinion": 0.002080917125567794,
+                                "opinion": 0.00233007431961596,
+                                "other_answers": 0.000710063090082258,
+                                "pos_answer": 0.002069666516035795,
+                                "statement": 0.0030088210478425026,
+                                "yes_no_question": 0.0024220345076173544
+                            }
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "mockcity",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [],
+                                "entity_ids": [],
+                                "entity_pages": [],
+                                "entity_pages_titles": [],
+                                "entity_substr": "mockcity",
+                                "tokens_match_conf": []
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Tell me weather in London."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "london": {
+                                    "conf": 0.9916341304779053,
+                                    "country": [
+                                        [
+                                            "Q105092",
+                                            "Kingdom of Mercia"
+                                        ],
+                                        [
+                                            "Q105313",
+                                            "Kingdom of Wessex"
+                                        ],
+                                        [
+                                            "Q110888",
+                                            "Kingdom of Essex"
+                                        ],
+                                        [
+                                            "Q145",
+                                            "United Kingdom"
+                                        ],
+                                        [
+                                            "Q161885",
+                                            "Great Britain"
+                                        ],
+                                        [
+                                            "Q174193",
+                                            "United Kingdom of Great Britain and Ireland"
+                                        ],
+                                        [
+                                            "Q179876",
+                                            "Kingdom of England"
+                                        ],
+                                        [
+                                            "Q2277",
+                                            "Roman Empire"
+                                        ]
+                                    ],
+                                    "entity_label": "London",
+                                    "inception": [
+                                        [
+                                            "'+0047-00-00^^T'",
+                                            "0047"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q1066984",
+                                            "financial centre"
+                                        ],
+                                        [
+                                            "Q1637706",
+                                            "city with millions of inhabitants"
+                                        ],
+                                        [
+                                            "Q200250",
+                                            "metropolis"
+                                        ],
+                                        [
+                                            "Q5119",
+                                            "capital"
+                                        ],
+                                        [
+                                            "Q515",
+                                            "city"
+                                        ],
+                                        [
+                                            "Q717478",
+                                            "administrative territorial entity of the United Kingdom"
+                                        ]
+                                    ],
+                                    "located in": [
+                                        [
+                                            "Q105313",
+                                            "Kingdom of Wessex"
+                                        ],
+                                        [
+                                            "Q1137312",
+                                            "County of London"
+                                        ],
+                                        [
+                                            "Q179876",
+                                            "Kingdom of England"
+                                        ],
+                                        [
+                                            "Q21",
+                                            "England"
+                                        ],
+                                        [
+                                            "Q23306",
+                                            "Greater London"
+                                        ]
+                                    ],
+                                    "located next to body of water": [
+                                        [
+                                            "Q19686",
+                                            "River Thames"
+                                        ],
+                                        [
+                                            "Q19914",
+                                            "Grand Union Canal"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q84",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q717478",
+                                            "administrative territorial entity of the United Kingdom"
+                                        ],
+                                        [
+                                            "Q177634",
+                                            "community"
+                                        ],
+                                        [
+                                            "Q15916867",
+                                            "administrative territorial entity of a single country"
+                                        ],
+                                        [
+                                            "Q515",
+                                            "city"
+                                        ],
+                                        [
+                                            "Q7930989",
+                                            "city/town"
+                                        ],
+                                        [
+                                            "Q1066984",
+                                            "financial centre"
+                                        ],
+                                        [
+                                            "Q1549591",
+                                            "big city"
+                                        ],
+                                        [
+                                            "Q5119",
+                                            "capital"
+                                        ],
+                                        [
+                                            "Q16562419",
+                                            "political entity"
+                                        ],
+                                        [
+                                            "Q200250",
+                                            "metropolis"
+                                        ],
+                                        [
+                                            "Q702492",
+                                            "urban area"
+                                        ],
+                                        [
+                                            "Q1637706",
+                                            "city with millions of inhabitants"
+                                        ],
+                                        [
+                                            "Q486972",
+                                            "human settlement"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "london": {
+                                    "conf": 0.0167678389698267,
+                                    "entity_label": "London",
+                                    "genre": [
+                                        [
+                                            "Q130232",
+                                            "drama"
+                                        ],
+                                        [
+                                            "Q226730",
+                                            "silent film"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q84",
+                                            "London"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6669754",
+                                    "pos": 4,
+                                    "publication date": [
+                                        [
+                                            "'+1926-01-01^^T'",
+                                            "01 January 1926"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Sen. Lindsey Graham Lindsey Olin GrahamOvernight Defense & National Security — Milley becomes lightning rod Joint Chiefs Chairman Milley becomes lightning rod on right GOP senators unveil bill designating Taliban as terrorist organization MORE (R-SC)... [2733 chars]",
+                                    "description": "Sen. Lindsey Graham (R-SC) said he expects to see law enforcement take a zero-tolerance approach in response to any violent behavior during a right-wing rally slated for Washington, D.C., this weekend.",
+                                    "image": "https://thehill.com/sites/default/files/grahamlindsey_060821gn3_lead.jpg",
+                                    "publishedAt": "2021-09-16T12:50:46Z",
+                                    "source": {
+                                        "name": "The Hill",
+                                        "url": "https://thehill.com"
+                                    },
+                                    "title": "Lindsey Graham: Police need 'to take a firm line' with Sept. 18 rally attendees",
+                                    "url": "https://thehill.com/homenews/senate/572539-lindsey-graham-police-need-to-take-a-firm-line-with-sept-18-rally-attendees"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "mockcity",
+                                "news": {},
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_weather_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

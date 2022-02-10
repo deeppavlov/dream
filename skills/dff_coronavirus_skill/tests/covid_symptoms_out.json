@@ -1,0 +1,77 @@
+[
+    [
+        "According to the statistical data, 9999 persons from 10000 in your age recover after contacting coronavirus if they are non-vaccinated and 99999 from 100000 if they are vaccinated. However, it is better to stay at home as much as you can to make older people safer. While staying at home, you may use a lot of different online cinema. ",
+        1.0,
+        {
+            "dff_coronavirus_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 2,
+                "history": {
+                    "0": [
+                        "covid_fact",
+                        "replied_yes"
+                    ],
+                    "1": [
+                        "covid_fact",
+                        "replied_yes"
+                    ],
+                    "2": [
+                        "simple",
+                        "age_covid_risks"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "88ec3bd5-1256-40c0-a8fd-c1527602d161",
+                    "labels": {
+                        "1": [
+                            "covid_fact",
+                            "replied_yes"
+                        ],
+                        "2": [
+                            "simple",
+                            "age_covid_risks"
+                        ]
+                    },
+                    "requests": {
+                        "1": "yes.",
+                        "2": "34."
+                    },
+                    "responses": {
+                        "1": "Someone who has completed quarantine or has been released from isolation does not pose a risk of coronavirus infection to other people. Can you tell me what people love doing when people are self-isolating? Anyway, I can approximately tell you how likely you are to recover from coronavirus if you get it. What is your age?",
+                        "2": "According to the statistical data, 9999 persons from 10000 in your age recover after contacting coronavirus if they are non-vaccinated and 99999 from 100000 if they are vaccinated. However, it is better to stay at home as much as you can to make older people safer. While staying at home, you may use a lot of different online cinema. "
+                    },
+                    "misc": {
+                        "covid_facts_exhausted": true,
+                        "used_covid_facts": [
+                            0,
+                            1,
+                            2
+                        ],
+                        "age": 34,
+                        "asked_about_age": true
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {
+                    "dff_movie_skill": {
+                        "2": {
+                            "from_service": "dff_coronavirus_skill"
+                        }
+                    }
+                },
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

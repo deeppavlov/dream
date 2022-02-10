@@ -1,0 +1,415 @@
+[
+    [
+        [
+            "You just told me about star wars, right?",
+            "You like to ask interesting questions.",
+            "You have so many interesting questions. I'm ashamed, I don't know."
+        ],
+        [
+            1.0,
+            0.5,
+            0.7
+        ],
+        [
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 2,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "1": "I like star wars too.",
+                            "2": "What do you mean?"
+                        },
+                        "responses": {
+                            "1": [
+                                [
+                                    "Thank you for being so considerate with me on this.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {}
+                                ],
+                                [
+                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                                    0.7,
+                                    {
+                                        "dff_grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "It's been really cool getting to know you better."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "2": [
+                                [
+                                    "You just told me about star wars, right?",
+                                    1.0,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. I'm ashamed, I don't know.",
+                                    0.7,
+                                    {
+                                        "dff_grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "It's been really cool getting to know you better.",
+                                                "I'm ashamed, I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "dff_grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "It's been really cool getting to know you better.",
+                                    "I'm ashamed, I don't know."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": []
+            },
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 2,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "1": "I like star wars too.",
+                            "2": "What do you mean?"
+                        },
+                        "responses": {
+                            "1": [
+                                [
+                                    "Thank you for being so considerate with me on this.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {}
+                                ],
+                                [
+                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                                    0.7,
+                                    {
+                                        "dff_grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "It's been really cool getting to know you better."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "2": [
+                                [
+                                    "You just told me about star wars, right?",
+                                    1.0,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. I'm ashamed, I don't know.",
+                                    0.7,
+                                    {
+                                        "dff_grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "It's been really cool getting to know you better.",
+                                                "I'm ashamed, I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "dff_grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "It's been really cool getting to know you better.",
+                                    "I'm ashamed, I don't know."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": []
+            },
+            {
+                "dff_grounding_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 2,
+                    "history": {
+                        "0": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "1": [
+                            "grounding",
+                            "grounding_response_node"
+                        ],
+                        "2": [
+                            "grounding",
+                            "grounding_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "27523079-7fc3-46d4-8f63-9cb50308e5ea",
+                        "labels": {
+                            "0": [
+                                "grounding",
+                                "grounding_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "1": "I like star wars too.",
+                            "2": "What do you mean?"
+                        },
+                        "responses": {
+                            "1": [
+                                [
+                                    "Thank you for being so considerate with me on this.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {}
+                                ],
+                                [
+                                    "I bet that you are so sincere'. It's been really cool getting to know you better.",
+                                    0.7,
+                                    {
+                                        "dff_grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "It's been really cool getting to know you better."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ],
+                            "2": [
+                                [
+                                    "You just told me about star wars, right?",
+                                    1.0,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "must"
+                                    }
+                                ],
+                                [
+                                    "You like to ask interesting questions.",
+                                    0.5,
+                                    {},
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    "You have so many interesting questions. I'm ashamed, I don't know.",
+                                    0.7,
+                                    {
+                                        "dff_grounding_skill": {
+                                            "used_universal_intent_responses": [
+                                                "It's been really cool getting to know you better.",
+                                                "I'm ashamed, I don't know."
+                                            ]
+                                        }
+                                    },
+                                    {},
+                                    {
+                                        "response_parts": [
+                                            "acknowlegdement",
+                                            "body"
+                                        ],
+                                        "type": "universal_response"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {
+                            "dff_grounding_skill": {
+                                "used_universal_intent_responses": [
+                                    "It's been really cool getting to know you better.",
+                                    "I'm ashamed, I don't know."
+                                ]
+                            }
+                        },
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "unknown",
+                "disliked_skills": [],
+                "dff_grounding_skill": {
+                    "used_universal_intent_responses": [
+                        "It's been really cool getting to know you better.",
+                        "I'm ashamed, I don't know."
+                    ]
+                }
+            }
+        ],
+        [
+            {},
+            {},
+            {}
+        ],
+        [
+            {
+                "can_continue": "must"
+            },
+            {
+                "can_continue": "can",
+                "response_parts": [
+                    "acknowledgement"
+                ]
+            },
+            {
+                "can_continue": "can",
+                "response_parts": [
+                    "acknowlegdement",
+                    "body"
+                ],
+                "type": "universal_response"
+            }
+        ]
+    ]
+]

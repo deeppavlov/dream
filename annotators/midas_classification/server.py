@@ -85,7 +85,8 @@ def respond():
     for i, dialog in enumerate(dialogs):
         if len(dialog["bot_utterances"]):
             prev_bot_uttr_text = dialog["bot_utterances"][-1].get("text", "").lower()
-            context = sent_tokenize(prev_bot_uttr_text)[-1].lower()
+            tokenized_sentences = sent_tokenize(prev_bot_uttr_text)
+            context = tokenized_sentences[-1].lower() if len(tokenized_sentences) > 0 else ""
         else:
             context = ""
         if len(dialog["human_utterances"]):

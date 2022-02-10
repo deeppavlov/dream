@@ -6,7 +6,7 @@ def test_link_to():
     assert link_result["phrase"]
     assert link_result["skill"]
 
-    link_result = link.link_to(["news_api_skill", "dff_movie_skill", "book_skill"], {})
+    link_result = link.link_to(["news_api_skill", "dff_movie_skill", "dff_book_skill"], {})
     print(link_result)
 
 

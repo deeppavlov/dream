@@ -1,0 +1,12 @@
+{
+  "input": "PersonX went to a mall",
+  "category": [
+    "xReact",
+    "xNeed",
+    "xAttr",
+    "xWant",
+    "oEffect",
+    "xIntent",
+    "oReact"
+  ]
+}

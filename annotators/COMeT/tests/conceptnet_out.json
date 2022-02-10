@@ -1,0 +1,38 @@
+{
+  "SymbolOf": {
+    "e1": "basketball",
+    "relation": "SymbolOf",
+    "beams": [
+      "basketball",
+      "graduation",
+      "football"
+    ]
+  },
+  "HasProperty": {
+    "e1": "basketball",
+    "relation": "HasProperty",
+    "beams": [
+      "spherical",
+      "fun",
+      "round"
+    ]
+  },
+  "Causes": {
+    "e1": "basketball",
+    "relation": "Causes",
+    "beams": [
+      "injury",
+      "you feel tire",
+      "you feel good"
+    ]
+  },
+  "CausesDesire": {
+    "e1": "basketball",
+    "relation": "CausesDesire",
+    "beams": [
+      "run marathon",
+      "run",
+      "jump"
+    ]
+  }
+}

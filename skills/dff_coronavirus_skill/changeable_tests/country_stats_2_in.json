@@ -1,0 +1,875 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "I am very interested in 1 very specific question. Tell me about covid statistics in Russia.",
+                    "annotations": {
+                        "spelling_preprocessing": "I am very interested in 1 very specific question. Tell me about covid statistics in Russia.",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "I am very interested in 1 very specific question. Tell me about covid statistics in Russia.",
+                            "segments": [
+                                "I am very interested in 1 very specific question.",
+                                "Tell me about covid statistics in Russia."
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "russia",
+                            "1 very specific question",
+                            "covid statistics"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.998358964920044
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9994610548019409
+                            },
+                            "cobot_topics": {
+                                "Math": 0.9198930263519287,
+                                "Other": 0.8216553926467896
+                            },
+                            "emotion_classification": {
+                                "joy": 0.5869033932685852,
+                                "neutral": 0.9905446767807007
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7492758631706238
+                            },
+                            "toxic_classification": {
+                                "insult": 0.0009920001029968262
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9994879961013794,
+                            "conversational": 0.0005120177520439029
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.00893415603786707,
+                                "command": 0.8171800971031189,
+                                "comment": 0.009409650228917599,
+                                "complaint": 0.009785179048776627,
+                                "dev_command": 0.01930011436343193,
+                                "neg_answer": 0.001754445256665349,
+                                "open_question_factual": 0.008338364772498608,
+                                "open_question_opinion": 0.015608816407620907,
+                                "opinion": 0.05842074006795883,
+                                "other_answers": 0.004722854122519493,
+                                "pos_answer": 0.003983970265835524,
+                                "statement": 0.037365902215242386,
+                                "yes_no_question": 0.005195773672312498
+                            },
+                            {
+                                "appreciation": 0.0017574250232428312,
+                                "command": 0.9692137241363525,
+                                "comment": 0.0012020035646855831,
+                                "complaint": 0.002711981302127242,
+                                "dev_command": 0.008169618435204029,
+                                "neg_answer": 0.0015360531397163868,
+                                "open_question_factual": 0.001522465143352747,
+                                "open_question_opinion": 0.001779049402102828,
+                                "opinion": 0.002811523387208581,
+                                "other_answers": 0.0007421887712553144,
+                                "pos_answer": 0.003093215636909008,
+                                "statement": 0.0033625264186412096,
+                                "yes_no_question": 0.002098307479172945
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 6,
+                                    "text": "russia",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "covid statistics",
+                                "russia"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        14,
+                                        30
+                                    ],
+                                    "text": "covid statistics"
+                                },
+                                {
+                                    "label": "location",
+                                    "offsets": [
+                                        34,
+                                        40
+                                    ],
+                                    "text": "russia"
+                                }
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021. REUTERS/Jose Cabezas\nSAN SALVADOR, Sept 8 (Reuters) - El Salvador's President Na... [2636 chars]",
+                                    "description": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021.",
+                                    "image": "https://www.reuters.com/resizer/70rqmtPpeSmjobcYmMh-MXuMPKY=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/SX7IFZIH4NKTHMPKRBXDDPRFYI.jpg",
+                                    "publishedAt": "2021-09-08T16:45:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "El Salvador president gets hands-on to fix bitcoin wallet roll-out woes",
+                                    "url": "https://www.reuters.com/technology/it-guy-in-chief-president-tries-fix-el-salvadors-bitcoin-woes-2021-09-08/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "russia",
+                                "news": {
+                                    "content": "MOSCOW, Sept 8 (Reuters) - Russia's annual inflation accelerated further in August towards levels last seen in 2016, data showed on Wednesday ahead of the central bank's board meeting where it is widely expected to raise rates for the fifth time this... [1694 chars]",
+                                    "description": "Russia's annual inflation accelerated further in August towards levels last seen in 2016, data showed on Wednesday ahead of the central bank's board meeting where it is widely expected to raise rates for the fifth time this year. Inflation is a sensitive issue in Russia...",
+                                    "image": "https://s1.reutersmedia.net/resources_v2/images/rcom-default.png?w=800",
+                                    "publishedAt": "2021-09-08T16:00:01Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "Russian inflation hits 5-yr peak ahead of cenbank meeting",
+                                    "url": "https://www.reuters.com/article/russia-cpi/russian-inflation-hits-5-yr-peak-ahead-of-cenbank-meeting-idUSR4N2PJ01J"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Tell me about covid statistics in Russia."
+                            ]
+                        },
+                        "fact_random": [],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9939486980438232,
+                                    0.5789046287536621,
+                                    0.009030523709952831,
+                                    0.10820084810256958,
+                                    0.003740996355190873
+                                ],
+                                "entity_ids": [
+                                    "Q159",
+                                    "Q34266",
+                                    "Q148685",
+                                    "Q20657737",
+                                    "Q24058892"
+                                ],
+                                "entity_pages": [
+                                    "Russia (,), or the Russian Federation, is a transcontinental country spanning Eastern Europe and Northern Asia. It extends from the Baltic Sea in the west to the Pacific Ocean in the east, and from the Arctic Ocean in the north to the Black, Azov, and Caspian seas in the south. Russia covers over, consists of more than one-eighth of the Earths inhabited land area, extends to eleven time zones, and has borders with sixteen sovereign nations. Moscow is the countrys capital and largest city, while Saint Petersburg is the second-largest city.",
+                                    "The Russian Empire was a historical empire that extended across Eurasia and North America from 1721, following the end of the Great Northern War, until the Republic was proclaimed by the Provisional Government that took power after the February Revolution of 1917. The third-largest empire in history, at its greatest extent stretching over three continents, Europe, Asia, and North America, the Russian Empire was surpassed in size only by the British and Mongol empires, leaving the empire lasting 196 years. The rise of the Russian Empire coincided with the decline of neighboring rival powers: the Swedish Empire, the Polish\u2013Lithuanian Commonwealth, Persia and the Ottoman Empire. It played a major role in 1812\u20131814 in defeating Napoleons ambitions to control Europe and expanded to the west and south, becoming one of the most powerful European empires of all time."
+                                ],
+                                "entity_pages_titles": [
+                                    "Russia",
+                                    "Russian Empire",
+                                    "Russia, New Jersey"
+                                ],
+                                "entity_substr": "russia",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "conceptnet": {
+                            "1 very specific question": {
+                                "Causes": [
+                                    "answer",
+                                    "one to be answer",
+                                    "many answer"
+                                ],
+                                "CausesDesire": [
+                                    "write essay",
+                                    "find answer",
+                                    "answer"
+                                ],
+                                "HasProperty": [
+                                    "one of five answer",
+                                    "one of many",
+                                    "important"
+                                ],
+                                "SymbolOf": [
+                                    "japanese person",
+                                    "mathematics",
+                                    "math"
+                                ]
+                            },
+                            "covid statistics": {
+                                "Causes": [
+                                    "global thermonuclear war",
+                                    "global thermonuclear war on earth",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "watch tv",
+                                    "surf web",
+                                    "watch television"
+                                ],
+                                "HasProperty": [
+                                    "unreliable",
+                                    "worthless",
+                                    "useless"
+                                ],
+                                "SymbolOf": [
+                                    "human life",
+                                    "human experience",
+                                    "many race"
+                                ]
+                            },
+                            "russia": {
+                                "Causes": [
+                                    "war",
+                                    "person die",
+                                    "bad"
+                                ],
+                                "CausesDesire": [
+                                    "go to war",
+                                    "fight war",
+                                    "go home"
+                                ],
+                                "HasProperty": [
+                                    "south of europe",
+                                    "cold",
+                                    "very large"
+                                ],
+                                "SymbolOf": [
+                                    "russia",
+                                    "japan",
+                                    "china"
+                                ]
+                            }
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "russia": {
+                                    "conf": 0.9939486980438232,
+                                    "country": [
+                                        [
+                                            "Q159",
+                                            "Russia"
+                                        ]
+                                    ],
+                                    "entity_label": "Russia",
+                                    "inception": [
+                                        [
+                                            "\"+0862-00-00^^T\"",
+                                            "0862"
+                                        ],
+                                        [
+                                            "\"+1917-10-25^^T\"",
+                                            "25 October 1917"
+                                        ],
+                                        [
+                                            "\"+1991-12-25^^T\"",
+                                            "25 December 1991"
+                                        ],
+                                        [
+                                            "\"+1991-12-26^^T\"",
+                                            "26 December 1991"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q1323642",
+                                            "transcontinental country"
+                                        ],
+                                        [
+                                            "Q185145",
+                                            "great power"
+                                        ],
+                                        [
+                                            "Q3624078",
+                                            "sovereign state"
+                                        ],
+                                        [
+                                            "Q4209223",
+                                            "Rechtsstaat"
+                                        ],
+                                        [
+                                            "Q619610",
+                                            "social state"
+                                        ],
+                                        [
+                                            "Q6256",
+                                            "country"
+                                        ],
+                                        [
+                                            "Q63791824",
+                                            "countries bordering the Baltic Sea"
+                                        ],
+                                        [
+                                            "Q859563",
+                                            "secular state"
+                                        ]
+                                    ],
+                                    "located next to body of water": [
+                                        [
+                                            "Q166",
+                                            "Black Sea"
+                                        ],
+                                        [
+                                            "Q545",
+                                            "Baltic Sea"
+                                        ],
+                                        [
+                                            "Q788",
+                                            "Arctic Ocean"
+                                        ],
+                                        [
+                                            "Q98",
+                                            "Pacific Ocean"
+                                        ]
+                                    ],
+                                    "part of": [
+                                        [
+                                            "Q302045",
+                                            "Post-Soviet states"
+                                        ]
+                                    ],
+                                    "participant in": [
+                                        [
+                                            "Q1209169",
+                                            "War in Abkhazia"
+                                        ],
+                                        [
+                                            "Q169401",
+                                            "Intermediate-Range Nuclear Forces Treaty"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q159",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q1323642",
+                                            "transcontinental country"
+                                        ],
+                                        [
+                                            "Q1307214",
+                                            "form of government"
+                                        ],
+                                        [
+                                            "Q619610",
+                                            "social state"
+                                        ],
+                                        [
+                                            "Q3624078",
+                                            "sovereign state"
+                                        ],
+                                        [
+                                            "Q63791824",
+                                            "countries bordering the Baltic Sea"
+                                        ],
+                                        [
+                                            "Q4209223",
+                                            "Rechtsstaat"
+                                        ],
+                                        [
+                                            "Q1192543",
+                                            "legal doctrine"
+                                        ],
+                                        [
+                                            "Q185145",
+                                            "great power"
+                                        ],
+                                        [
+                                            "Q859563",
+                                            "secular state"
+                                        ],
+                                        [
+                                            "Q6256",
+                                            "country"
+                                        ],
+                                        [
+                                            "Q1048835",
+                                            "political territorial entity"
+                                        ],
+                                        [
+                                            "Q7275",
+                                            "state"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.545558512210846,
+                                "Information_DeliveryIntent": 0.6853393316268921
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8792664408683777
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9971470832824707
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9989004135131836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.7943169474601746
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0072702765464782715
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.004948326386511326,
+                            "conversational": 0.9950516819953918
+                        },
+                        "conceptnet": {},
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012600576737895608,
+                                "command": 0.001053881598636508,
+                                "comment": 0.0009886831976473331,
+                                "complaint": 0.0003050877130590379,
+                                "dev_command": 0.0006738723604939878,
+                                "neg_answer": 0.0009884777246043086,
+                                "open_question_factual": 0.00031549742561765015,
+                                "open_question_opinion": 0.0004286061739549041,
+                                "opinion": 0.000542624678928405,
+                                "other_answers": 0.0007374203996732831,
+                                "pos_answer": 0.991058886051178,
+                                "statement": 0.00106660439632833,
+                                "yes_no_question": 0.0005802001105621457
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Tell me about covid statistics in Russia.",
+                                "I suppose you are asking about coronavirus in russia. Is it right?",
+                                "yes, it is right. "
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021. REUTERS/Jose Cabezas\nSAN SALVADOR, Sept 8 (Reuters) - El Salvador's President Na... [2636 chars]",
+                                    "description": "A sign reads: \"Exclusive Bitcoin register\" in a Starbucks store where the cryptocurrency is accepted as a payment method, in San Salvador, El Salvador September 7, 2021.",
+                                    "image": "https://www.reuters.com/resizer/70rqmtPpeSmjobcYmMh-MXuMPKY=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/SX7IFZIH4NKTHMPKRBXDDPRFYI.jpg",
+                                    "publishedAt": "2021-09-08T16:45:00Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "El Salvador president gets hands-on to fix bitcoin wallet roll-out woes",
+                                    "url": "https://www.reuters.com/technology/it-guy-in-chief-president-tries-fix-el-salvadors-bitcoin-woes-2021-09-08/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "russia",
+                                "news": {
+                                    "content": "MOSCOW, Sept 8 (Reuters) - Russia's annual inflation accelerated further in August towards levels last seen in 2016, data showed on Wednesday ahead of the central bank's board meeting where it is widely expected to raise rates for the fifth time this... [1694 chars]",
+                                    "description": "Russia's annual inflation accelerated further in August towards levels last seen in 2016, data showed on Wednesday ahead of the central bank's board meeting where it is widely expected to raise rates for the fifth time this year. Inflation is a sensitive issue in Russia...",
+                                    "image": "https://s1.reutersmedia.net/resources_v2/images/rcom-default.png?w=800",
+                                    "publishedAt": "2021-09-08T16:00:01Z",
+                                    "source": {
+                                        "name": "Reuters",
+                                        "url": "https://www.reuters.com"
+                                    },
+                                    "title": "Russian inflation hits 5-yr peak ahead of cenbank meeting",
+                                    "url": "https://www.reuters.com/article/russia-cpi/russian-inflation-hits-5-yr-peak-ahead-of-cenbank-meeting-idUSR4N2PJ01J"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I suppose you are asking about coronavirus in russia. Is it right?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I suppose you are asking about coronavirus in russia. Is it right?",
+                            "segments": [
+                                "I suppose you are asking about coronavirus in russia.",
+                                "Is it right?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 9,
+                                    "start_pos": 8,
+                                    "text": "russia",
+                                    "type": "LOC"
+                                }
+                            ],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I am very interested in 1 very specific question. Tell me about covid statistics in Russia.",
+                                "I suppose you are asking about coronavirus in russia. Is it right?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_coronavirus_skill"
+                }
+            ]
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {
+            "context": {
+                "current_index": 0,
+                "id": "7bf2bac7-4f8e-40ac-9a92-629ffe2db7dc",
+                "misc": {
+                    "subject": {
+                        "city": "undetected",
+                        "country": "russia",
+                        "county": "undetected",
+                        "state": "undetected",
+                        "type": "country"
+                    }
+                },
+                "node_labels": {
+                    "0": [
+                        "subject_detected",
+                        "clarify_intention"
+                    ]
+                },
+                "previous_index": 0,
+                "requests": {
+                    "0": "I am very interested in 1 very specific question. Tell me about covid statistics in Russia."
+                },
+                "responses": {
+                    "0": "I suppose you are asking about coronavirus in russia. Is it right?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "subject_detected",
+                    "clarify_intention"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "covid statistics": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "covid statistics"
+            },
+            "russia": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "russia",
+                        "human_utterance_index": 0,
+                        "previous_skill_name": "pre_start"
+                    }
+                ],
+                "name": "russia"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

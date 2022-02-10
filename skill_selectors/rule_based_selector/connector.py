@@ -100,25 +100,25 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("intent_responder")
             elif is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
                 # process user utterance with sensitive content, "safe mode"
-                skills_for_uttr.append("program_y_dangerous")
-                skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("dff_program_y_dangerous")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
-                skills_for_uttr.append("grounding_skill")
+                skills_for_uttr.append("dff_grounding_skill")
                 skills_for_uttr.append("dummy_skill")
 
                 skills_for_uttr += turn_on_skills(
                     cobot_topics,
                     cobot_dialogact_topics,
+                    intent_catcher_intents,
                     user_uttr_text,
                     bot_uttr.get("text", ""),
                     available_skills=[
                         "news_api_skill",
-                        "coronavirus_skill",
+                        "dff_coronavirus_skill",
                         "dff_funfact_skill",
-                        "weather_skill",
-                        # "dff_celebrity_skill",
+                        "dff_weather_skill",
+                        "dff_short_story_skill",
                     ],
                 )
 
@@ -126,7 +126,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("news_api_skill")
 
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
-                    skills_for_uttr.append("weather_skill")
+                    skills_for_uttr.append("dff_weather_skill")
 
                 if is_celebrity_mentioned:
                     skills_for_uttr.append("dff_gossip_skill")
@@ -180,9 +180,8 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("dff_wiki_skill")
                 if if_switch_test_skill(user_uttr, bot_uttr):
                     skills_for_uttr.append("dff_art_skill")
-                skills_for_uttr.append("grounding_skill")
-                skills_for_uttr.append("program_y")
-                skills_for_uttr.append("cobotqa")
+                skills_for_uttr.append("dff_grounding_skill")
+                skills_for_uttr.append("dff_program_y")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
@@ -197,7 +196,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("convert_reddit")
                     skills_for_uttr.append("comet_dialog_skill")
-                    skills_for_uttr.append("program_y_wide")
+                    skills_for_uttr.append("dff_program_y_wide")
 
                 if is_factoid:
                     skills_for_uttr.append("factoid_qa")
@@ -209,25 +208,27 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr += turn_on_skills(
                     cobot_topics,
                     cobot_dialogact_topics,
+                    intent_catcher_intents,
                     user_uttr_text,
                     bot_uttr.get("text", ""),
                     available_skills=[
                         "dff_movie_skill",
-                        "book_skill",
+                        "dff_book_skill",
                         "news_api_skill",
                         "dff_food_skill",
                         "dff_animals_skill",
                         "dff_sport_skill",
                         "dff_music_skill",
                         "dff_science_skill",
-                        "dff_gossip_skill",  # 'dff_celebrity_skill',
+                        "dff_gossip_skill",
                         "game_cooperative_skill",
-                        "weather_skill",
+                        "dff_weather_skill",
                         "dff_funfact_skill",
                         "dff_travel_skill",
-                        "coronavirus_skill",
+                        "dff_coronavirus_skill",
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
+                        "dff_short_story_skill",
                     ],
                 )
 
@@ -237,7 +238,7 @@ class RuleBasedSkillSelectorConnector:
 
                 # some special cases
                 if if_special_weather_turn_on(user_uttr, bot_uttr):
-                    skills_for_uttr.append("weather_skill")
+                    skills_for_uttr.append("dff_weather_skill")
 
                 if if_turn_on_emotion(user_uttr, bot_uttr):
                     skills_for_uttr.append("emotion_skill")
@@ -253,9 +254,9 @@ class RuleBasedSkillSelectorConnector:
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
             #  no convert when about coronavirus
-            if "coronavirus_skill" in skills_for_uttr and "convert_reddit" in skills_for_uttr:
+            if "dff_coronavirus_skill" in skills_for_uttr and "convert_reddit" in skills_for_uttr:
                 skills_for_uttr.remove("convert_reddit")
-            if "coronavirus_skill" in skills_for_uttr and "comet_dialog_skill" in skills_for_uttr:
+            if "dff_coronavirus_skill" in skills_for_uttr and "comet_dialog_skill" in skills_for_uttr:
                 skills_for_uttr.remove("comet_dialog_skill")
 
             if len(dialog["utterances"]) > 1:
@@ -276,4 +277,4 @@ class RuleBasedSkillSelectorConnector:
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["program_y", "dummy_skill", "cobotqa"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_program_y", "dummy_skill"]))

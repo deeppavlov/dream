@@ -2,7 +2,7 @@ import logging
 import os
 import random
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 
 import common.constants as common_constants
 import common.news as common_news
@@ -239,22 +239,24 @@ def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
     return nps
 
 
-def get_cobotqa_annotations_from_human_utterance(ctx: Context, actor: Actor) -> dict:
+def get_fact_random_annotations_from_human_utterance(ctx: Context, actor: Actor) -> dict:
     if not ctx.validation:
         return (
             ctx.misc["agent"]["dialog"]["human_utterances"][-1]
             .get("annotations", {})
-            .get("cobotqa_annotator", {"facts": [], "response": ""})
+            .get("fact_random", {"facts": [], "response": ""})
         )
     else:
         return {"facts": [], "response": ""}
 
 
 def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity) -> list:
-    cobotqa_annotations = get_cobotqa_annotations_from_human_utterance(ctx, actor)
+    fact_random_results = get_fact_random_annotations_from_human_utterance(ctx, actor)
     facts_for_entity = []
-    for fact in cobotqa_annotations["facts"]:
-        if fact.get("entity", "").lower() == entity.lower() and "Sorry, I don't know" not in fact.get("fact", ""):
+    for fact in fact_random_results.get("facts", []):
+        is_same_entity = fact.get("entity_substr", "").lower() == entity.lower()
+        is_sorry = "Sorry, I don't know" in fact.get("fact", "")
+        if is_same_entity and not is_sorry:
             facts_for_entity += [fact["fact"]]
 
     return facts_for_entity

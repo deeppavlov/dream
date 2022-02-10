@@ -457,7 +457,7 @@ def extract_possible_names(annotated_utterance, only_named, with_labels):
         with_labels=with_labels,
     )
     if not only_named:
-        nounphrases = annotated_utterance["annotations"].get("cobot_nounphrases", [])
+        nounphrases = annotated_utterance["annotations"].get("spacy_nounphrases", [])
         if with_labels:
             nounphrases = [{"text": np, "label": "misc"} for np in nounphrases]
         entities += nounphrases

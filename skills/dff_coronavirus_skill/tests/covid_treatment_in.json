@@ -1,0 +1,320 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Is there a vaccine for coronavirus?",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "Is there a vaccine for coronavirus?",
+                        "sentseg": {
+                            "punct_sent": "Is there a vaccine for coronavirus?",
+                            "segments": [
+                                "Is there a vaccine for coronavirus?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [
+                            "coronavirus"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9432190656661987
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9996563196182251
+                            },
+                            "cobot_topics": {
+                                "Other": 0.999587893486023
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9994140863418579
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.6816070675849915
+                            },
+                            "toxic_classification": {
+                                "insult": 0.0007918477058410645
+                            }
+                        },
+                        "factoid_classification": {
+                            "factoid": 0.9995551705360413,
+                            "conversational": 0.0004448493418749422
+                        },
+                        "conceptnet": {
+                            "coronavirus": {
+                                "Causes": [
+                                    "death",
+                                    "die",
+                                    "illness"
+                                ],
+                                "CausesDesire": [
+                                    "have checkup",
+                                    "die",
+                                    "take vitamin"
+                                ],
+                                "HasProperty": [
+                                    "fatal",
+                                    "contagious",
+                                    "deadly"
+                                ],
+                                "SymbolOf": [
+                                    "bacteria",
+                                    "disease",
+                                    "virus"
+                                ]
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037566879764199257,
+                                "command": 0.01631735824048519,
+                                "comment": 0.0041084885597229,
+                                "complaint": 0.0041941385716199875,
+                                "dev_command": 0.010700097307562828,
+                                "neg_answer": 0.0015314646298065782,
+                                "open_question_factual": 0.03227173164486885,
+                                "open_question_opinion": 0.013372138142585754,
+                                "opinion": 0.002161093521863222,
+                                "other_answers": 0.0029621003195643425,
+                                "pos_answer": 0.001821773243136704,
+                                "statement": 0.0038499583024531603,
+                                "yes_no_question": 0.902953028678894
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "vaccine",
+                                "coronavirus"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        11,
+                                        18
+                                    ],
+                                    "text": "vaccine"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        23,
+                                        34
+                                    ],
+                                    "text": "coronavirus"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "fact_random": [],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.\nWilliam \"Billy\" Evans received a citation on March 17 for \"fa... [4435 chars]",
+                                    "description": "WOODSIDE, CALIF. -- On the same day that former Theranos CEO Elizabeth Holmes was granted a delay in her criminal fraud trial due to a pregnancy, her partner was issued a traffic citation.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106936900-1630608952994-eliz2.jpg?v=1630609002",
+                                    "publishedAt": "2021-09-07T12:59:31Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Elizabeth Holmes staying at $135 million Silicon Valley estate during Theranos trial",
+                                    "url": "https://www.cnbc.com/2021/09/07/elizabeth-holmes-staying-at-135-million-silicon-valley-estate-during-theranos-trial.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "vaccine",
+                                "news": {
+                                    "content": "Dr. Anthony Fauci, the nation\u2019s top infectious disease expert, sought to remind Ron DeSantis of the critical role played by vaccines throughout history in response to the Florida Republican governor\u2019s latest controversial comments about COVID-19 shot... [2268 chars]",
+                                    "description": "The nation's top infectious diseases expert broke down why the Florida GOP governor's comments on COVID-19 shots were \"not true at all.\"",
+                                    "image": "https://img.huffingtonpost.com/asset/61375dbe280000190271f3f9.jpg?cache=uzwwjhwx0e&ops=1778_1000",
+                                    "publishedAt": "2021-09-07T12:43:06Z",
+                                    "source": {
+                                        "name": "The Huffington Post",
+                                        "url": "https://www.huffpost.com"
+                                    },
+                                    "title": "DeSantis Gets Vital History Lesson From Fauci Over 'Completely Incorrect' Vaccine Claim",
+                                    "url": "https://www.huffpost.com/entry/anthony-fauci-ron-desantis-covid-19-vaccine-response_n_61374f52e4b0aac9c01bb26e"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "coronavirus",
+                                "news": {
+                                    "content": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus.\nCurrently, 1 in 7 patients in the hospital is being treated for COVID-19.\nA week ago, that number was 1 in 8.\nTo ... [734 chars]",
+                                    "description": "CLEVELAND, Ohio (WJW) \u2013 The Ohio Hospital Association reports the strain on the state\u2019s hospitals is getting tighter due to coronavirus. Currently, 1 in 7 patients in the hospital is being treated for COVID-19.",
+                                    "image": "https://fox8.com/wp-content/uploads/sites/12/2021/09/GettyImages-523533754.jpg?w=1280",
+                                    "publishedAt": "2021-09-07T13:23:24Z",
+                                    "source": {
+                                        "name": "WJW FOX 8 News Cleveland",
+                                        "url": "https://fox8.com"
+                                    },
+                                    "title": "Ohio coronavirus hospitalizations",
+                                    "url": "https://fox8.com/news/coronavirus/coronavirus-in-ohio-hospitalizations-on-the-rise-in-every-age-group/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Is there a vaccine for coronavirus?"
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_coronavirus_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

@@ -1,17 +1,3 @@
-# Copyright 2017 Neural Networks and Deep Learning lab, MIPT
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import logging
 from typing import List, Tuple
 from collections import defaultdict
@@ -61,9 +47,14 @@ class EntityDetectionParser(Component):
         with open(str(expand_path(tags_file))) as fl:
             tags = [line.split("\t")[0] for line in fl.readlines()]
             if self.entity_tags is None:
-                self.entity_tags = list(
-                    {tag.split("-")[1] for tag in tags if len(tag.split("-")) > 1}.difference({self.o_tag})
-                )
+                if all([(tag.startswith("B-") or tag.startswith("I-") or tag == "O") for tag in tags]):
+                    self.entity_tags = list(
+                        {tag.split("-")[1] for tag in tags if len(tag.split("-")) > 1}.difference({self.o_tag})
+                    )
+                else:
+                    self.entity_tags = list(
+                        {tag.split("-")[0] for tag in tags if len(tag.split("-")) > 1}.difference({self.o_tag})
+                    )
 
             self.entity_prob_ind = {
                 entity_tag: [i for i, tag in enumerate(tags) if entity_tag in tag] for entity_tag in self.entity_tags
@@ -126,7 +117,7 @@ class EntityDetectionParser(Component):
         """
         tags = []
         tag_probas = []
-        for token, proba in zip(tokens, probas):
+        for proba in probas:
             tag_num = np.argmax(proba)
             if tag_num in self.et_prob_ind:
                 if proba[tag_num] < self.thres_proba:
@@ -160,22 +151,17 @@ class EntityDetectionParser(Component):
         entities_positions_dict = defaultdict(list)
         entities_probas_dict = defaultdict(list)
         entity_probas_dict = defaultdict(list)
-        replace_tokens = [
-            (" - ", "-"),
-            ("'s", ""),
-            (" .", ""),
-            ("{", ""),
-            ("}", ""),
-            ("  ", " "),
-            ('"', "'"),
-            ("(", ""),
-            (")", ""),
-        ]
+        replace_tokens = [(" - ", "-"), (" .", ""), ("{", ""), ("}", ""), ("  ", " "), ('"', "'"), ("(", ""), (")", "")]
 
         cnt = 0
-        for n, (tok, tag, probas) in enumerate(zip(tokens, tags, tag_probas)):
-            if tag.split("-")[-1] in self.entity_tags:
-                f_tag = tag.split("-")[-1]
+        for tok, tag, probas in zip(tokens, tags, tag_probas):
+            if (tag.split("-")[0] in {"B", "I"} and tag.split("-")[-1] in self.entity_tags) or (
+                tag.split("-")[0] not in {"B", "I"} and tag.split("-")[0] in self.entity_tags
+            ):
+                if tag.split("-")[0] in {"B", "I"}:
+                    f_tag = tag.split("-")[-1]
+                else:
+                    f_tag = tag.split("-")[0]
                 if tag.startswith("B-") and any(entity_dict.values()):
                     for c_tag, entity in entity_dict.items():
                         entity = " ".join(entity)
@@ -196,7 +182,10 @@ class EntityDetectionParser(Component):
 
             elif any(entity_dict.values()):
                 for tag, entity in entity_dict.items():
-                    c_tag = tag.split("-")[-1]
+                    if tag.split("-")[0] in {"B", "I"}:
+                        c_tag = tag.split("-")[-1]
+                    else:
+                        c_tag = tag.split("-")[0]
                     entity = " ".join(entity)
                     for old, new in replace_tokens:
                         entity = entity.replace(old, new)
