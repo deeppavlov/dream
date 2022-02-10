@@ -9,10 +9,11 @@ from os import getenv
 import random
 
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
-from df_engine.core.keywords import PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, LOCAL
+from df_engine.core.keywords import PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, LOCAL, MISC
 from df_engine.core import Actor
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
+import scenario.sf_conditions as dm_cnd
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
@@ -56,13 +57,13 @@ flows = {
                     loc_cnd.check_flag("book_start_visited"),
                 ]
             ),
-            ("bot_fav_book", "fav_name", 1.8): cnd.any(
+            ("bot_fav_book", "fav_name", 4): cnd.any( #было 1.8
                 [
                     loc_cnd.is_last_used_phrase(loc_rsp.FAVOURITE_BOOK_PHRASES),
                     loc_cnd.asked_fav_book,
                 ]
             ),
-            ("bot_fav_book", "fav_denied", 1.8): cnd.all(
+            ("bot_fav_book", "fav_denied", 2): cnd.all( 
                 [loc_cnd.is_last_used_phrase(loc_rsp.FAVOURITE_BOOK_PHRASES), int_cnd.is_no_vars]
             ),
             ("bible_flow", "bible_start", 1.8): cnd.all(
@@ -87,7 +88,7 @@ flows = {
             ),
             ("genre_flow", "return_genrebook", 1.2): loc_cnd.genrebook_request_detected,
             ("concrete_book_flow", "user_fav", 0.8): cnd.all([loc_cnd.told_fav_book, loc_cnd.book_in_request]),
-            ("concrete_book_flow", "denied_information", 0.8): cnd.all(
+            ("concrete_book_flow", "denied_information", 3): cnd.all(
                 [
                     cnd.any(
                         [
@@ -194,13 +195,15 @@ flows = {
                 ]
             ),
             #TRANSITIONS: {},
+            #TRANSITIONS: {},
+            # TRANSITIONS: {},
         }
     },
     "global_flow": {
         "start": {
             RESPONSE: "",
             PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
-            TRANSITIONS: {("books_general", "book_start"): cnd.true()},
+            TRANSITIONS: {("books_general", "book_start"): cnd.true(),},
         },
         "fallback": {
             RESPONSE: loc_rsp.append_unused(
@@ -230,7 +233,9 @@ flows = {
             TRANSITIONS: {
                 "dislikes_reading": int_cnd.is_no_vars,
                 "likes_reading": cnd.true(),
+                "test1": dm_cnd.is_sf("React.Rejoinder.Support.Track.Clarify"),
             },
+            MISC: {"speech_functions": ["Open.Demand.Fact"]},
         },
         "book_restart": {
             RESPONSE: loc_rsp.append_unused(
@@ -247,21 +252,26 @@ flows = {
         },
         "dislikes_reading": {
             RESPONSE: "Why don't you love reading? Maybe you haven't found the right book?",
-            TRANSITIONS: {("books_general", "told_why"): cnd.true()},
+            TRANSITIONS: {"told_why": cnd.true()},
         },
         "likes_reading": {
             RESPONSE: "I enjoy reading so much! Books help me understand humans much better. "
             "Why do you enjoy reading?",
-            TRANSITIONS: {("books_general", "told_why"): cnd.true()},
+            TRANSITIONS: {"told_why": cnd.true()},
         },
         "told_why": {
-            RESPONSE: loc_rsp.append_unused( # было That's great
+            RESPONSE: loc_rsp.append_unused(
                 initial="That's great. Outside of a dog, a book is man's best friend. ",
                 phrases=[loc_rsp.WHAT_BOOK_LAST_READ],
             ),
             TRANSITIONS: {
                 ("bot_fav_book", "fav_name"): cnd.true()
             },
+        },
+        "test1": {
+            TRANSITIONS: {},
+            RESPONSE: 'I think that reading is cool and all people should read books',
+            MISC: {"speech_functions": ["React.Rejoinder.Support.Response.Resolve"]},
         },
     },
     "bot_fav_book": {
@@ -273,7 +283,9 @@ flows = {
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {
-                "fav_denied": cnd.true(),
+                # "fav_denied": cnd.true(3),
+                ("bot_fav_book", "fav_denied", 5): int_cnd.is_no_vars,
+
             },
         },
         "fav_elaborate": {
@@ -306,7 +318,7 @@ flows = {
             },
             TRANSITIONS: {
                 # ("undetected_flow", "ask_to_repeat"): cnd.any([cnd.neg(loc_cnd.told_fav_book), cnd.neg(loc_cnd.book_in_request)]                ),
-                ("concrete_book_flow", "user_fav", 2): cnd.true()
+                "user_fav": cnd.true()
             },
         },
         "user_fav": {
@@ -330,6 +342,7 @@ flows = {
             ),
             PROCESSING: {"set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE)},
             TRANSITIONS: {
+                ("concrete_book_flow", "denied_information", 5): int_cnd.is_no_vars,
                 ("bible_flow", "bible_start"): cnd.true(),
             },
         },
@@ -360,7 +373,7 @@ flows = {
                 "get_book": loc_prs.get_book,
                 "get_book_genre": loc_prs.get_book_genre,
             },
-            TRANSITIONS: {("concrete_book_flow", "tell_genre"): cnd.true(),},
+            TRANSITIONS: {"tell_genre": cnd.true()},
         },
         "tell_genre": {
             RESPONSE: loc_rsp.append_question(initial="I believe that {cur_book_name} is {cur_genre}. "),
@@ -370,6 +383,7 @@ flows = {
             },
             # NEW
             TRANSITIONS: {
+                ("concrete_book_flow", "denied_information", 5): int_cnd.is_no_vars,
                 ("bible_flow", "bible_start"): cnd.true(),
             },
         },
@@ -425,7 +439,7 @@ flows = {
                 "execute_response": loc_prs.execute_response,
             },
             TRANSITIONS: {
-                "tell_date": cnd.all(                    [int_cnd.is_yes_vars, loc_cnd.check_slot("cur_book_ago")]                ),
+                "tell_date": cnd.all([int_cnd.is_yes_vars, loc_cnd.check_slot("cur_book_ago")]                ),
                 "denied_information": int_cnd.is_no_vars,
                 ("global_flow", "fallback"): cnd.true(),
             },
@@ -444,7 +458,7 @@ flows = {
         },
         "denied_information": {
             RESPONSE: loc_rsp.append_question(initial="As you wish. "),
-            TRANSITIONS: {},
+            TRANSITIONS: {("bible_flow", "bible_start", 5): int_cnd.is_no_vars},
         },
     },
     "genre_flow": {
@@ -456,12 +470,12 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("concrete_book_flow", "denied_information"): int_cnd.is_no_vars,
+                ("concrete_book_flow", "denied_information", 5): int_cnd.is_no_vars,
             },
         },
         "return_genrebook": {
             RESPONSE: (
-                "Amazing! I hear, {cur_book_name} by {cur_book_author} is quite good." + loc_rsp.HAVE_YOU_READ_BOOK
+                "Amazing! I hear, {cur_book_name} is quite good. " + loc_rsp.HAVE_YOU_READ_BOOK
             ),
             PROCESSING: {
                 "get_genre_regexp": loc_prs.get_genre_regexp,  # extracts new genre or leaves previous
@@ -504,7 +518,7 @@ flows = {
             RESPONSE: "You have good taste in books! By the way, I know that Bible is one of the most widespread books on Earth. "
             "It is the foundation stone of Christianity. Have you read the whole Bible?",
             TRANSITIONS: {
-                ("bible_flow", "bible_elaborate"): cnd.true(),
+                "bible_elaborate": cnd.true(),
             },
         },
         "bible_elaborate": {
@@ -516,13 +530,13 @@ flows = {
                 phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
             ),
             TRANSITIONS: {
-                ("undetected_flow", "ask_to_repeat", 2): cnd.true(),
+                ("undetected_flow", "ask_to_repeat"): cnd.true(),
             },
         },
     },
     "undetected_flow": {
         "ask_to_repeat": {
-            RESPONSE: "Sorry, but I can't answer you now :( It's been great talking to you today!",
+            RESPONSE: "I'm sorry, but I don't know what to say to that yet, but I will definitely learn! Have a nice day, bye!",
             TRANSITIONS: {},
         },
         "change_branch": {
@@ -556,6 +570,6 @@ flows = {
 actor = Actor(
     flows,
     start_label=("global_flow", "start"),
-    fallback_label=("global_flow", "fallback"),
+    fallback_label=("global_flow", "fallback")
 )
 logger.info("Actor created successfully")
