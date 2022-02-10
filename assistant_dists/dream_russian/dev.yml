@@ -60,7 +60,7 @@ services:
       - 8030:8030
   entity-linking:
     volumes:
-      - "./annotators/entity_linking:/src"
+      - "./annotators/entity_linking_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8075:8075
