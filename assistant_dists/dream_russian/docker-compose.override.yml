@@ -176,20 +176,19 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: kbqa_entity_linking_page.json
+        CONFIG: entity_linking_rus.json
         PORT: 8075
-        SRC_DIR: annotators/entity_linking
-        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+        SRC_DIR: annotators/entity_linking_rus
       context: ./
-      dockerfile: annotators/entity_linking/Dockerfile
+      dockerfile: annotators/entity_linking_rus/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
-          memory: 23G
+          memory: 3G
         reservations:
-          memory: 23G
+          memory: 3G
 
   wiki-parser:
     env_file: [.env]
