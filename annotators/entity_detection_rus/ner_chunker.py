@@ -243,7 +243,7 @@ class NerChunkModel(Component):
                 for i in range(len(ner_tokens_batch)):
                     for j in range(len(ner_tokens_batch[i])):
                         if self.morph.parse(ner_tokens_batch[i][j])[0].tag.POS == "NOUN" and ner_probas_batch[i][j] == "O":
-                            ner_probas_batch[i][j] = "B_MISC"
+                            ner_probas_batch[i][j] = "B-MISC"
             entity_substr_batch, entity_positions_batch, entity_probas_batch, tokens_conf_batch = \
                 self.ner_parser(ner_tokens_batch, ner_probas_batch, probas_batch)
             tm_ner_end = time.time()
