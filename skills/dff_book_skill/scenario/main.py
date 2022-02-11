@@ -13,7 +13,7 @@ from df_engine.core.keywords import PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, L
 from df_engine.core import Actor
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
-import scenario.sf_conditions as dm_cnd
+# import scenario.sf_conditions as dm_cnd
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
@@ -233,7 +233,7 @@ flows = {
             TRANSITIONS: {
                 "dislikes_reading": int_cnd.is_no_vars,
                 "likes_reading": cnd.true(),
-                "test1": dm_cnd.is_sf("React.Rejoinder.Support.Track.Clarify"),
+                # "test1": dm_cnd.is_sf("React.Rejoinder.Support.Track.Clarify"),
             },
             MISC: {"speech_functions": ["Open.Demand.Fact"]},
         },
@@ -268,11 +268,11 @@ flows = {
                 ("bot_fav_book", "fav_name"): cnd.true()
             },
         },
-        "test1": {
-            TRANSITIONS: {},
-            RESPONSE: 'I think that reading is cool and all people should read books',
-            MISC: {"speech_functions": ["React.Rejoinder.Support.Response.Resolve"]},
-        },
+        # "test1": {
+        #     TRANSITIONS: {},
+        #     RESPONSE: 'I think that reading is cool and all people should read books',
+        #     MISC: {"speech_functions": ["React.Rejoinder.Support.Response.Resolve"]},
+        # },
     },
     "bot_fav_book": {
         "fav_name": {
