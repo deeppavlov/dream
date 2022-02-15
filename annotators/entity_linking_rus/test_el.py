@@ -7,22 +7,15 @@ def main():
     url = "http://0.0.0.0:8075/model"
 
     request_data = [
-        {
-            "entity_substr": [["форрест гамп"]],
-            "entity_tags": [["film"]],
-            "context": [["кто снял фильм форрест гамп?"]]
-        },
+        {"entity_substr": [["форрест гамп"]], "entity_tags": [["film"]], "context": [["кто снял фильм форрест гамп?"]]},
         {
             "entity_substr": [["роберт левандовский"]],
             "entity_tags": [["per"]],
             "context": [["за какую команду играет роберт левандовский?"]],
-        }
+        },
     ]
-    
-    gold_results = [
-        ["Q134773"],
-        ["Q151269"]
-    ]
+
+    gold_results = [["Q134773"], ["Q151269"]]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

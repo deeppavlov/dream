@@ -30,7 +30,7 @@ log = getLogger(__name__)
 
 
 def token_from_subtoken(units: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-    """ Assemble token level units from subtoken level units
+    """Assemble token level units from subtoken level units
 
     Args:
         units: torch.Tensor of shape [batch_size, SUBTOKEN_seq_length, n_features]
@@ -107,7 +107,8 @@ def token_from_subtoken(units: torch.Tensor, mask: torch.Tensor) -> torch.Tensor
     # [0, 3, 5]
 
     new_word_indices = torch.arange(n_words).to(torch.int64) - torch.gather(
-        count_to_substract, dim=0, index=torch.cumsum(a, 0))
+        count_to_substract, dim=0, index=torch.cumsum(a, 0)
+    )
     # tf.range(n_words) -> [0, 1, 2, 3, 4, 5]
     # tf.cumsum(a) -> [0, 0, 0, 1, 1, 2]
     # tf.gather(count_to_substract, tf.cumsum(a)) -> [0, 0, 0, 3, 3, 5]
@@ -182,7 +183,7 @@ def token_labels_to_subtoken_labels(labels, y_mask, input_mask):
     labels_ind = 0
     n_tokens_with_special = int(np.sum(input_mask))
 
-    for el in y_mask[1:n_tokens_with_special - 1]:
+    for el in y_mask[1 : n_tokens_with_special - 1]:
         if el == 1:
             subtoken_labels += [labels[labels_ind]]
             labels_ind += 1
@@ -193,7 +194,7 @@ def token_labels_to_subtoken_labels(labels, y_mask, input_mask):
     return subtoken_labels
 
 
-@register('torch_transformers_sequence_tagger')
+@register("torch_transformers_sequence_tagger")
 class TorchTransformersSequenceTagger(TorchModel):
     """Transformer-based model on PyTorch for text tagging. It predicts a label for every token (not subtoken)
     in the text. You can use it for sequence labeling tasks, such as morphological tagging or named entity recognition.
@@ -216,22 +217,24 @@ class TorchTransformersSequenceTagger(TorchModel):
         min_learning_rate: min value of learning rate if learning rate decay is used
     """
 
-    def __init__(self,
-                 n_tags: int,
-                 pretrained_bert: str,
-                 bert_config_file: Optional[str] = None,
-                 return_probas: bool = False,
-                 attention_probs_keep_prob: Optional[float] = None,
-                 hidden_keep_prob: Optional[float] = None,
-                 optimizer: str = "AdamW",
-                 optimizer_parameters: dict = {"lr": 1e-3, "weight_decay": 1e-6},
-                 learning_rate_drop_patience: int = 20,
-                 learning_rate_drop_div: float = 2.0,
-                 load_before_drop: bool = True,
-                 clip_norm: Optional[float] = None,
-                 min_learning_rate: float = 1e-07,
-                 device: str = "cpu",
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        n_tags: int,
+        pretrained_bert: str,
+        bert_config_file: Optional[str] = None,
+        return_probas: bool = False,
+        attention_probs_keep_prob: Optional[float] = None,
+        hidden_keep_prob: Optional[float] = None,
+        optimizer: str = "AdamW",
+        optimizer_parameters: dict = {"lr": 1e-3, "weight_decay": 1e-6},
+        learning_rate_drop_patience: int = 20,
+        learning_rate_drop_div: float = 2.0,
+        load_before_drop: bool = True,
+        clip_norm: Optional[float] = None,
+        min_learning_rate: float = 1e-07,
+        device: str = "cpu",
+        **kwargs,
+    ) -> None:
 
         self.n_classes = n_tags
         self.return_probas = return_probas
@@ -242,21 +245,26 @@ class TorchTransformersSequenceTagger(TorchModel):
         self.pretrained_bert = pretrained_bert
         self.bert_config_file = bert_config_file
 
-        super().__init__(optimizer=optimizer,
-                         optimizer_parameters=optimizer_parameters,
-                         learning_rate_drop_patience=learning_rate_drop_patience,
-                         learning_rate_drop_div=learning_rate_drop_div,
-                         load_before_drop=load_before_drop,
-                         min_learning_rate=min_learning_rate,
-                         device=device,
-                         **kwargs)
+        super().__init__(
+            optimizer=optimizer,
+            optimizer_parameters=optimizer_parameters,
+            learning_rate_drop_patience=learning_rate_drop_patience,
+            learning_rate_drop_div=learning_rate_drop_div,
+            load_before_drop=load_before_drop,
+            min_learning_rate=min_learning_rate,
+            device=device,
+            **kwargs,
+        )
 
-    def train_on_batch(self,
-                       input_ids: Union[List[List[int]], np.ndarray],
-                       input_masks: Union[List[List[int]], np.ndarray],
-                       y_masks: Union[List[List[int]], np.ndarray],
-                       y: List[List[int]],
-                       *args, **kwargs) -> Dict[str, float]:
+    def train_on_batch(
+        self,
+        input_ids: Union[List[List[int]], np.ndarray],
+        input_masks: Union[List[List[int]], np.ndarray],
+        y_masks: Union[List[List[int]], np.ndarray],
+        y: List[List[int]],
+        *args,
+        **kwargs,
+    ) -> Dict[str, float]:
         """
 
         Args:
@@ -274,13 +282,14 @@ class TorchTransformersSequenceTagger(TorchModel):
         """
         b_input_ids = torch.from_numpy(input_ids).to(self.device)
         b_input_masks = torch.from_numpy(input_masks).to(self.device)
-        subtoken_labels = [token_labels_to_subtoken_labels(y_el, y_mask, input_mask)
-                           for y_el, y_mask, input_mask in zip(y, y_masks, input_masks)]
+        subtoken_labels = [
+            token_labels_to_subtoken_labels(y_el, y_mask, input_mask)
+            for y_el, y_mask, input_mask in zip(y, y_masks, input_masks)
+        ]
         b_labels = torch.from_numpy(np.array(subtoken_labels)).to(torch.int64).to(self.device)
         self.optimizer.zero_grad()
 
-        loss, logits = self.model(input_ids=b_input_ids, attention_mask=b_input_masks,
-                                  labels=b_labels)
+        loss, logits = self.model(input_ids=b_input_ids, attention_mask=b_input_masks, labels=b_labels)
         loss.backward()
         # Clip the norm of the gradients to 1.0.
         # This is to help prevent the "exploding gradients" problem.
@@ -291,13 +300,15 @@ class TorchTransformersSequenceTagger(TorchModel):
         if self.lr_scheduler is not None:
             self.lr_scheduler.step()
 
-        return {'loss': loss.item()}
+        return {"loss": loss.item()}
 
-    def __call__(self,
-                 input_ids: Union[List[List[int]], np.ndarray],
-                 input_masks: Union[List[List[int]], np.ndarray],
-                 y_masks: Union[List[List[int]], np.ndarray]) -> Union[List[List[int]], List[np.ndarray]]:
-        """ Predicts tag indices for a given subword tokens batch
+    def __call__(
+        self,
+        input_ids: Union[List[List[int]], np.ndarray],
+        input_masks: Union[List[List[int]], np.ndarray],
+        y_masks: Union[List[List[int]], np.ndarray],
+    ) -> Union[List[List[int]], List[np.ndarray]]:
+        """Predicts tag indices for a given subword tokens batch
 
         Args:
             input_ids: indices of the subwords
@@ -338,8 +349,9 @@ class TorchTransformersSequenceTagger(TorchModel):
 
         self.pretrained_bert = str(expand_path(self.pretrained_bert))
         if self.pretrained_bert:
-            config = AutoConfig.from_pretrained(self.pretrained_bert, num_labels=self.n_classes,
-                                                output_attentions=False, output_hidden_states=False)
+            config = AutoConfig.from_pretrained(
+                self.pretrained_bert, num_labels=self.n_classes, output_attentions=False, output_hidden_states=False
+            )
             self.model = AutoModelForTokenClassification.from_pretrained(self.pretrained_bert, config=config)
 
         elif self.bert_config_file and Path(self.bert_config_file).is_file():
@@ -355,11 +367,11 @@ class TorchTransformersSequenceTagger(TorchModel):
 
         self.model.to(self.device)
 
-        self.optimizer = getattr(torch.optim, self.optimizer_name)(
-            self.model.parameters(), **self.optimizer_parameters)
+        self.optimizer = getattr(torch.optim, self.optimizer_name)(self.model.parameters(), **self.optimizer_parameters)
         if self.lr_scheduler_name is not None:
             self.lr_scheduler = getattr(torch.optim.lr_scheduler, self.lr_scheduler_name)(
-                self.optimizer, **self.lr_scheduler_parameters)
+                self.optimizer, **self.lr_scheduler_parameters
+            )
 
         if self.load_path:
             log.info(f"Load path {self.load_path} is given.")

@@ -34,25 +34,26 @@ from deeppavlov.models.preprocessors.mask import Mask
 log = getLogger(__name__)
 
 
-@register('torch_transformers_entity_ranker_preprocessor')
+@register("torch_transformers_entity_ranker_preprocessor")
 class TorchTransformersEntityRankerPreprocessor(Component):
-    def __init__(self,
-                 vocab_file: str,
-                 do_lower_case: bool = True,
-                 max_seq_length: int = 512,
-                 return_tokens: bool = False,
-                 special_tokens: List[str] = None,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        vocab_file: str,
+        do_lower_case: bool = True,
+        max_seq_length: int = 512,
+        return_tokens: bool = False,
+        special_tokens: List[str] = None,
+        **kwargs
+    ) -> None:
         self.max_seq_length = max_seq_length
         self.return_tokens = return_tokens
         if Path(vocab_file).is_file():
             vocab_file = str(expand_path(vocab_file))
-            self.tokenizer = AutoTokenizer(vocab_file=vocab_file,
-                                           do_lower_case=do_lower_case)
+            self.tokenizer = AutoTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
         else:
             self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         if special_tokens is not None:
-            special_tokens_dict = {'additional_special_tokens': special_tokens}
+            special_tokens_dict = {"additional_special_tokens": special_tokens}
             num_added_toks = self.tokenizer.add_special_tokens(special_tokens_dict)
 
     def __call__(self, texts_a: List[str]) -> Union[List[InputFeatures], Tuple[List[InputFeatures], List[List[str]]]]:
@@ -62,17 +63,20 @@ class TorchTransformersEntityRankerPreprocessor(Component):
         lengths = []
         for text_a in texts_a:
             encoding = self.tokenizer.encode_plus(
-                text_a, add_special_tokens = True, pad_to_max_length = True, return_attention_mask = True)
+                text_a, add_special_tokens=True, pad_to_max_length=True, return_attention_mask=True
+            )
             input_ids = encoding["input_ids"]
             lengths.append(len(input_ids))
-            
+
         max_length = min(max(lengths), self.max_seq_length)
 
-        input_features = self.tokenizer(text=texts_a,
-                                        add_special_tokens=True,
-                                        max_length=self.max_seq_length,
-                                        padding='max_length',
-                                        return_attention_mask=True,
-                                        truncation=True,
-                                        return_tensors='pt')
+        input_features = self.tokenizer(
+            text=texts_a,
+            add_special_tokens=True,
+            max_length=self.max_seq_length,
+            padding="max_length",
+            return_attention_mask=True,
+            truncation=True,
+            return_tensors="pt",
+        )
         return input_features
