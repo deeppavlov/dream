@@ -92,6 +92,7 @@ class RussianDialogGPT:
         inputs_text += f"|1|{params_['length_generate']}|"
 
         inputs_token_ids = self.tokenizer.encode(inputs_text, return_tensors='pt')
+        inputs_token_ids = inputs_token_ids.cuda() if cuda else inputs
 
         try:
             outputs_token_ids = self.model.generate(
