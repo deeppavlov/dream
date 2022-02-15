@@ -14,7 +14,7 @@ def test_respond():
     result = requests.post(url, json=request_data).json()["generated_responses"][0]
 
     assert len(result) == 3 and len(result[0]) > 0, f"Got\n{result}"
-    print("Success")
+    print("Success!")
 
 
 if __name__ == "__main__":
