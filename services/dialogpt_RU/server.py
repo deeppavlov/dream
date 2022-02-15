@@ -59,7 +59,7 @@ class RussianDialogGPT:
         self.tokenizer = AutoTokenizer.from_pretrained(self.path_model)
         self.model = AutoModelForCausalLM.from_pretrained(self.path_model)
 
-    def get_responses(self, inputs: List[Dict], params: Dict) -> str:
+    def get_responses(self, inputs: List[Dict], params: Dict) -> List[str]:
 
         params_ = {
             'max_length': params.get('max_length', params_default['max_length']),
@@ -116,7 +116,7 @@ class RussianDialogGPT:
 
         outputs = [self.tokenizer.decode(x, skip_special_tokens=True) for x in outputs_token_ids]
         outputs = [x.split('|')[-1] for x in outputs]
-
+        # outputs contains list of strings of possible hypotheses
         return outputs
 
 
@@ -142,20 +142,22 @@ def respond():
     st_time = time.time()
 
     dialog_contexts = request.json.get("dialog_contexts", [])
+    num_return_sequences = request.json.get("num_return_sequences", 3)
+
     try:
         batch_generated_responses = []
         for context in dialog_contexts:
             # context is a list of dicts, each dict contains text and speaker label
             # context = [{"text": "utterance text", "speaker": "human"}, ...]
             inputs = [{"text": uttr["text"], "speaker": 1 if uttr["speaker"] == "bot" else 0} for uttr in context][-3:]
-            result = model.get_responses(inputs, params={})
-            logger.info(f"dialogpt result: {result}")
-            batch_generated_responses += result
+            hypotheses = model.get_responses(inputs, params={"num_return_sequences": num_return_sequences})
+            logger.info(f"dialogpt hypotheses: {hypotheses}")
+            batch_generated_responses.append(hypotheses)
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        batch_generated_responses = [""] * len(dialog_contexts)
+        batch_generated_responses = [[]] * len(dialog_contexts)
 
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
