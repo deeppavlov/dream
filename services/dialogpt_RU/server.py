@@ -30,7 +30,7 @@ if cuda:
 else:
     device = "cpu"
 
-logger.info(f"dialogpt-ru is set to run on {device}")
+logger.info(f"dialogpt is set to run on {device}")
 
 params_default = {
     'max_length': 256,
@@ -55,7 +55,7 @@ class RussianDialogGPT:
         self._load_model()
 
     def _load_model(self):
-        logger.info(f"dialogpt-ru Loading model: {self.path_model} ...")
+        logger.info(f"dialogpt Loading model: {self.path_model} ...")
         self.tokenizer = AutoTokenizer.from_pretrained(self.path_model)
         self.model = AutoModelForCausalLM.from_pretrained(self.path_model)
 
@@ -110,7 +110,7 @@ class RussianDialogGPT:
                 pad_token_id=self.tokenizer.pad_token_id,
             )
         except Exception as e:
-            logger.info(f"dialogpt-ru Error generate: {str(e)}")
+            logger.info(f"dialogpt Error generate: {str(e)}")
             return ""
 
         outputs = [self.tokenizer.decode(x, skip_special_tokens=True) for x in outputs_token_ids]
@@ -125,7 +125,7 @@ try:
     if cuda:
         model.model.cuda()
 
-    logger.info("dialogpt-ru model is ready")
+    logger.info("dialogpt model is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -148,7 +148,7 @@ def respond():
             # context = [{"text": "utterance text", "speaker": "human"}, ...]
             inputs = [{"text": uttr["text"], "speaker": 1 if uttr["speaker"] == "bot" else 0} for uttr in context][-3:]
             result = model.get_responses(inputs, params={})
-            logger.info(f"dialogpt-ru result: {result}")
+            logger.info(f"dialogpt result: {result}")
             batch_generated_responses += result
 
     except Exception as exc:
@@ -157,6 +157,6 @@ def respond():
         batch_generated_responses = [""] * len(dialog_contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"dialogpt-ru exec time: {total_time:.3f}s")
+    logger.info(f"dialogpt exec time: {total_time:.3f}s")
 
     return jsonify({"generated_responses": batch_generated_responses})

@@ -100,7 +100,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
-  dialogpt-ru:
+  dialogpt:
     volumes:
       - "./services/dialogpt_RU:/src"
     ports:

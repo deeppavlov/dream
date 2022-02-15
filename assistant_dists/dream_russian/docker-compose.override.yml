@@ -273,7 +273,7 @@ services:
         reservations:
           memory: 256M
 
-  dialogpt-ru:
+  dialogpt:
     env_file: [ .env ]
     build:
       context: ./services/dialogpt_RU/

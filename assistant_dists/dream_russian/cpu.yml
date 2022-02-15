@@ -7,6 +7,6 @@ services:
   entity-detection:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  dialogpt-ru:
+  dialogpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
