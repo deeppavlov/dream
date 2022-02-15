@@ -291,6 +291,22 @@ services:
         reservations:
           memory: 2.5G
 
+  dff-generative-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8092
+        SERVICE_NAME: dff_generative_skill
+      context: .
+      dockerfile: ./skills/dff_generative_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8092 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
   dff-template-skill:
     env_file: [.env]
     build:
