@@ -7,8 +7,9 @@ import df_engine.labels as lbl
 
 from . import response as loc_rsp
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
+logger = logging.getLogger(__name__)
 
 flows = {
     "generation": {
@@ -22,7 +23,6 @@ flows = {
         },
     },
 }
-
 
 actor = Actor(
     flows, start_label=("generation", "start_node"), fallback_node_label=("generation", "generative_response_node")
