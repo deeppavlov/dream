@@ -41,7 +41,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if "agent" in ctx.misc:
         request_data = compose_data_for_dialogpt(ctx.misc["agent"]["dialog"])
         hypotheses = requests.post(
-            DIALOGPT_SERVICE_URL, json=[request_data], timeout=1).json()["generated_responses"][0]
+            DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1).json()["generated_responses"][0]
 
         for hyp in hypotheses:
             reply, confidence, human_attr, bot_attr, attr = hyp, 0.95, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
