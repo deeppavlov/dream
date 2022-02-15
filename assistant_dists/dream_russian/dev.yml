@@ -100,6 +100,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
+  dialogpt-ru:
+    volumes:
+      - "./services/dialogpt_RU:/src"
+    ports:
+      - 8091:8091
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
