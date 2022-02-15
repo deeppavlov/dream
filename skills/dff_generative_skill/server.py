@@ -10,12 +10,10 @@ from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-
 from common.dff.integration.actor import load_ctxs, get_response
-
 from scenario.main import actor
 
-# import test_server
+import test_server
 
 
 ignore_logger("root")
@@ -50,7 +48,7 @@ def handler(requested_data, random_seed=None):
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
-            responses.append(("", 1.0, {}, {}, {}))
+            responses.append(("", 0.0, {}, {}, {}))
 
     total_time = time.time() - st_time
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
@@ -58,7 +56,7 @@ def handler(requested_data, random_seed=None):
 
 
 try:
-    # test_server.run_test(handler)
+    test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
