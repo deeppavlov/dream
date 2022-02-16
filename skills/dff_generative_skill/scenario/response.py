@@ -61,11 +61,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
 
     for hyp in hypotheses:
-        reply, confidence, human_attr, bot_attr, attr = hyp, 0.95, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
-        gathering_responses(reply, confidence, human_attr, bot_attr, attr)
+        gathering_responses(hyp, 0.95, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
-        gathering_responses("", 0.01, {}, {}, {})
+        return "", 0.01, {}, {}, {}
+
     return int_rsp.multi_response(
         replies=curr_responses,
         confidences=curr_confidences,
