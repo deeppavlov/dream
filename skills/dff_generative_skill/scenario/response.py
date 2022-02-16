@@ -33,9 +33,9 @@ def compose_data_for_dialogpt(ctx, actor):
     if len(bot_uttrs) > 0:
         data += [{"speaker": bot_uttrs[-1]["user"]["user_type"],
                   "text": bot_uttrs[-1]["text"]}]
-
-    data += [{"speaker": human_uttrs[-1]["user"]["user_type"],
-              "text": human_uttrs[-1]["text"]}]
+    if len(human_uttrs) > 0:
+        data += [{"speaker": human_uttrs[-1]["user"]["user_type"],
+                  "text": human_uttrs[-1]["text"]}]
 
     return data
 
@@ -54,8 +54,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             logger.info(f"dff-generative-skill: {reply}")
 
     request_data = compose_data_for_dialogpt(ctx, actor)
-    hypotheses = requests.post(
-        DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1).json()["generated_responses"][0]
+    if len(request_data) > 0:
+        hypotheses = requests.post(
+            DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1).json()["generated_responses"][0]
+    else:
+        hypotheses = []
 
     for hyp in hypotheses:
         reply, confidence, human_attr, bot_attr, attr = hyp, 0.95, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
