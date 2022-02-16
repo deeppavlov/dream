@@ -19,7 +19,7 @@ from pathlib import Path
 import torch
 from typing import Tuple, List, Optional, Union
 
-from transformers import AutoConfig, AutoTokenizer, AutoModel, BertModel, BertTokenizer
+from transformers import AutoTokenizer, BertTokenizer
 from transformers.data.processors.utils import InputFeatures
 
 from deeppavlov.core.commands.utils import expand_path
@@ -78,7 +78,7 @@ class TorchTransformersPreprocessor(Component):
         self.tokenizer = AutoTokenizer.from_pretrained(vocab_file_path, do_lower_case=do_lower_case)
         if add_special_tokens is not None:
             special_tokens_dict = {"additional_special_tokens": add_special_tokens}
-            num_added_toks = tokenizer.add_special_tokens(special_tokens_dict)
+            self.tokenizer.add_special_tokens(special_tokens_dict)
 
     def __call__(
         self, texts_a: List[str], texts_b: Optional[List[str]] = None
@@ -153,7 +153,7 @@ class TorchTransformersBatchPreprocessor(Component):
             self.tokenizer = BertTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         if add_special_tokens is not None:
             special_tokens_dict = {"additional_special_tokens": add_special_tokens}
-            num_added_toks = self.tokenizer.add_special_tokens(special_tokens_dict)
+            self.tokenizer.add_special_tokens(special_tokens_dict)
         self.add_special_tokens = add_special_tokens
         self.special_token_id = special_token_id
         self.return_special_tokens_pos = return_special_tokens_pos

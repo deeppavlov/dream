@@ -1,4 +1,3 @@
-import itertools
 from pathlib import Path
 from logging import getLogger
 from typing import List, Optional, Dict, Tuple, Union, Any

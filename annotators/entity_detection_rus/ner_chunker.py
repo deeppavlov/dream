@@ -86,7 +86,6 @@ class NerChunker(Component):
         sentences_list = []
         text = ""
         cur_len = 0
-        cur_chunk_len = 0
 
         for n, doc in enumerate(docs_batch):
             if self.do_lower_case:
@@ -103,7 +102,6 @@ class NerChunker(Component):
             for doc_piece in doc_pieces:
                 sentences += sent_tokenize(doc_piece)
             for sentence in sentences:
-                cur_chunk_len = 0
                 sentence_tokens = re.findall(self.re_tokenizer, sentence)
                 sentence_len = sum([len(self.tokenizer.tokenize(token)) for token in sentence_tokens])
                 if cur_len + sentence_len < self.max_seq_len:

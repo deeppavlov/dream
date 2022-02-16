@@ -1,10 +1,8 @@
 import logging
 import os
-import re
 import time
 from flask import Flask, request, jsonify
 import sentry_sdk
-from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -44,7 +42,6 @@ def respond():
         else:
             opt_context_batch.append([last_utt])
 
-    entity_types_batch = [[[] for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:
         entity_substr_batch, entity_ids_batch, conf_batch, entity_pages_batch = el(

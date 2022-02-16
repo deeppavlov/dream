@@ -91,7 +91,6 @@ def get_result(request):
                                 "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
                             }
                         )
-                        already_detected_set.add((entity, offsets))
                     else:
                         utt_entities["entities"] = [entity]
                         utt_entities["labelled_entities"] = [

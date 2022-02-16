@@ -12,24 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-import random
-from collections import defaultdict
-from dataclasses import dataclass
 from logging import getLogger
 from pathlib import Path
-import torch
-from typing import Tuple, List, Optional, Union, Dict, Set
+from typing import Tuple, List, Union
 
-import numpy as np
 from transformers import AutoTokenizer
 from transformers.data.processors.utils import InputFeatures
 
 from deeppavlov.core.commands.utils import expand_path
 from deeppavlov.core.common.registry import register
-from deeppavlov.core.data.utils import zero_pad
 from deeppavlov.core.models.component import Component
-from deeppavlov.models.preprocessors.mask import Mask
 
 log = getLogger(__name__)
 
@@ -54,7 +46,7 @@ class TorchTransformersEntityRankerPreprocessor(Component):
             self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         if special_tokens is not None:
             special_tokens_dict = {"additional_special_tokens": special_tokens}
-            num_added_toks = self.tokenizer.add_special_tokens(special_tokens_dict)
+            self.tokenizer.add_special_tokens(special_tokens_dict)
 
     def __call__(self, texts_a: List[str]) -> Union[List[InputFeatures], Tuple[List[InputFeatures], List[List[str]]]]:
         # in case of iterator's strange behaviour
@@ -67,8 +59,6 @@ class TorchTransformersEntityRankerPreprocessor(Component):
             )
             input_ids = encoding["input_ids"]
             lengths.append(len(input_ids))
-
-        max_length = min(max(lengths), self.max_seq_length)
 
         input_features = self.tokenizer(
             text=texts_a,

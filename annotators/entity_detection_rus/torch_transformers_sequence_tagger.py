@@ -19,7 +19,7 @@ from typing import List, Union, Dict, Optional
 import numpy as np
 import torch
 from overrides import overrides
-from transformers import AutoModelForTokenClassification, AutoConfig, BertForTokenClassification, BertConfig
+from transformers import AutoModelForTokenClassification, AutoConfig
 
 from deeppavlov.core.commands.utils import expand_path
 from deeppavlov.core.common.errors import ConfigError

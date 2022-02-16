@@ -18,20 +18,15 @@ from logging import getLogger
 from typing import List, Dict, Tuple, Union
 from collections import defaultdict
 
-import numpy as np
 import pymorphy2
 from hdt import HDTDocument
 from nltk.corpus import stopwords
-from nltk import sent_tokenize
 from rapidfuzz import fuzz
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
-from deeppavlov.core.common.chainer import Chainer
 from deeppavlov.core.models.serializable import Serializable
 from deeppavlov.core.commands.utils import expand_path
-from deeppavlov.core.common.file import load_pickle, save_pickle
 
 log = getLogger(__name__)
 
@@ -369,7 +364,7 @@ class EntityLinker(Component, Serializable):
                         inters = entities_objects_list[i][entity1].intersection(entities_sets_list[j])
                         if inters:
                             entities_conn_scores_list[i][entity1] += len(inters)
-                            entities_conn_scores_list[j][entity2] += len(inters)
+                            entities_conn_scores_list[j][entities_sets_list[j]] += len(inters)
                             already_ranked[j] = True
                         else:
                             for entity2 in entities_triplets_list[j]:
