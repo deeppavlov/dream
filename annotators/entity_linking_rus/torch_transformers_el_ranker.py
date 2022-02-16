@@ -124,7 +124,7 @@ class TorchTransformersElRanker(TorchModel):
             fname = self.save_path
         if not fname.parent.is_dir():
             raise ConfigError("Provided save path is incorrect!")
-        weights_path = Path(fname).with_suffix(f".pth.tar")
+        weights_path = Path(fname).with_suffix(".pth.tar")
         log.info(f"Saving model to {weights_path}.")
         torch.save(
             {
@@ -262,10 +262,10 @@ class SiameseBertElModel(nn.Module):
             return softmax_scores
 
     def save(self) -> None:
-        encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(f".pth.tar")
+        encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(".pth.tar")
         log.info(f"Saving encoder to {encoder_weights_path}.")
         torch.save({"model_state_dict": self.encoder.cpu().state_dict()}, encoder_weights_path)
-        bilinear_weights_path = expand_path(self.bilinear_save_path).with_suffix(f".pth.tar")
+        bilinear_weights_path = expand_path(self.bilinear_save_path).with_suffix(".pth.tar")
         log.info(f"Saving bilinear weights to {bilinear_weights_path}.")
         torch.save({"model_state_dict": self.bilinear_ranker.cpu().state_dict()}, bilinear_weights_path)
         self.encoder.to(self.device)
