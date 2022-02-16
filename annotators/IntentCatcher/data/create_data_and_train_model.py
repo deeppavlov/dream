@@ -11,7 +11,7 @@ from utils import *
 MODEL_NAME = "linear_classifier"
 MULTILABEL = True
 TRAIN_SIZE = 0.5
-DENSE_LAYERS = 2
+DENSE_LAYERS = 3
 MODEL_NAME += "_h" + str(DENSE_LAYERS)
 INTENT_DATA_PATH = "./intent_data_h" + str(DENSE_LAYERS) + ".json"
 
