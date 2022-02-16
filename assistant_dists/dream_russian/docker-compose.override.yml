@@ -78,7 +78,7 @@ services:
       context: ./annotators/IntentCatcher/
       args:
         INTENT_MODEL_FNAME: linear_classifier_h3_RU.h5
-        USE_MODEL_PATH: https://tfhub.dev/google/universal-sentence-encoder-multilingual/3
+        USE_MODEL_PATH: https://tfhub.dev/google/universal-sentence-encoder-multilingual/1
         INTENT_DATA_FNAME: intent_data_h3_RU.json
         INTENT_PHRASES_FNAME: intent_phrases_RU.json
     command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
