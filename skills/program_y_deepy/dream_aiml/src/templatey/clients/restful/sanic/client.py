@@ -113,9 +113,7 @@ class SanicRestBotClient(RestBotClient):
                     answer = self.ask_question(userid, self.preprocesser.process(s))
 
                 if "DEFAULT_SORRY_RESPONCE" in answer:
-                    answer = (
-                        "Sorry, I don't have an answer for that!"
-                    )
+                    answer = "Sorry, I don't have an answer for that!"
 
                 untagged_text, ssml_tagged_text = create_amazon_ssml_markup(answer)
 
