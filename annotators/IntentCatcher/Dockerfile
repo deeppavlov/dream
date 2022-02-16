@@ -29,7 +29,7 @@ ENV TFHUB_CACHE_DIR='/root/tfhub_cache'
 
 RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/$INTENT_MODEL_FNAME -q -P /data/models
 
-RUN python -c "import tensorflow_hub as hub; model=hub.Module('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')"
+RUN python -c "import tensorflow_hub as hub; import tf_sentencepiece; model=hub.Module('https://tfhub.dev/google/universal-sentence-encoder-multilingual/3')"
 
 COPY ./src/ ./
 COPY ./data/ /data
