@@ -5,6 +5,7 @@ from os import getenv
 from typing import Any
 
 import common.dff.integration.response as int_rsp
+import common.dff.integration.context as int_ctx
 from df_engine.core import Context, Actor
 from common.constants import CAN_NOT_CONTINUE
 
@@ -48,7 +49,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
             logger.info(f"dff-generative-skill: {reply}")
 
-    request_data = compose_data_for_dialogpt(ctx.misc["agent"]["dialog"])
+    request_data = compose_data_for_dialogpt(int_ctx.get_dialog(ctx, actor))
     hypotheses = requests.post(
         DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1).json()["generated_responses"][0]
 
