@@ -1,6 +1,7 @@
+
 what_are_you_talking_about: 22
-topic_switching: 2460
-lets_chat_about: 2106
+topic_switching: 2462
+lets_chat_about: 2121
 exit: 6
 repeat: 13
 yes: 16
@@ -9,34 +10,34 @@ what_is_your_name: 55
 where_are_you_from: 504
 what_can_you_do: 8
 choose_topic: 60
-who_made_you: 1134
+who_made_you: 1124
 what_is_your_job: 44
-opinion_request: 4228
+opinion_request: 4408
 Created!
 Scoring model...
-  0%|                                                                                         | 0/20 [00:00<?, ?it/s]W0217 13:04:38.466269 140288801503040 deprecation.py:506] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/init_ops.py:1251: calling VarianceScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+  0%|                                                                                         | 0/20 [00:00<?, ?it/s]W0217 13:49:20.161889 139983303497536 deprecation.py:506] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/init_ops.py:1251: calling VarianceScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
 Instructions for updating:
 Call initializer instance with the dtype argument instead of passing it to the constructor
-W0217 13:04:38.550826 140288801503040 deprecation.py:323] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/nn_impl.py:180: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+W0217 13:49:20.268048 139983303497536 deprecation.py:323] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/nn_impl.py:180: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
 Instructions for updating:
 Use tf.where in 2.0, which has the same broadcast rule as np.where
-/data/utils.py:65: RuntimeWarning: invalid value encountered in true_divide
+ 15%|████████████▏                                                                    | 3/20 [01:54<10:43, 37.83s/it]/data/utils.py:65: RuntimeWarning: invalid value encountered in true_divide
   f1 = 2.0 * pr * rec / (pr + rec)
-100%|████████████████████████████████████████████████████████████████████████████████| 20/20 [12:02<00:00, 36.14s/it]
+100%|████████████████████████████████████████████████████████████████████████████████| 20/20 [12:52<00:00, 38.60s/it]
 
 Intent: choose_topic
-PRECISION: 0.9990196078431373±0.00427343033680459
-RECALL: 0.9578947368421054±0.06087491779964026
-F1: 0.9770443759123004±0.03334734574746542
-Threshold: 0.2939684987068176±0.35655850172042847
+PRECISION: 0.9980270793036752±0.00593895494762976
+RECALL: 0.9587719298245615±0.06007971517953603
+F1: 0.9770899514682497±0.03382338383667983
+Threshold: 0.34319204092025757±0.36313334107398987
 
 
 
 Intent: exit
-PRECISION: 0.8746013790131435±0.13567749723085115
-RECALL: 0.8533333333333333±0.11075498483890768
-F1: 0.8532393399148125±0.08765163106214792
-Threshold: 0.15178845822811127±0.2250969111919403
+PRECISION: 0.872486579539598±0.14221443466239983
+RECALL: 0.8766666666666667±0.11010096376609162
+F1: 0.860658576749781±0.08201468688887624
+Threshold: 0.25695839524269104±0.2849607765674591
 
 
 
@@ -44,23 +45,23 @@ Intent: lets_chat_about
 PRECISION: 1.0±0.0
 RECALL: 1.0±0.0
 F1: 1.0±0.0
-Threshold: 0.9912959337234497±0.015011177398264408
+Threshold: 0.9965183138847351±0.00343881594017148
 
 
 
 Intent: no
-PRECISION: 0.9996075997076916±0.000431768210248483
-RECALL: 1.0±0.0
-F1: 0.9998037147074721±0.00021601948180804932
-Threshold: 0.8726552128791809±0.24837008118629456
+PRECISION: 0.9996078777134827±0.00039634745763705983
+RECALL: 0.9998917748917748±0.0004717423099069955
+F1: 0.9997497486049305±0.0003638322943964029
+Threshold: 0.7785886526107788±0.3237993121147156
 
 
 
 Intent: opinion_request
-PRECISION: 0.8130991424669913±0.102252994187009
-RECALL: 0.9083333333333334±0.12206429190399906
-F1: 0.8478615460069143±0.07647444510777192
-Threshold: 0.21655341982841492±0.33242785930633545
+PRECISION: 0.8056358447269067±0.08686666043847775
+RECALL: 0.913888888888889±0.1046378233435409
+F1: 0.8516480450386098±0.07783880103769529
+Threshold: 0.30465465784072876±0.38313382863998413
 
 
 
@@ -68,15 +69,15 @@ Intent: repeat
 PRECISION: 1.0±0.0
 RECALL: 1.0±0.0
 F1: 1.0±0.0
-Threshold: 0.8275942802429199±0.29696765542030334
+Threshold: 0.9574275016784668±0.10017287731170654
 
 
 
 Intent: topic_switching
-PRECISION: 0.5783139508869323±0.41316356145520905
-RECALL: 0.6416666666666667±0.2649685515930775
-F1: 0.4954543412830154±0.3103772085199389
-Threshold: 0.046996086835861206±0.10882873088121414
+PRECISION: 0.6847320097934851±0.34214058631099187
+RECALL: 0.6083333333333332±0.2373171810983024
+F1: 0.6060141017982851±0.2859388849232273
+Threshold: 0.014090225100517273±0.01806945912539959
 
 
 
@@ -84,7 +85,7 @@ Intent: what_are_you_talking_about
 PRECISION: 1.0±0.0
 RECALL: 1.0±0.0
 F1: 1.0±0.0
-Threshold: 0.9412937164306641±0.10858642309904099
+Threshold: 0.9333623647689819±0.112946055829525
 
 
 
@@ -92,23 +93,23 @@ Intent: what_can_you_do
 PRECISION: 1.0±0.0
 RECALL: 1.0±0.0
 F1: 1.0±0.0
-Threshold: 0.8469878435134888±0.2814437448978424
+Threshold: 0.9408076405525208±0.19985346496105194
 
 
 
 Intent: what_is_your_job
-PRECISION: 1.0±0.0
-RECALL: 0.9995598591549296±0.001095941866020137
-F1: 0.9997795802935304±0.0005488905917888589
-Threshold: 0.31849440932273865±0.37433820962905884
+PRECISION: 0.999911190053286±0.00038711358290768975
+RECALL: 0.9998220640569395±0.0005338078291815096
+F1: 0.9998665083605422±0.00031777379443849804
+Threshold: 0.43026596307754517±0.41177961230278015
 
 
 
 Intent: what_is_your_name
-PRECISION: 0.9702256004864701±0.05743799358796103
-RECALL: 0.9145833333333334±0.09078649403958719
-F1: 0.938440821941813±0.06159146405137561
-Threshold: 0.6538155674934387±0.3597622215747833
+PRECISION: 0.9609268301143301±0.07956909847711319
+RECALL: 0.9166666666666667±0.08640183897219882
+F1: 0.9352746228926353±0.06974336212732112
+Threshold: 0.5547856688499451±0.3752080798149109
 
 
 
@@ -116,51 +117,51 @@ Intent: where_are_you_from
 PRECISION: 1.0±0.0
 RECALL: 1.0±0.0
 F1: 1.0±0.0
-Threshold: 0.7932785749435425±0.26979535818099976
+Threshold: 0.7640674114227295±0.26714542508125305
 
 
 
 Intent: who_made_you
 PRECISION: 1.0±0.0
-RECALL: 0.9998015873015873±0.0008648609014961623
-F1: 0.9999005964214712±0.000433290153433472
-Threshold: 0.9245980978012085±0.2196420431137085
+RECALL: 1.0±0.0
+F1: 1.0±0.0
+Threshold: 0.9943496584892273±0.0046676574274897575
 
 
 
 Intent: yes
-PRECISION: 0.9921052631578947±0.03441236008058427
-RECALL: 0.99±0.04358898943540673
-F1: 0.9910256410256411±0.039118323852288105
-Threshold: 0.8140701055526733±0.28163251280784607
+PRECISION: 0.9910973084886129±0.02974529196980955
+RECALL: 0.9974999999999999±0.010897247358851692
+F1: 0.9940100644298034±0.01643510811433177
+Threshold: 0.8326555490493774±0.2517296075820923
 
 
 METRICS:
            choose_topic      exit  lets_chat_about  ...  where_are_you_from  who_made_you       yes
-precision      0.999020  0.874601         1.000000  ...            1.000000      1.000000  0.992105
-recall         0.957895  0.853333         1.000000  ...            1.000000      0.999802  0.990000
-f1             0.977044  0.853239         1.000000  ...            1.000000      0.999901  0.991026
-threshold      0.293968  0.151788         0.991296  ...            0.793279      0.924598  0.814070
+precision      0.998027  0.872487         1.000000  ...            1.000000       1.00000  0.991097
+recall         0.958772  0.876667         1.000000  ...            1.000000       1.00000  0.997500
+f1             0.977090  0.860659         1.000000  ...            1.000000       1.00000  0.994010
+threshold      0.343192  0.256958         0.996518  ...            0.764067       0.99435  0.832656
 
 [4 rows x 14 columns]
 Training model...
 Epoch 1/10
-24610/24610 [==============================] - 15s 627us/sample - loss: 0.0224
+24832/24832 [==============================] - 16s 664us/sample - loss: 0.0220
 Epoch 2/10
-24610/24610 [==============================] - 2s 94us/sample - loss: 6.4916e-04
+24832/24832 [==============================] - 2s 96us/sample - loss: 5.8086e-04
 Epoch 3/10
-24610/24610 [==============================] - 2s 92us/sample - loss: 2.2738e-04
+24832/24832 [==============================] - 2s 93us/sample - loss: 2.3144e-04
 Epoch 4/10
-24610/24610 [==============================] - 2s 94us/sample - loss: 5.0388e-04
+24832/24832 [==============================] - 2s 96us/sample - loss: 5.5082e-04
 Epoch 5/10
-24610/24610 [==============================] - 2s 94us/sample - loss: 1.0129e-04
+24832/24832 [==============================] - 2s 95us/sample - loss: 8.3136e-05
 Epoch 6/10
-24610/24610 [==============================] - 2s 94us/sample - loss: 2.1509e-05
+24832/24832 [==============================] - 2s 94us/sample - loss: 2.6953e-05
 Epoch 7/10
-24610/24610 [==============================] - 2s 94us/sample - loss: 2.9871e-06
+24832/24832 [==============================] - 2s 95us/sample - loss: 2.7350e-06
 Epoch 8/10
-24610/24610 [==============================] - 2s 93us/sample - loss: 1.4432e-06
+24832/24832 [==============================] - 2s 94us/sample - loss: 1.4526e-06
 Epoch 9/10
-24610/24610 [==============================] - 2s 96us/sample - loss: 8.5143e-07
+24832/24832 [==============================] - 2s 94us/sample - loss: 8.5859e-07
 Epoch 10/10
-24610/24610 [==============================] - 2s 96us/sample - loss: 5.3752e-07
+24832/24832 [==============================] - 2s 95us/sample - loss: 5.3386e-07
