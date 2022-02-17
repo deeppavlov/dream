@@ -54,20 +54,29 @@ def get_result(request):
             else:
                 last_utt_starts.append(0)
                 concat_utt = last_utt
-                
+
             utts_list.append(concat_utt.lower())
             utts_nums.append(n)
 
     utt_entities_batch = [{} for _ in last_utts]
     utt_entities = {}
     if utts_list:
-        entity_substr_batch, entity_offsets_batch, entity_positions_batch, tokens_batch, tags_batch, \
-            sentences_offsets_batch, sentences_batch, probas_batch, tokens_conf_batch = \
-            entity_detection_rus(utts_list)
+        (
+            entity_substr_batch,
+            entity_offsets_batch,
+            entity_positions_batch,
+            tokens_batch,
+            tags_batch,
+            sentences_offsets_batch,
+            sentences_batch,
+            probas_batch,
+            tokens_conf_batch,
+        ) = entity_detection_rus(utts_list)
         logger.info(f"entity_substr_batch {entity_substr_batch}")
-        
-        for entity_substr_list, tags_list, entity_offsets_list, last_utt_start, num in \
-                zip(entity_substr_batch, tags_batch, entity_offsets_batch, last_utt_starts, utts_nums):
+
+        for entity_substr_list, tags_list, entity_offsets_list, last_utt_start, num in zip(
+            entity_substr_batch, tags_batch, entity_offsets_batch, last_utt_starts, utts_nums
+        ):
             utt_entities = {}
             for entity, tag, (start_offset, end_offset) in zip(entity_substr_list, tags_list, entity_offsets_list):
                 if entity not in stopwords and len(entity) > 2 and start_offset >= last_utt_start:
@@ -76,16 +85,22 @@ def get_result(request):
                     if "entities" in utt_entities:
                         utt_entities["entities"].append(entity)
                         utt_entities["labelled_entities"].append(
-                            {"text": entity, "label": tag.lower(),
-                             "offsets": (start_offset - last_utt_start, end_offset - last_utt_start)}
+                            {
+                                "text": entity,
+                                "label": tag.lower(),
+                                "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
+                            }
                         )
-                        already_detected_set.add((entity, offsets))
                     else:
                         utt_entities["entities"] = [entity]
-                        utt_entities["labelled_entities"] = \
-                            [{"text": entity, "label": tag.lower(),
-                              "offsets": (start_offset - last_utt_start, end_offset - last_utt_start)}]
-                        
+                        utt_entities["labelled_entities"] = [
+                            {
+                                "text": entity,
+                                "label": tag.lower(),
+                                "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
+                            }
+                        ]
+
             if utt_entities:
                 utt_entities_batch[num] = utt_entities
 

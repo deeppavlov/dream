@@ -4,14 +4,14 @@ import requests
 def main():
     url = "http://0.0.0.0:8103/respond"
 
-    request_data = [
-        {"last_utterances": [["кто написал войну и мир?"]]}}
-    ]
+    request_data = [{"last_utterances": [["кто написал войну и мир?"]]}]
 
     gold_results = [
         [
-            {'entities': ['войну и мир'],
-             'labelled_entities': [{'label': 'literary_work', 'offsets': [12, 23], 'text': 'войну и мир'}]}
+            {
+                "entities": ["войну и мир"],
+                "labelled_entities": [{"label": "literary_work", "offsets": [12, 23], "text": "войну и мир"}],
+            }
         ]
     ]
 
