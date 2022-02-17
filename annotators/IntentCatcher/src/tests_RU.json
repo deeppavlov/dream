@@ -48,10 +48,6 @@
         "intent": "what_is_your_job"
     },
     {
-        "sentence": "тебе нравится моя одежда?",
-        "intent": "opinion_request"
-    },
-    {
         "sentence": "давай поговорим о ромашках.",
         "intent": "lets_chat_about"
     },
