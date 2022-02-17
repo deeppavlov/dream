@@ -69,8 +69,7 @@
             "min_precision": 0.0,
             "punctuation": [
                 ".",
-                "!",
-                "?"
+                "!"
             ]
         },
         "repeat": {
@@ -164,7 +163,6 @@
             ],
             "min_precision": 0.0,
             "punctuation": [
-                ".",
                 "?"
             ]
         },
