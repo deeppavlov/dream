@@ -1,7 +1,7 @@
 services:
   agent:
     volumes:
-      - "./assistant_dists/dream:/dp-agent/"
+      - "./assistant_dists/speech_functions:/dp-agent/"
       - "./skill_selectors/:/dp-agent/skill_selectors/"
       - "./state_formatters/:/dp-agent/state_formatters/"
       - "./skills/:/dp-agent/skills/"

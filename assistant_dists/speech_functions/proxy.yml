@@ -593,20 +593,20 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8120
       - PORT=8120
-  speech-function-predictor:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8107
-      - PORT=8108
-  speech-function-classifier:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8108
-      - PORT=8107
+#  speech-function-predictor:
+#    command: [ "nginx", "-g", "daemon off;" ]
+#    build:
+#      context: dp/proxy/
+#      dockerfile: Dockerfile
+#    environment:
+#      - PROXY_PASS=lnsigo.mipt.ru:8107
+#      - PORT=8107
+#  speech-function-classifier:
+#    command: [ "nginx", "-g", "daemon off;" ]
+#    build:
+#      context: dp/proxy/
+#      dockerfile: Dockerfile
+#    environment:
+#      - PROXY_PASS=lnsigo.mipt.ru:8108
+#      - PORT=8108
 version: '3.7'
