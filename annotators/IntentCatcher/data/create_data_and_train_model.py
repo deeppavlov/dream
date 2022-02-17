@@ -12,6 +12,8 @@ import tf_sentencepiece
 from utils import *
 
 
+# this is just to use library because without this import, m-use does not work
+print(tf_sentencepiece.__file__)
 config = tf.ConfigProto()
 config.graph_options.rewrite_options.shape_optimization = 2
 session = tf.Session(config=config)
