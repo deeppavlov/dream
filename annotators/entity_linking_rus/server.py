@@ -49,7 +49,10 @@ def respond():
         )
         entity_info_batch = []
         for entity_substr_list, entity_ids_list, conf_list, entity_pages_list in zip(
-            entity_substr_batch, entity_ids_batch, conf_batch, entity_pages_batch,
+            entity_substr_batch,
+            entity_ids_batch,
+            conf_batch,
+            entity_pages_batch,
         ):
             entity_info_list = []
             for entity_substr, entity_ids, confs, entity_pages in zip(

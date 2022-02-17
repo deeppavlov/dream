@@ -58,7 +58,11 @@ class TorchTransformersElRanker(TorchModel):
         )
 
     def train_on_batch(
-        self, q_features: List[Dict], c_features: List[Dict], entity_tokens_pos: List[int], labels: List[int],
+        self,
+        q_features: List[Dict],
+        c_features: List[Dict],
+        entity_tokens_pos: List[int],
+        labels: List[int],
     ) -> float:
 
         _input = {"labels": labels}
@@ -88,7 +92,10 @@ class TorchTransformersElRanker(TorchModel):
         return loss.item()
 
     def __call__(
-        self, q_features: List[Dict], c_features: List[Dict], entity_tokens_pos: List[int],
+        self,
+        q_features: List[Dict],
+        c_features: List[Dict],
+        entity_tokens_pos: List[int],
     ) -> Union[List[int], List[np.ndarray]]:
 
         self.model.eval()
@@ -157,7 +164,10 @@ class TextEncoder(nn.Module):
         self.encoder.resize_token_embeddings(len(self.tokenizer) + 1)
 
     def forward(
-        self, input_ids: Tensor, attention_mask: Tensor, entity_tokens_pos: List[int] = None,
+        self,
+        input_ids: Tensor,
+        attention_mask: Tensor,
+        entity_tokens_pos: List[int] = None,
     ) -> Union[Tuple[Any, Tensor], Tuple[Tensor]]:
 
         if entity_tokens_pos is not None:
@@ -241,7 +251,9 @@ class SiameseBertElModel(nn.Module):
     ) -> Union[Tuple[Any, Tensor], Tuple[Tensor]]:
 
         entity_emb = self.encoder(
-            input_ids=q_input_ids, attention_mask=q_attention_mask, entity_tokens_pos=entity_tokens_pos,
+            input_ids=q_input_ids,
+            attention_mask=q_attention_mask,
+            entity_tokens_pos=entity_tokens_pos,
         )
         c_cls_emb = self.encoder(input_ids=c_input_ids, attention_mask=c_attention_mask)
         softmax_scores, log_softmax = self.bilinear_ranker(entity_emb, c_cls_emb)
@@ -268,7 +280,8 @@ class SiameseBertElModel(nn.Module):
         bilinear_weights_path = expand_path(self.bilinear_save_path).with_suffix(".pth.tar")
         log.info(f"Saving bilinear weights to {bilinear_weights_path}.")
         torch.save(
-            {"model_state_dict": self.bilinear_ranker.cpu().state_dict()}, bilinear_weights_path,
+            {"model_state_dict": self.bilinear_ranker.cpu().state_dict()},
+            bilinear_weights_path,
         )
         self.encoder.to(self.device)
         self.bilinear_ranker.to(self.device)
@@ -292,7 +305,9 @@ class TorchTransformersEntityRankerInfer:
         self.device = torch.device("cuda" if torch.cuda.is_available() and device == "gpu" else "cpu")
         self.pretrained_bert = str(expand_path(pretrained_bert))
         self.preprocessor = TorchTransformersEntityRankerPreprocessor(
-            vocab_file=self.pretrained_bert, do_lower_case=do_lower_case, special_tokens=["[ENT]"],
+            vocab_file=self.pretrained_bert,
+            do_lower_case=do_lower_case,
+            special_tokens=["[ENT]"],
         )
         self.encoder, self.config = None, None
         self.config = AutoConfig.from_pretrained(self.pretrained_bert, output_hidden_states=True)

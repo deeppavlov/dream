@@ -145,10 +145,18 @@ class EntityLinker(Component, Serializable):
 
         entity_ids_batch, entity_conf_batch, entity_pages_batch = [], [], []
         for (entity_substr_list, entity_offsets_list, entity_tags_list, sentences_list, sentences_offsets_list,) in zip(
-            entity_substr_batch, entity_offsets_batch, entity_tags_batch, sentences_batch, sentences_offsets_batch,
+            entity_substr_batch,
+            entity_offsets_batch,
+            entity_tags_batch,
+            sentences_batch,
+            sentences_offsets_batch,
         ):
             entity_ids_list, entity_conf_list, entity_pages_list = self.link_entities(
-                entity_substr_list, entity_offsets_list, entity_tags_list, sentences_list, sentences_offsets_list,
+                entity_substr_list,
+                entity_offsets_list,
+                entity_tags_list,
+                sentences_list,
+                sentences_offsets_list,
             )
             log.info(f"entity_ids_list {entity_ids_list} entity_conf_list {entity_conf_list}")
             entity_ids_batch.append(entity_ids_list)
@@ -211,7 +219,12 @@ class EntityLinker(Component, Serializable):
                     res = self.cur.execute("SELECT * FROM entity_labels WHERE entity='{}';".format(entity_id))
                     entity_info = res.fetchall()
                     if entity_info:
-                        (cur_entity_id, cur_entity_label, cur_entity_descr, cur_entity_page,) = entity_info[0]
+                        (
+                            cur_entity_id,
+                            cur_entity_label,
+                            cur_entity_descr,
+                            cur_entity_page,
+                        ) = entity_info[0]
                         entity_descrs.append(cur_entity_descr)
                         pages_dict[cur_entity_id] = cur_entity_page
                     else:
@@ -235,12 +248,22 @@ class EntityLinker(Component, Serializable):
 
     def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tag):
         if self.use_tags:
-            for (cand_entity_title, cand_entity_id, cand_entity_rels, cand_tag,) in entities_and_ids:
+            for (
+                cand_entity_title,
+                cand_entity_id,
+                cand_entity_rels,
+                cand_tag,
+            ) in entities_and_ids:
                 if tag == cand_tag:
                     substr_score = self.calc_substr_score(cand_entity_id, cand_entity_title, entity_substr_split)
                     cand_ent_init[cand_entity_id].add((substr_score, cand_entity_rels))
             if not cand_ent_init:
-                for (cand_entity_title, cand_entity_id, cand_entity_rels, cand_tag,) in entities_and_ids:
+                for (
+                    cand_entity_title,
+                    cand_entity_id,
+                    cand_entity_rels,
+                    cand_tag,
+                ) in entities_and_ids:
                     substr_score = self.calc_substr_score(cand_entity_id, cand_entity_title, entity_substr_split)
                     cand_ent_init[cand_entity_id].add((substr_score, cand_entity_rels))
         else:
@@ -284,7 +307,10 @@ class EntityLinker(Component, Serializable):
                     res = self.cur.execute("SELECT * FROM inverted_index WHERE title MATCH '{}';".format(word_lemm))
                     part_entities_and_ids = res.fetchall()
                     cand_ent_init = self.process_cand_ent(
-                        cand_ent_init, part_entities_and_ids, entity_substr_split_lemm, tag,
+                        cand_ent_init,
+                        part_entities_and_ids,
+                        entity_substr_split_lemm,
+                        tag,
                     )
         return cand_ent_init
 
@@ -382,7 +408,11 @@ class EntityLinker(Component, Serializable):
         entities_with_conn_scores_list = []
         for i in range(len(entities_conn_scores_list)):
             entities_with_conn_scores_list.append(
-                sorted(list(entities_conn_scores_list[i].items()), key=lambda x: x[1], reverse=True,)
+                sorted(
+                    list(entities_conn_scores_list[i].items()),
+                    key=lambda x: x[1],
+                    reverse=True,
+                )
             )
         return entities_with_conn_scores_list
 
@@ -400,9 +430,11 @@ class EntityLinker(Component, Serializable):
         entity_ids_list = []
         conf_list = []
         contexts = []
-        for (entity_substr, (entity_start_offset, entity_end_offset), candidate_entities,) in zip(
-            entity_substr_list, entity_offsets_list, cand_ent_list
-        ):
+        for (
+            entity_substr,
+            (entity_start_offset, entity_end_offset),
+            candidate_entities,
+        ) in zip(entity_substr_list, entity_offsets_list, cand_ent_list):
             sentence = ""
             rel_start_offset = 0
             rel_end_offset = 0
@@ -435,7 +467,10 @@ class EntityLinker(Component, Serializable):
                         added = False
                         if last_sentence_num < len(sentences_list) - 1:
                             last_sentence_len = len(
-                                re.findall(self.re_tokenizer, sentences_list[last_sentence_num + 1],)
+                                re.findall(
+                                    self.re_tokenizer,
+                                    sentences_list[last_sentence_num + 1],
+                                )
                             )
                             if cur_sent_len + last_sentence_len < self.max_paragraph_len:
                                 context.append(sentences_list[last_sentence_num + 1])
@@ -444,7 +479,10 @@ class EntityLinker(Component, Serializable):
                                 added = True
                         if first_sentence_num > 0:
                             first_sentence_len = len(
-                                re.findall(self.re_tokenizer, sentences_list[first_sentence_num - 1],)
+                                re.findall(
+                                    self.re_tokenizer,
+                                    sentences_list[first_sentence_num - 1],
+                                )
                             )
                             if cur_sent_len + first_sentence_len < self.max_paragraph_len:
                                 context = [sentences_list[first_sentence_num - 1]] + context
@@ -461,7 +499,11 @@ class EntityLinker(Component, Serializable):
         scores_list = self.entity_ranker(contexts, cand_ent_list, cand_ent_descr_list)
 
         for (entity_substr, candidate_entities, substr_len, entities_scores, scores,) in zip(
-            entity_substr_list, cand_ent_list, substr_lens, entities_scores_list, scores_list,
+            entity_substr_list,
+            cand_ent_list,
+            substr_lens,
+            entities_scores_list,
+            scores_list,
         ):
             log.info(f"len candidate entities {len(candidate_entities)}")
             entities_with_scores = [

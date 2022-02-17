@@ -55,7 +55,10 @@ class TorchTransformersEntityRankerPreprocessor(Component):
         lengths = []
         for text_a in texts_a:
             encoding = self.tokenizer.encode_plus(
-                text_a, add_special_tokens=True, pad_to_max_length=True, return_attention_mask=True,
+                text_a,
+                add_special_tokens=True,
+                pad_to_max_length=True,
+                return_attention_mask=True,
             )
             input_ids = encoding["input_ids"]
             lengths.append(len(input_ids))
