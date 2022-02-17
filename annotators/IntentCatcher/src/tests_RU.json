@@ -4,7 +4,7 @@
         "intent": "topic_switching"
     },
     {
-        "sentence": "хватит разговоров",
+        "sentence": "пока-пока",
         "intent": "exit"
     },
     {
