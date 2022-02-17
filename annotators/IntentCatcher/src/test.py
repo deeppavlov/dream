@@ -5,12 +5,12 @@ import json
 from os import getenv
 
 
-INTENT_PHRASES_FNAME = getenv("INTENT_PHRASES_FNAME")
+INTENT_DATA_PATH = getenv("INTENT_DATA_PATH")
 
 
 def main_test():
     url = "http://0.0.0.0:8014/detect"
-    if "RU" in INTENT_PHRASES_FNAME:
+    if "RU" in INTENT_DATA_PATH:
         tests = json.load(open("tests_RU.json"))
     else:
         tests = json.load(open("tests.json"))
