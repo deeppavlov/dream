@@ -29,8 +29,9 @@ parser.add_argument(
     "--intent_phrases_path", help="file with phrases for embedding generation", default="intent_phrases.json"
 )
 parser.add_argument("--model_path", help="path where to save the model", default="./models/" + MODEL_NAME + ".h5")
-parser.add_argument("--intent_data_path", help="path where to save theresholds",
-                    default="./intent_data_h" + str(DENSE_LAYERS) + ".json")
+parser.add_argument(
+    "--intent_data_path", help="path where to save theresholds", default="./intent_data_h" + str(DENSE_LAYERS) + ".json"
+)
 parser.add_argument("--epochs", help="number of epochs to train model", default=7)
 # Whereas to calc metrics or not (default value = True)
 args = parser.parse_args()
