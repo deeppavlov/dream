@@ -52,7 +52,7 @@
         "intent": "opinion_request"
     },
     {
-        "sentence": "ой а давай поговорим о ромашках",
+        "sentence": "давай поговорим о ромашках",
         "intent": "lets_chat_about"
     },
     {
