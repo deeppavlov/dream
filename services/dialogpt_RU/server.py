@@ -19,8 +19,9 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH",
-                                               "Grossmend/rudialogpt3_medium_based_on_gpt2")
+PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get(
+    "PRETRAINED_MODEL_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2"
+)
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 
 cuda = torch.cuda.is_available()
@@ -33,21 +34,20 @@ else:
 logger.info(f"dialogpt is set to run on {device}")
 
 params_default = {
-    'max_length': 256,
-    'no_repeat_ngram_size': 3,
-    'do_sample': True,
-    'top_k': 100,
-    'top_p': 0.9,
-    'temperature': 0.6,
-    'num_return_sequences': 3,
-    'device': device,
-    'is_always_use_length': True,
-    'length_generate': '1',
+    "max_length": 256,
+    "no_repeat_ngram_size": 3,
+    "do_sample": True,
+    "top_k": 100,
+    "top_p": 0.9,
+    "temperature": 0.6,
+    "num_return_sequences": 3,
+    "device": device,
+    "is_always_use_length": True,
+    "length_generate": "1",
 }
 
 
 class RussianDialogGPT:
-
     def __init__(self, path_model: str):
         self.path_model = path_model
         self.tokenizer = None
@@ -62,49 +62,49 @@ class RussianDialogGPT:
     def get_responses(self, inputs: List[Dict], params: Dict) -> List[str]:
 
         params_ = {
-            'max_length': params.get('max_length', params_default['max_length']),
-            'no_repeat_ngram_size': params.get('no_repeat_ngram_size', params_default['no_repeat_ngram_size']),
-            'do_sample': params.get('do_sample', params_default['do_sample']),
-            'top_k': params.get('top_k', params_default['top_k']),
-            'top_p': params.get('top_p', params_default['top_p']),
-            'temperature': params.get('temperature', params_default['temperature']),
-            'num_return_sequences': params.get('num_return_sequences', params_default['num_return_sequences']),
-            'device': params.get('device', params_default['device']),
-            "is_always_use_length": params.get('is_always_use_length', params_default['is_always_use_length']),
-            "length_generate": params.get('length_generate', params_default['length_generate']),
+            "max_length": params.get("max_length", params_default["max_length"]),
+            "no_repeat_ngram_size": params.get("no_repeat_ngram_size", params_default["no_repeat_ngram_size"]),
+            "do_sample": params.get("do_sample", params_default["do_sample"]),
+            "top_k": params.get("top_k", params_default["top_k"]),
+            "top_p": params.get("top_p", params_default["top_p"]),
+            "temperature": params.get("temperature", params_default["temperature"]),
+            "num_return_sequences": params.get("num_return_sequences", params_default["num_return_sequences"]),
+            "device": params.get("device", params_default["device"]),
+            "is_always_use_length": params.get("is_always_use_length", params_default["is_always_use_length"]),
+            "length_generate": params.get("length_generate", params_default["length_generate"]),
         }
 
-        inputs_text = ''
+        inputs_text = ""
         for input_ in inputs:
-            if params_['is_always_use_length']:
-                length_rep = len(self.tokenizer.encode(input_['text']))
+            if params_["is_always_use_length"]:
+                length_rep = len(self.tokenizer.encode(input_["text"]))
                 if length_rep <= 15:
-                    length_param = '1'
+                    length_param = "1"
                 elif length_rep <= 50:
-                    length_param = '2'
+                    length_param = "2"
                 elif length_rep <= 256:
-                    length_param = '3'
+                    length_param = "3"
                 else:
-                    length_param = '-'
+                    length_param = "-"
             else:
-                length_param = '-'
+                length_param = "-"
             inputs_text += f"|{input_['speaker']}|{length_param}|{input_['text']}"
         inputs_text += f"|1|{params_['length_generate']}|"
 
-        inputs_token_ids = self.tokenizer.encode(inputs_text, return_tensors='pt')
+        inputs_token_ids = self.tokenizer.encode(inputs_text, return_tensors="pt")
         inputs_token_ids = inputs_token_ids.cuda() if cuda else inputs
 
         try:
             outputs_token_ids = self.model.generate(
                 inputs_token_ids,
-                max_length=params_['max_length'],
-                no_repeat_ngram_size=params_['no_repeat_ngram_size'],
-                do_sample=params_['do_sample'],
-                top_k=params_['top_k'],
-                top_p=params_['top_p'],
-                temperature=params_['temperature'],
-                num_return_sequences=params_['num_return_sequences'],
-                device=params_['device'],
+                max_length=params_["max_length"],
+                no_repeat_ngram_size=params_["no_repeat_ngram_size"],
+                do_sample=params_["do_sample"],
+                top_k=params_["top_k"],
+                top_p=params_["top_p"],
+                temperature=params_["temperature"],
+                num_return_sequences=params_["num_return_sequences"],
+                device=params_["device"],
                 mask_token_id=self.tokenizer.mask_token_id,
                 eos_token_id=self.tokenizer.eos_token_id,
                 unk_token_id=self.tokenizer.unk_token_id,
@@ -115,7 +115,7 @@ class RussianDialogGPT:
             return ""
 
         outputs = [self.tokenizer.decode(x, skip_special_tokens=True) for x in outputs_token_ids]
-        outputs = [x.split('|')[-1] for x in outputs]
+        outputs = [x.split("|")[-1] for x in outputs]
         # outputs contains list of strings of possible hypotheses
         return outputs
 
