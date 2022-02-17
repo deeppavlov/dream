@@ -55,13 +55,17 @@ def handler(requested_data, random_seed=None):
     return responses
 
 
-try:
-    test_server.run_test(handler)
-    logger.info("test query processed")
-except Exception as exc:
-    sentry_sdk.capture_exception(exc)
-    logger.exception(exc)
-    raise exc
+while True:
+    try:
+        test_server.run_test(handler)
+        logger.info("test query processed")
+        break
+    except Exception as exc:
+        pass
+        # sentry_sdk.capture_exception(exc)
+        # logger.exception(exc)
+        # raise exc
+
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
