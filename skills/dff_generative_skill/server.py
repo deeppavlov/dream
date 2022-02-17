@@ -61,9 +61,8 @@ while True:
         logger.info("test query processed")
         break
     except Exception as exc:
-        pass
-        # sentry_sdk.capture_exception(exc)
-        # logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        logger.exception(exc)
         # raise exc
 
 
