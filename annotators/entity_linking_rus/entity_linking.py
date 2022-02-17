@@ -18,6 +18,7 @@ from logging import getLogger
 from typing import List, Dict, Tuple, Union
 from collections import defaultdict
 
+import nltk
 import pymorphy2
 from hdt import HDTDocument
 from nltk.corpus import stopwords
@@ -29,6 +30,7 @@ from deeppavlov.core.models.serializable import Serializable
 from deeppavlov.core.commands.utils import expand_path
 
 log = getLogger(__name__)
+nltk.download('stopwords')
 
 
 @register("entity_linker")
