@@ -2,14 +2,17 @@
 
 import json
 import random
-import common.dff.integration.context as int_ctx
 from datetime import datetime
+from os import getenv
+
+import common.dff.integration.context as int_ctx
 from df_engine.core import Actor, Context
 
-INTENT_RESPONSES_PATH = "scenario/data/intent_response_phrases.json"
+
+INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "scenario/data/intent_response_phrases.json")
 
 
-with open(INTENT_RESPONSES_PATH, "r") as fp:
+with open(INTENT_RESPONSE_PHRASES_FNAME, "r") as fp:
     RESPONSES = json.load(fp)
 
 
