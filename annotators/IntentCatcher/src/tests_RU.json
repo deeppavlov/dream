@@ -56,7 +56,7 @@
         "intent": "lets_chat_about"
     },
     {
-        "sentence": "люблю тебя.",
+        "sentence": "люблю пирожки.",
         "intent": null
     },
     {
@@ -64,7 +64,7 @@
         "intent": null
     },
     {
-        "sentence": "что из этого твое?",
+        "sentence": "что из этого собака?",
         "intent": null
     }
 ]
