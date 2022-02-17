@@ -58,7 +58,11 @@ class TorchTransformersElRanker(TorchModel):
         )
 
     def train_on_batch(
-        self, q_features: List[Dict], c_features: List[Dict], entity_tokens_pos: List[int], labels: List[int]
+        self,
+        q_features: List[Dict],
+        c_features: List[Dict],
+        entity_tokens_pos: List[int],
+        labels: List[int],
     ) -> float:
 
         _input = {"labels": labels}
@@ -88,7 +92,10 @@ class TorchTransformersElRanker(TorchModel):
         return loss.item()
 
     def __call__(
-        self, q_features: List[Dict], c_features: List[Dict], entity_tokens_pos: List[int]
+        self,
+        q_features: List[Dict],
+        c_features: List[Dict],
+        entity_tokens_pos: List[int],
     ) -> Union[List[int], List[np.ndarray]]:
 
         self.model.eval()
@@ -157,7 +164,10 @@ class TextEncoder(nn.Module):
         self.encoder.resize_token_embeddings(len(self.tokenizer) + 1)
 
     def forward(
-        self, input_ids: Tensor, attention_mask: Tensor, entity_tokens_pos: List[int] = None
+        self,
+        input_ids: Tensor,
+        attention_mask: Tensor,
+        entity_tokens_pos: List[int] = None,
     ) -> Union[Tuple[Any, Tensor], Tuple[Tensor]]:
 
         if entity_tokens_pos is not None:
@@ -179,11 +189,17 @@ class TextEncoder(nn.Module):
     def load(self) -> None:
         if self.pretrained_bert:
             log.info(f"From pretrained {self.pretrained_bert}.")
-            self.config = AutoConfig.from_pretrained(self.pretrained_bert, output_hidden_states=True)
-            self.encoder = AutoModel.from_pretrained(self.pretrained_bert, config=self.config)
+            self.config = AutoConfig.from_pretrained(
+                self.pretrained_bert, output_hidden_states=True
+            )
+            self.encoder = AutoModel.from_pretrained(
+                self.pretrained_bert, config=self.config
+            )
 
         elif self.bert_config_file and Path(self.bert_config_file).is_file():
-            self.config = AutoConfig.from_json_file(str(expand_path(self.bert_config_file)))
+            self.config = AutoConfig.from_json_file(
+                str(expand_path(self.bert_config_file))
+            )
             self.encoder = AutoModel.from_config(config=self.bert_config)
         else:
             raise ConfigError("No pre-trained BERT model is given.")
@@ -202,7 +218,9 @@ class BilinearRanking(nn.Module):
     def forward(self, text1: Tensor, text2: Tensor):
         b1 = text1.view(-1, self.emb_size // self.block_size, self.block_size)
         b2 = text2.view(-1, self.emb_size // self.block_size, self.block_size)
-        bl = (b1.unsqueeze(3) * b2.unsqueeze(2)).view(-1, self.emb_size * self.block_size)
+        bl = (b1.unsqueeze(3) * b2.unsqueeze(2)).view(
+            -1, self.emb_size * self.block_size
+        )
         logits = self.bilinear(bl)
         softmax_logits = self.softmax(logits)
         log_softmax = F.log_softmax(logits, dim=-1)
@@ -227,7 +245,9 @@ class SiameseBertElModel(nn.Module):
         self.device = device
 
         # initialize parameters that would be filled later
-        self.encoder = TextEncoder(pretrained_bert=self.pretrained_bert, device=self.device)
+        self.encoder = TextEncoder(
+            pretrained_bert=self.pretrained_bert, device=self.device
+        )
         self.bilinear_ranker = BilinearRanking(emb_size=264, block_size=6)
 
     def forward(
@@ -241,7 +261,9 @@ class SiameseBertElModel(nn.Module):
     ) -> Union[Tuple[Any, Tensor], Tuple[Tensor]]:
 
         entity_emb = self.encoder(
-            input_ids=q_input_ids, attention_mask=q_attention_mask, entity_tokens_pos=entity_tokens_pos
+            input_ids=q_input_ids,
+            attention_mask=q_attention_mask,
+            entity_tokens_pos=entity_tokens_pos,
         )
         c_cls_emb = self.encoder(input_ids=c_input_ids, attention_mask=c_attention_mask)
         softmax_scores, log_softmax = self.bilinear_ranker(entity_emb, c_cls_emb)
@@ -254,7 +276,11 @@ class SiameseBertElModel(nn.Module):
 
             bs, dim = labels_one_hot.shape
             per_sample_loss = (
-                -torch.bmm(labels_one_hot.view(bs, 1, dim), log_softmax.view(bs, dim, 1)).squeeze(2).squeeze(1)
+                -torch.bmm(
+                    labels_one_hot.view(bs, 1, dim), log_softmax.view(bs, dim, 1)
+                )
+                .squeeze(2)
+                .squeeze(1)
             )
             loss = torch.mean(per_sample_loss)
             return loss, softmax_scores
@@ -262,12 +288,21 @@ class SiameseBertElModel(nn.Module):
             return softmax_scores
 
     def save(self) -> None:
-        encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(".pth.tar")
+        encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(
+            ".pth.tar"
+        )
         log.info(f"Saving encoder to {encoder_weights_path}.")
-        torch.save({"model_state_dict": self.encoder.cpu().state_dict()}, encoder_weights_path)
-        bilinear_weights_path = expand_path(self.bilinear_save_path).with_suffix(".pth.tar")
+        torch.save(
+            {"model_state_dict": self.encoder.cpu().state_dict()}, encoder_weights_path
+        )
+        bilinear_weights_path = expand_path(self.bilinear_save_path).with_suffix(
+            ".pth.tar"
+        )
         log.info(f"Saving bilinear weights to {bilinear_weights_path}.")
-        torch.save({"model_state_dict": self.bilinear_ranker.cpu().state_dict()}, bilinear_weights_path)
+        torch.save(
+            {"model_state_dict": self.bilinear_ranker.cpu().state_dict()},
+            bilinear_weights_path,
+        )
         self.encoder.to(self.device)
         self.bilinear_ranker.to(self.device)
 
@@ -287,23 +322,37 @@ class TorchTransformersEntityRankerInfer:
         device: str = "cpu",
         **kwargs,
     ):
-        self.device = torch.device("cuda" if torch.cuda.is_available() and device == "gpu" else "cpu")
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() and device == "gpu" else "cpu"
+        )
         self.pretrained_bert = str(expand_path(pretrained_bert))
         self.preprocessor = TorchTransformersEntityRankerPreprocessor(
-            vocab_file=self.pretrained_bert, do_lower_case=do_lower_case, special_tokens=["[ENT]"]
+            vocab_file=self.pretrained_bert,
+            do_lower_case=do_lower_case,
+            special_tokens=["[ENT]"],
         )
         self.encoder, self.config = None, None
-        self.config = AutoConfig.from_pretrained(self.pretrained_bert, output_hidden_states=True)
+        self.config = AutoConfig.from_pretrained(
+            self.pretrained_bert, output_hidden_states=True
+        )
         self.emb_size = emb_size
         self.block_size = block_size
-        self.encoder = TextEncoder(pretrained_bert=self.pretrained_bert, device=self.device)
+        self.encoder = TextEncoder(
+            pretrained_bert=self.pretrained_bert, device=self.device
+        )
         self.encoder_weights_path = str(expand_path(encoder_weights_path))
         self.bilinear_weights_path = str(expand_path(bilinear_weights_path))
-        encoder_checkpoint = torch.load(self.encoder_weights_path, map_location=self.device)
+        encoder_checkpoint = torch.load(
+            self.encoder_weights_path, map_location=self.device
+        )
         self.encoder.load_state_dict(encoder_checkpoint["model_state_dict"])
         self.encoder.to(self.device)
-        self.bilinear_ranking = BilinearRanking(emb_size=self.emb_size, block_size=self.block_size)
-        bilinear_checkpoint = torch.load(self.bilinear_weights_path, map_location=self.device)
+        self.bilinear_ranking = BilinearRanking(
+            emb_size=self.emb_size, block_size=self.block_size
+        )
+        bilinear_checkpoint = torch.load(
+            self.bilinear_weights_path, map_location=self.device
+        )
         self.bilinear_ranking.load_state_dict(bilinear_checkpoint["model_state_dict"])
         self.bilinear_ranking.to(self.device)
         self.special_token_id = special_token_id
@@ -317,9 +366,13 @@ class TorchTransformersEntityRankerInfer:
     ):
         entity_emb_batch = []
 
-        num_batches = len(contexts_batch) // self.batch_size + int(len(contexts_batch) % self.batch_size > 0)
+        num_batches = len(contexts_batch) // self.batch_size + int(
+            len(contexts_batch) % self.batch_size > 0
+        )
         for ii in range(num_batches):
-            contexts_list = contexts_batch[ii * self.batch_size : (ii + 1) * self.batch_size]
+            contexts_list = contexts_batch[
+                ii * self.batch_size : (ii + 1) * self.batch_size
+            ]
             context_features = self.preprocessor(contexts_list)
             context_input_ids = context_features["input_ids"]
             context_attention_mask = context_features["attention_mask"]
@@ -335,7 +388,9 @@ class TorchTransformersEntityRankerInfer:
                 special_tokens_pos.append(found_n)
 
             cur_entity_emb_batch = self.encoder(
-                input_ids=context_input_ids, attention_mask=context_attention_mask, entity_tokens_pos=special_tokens_pos
+                input_ids=context_input_ids,
+                attention_mask=context_attention_mask,
+                entity_tokens_pos=special_tokens_pos,
             )
 
             entity_emb_batch += cur_entity_emb_batch.detach().cpu().numpy().tolist()
@@ -350,12 +405,21 @@ class TorchTransformersEntityRankerInfer:
                 descr_features = self.preprocessor(candidate_entities_descr_list)
                 descr_input_ids = descr_features["input_ids"]
                 descr_attention_mask = descr_features["attention_mask"]
-                candidate_entities_emb = self.encoder(input_ids=descr_input_ids, attention_mask=descr_attention_mask)
-                scores_list, _ = self.bilinear_ranking(entity_emb, candidate_entities_emb)
+                candidate_entities_emb = self.encoder(
+                    input_ids=descr_input_ids, attention_mask=descr_attention_mask
+                )
+                scores_list, _ = self.bilinear_ranking(
+                    entity_emb, candidate_entities_emb
+                )
                 scores_list = scores_list.detach().cpu().numpy()
                 scores_list = [score[1] for score in scores_list]
-                entities_with_scores = [(entity, score) for entity, score in zip(candidate_entities_list, scores_list)]
-                entities_with_scores = sorted(entities_with_scores, key=lambda x: x[1], reverse=True)
+                entities_with_scores = [
+                    (entity, score)
+                    for entity, score in zip(candidate_entities_list, scores_list)
+                ]
+                entities_with_scores = sorted(
+                    entities_with_scores, key=lambda x: x[1], reverse=True
+                )
                 scores_batch.append(entities_with_scores)
             else:
                 scores_batch.append([])

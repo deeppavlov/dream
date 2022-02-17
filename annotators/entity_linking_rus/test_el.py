@@ -7,7 +7,11 @@ def main():
     url = "http://0.0.0.0:8075/model"
 
     request_data = [
-        {"entity_substr": [["форрест гамп"]], "entity_tags": [["film"]], "context": [["кто снял фильм форрест гамп?"]]},
+        {
+            "entity_substr": [["форрест гамп"]],
+            "entity_tags": [["film"]],
+            "context": [["кто снял фильм форрест гамп?"]],
+        },
         {
             "entity_substr": [["роберт левандовский"]],
             "entity_tags": [["per"]],
