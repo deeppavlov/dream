@@ -3,10 +3,18 @@
 import os
 import json
 import argparse
+from collections import OrderedDict
+
 import tensorflow as tf
 import tensorflow_hub as hub
-from collections import OrderedDict
+import tf_sentencepiece
+
 from utils import *
+
+
+config = tf.ConfigProto()
+config.graph_options.rewrite_options.shape_optimization = 2
+session = tf.Session(config=config)
 
 MODEL_NAME = "linear_classifier"
 MULTILABEL = True
