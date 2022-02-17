@@ -225,7 +225,6 @@
             ],
             "min_precision": 0.0,
             "punctuation": [
-                ".",
                 "?"
             ]
         }
