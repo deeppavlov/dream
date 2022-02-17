@@ -56,10 +56,6 @@
         "intent": "lets_chat_about"
     },
     {
-        "sentence": "спасибо.",
-        "intent": null
-    },
-    {
         "sentence": "люблю тебя.",
         "intent": null
     },
