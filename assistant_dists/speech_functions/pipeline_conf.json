@@ -418,11 +418,11 @@
                     "annotators.spelling_preprocessing"
                 ]
             },
-            "speech_function_classifier": {
+            "speech_function_predictor": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://speech-function-classifier:8107/model"
+                    "url": "http://speech-function-predictor:8107/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -431,11 +431,11 @@
                     "annotators.spelling_preprocessing"
                 ]
             },
-            "speech_function_predictor": {
+            "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://speech-function-predictor:8108/model"
+                    "url": "http://speech-function-classifier:8108/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

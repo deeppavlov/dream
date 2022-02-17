@@ -1158,34 +1158,40 @@ services:
           memory: 128M
 
   speech-function-classifier:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8107
-        SERVICE_NAME: speech_function_classifier
-      context: .
-      dockerfile: ./annotators/speech_function_classifier/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8107 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
-
-  speech-function-predictor:
-    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8108
-        SERVICE_NAME: speech_function_predictor
-      context: .
-      dockerfile: ./annotators/speech_function_predictor/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8108 --reload
+        SERVICE_NAME: speech_function_classifier
+      context: annotators/speech_function_classifier
+    command: uvicorn server:app --host 0.0.0.0 --port 8108
+    ports:
+      - 8108:8108
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
     deploy:
+      mode: replicated
+      replicas: 1
       resources:
         limits:
-          memory: 2G
+          memory: 2.5G
         reservations:
-          memory: 2G
+          memory: 2.5G
+
+  speech-function-predictor:
+    build:
+      args:
+        SERVICE_PORT: 8107
+        SERVICE_NAME: speech_function_predictor
+      context: annotators/speech_function_predictor
+    command: uvicorn server:app --host 0.0.0.0 --port 8107
+    ports:
+      - 8107:8107
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
 version: '3.7'
