@@ -735,26 +735,12 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
-def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
-    intents = list(dialog["utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
-    called_intents = {intent: False for intent in intents}
-    for utt in dialog["human_utterances"][-5:-1]:
-        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
-        for intent in called:
-            called_intents[intent] = True
-
-    batches = utils.dff_formatter(dialog, "dff_intent_responder_skill")
-    batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
-    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
-    return batches
+def dff_program_y_wide_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y_wide")
 
 
-def dff_program_y_wide_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_program_y_wide_skill")
-
-
-def dff_program_y_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_program_y_skill")
+def dff_program_y_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y")
 
 
 def dff_food_skill_formatter(dialog: Dict) -> List[Dict]:
@@ -793,8 +779,8 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
     )
 
 
-def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
+def dff_program_y_dangerous_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "program_y_dangerous")
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
