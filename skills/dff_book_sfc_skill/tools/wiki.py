@@ -20,11 +20,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
 book_banned_words_file = pathlib.Path(__file__).parent / "book_banned_words.txt"
-book_banned_words = {
-    line.strip()
-    for line in book_banned_words_file.read_text().split("\n")
-    if line.strip()
-}
+book_banned_words = {line.strip() for line in book_banned_words_file.read_text().split("\n") if line.strip()}
 book_query_dict = cPickle.load(open("/global_data/book_query_dict.pkl", "rb"))
 
 
@@ -35,9 +31,7 @@ MOVIE_WIKI_TYPES = ["Q11424", "Q24856", "Q202866"]
 
 def is_wikidata_entity(entity: str) -> bool:
     """Assert that a string is a wikidata entity"""
-    wrong_entity_format = entity and (
-        entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]])
-    )
+    wrong_entity_format = entity and (entity[0] != "Q" or any([j not in "0123456789" for j in entity[1:]]))
     return not wrong_entity_format
 
 
@@ -71,9 +65,7 @@ def get_name(
         None,
     )
     try:
-        all_found_entities = get_raw_entity_names_from_annotations(
-            annotated_phrase.get("annotations", {})
-        )
+        all_found_entities = get_raw_entity_names_from_annotations(annotated_phrase.get("annotations", {}))
         if not all_found_entities:
             return None
         logger.info(f"Found entities in annotations {all_found_entities}")
@@ -104,22 +96,10 @@ def get_name(
             logger.debug(f"Examine {entity}")
             logger.debug(found_types)
             if "types_2hop" in toiterate_dict[entity]:
-                found_types.extend(
-                    [
-                        j[0]
-                        for j in toiterate_dict[entity]["types_2hop"]
-                        if j[0] not in found_types
-                    ]
-                )
+                found_types.extend([j[0] for j in toiterate_dict[entity]["types_2hop"] if j[0] not in found_types])
             logger.debug(found_types)
             if "instance of" in toiterate_dict[entity]:
-                found_types.extend(
-                    [
-                        j[0]
-                        for j in toiterate_dict[entity]["instance of"]
-                        if j[0] not in found_types
-                    ]
-                )
+                found_types.extend([j[0] for j in toiterate_dict[entity]["instance of"] if j[0] not in found_types])
             logger.debug(found_types)
             if not any([j in types for j in found_types]):
                 logger.warning(f"Querying wikidata for {entity}")
@@ -139,21 +119,15 @@ def get_name(
                 found_entity = entity
                 if "plain_entity" not in toiterate_dict[entity]:
                     logger.warning(f"No plain_entity found in annotation for {entity}")
-                    plain_entities, _ = request_entities_entitylinking(
-                        entity, types=types, confidence_threshold=0.05
-                    )
+                    plain_entities, _ = request_entities_entitylinking(entity, types=types, confidence_threshold=0.05)
                     plain_entity = plain_entities[0]
                 else:
                     plain_entity = toiterate_dict[entity]["plain_entity"]
                 if mode == "book":
                     if "publication date" in toiterate_dict[entity]:
-                        publication_year = toiterate_dict[entity]["publication date"][
-                            0
-                        ][0]
+                        publication_year = toiterate_dict[entity]["publication date"][0][0]
                     else:
-                        logger.warning(
-                            "No publication date found in annotation for {entity}"
-                        )
+                        logger.warning("No publication date found in annotation for {entity}")
                         publication_year = get_published_year(plain_entity)
                     n_years_ago = get_n_years(publication_year)
                 elif mode == "movie":
@@ -161,16 +135,10 @@ def get_name(
                         film_director = toiterate_dict[entity]["film producer"][0][0]
                     else:
                         film_director = get_author(plain_entity, mode="movie")
-                elif (
-                    mode == "author"
-                ):  # to get rid of abbreviations such as J R R Tolkien
-                    found_entity = " ".join(
-                        [k for k in found_entity.split(" ") if len(k) > 1]
-                    )
+                elif mode == "author":  # to get rid of abbreviations such as J R R Tolkien
+                    found_entity = " ".join([k for k in found_entity.split(" ") if len(k) > 1])
                     if "notable work" in toiterate_dict[entity]:
-                        attribute = random.choice(
-                            toiterate_dict[entity]["notable work"]
-                        )[1]
+                        attribute = random.choice(toiterate_dict[entity]["notable work"])[1]
                 break
             else:
                 logger.info(f"No interception with {types}")
@@ -208,15 +176,11 @@ def get_published_year(book_entity: str) -> Optional[str]:
     year_candidates = re.findall(r"[\d]{3,4}", published_year)
     if year_candidates:
         try:
-            published_year: str = get_n_years(
-                year_candidates[0]
-            )  # Changed to return a string
+            published_year: str = get_n_years(year_candidates[0])  # Changed to return a string
             assert published_year
         except Exception:
             # sentry_sdk.capture_exception(e)
-            logger.exception(
-                f"Could not obtain published year from {published_year_list}"
-            )
+            logger.exception(f"Could not obtain published year from {published_year_list}")
             return None
     logger.info(f"Answer for get_published_year {published_year}")
     return published_year
@@ -272,16 +236,12 @@ def get_author(plain_entity: str, return_plain=False, mode="book") -> Optional[s
             query_dict=book_query_dict,
         )
     else:
-        author_list = request_triples_wikidata(
-            "find_object", [(plain_entity.upper(), "P57", "forw")], query_dict={}
-        )
+        author_list = request_triples_wikidata("find_object", [(plain_entity.upper(), "P57", "forw")], query_dict={})
     logger.info(f"Author list received {author_list}")
     author_list = list(itertools.chain.from_iterable(author_list))
     author_list = list(set(author_list))
     author_list = [x[x.find("Q") :] for x in author_list]  # to unify representations
-    sorted_author_list = sorted(
-        author_list, key=lambda x: int(x[1:])
-    )  # Sort entities by frequency
+    sorted_author_list = sorted(author_list, key=lambda x: int(x[1:]))  # Sort entities by frequency
     if not sorted_author_list:
         return None
     author_entity = sorted_author_list[0]
@@ -297,9 +257,7 @@ def get_author(plain_entity: str, return_plain=False, mode="book") -> Optional[s
         return None
 
 
-def parse_author_best_book(
-    annotated_phrase: Dict[str, str], default_phrase=None
-) -> Tuple[str, Optional[str]]:
+def parse_author_best_book(annotated_phrase: Dict[str, str], default_phrase=None) -> Tuple[str, Optional[str]]:
     """
     Get one book from the 'notable work' list
     """
@@ -322,9 +280,7 @@ def parse_author_best_book(
             plain_last_bookname=plain_bookname,
             default_phrase=default_phrase,
         )
-        logger.debug(
-            f"Answer for parse_author_best_book is {(plain_book, plain_author)}"
-        )
+        logger.debug(f"Answer for parse_author_best_book is {(plain_book, plain_author)}")
         return plain_book, plain_author
     logger.debug("No author found")
     return default_phrase, None
@@ -352,9 +308,7 @@ def best_plain_book_by_author(
     """
     Look up a book for an author
     """
-    logger.debug(
-        f"Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}"
-    )
+    logger.debug(f"Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}")
     # best books
     last_bookname = "NO_BOOK"
     try:
@@ -399,22 +353,16 @@ def what_is_book_about(book: Optional[str] = None) -> Optional[str]:
         logger.info(f"After request {plain_books}")
     if plain_books:
         plain_book = plain_books[0]
-        subjects = request_triples_wikidata(
-            "find_object", [(plain_book, "P921", "forw")], query_dict={}
-        )[0]
+        subjects = request_triples_wikidata("find_object", [(plain_book, "P921", "forw")], query_dict={})[0]
         if subjects:
             fact = f"The main subject of this book is {entity_to_label(subjects[0])}."
-        locations = request_triples_wikidata(
-            "find_object", [(plain_book, "P840", "forw")], query_dict={}
-        )[0]
+        locations = request_triples_wikidata("find_object", [(plain_book, "P840", "forw")], query_dict={})[0]
         if len(locations) > 1:
             fact = f"{fact} Apart from other locations,"
         if locations:
             fact = f"{fact} The action of this book takes place in {entity_to_label(locations[0])}."
         if not subjects or not locations:
-            characters = request_triples_wikidata(
-                "find_object", [(plain_book, "P674", "forw")], query_dict={}
-            )[0]
+            characters = request_triples_wikidata("find_object", [(plain_book, "P674", "forw")], query_dict={})[0]
             if characters:
                 fact = f"{fact} One of the main characters of this book is {entity_to_label(characters[0])}."
     logger.info(f"Final fact {fact}")

@@ -5,23 +5,15 @@ from os import getenv
 from df_engine.core import Context, Actor
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def is_sf(sf_name="Open.Give.Opinion"):
     def is_sf_handler(ctx: Context, actor: Actor, *args, **kwargs):
         try:
-            last_utterance = (
-                ctx.misc.get("agent", {})
-                .get("dialog", {})
-                .get("human_utterances", {})[-1]
-            )
-            utterance_sfcs = last_utterance.get("annotations", {}).get(
-                "speech_function_classifier", []
-            )
+            last_utterance = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", {})[-1]
+            utterance_sfcs = last_utterance.get("annotations", {}).get("speech_function_classifier", [])
         except KeyError:
             utterance_sfcs = []
 
