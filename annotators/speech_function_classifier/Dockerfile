@@ -8,6 +8,7 @@ RUN mkdir /models && \
     curl https://files.deeppavlov.ai/alexaprize_data/speech_function_classifier.tar.gz --output arch.tgz && \
     tar zxfv arch.tgz && \
     rm -rf arch.tgz && \
+    curl https://files.deeppavlov.ai/dream/speech_function_classifier/res_cor.json --output data/res_cor.json && \
     mv data/* /models && \
     rm -rf data
 
