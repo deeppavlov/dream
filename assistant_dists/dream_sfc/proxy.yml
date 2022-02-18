@@ -143,14 +143,23 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8033
       - PORT=8033
 
-  dff-book-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8032
-      - PORT=8032
+#  dff-book-skill:
+#    command: ["nginx", "-g", "daemon off;"]
+#    build:
+#      context: dp/proxy/
+#      dockerfile: Dockerfile
+#    environment:
+#      - PROXY_PASS=dream.deeppavlov.ai:8032
+#      - PORT=8032
+
+#  dff-book-sfc-skill:
+#    command: ["nginx", "-g", "daemon off;"]
+#    build:
+#      context: dp/proxy/
+#      dockerfile: Dockerfile
+#    environment:
+#      - PROXY_PASS=dream.deeppavlov.ai:8034
+#      - PORT=8034
 
   emotion-skill:
     command: ["nginx", "-g", "daemon off;"]

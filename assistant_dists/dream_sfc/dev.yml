@@ -113,6 +113,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8032:8032
+  dff-book-sfc-skill:
+    volumes:
+      - "./skills/dff_book_sfc_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8034:8034
   emotion-skill:
     volumes:
       - "./skills/emotion_skill:/src"

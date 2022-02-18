@@ -34,7 +34,13 @@ logger = logging.getLogger(__name__)
 
 def is_sf(sf_name="Open.Give.Opinion"):
     def is_sf_handler(ctx: Context, actor: Actor, *args, **kwargs):
-        return sf_name in ctx.misc.get("speech_functions", [[""]])[-1][-1]
+        try:
+            last_utterance = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", {})[-1]
+            utterance_sfcs = last_utterance.get("annotations", {}).get("speech_function_classifier", [])
+        except KeyError:
+            utterance_sfcs = []
+
+        return sf_name in utterance_sfcs
 
     return is_sf_handler
 

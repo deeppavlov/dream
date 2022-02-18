@@ -773,6 +773,10 @@ def dff_book_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_book_skill")
 
 
+def dff_book_sfc_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_book_sfc_skill")
+
+
 def dff_weather_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_weather_skill")
 
