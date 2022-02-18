@@ -5,9 +5,10 @@ import time
 import os
 import random
 
+import docker
+import sentry_sdk
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
-import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
@@ -30,6 +31,23 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
+
+
+def is_container_running(container_name: str):
+    """Code from
+    https://dev.to/serhatteker/how-to-check-if-a-docker-container-running-with-python-3aoj
+    """
+    RUNNING = "running"
+    docker_client = docker.from_env()
+
+    try:
+        container = docker_client.containers.get(container_name)
+    except docker.errors.NotFound as exc:
+        print(exc)
+        return False
+    else:
+        container_state = container.attrs["State"]
+        return container_state["Status"] == RUNNING
 
 
 def handler(requested_data, random_seed=None):
@@ -56,14 +74,19 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    try:
-        test_server.run_test(handler)
-        logger.info("test query processed")
+    result = is_container_running("dialogpt")
+    if result:
         break
-    except Exception as exc:
-        sentry_sdk.capture_exception(exc)
-        logger.exception(exc)
-        # raise exc
+    else:
+        continue
+
+try:
+    test_server.run_test(handler)
+    logger.info("test query processed")
+except Exception as exc:
+    sentry_sdk.capture_exception(exc)
+    logger.exception(exc)
+    raise exc
 
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
