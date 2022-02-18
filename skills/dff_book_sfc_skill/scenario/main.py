@@ -277,6 +277,11 @@ flows = {
         },
         "test_1": {
             TRANSITIONS: {},
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_flag": loc_prs.set_flag("book_skill_active", True),
+                "execute_response": loc_prs.execute_response,
+            },
             RESPONSE: "I think that reading is cool and all people should read books",
             MISC: {"speech_functions": ["React.Rejoinder.Support.Response.Resolve"]},
         },
