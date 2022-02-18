@@ -16,7 +16,7 @@ def run_test():
     }
     model_hypothesis = requests.post(MODEL_URL, json=model_test_data).json()
 
-    print(f"test name: sfc model_hypothesis")
+    print("test name: sfc model_hypothesis")
     assert model_hypothesis == [
         [
             "React.Rejoinder.Support.Response.Resolve",
@@ -35,7 +35,7 @@ def run_test():
         ANNOTATION_URL, json=annotation_test_data
     ).json()
 
-    print(f"test name: sfc annotation_hypothesis")
+    print("test name: sfc annotation_hypothesis")
     assert annotation_hypothesis == [
         {
             "batch": [

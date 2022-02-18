@@ -12,7 +12,7 @@ def run_test():
     model_test_data = ["Reply.Acknowledge"]
     model_hypothesis = requests.post(MODEL_URL, json=model_test_data).json()
 
-    print(f"test name: sfp model_hypothesis")
+    print("test name: sfp model_hypothesis")
     assert model_hypothesis == [{}]
 
     annotation_test_data = ["Reply.Acknowledge"]
@@ -20,7 +20,7 @@ def run_test():
         ANNOTATION_URL, json=annotation_test_data
     ).json()
 
-    print(f"test name: sfp annotation_hypothesis")
+    print("test name: sfp annotation_hypothesis")
     assert annotation_hypothesis == [{"batch": [{}]}]
 
     print("Success")
