@@ -1,5 +1,59 @@
 from collections import defaultdict
+import re
 import json
+
+
+def cut_labels(list_of_labels):
+    for i in range(len(list_of_labels)):
+        if list_of_labels[i][-1] == ".":
+            list_of_labels[i] = list_of_labels[i].strip(".")
+        if "Append" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Append", "Prolong", list_of_labels[i])
+        if "Initiate." in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Initiate.", "", list_of_labels[i])
+        if "Answer" in list_of_labels[i]:
+            list_of_labels[i] = "React.Rejoinder.Support.Response.Resolve"
+        if "Open.Opinion" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Open.Opinion", "Opinion", list_of_labels[i])
+        if "Re-challenge" in list_of_labels[i]:
+            list_of_labels[i] = "React.Rejoinder.Confront.Response.Re-challenge"
+        if "Open.Fact" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Open.Fact", "Fact", list_of_labels[i])
+        if "Open.Fact" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Open.Fact", "Fact", list_of_labels[i])
+        if "Decline" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Decline", "Contradict", list_of_labels[i])
+        if "Accept" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Accept", "Affirm", list_of_labels[i])
+        if "Response.Refute" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Response.Refute", "Counter", list_of_labels[i])
+        if "Response.Acquiesce" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Response.Acquiesce", "Response.Resolve", list_of_labels[i])
+        if "Detach" in list_of_labels[i]:
+            list_of_labels[i] = "React.Rejoinder.Rebound"
+        if "Rejoinder.Develop.Elaborate" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Rejoinder", "Respond", list_of_labels[i])
+        if "React.Respond.Disengage" in list_of_labels[i]:
+            list_of_labels[i] = "React.Respond.Support.Register"
+        if "Response.Repair" in list_of_labels[i]:
+            list_of_labels[i] = "React.Respond.Support.Develop.Extend"
+        if "Counter" in list_of_labels[i]:
+            list_of_labels[i] = "React.Rejoinder.Confront.Challenge.Counter"
+        if "Closed.Fact" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Closed.Fact", "Fact", list_of_labels[i])
+        if "Closed.Opinion" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Closed.Opinion", "Opinion", list_of_labels[i])
+        if "React.Rejoinder.Response.Resolve" in list_of_labels[i]:
+            list_of_labels[i] = re.sub("Closed.Opinion", "Opinion", list_of_labels[i])
+        if "Sustain.Continue.Develop.Elaborate" in list_of_labels[i]:
+            list_of_labels[i] = "Sustain.Continue.Prolong.Elaborate"
+        if "Rebound" in list_of_labels[i]:
+            list_of_labels[i] = "React.Rejoinder.Support.Challenge.Rebound"
+        if "React.Rejoinder.Confront.Develop.Elaborate" in list_of_labels[i]:
+            list_of_labels[i] = "React.Rejoinder.Support.Develop.Elaborate"
+        if "Fact.Extend" in list_of_labels[i]:
+            list_of_labels[i] = "Open.Give.Fact"
+    return list_of_labels
 
 
 def init_model():
@@ -40,11 +94,12 @@ def init_model():
     class_dict = {}
     label_to_name = []
     i = 0
-    for el in set(train_labels + test_labels):
+    for el in set(cut_labels(train_labels) + cut_labels(test_labels)):
         class_dict[el] = i
         i = i + 1
         label_to_name.append(el)
 
+    print("Class Dict:", class_dict)
     counters = [[0] * len(class_dict) for _ in range(len(class_dict))]
 
     for label_sequence in (train_labels, test_labels):
