@@ -7,6 +7,7 @@ tensorflow-hub==0.7.0
 # web
 gunicorn==19.9.0
 flask==1.1.1
+itsdangerous==2.0.1
 flasgger==0.9.4.dev0
 
 # external

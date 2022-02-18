@@ -69,7 +69,7 @@ def get_entity_name(annotations):
 
 
 with open("./data/midas_acknowledgements.json", "r") as f:
-    MIDAS_INTENT_ACKNOWLEDGMENTS = json.load(f)
+    MIDAS_INTENT_ACKNOWLEDGEMENTS = json.load(f)
 
 MIDAS_INTENT_ANALOGUES = {
     "open_question_opinion": ["open_question_opinion", "Opinion_RequestIntent"],
@@ -89,7 +89,7 @@ def get_midas_analogue_intent_for_any_intent(intent):
 
 
 def get_midas_intent_acknowledgement(intent, entity_name):
-    pos_responses = MIDAS_INTENT_ACKNOWLEDGMENTS.get(intent, [])
+    pos_responses = MIDAS_INTENT_ACKNOWLEDGEMENTS.get(intent, [])
     if pos_responses:
         response = random.choice(pos_responses).replace("SUBJECT", entity_name)
         response = response.replace("PROPERTY", random.choice(COMPLIMENT_PROPERTIES).lower())
