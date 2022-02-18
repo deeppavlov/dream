@@ -46,4 +46,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-
+  speech-function-classifier:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
