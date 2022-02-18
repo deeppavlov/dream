@@ -14,12 +14,10 @@ from df_engine.core.keywords import (
     TRANSITIONS,
     GLOBAL,
     RESPONSE,
-    LOCAL,
     MISC,
 )
 from df_engine.core import Actor
 import df_engine.conditions as cnd
-import df_engine.labels as lbl
 import scenario.sf_conditions as dm_cnd
 
 import common.dff.integration.condition as int_cnd
