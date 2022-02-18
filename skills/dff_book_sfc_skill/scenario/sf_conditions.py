@@ -1,32 +1,8 @@
 import logging
-import re
-from typing import Callable, Any
 import sentry_sdk
 from os import getenv
-import functools
 
 from df_engine.core import Context, Actor
-import df_engine.conditions as cnd
-
-from common.books import about_book, BOOK_PATTERN, book_skill_was_proposed
-from common.dff.integration import condition as int_cnd
-from common.universal_templates import (
-    NOT_LIKE_PATTERN,
-    if_chat_about_particular_topic,
-    is_switch_topic,
-    tell_me_more,
-)
-from common.utils import (
-    get_intents,
-    get_sentiment,
-    is_question,
-    is_opinion_request,
-    is_opinion_expression,
-)  # present in integration
-
-import scenario.response as loc_rsp
-import scenario.universal as universal
-from scenario.universal import GENRE_PATTERN, get_slot
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(

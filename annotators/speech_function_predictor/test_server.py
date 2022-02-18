@@ -3,7 +3,7 @@ import os
 
 
 SERVICE_PORT = os.getenv("SERVICE_PORT")
-URL = f"http://0.0.0.0:8107/model"
+URL = "http://0.0.0.0:8107/model"
 
 
 def handler(requested_data):

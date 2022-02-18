@@ -343,7 +343,9 @@ flows = {
                 "execute_response": loc_prs.execute_response,
             },
             TRANSITIONS: {
-                # ("undetected_flow", "ask_to_repeat"): cnd.any([cnd.neg(loc_cnd.told_fav_book), cnd.neg(loc_cnd.book_in_request)]                ),
+                # ("undetected_flow", "ask_to_repeat"): cnd.any(
+                #     [cnd.neg(loc_cnd.told_fav_book), cnd.neg(loc_cnd.book_in_request)]
+                # ),
                 "user_fav": cnd.true()
             },
         },
@@ -557,8 +559,11 @@ flows = {
     },
     "bible_flow": {
         "bible_start": {
-            RESPONSE: "You have good taste in books! By the way, I know that Bible is one of the most widespread books on Earth. "
-            "It is the foundation stone of Christianity. Have you read the whole Bible?",
+            RESPONSE: (
+                "You have good taste in books! "
+                "By the way, I know that Bible is one of the most widespread books on Earth. "
+                "It is the foundation stone of Christianity. Have you read the whole Bible?"
+            ),
             TRANSITIONS: {
                 "bible_elaborate": cnd.true(),
             },
@@ -578,7 +583,10 @@ flows = {
     },
     "undetected_flow": {
         "ask_to_repeat": {
-            RESPONSE: "I'm sorry, but I don't know what to say to that yet, but I will definitely learn! Have a nice day, bye!",
+            RESPONSE: (
+                "I'm sorry, but I don't know what to say to that yet, "
+                "but I will definitely learn! Have a nice day, bye!"
+            ),
             TRANSITIONS: {},
         },
         "change_branch": {
