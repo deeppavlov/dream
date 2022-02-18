@@ -107,12 +107,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8033:8033
-  dff-book-skill:
-    volumes:
-      - "./skills/dff_book_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8032:8032
   dff-book-sfc-skill:
     volumes:
       - "./skills/dff_book_sfc_skill:/src"

@@ -87,7 +87,7 @@ services:
     restart: unless-stopped
   misheard-asr:
     restart: unless-stopped
-  dff-book-skill:
+  dff-book-sfc-skill:
     restart: unless-stopped
   emotion-skill:
     restart: unless-stopped
