@@ -16,9 +16,7 @@ def run_test():
     assert model_hypothesis == [{}]
 
     annotation_test_data = ["Reply.Acknowledge"]
-    annotation_hypothesis = requests.post(
-        ANNOTATION_URL, json=annotation_test_data
-    ).json()
+    annotation_hypothesis = requests.post(ANNOTATION_URL, json=annotation_test_data).json()
 
     print("test name: sfp annotation_hypothesis")
     assert annotation_hypothesis == [{"batch": [{}]}]

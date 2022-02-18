@@ -31,9 +31,7 @@ def run_test():
             "prev_speech_function": "Open.Demand.Fact",
         }
     ]
-    annotation_hypothesis = requests.post(
-        ANNOTATION_URL, json=annotation_test_data
-    ).json()
+    annotation_hypothesis = requests.post(ANNOTATION_URL, json=annotation_test_data).json()
 
     print("test name: sfc annotation_hypothesis")
     assert annotation_hypothesis == [
