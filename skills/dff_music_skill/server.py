@@ -39,7 +39,7 @@ def handler(requested_data, random_seed=None):
     dialog_batch = requested_data.get("dialog_batch", [])
     human_utter_index_batch = requested_data.get("human_utter_index_batch", [0] * len(dialog_batch))
     state_batch = requested_data.get(f"{SERVICE_NAME}_state_batch", [{}] * len(dialog_batch))
-    dff_shared_state_batch = requested_data.get(f"dff_shared_state_batch", [{}] * len(dialog_batch))
+    dff_shared_state_batch = requested_data.get("dff_shared_state_batch", [{}] * len(dialog_batch))
     entities_batch = requested_data.get("entities_batch", [{}] * len(dialog_batch))
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     age_group_batch = requested_data.get("age_group_batch", [""] * len(dialog_batch))
@@ -110,7 +110,7 @@ def handler(requested_data, random_seed=None):
             }
             hype_attr = {"can_continue": can_continue}
             if response_parts:
-                hype_attr["response_parts"] = response_parts
+                hype_attr["response_parts"] = sorted(response_parts)
 
             responses.append((text, confidence, human_attr, {}, hype_attr))
         except Exception as exc:

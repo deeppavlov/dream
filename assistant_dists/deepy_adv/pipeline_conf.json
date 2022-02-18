@@ -72,13 +72,13 @@
                 "state_manager_method": "add_hypothesis",
                 "previous_services": ["annotators"]
             },
-            "dff_program_y": {
+            "dff_program_y_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-program-y:3555/respond"
+                    "url": "http://dff-program-y-skill:3555/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "annotators"
