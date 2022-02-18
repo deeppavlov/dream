@@ -5,7 +5,13 @@ import json
 
 from df_engine.core import Context, Actor
 
-from tools.wiki import get_name, what_is_book_about, get_published_year, best_plain_book_by_author, genre_of_book
+from tools.wiki import (
+    get_name,
+    what_is_book_about,
+    get_published_year,
+    best_plain_book_by_author,
+    genre_of_book,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -20,15 +26,21 @@ GENRE_DICT = {
     "romance": re.compile(r"\bromance\b|\bromantic\b|\blove\b", re.IGNORECASE),
     "non-fiction": re.compile(r"\bnonfiction\b|\bnon-fiction\b", re.IGNORECASE),
     "food cook": re.compile(r"\bfood\b|\bcook\b|\bkitchen\b", re.IGNORECASE),
-    "poetry": re.compile(r"\bpoetry\b|\bpoesy\b|\bverse\b|\brhyme\b|\brime\b", re.IGNORECASE),
+    "poetry": re.compile(
+        r"\bpoetry\b|\bpoesy\b|\bverse\b|\brhyme\b|\brime\b", re.IGNORECASE
+    ),
     "childrens": re.compile(r"\bchild\b|\bkids?\b", re.IGNORECASE),
     "mystery thriller": re.compile(r"\bmystery\b|\bthriller\b", re.IGNORECASE),
     "horror": re.compile(r"\bhorror\b", re.IGNORECASE),
     "humour": re.compile(r"\bhumor\b|\bfunny\b|\blaugh\b|\bcomics?\b", re.IGNORECASE),
     "fantasy": re.compile(r"\bfantasy\b", re.IGNORECASE),
-    "science fiction": re.compile(r"\bsci-fi\b|\bscience fiction\b|\bspace\b", re.IGNORECASE),
+    "science fiction": re.compile(
+        r"\bsci-fi\b|\bscience fiction\b|\bspace\b", re.IGNORECASE
+    ),
     "historical fiction": re.compile(r"\bhistory\b|\bhistoric(al)?\b", re.IGNORECASE),
-    "fiction": re.compile(r"\bfiction\b|\ball\b|\bany\b|\banything\b|everything", re.IGNORECASE),
+    "fiction": re.compile(
+        r"\bfiction\b|\ball\b|\bany\b|\banything\b|everything", re.IGNORECASE
+    ),
 }
 GENRE_PATTERN = "|".join(GENRE_DICT.keys())
 AUTHOR_PATTERN = re.compile(r"(?<=by )[A-Za-z][a-z]+( [A-Z][a-z]+){0,1}")
@@ -50,7 +62,9 @@ def get_book(ctx: Context, actor: Actor) -> Optional[Tuple[str, Optional[str]]]:
     """
     Extract a book name from user request with wikiparser
     """
-    annotated_utterance: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    annotated_utterance: dict = (
+        ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    )
     result = get_name(annotated_utterance, "book")
     if not result or not result[0]:
         return None
@@ -61,7 +75,9 @@ def get_movie(ctx: Context, actor: Actor) -> Optional[Tuple[str, Optional[str]]]
     """
     Extract a movie with wikiparser
     """
-    annotated_utterance: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    annotated_utterance: dict = (
+        ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    )
     result = get_name(annotated_utterance, "movie")
     if not result or not result[0]:
         return None
@@ -134,11 +150,15 @@ def get_author_regexp(ctx: Context, actor: Actor) -> Optional[str]:
     return None if not (x := author_candidate) else x.group()
 
 
-def get_author(ctx: Context, actor: Actor) -> Optional[Tuple[str, Optional[str], Optional[str]]]:
+def get_author(
+    ctx: Context, actor: Actor
+) -> Optional[Tuple[str, Optional[str], Optional[str]]]:
     """
     Extract the author name from user request with wikiparser
     """
-    annotated_utterance: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    annotated_utterance: dict = (
+        ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    )
     result = get_name(annotated_utterance, "author")
     if not result or not result[0]:
         return None
@@ -151,7 +171,9 @@ def get_book_by_author(ctx: Context, actor: Actor) -> Optional[str]:
     """
     author_plain = get_slot("cur_author_plain")(ctx, actor)
     prev_book = get_slot("cur_book_plain")(ctx, actor)
-    return best_plain_book_by_author(plain_author_name=author_plain, plain_last_bookname=prev_book)
+    return best_plain_book_by_author(
+        plain_author_name=author_plain, plain_last_bookname=prev_book
+    )
 
 
 def get_book_year(ctx: Context, actor: Actor) -> Optional[str]:
