@@ -93,8 +93,11 @@ def respond():
     inputs = []
     for i, dialog in enumerate(dialogs):
         if len(dialog["bot_utterances"]):
-            prev_bot_uttr_text = dialog["bot_utterances"][-1].get("text", "").lower()
-            tokenized_sentences = spacy_sent_tokenize(prev_bot_uttr_text)
+            tokenized_sentences = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {}).get(
+                "segments", [])
+            if len(tokenized_sentences) == 0:
+                prev_bot_uttr_text = dialog["bot_utterances"][-1].get("text", "").lower()
+                tokenized_sentences = spacy_sent_tokenize(prev_bot_uttr_text)
             context = tokenized_sentences[-1].lower() if len(tokenized_sentences) > 0 else ""
         else:
             context = ""
@@ -123,7 +126,8 @@ def batch_respond():
     st_time = time.time()
     bot_utterances = request.json["sentences"]
     human_utterances = request.json["last_human_utterances"]
-    bot_utterances_sentences = [spacy_sent_tokenize(utterance) for utterance in bot_utterances]
+    bot_utterances_sentences = [spacy_sent_tokenize(utterance) if isinstance(utterance, str) else utterance
+                                for utterance in bot_utterances]
     dialog_ids = []
     inputs = []
     for i, bot_utterance_sents in enumerate(bot_utterances_sentences):
