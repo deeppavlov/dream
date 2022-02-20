@@ -19,12 +19,19 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # Load data (deserialize)
-with open('models/midas_predictor_rfc_depth20.pickle', 'rb') as f:
+with open('data/models/midas_predictor_rfc_depth20.pickle', 'rb') as f:
     rfc_model = pickle.load(f)
 
-os.environ['TFHUB_CACHE_DIR'] = './models/tf_cache'
-module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
-encoder = hub.load(module_url)
+
+TFHUB_CACHE_DIR = os.environ.get("TFHUB_CACHE_DIR", None)
+if TFHUB_CACHE_DIR is None:
+    os.environ["TFHUB_CACHE_DIR"] = "/root/tfhub_cache"
+
+USE_MODEL_PATH = os.environ.get("USE_MODEL_PATH", None)
+if USE_MODEL_PATH is None:
+    USE_MODEL_PATH = "https://tfhub.dev/google/universal-sentence-encoder/4"
+
+encoder = hub.load(USE_MODEL_PATH)
 
 Midas2Id = {
     "appreciation": 0, "command": 1, "comment": 2,"complaint": 3,

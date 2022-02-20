@@ -75,10 +75,16 @@ with open('data/annotated/midas_test.json', 'r', encoding='utf8') as f:
 
 print(len(train), len(val), len(test))
 
-os.environ['TFHUB_CACHE_DIR'] = './models/tf_cache'
-module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
-encoder = hub.load(module_url)
-print("module %s loaded" % module_url)
+
+TFHUB_CACHE_DIR = os.environ.get("TFHUB_CACHE_DIR", None)
+if TFHUB_CACHE_DIR is None:
+    os.environ["TFHUB_CACHE_DIR"] = "/root/tfhub_cache"
+
+USE_MODEL_PATH = os.environ.get("USE_MODEL_PATH", None)
+if USE_MODEL_PATH is None:
+    USE_MODEL_PATH = "https://tfhub.dev/google/universal-sentence-encoder/4"
+
+encoder = hub.load(USE_MODEL_PATH)
 
 midas_vectorizer = MidasVectorizer(
     text_vectorizer=encoder, # USE
@@ -150,5 +156,5 @@ print(f1_score(y_val, val_preds, average='weighted'))
 # plt.show()
 
 # Store data (serialize)
-with open(f'models/midas_predictor_rfc_depth{MAX_DEPTH}.pickle', 'wb') as f:
+with open(f'data/models/midas_predictor_rfc_depth{MAX_DEPTH}.pickle', 'wb') as f:
     pickle.dump(rfc_model, f, protocol=pickle.HIGHEST_PROTOCOL)

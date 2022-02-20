@@ -21,25 +21,16 @@ WORKDIR /src
 RUN mkdir /data/
 RUN mkdir /data/models/
 
-RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/midas_predictor.tar.gz -P /data/models/ && \
-    tar -xzf /data/models/midas_predictor.tar.gz -C /data/ && \
-    rm -rf /data/models/
+RUN wget -c -q http://lnsigo.mipt.ru/export/dream/midas_predictor_rfc_depth20.pickle -P /data/models/
 
-ARG GRAPH
-ARG PRETRAINED_MODEL
-ARG PREPROCESS_DATA
-ARG DECODING_ALGO
 ARG SERVICE_NAME
 ARG SERVICE_PORT
 
-ENV GRAPH ${GRAPH}
-ENV PRETRAINED_MODEL ${PRETRAINED_MODEL}
-ENV DECODING_ALGO ${DECODING_ALGO}
 ENV SERVICE_NAME ${SERVICE_NAME}
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-RUN wget ${PRETRAINED_MODEL} -q -P /data/pretrained_models/ && \
-    wget ${PREPROCESS_DATA} -q -P /data/data/${GRAPH}/processed/generation/
+ENV TFHUB_CACHE_DIR='/root/tfhub_cache'
+ENV USE_MODEL_PATH='https://tfhub.dev/google/universal-sentence-encoder/4'
 
 WORKDIR /src
 
