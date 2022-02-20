@@ -13,7 +13,7 @@ COPY ./common/ /src/common/
 WORKDIR /src
 
 RUN mkdir /data/
-RUN mkdir / data/models/
+RUN mkdir /data/models/
 
 RUN wget -c -q http://lnsigo.mipt.ru/export/dream/midas_predictor_rfc_depth20.pickle -P /data/models/
 
