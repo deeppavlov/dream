@@ -6,8 +6,7 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf 
 
 COPY ./requirements.txt /src/requirements.txt
 
-RUN pip install -r /src/requirements.txt && \
-    python -m spacy download en
+RUN pip install -r /src/requirements.txt
 
 COPY ./ /src/
 COPY ./common/ /src/common/
