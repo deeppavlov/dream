@@ -4,17 +4,12 @@ FROM pytorch/pytorch:1.4-cuda10.1-cudnn7-runtime
 
 RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
 
-ARG SERVICE_HOME
-
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8
-
 COPY ./annotators/midas_predictor/requirements.txt /src/requirements.txt
 
 RUN pip install -r /src/requirements.txt && \
     python -m spacy download en
 
-COPY $SERVICE_HOME/ /src/
+COPY ./annotators/midas_predictor/ /src/
 COPY ./common/ /src/common/
 WORKDIR /src
 
