@@ -28,4 +28,4 @@ ENV USE_MODEL_PATH='https://tfhub.dev/google/universal-sentence-encoder/4'
 
 WORKDIR /src
 
-CMD gunicorn --workers=1 --name=catcher --bind 0.0.0.0:${SERVICE_PORT} --timeout=500 server:app
+CMD gunicorn --workers=1 server:app
