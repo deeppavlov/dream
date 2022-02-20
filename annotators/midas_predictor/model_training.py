@@ -1,15 +1,11 @@
 import json
 import os
 import pickle
-import random
-from collections import Counter
 
-import numpy as np
 import pandas as pd
 import tensorflow_hub as hub
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score, accuracy_score
-from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 
 from data2seq import Dial2seq, SequencePreprocessor

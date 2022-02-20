@@ -2,7 +2,7 @@ import json
 import requests
 
 
-URL = f"http://0.0.0.0:8121/respond"
+URL = "http://0.0.0.0:8121/respond"
 
 utterances = [
     [

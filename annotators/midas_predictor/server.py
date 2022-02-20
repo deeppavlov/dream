@@ -7,7 +7,7 @@ import sentry_sdk
 import tensorflow_hub as hub
 from flask import Flask, jsonify, request
 
-from midas_dataset import MidasDataset, MidasVectorizer
+from midas_dataset import MidasVectorizer
 
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
@@ -116,7 +116,7 @@ test_midas = [
 ]
 
 print(f"test sample proceeded result: {inference([test_sample], [test_midas])}")
-logger.info(f"midas-predictor is loaded")
+logger.info("midas-predictor is loaded")
 
 
 @app.route("/respond", methods=["POST"])

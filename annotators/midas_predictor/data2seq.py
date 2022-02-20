@@ -1,8 +1,5 @@
 import json
 from collections import Counter
-import re
-
-from nltk.tokenize import sent_tokenize
 
 
 class Dial2seq:
