@@ -34,7 +34,7 @@ if USE_MODEL_PATH is None:
 encoder = hub.load(USE_MODEL_PATH)
 
 Midas2Id = {
-    "appreciation": 0, "command": 1, "comment": 2,"complaint": 3,
+    "appreciation": 0, "command": 1, "comment": 2, "complaint": 3,
     "dev_command": 4, "neg_answer": 5, "open_question_factual": 6,
     "open_question_opinion": 7, "opinion": 8, "other_answers": 9,
     "pos_answer": 10, "statement": 11, "yes_no_question": 12,
@@ -48,16 +48,15 @@ midas_vectorizer = MidasVectorizer(
 )
 
 
-def inference(context: list, midas: list, clf, vectorizer):
+def inference(context: list, midas: list):
     """
     context: list of utterances (string)
     midas: list of lists of midas dicts {midas_label_1: prob, ..., midas_label_n, proba}
             1D : number of utterances = 3, 2D: number of sentences in the utterance: N
-    clf: sklearn classifier train to predict next midas label
-    vectorizer: Vectorizer to concatenate text embeddings with midas proba distribution
 
     output: probability distribution for the next utterance
     """
+    global rfc_model, midas_vectorizer
     # extract vectors
     midas_vectors = list()
 
@@ -68,8 +67,8 @@ def inference(context: list, midas: list, clf, vectorizer):
         midas_vectors.append(utterance_vec)
 
     assert len(context) == len(midas_vectors)
-    vec = vectorizer.context_vector(context, midas_vectors)[None, :]
-    pred_probas = clf.predict_proba(vec)
+    vec = midas_vectorizer.context_vector(context, midas_vectors)[None, :]
+    pred_probas = rfc_model.predict_proba(vec)
 
     return pred_probas[0]
 
@@ -90,38 +89,24 @@ test_midas = [{'appreciation': 0.0022430846001952887, 'command': 0.0024833311326
                'other_answers': 0.006914180237799883, 'pos_answer': 0.048117928206920624,
                'statement': 0.2340209186077118, 'yes_no_question': 0.47626861929893494}]
 
-print(f"test sample proceeded result: {inference([test_sample], [test_midas], rfc_model, midas_vectorizer)}")
+print(f"test sample proceeded result: {inference([test_sample], [test_midas])}")
 logger.info(f"midas-predictor is loaded")
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    user_sentences = request.json["sentences"]
-    session_id = uuid.uuid4().hex
+    # full utterances (no sentence segmentation)
+    utterances = request.json["utterances"]
+    # sentence-wise (each sample is a list of midas distributions)
+    midas_distributions = request.json["midas_distributions"]
 
-    sentseg_result = []
-    # Only for user response delete alexa from sentence TRELLO#275
-    if len(user_sentences) % 2 == 1:
-        user_sent_without_alexa = re.sub(r"(^alexa\b)", "", user_sentences[-1], flags=re.I).strip()
-        if len(user_sent_without_alexa) > 1:
-            user_sentences[-1] = user_sent_without_alexa
+    result = inference(utterances, midas_distributions)
+    result = [zip(Midas2Id.keys(), sample) for sample in result]
 
-    for i, text in enumerate(user_sentences):
-        if text.strip():
-            logger.info(f"user text: {text}, session_id: {session_id}")
-            sentseg = model.predict(sess, text)
-            sentseg = sentseg.replace(" '", "'")
-            sentseg = preprocessing(sentseg)
-            segments = split_segments(sentseg)
-            sentseg_result += [{"punct_sent": sentseg, "segments": segments}]
-            logger.info(f"punctuated sent. : {sentseg}")
-        else:
-            sentseg_result += [{"punct_sent": "", "segments": [""]}]
-            logger.warning(f"empty sentence {text}")
     total_time = time.time() - st_time
-    logger.info(f"sentseg exec time: {total_time:.3f}s")
-    return jsonify(sentseg_result)
+    logger.info(f"midas-predictor exec time: {total_time:.3f}s")
+    return jsonify(result)
 
 
 if __name__ == "__main__":
