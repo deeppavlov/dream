@@ -19,7 +19,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # Load data (deserialize)
-with open('data/models/midas_predictor_rfc_depth20.pickle', 'rb') as f:
+with open('/data/models/midas_predictor_rfc_depth20.pickle', 'rb') as f:
     rfc_model = pickle.load(f)
 
 
