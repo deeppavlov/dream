@@ -1,13 +1,13 @@
 import logging
 import os
-import pickle
+import pickle5 as pickle
 import time
 
 import sentry_sdk
 import tensorflow_hub as hub
 from flask import Flask, jsonify, request
 
-from utils.midas_dataset import MidasDataset, MidasVectorizer
+from midas_dataset import MidasDataset, MidasVectorizer
 
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
