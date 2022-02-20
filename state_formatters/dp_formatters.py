@@ -875,6 +875,6 @@ def midas_predictor_formatter(dialog: Dict):
     utterances, midas_distributions = [], []
     for utt in dialog["utterances"]:
         utterances.append(utt["text"])
-        midas_distributions.append(utt.get("annotations", {}).get("midas_classification", {}))
+        midas_distributions.append(utt.get("annotations", {}).get("midas_classification", [{}]))
 
-    return [{"utterances": " ".join(utterances[-5:]), "midas_distributions": midas_distributions[-5:]}]
+    return [{"utterances": utterances[-3:], "midas_distributions": midas_distributions[-3:]}]

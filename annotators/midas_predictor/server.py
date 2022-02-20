@@ -95,13 +95,13 @@ logger.info(f"midas-predictor is loaded")
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    # full utterances (no sentence segmentation)
+    # each sample is a list of 3 utterances texts (no sentence segmentation)
     utterances = request.json["utterances"]
-    # sentence-wise (each sample is a list of midas distributions)
+    # each sample is a list of midas distributions where the number of distributions is equal to number of sentences
     midas_distributions = request.json["midas_distributions"]
 
-    result = inference(utterances, midas_distributions)
-    result = [zip(Midas2Id.keys(), sample) for sample in result]
+    result = [inference(utts, dists) for utts, dists in zip(utterances, midas_distributions)]
+    result = [{k: s for k, s in zip(Midas2Id.keys(), sample)} for sample in result]
 
     total_time = time.time() - st_time
     logger.info(f"midas-predictor exec time: {total_time:.3f}s")

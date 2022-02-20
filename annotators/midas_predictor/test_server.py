@@ -1,33 +1,25 @@
+import json
 import requests
-import os
-
-import common.test_utils as test_utils
-
-SERVICE_NAME = os.getenv("SERVICE_NAME")
-SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
-URL = f"http://0.0.0.0:{SERVICE_PORT}/comet"
 
 
-def handler(requested_data):
-    hypothesis = requests.post(URL, json={**requested_data}).json()
-    return hypothesis
+URL = f"http://0.0.0.0:8121/respond"
 
+utterances = [[
+    "Yeah I think the original is going to be the best. Did you know that Stephen King actually thinks that the "
+    "movie Bambi should be a horror movie?",
+    "He was traumatized as a child. That movie did have death. so it could be scary. Anyway. "
+    "he turned his trauma into a career.",
+    "Well that's really good for him! Do you think that horror movies actually burn almost 200 calories per movie? "
+    "If so I should watch more to lose weight LOL"
+]]
 
-def run_test(handler):
-    in_data, out_data = test_utils.get_dataset()
-    for test_name in in_data:
-        if test_name in SERVICE_NAME:
-            hypothesis = handler(in_data[test_name])
-            print(f"test name: {test_name}")
-            is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis)
-            if msg and len(msg.split("`")) == 5:
-                _, ground_truth_text, _, hypothesis_text, _ = msg.split("`")
-                is_equal_flag, ratio = test_utils.compare_text(ground_truth_text, hypothesis_text, 0.80)
-                if not is_equal_flag:
-                    msg = f"{msg} ratio = {ratio}"
-            assert is_equal_flag, msg
-            print("Success")
+with open("test_midas_distributions.json", "r") as f:
+    midas_distributions = json.load(f)
 
 
 if __name__ == "__main__":
-    run_test(handler)
+
+    requested_data = {"utterances": utterances, "midas_distributions": midas_distributions}
+    result = requests.post(URL, json=requested_data).json()
+    print(result)
+    print("Success")
