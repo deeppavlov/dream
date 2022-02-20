@@ -5,7 +5,7 @@ import re
 from nltk.tokenize import sent_tokenize
 
 
-class Dial2seq():
+class Dial2seq:
     """
     a class to transform dialogues into a sequence of utterances and labels
     The sequence consists of n previous uterrances.
@@ -29,12 +29,12 @@ class Dial2seq():
         return [seq for dial in self for seq in self.__ngrammer(dial)]
 
     def __ngrammer(self, dialogue: list) -> list:
-        """ transforms a dialogue into a set of sequences (ngram style) """
-        return [dialogue[i:i + self.seqlen + 1] for i in range(len(dialogue) - (self.seqlen + 1) + 1)]
+        """transforms a dialogue into a set of sequences (ngram style)"""
+        return [dialogue[i : i + self.seqlen + 1] for i in range(len(dialogue) - (self.seqlen + 1) + 1)]
 
     def __load_data(self, path: str) -> dict:
-        """ loads data from a json file """
-        with open(path, 'r', encoding='utf8') as f:
+        """loads data from a json file"""
+        with open(path, "r", encoding="utf8") as f:
             data = json.load(f)
         return data
 
@@ -42,12 +42,12 @@ class Dial2seq():
         return len(self.data)
 
     def __iter__(self):
-        """iterates over all the dialogues in the file """
+        """iterates over all the dialogues in the file"""
         for dialogue in self.data.values():
             yield dialogue
 
 
-class SequencePreprocessor():
+class SequencePreprocessor:
     """
     preprocesses sequences
     to filter only those that are relevant for the task
@@ -57,10 +57,11 @@ class SequencePreprocessor():
     in terms of number of annotated entities
     """
 
-    def __init__(self,
-                 num_entities=1,
-                 stoplist_labels: list = ['misc', 'anaphor'],
-                 ):
+    def __init__(
+        self,
+        num_entities=1,
+        stoplist_labels: list = ["misc", "anaphor"],
+    ):
         self.num_entities = num_entities
         self.stoplist_labels = stoplist_labels
         self.midas_all = Counter()
@@ -70,7 +71,7 @@ class SequencePreprocessor():
         self.midas_and_entity_target = Counter()
 
     def transform(self, sequences: list) -> list:
-        """ extract necessary data from sequences """
+        """extract necessary data from sequences"""
         seqs = list()
 
         for seq in sequences:
@@ -99,67 +100,62 @@ class SequencePreprocessor():
         output: bool
         """
         # skip those that have too many entities
-        if len(ut['entities'][0]) > 1:
+        if len(ut["entities"][0]) > 1:
             return False
 
         # no entities in the first or only sentence
-        if not ut['entities'][0]:
+        if not ut["entities"][0]:
             return True
 
         # if there is one, check if it is not in stoplist of entity labels
-        return ut['entities'][0][0]['label'] not in self.stoplist_labels
+        return ut["entities"][0][0]["label"] not in self.stoplist_labels
 
     def __shape_output(self, seq: list) -> list:
-        """ shapes sequence in order to keep only the necessary data """
+        """shapes sequence in order to keep only the necessary data"""
 
         output = list()
 
         for ut in seq[:-1]:
-            midas_labels, midas_vectors = self.__get_midas(ut['midas'])
+            midas_labels, midas_vectors = self.__get_midas(ut["midas"])
 
-            output.append((
-                ut['text'], midas_labels, midas_vectors, ut['entities']))
+            output.append((ut["text"], midas_labels, midas_vectors, ut["entities"]))
 
         # preprocess last sentence in the sequence
-        midas_labels, midas_vectors = self.__get_midas(seq[-1]['midas'])
-        sentence = seq[-1]['text'][0]
-        entity = seq[-1]['entities'][0]
+        midas_labels, midas_vectors = self.__get_midas(seq[-1]["midas"])
+        sentence = seq[-1]["text"][0]
+        entity = seq[-1]["entities"][0]
         # if there is an entity, take it. Otherwise, use dict of empty values
-        entity = entity[0] if entity else {'label': "", 'offsets': [0, 0], 'text': ""}
+        entity = entity[0] if entity else {"label": "", "offsets": [0, 0], "text": ""}
 
         # replace the entity text with its label
-        sentence = (sentence[:entity['offsets'][0]] +
-                    entity['label'].upper() +
-                    sentence[entity['offsets'][1]:])
+        sentence = sentence[: entity["offsets"][0]] + entity["label"].upper() + sentence[entity["offsets"][1] :]
 
-        output.append(
-            (sentence, midas_labels[0:1], entity))
+        output.append((sentence, midas_labels[0:1], entity))
 
         return output
 
     def __get_dict_entry(self, seq) -> dict:
-        """ creates a proper dict entry to dump into a file """
+        """creates a proper dict entry to dump into a file"""
         entry = dict()
 
         # calc stats for all possible entities and targets in prev sequences
         for s in seq[:-1]:
             self.midas_all.update(s[1])
-            self.entity_all.update([ent['label'] for ents in s[-1] for ent in ents])
+            self.entity_all.update([ent["label"] for ents in s[-1] for ent in ents])
 
         # calc stats for targets
         self.midas_target.update([seq[-1][1][0]])
-        self.entity_target.update([seq[-1][2]['label']])
-        self.midas_and_entity_target.update(
-            [f"{seq[-1][1][0]}_{seq[-1][2]['label']}"])
+        self.entity_target.update([seq[-1][2]["label"]])
+        self.midas_and_entity_target.update([f"{seq[-1][1][0]}_{seq[-1][2]['label']}"])
 
-        entry['previous_text'] = [s[0] for s in seq[:-1]]
-        entry['previous_midas'] = [s[1] for s in seq[:-1]]
-        entry['midas_vectors'] = [s[2] for s in seq[:-1]]
-        entry['previous_entities'] = [s[-1] for s in seq[:-1]]
-        entry['predict'] = {}
-        entry['predict']['text'] = seq[-1][0]
-        entry['predict']['midas'] = seq[-1][1][0]
-        entry['predict']['entity'] = seq[-1][2]
+        entry["previous_text"] = [s[0] for s in seq[:-1]]
+        entry["previous_midas"] = [s[1] for s in seq[:-1]]
+        entry["midas_vectors"] = [s[2] for s in seq[:-1]]
+        entry["previous_entities"] = [s[-1] for s in seq[:-1]]
+        entry["predict"] = {}
+        entry["predict"]["text"] = seq[-1][0]
+        entry["predict"]["midas"] = seq[-1][1][0]
+        entry["predict"]["entity"] = seq[-1][2]
 
         return entry
 
