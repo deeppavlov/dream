@@ -2,21 +2,20 @@ import logging
 import os
 import pickle
 import time
-import uuid
 
 import sentry_sdk
 import tensorflow_hub as hub
 from flask import Flask, jsonify, request
-from sentry_sdk.integrations.logging import ignore_logger
 
 from utils.midas_dataset import MidasDataset, MidasVectorizer
 
 
-ignore_logger("root")
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
-app = Flask(__name__)
+
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+app = Flask(__name__)
 
 # Load data (deserialize)
 with open('/data/models/midas_predictor_rfc_depth20.pickle', 'rb') as f:
