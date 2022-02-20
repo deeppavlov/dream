@@ -87,10 +87,10 @@ if USE_MODEL_PATH is None:
 encoder = hub.load(USE_MODEL_PATH)
 
 midas_vectorizer = MidasVectorizer(
-    text_vectorizer=encoder, # USE
+    text_vectorizer=encoder,  # USE
     midas2id=Midas2Id,
     context_len=3,
-    embed_dim=512 # USE vector size
+    embed_dim=512  # USE vector size
 )
 
 midas_vectorizer.context_vector(train[0]['previous_text'], train[0]['midas_vectors'])
