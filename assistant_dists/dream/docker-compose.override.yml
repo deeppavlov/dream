@@ -1144,8 +1144,9 @@ services:
         SERVICE_PORT: 8121
         SERVICE_NAME: midas_predictor
       context: ./annotators/midas_predictor/
-    command: python -m flask run -h 0.0.0.0 -p 8121 --without-threads
+    command: flask run -h 0.0.0.0 -p 8121
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
