@@ -16,7 +16,11 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -28,7 +32,8 @@ def predict(label_name):
         class_id = class_dict[label_name]
     except KeyError:
         return {}
-    sorted_classes = sorted(enumerate(counters[class_id]), reverse=True, key=lambda x: x[1])[:5]
+    sorted_classes = sorted(enumerate(counters[class_id]), reverse=False, key=lambda x: x[1])
+    sorted_classes = [x for x in sorted_classes if x[1] > 0]
     return [{"prediction": label_to_name[label], "confidence": probability} for label, probability in sorted_classes]
 
 
