@@ -2,7 +2,7 @@ import logging
 import os
 import requests
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
 import common.constants as common_constants
 
@@ -81,7 +81,7 @@ def ontology_detailed_info_response(ctx: Context, actor: Actor) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         used_topics = shared_memory.get("used_topics", [])
         if len(used_topics) != 0:
-            topic = used_topics[-1].replace('_', ' ')
+            topic = used_topics[-1].replace("_", " ")
             response = requests.post(os.environ["GRAPH_DB_URL"] + "/detailed_trigger", json={"sentence": topic})
             js = response.json()
             if "answer" in js.keys():

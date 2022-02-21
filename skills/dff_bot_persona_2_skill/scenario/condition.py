@@ -2,7 +2,7 @@ import logging
 import os
 import requests
 
-from dff.core import Context, Actor
+from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
 
 from common.dff.integration import condition as int_cnd
@@ -51,6 +51,3 @@ def ontology_detailed_info_request(ctx: Context, actor: Actor) -> bool:
     logger.info(f"ontology_detailed_info_request {flag}")
 
     return flag
-
-
-
