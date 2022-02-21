@@ -3,26 +3,39 @@
 import os
 import json
 import argparse
+from collections import OrderedDict
+
 import tensorflow as tf
 import tensorflow_hub as hub
-from collections import OrderedDict
+import tf_sentencepiece
+
 from utils import *
+
+
+# this is just to use library because without this import, m-use does not work
+print(tf_sentencepiece.__file__)
+config = tf.ConfigProto()
+config.graph_options.rewrite_options.shape_optimization = 2
+session = tf.Session(config=config)
 
 MODEL_NAME = "linear_classifier"
 MULTILABEL = True
 TRAIN_SIZE = 0.5
-DENSE_LAYERS = 2
+DENSE_LAYERS = 3
 MODEL_NAME += "_h" + str(DENSE_LAYERS)
-INTENT_DATA_PATH = "./intent_data_h" + str(DENSE_LAYERS) + ".json"
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--intent_phrases_path", help="file with phrases for embedding generation", default="intent_phrases.json"
 )
 parser.add_argument("--model_path", help="path where to save the model", default="./models/" + MODEL_NAME + ".h5")
+parser.add_argument(
+    "--intent_data_path", help="path where to save theresholds", default="./intent_data_h" + str(DENSE_LAYERS) + ".json"
+)
 parser.add_argument("--epochs", help="number of epochs to train model", default=7)
 # Whereas to calc metrics or not (default value = True)
 args = parser.parse_args()
+INTENT_DATA_PATH = args.intent_data_path
 
 # Create metrics directory if not exists
 if not os.path.exists("../metrics/"):
