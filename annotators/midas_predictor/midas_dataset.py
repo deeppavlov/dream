@@ -3,7 +3,7 @@ from tensorflow.keras.utils import Sequence
 
 
 class MidasDataset(Sequence):
-    """customized Dataset class from torch"""
+    """customized Dataset class from tensorflow"""
 
     def __init__(self, data: list, vectorizer, batch_size: int = 32, shuffle: bool = False):
         self.data = data

@@ -12,7 +12,7 @@ from data2seq import Dial2seq, SequencePreprocessor
 from midas_dataset import MidasDataset, MidasVectorizer
 
 
-# topical_sequencer = Dial2seq('data/topical_chat_annotated.json', 3)
+topical_sequencer = Dial2seq('data/topical_chat_annotated.json', 3)
 daily_sequencer = Dial2seq("data/daily_dialogue_annotated.json", 3)
 daily_seqs = daily_sequencer.transform()
 print("Total number of sequences in the DailyDialog dataset is", len(daily_seqs))
@@ -96,8 +96,8 @@ encoder = hub.load(USE_MODEL_PATH)
 midas_vectorizer = MidasVectorizer(
     text_vectorizer=encoder, midas2id=Midas2Id, context_len=3, embed_dim=512  # USE  # USE vector size
 )
-
-midas_vectorizer.context_vector(train[0]["previous_text"], train[0]["midas_vectors"])
+# check
+# midas_vectorizer.context_vector(train[0]["previous_text"], train[0]["midas_vectors"])
 
 train_dataloader = MidasDataset(data=train, vectorizer=midas_vectorizer, batch_size=len(train), shuffle=False)
 
