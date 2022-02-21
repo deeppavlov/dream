@@ -2,11 +2,19 @@
 
 import os
 import json
+import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
-import numpy as np
+import tf_sentencepiece
+
 from utils import cosine_similarity_debug
 
+
+# this is just to use library because without this import, m-use does not work
+print(tf_sentencepiece.__file__)
+config = tf.ConfigProto()
+config.graph_options.rewrite_options.shape_optimization = 2
+session = tf.Session(config=config)
 
 INTENT_DATA_PATH = "./data/intent_data.json"
 
