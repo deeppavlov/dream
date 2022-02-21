@@ -2,6 +2,7 @@
 six
 sentry_sdk[flask]==0.14.3
 flask==1.1.1
+itsdangerous==2.0.1
 gunicorn==19.9.0
 healthcheck==1.3.3
 df_engine>=0.8.1

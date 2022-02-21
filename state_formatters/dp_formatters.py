@@ -867,3 +867,14 @@ def topic_recommendation_formatter(dialog: Dict):
         topics += utt.get("annotations", {}).get("cobot_topics", {}).get("text", [])
     active_skills = [skill for skill in active_skills if skill]
     return [{"active_skills": [active_skills], "cobot_topics": [topics]}]
+
+
+def midas_predictor_formatter(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    utterances, midas_distributions = [], []
+    for utt in dialog["utterances"]:
+        utterances.append(utt["text"])
+        midas_distributions.append(utt.get("annotations", {}).get("midas_classification", [{}]))
+
+    return [{"utterances": utterances[-3:], "midas_distributions": midas_distributions[-3:]}]

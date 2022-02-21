@@ -417,6 +417,20 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ]
+            },
+            "midas_predictor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://midas-predictor:8121/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "required_previous_services": [
+                    "annotators.midas_classification",
+                    "annotators.combined_classification"
+                ]
             }
         },
         "skill_selectors": {
