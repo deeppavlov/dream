@@ -585,6 +585,15 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8037
       - PORT=8037
 
+  midas-predictor:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8121
+      - PORT=8121
+
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
