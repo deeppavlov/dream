@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 #      - the node to which the agent will perform the transition
 #      - the condition under which to make the transition
 
-std_prs = [int_prs.set_confidence(1.0), int_prs.set_can_continue()]
+std_prs = {"set_confidence": int_prs.set_confidence(1.0), "set_can_continue": int_prs.set_can_continue()}
 flows = {
     GLOBAL: {
         TRANSITIONS: {
@@ -47,24 +47,25 @@ flows = {
             lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
             ("ontology_info", "info"): loc_cnd.ontology_info_request,
         },
-        "global": {
-            "start": {
-                RESPONSE: "",
-                TRANSITIONS: {("greeting", "node1"): cnd.true},
-            },
-            "fallback": {
-                RESPONSE: "Ooops",
-                TRANSITIONS: {
-                    lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
-                    lbl.repeat(0.2): cnd.true,
-                },
+    },
+    "global": {
+        "start": {
+            RESPONSE: "",
+            TRANSITIONS: {("greeting", "node1"): cnd.true()},
+        },
+        "fallback": {
+            RESPONSE: "Ooops",
+            TRANSITIONS: {
+                lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
+                lbl.repeat(0.2): cnd.true(),
             },
         },
     },
     "greeting": {
         "node1": {
             RESPONSE: int_rsp.multi_response(replies=["Hi, how are you?", "Hi, what's up?"]),  # several hypothesis
-            PROCESSING: std_prs + [int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})],
+            PROCESSING: std_prs
+            | {"save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})},
             TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
         },
         "node2": {
@@ -75,28 +76,28 @@ flows = {
         },
         "node3": {
             RESPONSE: "Sorry, I can not talk about that now. Maybe late. Do you like {topic}?",
-            PROCESSING: std_prs + [int_prs.fill_responses_by_slots()],
+            PROCESSING: std_prs | {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
             TRANSITIONS: {
                 "node4": int_cnd.is_yes_vars,
                 "node5": int_cnd.is_no_vars,
                 "node6": int_cnd.is_do_not_know_vars,
-                "node7": cnd.true,  # it will be chosen if other conditions are False
+                "node7": cnd.true(),  # it will be chosen if other conditions are False
             },
         },
         "node4": {
             RESPONSE: "I like {topic} too, {user_name}",
-            PROCESSING: std_prs + [int_prs.fill_responses_by_slots()],
-            TRANSITIONS: {("node7", 0.1): cnd.true},
+            PROCESSING: std_prs | {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node5": {
             RESPONSE: "I do not like {topic} too, {user_name}",
-            PROCESSING: std_prs + [int_prs.fill_responses_by_slots()],
-            TRANSITIONS: {("node7", 0.1): cnd.true},
+            PROCESSING: std_prs | {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node6": {
             RESPONSE: "I have no opinion about {topic} too, {user_name}",
-            PROCESSING: std_prs + [int_prs.fill_responses_by_slots()],
-            TRANSITIONS: {("node7", 0.1): cnd.true},
+            PROCESSING: std_prs | {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node7": {
             RESPONSE: int_rsp.multi_response(
@@ -107,7 +108,7 @@ flows = {
                     {"can_continue": common_constants.CAN_CONTINUE_SCENARIO},  # for the second hyp
                 ],
             ),
-            PROCESSING: [int_prs.set_can_continue()],
+            PROCESSING: {"set_can_continue":int_prs.set_can_continue()},
         },
     },
     "secret_dialog_flow": {
