@@ -1,0 +1,604 @@
+{
+    "human_utter_index_batch": [
+        4
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "stop this bot.",
+                    "annotations": {
+                        "spelling_preprocessing": "stop this bot",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "this bot"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "stop this bot.",
+                            "segments": [
+                                "stop this bot."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "User_InstructionIntent": 0.9999518394470215
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.999966025352478
+                            },
+                            "cobot_topics": {
+                                "SciTech": 0.9998132586479187
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9923678040504456
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9871318340301514
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9998714923858643
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9997690320014954
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.02823326736688614,
+                                "command": 0.47478771209716797,
+                                "comment": 0.022364214062690735,
+                                "complaint": 0.17964129149913788,
+                                "dev_command": 0.21054881811141968,
+                                "neg_answer": 0.00968626607209444,
+                                "open_question_factual": 0.012707412242889404,
+                                "open_question_opinion": 0.012279631569981575,
+                                "opinion": 0.0037366764154285192,
+                                "other_answers": 0.006453178357332945,
+                                "pos_answer": 0.00633029080927372,
+                                "statement": 0.015562125481665134,
+                                "yes_no_question": 0.01766909845173359
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "bot"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        10,
+                                        13
+                                    ],
+                                    "text": "bot"
+                                }
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "i did not hear you.",
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "stop this bot."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "bot",
+                                "news": {
+                                    "content": "There have been many changes to the Rift as the new season arrived with the new year. In the LCK, it seems the meta is very bot-centric. However, there are some players that seemed to still be living in 2021. Nongshim RedForce top laner Kim \u201cCanna\u201d C... [3347 chars]",
+                                    "description": "There have been many changes to the Rift as the new season arrived with the new year. In the LCK, it seems the meta is very bot-centric.",
+                                    "image": "https://static.invenglobal.com/upload/image/2022/01/15/o1642267905419510.jpeg",
+                                    "publishedAt": "2022-01-15T17:32:48Z",
+                                    "source": {
+                                        "name": "InvenGlobal",
+                                        "url": "https://www.invenglobal.com"
+                                    },
+                                    "title": "NS Canna: \"The top lane isn\u2019t that different from last year.\"",
+                                    "url": "https://www.invenglobal.com/articles/16176/ns-canna-the-top-lane-isnt-that-different-from-last-year"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "stop this bot."
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "bot": {
+                                "SymbolOf": [
+                                    "computer",
+                                    "genius",
+                                    "math"
+                                ],
+                                "HasProperty": [
+                                    "mechanical",
+                                    "skilled",
+                                    "fast"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "bankruptcy",
+                                    "die"
+                                ],
+                                "CausesDesire": [
+                                    "fix computer",
+                                    "work",
+                                    "improve your life"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "what? come again.",
+                    "annotations": {
+                        "spelling_preprocessing": "what come again",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "what? come again.",
+                            "segments": [
+                                "what?",
+                                "come again."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "ClarificationIntent": 0.9999499320983887
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999638795852661
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999920129776001
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9986459612846375
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.7330408096313477
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9963127970695496
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999985933303833
+                            }
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003343055257573724,
+                                "command": 0.004563309717923403,
+                                "comment": 0.008166654966771603,
+                                "complaint": 0.920906662940979,
+                                "dev_command": 0.008219100534915924,
+                                "neg_answer": 0.016612902283668518,
+                                "open_question_factual": 0.011057836934924126,
+                                "open_question_opinion": 0.0035862824879586697,
+                                "opinion": 0.003152345772832632,
+                                "other_answers": 0.007223968394100666,
+                                "pos_answer": 0.0020661824382841587,
+                                "statement": 0.005015276372432709,
+                                "yes_no_question": 0.006086411420255899
+                            },
+                            {
+                                "appreciation": 0.005187890492379665,
+                                "command": 0.8482842445373535,
+                                "comment": 0.0025760403368622065,
+                                "complaint": 0.023622015491127968,
+                                "dev_command": 0.06365357339382172,
+                                "neg_answer": 0.003279327880591154,
+                                "open_question_factual": 0.005991458427160978,
+                                "open_question_opinion": 0.0035994311328977346,
+                                "opinion": 0.0026160171255469322,
+                                "other_answers": 0.0020213318057358265,
+                                "pos_answer": 0.0032540406100451946,
+                                "statement": 0.02783408761024475,
+                                "yes_no_question": 0.008080578409135342
+                            }
+                        ],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "stop this bot.",
+                                "Sorry for interrupting you. Talk to you soon. #+#exit",
+                                "what? come again."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what? come again."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Sorry for interrupting you. Talk to you soon. #+#exit",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Sorry for interrupting you. Talk to you soon. #+#exit",
+                            "segments": [
+                                "Sorry for interrupting you.",
+                                "Talk to you soon.",
+                                "#+#exit"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "i did not hear you.",
+                                "Sorry, something went wrong inside. Please tell me, what did you say.",
+                                "stop this bot.",
+                                "Sorry for interrupting you. Talk to you soon. #+#exit"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_intent_responder_skill"
+                }
+            ],
+            "called_intents": {
+                "cant_do": false,
+                "choose_topic": false,
+                "doing_well": false,
+                "dont_understand": false,
+                "exit": true,
+                "lets_chat_about": false,
+                "no": false,
+                "opinion_request": false,
+                "repeat": true,
+                "stupid": false,
+                "tell_me_a_story": false,
+                "tell_me_more": false,
+                "topic_switching": false,
+                "weather_forecast_intent": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": false,
+                "what_is_your_name": false,
+                "what_time": false,
+                "where_are_you_from": false,
+                "who_made_you": false,
+                "yes": false
+            },
+            "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
+        }
+    ],
+    "dff_intent_responder_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
+                "labels": {
+                    "0": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "stop this bot."
+                },
+                "responses": {
+                    "0": "Sorry for interrupting you. Talk to you soon. #+#exit"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "3": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ]
+            },
+            "previous_human_utter_index": 3,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

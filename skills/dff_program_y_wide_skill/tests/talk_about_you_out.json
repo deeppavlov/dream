@@ -1,0 +1,48 @@
+[
+    [
+        "Talking is my primary function.",
+        0.85,
+        {
+            "dff_program_y_wide_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "story_flow",
+                        "start_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "a77ee4a7-49eb-4aba-99b4-abfa0253f970",
+                    "labels": {
+                        "0": [
+                            "story_flow",
+                            "start_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "talk about you"
+                    },
+                    "responses": {
+                        "0": "Talking is my primary function."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

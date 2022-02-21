@@ -64,7 +64,7 @@
                                     {},
                                     {
                                         "response_parts": [
-                                            "acknowlegdement",
+                                            "acknowledgement",
                                             "body"
                                         ],
                                         "type": "universal_response"
@@ -106,7 +106,7 @@
                                     {},
                                     {
                                         "response_parts": [
-                                            "acknowlegdement",
+                                            "acknowledgement",
                                             "body"
                                         ],
                                         "type": "universal_response"
@@ -187,7 +187,7 @@
                                     {},
                                     {
                                         "response_parts": [
-                                            "acknowlegdement",
+                                            "acknowledgement",
                                             "body"
                                         ],
                                         "type": "universal_response"
@@ -229,7 +229,7 @@
                                     {},
                                     {
                                         "response_parts": [
-                                            "acknowlegdement",
+                                            "acknowledgement",
                                             "body"
                                         ],
                                         "type": "universal_response"
@@ -310,7 +310,7 @@
                                     {},
                                     {
                                         "response_parts": [
-                                            "acknowlegdement",
+                                            "acknowledgement",
                                             "body"
                                         ],
                                         "type": "universal_response"
@@ -352,7 +352,7 @@
                                     {},
                                     {
                                         "response_parts": [
-                                            "acknowlegdement",
+                                            "acknowledgement",
                                             "body"
                                         ],
                                         "type": "universal_response"
@@ -405,7 +405,7 @@
             {
                 "can_continue": "can",
                 "response_parts": [
-                    "acknowlegdement",
+                    "acknowledgement",
                     "body"
                 ],
                 "type": "universal_response"
