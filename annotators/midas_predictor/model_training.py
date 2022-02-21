@@ -12,7 +12,7 @@ from data2seq import Dial2seq, SequencePreprocessor
 from midas_dataset import MidasDataset, MidasVectorizer
 
 
-topical_sequencer = Dial2seq('data/topical_chat_annotated.json', 3)
+topical_sequencer = Dial2seq("data/topical_chat_annotated.json", 3)
 daily_sequencer = Dial2seq("data/daily_dialogue_annotated.json", 3)
 daily_seqs = daily_sequencer.transform()
 print("Total number of sequences in the DailyDialog dataset is", len(daily_seqs))
