@@ -2,7 +2,7 @@ FROM python:3.7
 
 WORKDIR /src
 
-COPY requirements.txt requirements.txt
+COPY annotators/speech_function_predictor/requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 

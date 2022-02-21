@@ -1,0 +1,785 @@
+{
+    "human_utter_index_batch": [
+        4
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Because it is fun.",
+                    "annotations": {
+                        "spelling_preprocessing": "Because it's fun.",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "Because it is fun.",
+                            "segments": [
+                                "Because it is fun."
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0015874991659075022,
+                                "command": 0.0012021342990919948,
+                                "comment": 0.006082947365939617,
+                                "complaint": 0.0012385753216221929,
+                                "dev_command": 0.0009411216014996171,
+                                "neg_answer": 0.0006473451503552496,
+                                "open_question_factual": 0.0007278429111465812,
+                                "open_question_opinion": 0.0007139713852666318,
+                                "opinion": 0.957204282283783,
+                                "other_answers": 0.001669793389737606,
+                                "pos_answer": 0.0036578262224793434,
+                                "statement": 0.02381274849176407,
+                                "yes_no_question": 0.000513880280777812
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Books are my diamonds. Do you love reading?",
+                                "yes, i love reading. ",
+                                "I enjoy reading so much! Books help me understand humans much better. Why do you enjoy reading?",
+                                "Because it is fun."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9999220371246338
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9997549653053284
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999939203262329
+                            },
+                            "emotion_classification": {
+                                "joy": 0.9641170501708984
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999978542327881
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9999966621398926
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999992847442627
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
+                        ],
+                        "speech_function_classifier": [
+                            "React.Rejoinder.Support.Response.Resolve"
+                        ],
+                        "speech_function_predictor": [
+                            {
+                                "prediction": "React.Respond.Support.Reply.Acknowledge",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Track.Probe",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "Open.Attend",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Confront.Challenge.Counter",
+                                "confidence": 0.046511627906976744
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Challenge.Rebound",
+                                "confidence": 0.046511627906976744
+                            },
+                            {
+                                "prediction": "React.Respond.Support.Develop.Enhance",
+                                "confidence": 0.046511627906976744
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Track.Clarify",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Track.Confirm",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "Sustain.Continue.Prolong.Extend",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "Sustain.Continue.Prolong.Elaborate",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "React.Respond.Support.Develop.Extend",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Response.Resolve",
+                                "confidence": 0.09302325581395349
+                            },
+                            {
+                                "prediction": "Sustain.Continue.Prolong.Enhance",
+                                "confidence": 0.13953488372093023
+                            },
+                            {
+                                "prediction": "React.Respond.Support.Register",
+                                "confidence": 0.18604651162790697
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "fun"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        13,
+                                        16
+                                    ],
+                                    "text": "fun"
+                                }
+                            ]
+                        },
+                        "entity_linking": [],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "Because it is fun."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "fun": {
+                                "SymbolOf": [
+                                    "life",
+                                    "fun",
+                                    "time"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "good",
+                                    "important"
+                                ],
+                                "Causes": [
+                                    "laughter",
+                                    "you feel good",
+                                    "fun"
+                                ],
+                                "CausesDesire": [
+                                    "have fun",
+                                    "have party",
+                                    "laugh"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Mr. Ferriero also wrote that \u201csome White House staff conducted official business using nonofficial electronic messaging accounts that were not copied or forwarded into their official electronic messaging accounts.\u201d The archives said it was in the pro... [1511 chars]",
+                                    "description": "In a letter to Congress, the National Archives confirmed that boxes taken from the White House by the former president included classified national security documents.",
+                                    "image": "https://static01.nyt.com/images/2022/02/18/us/politics/18dc-investigate-sub/18dc-investigate-sub-facebookJumbo.jpg",
+                                    "publishedAt": "2022-02-18T19:30:18Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Material Recovered From Trump by Archives Included Classified Information",
+                                    "url": "https://www.nytimes.com/2022/02/18/us/politics/material-recovered-from-trump-by-archives-included-classified-information.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "fun",
+                                "news": {
+                                    "content": "Published 02/18/2022, 2:05 PM EST\nGeorge Russell and Lewis Hamilton will be teammates at Mercedes for the 2022 season. The British duo made their first appearance as teammates at the recent Mercedes 2022 livery launch. While talking with the 2 hosts,... [2636 chars]",
+                                    "description": "Published 02/18/2022, 2:05 PM EST\nGeorge Russell and Lewis Hamilton will be teammates at Mercedes for the 2022 season. The British duo made their first appearance as teammates at the recent Mercedes 2022 livery launch.",
+                                    "image": "https://image-cdn.essentiallysports.com/wp-content/uploads/2021-04-29T141359Z_1211079164_RC2Q5N9TEOJJ_RTRMADP_3_MOTOR-F1-PORTUGAL-1.jpg",
+                                    "publishedAt": "2022-02-18T19:05:09Z",
+                                    "source": {
+                                        "name": "Essentially Sports",
+                                        "url": "https://www.essentiallysports.com"
+                                    },
+                                    "title": "Trouble at Work? George Russell Gets \u2018One Point\u2019 From Mercedes F1 Boss for Snarky Remark",
+                                    "url": "https://www.essentiallysports.com/f1-news-trouble-at-work-george-russell-gets-one-point-from-mercedes-f1-boss-for-snarky-remark/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "Animal Farm.",
+                    "annotations": {
+                        "spelling_preprocessing": "Animal Farm.",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "Animal Farm.",
+                            "segments": [
+                                "Animal Farm."
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "animal farm"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0009249521535821259,
+                                "command": 0.005343592260032892,
+                                "comment": 0.0020537935197353363,
+                                "complaint": 0.001899249036796391,
+                                "dev_command": 0.002564209047704935,
+                                "neg_answer": 0.0007322892779484391,
+                                "open_question_factual": 0.0020840929355472326,
+                                "open_question_opinion": 0.0011681143660098314,
+                                "opinion": 0.06060381233692169,
+                                "other_answers": 0.0010098512284457684,
+                                "pos_answer": 0.0009030058281496167,
+                                "statement": 0.9191946387290955,
+                                "yes_no_question": 0.001518443925306201
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I enjoy reading so much! Books help me understand humans much better. Why do you enjoy reading?",
+                                "Because it is fun.",
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                                "Animal Farm."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9999359846115112
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9987398982048035
+                            },
+                            "cobot_topics": {
+                                "Pets_Animals": 0.9997968077659607
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9999651908874512
+                            },
+                            "factoid_classification": {
+                                "is_factoid": 0.9996102452278137
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9998181462287903
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999810457229614
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
+                        ],
+                        "speech_function_classifier": [
+                            "React.Rejoinder.Support.Response.Resolve"
+                        ],
+                        "speech_function_predictor": [
+                            {
+                                "prediction": "React.Respond.Support.Reply.Acknowledge",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Track.Probe",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "Open.Attend",
+                                "confidence": 0.023255813953488372
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Confront.Challenge.Counter",
+                                "confidence": 0.046511627906976744
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Challenge.Rebound",
+                                "confidence": 0.046511627906976744
+                            },
+                            {
+                                "prediction": "React.Respond.Support.Develop.Enhance",
+                                "confidence": 0.046511627906976744
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Track.Clarify",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Track.Confirm",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "Sustain.Continue.Prolong.Extend",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "Sustain.Continue.Prolong.Elaborate",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "React.Respond.Support.Develop.Extend",
+                                "confidence": 0.06976744186046512
+                            },
+                            {
+                                "prediction": "React.Rejoinder.Support.Response.Resolve",
+                                "confidence": 0.09302325581395349
+                            },
+                            {
+                                "prediction": "Sustain.Continue.Prolong.Enhance",
+                                "confidence": 0.13953488372093023
+                            },
+                            {
+                                "prediction": "React.Respond.Support.Register",
+                                "confidence": 0.18604651162790697
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "animal farm"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        0,
+                                        11
+                                    ],
+                                    "text": "animal farm"
+                                }
+                            ]
+                        },
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "Animal Farm."
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "animal farm": {
+                                "SymbolOf": [
+                                    "farm life",
+                                    "poverty",
+                                    "animal"
+                                ],
+                                "HasProperty": [
+                                    "very peaceful",
+                                    "fun",
+                                    "expensive"
+                                ],
+                                "Causes": [
+                                    "farm to produce food",
+                                    "farm to become crop",
+                                    "cow to be born"
+                                ],
+                                "CausesDesire": [
+                                    "buy farm",
+                                    "farm farm",
+                                    "milk"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Mr. Ferriero also wrote that \u201csome White House staff conducted official business using nonofficial electronic messaging accounts that were not copied or forwarded into their official electronic messaging accounts.\u201d The archives said it was in the pro... [1511 chars]",
+                                    "description": "In a letter to Congress, the National Archives confirmed that boxes taken from the White House by the former president included classified national security documents.",
+                                    "image": "https://static01.nyt.com/images/2022/02/18/us/politics/18dc-investigate-sub/18dc-investigate-sub-facebookJumbo.jpg",
+                                    "publishedAt": "2022-02-18T19:30:18Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Material Recovered From Trump by Archives Included Classified Information",
+                                    "url": "https://www.nytimes.com/2022/02/18/us/politics/material-recovered-from-trump-by-archives-included-classified-information.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "animal farm",
+                                "news": {
+                                    "content": "A Pennsylvania man was arrested in connection with the theft of a 22-year-old bobcat from an animal farm.\nSurveillance footage released by police shows a man stealing a North American bobcat from the Pocono Snake and Animal Farm in East Stroudsburg.\n... [1806 chars]",
+                                    "description": "A Pennsylvania man was arrested in connection with the theft of a 22-year-old bobcat from an animal farm. Surveillance footage released by police shows a man stealing a North American bobcat from the Pocono Snake and Animal Farm in East Stroudsburg.",
+                                    "image": "https://i.insider.com/61fe9869fa4f1f0018262da6?width=1200&format=jpeg",
+                                    "publishedAt": "2022-02-05T05:00:00Z",
+                                    "source": {
+                                        "name": "INSIDER",
+                                        "url": "https://www.insider.com"
+                                    },
+                                    "title": "Pennsylvania Man Arrested in Connection With Theft of Bobcat From Animal Farm",
+                                    "url": "https://www.insider.com/pennsylvania-man-arrested-in-theft-bobcat-from-animal-farm-2022-2"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "That's great. Outside of a dog, a book is man's best friend. What is the last book you've read?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?",
+                            "segments": [
+                                "That's great.",
+                                "Outside of a dog, a book is man's best friend.",
+                                "What is the last book you have read?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "yes.",
+                                "I enjoy reading so much! Books help me understand humans much better. Why do you enjoy reading?",
+                                "Because it is fun.",
+                                "That's great. Outside of a dog, a book is man's best friend. What is the last book you have read?"
+                            ]
+                        },
+                        "speech_function_classifier": [
+                            "React.Respond.Support.Register",
+                            "Open.Give.Fact",
+                            "React.Rejoinder.Support.Track.Clarify"
+                        ]
+                    },
+                    "active_skill": "dff_book_skill"
+                }
+            ]
+        }
+    ],
+    "dff_book_sfc_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "a5f6e283-c5c8-49f2-bd37-4e27ae435d32",
+                "labels": {
+                    "1": [
+                        "books_general",
+                        "likes_reading"
+                    ],
+                    "2": [
+                        "books_general",
+                        "told_why"
+                    ]
+                },
+                "misc": {
+                    "flags": {
+                        "book_skill_active": true
+                    },
+                    "used_phrases": [
+                        140483975774928,
+                        140378459972400,
+                        140378459972400
+                    ]
+                },
+                "requests": {
+                    "1": "yes.",
+                    "2": "Because it is fun."
+                },
+                "responses": {
+                    "1": "I enjoy reading so much! Books help me understand humans much better. Why do you enjoy reading?",
+                    "2": "That's great. Outside of a dog, a book is man's best friend. What is the last book you've read?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "books_general",
+                    "book_start"
+                ],
+                "2": [
+                    "books_general",
+                    "likes_reading"
+                ],
+                "3": [
+                    "books_general",
+                    "told_why"
+                ]
+            },
+            "previous_human_utter_index": 3,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "reading": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "reading",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "reading"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

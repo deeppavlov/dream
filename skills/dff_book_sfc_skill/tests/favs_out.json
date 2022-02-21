@@ -1,0 +1,85 @@
+[
+    [
+        " My favourite book is \"The catcher in the rye\" by Jerome David Salinger. May I tell you something about this book?",
+        0.85,
+        {
+            "dff_book_sfc_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 4,
+                "history": {
+                    "1": [
+                        "books_general",
+                        "book_start"
+                    ],
+                    "2": [
+                        "books_general",
+                        "likes_reading"
+                    ],
+                    "3": [
+                        "books_general",
+                        "told_why"
+                    ],
+                    "4": [
+                        "bot_fav_book",
+                        "fav_name"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "a5f6e283-c5c8-49f2-bd37-4e27ae435d32",
+                    "labels": {
+                        "2": [
+                            "books_general",
+                            "told_why"
+                        ],
+                        "3": [
+                            "bot_fav_book",
+                            "fav_name"
+                        ]
+                    },
+                    "requests": {
+                        "2": "Because it is fun.",
+                        "3": "Animal Farm."
+                    },
+                    "responses": {
+                        "2": "That's great. Outside of a dog, a book is man's best friend. What is the last book you've read?",
+                        "3": " My favourite book is \"The catcher in the rye\" by Jerome David Salinger. May I tell you something about this book?"
+                    },
+                    "misc": {
+                        "flags": {
+                            "book_skill_active": true
+                        },
+                        "used_phrases": [
+                            140483975774928,
+                            140378459972400,
+                            140378459972400,
+                            140378459467088
+                        ],
+                        "slots": {
+                            "cur_book_name": "The Catcher in the Rye",
+                            "cur_book_ago": "71 years ",
+                            "cur_book_plain": "Q183883",
+                            "cur_book_author": "Jerome Salinger",
+                            "cur_genre": "a novel",
+                            "fav_book_init": " My favourite book is \"The catcher in the rye\" by Jerome David Salinger.",
+                            "cur_book_about": "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, it is truly fascinating."
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
