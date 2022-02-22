@@ -1,0 +1,93 @@
+{
+    "appreciation": {
+        "opinion": 0.39445628997867804,
+        "statement": 0.2462686567164179,
+        "comment": 0.14712153518123666,
+        "pos_answer": 0.1257995735607676,
+        "appreciation": 0.08635394456289978
+    },
+    "command": {
+        "statement": 0.47503617945007237,
+        "opinion": 0.22919681620839363,
+        "pos_answer": 0.1676917510853835,
+        "command": 0.06747467438494935,
+        "yes_no_question": 0.060600578871201155
+    },
+    "comment": {
+        "opinion": 0.4188150158299412,
+        "statement": 0.23998190863862506,
+        "comment": 0.15658073270013567,
+        "pos_answer": 0.14454997738579828,
+        "yes_no_question": 0.040072365445499775
+    },
+    "complaint": {
+        "statement": 0.4099272571673085,
+        "opinion": 0.33675652545999146,
+        "comment": 0.09970047068891741,
+        "pos_answer": 0.0962772785622593,
+        "complaint": 0.05733846812152332
+    },
+    "dev_command": {
+        "statement": 0.4397031539888683,
+        "opinion": 0.32653061224489793,
+        "comment": 0.09090909090909091,
+        "pos_answer": 0.07606679035250463,
+        "yes_no_question": 0.06679035250463822
+    },
+    "neg_answer": {
+        "statement": 0.41106719367588934,
+        "opinion": 0.28326745718050067,
+        "yes_no_question": 0.14492753623188406,
+        "open_question_factual": 0.09486166007905138,
+        "pos_answer": 0.06587615283267458
+    },
+    "open_question_factual": {
+        "statement": 0.7271302790628265,
+        "opinion": 0.18750932696612446,
+        "comment": 0.03611401283390539,
+        "other_answers": 0.032159379197134755,
+        "command": 0.017087001940008954
+    },
+    "open_question_opinion": {
+        "opinion": 0.5761767340033834,
+        "statement": 0.2929644740770226,
+        "comment": 0.05572693800378147,
+        "pos_answer": 0.042690815006468305,
+        "other_answers": 0.032441038909344216
+    },
+    "opinion": {
+        "opinion": 0.4937263639295242,
+        "statement": 0.23360499545601127,
+        "pos_answer": 0.12092873266688164,
+        "comment": 0.09951335346369207,
+        "yes_no_question": 0.052226554483890825
+    },
+    "other_answers": {
+        "opinion": 0.39509536784741145,
+        "statement": 0.3651226158038147,
+        "yes_no_question": 0.12806539509536785,
+        "open_question_opinion": 0.05994550408719346,
+        "comment": 0.051771117166212535
+    },
+    "pos_answer": {
+        "statement": 0.3525974025974026,
+        "opinion": 0.2292207792207792,
+        "yes_no_question": 0.15454545454545454,
+        "pos_answer": 0.1538961038961039,
+        "open_question_factual": 0.10974025974025974
+    },
+    "statement": {
+        "statement": 0.35850886033961443,
+        "opinion": 0.30365002615363024,
+        "comment": 0.1578786216398964,
+        "pos_answer": 0.10622201242616383,
+        "yes_no_question": 0.07374047944069505
+    },
+    "yes_no_question": {
+        "statement": 0.3241751087267898,
+        "pos_answer": 0.27709054923305293,
+        "opinion": 0.19081226073595667,
+        "neg_answer": 0.15779056746269435,
+        "comment": 0.05013151384150629
+    }
+}
