@@ -393,6 +393,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8037:8037
+  midas-predictor:
+    volumes:
+      - "./annotators/midas_predictor:/src"
+    ports:
+      - 8121:8121
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
