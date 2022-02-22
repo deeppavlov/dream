@@ -24,6 +24,6 @@ if __name__ == "__main__":
 
     requested_data = {"last_midas_labels": last_midas_labels, "return_probas": 0}
     result = requests.post(URL, json=requested_data).json()
-    assert result[0] == "opinion"
+    assert isinstance(result[0], str) and result[0] in gold[0].keys()
 
     print("Success")
