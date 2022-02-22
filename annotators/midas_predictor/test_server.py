@@ -1,16 +1,11 @@
-import json
 import requests
 
 
 URL = "http://0.0.0.0:8121/respond"
 
-last_midas_labels = [
-    "appreciation"
-]
+last_midas_labels = ["appreciation"]
 
-gold = [
-    {'appreciation': 0.09, 'comment': 0.15, 'opinion': 0.39, 'pos_answer': 0.13, 'statement': 0.25}
-]
+gold = [{"appreciation": 0.09, "comment": 0.15, "opinion": 0.39, "pos_answer": 0.13, "statement": 0.25}]
 
 if __name__ == "__main__":
 
