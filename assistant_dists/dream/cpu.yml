@@ -46,7 +46,4 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  midas-predictor:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
 
