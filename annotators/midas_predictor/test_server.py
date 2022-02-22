@@ -5,7 +5,16 @@ URL = "http://0.0.0.0:8121/respond"
 
 last_midas_labels = ["appreciation"]
 
-gold = [{"appreciation": 0.09, "comment": 0.15, "opinion": 0.39, "pos_answer": 0.13, "statement": 0.25}]
+gold = [
+    {
+        'appreciation': 0.08635394456289978,
+        'comment': 0.14712153518123666,
+        'opinion': 0.39445628997867804,
+        'pos_answer': 0.1257995735607676,
+        'statement': 0.2462686567164179
+    }
+]
+
 
 if __name__ == "__main__":
 
