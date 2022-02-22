@@ -899,11 +899,6 @@ def topic_recommendation_formatter(dialog: Dict):
 
 
 def midas_predictor_formatter(dialog: Dict):
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    utterances, midas_distributions = [], []
-    for utt in dialog["utterances"]:
-        utterances.append(utt["text"])
-        midas_distributions.append(utt.get("annotations", {}).get("midas_classification", [{}]))
+    midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
 
-    return [{"utterances": utterances[-3:], "midas_distributions": midas_distributions[-3:]}]
+    return [{"last_midas_labels": max(midas_dist, key=midas_dist.get), "return_probas": 1}]
