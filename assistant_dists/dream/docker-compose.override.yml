@@ -1146,14 +1146,13 @@ services:
       context: ./annotators/midas_predictor/
     command: flask run -h 0.0.0.0 -p 8121
     environment:
-      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 3.5G
+          memory: 50M
         reservations:
-          memory: 3.5G
+          memory: 50M
 
   dff-template-skill:
     env_file: [.env]

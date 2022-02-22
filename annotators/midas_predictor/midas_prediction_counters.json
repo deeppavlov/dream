@@ -1,0 +1,93 @@
+{
+    "appreciation": {
+        "opinion": 0.39,
+        "statement": 0.25,
+        "comment": 0.15,
+        "pos_answer": 0.13,
+        "appreciation": 0.09
+    },
+    "command": {
+        "statement": 0.48,
+        "opinion": 0.23,
+        "pos_answer": 0.17,
+        "command": 0.07,
+        "yes_no_question": 0.06
+    },
+    "comment": {
+        "opinion": 0.42,
+        "statement": 0.24,
+        "comment": 0.16,
+        "pos_answer": 0.14,
+        "yes_no_question": 0.04
+    },
+    "complaint": {
+        "statement": 0.41,
+        "opinion": 0.34,
+        "comment": 0.1,
+        "pos_answer": 0.1,
+        "complaint": 0.06
+    },
+    "dev_command": {
+        "statement": 0.44,
+        "opinion": 0.33,
+        "comment": 0.09,
+        "pos_answer": 0.08,
+        "yes_no_question": 0.07
+    },
+    "neg_answer": {
+        "statement": 0.41,
+        "opinion": 0.28,
+        "yes_no_question": 0.14,
+        "open_question_factual": 0.09,
+        "pos_answer": 0.07
+    },
+    "open_question_factual": {
+        "statement": 0.73,
+        "opinion": 0.19,
+        "comment": 0.04,
+        "other_answers": 0.03,
+        "command": 0.02
+    },
+    "open_question_opinion": {
+        "opinion": 0.58,
+        "statement": 0.29,
+        "comment": 0.06,
+        "pos_answer": 0.04,
+        "other_answers": 0.03
+    },
+    "opinion": {
+        "opinion": 0.49,
+        "statement": 0.23,
+        "pos_answer": 0.12,
+        "comment": 0.1,
+        "yes_no_question": 0.05
+    },
+    "other_answers": {
+        "opinion": 0.4,
+        "statement": 0.37,
+        "yes_no_question": 0.13,
+        "open_question_opinion": 0.06,
+        "comment": 0.05
+    },
+    "pos_answer": {
+        "statement": 0.35,
+        "opinion": 0.23,
+        "yes_no_question": 0.15,
+        "pos_answer": 0.15,
+        "open_question_factual": 0.11
+    },
+    "statement": {
+        "statement": 0.36,
+        "opinion": 0.3,
+        "comment": 0.16,
+        "pos_answer": 0.11,
+        "yes_no_question": 0.07
+    },
+    "yes_no_question": {
+        "statement": 0.32,
+        "pos_answer": 0.28,
+        "opinion": 0.19,
+        "neg_answer": 0.16,
+        "comment": 0.05
+    }
+}
