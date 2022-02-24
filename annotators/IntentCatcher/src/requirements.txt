@@ -12,3 +12,4 @@ openpyxl==3.0.0
 sentry-sdk[flask]==0.14.1
 sentencepiece==0.1.83
 tf-sentencepiece==0.1.83
+itsdangerous==2.0.1

@@ -7,3 +7,4 @@ rapidfuzz==0.7.6
 torch==1.6.0
 transformers==4.6.0
 deeppavlov==0.17.2
+itsdangerous==2.0.1
