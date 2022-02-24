@@ -9,3 +9,4 @@ deeppavlov==0.17.2
 pymorphy2==0.9.1
 pymorphy2-dicts==2.4.393442.3710985
 pymorphy2-dicts-ru==2.4.417127.4579844
+itsdangerous==2.0.1
