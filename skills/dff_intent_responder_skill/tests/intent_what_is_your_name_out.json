@@ -1,0 +1,78 @@
+[
+    [
+        "My name is DREAM Socialbot. #+#what_is_your_name",
+        0.9999731779098511,
+        {
+            "dff_intent_responder_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 9,
+                "history": {
+                    "3": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "4": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "5": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "6": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "7": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "8": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "9": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
+                    "labels": {
+                        "5": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ],
+                        "6": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "requests": {
+                        "5": "Where are you from?",
+                        "6": "introduce yourself."
+                    },
+                    "responses": {
+                        "5": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
+                        "6": "My name is DREAM Socialbot. #+#what_is_your_name"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

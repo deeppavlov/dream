@@ -1,0 +1,589 @@
+{
+    "human_utter_index_batch": [
+        9
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "Where are you from?",
+                    "annotations": {
+                        "spelling_preprocessing": "Where are you from",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "Where are you from?",
+                            "segments": [
+                                "Where are you from?"
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9976382255554199
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9995998740196228
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999850988388062
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999915361404419
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9997586607933044
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9997532963752747
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999995231628418
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0027974345721304417,
+                                "command": 0.0058496748097240925,
+                                "comment": 0.0025749458000063896,
+                                "complaint": 0.010895498096942902,
+                                "dev_command": 0.004854203667491674,
+                                "neg_answer": 0.004030757583677769,
+                                "open_question_factual": 0.9161516427993774,
+                                "open_question_opinion": 0.02493928000330925,
+                                "opinion": 0.00946198869496584,
+                                "other_answers": 0.0031007302459329367,
+                                "pos_answer": 0.00220314203761518,
+                                "statement": 0.008217692375183105,
+                                "yes_no_question": 0.004923079162836075
+                            }
+                        ],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "who made you?",
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "Where are you from?"
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "Where are you from?"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 9,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "moscow institute of physics",
+                                "news": {},
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "introduce yourself.",
+                    "annotations": {
+                        "spelling_preprocessing": "introduce yourself",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spacy_nounphrases": [],
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "introduce yourself.",
+                            "segments": [
+                                "introduce yourself."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.8080158233642578
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9991046786308289
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.34582415223121643
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997722506523132
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9998695850372314
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.7235747575759888
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999600648880005
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.9999731779098511,
+                                "detected": 1
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.010892647318542004,
+                                "command": 0.7336281538009644,
+                                "comment": 0.005103215109556913,
+                                "complaint": 0.02067321538925171,
+                                "dev_command": 0.14496436715126038,
+                                "neg_answer": 0.0024191737174987793,
+                                "open_question_factual": 0.007597881834954023,
+                                "open_question_opinion": 0.0052649048157036304,
+                                "opinion": 0.008669200353324413,
+                                "other_answers": 0.0026175023522228003,
+                                "pos_answer": 0.004529756493866444,
+                                "statement": 0.043365247547626495,
+                                "yes_no_question": 0.010274818167090416
+                            }
+                        ],
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "Where are you from?",
+                                "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
+                                "introduce yourself."
+                            ]
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "introduce yourself."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 10,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "RELATED STORIES Fatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order\nFatal Attraction Reboot, Starring Lizzy Caplan, Gets Paramount+ Series Order Soapdish Series in Development at Paramount+\nLizzy Caplan will only have eyes fo... [1634 chars]",
+                                    "description": "Joshua Jackson has nabbed a leading role in 'Fatal Attraction,' Paramount+'s series adaptation of the 1987 film.",
+                                    "image": "https://tvline.com/wp-content/uploads/2022/01/joshua-jackson-fatal-attraction.jpg?w=620",
+                                    "publishedAt": "2022-01-20T19:30:00Z",
+                                    "source": {
+                                        "name": "TVLine",
+                                        "url": "https://tvline.com"
+                                    },
+                                    "title": "Joshua Jackson to Star in \u2018Fatal Attraction\u2019 Series at Paramount Plus",
+                                    "url": "https://tvline.com/2022/01/20/joshua-jackson-fatal-attraction-series-paramount-plus/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "socialbot",
+                                "news": {
+                                    "content": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.\nThe Transform Technology Summits start October 13th with Low-Code/No Code: Enab... [5130 chars]",
+                                    "description": "Open standards will have a huge impact on driving innovation in banking. Learn the status in the U.S. \u2013 and the bold new opportunities open standards are set to usher in.",
+                                    "image": "https://venturebeat.com/wp-content/themes/vb-news/img/favicon.ico",
+                                    "publishedAt": "2021-08-19T17:15:03Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Amazon taps its SocialBot challenge to boost conversational AI",
+                                    "url": "https://venturebeat.com/2021/08/19/amazon-taps-its-socialbot-challenge-to-boost-conversational-ai/"
+                                },
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
+                            "segments": [
+                                "As a socialbot, I live in a cloud.",
+                                "If you want to know me better, let's spend more time talking to each other.",
+                                "Where are you from?",
+                                "#+#where_are_you_from"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 3,
+                                    "start_pos": 2,
+                                    "text": "socialbot",
+                                    "type": "LOC"
+                                }
+                            ],
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "who made you?",
+                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "Where are you from?",
+                                "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_intent_responder_skill"
+                }
+            ],
+            "called_intents": {
+                "cant_do": false,
+                "choose_topic": false,
+                "doing_well": false,
+                "dont_understand": false,
+                "exit": false,
+                "lets_chat_about": false,
+                "no": false,
+                "opinion_request": false,
+                "repeat": false,
+                "stupid": false,
+                "tell_me_a_story": false,
+                "tell_me_more": false,
+                "topic_switching": false,
+                "weather_forecast_intent": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": false,
+                "what_is_your_name": false,
+                "what_time": false,
+                "where_are_you_from": true,
+                "who_made_you": true,
+                "yes": false
+            },
+            "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
+        }
+    ],
+    "dff_intent_responder_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
+                "labels": {
+                    "4": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "5": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "4": "who made you?",
+                    "5": "Where are you from?"
+                },
+                "responses": {
+                    "4": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                    "5": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "3": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "4": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "5": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "6": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "7": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ],
+                "8": [
+                    "context_driven_response",
+                    "intent_catcher"
+                ]
+            },
+            "previous_human_utter_index": 8,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

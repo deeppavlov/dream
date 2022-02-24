@@ -1,0 +1,240 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "talk about you",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "talk about you",
+                        "badlisted_words": {
+                            "inappropriate": false,
+                            "profanity": false,
+                            "restricted_topics": false
+                        },
+                        "spacy_nounphrases": [],
+                        "factoid_classification": {
+                            "factoid": 0.009537393227219582,
+                            "conversational": 0.990462601184845
+                        },
+                        "conceptnet": {},
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9982210397720337
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9222673773765564
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9989814758300781
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996328353881836
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.737922191619873
+                            },
+                            "toxic_classification": {
+                                "toxic": 0.0014452040195465088
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "entity_detection": {},
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "fact_random": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours. The companies also will not be allowed to provide services to users who haven't logged in with real-n... [3065 chars]",
+                                    "description": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/106924433-GettyImages-1234392254.jpg?v=1630329277",
+                                    "publishedAt": "2021-08-30T13:52:58Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "China to ban kids from playing online games for more than three hours per week",
+                                    "url": "https://www.cnbc.com/2021/08/30/china-to-ban-kids-from-playing-online-games-for-more-than-three-hours-per-week.html"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_program_y_wide_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
