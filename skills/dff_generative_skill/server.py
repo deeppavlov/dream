@@ -4,8 +4,8 @@ import logging
 import time
 import os
 import random
+import requests
 
-import docker
 import sentry_sdk
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
@@ -23,6 +23,8 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
+DIALOGPT_SERVICE_URL = os.getenv("DIALOGPT_SERVICE_URL")
+assert DIALOGPT_SERVICE_URL
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -33,21 +35,16 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def is_container_running(container_name: str):
-    """Code from
-    https://dev.to/serhatteker/how-to-check-if-a-docker-container-running-with-python-3aoj
-    """
-    RUNNING = "running"
-    docker_client = docker.from_env()
-
+def is_container_running():
     try:
-        container = docker_client.containers.get(container_name)
-    except docker.errors.NotFound as exc:
+        requested_data = [{"speaker": "human", "text": "привет"}]
+        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=1)
+        if response.status_code == 200:
+            return True
+    except Exception as exc:
         print(exc)
         return False
-    else:
-        container_state = container.attrs["State"]
-        return container_state["Status"] == RUNNING
+    return False
 
 
 def handler(requested_data, random_seed=None):
@@ -74,7 +71,7 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = is_container_running("dialogpt")
+    result = is_container_running()
     if result:
         break
     else:
