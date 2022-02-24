@@ -9,10 +9,10 @@ import common.dff.integration.context as int_ctx
 from df_engine.core import Actor, Context
 
 
-INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "scenario/data/intent_response_phrases.json")
+INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
 
 
-with open(INTENT_RESPONSE_PHRASES_FNAME, "r") as fp:
+with open(f"scenario/data/{INTENT_RESPONSE_PHRASES_FNAME}", "r") as fp:
     RESPONSES = json.load(fp)
 
 
