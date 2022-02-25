@@ -12,7 +12,7 @@ RUN mkdir /models && \
     mv data/* /models && \
     rm -rf data
 
-COPY annotators/speech_function_classifier/requirements.txt requirements.txt
+COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 

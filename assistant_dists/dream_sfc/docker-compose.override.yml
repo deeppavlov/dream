@@ -1157,8 +1157,7 @@ services:
       args:
         SERVICE_PORT: 8108
         SERVICE_NAME: speech_function_classifier
-      context: .
-      dockerfile: annotators/speech_function_classifier/Dockerfile
+      context: annotators/speech_function_classifier
     command: uvicorn server:app --host 0.0.0.0 --port 8108
     ports:
       - 8108:8108
@@ -1178,8 +1177,7 @@ services:
       args:
         SERVICE_PORT: 8107
         SERVICE_NAME: speech_function_predictor
-      context: .
-      dockerfile: annotators/speech_function_predictor/Dockerfile
+      context: annotators/speech_function_predictor
     command: uvicorn server:app --host 0.0.0.0 --port 8107
     ports:
       - 8107:8107
