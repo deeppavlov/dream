@@ -45,7 +45,7 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("global_flow", "fallback", 1.5): loc_cnd.exit_skill,
-            ("books_general", "dislikes_reading", 1.5): loc_cnd.dislikes_reading,
+            ("books_general", "dislikes_reading", 0.5): loc_cnd.dislikes_reading,
             ("books_general", "book_start", 5): cnd.all(
                 [
                     loc_cnd.is_proposed_skill,
@@ -256,7 +256,7 @@ flows = {
             TRANSITIONS: {
                 "right_book_reassure": cnd.any([dm_cnd.is_sf("React.Respond.Support.Reply.Affirm"),                dm_cnd.is_sf("React.Respond.Support.Reply.Agree"),                dm_cnd.is_sf("React.Respond.Support.Reply.Acknowledge"), int_cnd.is_yes_vars]),
                 "ask_not_like": cnd.any(                    [dm_cnd.is_sf("React.Respond.Confront.Reply.Disagree"),                    dm_cnd.is_sf("React.Respond.Support.Reply.Disavow"),                    dm_cnd.is_sf("React.Rejoinder.Confront.Challenge.Counter"), int_cnd.is_no_vars]),
-                "told_why": cnd.true(),
+                "change_subject": cnd.true()
             },
             MISC: {
                 "speech_functions": ["React.Rejoinder.Support.Track.Clarify"],
@@ -456,7 +456,7 @@ flows = {
                 "get_movie": loc_prs.get_movie,
             },
             TRANSITIONS: {
-                ("undetected_flow", "change_branch"): cnd.true(),
+                "denied_information": cnd.true(),
             },
         },
         "tell_about": { #НЕ РАБОТАЕТ
@@ -493,8 +493,7 @@ flows = {
             },
             TRANSITIONS: {
                 "tell_date": cnd.all([int_cnd.is_yes_vars, loc_cnd.check_slot("cur_book_ago")]                ),
-                "denied_information": int_cnd.is_no_vars,
-                ("global_flow", "fallback"): cnd.true(),
+                "denied_information": cnd.true(),
             },
         },
         "tell_date": {
@@ -505,8 +504,7 @@ flows = {
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {
-                "offer_genre": loc_cnd.check_slot("cur_book_plain"),
-                ("undetected_flow", "change_branch"): cnd.true(),
+                "offer_genre": cnd.true(),
             },
         },
         "denied_information": {
@@ -584,7 +582,7 @@ flows = {
                 phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
             ),
             TRANSITIONS: {
-                ("undetected_flow", "ask_to_repeat"): cnd.true(),
+                ("books_general", "book_restart"): cnd.true(),
             },
         },
         "bible_elaborate_not_read": {
@@ -593,8 +591,7 @@ flows = {
                 phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
             ),
             TRANSITIONS: {
-                "suggestion": lambda ctx, actor, *args, **kwargs: True,
-                ("undetected_flow", "ask_to_repeat"): cnd.true(),
+                ("books_general", "book_restart"): cnd.true(),
             },
         },
         "suggestion": {
@@ -605,7 +602,7 @@ flows = {
     },
     "undetected_flow": {
         "ask_to_repeat": {
-            RESPONSE: "I'm sorry, but I don't know what to say to that yet, but I will definitely learn! Have a nice day, bye!",
+            RESPONSE: "I'm sorry, I don't know what to answer yet, but I will definitely learn! Have a nice day, bye!",
             TRANSITIONS: {},
         },
         "change_branch": {
