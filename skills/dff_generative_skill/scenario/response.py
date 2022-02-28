@@ -52,9 +52,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     request_data = compose_data_for_dialogpt(ctx, actor)
     if len(request_data) > 0:
-        hypotheses = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1).json()[
-            "generated_responses"
-        ][0]
+        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1)
+        hypotheses = response.json()["generated_responses"][0]
     else:
         hypotheses = []
 
