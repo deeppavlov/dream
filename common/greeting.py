@@ -6,8 +6,8 @@ greeting_spec = {
     "RU": "это чат-бот Dream",
 }
 HI_THIS_IS_DREAM = {
-    "EN": f"Hi, {greeting_spec}!",
-    "RU": f"Привет, {greeting_spec}!",
+    "EN": f"Hi, {greeting_spec['EN']}!",
+    "RU": f"Привет, {greeting_spec['RU']}!",
 }
 
 WHAT_DO_YOU_DO_RESPONSES = {
