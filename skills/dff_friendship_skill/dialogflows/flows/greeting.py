@@ -253,7 +253,7 @@ def false_positive_response(vars):
 def bye_response(vars):
     state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
     state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
-    return f"Sorry, bye. #+#exit"
+    return "Sorry, bye. #+#exit"
 
 
 ##################################################################################################################
@@ -604,7 +604,7 @@ def std_greeting_response(vars):
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         if health_problems(vars):
-            ack = f"I'm so sorry to hear that. Hope, everything will be fine soon."
+            ack = "I'm so sorry to hear that. Hope, everything will be fine soon."
             state_utils.add_acknowledgement_to_response_parts(vars)
 
         if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
