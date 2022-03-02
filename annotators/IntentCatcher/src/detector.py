@@ -11,8 +11,15 @@ import numpy as np
 
 import tensorflow as tf
 import tensorflow_hub as hub
+import tf_sentencepiece
 
 from collections import defaultdict
+
+# this is just to use library because without this import, m-use does not work
+print(tf_sentencepiece.__file__)
+config = tf.ConfigProto()
+config.graph_options.rewrite_options.shape_optimization = 2
+session = tf.Session(config=config)
 
 USE_MODEL_PATH = os.environ.get("USE_MODEL_PATH", None)
 if USE_MODEL_PATH is None:

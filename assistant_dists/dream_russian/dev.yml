@@ -60,7 +60,7 @@ services:
       - 8030:8030
   entity-linking:
     volumes:
-      - "./annotators/entity_linking:/src"
+      - "./annotators/entity_linking_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8075:8075
@@ -96,7 +96,7 @@ services:
       - 8111:8111
   entity-detection:
     volumes:
-      - "./annotators/entity_detection:/src"
+      - "./annotators/entity_detection_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103

@@ -147,6 +147,11 @@ services:
     env_file: [.env]
     build:
       context: ./annotators/IntentCatcher/
+      args:
+        INTENT_MODEL_FNAME: linear_classifier_h3.h5
+        USE_MODEL_PATH: https://tfhub.dev/google/universal-sentence-encoder/1
+        INTENT_DATA_FNAME: intent_data_h3.json
+        INTENT_PHRASES_FNAME: intent_phrases.json
     command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
     environment:
       - FLASK_APP=server
@@ -1137,6 +1142,23 @@ services:
           memory: 512M
         reservations:
           memory: 512M
+
+  midas-predictor:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8121
+        SERVICE_NAME: midas_predictor
+      context: ./annotators/midas_predictor/
+    command: flask run -h 0.0.0.0 -p 8121
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 50M
 
   dff-template-skill:
     env_file: [.env]

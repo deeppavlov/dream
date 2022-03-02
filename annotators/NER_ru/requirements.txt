@@ -3,3 +3,4 @@ flask==1.1.1
 gunicorn==19.9.0
 requests==2.22.0
 numpy==1.15.4
+itsdangerous==2.0.1
