@@ -81,20 +81,17 @@
                     }
                 },
                 {
-                    "text": "\u041f\u043e\u043a\u0430!",
+                    "text": "\u043f\u043e\u043a\u0430!",
                     "annotations": {
                         "spelling_preprocessing": "\u043f\u043e\u043a\u0430!",
                         "entity_detection": {},
-                        "badlisted_words": {
-                            "bad_words": false
-                        },
                         "intent_catcher": {
                             "choose_topic": {
                                 "confidence": 0.0,
                                 "detected": 0
                             },
                             "exit": {
-                                "confidence": 0.994692325592041,
+                                "confidence": 1.0,
                                 "detected": 1
                             },
                             "lets_chat_about": {
@@ -142,6 +139,9 @@
                                 "detected": 0
                             }
                         },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
                         "ner": [
                             []
                         ],
@@ -182,7 +182,7 @@
                 "who_made_you": false,
                 "yes": true
             },
-            "dialog_id": "0f660a66bac1ebf75dde6520198351bc"
+            "dialog_id": "533d72a5aea4c3c8e0b2b695fd6fb580"
         }
     ],
     "dff_intent_responder_skill_state_batch": [
