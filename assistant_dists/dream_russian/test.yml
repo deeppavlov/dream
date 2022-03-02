@@ -11,7 +11,6 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   dff-program-y-skill:
-  sentseg:
   convers-evaluation-selector:
   dff-intent-responder-skill:
   intent-catcher:
@@ -21,7 +20,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  convert-reddit:
   personal-info-skill:
   entity-linking:
     volumes:
