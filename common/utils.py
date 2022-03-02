@@ -106,11 +106,7 @@ high_priority_intents = {
     "dff_grounding_skill": {"what_are_you_talking_about"},
 }
 
-low_priority_intents = {
-    "dont_understand",
-    "what_time",
-    "choose_topic"
-}
+low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
 combined_classes = {
     "factoid_classification": ["is_factoid", "is_conversational"],
