@@ -8,6 +8,7 @@ from enum import Enum, auto
 import requests
 import sentry_sdk
 
+from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
 from dff import dialogflow_extension
@@ -107,7 +108,10 @@ def compose_topic_offering(vars, excluded_skills=None):
     if skill_name in link_to_skill2i_like_to_talk:
         response = random.choice(link_to_skill2i_like_to_talk[skill_name])
     else:
-        response = f"Would you like to talk about {skill_name}?"
+        if LANGUAGE == "RU":
+            response = f"Хочешь поговорить о {skill_name}?"
+        else:
+            response = f"Would you like to talk about {skill_name}?"
     state_utils.save_to_shared_memory(vars, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
 
     return response
@@ -162,7 +166,7 @@ def clarify_event_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, MUST_CONTINUE)
-        response = random.choice(["Cool! Tell me about it.", "Great! What is it?"])
+        response = random.choice(common_greeting.CLARIFICATION_EVENT[LANGUAGE])
         state_utils.save_to_shared_memory(vars, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
         return response
 
@@ -253,7 +257,7 @@ def false_positive_response(vars):
 def bye_response(vars):
     state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
     state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
-    return "Sorry, bye. #+#exit"
+    return common_greeting.BYE_RESPONSE[LANGUAGE]
 
 
 ##################################################################################################################
@@ -433,7 +437,7 @@ def how_human_is_doing_response(vars):
                     f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP[LANGUAGE])}"
                 )
             else:
-                user_mood_acknowledgement = "Okay."
+                user_mood_acknowledgement = random.choice(GENERAL_ACKNOWLEDGEMENTS[LANGUAGE]['neutral'])
 
         question_about_activities = random.choice(
             common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"]
@@ -479,8 +483,8 @@ def offered_topic_choice_declined_response(vars):
         # what do you want to talk about?
         offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
         state_utils.save_to_shared_memory(vars, greeting_step_id=greeting_step_id + 1)
-
-        return f"Okay. {offer_topic_choose}"
+        ack = random.choice(GENERAL_ACKNOWLEDGEMENTS[LANGUAGE]['neutral'])
+        return f"{ack}. {offer_topic_choose}"
 
     except Exception as exc:
         logger.exception(exc)
@@ -604,7 +608,7 @@ def std_greeting_response(vars):
             state_utils.set_can_continue(vars, CAN_CONTINUE_SCENARIO)
 
         if health_problems(vars):
-            ack = "I'm so sorry to hear that. Hope, everything will be fine soon."
+            ack = common_greeting.SORRY_TO_HEAR_THAT[LANGUAGE]
             state_utils.add_acknowledgement_to_response_parts(vars)
 
         if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
@@ -645,7 +649,7 @@ def new_entities_is_needed_for_request(ngrams, vars):
 def new_entities_is_needed_for_response(vars):
     try:
         ack = condition_utils.get_not_used_and_save_sentiment_acknowledgement(vars)
-        body = "Tell me more about that."
+        body = common_greeting.TELL_ME_MORE[LANGUAGE]
         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
         return " ".join([ack, body])
     except Exception as exc:

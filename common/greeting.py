@@ -271,3 +271,23 @@ INTERESTING_PERSON_THANKS_FOR_CHATTING = {
         "Уверена, что у тебя много дел, поэтому спасибо за уделенное мне время.",
     ],
 }
+
+CLARIFICATION_EVENT = {
+    "EN": ["Cool! Tell me about it.", "Great! What is it?"],
+    "RU": ["Классно! Расскажи подробнее.", "Отлично! Может поподробнее?"],
+}
+
+BYE_RESPONSE = {
+    "EN": "Sorry, bye. #+#exit",
+    "RU": "Извини, пока. #+#exit",
+}
+
+SORRY_TO_HEAR_THAT = {
+    "EN": "I'm so sorry to hear that. Hope, everything will be fine soon.",
+    "RU": "Жаль это слышать. Надеюсь в ближайшее время все наладится.",
+}
+
+TELL_ME_MORE = {
+    "EN": "Tell me more about that.",
+    "RU": "Расскажи мне подробнее об этом.",
+}
