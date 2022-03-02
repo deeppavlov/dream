@@ -309,7 +309,7 @@ def hello_response(vars):
         if "seems like alexa decided to turn me on" in bot_utt:
             return after_hello_resp
         else:
-            return f"{common_greeting.HI_THIS_IS_DREAM} {after_hello_resp}"
+            return f"{common_greeting.HI_THIS_IS_DREAM[LANGUAGE]} {after_hello_resp}"
 
     except Exception as exc:
         logger.exception(exc)
