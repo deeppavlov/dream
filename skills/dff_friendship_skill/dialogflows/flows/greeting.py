@@ -123,8 +123,10 @@ def offered_topic_choice_declined_request(ngrams, vars):
         GREETING_STEPS[greeting_step_id - 1] == "what_to_talk_about" if greeting_step_id > 0 else False
     )
     user_asked_for_topic = any(
-        [resp.lower() in prev_bot_uttr.lower()
-         for resp in common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"]]
+        [
+            resp.lower() in prev_bot_uttr.lower()
+            for resp in common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"]
+        ]
     )
 
     was_active = "dff_friendship_skill" == state_utils.get_last_bot_utterance(vars).get("active_skill", "")
@@ -142,8 +144,10 @@ def asked_for_events_and_got_yes_request(ngrams, vars):
     # SYS_ASKED_EVENTS_AND_YES_INTENT
     prev_bot_uttr = state_utils.get_last_bot_utterance(vars).get("text", "")
     was_event_question = any(
-        [resp.lower() in prev_bot_uttr.lower()
-         for resp in common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"]]
+        [
+            resp.lower() in prev_bot_uttr.lower()
+            for resp in common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"]
+        ]
     )
 
     agreed = condition_utils.is_yes_vars(vars)
@@ -341,7 +345,9 @@ def how_are_you_response(vars):
         state_utils.set_can_continue(vars, MUST_CONTINUE)
         how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES[LANGUAGE])
 
-        question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"])
+        question_about_activities = random.choice(
+            common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"]
+        )
         response = (
             f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES[LANGUAGE])} "
             f"{question_about_activities}"
@@ -367,7 +373,10 @@ def positive_or_negative_request(ngrams, vars):
     neg_temp = is_negative_regexp_based(state_utils.get_last_human_utterance(vars))
 
     bot_asked_how_are_you = any(
-        [resp in state_utils.get_last_bot_utterance(vars)["text"] for resp in common_greeting.HOW_ARE_YOU_RESPONSES[LANGUAGE]]
+        [
+            resp in state_utils.get_last_bot_utterance(vars)["text"]
+            for resp in common_greeting.HOW_ARE_YOU_RESPONSES[LANGUAGE]
+        ]
     )
     if bot_asked_how_are_you and (usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp):
         return True
@@ -426,7 +435,9 @@ def how_human_is_doing_response(vars):
             else:
                 user_mood_acknowledgement = "Okay."
 
-        question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"])
+        question_about_activities = random.choice(
+            common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"]
+        )
         response = (
             f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES[LANGUAGE])} "
             f"{question_about_activities}"
@@ -485,7 +496,10 @@ def offered_topic_choice_declined_response(vars):
 def was_what_do_you_do_request(ngrams, vars):
     bot_uttr_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     if condition_utils.no_requests(vars) and any(
-        [phrase in bot_uttr_text for phrase in common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_do_you_do_on_weekdays"]]
+        [
+            phrase in bot_uttr_text
+            for phrase in common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_do_you_do_on_weekdays"]
+        ]
     ):
         return True
     return False
@@ -553,7 +567,9 @@ def std_greeting_response(vars):
         if _nothing_dont_know or (_no_requests and len(_entities) == 0):
             if _friendship_was_active and greeting_step_id >= 1:
                 ack = random.choice(
-                    common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE][GREETING_STEPS[greeting_step_id - 1]]
+                    common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE][
+                        GREETING_STEPS[greeting_step_id - 1]
+                    ]
                 )
                 state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
                 state_utils.set_can_continue(vars, MUST_CONTINUE)

@@ -381,9 +381,9 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
 ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know" r"|you (choose|pick up|tell me|want|wish|like)\.?$)"
 )
-GREETING_QUESTIONS_TEXTS = [question.lower()
-                            for t in GREETING_QUESTIONS[LANGUAGE]
-                            for question in GREETING_QUESTIONS[LANGUAGE][t]]
+GREETING_QUESTIONS_TEXTS = [
+    question.lower() for t in GREETING_QUESTIONS[LANGUAGE] for question in GREETING_QUESTIONS[LANGUAGE][t]
+]
 GREETING_QUESTIONS_TEXTS += [t.lower() for t in WHAT_DO_YOU_DO_RESPONSES[LANGUAGE] + FREE_TIME_RESPONSES[LANGUAGE]]
 
 
