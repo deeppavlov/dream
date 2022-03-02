@@ -5,6 +5,7 @@ import scenario.response_funcs as response_funcs
 from df_engine.core import Actor, Context
 
 
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

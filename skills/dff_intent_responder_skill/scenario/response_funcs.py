@@ -11,6 +11,7 @@ from df_engine.core import Actor, Context
 
 INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
 
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FNAME}")
 
