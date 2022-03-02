@@ -185,6 +185,8 @@ services:
     restart: unless-stopped
   dff-weather-skill:
     restart: unless-stopped
+  midas-predictor:
+    restart: unless-stopped
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'
