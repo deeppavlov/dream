@@ -1,0 +1,48 @@
+[
+    [
+        "\u041c\u0435\u043d\u044f \u0441\u043e\u0437\u0434\u0430\u043b\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u041c\u043e\u0441\u043a\u043e\u0432\u0441\u043a\u043e\u0433\u043e \u0444\u0438\u0437\u0438\u043a\u043e-\u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0438\u043d\u0441\u0442\u0438\u0442\u0443\u0442\u0430. #+#who_made_you",
+        1.0,
+        {
+            "dff_intent_responder_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "194eba44-2687-41d7-beb8-bb637cb5600b",
+                    "labels": {
+                        "0": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "requests": {
+                        "0": "\u043a\u0442\u043e \u0442\u0435\u0431\u044f \u0441\u043e\u0437\u0434\u0430\u043b"
+                    },
+                    "responses": {
+                        "0": "\u041c\u0435\u043d\u044f \u0441\u043e\u0437\u0434\u0430\u043b\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u041c\u043e\u0441\u043a\u043e\u0432\u0441\u043a\u043e\u0433\u043e \u0444\u0438\u0437\u0438\u043a\u043e-\u0442\u0435\u0445\u043d\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u0438\u043d\u0441\u0442\u0438\u0442\u0443\u0442\u0430. #+#who_made_you"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
