@@ -54,6 +54,7 @@ from common.utils import get_sentiment, get_named_persons
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
+LANGUAGE = os.getenv("LANGUAGE", "EN")
 
 MASKED_LM_SERVICE_URL = os.getenv("MASKED_LM_SERVICE_URL")
 
@@ -163,7 +164,7 @@ def not_negative_emotion(vars):
 
 def compose_topic_offering(excluded_skills=None):
     excluded_skills = [] if excluded_skills is None else excluded_skills
-    ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+    ask_about_topic = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
     offer_topics_template = random.choice(common_greeting.TOPIC_OFFERING_TEMPLATES)
 
     available_topics = [

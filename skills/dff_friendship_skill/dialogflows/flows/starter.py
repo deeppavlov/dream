@@ -11,7 +11,7 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.constants import CAN_CONTINUE_PROMPT, MUST_CONTINUE
 
-# from common.greeting import HI_THIS_IS_ALEXA
+# from common.greeting import HI_THIS_IS_DREAM
 from common.starter import (
     INTROS,
     OUTROS,

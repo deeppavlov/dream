@@ -5,8 +5,8 @@ from os import getenv
 def main():
     url = "http://0.0.0.0:8018/badlisted_words"
 
-    LANGUAGE = getenv("LANGUAGE", "ENGLISH")
-    if LANGUAGE == "RUSSIAN":
+    LANGUAGE = getenv("LANGUAGE", "EN")
+    if LANGUAGE == "RU":
         request_data = {
             "sentences": ["пизда настала", "застрахуйте уже его", "пошел нахер!"],
         }

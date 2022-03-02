@@ -1,7 +1,11 @@
+import os
 import re
 from common.greeting import HOW_ARE_YOU_RESPONSES
 from common.utils import get_emotions
 from common.universal_templates import if_chat_about_particular_topic
+
+
+LANGUAGE = os.getenv("LANGUAGE", "EN")
 
 POSITIVE_EMOTIONS = set(
     [
@@ -179,7 +183,7 @@ def emo_advice_requested(uttr):
 
 
 def skill_trigger_phrases():
-    return [HOW_DO_YOU_FEEL] + HOW_ARE_YOU_RESPONSES
+    return [HOW_DO_YOU_FEEL] + HOW_ARE_YOU_RESPONSES[LANGUAGE]
 
 
 def emotion_from_feel_answer(prev_bot_uttr, user_uttr):
@@ -207,7 +211,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     how_are_you = any(
         [
             how_are_you_response.lower() in bot_uttr.get("text", "").lower()
-            for how_are_you_response in HOW_ARE_YOU_RESPONSES
+            for how_are_you_response in HOW_ARE_YOU_RESPONSES[LANGUAGE]
         ]
     )
     joke_request_detected = is_joke_requested(user_utt)
