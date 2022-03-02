@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import logging
 import json
 import random
 from datetime import datetime
@@ -11,6 +11,8 @@ from df_engine.core import Actor, Context
 
 INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
 
+logger = logging.getLogger(__name__)
+logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FNAME}")
 
 with open(f"scenario/data/{INTENT_RESPONSE_PHRASES_FNAME}", "r") as fp:
     RESPONSES = json.load(fp)
