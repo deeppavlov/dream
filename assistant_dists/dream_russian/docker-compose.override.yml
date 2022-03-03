@@ -240,6 +240,7 @@ services:
         SERVICE_PORT: 8111
         SERVICE_NAME: dff_wiki_skill
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+        LANGUAGE: RU
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8111
