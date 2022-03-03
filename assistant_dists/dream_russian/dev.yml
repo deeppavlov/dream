@@ -89,6 +89,17 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
+  dialogpt:
+    volumes:
+      - "./services/dialogpt_RU:/src"
+    ports:
+      - 8091:8091
+  dff-generative-skill:
+    volumes:
+      - "./skills/dff_generative_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8092:8092
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

@@ -1,0 +1,59 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "привет! как дела?",
+                    "user": {
+                        "user_type": "human"
+                    },
+                    "annotations": {}
+                },
+                {
+                    "text": "тоже хорошо. посоветуй мне фильм посмотреть.",
+                    "user": {
+                        "user_type": "human"
+                    },
+                    "annotations": {}
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "отлично. а твои как?",
+                    "user": {
+                        "user_type": "bot"
+                    },
+                    "annotations": {}
+                }
+            ]
+        }
+    ],
+    "dff_generative_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "random_seed": 2718
+}
