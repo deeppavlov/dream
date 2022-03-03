@@ -11,11 +11,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8008:8008
-  sentseg:
-    volumes:
-      - "./annotators/SentSeg:/src"
-    ports:
-      - 8011:8011
   convers-evaluation-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
@@ -46,12 +41,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
-  convert-reddit:
-    volumes:
-      - "./skills/convert_reddit:/app"
-      - "./common:/src/common"
-    ports:
-      - 8029:8029
   personal-info-skill:
     volumes:
       - "./skills/personal_info_skill:/src"
