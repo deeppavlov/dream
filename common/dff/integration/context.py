@@ -157,6 +157,10 @@ def get_dialog(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]
 
 
+def get_human_utterances(ctx: Context, actor: Actor) -> dict:
+    return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
+
+
 def get_last_human_utterance(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1]
 
