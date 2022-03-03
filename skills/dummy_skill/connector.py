@@ -50,13 +50,13 @@ ASK_ME_QUESTION_PATTERN = re.compile(
 )
 
 donotknow_answers = {
-    "ENGLISH": [
+    "EN": [
         "What do you want to talk about?",
         "I am a bit confused. What would you like to chat about?",
         "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
         "Sorry, I didn't catch that. What would you like to chat about?",
     ],
-    "RUSSIAN": [
+    "RU": [
         "О чем ты хочешь поговорить?",
         "Кажется, я немного потерялась. О чем ты хочешь поговорить?",
         "Извини, возможно я не совсем поняла, что ты имеешь в виду. О чем ты хочешь поговорить?",
@@ -204,9 +204,9 @@ class DummySkillConnector:
             attrs = []
             is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"])
             if is_russian:
-                cands += [choice(donotknow_answers["RUSSIAN"])]
+                cands += [choice(donotknow_answers["RU"])]
             else:
-                cands += [choice(donotknow_answers["ENGLISH"])]
+                cands += [choice(donotknow_answers["EN"])]
             confs += [0.5]
             attrs += [{"type": "dummy"}]
             human_attrs += [{}]
