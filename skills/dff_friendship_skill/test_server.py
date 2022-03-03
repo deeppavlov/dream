@@ -6,7 +6,7 @@ import common.test_utils as test_utils
 
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-LANGUAGE = int(os.getenv("LANGUAGE", "EN"))
+LANGUAGE = os.getenv("LANGUAGE", "EN")
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 
 
