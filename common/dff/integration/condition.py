@@ -5,10 +5,12 @@ from nltk.stem import WordNetLemmatizer
 
 from df_engine.core import Context, Actor
 
+import common.greeting as common_greeting
 import common.utils as common_utils
 import common.universal_templates as universal_templates
 import common.dff.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 
 logger = logging.getLogger(__name__)
 
@@ -247,3 +249,29 @@ def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor):
     used_acks = last_acknowledgements + [ack]
     int_ctx.save_to_shared_memory(ctx, actor, last_acknowledgements=used_acks[-2:])
     return ack
+
+
+def set_conf_and_can_cont_by_universal_policy(ctx: Context, actor: Actor):
+    DIALOG_BEGINNING_START_CONFIDENCE = 0.98
+    DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
+    DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
+    MIDDLE_DIALOG_START_CONFIDENCE = 0.7
+
+    if not is_begin_of_dialog(ctx, actor, begin_dialog_n=10):
+        confidence = 0.
+        can_continue_flag = CAN_NOT_CONTINUE
+    elif is_first_our_response(ctx, actor):
+        confidence = DIALOG_BEGINNING_START_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    elif not is_interrupted(ctx, actor) and common_greeting.dont_tell_you_answer(
+            int_ctx.get_last_human_utterance(ctx, actor)
+    ):
+        confidence = DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    elif not is_interrupted(ctx, actor):
+        confidence = DIALOG_BEGINNING_CONTINUE_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    else:
+        confidence = MIDDLE_DIALOG_START_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    return confidence, can_continue_flag
