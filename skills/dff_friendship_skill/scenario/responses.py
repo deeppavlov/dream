@@ -6,7 +6,7 @@ from typing import Any, Tuple
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.context as int_ctx
-import common.dff.integration.processing as int_prs
+import common.dff.integration.response as int_rsp
 import common.greeting as common_greeting
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO,CAN_NOT_CONTINUE
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
@@ -28,55 +28,6 @@ SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
 MIDDLE_CONFIDENCE = 0.95
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
-
-
-def grounding_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
-    curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
-
-    def gathering_responses(reply, confidence, human_attr, bot_attr, attr, name):
-        nonlocal curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs
-        if reply and confidence:
-            curr_responses += [reply]
-            curr_confidences += [confidence]
-            curr_human_attrs += [human_attr]
-            curr_bot_attrs += [bot_attr]
-            curr_attrs += [attr]
-            logger.info(f"Grounding skill {name}: {reply}")
-
-    if "agent" in ctx.misc:
-        dialog = ctx.misc["agent"]["dialog"]
-
-        is_toxic = (
-            is_toxic_or_badlisted_utterance(dialog["human_utterances"][-2])  # ???
-            if len(dialog["human_utterances"]) > 1
-            else False
-        )
-        reply, confidence, human_attr, bot_attr, attr = are_we_recorded_response(ctx)
-        gathering_responses(reply, confidence, human_attr, bot_attr, attr, "are_we_recorded")
-
-        if not is_toxic:
-            reply, confidence, human_attr, bot_attr, attr = what_do_you_mean_response(ctx)
-            gathering_responses(reply, confidence, human_attr, bot_attr, attr, "what_do_you_mean")
-
-        reply, confidence, human_attr, bot_attr, attr = generate_acknowledgement_response(ctx)
-        gathering_responses(reply, confidence, human_attr, bot_attr, attr, "acknowledgement_response")
-
-        reply, confidence, human_attr, bot_attr, attr = generate_universal_response(ctx)
-        gathering_responses(reply, confidence, human_attr, bot_attr, attr, "universal_response")
-
-        reply, confidence, human_attr, bot_attr, attr = ask_for_topic_after_two_no_in_a_row_to_linkto_response(ctx)
-        gathering_responses(reply, confidence, human_attr, bot_attr, attr, '2 "no" detected')
-
-    # to pass assert  "Got empty replies"
-    if len(curr_responses) == 0:
-        gathering_responses(" ", 0.01, {}, {}, {}, "empty_response")
-    return int_rsp.multi_response(
-        replies=curr_responses,
-        confidences=curr_confidences,
-        human_attr=curr_human_attrs,
-        bot_attr=curr_bot_attrs,
-        hype_attr=curr_attrs,
-    )(ctx, actor, *args, **kwargs)
 
 
 def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> str:
