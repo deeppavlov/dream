@@ -39,7 +39,7 @@ prefixes = {
     "statement": "http://ws",
 }
 max_comb_num = 1e6
-lang = "@en"
+lang = "@ru"
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
 USE_CACHE = True

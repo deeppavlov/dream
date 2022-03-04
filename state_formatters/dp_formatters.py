@@ -523,25 +523,33 @@ def wp_formatter_dialog(dialog: Dict):
     return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
 
 
+def entity_detection_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    num_last_utterances = 2
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+
+    return [{"last_utterances": context}]
+
+
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2
-    ner_output = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
-    nounphrases = dialog["human_utterances"][-1]["annotations"].get("cobot_entities", {}).get("entities", [])
-    entity_substr = []
+    ner_output = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    
+    entity_substr, tags = [], []
     if ner_output:
         for entity in ner_output:
             if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
                 entity_substr.append(entity["text"].lower())
+                tags.append(entity["label"])
 
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-    if nounphrases:
-        entity_substr += [nounphrase.lower() for nounphrase in nounphrases]
-    entity_substr = list(set(entity_substr))
 
-    return [{"entity_substr": [entity_substr], "template": [""], "context": context}]
+    return [{"entity_substr": [entity_substr], "entity_tags": [tags], "context": context}]
 
 
 def kbqa_formatter_dialog(dialog: Dict):
