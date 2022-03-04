@@ -105,7 +105,7 @@
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "bot_annotator_selector",
                     "post_annotators.sentseg"
                 ],
@@ -115,7 +115,7 @@
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "bot_annotator_selector",
                     "post_annotators.sentseg",
                     "post_annotators.ner"
@@ -151,7 +151,7 @@
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -164,7 +164,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -177,10 +177,8 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
                 "previous_services": [
+                    "annotators.spelling_preprocessing",
                     "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ],
@@ -194,7 +192,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -218,7 +216,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
@@ -247,7 +245,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
                     "annotators.entity_linking"
@@ -258,7 +256,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
@@ -272,7 +270,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
@@ -299,10 +297,8 @@
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.ner"
-                ],
                 "previous_services": [
+                    "annotators.ner",
                     "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ]
@@ -325,7 +321,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
                     "annotators.ner",
@@ -340,7 +336,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
@@ -354,7 +350,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -427,7 +423,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.midas_classification",
                     "annotators.combined_classification"
                 ]
@@ -443,10 +439,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators"
-                ],
-                "required_previous_services": [
-                    "annotators.badlisted_words",
-                    "annotators.asr"
                 ],
                 "tags": [
                     "selector"
