@@ -27,8 +27,9 @@ def respond():
     st_time = time.time()
     inp = request.json
     entity_substr_batch = inp.get("entity_substr", [[""]])
-    entity_tags_batch = inp.get("entity_tags", [["" for _ in entity_substr_list]
-                                                for entity_substr_list in entity_substr_batch])
+    entity_tags_batch = inp.get(
+        "entity_tags", [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
+    )
     context_batch = inp.get("context", [[""]])
     opt_context_batch = []
     for entity_substr_list, hist_utt in zip(entity_substr_batch, context_batch):
