@@ -20,6 +20,7 @@ flows = {
             PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
             TRANSITIONS: {
                 ("greeting_flow", "false_positive_node"): loc_cnd.false_positive_condition,
+                ("greeting_flow", "hello_response_node"): loc_cnd.hello_condition,
                 ("greeting_flow", "how_are_you_node"): loc_cnd.how_are_you_condition,
                 ("greeting_flow", "std_greeting_node"): loc_cnd.std_greeting_condition,
                 ("greeting_flow", "new_entities_is_needed_for_node"): loc_cnd.new_entities_is_needed_for_condition,
