@@ -28,12 +28,7 @@ flows = {
             TRANSITIONS: {("greeting", "greeting_start"): cnd.true()},
         },
         "fallback": {
-            RESPONSE: loc_rsp.append_unused(
-                initial="Anyway, let's talk about something else! ",
-                phrases=[
-                    "What's on your mind?",
-                ],
-            ),
+            RESPONSE: "",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(CAN_NOT_CONTINUE),
