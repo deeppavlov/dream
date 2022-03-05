@@ -183,7 +183,7 @@ flows = {
                 "std_weekend_node": loc_cnd.std_weekend_condition,
             },
         },
-    }
+    },
 }
 
 actor = Actor(
