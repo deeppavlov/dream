@@ -12,9 +12,6 @@ RUN pip install -r requirements.txt
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
-ARG INTENT_RESPONSE_PHRASES_FNAME
-ENV INTENT_RESPONSE_PHRASES_FNAME ${INTENT_RESPONSE_PHRASES_FNAME}
-
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet

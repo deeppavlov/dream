@@ -2,11 +2,11 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_russian/pipeline_conf.json --cors'
     environment:
-      WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+      WAIT_HOSTS: "dff-program-y-skill:8008, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          ner:8021, convert-reddit:8029, personal-info-skill:8030,
-          spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077,
-          dff-friendship-skill:8086, dff-wiki-skill:8111, entity-detection:8103,
+          ner:8021, personal-info-skill:8030,
+          spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, dff-generative-skill:8092,
+          dff-friendship-skill:8086, dff-wiki-skill:8111, entity-detection:8103, dialogpt:8091,
           dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
@@ -26,20 +26,6 @@ services:
           memory: 1024M
         reservations:
           memory: 1024M
-
-  sentseg:
-    env_file: [.env]
-    build:
-      context: ./annotators/SentSeg/
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1.5G
-        reservations:
-          memory: 1.5G
 
   convers-evaluation-selector:
     env_file: [.env]
@@ -62,6 +48,7 @@ services:
       args:
         SERVICE_PORT: 8012
         SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_RU.json
       context: .
       dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
@@ -147,20 +134,6 @@ services:
           memory: 1512M
         reservations:
           memory: 1512M
-
-  convert-reddit:
-    env_file: [.env]
-    build:
-      context: ./skills/convert_reddit/
-    command: flask run -h 0.0.0.0 -p 8029
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1536M
-        reservations:
-          memory: 1536M
 
   personal-info-skill:
     env_file: [.env]
@@ -277,6 +250,40 @@ services:
           memory: 256M
         reservations:
           memory: 256M
+
+  dialogpt:
+    env_file: [ .env ]
+    build:
+      context: ./services/dialogpt_RU/
+      args:
+        SERVICE_PORT: 8091
+        PRETRAINED_MODEL_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+    command: flask run -h 0.0.0.0 -p 8091
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
+
+  dff-generative-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8092
+        SERVICE_NAME: dff_generative_skill
+      context: .
+      dockerfile: ./skills/dff_generative_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8092 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   dff-template-skill:
     env_file: [.env]
