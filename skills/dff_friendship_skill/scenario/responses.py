@@ -2,11 +2,10 @@ import logging
 import random
 import sentry_sdk
 from os import getenv
-from typing import Any, Tuple
+from typing import Tuple
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.context as int_ctx
-import common.dff.integration.response as int_rsp
 import common.greeting as common_greeting
 from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO,CAN_NOT_CONTINUE
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
