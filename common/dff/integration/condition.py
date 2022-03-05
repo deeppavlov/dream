@@ -260,13 +260,13 @@ def set_conf_and_can_cont_by_universal_policy(ctx: Context, actor: Actor):
     MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 
     if not is_begin_of_dialog(ctx, actor, begin_dialog_n=10):
-        confidence = 0.
+        confidence = 0.0
         can_continue_flag = CAN_NOT_CONTINUE
     elif is_first_our_response(ctx, actor):
         confidence = DIALOG_BEGINNING_START_CONFIDENCE
         can_continue_flag = CAN_CONTINUE_SCENARIO
     elif not is_interrupted(ctx, actor) and common_greeting.dont_tell_you_answer(
-            int_ctx.get_last_human_utterance(ctx, actor)
+        int_ctx.get_last_human_utterance(ctx, actor)
     ):
         confidence = DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE
         can_continue_flag = CAN_CONTINUE_SCENARIO

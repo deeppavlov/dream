@@ -266,9 +266,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     elif not _no_requests and len(_entities) > 0:
         # user wants to talk about something particular. We are just a dummy response, if no appropriate
         if _friendship_was_active:
-            ack = random.choice(
-                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY["what_do_you_do_on_weekdays"]
-            )
+            ack = random.choice(common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY["what_do_you_do_on_weekdays"])
             sent_ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
             ack = f"{sent_ack} {ack}"
         else:
@@ -293,9 +291,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
-        prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][
-            -5:
-        ]
+        prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][-5:]
         disliked_skills = int_ctx.get_disliked_skills(ctx, actor)
         body = offer_topic(ctx, actor, excluded_skills=prev_active_skills + disliked_skills)
     else:

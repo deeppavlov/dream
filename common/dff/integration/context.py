@@ -20,20 +20,13 @@ def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor) -> list:
     return (
         []
         if ctx.validation
-        else (
-            get_last_human_utterance(ctx, actor)
-            .get("annotations", {})
-            .get("cobot_entities", {})
-            .get("entities", [])
-        )
+        else (get_last_human_utterance(ctx, actor).get("annotations", {}).get("cobot_entities", {}).get("entities", []))
     )
 
 
 def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, positive_threshold=0.333) -> str:
     sentiment_probs = (
-        None
-        if ctx.validation
-        else common_utils.get_sentiment(get_last_human_utterance(ctx, actor), probs=True)
+        None if ctx.validation else common_utils.get_sentiment(get_last_human_utterance(ctx, actor), probs=True)
     )
     if sentiment_probs and isinstance(sentiment_probs, dict):
         max_sentiment_prob = max(sentiment_probs.values())

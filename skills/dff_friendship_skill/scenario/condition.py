@@ -78,13 +78,15 @@ def hello_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 def how_are_you_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     prev_frindship_skill = int_ctx.get_last_bot_utterance(ctx, actor).get("active_skill", "") == "dff_friendship_skill"
     how_are_you_found = common_greeting.HOW_ARE_YOU_TEMPLATE.search(
-        int_ctx.get_last_human_utterance(ctx, actor)["text"])
+        int_ctx.get_last_human_utterance(ctx, actor)["text"]
+    )
     how_are_you_precise_found = common_greeting.HOW_ARE_YOU_PRECISE_TEMPLATE.search(
-        int_ctx.get_last_human_utterance(ctx, actor)["text"])
+        int_ctx.get_last_human_utterance(ctx, actor)["text"]
+    )
     how_are_you_by_bot_found = common_greeting.HOW_ARE_YOU_TEMPLATE.search(
-        int_ctx.get_last_bot_utterance(ctx, actor)["text"])
-    any_you_in_user = common_greeting.ANY_YOU_TEMPLATE.search(
-        int_ctx.get_last_human_utterance(ctx, actor)["text"])
+        int_ctx.get_last_bot_utterance(ctx, actor)["text"]
+    )
+    any_you_in_user = common_greeting.ANY_YOU_TEMPLATE.search(int_ctx.get_last_human_utterance(ctx, actor)["text"])
 
     if how_are_you_precise_found:
         return True
