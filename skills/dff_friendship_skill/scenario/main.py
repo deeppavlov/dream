@@ -1,18 +1,11 @@
 import logging
 
-import common.dff.integration.condition as int_cnd
-import common.dff.integration.context as int_ctx
 import common.dff.integration.processing as int_prs
-import df_engine.labels as lbl
-import df_engine.conditions as cnd
 import scenario.condition as loc_cnd
-import scenario.processing as loc_prs
 import scenario.response as loc_rsp
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.constants import MUST_CONTINUE, CAN_NOT_CONTINUE
 from df_engine.core.keywords import RESPONSE, TRANSITIONS, PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, MISC
 from df_engine.core import Actor
-
-from .responses import greeting_response
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -25,7 +18,14 @@ flows = {
         "start": {
             RESPONSE: "",
             PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
-            TRANSITIONS: {("greeting", "greeting_start"): cnd.true()},
+            TRANSITIONS: {
+                ("greeting_flow", "false_positive_node"): loc_cnd.false_positive_condition,
+                ("greeting_flow", "how_are_you_node"): loc_cnd.how_are_you_condition,
+                ("greeting_flow", "std_greeting_node"): loc_cnd.std_greeting_condition,
+                ("greeting_flow", "new_entities_is_needed_for_node"): loc_cnd.new_entities_is_needed_for_condition,
+                ("greeting_flow", "link_to_by_enity_node"): loc_cnd.link_to_by_enity_condition,
+                # ("weekend_flow", "std_weekend_node"): loc_cnd.std_weekend_condition,
+            },
         },
         "fallback": {
             RESPONSE: "",
@@ -36,14 +36,69 @@ flows = {
             TRANSITIONS: {},
         },
     },
-    "greeting": {
-        "start_node": {
-            RESPONSE: "",
-            TRANSITIONS: {"greeting_response_node": cnd.true()},
+    "greeting_flow": {
+        "false_positive_node": {
+            RESPONSE: loc_rsp.false_positive_response,
+            TRANSITIONS: {
+                "hello_response_node": loc_cnd.not_is_no_condition,
+                "bye_response_node": loc_cnd.is_no_condition,
+            },
         },
-        "greeting_response_node": {
-            RESPONSE: greeting_response,
-            TRANSITIONS: {lbl.repeat(): cnd.true()},
+        "bye_response_node": {
+            RESPONSE: loc_rsp.bye_response,
+            TRANSITIONS: {},
+        },
+        "hello_response_node": {
+            RESPONSE: loc_rsp.hello_response,
+            TRANSITIONS: {
+                "how_are_you_node": loc_cnd.how_are_you_condition,
+                "how_human_is_doing_node": loc_cnd.no_requests_condition,
+                # ("weekend_flow", "weekend_start_node"): loc_cnd.std_weekend_condition,
+            },
+        },
+        "how_are_you_node": {
+            RESPONSE: loc_rsp.how_are_you_response,
+            TRANSITIONS: {
+                "std_greeting_node": loc_cnd.std_greeting_condition,
+            },
+        },
+        "how_human_is_doing_node": {
+            RESPONSE: loc_rsp.how_human_is_doing_response,
+            TRANSITIONS: {
+                "std_greeting_node": loc_cnd.std_greeting_condition,
+            },
+        },
+        "std_greeting_node": {
+            RESPONSE: loc_rsp.how_human_is_doing_response,
+            TRANSITIONS: {
+                "offered_topic_choice_declined_node": loc_cnd.offered_topic_choice_declined_condition,
+                "asked_for_events_and_got_yes_node": loc_cnd.asked_for_events_and_got_yes_condition,
+                "std_greeting_node": loc_cnd.std_greeting_condition,
+            },
+        },
+        "offered_topic_choice_declined_node": {
+            RESPONSE: loc_rsp.offered_topic_choice_declined_response,
+            TRANSITIONS: {
+                "std_greeting_node": loc_cnd.std_greeting_condition,
+            },
+        },
+        "asked_for_events_and_got_yes_node": {
+            RESPONSE: loc_rsp.clarify_event_response,
+            TRANSITIONS: {
+                "std_greeting_node": loc_cnd.std_greeting_condition,
+            },
+        },
+        "new_entities_is_needed_for_node": {
+            RESPONSE: loc_rsp.closed_answer_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "link_to_by_enity_node": {
+            RESPONSE: loc_rsp.link_to_by_enity_response,
+            TRANSITIONS: {
+                "std_greeting_node": loc_cnd.std_greeting_condition,
+            },
         },
     },
 }

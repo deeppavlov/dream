@@ -691,7 +691,8 @@ simplified_dialogflow.set_error_successor(State.SYS_FP, State.SYS_ERR)
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_FP,
-    {State.SYS_USER_WANTS_TALK: not_is_no_request, State.SYS_USER_DOESNT_WANT_TALK: is_no_request},
+    {State.SYS_USER_WANTS_TALK: not_is_no_request,
+     State.SYS_USER_DOESNT_WANT_TALK: is_no_request},
 )
 simplified_dialogflow.set_error_successor(State.USR_FP, State.SYS_ERR)
 
