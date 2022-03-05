@@ -27,7 +27,6 @@ from common.starter import (
 )
 from df_engine.core import Actor, Context
 
-
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -41,7 +40,6 @@ CONF_LOW = 0.9
 
 
 def genre_response(ctx: Context, actor: Actor) -> str:
-
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     used_categories = shared_memory.get("used_categories", [])
     # _object = ""
@@ -66,8 +64,8 @@ def genre_response(ctx: Context, actor: Actor) -> str:
             ctx, actor, used_categories=used_categories + [{"category": category, "genre": genre, "item": item}]
         )
         return (
-            f"{random.choice(INTROS)} "
-            + f"{category_verb} {item}. {attitude} {random.choice(OUTROS)} {genre} {category}?"
+                f"{random.choice(INTROS)} "
+                + f"{category_verb} {item}. {attitude} {random.choice(OUTROS)} {genre} {category}?"
         )
     else:
         int_ctx.set_confidence(ctx, actor, 0)
@@ -111,9 +109,9 @@ def my_fav_response(ctx: Context, actor: Actor) -> str:
             int_ctx.set_confidence(ctx, actor, confidence=CONF_HIGH)
             int_ctx.set_can_continue(ctx, actor, continue_flag=MUST_CONTINUE)
             return (
-                f"{random.choice(ACKNOWLEDGEMENTS)}"
-                + random.choice(MY_FAV_ANSWERS(category, item))
-                + f"{random.choice(WONDER_WHY_QUESTIONS)}"
+                    f"{random.choice(ACKNOWLEDGEMENTS)}"
+                    + random.choice(MY_FAV_ANSWERS(category, item))
+                    + f"{random.choice(WONDER_WHY_QUESTIONS)}"
             )
     else:
         int_ctx.set_confidence(ctx, actor, 0)
@@ -128,7 +126,6 @@ def repeat_response(ctx: Context, actor: Actor) -> str:
 
 
 def assent_yes_response(ctx: Context, actor: Actor) -> str:
-
     int_ctx.set_confidence(ctx, actor, confidence=CONF_HIGH)
     int_ctx.set_can_continue(ctx, actor, continue_flag=MUST_CONTINUE)
     return random.choice(ASSENT_YES_PHRASES)
@@ -141,7 +138,6 @@ def assent_no_response(ctx: Context, actor: Actor) -> str:
 
 
 def my_fav_story_response(ctx: Context, actor: Actor) -> str:
-
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     used_categories = shared_memory.get("used_categories", [])
     story = ""
@@ -155,7 +151,7 @@ def my_fav_story_response(ctx: Context, actor: Actor) -> str:
     else:
         int_ctx.set_confidence(ctx, actor, 0)
         return ""
-        
+
 
 def weekday_response(ctx: Context, actor: Actor) -> str:
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
