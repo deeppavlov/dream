@@ -311,7 +311,7 @@ def get_unrepeatable_index_from_rand_seq(
 def get_history(ctx: Context, actor: Actor):
     if not ctx.validation:
         return ctx.misc["agent"]["history"]
-    return []
+    return {}
 
 
 def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
