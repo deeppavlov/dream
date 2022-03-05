@@ -27,13 +27,13 @@ def was_clarification_request(ctx: Context, actor: Actor) -> bool:
 
 
 def is_opinion_request(ctx: Context, actor: Actor) -> bool:
-    flag = common_utils.is_opinion_request(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+    flag = common_utils.is_opinion_request(int_ctx.get_last_human_utterance(ctx, actor))
     logger.debug(f"is_opinion_request = {flag}")
     return bool(flag)
 
 
 def is_opinion_expression(ctx: Context, actor: Actor) -> bool:
-    flag = common_utils.is_opinion_expression(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+    flag = common_utils.is_opinion_expression(int_ctx.get_last_human_utterance(ctx, actor))
     logger.debug(f"is_opinion_expression = {flag}")
     return bool(flag)
 
@@ -51,7 +51,7 @@ def is_current_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
 
 
 def is_switch_topic(ctx: Context, actor: Actor) -> bool:
-    flag = universal_templates.is_switch_topic(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+    flag = universal_templates.is_switch_topic(int_ctx.get_last_human_utterance(ctx, actor))
     logger.debug(f"is_switch_topic = {flag}")
     return bool(flag)
 
@@ -225,7 +225,7 @@ def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
     """Check history_len last human utterances on the number of tokens.
     If number of tokens in ALL history_len uterances is <= 3 tokens, then consider user passive - return True.
     """
-    user_utterances = ctx.misc["agent"]["dialog"]["human_utterances"][-history_len:]
+    user_utterances = int_ctx.get_human_utterances(ctx, actor)[-history_len:]
     user_utterances = [utt["text"] for utt in user_utterances]
 
     uttrs_lens = [len(uttr.split()) <= 5 for uttr in user_utterances]
