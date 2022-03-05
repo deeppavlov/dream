@@ -21,7 +21,7 @@ wnl = WordNetLemmatizer()
 
 
 def was_clarification_request(ctx: Context, actor: Actor) -> bool:
-    flag = ctx.misc["agent"]["clarification_request_flag"]
+    flag = ctx.misc["agent"]["clarification_request_flag"] if not ctx.validation else False
     logger.debug(f"was_clarification_request = {flag}")
     return bool(flag)
 
@@ -39,13 +39,13 @@ def is_opinion_expression(ctx: Context, actor: Actor) -> bool:
 
 
 def is_previous_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
-    flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False)
+    flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False) if not ctx.validation else False
     logger.debug(f"is_previous_turn_dff_suspended = {flag}")
     return bool(flag)
 
 
 def is_current_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
-    flag = ctx.misc["agent"].get("current_turn_dff_suspended", False)
+    flag = ctx.misc["agent"].get("current_turn_dff_suspended", False) if not ctx.validation else False
     logger.debug(f"is_current_turn_dff_suspended = {flag}")
     return bool(flag)
 
@@ -113,24 +113,25 @@ def is_new_human_entity(ctx: Context, actor: Actor) -> bool:
 
 def is_last_state(ctx: Context, actor: Actor, state) -> bool:
     flag = False
-    history = list(ctx.misc["agent"]["history"].items())
-    if history:
-        history_sorted = sorted(history, key=lambda x: x[0])
-        last_state = history_sorted[-1][1]
-        if last_state == state:
-            flag = True
+    if not ctx.validation:
+        history = list(int_ctx.get_history(ctx, actor).items())
+        if history:
+            history_sorted = sorted(history, key=lambda x: x[0])
+            last_state = history_sorted[-1][1]
+            if last_state == state:
+                flag = True
     return bool(flag)
 
 
 def is_first_time_of_state(ctx: Context, actor: Actor, state) -> bool:
-    flag = state not in list(ctx.misc["agent"]["history"].values())
+    flag = state not in list(int_ctx.get_history(ctx, actor).values())
     logger.debug(f"is_first_time_of_state {state} = {flag}")
     return bool(flag)
 
 
 def if_was_prev_active(ctx: Context, actor: Actor) -> bool:
     flag = False
-    skill_uttr_indices = set(ctx.misc["agent"]["history"].keys())
+    skill_uttr_indices = set(int_ctx.get_history(ctx, actor).keys())
     human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
     if human_uttr_index in skill_uttr_indices:
         flag = True
@@ -144,7 +145,7 @@ def is_plural(word) -> bool:
 
 
 def is_first_our_response(ctx: Context, actor: Actor) -> bool:
-    flag = len(list(ctx.misc["agent"]["history"].values())) == 0
+    flag = len(list(int_ctx.get_history(ctx, actor).values())) == 0
     logger.debug(f"is_first_our_response = {flag}")
     return bool(flag)
 

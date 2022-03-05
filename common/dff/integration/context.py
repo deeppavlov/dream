@@ -21,7 +21,7 @@ def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor) -> list:
         []
         if ctx.validation
         else (
-            ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+            get_last_human_utterance(ctx, actor)
             .get("annotations", {})
             .get("cobot_entities", {})
             .get("entities", [])
@@ -33,7 +33,7 @@ def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, posi
     sentiment_probs = (
         None
         if ctx.validation
-        else common_utils.get_sentiment(ctx.misc["agent"]["dialog"]["human_utterances"][-1], probs=True)
+        else common_utils.get_sentiment(get_last_human_utterance(ctx, actor), probs=True)
     )
     if sentiment_probs and isinstance(sentiment_probs, dict):
         max_sentiment_prob = max(sentiment_probs.values())
@@ -246,7 +246,7 @@ def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
 def get_fact_random_annotations_from_human_utterance(ctx: Context, actor: Actor) -> dict:
     if not ctx.validation:
         return (
-            ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+            get_last_human_utterance(ctx, actor)
             .get("annotations", {})
             .get("fact_random", {"facts": [], "response": ""})
         )
@@ -281,7 +281,7 @@ def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: A
 
 
 def get_facts_from_fact_retrieval(ctx: Context, actor: Actor) -> list:
-    annotations = {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1].get("annotations", {})
+    annotations = get_last_human_utterance(ctx, actor).get("annotations", {})
     if "fact_retrieval" in annotations:
         if isinstance(annotations["fact_retrieval"], dict):
             return annotations["fact_retrieval"].get("facts", [])
@@ -307,9 +307,15 @@ def get_unrepeatable_index_from_rand_seq(
         return next_index
 
 
+def get_history(ctx: Context, actor: Actor):
+    if not ctx.validation:
+        return ctx.misc["agent"]["history"]
+    return []
+
+
 def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
     last_state = ""
-    history = list(ctx.misc["agent"]["history"].items())
+    history = list(get_history(ctx, actor).items())
     if history:
         history_sorted = sorted(history, key=lambda x: x[0])
         if len(history_sorted) >= n:
@@ -319,7 +325,7 @@ def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
 
 def get_last_state(ctx: Context, actor: Actor) -> str:
     last_state = ""
-    history = list(ctx.misc["agent"]["history"].items())
+    history = list(get_history(ctx, actor).items())
     if history:
         history_sorted = sorted(history, key=lambda x: x[0])
         last_state = history_sorted[-1][1]
