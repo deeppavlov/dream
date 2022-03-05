@@ -132,9 +132,10 @@ def is_first_time_of_state(ctx: Context, actor: Actor, state) -> bool:
 def if_was_prev_active(ctx: Context, actor: Actor) -> bool:
     flag = False
     skill_uttr_indices = set(int_ctx.get_history(ctx, actor).keys())
-    human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
-    if human_uttr_index in skill_uttr_indices:
-        flag = True
+    if not ctx.validation:
+        human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
+        if human_uttr_index in skill_uttr_indices:
+            flag = True
     return bool(flag)
 
 

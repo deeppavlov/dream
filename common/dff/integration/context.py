@@ -182,8 +182,9 @@ def save_to_shared_memory(ctx: Context, actor: Actor, **kwargs):
 
 
 def update_used_links(ctx: Context, actor: Actor, linked_skill_name, linking_phrase):
-    agent = ctx.misc["agent"]
-    agent["used_links"][linked_skill_name] = agent["used_links"].get(linked_skill_name, []) + [linking_phrase]
+    if not ctx.validation:
+        agent = ctx.misc["agent"]
+        agent["used_links"][linked_skill_name] = agent["used_links"].get(linked_skill_name, []) + [linking_phrase]
 
 
 def get_new_link_to(ctx: Context, actor: Actor, skill_names):
@@ -227,7 +228,7 @@ def reset_can_continue(ctx: Context, actor: Actor):
 def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
     entities = common_utils.get_entities(
-        {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1],
+        get_last_human_utterance(ctx, actor),
         only_named=True,
         with_labels=True,
     )
@@ -236,7 +237,7 @@ def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
 
 def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
     nps = common_utils.get_entities(
-        {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1],
+        get_last_human_utterance(ctx, actor),
         only_named=False,
         with_labels=False,
     )
