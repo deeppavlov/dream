@@ -53,7 +53,7 @@ def sys_cleaned_up_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_slept_in_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -81,7 +81,7 @@ def sys_feel_great_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_need_more_time_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -95,7 +95,7 @@ def sys_need_more_time_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_watched_film_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -109,7 +109,7 @@ def sys_watched_film_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_read_book_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -123,7 +123,7 @@ def sys_read_book_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_played_computer_game_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -137,7 +137,7 @@ def sys_played_computer_game_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_play_on_weekends_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -165,7 +165,7 @@ def sys_play_regularly_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-    
+
 
 def sys_play_once_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
@@ -179,4 +179,3 @@ def sys_play_once_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     return " ".join([ack, body])
-

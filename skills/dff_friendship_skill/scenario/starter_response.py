@@ -64,8 +64,8 @@ def genre_response(ctx: Context, actor: Actor) -> str:
             ctx, actor, used_categories=used_categories + [{"category": category, "genre": genre, "item": item}]
         )
         return (
-                f"{random.choice(INTROS)} "
-                + f"{category_verb} {item}. {attitude} {random.choice(OUTROS)} {genre} {category}?"
+            f"{random.choice(INTROS)} "
+            + f"{category_verb} {item}. {attitude} {random.choice(OUTROS)} {genre} {category}?"
         )
     else:
         int_ctx.set_confidence(ctx, actor, 0)
@@ -109,9 +109,9 @@ def my_fav_response(ctx: Context, actor: Actor) -> str:
             int_ctx.set_confidence(ctx, actor, confidence=CONF_HIGH)
             int_ctx.set_can_continue(ctx, actor, continue_flag=MUST_CONTINUE)
             return (
-                    f"{random.choice(ACKNOWLEDGEMENTS)}"
-                    + random.choice(MY_FAV_ANSWERS(category, item))
-                    + f"{random.choice(WONDER_WHY_QUESTIONS)}"
+                f"{random.choice(ACKNOWLEDGEMENTS)}"
+                + random.choice(MY_FAV_ANSWERS(category, item))
+                + f"{random.choice(WONDER_WHY_QUESTIONS)}"
             )
     else:
         int_ctx.set_confidence(ctx, actor, 0)
@@ -201,4 +201,3 @@ def my_fav_day_response(ctx: Context, actor: Actor) -> str:
     int_ctx.set_confidence(ctx, actor, confidence=CONF_HIGH)
     int_ctx.set_can_continue(ctx, actor, continue_flag=MUST_CONTINUE)
     return "Aha. Speaking of me, my favorite day is Friday. " "As the song says, Nothing matters like the weekend."
-
