@@ -683,7 +683,8 @@ simplified_dialogflow.set_error_successor(State.SYS_PLAYED_ALL_WEEKEND, State.SY
 
 simplified_dialogflow.add_user_serial_transitions(
     State.USR_PLAYED_ALL_WEEKEND,
-    {State.SYS_PLAY_REGULARLY: sys_play_regularly_request, State.SYS_PLAYED_ONCE: sys_play_once_request},
+    {State.SYS_PLAY_REGULARLY: sys_play_regularly_request,
+     State.SYS_PLAYED_ONCE: sys_play_once_request},
 )
 
 simplified_dialogflow.set_error_successor(State.USR_PLAYED_ALL_WEEKEND, State.SYS_ERR)

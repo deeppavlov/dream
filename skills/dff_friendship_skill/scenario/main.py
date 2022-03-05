@@ -3,6 +3,8 @@ import logging
 import common.dff.integration.processing as int_prs
 import scenario.condition as loc_cnd
 import scenario.response as loc_rsp
+import scenario.weekend_condition as loc_wkd_cnd
+import scenario.weekend_response as loc_wkd_rsp
 from common.constants import MUST_CONTINUE, CAN_NOT_CONTINUE
 from df_engine.core.keywords import PROCESSING, TRANSITIONS, RESPONSE
 from df_engine.core import Actor
@@ -25,7 +27,7 @@ flows = {
                 ("greeting_flow", "std_greeting_node"): loc_cnd.std_greeting_condition,
                 ("greeting_flow", "new_entities_is_needed_for_node"): loc_cnd.new_entities_is_needed_for_condition,
                 ("greeting_flow", "link_to_by_enity_node"): loc_cnd.link_to_by_enity_condition,
-                # ("weekend_flow", "std_weekend_node"): loc_cnd.std_weekend_condition,
+                ("weekend_flow", "std_weekend_node"): loc_cnd.std_weekend_condition,
             },
         },
         "fallback": {
@@ -102,6 +104,86 @@ flows = {
             },
         },
     },
+    "weekend_flow": {
+        "std_weekend_node": {
+            RESPONSE: loc_wkd_rsp.std_weekend_response,
+            TRANSITIONS: {
+                "sys_cleaned_up_node": loc_wkd_cnd.sys_cleaned_up_condition,
+                "sys_slept_in_node": loc_wkd_cnd.sys_slept_in_condition,
+                "sys_read_book_node": loc_wkd_cnd.sys_read_book_condition,
+                "sys_watched_film_node": loc_wkd_cnd.sys_watched_film_condition,
+                "sys_played_computer_game_node": loc_wkd_cnd.sys_played_computer_game_condition,
+            },
+        },
+        "sys_cleaned_up_node": {
+            RESPONSE: loc_wkd_rsp.sys_cleaned_up_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "sys_slept_in_node": {
+            RESPONSE: loc_wkd_rsp.sys_slept_in_response,
+            TRANSITIONS: {
+                "sys_feel_great_node": loc_wkd_cnd.sys_feel_great_condition,
+                "sys_need_more_time_node": loc_wkd_cnd.sys_need_more_time_condition,
+            },
+        },
+        "sys_feel_great_node": {
+            RESPONSE: loc_wkd_rsp.sys_feel_great_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "sys_need_more_time_node": {
+            RESPONSE: loc_wkd_rsp.sys_need_more_time_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "sys_read_book_node": {
+            RESPONSE: loc_wkd_rsp.sys_read_book_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "sys_watched_film_node": {
+            RESPONSE: loc_wkd_rsp.sys_watched_film_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "sys_played_computer_game_node": {
+            RESPONSE: loc_wkd_rsp.sys_played_computer_game_response,
+            TRANSITIONS: {
+                "sys_play_on_weekends_node": loc_wkd_cnd.sys_play_on_weekends_condition,
+            },
+        },
+        "sys_play_on_weekends_node": {
+            RESPONSE: loc_wkd_rsp.sys_play_on_weekends_response,
+            TRANSITIONS: {
+                "sys_play_regularly_node": loc_wkd_cnd.sys_play_regularly_condition,
+                "sys_play_once_node": loc_wkd_cnd.sys_play_once_condition,
+            },
+        },
+        "sys_play_regularly_node": {
+            RESPONSE: loc_wkd_rsp.sys_play_regularly_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "sys_play_once_node": {
+            RESPONSE: loc_wkd_rsp.sys_play_once_response,
+            TRANSITIONS: {
+                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+            },
+        },
+        "link_to_by_enity_node": {
+            RESPONSE: loc_rsp.link_to_by_enity_response,
+            TRANSITIONS: {
+                "std_weekend_node": loc_cnd.std_weekend_condition,
+            },
+        },
+    }
 }
 
 actor = Actor(
