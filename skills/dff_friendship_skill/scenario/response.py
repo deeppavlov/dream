@@ -129,7 +129,6 @@ def greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         reply = after_hello_resp
     else:
         reply = f"{common_greeting.HI_THIS_IS_ALEXA} {after_hello_resp}"
-
     return reply
 
 
@@ -138,7 +137,6 @@ def clarify_event_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     reply = random.choice(["Cool! Tell me about it.", "Great! What is it?"])
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
-    
     return reply
 
 
@@ -146,7 +144,6 @@ def false_positive_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     reply = "Hi! Seems like Alexa decided to turn me on. Do you want to chat with me?"
-    
     return reply
 
 
@@ -154,7 +151,6 @@ def bye_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
     reply = "Sorry, bye. #+#exit"
-    
     return reply
 
 
@@ -169,7 +165,6 @@ def how_are_you_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         f"{question_about_activities}"
     )
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
-    
     return reply
 
 
@@ -221,7 +216,6 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
         f"{question_about_activities}"
     )
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
-    
     return reply
 
 
@@ -229,7 +223,6 @@ def offer_topics_choice_response(ctx: Context, actor: Actor, *args, **kwargs) ->
     int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     reply = offer_topic(ctx, actor)
-    
     return reply
 
 
@@ -241,7 +234,6 @@ def offered_topic_choice_declined_response(ctx: Context, actor: Actor, *args, **
     offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     reply = f"Okay. {offer_topic_choose}"
-    
     return reply
 
 
@@ -312,7 +304,6 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
 
     reply = f"{ack} {body}"
-    
     return reply
 
 
@@ -324,7 +315,6 @@ def new_entities_is_needed_for_response(ctx: Context, actor: Actor, *args, **kwa
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
 
     reply = " ".join([ack, body])
-    
     return reply
 
 
@@ -336,7 +326,6 @@ def closed_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
 
     reply = " ".join([ack, body])
-    
     return reply
 
 
