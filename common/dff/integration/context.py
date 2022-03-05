@@ -5,9 +5,9 @@ import random
 from df_engine.core import Context, Actor
 
 import common.constants as common_constants
+import common.link as common_link
 import common.news as common_news
 import common.utils as common_utils
-import common.link as common_link
 
 logger = logging.getLogger(__name__)
 SERVICE_NAME = os.getenv("SERVICE_NAME")

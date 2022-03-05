@@ -5,10 +5,22 @@ from df_engine.core import Actor, Context
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.context as int_ctx
 import common.greeting as common_greeting
+import common.link as common_link
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
 
 
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
+link_to_skill2key_words = {
+    skill_name: common_link.link_to_skill2key_words[skill_name]
+    for skill_name in common_link.link_to_skill2key_words
+    if skill_name in common_link.SKILLS_FOR_LINKING
+}
+
+link_to_skill2i_like_to_talk = {
+    skill_name: common_link.link_to_skill2i_like_to_talk[skill_name]
+    for skill_name in common_link.link_to_skill2i_like_to_talk
+    if skill_name in common_link.SKILLS_FOR_LINKING
+}
 
 
 def offered_topic_choice_declined_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
@@ -157,6 +169,14 @@ def new_entities_is_needed_for_condition(ctx: Context, actor: Actor, *args, **kw
 
 
 def closed_answer_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    flag = True
+    flag = flag and not int_cnd.is_switch_topic(ctx, actor)
+    flag = flag and not int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
+
+    return flag
+
+
+def link_to_by_enity_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     flag = True
     flag = flag and not int_cnd.is_switch_topic(ctx, actor)
     flag = flag and not int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)

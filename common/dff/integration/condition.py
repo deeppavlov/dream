@@ -274,4 +274,6 @@ def set_conf_and_can_cont_by_universal_policy(ctx: Context, actor: Actor):
     else:
         confidence = MIDDLE_DIALOG_START_CONFIDENCE
         can_continue_flag = CAN_CONTINUE_SCENARIO
-    return confidence, can_continue_flag
+
+    int_ctx.set_can_continue(ctx, actor, can_continue_flag)
+    int_ctx.set_confidence(ctx, actor, confidence)
