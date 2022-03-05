@@ -56,7 +56,7 @@ flows = {
             TRANSITIONS: {
                 "how_are_you_node": loc_cnd.how_are_you_condition,
                 "how_human_is_doing_node": loc_cnd.no_requests_condition,
-                ("weekend_flow", "weekend_start_node"): loc_wkd_cnd.std_weekend_condition,
+                ("weekend_flow", "std_weekend_node"): loc_wkd_cnd.std_weekend_condition,
             },
         },
         "how_are_you_node": {
