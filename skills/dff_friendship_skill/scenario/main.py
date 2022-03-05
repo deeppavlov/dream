@@ -49,7 +49,7 @@ flows = {
             TRANSITIONS: {},
         },
         "hello_response_node": {
-            RESPONSE: loc_rsp.hello_response,
+            RESPONSE: loc_rsp.greeting_response,
             TRANSITIONS: {
                 "how_are_you_node": loc_cnd.how_are_you_condition,
                 "how_human_is_doing_node": loc_cnd.no_requests_condition,
