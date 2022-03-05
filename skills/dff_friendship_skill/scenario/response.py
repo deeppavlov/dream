@@ -393,4 +393,3 @@ def link_to_by_enity_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
         sentry_sdk.capture_exception(exc)
         int_ctx.set_confidence(ctx, actor, 0)
         return ""
-
