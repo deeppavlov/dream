@@ -1,6 +1,5 @@
 import logging
 import random
-import requests
 import sentry_sdk
 from os import getenv
 from typing import Tuple
@@ -8,10 +7,8 @@ from typing import Tuple
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.context as int_ctx
 import common.greeting as common_greeting
-import common.link as common_link
-from common.constants import MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
-from common.emotion import is_positive_regexp_based, is_negative_regexp_based
-from common.universal_templates import HEALTH_PROBLEMS, COMPILE_SOMETHING
+import common.scenarios.weekend as common_weekend
+from common.constants import CAN_CONTINUE_SCENARIO
 from df_engine.core import Actor, Context
 
 
@@ -30,30 +27,156 @@ MIDDLE_CONFIDENCE = 0.95
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
 
 
+def std_weekend_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
-def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> str:
-    excluded_skills = [] if excluded_skills is None else excluded_skills
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.WEEKEND_QUESTIONS)
 
-    available_skill_names = [
-        skill_name for skill_name in link_to_skill2key_words.keys() if skill_name not in excluded_skills
-    ]
-    if int_ctx.get_age_group(ctx, actor) == "kid":
-        available_skill_names = [
-            "game_cooperative_skill",
-            "dff_animals_skill",
-            "dff_food_skill",
-            "superheroes",
-            "school",
-        ]  # for small talk skill
-    if len(available_skill_names) == 0:
-        available_skill_names = link_to_skill2key_words.keys()
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_START_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
-    skill_name = random.choice(available_skill_names)
-    if skill_name in link_to_skill2i_like_to_talk:
-        response = random.choice(link_to_skill2i_like_to_talk[skill_name])
-    else:
-        response = f"Would you like to talk about {skill_name}?"
-    int_ctx.save_to_shared_memory(ctx, actor, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
+    return " ".join([ack, body])
 
-    return response
+
+def sys_cleaned_up_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.CLEANED_UP_STATEMENTS)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_slept_in_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.SLEPT_IN_QUESTIONS)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_START_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+
+
+def sys_feel_great_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.WHAT_PLANS_FOR_TODAY)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_need_more_time_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.WISH_MORE_TIME)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_watched_film_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.MOVIE_NAME_QUESTION)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_read_book_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.BOOK_NAME_QUESTION)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_played_computer_game_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.COMPUTER_GAME_NAME_QUESTION)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_play_on_weekends_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.GAME_EMOTIONS_QUESTION)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+
+
+def sys_play_regularly_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.REGULAR_PLAYER_QUESTION)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
+    
+
+def sys_play_once_response(ctx: Context, actor: Actor) -> str:
+    # get ack, body
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+
+    # obtaining random response from weekend questions
+    body = random.choice(common_weekend.OCCASIONAL_PLAYER_QUESTION)
+
+    # set confidence
+    int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
+    return " ".join([ack, body])
 
