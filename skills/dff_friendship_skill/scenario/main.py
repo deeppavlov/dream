@@ -4,7 +4,7 @@ import common.dff.integration.processing as int_prs
 import scenario.condition as loc_cnd
 import scenario.response as loc_rsp
 from common.constants import MUST_CONTINUE, CAN_NOT_CONTINUE
-from df_engine.core.keywords import RESPONSE, TRANSITIONS, PROCESSING, TRANSITIONS, GLOBAL, RESPONSE, MISC
+from df_engine.core.keywords import PROCESSING, TRANSITIONS, RESPONSE
 from df_engine.core import Actor
 
 

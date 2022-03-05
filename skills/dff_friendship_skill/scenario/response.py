@@ -297,7 +297,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     if health_problems(ctx, actor):
-        ack = f"I'm so sorry to hear that. Hope, everything will be fine soon."
+        ack = "I'm so sorry to hear that. Hope, everything will be fine soon."
         int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
