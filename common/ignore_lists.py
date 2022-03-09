@@ -1,4 +1,3 @@
-
 FALSE_POS_NPS_LIST = [
     "'s",
     "i",
