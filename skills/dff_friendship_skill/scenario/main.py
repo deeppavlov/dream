@@ -72,7 +72,7 @@ flows = {
             },
         },
         "std_greeting_node": {
-            RESPONSE: loc_rsp.how_human_is_doing_response,
+            RESPONSE: loc_rsp.std_greeting_response,
             TRANSITIONS: {
                 "offered_topic_choice_declined_node": loc_cnd.offered_topic_choice_declined_condition,
                 "asked_for_events_and_got_yes_node": loc_cnd.asked_for_events_and_got_yes_condition,
