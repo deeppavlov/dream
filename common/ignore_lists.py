@@ -1,4 +1,5 @@
-NP_REMOVE_LIST = [
+
+FALSE_POS_NPS_LIST = [
     "'s",
     "i",
     "me",
@@ -194,6 +195,9 @@ NP_REMOVE_LIST = [
     "another one",
     "something else",
     "something",
+    "nothing",
+    "everything",
+    "none",
     "anything",
     "someone",
     "anyone",
@@ -202,9 +206,11 @@ NP_REMOVE_LIST = [
     "a lot",
     "a little",
     "a little bit",
+    "sure",
+    "going",
 ]
 
-NP_IGNORE_LIST = [
+BAD_NPS_LIST = [
     "boring",
     "radio",
     "type",
@@ -224,7 +230,6 @@ NP_IGNORE_LIST = [
     "years",
     "sort",
     "fan",
-    "going",
     "death",
     "part",
     "end",
@@ -238,12 +243,11 @@ NP_IGNORE_LIST = [
     "fans",
     "rapping",
     "reading",
-    "going",
     "thing",
     "hanging",
     "best thing",
     "wife",
     "things",
-    "nothing",
-    "everything",
+    "guy",
+    "guys",
 ]
