@@ -259,7 +259,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(vars)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
             int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
         int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
