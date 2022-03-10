@@ -306,7 +306,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     else:
         body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
 
-    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    logger.info(f"Assign in std_greeting_response greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
 
     reply = f"{ack} {body}"
