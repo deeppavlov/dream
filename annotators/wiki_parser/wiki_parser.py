@@ -40,7 +40,7 @@ prefixes = {
 }
 max_comb_num = 1e6
 
-if os.getenv("LANGUAGE", "ENGLISH") == "RUSSIAN":
+if os.getenv("LANGUAGE", "EN") == "RU":
     lang = "@ru"
 else:
     lang = "@en"
