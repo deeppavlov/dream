@@ -80,8 +80,9 @@ def offer_topic(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwarg
     # else:
     #     # what do you want to talk about?
     #     offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
-
-    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("what_to_talk_about") + 1)
+    greeting_step_id = GREETING_STEPS.index("what_to_talk_about")
+    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return offer_topic_choose
 
 
@@ -136,7 +137,9 @@ def clarify_event_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     reply = random.choice(["Cool! Tell me about it.", "Great! What is it?"])
-    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
+    greeting_step_id = GREETING_STEPS.index("recent_personal_events")
+    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return reply
 
 
@@ -164,7 +167,9 @@ def how_are_you_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
         f"{question_about_activities}"
     )
-    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
+    greeting_step_id = GREETING_STEPS.index("recent_personal_events")
+    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return reply
 
 
@@ -215,7 +220,9 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
         f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
         f"{question_about_activities}"
     )
-    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=GREETING_STEPS.index("recent_personal_events") + 1)
+    greeting_step_id = GREETING_STEPS.index("recent_personal_events")
+    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return reply
 
 
@@ -232,6 +239,8 @@ def offered_topic_choice_declined_response(ctx: Context, actor: Actor, *args, **
     greeting_step_id = 0
     # what do you want to talk about?
     offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+
+    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     reply = f"Okay. {offer_topic_choose}"
     return reply
@@ -297,6 +306,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     else:
         body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
 
+    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
 
     reply = f"{ack} {body}"
