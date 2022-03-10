@@ -1,0 +1,556 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "great. how are you?",
+                    "annotations": {
+                        "spelling_preprocessing": "great how are you",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "great. how are you?",
+                            "segments": [
+                                "great.",
+                                "how are you?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.25312650203704834,
+                                "command": 0.007256400305777788,
+                                "comment": 0.44351035356521606,
+                                "complaint": 0.009795245714485645,
+                                "dev_command": 0.012913011014461517,
+                                "neg_answer": 0.0017865210538730025,
+                                "open_question_factual": 0.014396760612726212,
+                                "open_question_opinion": 0.015247201547026634,
+                                "opinion": 0.16134771704673767,
+                                "other_answers": 0.005105912219733,
+                                "pos_answer": 0.010215267539024353,
+                                "statement": 0.054177362471818924,
+                                "yes_no_question": 0.011121814139187336
+                            },
+                            {
+                                "appreciation": 0.004218478687107563,
+                                "command": 0.0036231419071555138,
+                                "comment": 0.0028404160402715206,
+                                "complaint": 0.005980296991765499,
+                                "dev_command": 0.004543297924101353,
+                                "neg_answer": 0.0022460550535470247,
+                                "open_question_factual": 0.8474536538124084,
+                                "open_question_opinion": 0.10383260995149612,
+                                "opinion": 0.0038928252179175615,
+                                "other_answers": 0.0025035287253558636,
+                                "pos_answer": 0.0016886511584743857,
+                                "statement": 0.002319017192348838,
+                                "yes_no_question": 0.01485812570899725
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9998457431793213
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.9996715784072876
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999914169311523
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9998966455459595
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9998598098754883
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.4806326627731323
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9997813105583191
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "great. how are you?"
+                            ]
+                        },
+                        "midas_predictor": {
+                            "command": 0.017087001940008954,
+                            "comment": 0.03611401283390539,
+                            "opinion": 0.18750932696612446,
+                            "other_answers": 0.032159379197134755,
+                            "statement": 0.7271302790628265
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"\nKuleba's comments come after Russia's foreign minister earlier denied tha... [1518 chars]",
+                                    "description": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/107020827-1645799231530-gettyimages-1238738593-Lev_Radin_022422.jpeg?v=1646899141",
+                                    "publishedAt": "2022-03-10T11:41:32Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Ukraine foreign minister says Russian officials 'live in their own reality'",
+                                    "url": "https://www.cnbc.com/2022/03/10/ukraine-foreign-minister-says-russian-officials-live-in-their-own-reality.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "great. how are you?"
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "nothing.",
+                    "annotations": {
+                        "spelling_preprocessing": "nothing",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "nothing.",
+                            "segments": [
+                                "nothing."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0024243341758847237,
+                                "command": 0.0008728859247639775,
+                                "comment": 0.006247213110327721,
+                                "complaint": 0.009945373982191086,
+                                "dev_command": 0.003456131089478731,
+                                "neg_answer": 0.009067235514521599,
+                                "open_question_factual": 0.0028618606738746166,
+                                "open_question_opinion": 0.004510175436735153,
+                                "opinion": 0.031044118106365204,
+                                "other_answers": 0.9201156497001648,
+                                "pos_answer": 0.0016514778835698962,
+                                "statement": 0.005813465919345617,
+                                "yes_no_question": 0.0019900964107364416
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9617438912391663
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.8875331282615662
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.5994126200675964
+                            },
+                            "emotion_classification": {
+                                "anger": 0.8216107487678528
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9997403025627136
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9899485111236572
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999696016311646
+                            }
+                        },
+                        "entity_detection": {},
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "great. how are you?",
+                                "Outstanding! I have heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and talking day and night not getting tired! What was the highlight of your day today?",
+                                "nothing."
+                            ]
+                        },
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "midas_predictor": {
+                            "comment": 0.051771117166212535,
+                            "open_question_opinion": 0.05994550408719346,
+                            "opinion": 0.39509536784741145,
+                            "statement": 0.3651226158038147,
+                            "yes_no_question": 0.12806539509536785
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"\nKuleba's comments come after Russia's foreign minister earlier denied tha... [1518 chars]",
+                                    "description": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/107020827-1645799231530-gettyimages-1238738593-Lev_Radin_022422.jpeg?v=1646899141",
+                                    "publishedAt": "2022-03-10T11:41:32Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Ukraine foreign minister says Russian officials 'live in their own reality'",
+                                    "url": "https://www.cnbc.com/2022/03/10/ukraine-foreign-minister-says-russian-officials-live-in-their-own-reality.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "nothing."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Outstanding! I've heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and talking day and night not getting tired! What was the highlight of your day today?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Outstanding! I have heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and talking day and night not getting tired! What was the highlight of your day today?",
+                            "segments": [
+                                "Outstanding!",
+                                "I have heard that people have vacations and days-off to have a rest from work.",
+                                "Not my choice!",
+                                "Talking and talking day and night not getting tired!",
+                                "What was the highlight of your day today?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "great. how are you?",
+                                "Outstanding! I have heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and talking day and night not getting tired! What was the highlight of your day today?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_friendship_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "6332e8b4-122d-4b64-bc7c-01d0a8f7dc75",
+                "labels": {
+                    "0": [
+                        "greeting_flow",
+                        "hello_response_node"
+                    ],
+                    "1": [
+                        "greeting_flow",
+                        "how_are_you_node"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "hi.",
+                    "1": "great. how are you?"
+                },
+                "responses": {
+                    "0": "Hi, this is a DREAM Socialbot! How are you?",
+                    "1": "Outstanding! I've heard that people have vacations and days-off to have a rest from work. Not my choice! Talking and talking day and night not getting tired! What was the highlight of your day today?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "greeting_flow",
+                    "hello_response_node"
+                ],
+                "1": [
+                    "greeting_flow",
+                    "how_are_you_node"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {
+                "greeting_step_id": 1,
+                "greeting_type": "how_are_you"
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
