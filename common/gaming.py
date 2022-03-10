@@ -247,6 +247,12 @@ VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+VIDEO_GAME_QUESTION_COMPILED_PATTERN = re.compile(
+    r"(?:\bvideo ?game|\bgam(?:e|es|ing)\b|\bplay ?station|\bplaying\b|\bx ?box\b|"
+    r"\bplay(ed|ing|s).*\b(tablet|pc|computer)\b)[a-zA-Z \-]+\?",
+    re.IGNORECASE,
+)
+
 
 genre_and_theme_groups = {
     "action": {"genres": [2, 4, 5, 10, 11, 12, 24, 25, 31, 36], "themes": [1, 23, 39]},

@@ -15,6 +15,7 @@ from typing import Callable, Dict
 
 import sentry_sdk
 
+from common.ignore_lists import FALSE_POS_NPS_LIST, BAD_NPS_LIST
 from common.link import (
     LIST_OF_SCRIPTED_TOPICS,
     SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED,
@@ -22,7 +23,6 @@ from common.link import (
     skills_phrases_map,
     compose_linkto_with_connection_phrase,
 )
-from common.remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
 from common.sensitive import is_sensitive_situation
 from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
@@ -37,13 +37,14 @@ ASK_QUESTION_PROB = 0.7
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
+
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
 
 np_ignore_expr = re.compile(
-    "(" + "|".join([r"\b%s\b" % word for word in NP_IGNORE_LIST + TOP_FREQUENT_UNIGRAMS]) + ")", re.IGNORECASE
+    "(" + "|".join([r"\b%s\b" % word for word in BAD_NPS_LIST + TOP_FREQUENT_UNIGRAMS]) + ")", re.IGNORECASE
 )
-np_remove_expr = re.compile("(" + "|".join([r"\b%s\b" % word for word in NP_REMOVE_LIST]) + ")", re.IGNORECASE)
+np_remove_expr = re.compile("(" + "|".join([r"\b%s\b" % word for word in FALSE_POS_NPS_LIST]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r"\s\s+")
 ASK_ME_QUESTION_PATTERN = re.compile(
     r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE
