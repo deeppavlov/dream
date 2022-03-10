@@ -40,10 +40,10 @@ prefixes = {
 }
 max_comb_num = 1e6
 
-if os.getenv("LANGUAGE", "ENGLISH") == "ENGLISH":
-    lang = "@en"
-else:
+if os.getenv("LANGUAGE", "ENGLISH") == "RUSSIAN":
     lang = "@ru"
+else:
+    lang = "@en"
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
 USE_CACHE = True
