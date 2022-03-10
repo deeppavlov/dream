@@ -643,7 +643,7 @@ services:
         SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
       context: .
       dockerfile: ./skills/dff_friendship_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086 --reload
     # command:  flask run -h 0.0.0.0 -p 8086
     # environment:
     #   - FLASK_APP=server
