@@ -67,40 +67,41 @@ def main():
     gold_results_ru = [
         [
             {
-                "animals_skill_entities_info": {},
-                "entities_info": {
-                    "Юрген Шмидхубер": {
-                        "age": 59,
-                        "conf": 1.0,
-                        "country of sitizenship": [["Q183", "Германия"]],
-                        "date of birth": [['"+1963-01-17^^T"', "17 January 1963"]],
-                        "entity_label": "Шмидхубер, Юрген",
-                        "instance of": [["Q5", "человек"]],
-                        "occupation": [
-                            ["Q15976092", "исследователь искусственного интеллекта"],
-                            ["Q1622272", "преподаватель университета"],
-                            ["Q82594", "специалист в области информатики"],
+                'animals_skill_entities_info': {},
+                'entities_info': {
+                    'Юрген Шмидхубер': {
+                        'age': 59,
+                        'conf': 1.0,
+                        'country of sitizenship': [['Q183', 'Germany']],
+                        'date of birth': [['"+1963-01-17^^T"', '17 January 1963']],
+                        'entity_label': 'Jürgen Schmidhuber',
+                        'instance of': [['Q5', 'human']],
+                        'occupation': [
+                            ['Q15976092', 'artificial intelligence researcher'],
+                            ['Q1622272', 'university teacher'],
+                            ['Q82594', 'computer scientist']
                         ],
-                        "plain_entity": "Q92735",
-                        "pos": 0,
-                        "token_conf": 1.0,
-                        "types_2hop": [
-                            ["Q5", "человек"],
-                            ["Q28640", "профессия"],
-                            ["Q37226", "учитель"],
-                            ["Q3400985", "научный работник"],
-                            ["Q41835716", "преподаватель"],
-                            ["Q901", "учёный"],
-                            ["Q82594", "специалист в области информатики"],
-                            ["Q15976092", "исследователь искусственного интеллекта"],
-                            ["Q1622272", "преподаватель университета"],
-                            ["Q66666607", "академическая профессия"],
-                        ],
+                        'plain_entity': 'Q92735',
+                        'pos': 0,
+                        'token_conf': 1.0,
+                        'types_2hop': [
+                            ['Q41835716', 'faculty member'],
+                            ['Q82594', 'computer scientist'],
+                            ['Q28640', 'profession'],
+                            ['Q901', 'scientist'],
+                            ['Q3400985', 'academic'],
+                            ['Q37226', 'teacher'],
+                            ['Q15976092', 'artificial intelligence researcher'],
+                            ['Q1622272', 'university teacher'],
+                            ['Q5', 'human'],
+                            ['Q66666607', 'academic profession'],
+                            ['Q14565186', 'cognitive scientist']
+                        ]
                     }
                 },
-                "topic_skill_entities_info": {},
-                "utt_num": 0,
-                "wiki_skill_entities_info": {},
+                'topic_skill_entities_info': {},
+                'utt_num': 0,
+                'wiki_skill_entities_info': {}
             }
         ]
     ]
