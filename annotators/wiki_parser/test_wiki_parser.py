@@ -54,8 +54,8 @@ def main():
                             ["Q5", "human"],
                             ["Q66666607", "academic profession"],
                             ["Q82594", "computer scientist"],
-                            ["Q901", "scientist"]
-                        ]
+                            ["Q901", "scientist"],
+                        ],
                     }
                 },
                 "topic_skill_entities_info": {},
@@ -94,8 +94,8 @@ def main():
                             ["Q5", "человек"],
                             ["Q66666607", "академическая профессия"],
                             ["Q82594", "специалист в области информатики"],
-                            ["Q901", "учёный"]
-                        ]
+                            ["Q901", "учёный"],
+                        ],
                     }
                 },
                 "topic_skill_entities_info": {},
