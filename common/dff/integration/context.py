@@ -5,9 +5,9 @@ import random
 from df_engine.core import Context, Actor
 
 import common.constants as common_constants
+import common.link as common_link
 import common.news as common_news
 import common.utils as common_utils
-import common.link as common_link
 
 logger = logging.getLogger(__name__)
 SERVICE_NAME = os.getenv("SERVICE_NAME")
@@ -20,20 +20,13 @@ def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor) -> list:
     return (
         []
         if ctx.validation
-        else (
-            ctx.misc["agent"]["dialog"]["human_utterances"][-1]
-            .get("annotations", {})
-            .get("cobot_entities", {})
-            .get("entities", [])
-        )
+        else (get_last_human_utterance(ctx, actor).get("annotations", {}).get("cobot_entities", {}).get("entities", []))
     )
 
 
 def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, positive_threshold=0.333) -> str:
     sentiment_probs = (
-        None
-        if ctx.validation
-        else common_utils.get_sentiment(ctx.misc["agent"]["dialog"]["human_utterances"][-1], probs=True)
+        None if ctx.validation else common_utils.get_sentiment(get_last_human_utterance(ctx, actor), probs=True)
     )
     if sentiment_probs and isinstance(sentiment_probs, dict):
         max_sentiment_prob = max(sentiment_probs.values())
@@ -92,7 +85,7 @@ def add_parts_to_response_parts(ctx: Context, actor: Actor, parts=[]):
     response_parts = set([] if ctx.validation else ctx.misc["agent"].get("response_parts", []))
     response_parts.update(parts)
     if not ctx.validation:
-        ctx.misc["agent"]["response_parts"] = list(response_parts)
+        ctx.misc["agent"]["response_parts"] = sorted(list(response_parts))
 
 
 def set_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
@@ -157,8 +150,12 @@ def get_dialog(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]
 
 
+def get_human_utterances(ctx: Context, actor: Actor) -> dict:
+    return [] if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
+
+
 def get_last_human_utterance(ctx: Context, actor: Actor) -> dict:
-    return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+    return {"text": "", "annotations": {}} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1]
 
 
 def get_bot_utterances(ctx: Context, actor: Actor) -> list:
@@ -178,8 +175,9 @@ def save_to_shared_memory(ctx: Context, actor: Actor, **kwargs):
 
 
 def update_used_links(ctx: Context, actor: Actor, linked_skill_name, linking_phrase):
-    agent = ctx.misc["agent"]
-    agent["used_links"][linked_skill_name] = agent["used_links"].get(linked_skill_name, []) + [linking_phrase]
+    if not ctx.validation:
+        agent = ctx.misc["agent"]
+        agent["used_links"][linked_skill_name] = agent["used_links"].get(linked_skill_name, []) + [linking_phrase]
 
 
 def get_new_link_to(ctx: Context, actor: Actor, skill_names):
@@ -223,7 +221,7 @@ def reset_can_continue(ctx: Context, actor: Actor):
 def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
     entities = common_utils.get_entities(
-        {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1],
+        get_last_human_utterance(ctx, actor),
         only_named=True,
         with_labels=True,
     )
@@ -232,7 +230,7 @@ def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
 
 def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
     nps = common_utils.get_entities(
-        {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1],
+        get_last_human_utterance(ctx, actor),
         only_named=False,
         with_labels=False,
     )
@@ -242,7 +240,7 @@ def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
 def get_fact_random_annotations_from_human_utterance(ctx: Context, actor: Actor) -> dict:
     if not ctx.validation:
         return (
-            ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+            get_last_human_utterance(ctx, actor)
             .get("annotations", {})
             .get("fact_random", {"facts": [], "response": ""})
         )
@@ -277,7 +275,7 @@ def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: A
 
 
 def get_facts_from_fact_retrieval(ctx: Context, actor: Actor) -> list:
-    annotations = {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1].get("annotations", {})
+    annotations = get_last_human_utterance(ctx, actor).get("annotations", {})
     if "fact_retrieval" in annotations:
         if isinstance(annotations["fact_retrieval"], dict):
             return annotations["fact_retrieval"].get("facts", [])
@@ -303,9 +301,15 @@ def get_unrepeatable_index_from_rand_seq(
         return next_index
 
 
+def get_history(ctx: Context, actor: Actor):
+    if not ctx.validation:
+        return ctx.misc["agent"]["history"]
+    return {}
+
+
 def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
     last_state = ""
-    history = list(ctx.misc["agent"]["history"].items())
+    history = list(get_history(ctx, actor).items())
     if history:
         history_sorted = sorted(history, key=lambda x: x[0])
         if len(history_sorted) >= n:
@@ -315,7 +319,7 @@ def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
 
 def get_last_state(ctx: Context, actor: Actor) -> str:
     last_state = ""
-    history = list(ctx.misc["agent"]["history"].items())
+    history = list(get_history(ctx, actor).items())
     if history:
         history_sorted = sorted(history, key=lambda x: x[0])
         last_state = history_sorted[-1][1]
