@@ -111,21 +111,17 @@ def main():
             result = requests.post(url, json=data).json()
             if result == gold_result:
                 count += 1
-        else:
-            print(f"Got {result}, but expected: {gold_result}")
-        assert count == len(request_data_ru)
-        if count == len(request_data_ru):
-            print("Success")
+        assert count == len(request_data_ru), print(f"Got {result}, but expected: {gold_result}")
+
+        print("Success")
     elif lang == "@en":
         for data, gold_result in zip(request_data_en, gold_results_en):
             result = requests.post(url, json=data).json()
             if result == gold_result:
                 count += 1
-        else:
-            print(f"Got {result}, but expected: {gold_result}")
-        assert count == len(request_data_en)
-        if count == len(request_data_en):
-            print("Success")
+        assert count == len(request_data_en), print(f"Got {result}, but expected: {gold_result}")
+
+        print("Success")
 
 
 if __name__ == "__main__":
