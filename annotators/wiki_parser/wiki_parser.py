@@ -343,7 +343,7 @@ def find_types_2hop(entity: str):
             types_2hop_list += types_2hop
     types_list = types_2hop_list + types_1hop
     types_list = list(set(types_list))
-    return sorted(types_list, key=lambda x: x[0])
+    return types_list
 
 
 def find_objects_info(objects, num_objects=25):
@@ -352,7 +352,7 @@ def find_objects_info(objects, num_objects=25):
         obj_label = find_label(obj, "")
         if obj_label and obj_label not in {"Not Found", "anonymous"}:
             objects_info.append((obj, obj_label))
-    return objects_info
+    return sorted(objects_info)
 
 
 def find_intersection(entity1, entity2, rel, direction):
