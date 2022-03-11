@@ -27,48 +27,40 @@ def main():
         [
             {
                 "animals_skill_entities_info": {},
-                "entities_info":
-                    {
-                        "Jurgen Schmidhuber": {
-                            "age": 59,
-                            "conf": 1.0,
-                            "country of sitizenship":
-                                [
-                                    ["Q183", "Germany"]
-                                ],
-                            "date of birth": [
-                                ['"+1963-01-17^^T"', "17 January 1963"]
-                            ], 
-                            "entity_label": "Jürgen Schmidhuber", 
-                            "instance of": [
-                                ["Q5", "human"]
-                            ],
-                            "occupation": [
-                                ["Q15976092", "artificial intelligence researcher"], 
-                                ["Q1622272", "university teacher"],
-                                ["Q82594", "computer scientist"]
-                            ],
-                            "plain_entity": "Q92735",
-                            "pos": 0,
-                            "token_conf": 1.0,
-                            "types_2hop": [
-                                ["Q14565186", "cognitive scientist"],
-                                ["Q15976092", "artificial intelligence researcher"],
-                                ["Q1622272", "university teacher"],
-                                ["Q28640", "profession"],
-                                ["Q3400985", "academic"],
-                                ["Q37226", "teacher"],
-                                ["Q41835716", "faculty member"],
-                                ["Q5", "human"],
-                                ["Q66666607", "academic profession"],
-                                ["Q82594", "computer scientist"],
-                                ["Q901", "scientist"]
-                            ]
-                        }
-                    },
+                "entities_info": {
+                    "Jurgen Schmidhuber": {
+                        "age": 59,
+                        "conf": 1.0,
+                        "country of sitizenship": [["Q183", "Germany"]],
+                        "date of birth": [['"+1963-01-17^^T"', "17 January 1963"]],
+                        "entity_label": "Jürgen Schmidhuber",
+                        "instance of": [["Q5", "human"]],
+                        "occupation": [
+                            ["Q15976092", "artificial intelligence researcher"],
+                            ["Q1622272", "university teacher"],
+                            ["Q82594", "computer scientist"],
+                        ],
+                        "plain_entity": "Q92735",
+                        "pos": 0,
+                        "token_conf": 1.0,
+                        "types_2hop": [
+                            ["Q14565186", "cognitive scientist"],
+                            ["Q15976092", "artificial intelligence researcher"],
+                            ["Q1622272", "university teacher"],
+                            ["Q28640", "profession"],
+                            ["Q3400985", "academic"],
+                            ["Q37226", "teacher"],
+                            ["Q41835716", "faculty member"],
+                            ["Q5", "human"],
+                            ["Q66666607", "academic profession"],
+                            ["Q82594", "computer scientist"],
+                            ["Q901", "scientist"],
+                        ],
+                    }
+                },
                 "topic_skill_entities_info": {},
                 "utt_num": 0,
-                "wiki_skill_entities_info": {}
+                "wiki_skill_entities_info": {},
             }
         ]
     ]
