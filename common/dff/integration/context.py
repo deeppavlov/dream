@@ -85,7 +85,7 @@ def add_parts_to_response_parts(ctx: Context, actor: Actor, parts=[]):
     response_parts = set([] if ctx.validation else ctx.misc["agent"].get("response_parts", []))
     response_parts.update(parts)
     if not ctx.validation:
-        ctx.misc["agent"]["response_parts"] = list(response_parts)
+        ctx.misc["agent"]["response_parts"] = sorted(list(response_parts))
 
 
 def set_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
