@@ -44,7 +44,8 @@ services:
   spacy-nounphrases:
     env_file: [.env]
     build:
-      context: annotators/spacy_nounphrases/
+      context: .
+      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
     command: flask run -h 0.0.0.0 -p 8006
     environment:
       - FLASK_APP=server
