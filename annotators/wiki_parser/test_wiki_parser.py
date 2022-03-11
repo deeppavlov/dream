@@ -46,15 +46,16 @@ def main():
                         "types_2hop": [
                             ["Q14565186", "cognitive scientist"],
                             ["Q66666607", "academic profession"],
-                            ["Q5", "human"], ["Q28640", "profession"],
+                            ["Q5", "human"],
+                            ["Q28640", "profession"],
                             ["Q3400985", "academic"],
                             ["Q37226", "teacher"],
                             ["Q41835716", "faculty member"],
                             ["Q1622272", "university teacher"],
                             ["Q82594", "computer scientist"],
                             ["Q15976092", "artificial intelligence researcher"],
-                            ["Q901", "scientist"]
-                        ]
+                            ["Q901", "scientist"],
+                        ],
                     }
                 },
                 "topic_skill_entities_info": {},
@@ -93,8 +94,8 @@ def main():
                             ["Q5", "человек"],
                             ["Q66666607", "академическая профессия"],
                             ["Q82594", "специалист в области информатики"],
-                            ["Q901", "учёный"]
-                        ]
+                            ["Q901", "учёный"],
+                        ],
                     }
                 },
                 "topic_skill_entities_info": {},
