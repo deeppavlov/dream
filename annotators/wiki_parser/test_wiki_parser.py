@@ -2,10 +2,10 @@ import os
 import requests
 
 
-if os.getenv("LANGUAGE", "ENGLISH") == "ENGLISH":
-    lang = "@en"
-else:
+if os.getenv("LANGUAGE", "EN") == "RU":
     lang = "@ru"
+else:
+    lang = "@en"
 
 
 def main():
