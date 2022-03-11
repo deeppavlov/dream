@@ -1,0 +1,532 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"\nKuleba's comments come after Russia's foreign minister earlier denied tha... [1518 chars]",
+                                    "description": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/107020827-1645799231530-gettyimages-1238738593-Lev_Radin_022422.jpeg?v=1646899141",
+                                    "publishedAt": "2022-03-10T11:41:32Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Ukraine foreign minister says Russian officials 'live in their own reality'",
+                                    "url": "https://www.cnbc.com/2022/03/10/ukraine-foreign-minister-says-russian-officials-live-in-their-own-reality.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "midas_predictor": {
+                            "comment": 0.1578786216398964,
+                            "opinion": 0.30365002615363024,
+                            "pos_answer": 0.10622201242616383,
+                            "statement": 0.35850886033961443,
+                            "yes_no_question": 0.07374047944069505
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "great. how are you?",
+                    "annotations": {
+                        "spelling_preprocessing": "great how are you",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "great. how are you?",
+                            "segments": [
+                                "great.",
+                                "how are you?"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.25312650203704834,
+                                "command": 0.007256400305777788,
+                                "comment": 0.44351035356521606,
+                                "complaint": 0.009795245714485645,
+                                "dev_command": 0.012913011014461517,
+                                "neg_answer": 0.0017865210538730025,
+                                "open_question_factual": 0.014396760612726212,
+                                "open_question_opinion": 0.015247201547026634,
+                                "opinion": 0.16134771704673767,
+                                "other_answers": 0.005105912219733,
+                                "pos_answer": 0.010215267539024353,
+                                "statement": 0.054177362471818924,
+                                "yes_no_question": 0.011121814139187336
+                            },
+                            {
+                                "appreciation": 0.004218478687107563,
+                                "command": 0.0036231419071555138,
+                                "comment": 0.0028404160402715206,
+                                "complaint": 0.005980296991765499,
+                                "dev_command": 0.004543297924101353,
+                                "neg_answer": 0.0022460550535470247,
+                                "open_question_factual": 0.8474536538124084,
+                                "open_question_opinion": 0.10383260995149612,
+                                "opinion": 0.0038928252179175615,
+                                "other_answers": 0.0025035287253558636,
+                                "pos_answer": 0.0016886511584743857,
+                                "statement": 0.002319017192348838,
+                                "yes_no_question": 0.01485812570899725
+                            }
+                        ],
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9998457431793213
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.9996715784072876
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999914169311523
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9998966455459595
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9998598098754883
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.4806326627731323
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9997813105583191
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "great. how are you?"
+                            ]
+                        },
+                        "midas_predictor": {
+                            "command": 0.017087001940008954,
+                            "comment": 0.03611401283390539,
+                            "opinion": 0.18750932696612446,
+                            "other_answers": 0.032159379197134755,
+                            "statement": 0.7271302790628265
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"\nKuleba's comments come after Russia's foreign minister earlier denied tha... [1518 chars]",
+                                    "description": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/107020827-1645799231530-gettyimages-1238738593-Lev_Radin_022422.jpeg?v=1646899141",
+                                    "publishedAt": "2022-03-10T11:41:32Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Ukraine foreign minister says Russian officials 'live in their own reality'",
+                                    "url": "https://www.cnbc.com/2022/03/10/ukraine-foreign-minister-says-russian-officials-live-in-their-own-reality.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "great. how are you?"
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How are you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How are you?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_friendship_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "6332e8b4-122d-4b64-bc7c-01d0a8f7dc75",
+                "labels": {
+                    "0": [
+                        "greeting_flow",
+                        "hello_response_node"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "hi."
+                },
+                "responses": {
+                    "0": "Hi, this is a DREAM Socialbot! How are you?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "greeting_flow",
+                    "hello_response_node"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {
+                "greeting_type": "how_are_you"
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

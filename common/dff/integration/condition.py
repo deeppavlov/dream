@@ -5,10 +5,12 @@ from nltk.stem import WordNetLemmatizer
 
 from df_engine.core import Context, Actor
 
+import common.greeting as common_greeting
 import common.utils as common_utils
 import common.universal_templates as universal_templates
 import common.dff.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 
 logger = logging.getLogger(__name__)
 
@@ -19,37 +21,37 @@ wnl = WordNetLemmatizer()
 
 
 def was_clarification_request(ctx: Context, actor: Actor) -> bool:
-    flag = ctx.misc["agent"]["clarification_request_flag"]
+    flag = ctx.misc["agent"]["clarification_request_flag"] if not ctx.validation else False
     logger.debug(f"was_clarification_request = {flag}")
     return bool(flag)
 
 
 def is_opinion_request(ctx: Context, actor: Actor) -> bool:
-    flag = common_utils.is_opinion_request(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+    flag = common_utils.is_opinion_request(int_ctx.get_last_human_utterance(ctx, actor))
     logger.debug(f"is_opinion_request = {flag}")
     return bool(flag)
 
 
 def is_opinion_expression(ctx: Context, actor: Actor) -> bool:
-    flag = common_utils.is_opinion_expression(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+    flag = common_utils.is_opinion_expression(int_ctx.get_last_human_utterance(ctx, actor))
     logger.debug(f"is_opinion_expression = {flag}")
     return bool(flag)
 
 
 def is_previous_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
-    flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False)
+    flag = ctx.misc["agent"].get("previous_turn_dff_suspended", False) if not ctx.validation else False
     logger.debug(f"is_previous_turn_dff_suspended = {flag}")
     return bool(flag)
 
 
 def is_current_turn_dff_suspended(ctx: Context, actor: Actor) -> bool:
-    flag = ctx.misc["agent"].get("current_turn_dff_suspended", False)
+    flag = ctx.misc["agent"].get("current_turn_dff_suspended", False) if not ctx.validation else False
     logger.debug(f"is_current_turn_dff_suspended = {flag}")
     return bool(flag)
 
 
 def is_switch_topic(ctx: Context, actor: Actor) -> bool:
-    flag = universal_templates.is_switch_topic(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+    flag = universal_templates.is_switch_topic(int_ctx.get_last_human_utterance(ctx, actor))
     logger.debug(f"is_switch_topic = {flag}")
     return bool(flag)
 
@@ -111,27 +113,29 @@ def is_new_human_entity(ctx: Context, actor: Actor) -> bool:
 
 def is_last_state(ctx: Context, actor: Actor, state) -> bool:
     flag = False
-    history = list(ctx.misc["agent"]["history"].items())
-    if history:
-        history_sorted = sorted(history, key=lambda x: x[0])
-        last_state = history_sorted[-1][1]
-        if last_state == state:
-            flag = True
+    if not ctx.validation:
+        history = list(int_ctx.get_history(ctx, actor).items())
+        if history:
+            history_sorted = sorted(history, key=lambda x: x[0])
+            last_state = history_sorted[-1][1]
+            if last_state == state:
+                flag = True
     return bool(flag)
 
 
 def is_first_time_of_state(ctx: Context, actor: Actor, state) -> bool:
-    flag = state not in list(ctx.misc["agent"]["history"].values())
+    flag = state not in list(int_ctx.get_history(ctx, actor).values())
     logger.debug(f"is_first_time_of_state {state} = {flag}")
     return bool(flag)
 
 
 def if_was_prev_active(ctx: Context, actor: Actor) -> bool:
     flag = False
-    skill_uttr_indices = set(ctx.misc["agent"]["history"].keys())
-    human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
-    if human_uttr_index in skill_uttr_indices:
-        flag = True
+    skill_uttr_indices = set(int_ctx.get_history(ctx, actor).keys())
+    if not ctx.validation:
+        human_uttr_index = str(ctx.misc["agent"]["human_utter_index"] - 1)
+        if human_uttr_index in skill_uttr_indices:
+            flag = True
     return bool(flag)
 
 
@@ -142,7 +146,7 @@ def is_plural(word) -> bool:
 
 
 def is_first_our_response(ctx: Context, actor: Actor) -> bool:
-    flag = len(list(ctx.misc["agent"]["history"].values())) == 0
+    flag = len(list(int_ctx.get_history(ctx, actor).values())) == 0
     logger.debug(f"is_first_our_response = {flag}")
     return bool(flag)
 
@@ -223,7 +227,7 @@ def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
     """Check history_len last human utterances on the number of tokens.
     If number of tokens in ALL history_len uterances is <= 3 tokens, then consider user passive - return True.
     """
-    user_utterances = ctx.misc["agent"]["dialog"]["human_utterances"][-history_len:]
+    user_utterances = int_ctx.get_human_utterances(ctx, actor)[-history_len:]
     user_utterances = [utt["text"] for utt in user_utterances]
 
     uttrs_lens = [len(uttr.split()) <= 5 for uttr in user_utterances]
@@ -232,10 +236,11 @@ def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
     return False
 
 
-def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor):
-    sentiment = int_ctx.get_human_sentiment(ctx, actor)
-    if is_yes_vars(ctx, actor) or is_no_vars(ctx, actor):
-        sentiment = "neutral"
+def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor, sentiment=None):
+    if sentiment is None:
+        sentiment = int_ctx.get_human_sentiment(ctx, actor)
+        if is_yes_vars(ctx, actor) or is_no_vars(ctx, actor):
+            sentiment = "neutral"
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     last_acknowledgements = shared_memory.get("last_acknowledgements", [])
@@ -247,3 +252,31 @@ def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor):
     used_acks = last_acknowledgements + [ack]
     int_ctx.save_to_shared_memory(ctx, actor, last_acknowledgements=used_acks[-2:])
     return ack
+
+
+def set_conf_and_can_cont_by_universal_policy(ctx: Context, actor: Actor):
+    DIALOG_BEGINNING_START_CONFIDENCE = 0.98
+    DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
+    DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
+    MIDDLE_DIALOG_START_CONFIDENCE = 0.7
+
+    if not is_begin_of_dialog(ctx, actor, begin_dialog_n=10):
+        confidence = 0.0
+        can_continue_flag = CAN_NOT_CONTINUE
+    elif is_first_our_response(ctx, actor):
+        confidence = DIALOG_BEGINNING_START_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    elif not is_interrupted(ctx, actor) and common_greeting.dont_tell_you_answer(
+        int_ctx.get_last_human_utterance(ctx, actor)
+    ):
+        confidence = DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    elif not is_interrupted(ctx, actor):
+        confidence = DIALOG_BEGINNING_CONTINUE_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+    else:
+        confidence = MIDDLE_DIALOG_START_CONFIDENCE
+        can_continue_flag = CAN_CONTINUE_SCENARIO
+
+    int_ctx.set_can_continue(ctx, actor, can_continue_flag)
+    int_ctx.set_confidence(ctx, actor, confidence)
