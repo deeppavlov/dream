@@ -236,10 +236,11 @@ def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
     return False
 
 
-def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor):
-    sentiment = int_ctx.get_human_sentiment(ctx, actor)
-    if is_yes_vars(ctx, actor) or is_no_vars(ctx, actor):
-        sentiment = "neutral"
+def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor, sentiment=None):
+    if sentiment is None:
+        sentiment = int_ctx.get_human_sentiment(ctx, actor)
+        if is_yes_vars(ctx, actor) or is_no_vars(ctx, actor):
+            sentiment = "neutral"
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     last_acknowledgements = shared_memory.get("last_acknowledgements", [])

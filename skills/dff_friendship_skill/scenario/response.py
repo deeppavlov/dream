@@ -195,7 +195,6 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
             f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} "
             f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
         )
-        int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
     else:
         if _no_entities and _no_requests and usr_sentiment != "negative":
             # we do not set super conf for negative responses because we hope that emotion_skill will respond
@@ -220,6 +219,8 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
         f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
         f"{question_about_activities}"
     )
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
+
     greeting_step_id = GREETING_STEPS.index("recent_personal_events")
     logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
@@ -297,7 +298,6 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     if health_problems(ctx, actor):
         ack = "I'm so sorry to hear that. Hope, everything will be fine soon."
-        int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
         prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][-5:]
@@ -308,6 +308,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     logger.info(f"Assign in std_greeting_response greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     reply = f"{ack} {body}"
     return reply
@@ -363,8 +364,8 @@ def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
 
 
 def link_to_by_enity_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
     try:
+        ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
         entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
         if entities:
             logger.debug(f"entities= {entities}")
