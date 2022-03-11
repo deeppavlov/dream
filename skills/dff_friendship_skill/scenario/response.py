@@ -272,7 +272,6 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
             int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-        int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
     elif not _no_requests and len(_entities) > 0:
         # user wants to talk about something particular. We are just a dummy response, if no appropriate
         if _friendship_was_active:
@@ -283,7 +282,6 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
         int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-        int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
     else:
         if len(_entities) == 0 or _no_requests:
             int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
@@ -320,6 +318,7 @@ def new_entities_is_needed_for_response(ctx: Context, actor: Actor, *args, **kwa
 
     int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     reply = " ".join([ack, body])
     return reply
@@ -331,6 +330,7 @@ def closed_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     reply = " ".join([ack, body])
     return reply
@@ -394,6 +394,8 @@ def link_to_by_enity_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
         body = random.choice(link_to_skill2i_like_to_talk.get(link["skill"], [""]))
         int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
         int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+        int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
+
         return " ".join([ack, body])
     except Exception as exc:
         logger.exception(exc)

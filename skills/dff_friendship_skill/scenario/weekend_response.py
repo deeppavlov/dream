@@ -37,6 +37,7 @@ def std_weekend_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_START_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -51,6 +52,7 @@ def sys_cleaned_up_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -65,6 +67,7 @@ def sys_slept_in_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_START_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -79,6 +82,7 @@ def sys_feel_great_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -93,6 +97,7 @@ def sys_need_more_time_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -107,6 +112,7 @@ def sys_watched_film_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -121,6 +127,7 @@ def sys_read_book_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -135,6 +142,7 @@ def sys_played_computer_game_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -149,6 +157,7 @@ def sys_play_on_weekends_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -163,6 +172,7 @@ def sys_play_regularly_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
 
@@ -177,5 +187,6 @@ def sys_play_once_response(ctx: Context, actor: Actor) -> str:
     # set confidence
     int_ctx.set_confidence(ctx, actor, DIALOG_BEGINNING_CONTINUE_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     return " ".join([ack, body])
