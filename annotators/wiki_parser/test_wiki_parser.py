@@ -44,16 +44,16 @@ def main():
                         "pos": 0,
                         "token_conf": 1.0,
                         "types_2hop": [
-                            ['Q14565186', 'cognitive scientist'],
-                            ['Q66666607', 'academic profession'],
-                            ['Q5', 'human'], ['Q28640', 'profession'],
-                            ['Q3400985', 'academic'],
-                            ['Q37226', 'teacher'],
-                            ['Q41835716', 'faculty member'],
-                            ['Q1622272', 'university teacher'],
-                            ['Q82594', 'computer scientist'],
-                            ['Q15976092', 'artificial intelligence researcher'],
-                            ['Q901', 'scientist']
+                            ["Q14565186", "cognitive scientist"],
+                            ["Q66666607", "academic profession"],
+                            ["Q5", "human"], ["Q28640", "profession"],
+                            ["Q3400985", "academic"],
+                            ["Q37226", "teacher"],
+                            ["Q41835716", "faculty member"],
+                            ["Q1622272", "university teacher"],
+                            ["Q82594", "computer scientist"],
+                            ["Q15976092", "artificial intelligence researcher"],
+                            ["Q901", "scientist"]
                         ]
                     }
                 },
