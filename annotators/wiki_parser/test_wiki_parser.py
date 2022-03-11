@@ -44,18 +44,18 @@ def main():
                         "pos": 0,
                         "token_conf": 1.0,
                         "types_2hop": [
-                            ["Q82594", "computer scientist"],
                             ["Q14565186", "cognitive scientist"],
-                            ["Q66666607", "academic profession"],
-                            ["Q1622272", "university teacher"],
-                            ["Q37226", "teacher"],
-                            ["Q3400985", "academic"],
-                            ["Q41835716", "faculty member"],
                             ["Q15976092", "artificial intelligence researcher"],
-                            ["Q5", "human"],
+                            ["Q1622272", "university teacher"],
                             ["Q28640", "profession"],
-                            ["Q901", "scientist"],
-                        ],
+                            ["Q3400985", "academic"],
+                            ["Q37226", "teacher"],
+                            ["Q41835716", "faculty member"],
+                            ["Q5", "human"],
+                            ["Q66666607", "academic profession"],
+                            ["Q82594", "computer scientist"],
+                            ["Q901", "scientist"]
+                        ]
                     }
                 },
                 "topic_skill_entities_info": {},
@@ -85,17 +85,17 @@ def main():
                         "pos": 0,
                         "token_conf": 1.0,
                         "types_2hop": [
-                            ["Q5", "человек"],
-                            ["Q28640", "профессия"],
-                            ["Q37226", "учитель"],
-                            ["Q3400985", "научный работник"],
-                            ["Q41835716", "преподаватель"],
-                            ["Q901", "учёный"],
-                            ["Q82594", "специалист в области информатики"],
                             ["Q15976092", "исследователь искусственного интеллекта"],
                             ["Q1622272", "преподаватель университета"],
+                            ["Q28640", "профессия"],
+                            ["Q3400985", "научный работник"],
+                            ["Q37226", "учитель"],
+                            ["Q41835716", "преподаватель"],
+                            ["Q5", "человек"],
                             ["Q66666607", "академическая профессия"],
-                        ],
+                            ["Q82594", "специалист в области информатики"],
+                            ["Q901", "учёный"]
+                        ]
                     }
                 },
                 "topic_skill_entities_info": {},

@@ -343,7 +343,7 @@ def find_types_2hop(entity: str):
             types_2hop_list += types_2hop
     types_list = types_2hop_list + types_1hop
     types_list = list(set(types_list))
-    return types_list
+    return sorted(types_list, key=lambda x: x[0])
 
 
 def find_objects_info(objects, num_objects=25):
