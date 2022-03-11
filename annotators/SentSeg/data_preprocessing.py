@@ -9,6 +9,7 @@ import string
 
 # Convert cornellmoviequotes dataset to be suitable with the segmentation task
 
+
 def preprocess(raw_text):
 	# input: raw text consisting of sentences without punctuation
 	# output: x - list of tokens, y - list of label
@@ -35,6 +36,26 @@ def preprocess(raw_text):
 		y.extend(['O']*(len(sent)-2))	
 	return x, y
 
+
+def convert_russian_subtitles():
+	lines = open(file="data/russian_subtitles_unique_utterances.txt", mode="r").readlines()
+	X, Y = [], []
+
+	for line in lines:
+		tmp = line.strip().lower()
+		x, y = preprocess(tmp)
+		if x != []:
+			X.append(x)
+			Y.append(y)
+
+	fo = open(file="./data/ru_sentseg.txt", mode="w", encoding="utf-8")
+	for x, y in zip(X, Y):
+		for word, label in zip(x, y):
+			fo.write("{}\t{}\n".format(word, label))
+		fo.write('\n')
+	fo.close()
+
+
 def convert_cornellmoviequotes():	
 	lines = open(file="../datasets/cornellmoviequotes/moviequotes.scripts.txt", mode="r", encoding='latin-1').readlines()
 	X, Y = [], []
@@ -59,7 +80,6 @@ def convert_cornellmoviequotes():
 		fo.write('\n')
 	fo.close()
 
-# convert_cornellmoviequotes()
 
 def convert_dailydialog():
 	X, Y = [], []
@@ -88,7 +108,6 @@ def convert_dailydialog():
 		fo.write('\n')
 	fo.close()
 
-# convert_dailydialog()
 
 def data_split(x, y, dev_size, test_size):
 	from sklearn.model_selection import train_test_split
@@ -96,11 +115,12 @@ def data_split(x, y, dev_size, test_size):
 	X_train, X_dev, y_train, y_dev = train_test_split(X_train, y_train, test_size=dev_size/(1-test_size), random_state=42)
 	return X_train, y_train, X_dev, y_dev, X_test, y_test
 
-def split_dataset():
+
+def split_dataset(dataset_name="cornellmoviequotes"):
 	X, Y = [], []
 	x, y = [], []
 
-	for line in open(file="../datasets/cornellmoviequotes.txt", mode="r", encoding="utf-8").readlines():
+	for line in open(file=f"data/{dataset_name}.txt", mode="r", encoding="utf-8").readlines():
 		if line.strip() == '':
 			X.append(x)
 			Y.append(y)
@@ -123,11 +143,10 @@ def split_dataset():
 			fo.write("\n")
 		fo.close()
 
-	write2file(xtrain, ytrain, "models/cornellmovie_811/train.txt")
-	write2file(xdev, ydev, "models/cornellmovie_811/dev.txt")
-	write2file(xtest, ytest, "models/cornellmovie_811/test.txt")
+	write2file(xtrain, ytrain, f"data/{dataset_name}_train.txt")
+	write2file(xdev, ydev, f"data/{dataset_name}_dev.txt")
+	write2file(xtest, ytest, f"data/{dataset_name}_test.txt")
 
-# split_dataset()
 
 def create_dicts(inp_file, out_file):
 	word_counts = {}
@@ -167,10 +186,15 @@ def create_dicts(inp_file, out_file):
 	print(len(word2id), len(id2word), len(char2id), len(id2char))
 	
 	import pickle
-	pickle.dump({"word2id": word2id, "id2word": id2word, "char2id": char2id, "id2char": id2char, "tag2id": tag2id, "id2tag": id2tag},
+	pickle.dump({
+		"word2id": word2id,
+		"id2word": id2word,
+		"char2id": char2id,
+		"id2char": id2char,
+		"tag2id": tag2id,
+		"id2tag": id2tag},
 		open(out_file, "wb"))
 
-# create_dicts("../datasets/cornellmoviequotes.txt", "models/cornellmovie_811/dict.pkl")
 
 def data_statistic(file):	
 	stat = {"samples": 0, "total_words": 0, "B-S": 0, "B-Q": 0, "O": 0}
@@ -184,17 +208,12 @@ def data_statistic(file):
 
 	print(stat)
 
-# data_statistic("models/dailydialog/train.txt")
-# data_statistic("models/dailydialog/dev.txt")
-# data_statistic("models/dailydialog/test.txt")
-
-# data_statistic("models/cornellmovie_811/train.txt")
-# data_statistic("models/cornellmovie_811/dev.txt")
-# data_statistic("models/cornellmovie_811/test.txt")
 
 def create_dailydialog_for_deeppavlov():
-	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/dailydialog_deeppavlov2.txt", mode="w", encoding="utf-8") as fo:
-		for dialog in open(file="../datasets/ijcnlp_dailydialog/dialogues_text.txt", mode="r", encoding="utf-8").readlines():
+	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/dailydialog_deeppavlov2.txt",
+			  mode="w", encoding="utf-8") as fo:
+		for dialog in open(file="../datasets/ijcnlp_dailydialog/dialogues_text.txt",
+						   mode="r", encoding="utf-8").readlines():
 			utterances = dialog.lower().replace("! ?", "!").replace("? !", "?").replace("!", ".").split("__eou__")[:-1]
 			for utt in utterances:				
 				if len(utt) > 200:
@@ -219,24 +238,25 @@ def create_dailydialog_for_deeppavlov():
 			# if len(x.strip()) > 0:
 			# 	fo.write("{} [SEP] {}\n".format(x, y))
 
-# create_dailydialog_for_deeppavlov()
 
 def split_dailydialog_for_deeppavlov():
-	samples = open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/dailydialog_deeppavlov2.txt", mode="r", encoding="utf-8").readlines()
+	samples = open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/dailydialog_deeppavlov2.txt",
+				   mode="r", encoding="utf-8").readlines()
 	n = len(samples)
 	train = samples[: (int)(n * 0.8)]
 	val = samples[len(train): (int)(n*0.9)]
 	test = samples[len(train) + len(val):]	
 	print(len(samples), len(train), len(val), len(test))
 
-	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/train2.txt", mode="w", encoding="utf-8") as fo:		
+	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/train2.txt",
+			  mode="w", encoding="utf-8") as fo:
 		fo.writelines(train)
-	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/valid2.txt", mode="w", encoding="utf-8") as fo:		
+	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/valid2.txt",
+			  mode="w", encoding="utf-8") as fo:
 		fo.writelines(val)
-	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/test2.txt", mode="w", encoding="utf-8") as fo:		
+	with open(file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/test2.txt",
+			  mode="w", encoding="utf-8") as fo:
 		fo.writelines(test)
-
-# split_dailydialog_for_deeppavlov()
 
 
 # convert = {"Q": "?", "S": ".", "": ""}
@@ -273,18 +293,27 @@ def split_dailydialog_for_deeppavlov():
 # import pickle
 # print(pickle.load(open("models/dailydialog_811/params.pkl", "rb")))
 
+#
+# with open(file="/home/theanh/.deeppavlov/downloads/sentseg_dailydialog/test.txt", mode="w", encoding="utf-8") as fo:
+# 	for line in open(file="models/dailydialog_811/test.txt", mode="r", encoding="utf-8").readlines():
+# 		if len(line.strip()) > 0:
+# 			line = line.replace("B-Q", "B-?").replace("B-S", "B-.")
+# 		fo.write(line)
 
-with open(file="/home/theanh/.deeppavlov/downloads/sentseg_dailydialog/test.txt", mode="w", encoding="utf-8") as fo:
-	for line in open(file="models/dailydialog_811/test.txt", mode="r", encoding="utf-8").readlines():
-		if len(line.strip()) > 0:
-			line = line.replace("B-Q", "B-?").replace("B-S", "B-.")
-		fo.write(line)
+convert_russian_subtitles()
 
+split_dataset(dataset_name="ru_sentseg")
 
+create_dicts("data/ru_sentseg.txt", "data/ru_sentseg_dict.pkl")
 
+# data_statistic("models/dailydialog/train.txt")
+# data_statistic("models/dailydialog/dev.txt")
+# data_statistic("models/dailydialog/test.txt")
 
+# data_statistic("models/cornellmovie_811/train.txt")
+# data_statistic("models/cornellmovie_811/dev.txt")
+# data_statistic("models/cornellmovie_811/test.txt")
 
+# create_dailydialog_for_deeppavlov()
 
-
-
-
+# split_dailydialog_for_deeppavlov()
