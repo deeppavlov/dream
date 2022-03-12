@@ -76,8 +76,8 @@ def nounphrases_questions(nounphrase=None):
 
 
 ARTICLES = r"\s?(\ba\b|\ban\b|\bthe\b|\bsome\b|\bany\b)?\s?"
-ANY_WORDS = r"[a-zA-Z0-9 ]*"
-ANY_SENTENCES = r"[A-Za-z0-9-!,\?\.’'\"’ ]*"
+ANY_WORDS = r"[a-zA-Zа-яА-ЯйЙёЁ0-9 ]*"
+ANY_SENTENCES = r"[A-Za-zа-яА-ЯйЙёЁ0-9-!,\?\.’'\"’ ]*"
 END = r"([!,\?\.’'\"’]+.*|$)"
 BEGIN_OF_SENT = r"^(.*[!,\?\.’'\"’]+ )?"
 
@@ -144,9 +144,18 @@ WANT_LIKE = [
     "care to",
 ]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "that", "everything", "thing", "stuff", "other things"]
-NOTHING_LIKE = ["nothing", "none", "neither"]
-DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
+SOMETHING_LIKE = [
+    "anything", "something", "that", "everything", "thing", "stuff", "other things",
+    "что-нибудь", "что-то", "что угодно", "всё", "что-либо", "всякое", "другое"
+]
+NOTHING_LIKE = [
+    "nothing", "none", "neither",
+    "ничего", "нечего", "ни о чем", "не о чем", f"ни то,? ни то"
+]
+DONOTKNOW_LIKE = [
+    r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none",
+    r"(я )?(не знаю|без понятия)", "(ты|сам) (выбери|выбирай|реши|решай)", "сложно (сказать|выбрать)",
+]
 KNOW_LIKE = ["know", "learn", "find out"]
 LIKE_TEMPLATE = ["like", "love", "prefer"]
 ASK_TEMPLATE = ["ask", "request"]
@@ -157,7 +166,9 @@ ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_
 SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\s?"
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
-SOMETHING_ELSE = re.compile(r"((something|anything|everything) (else|other))", re.IGNORECASE)
+SOMETHING_ELSE = re.compile(
+    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))",
+    re.IGNORECASE)
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(
