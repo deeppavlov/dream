@@ -281,6 +281,8 @@ class DummySkillConnector:
                             f"{FACTS_MAP[str(fact_id)]}. "
                             f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
                         ]
+            else:
+                facts_same_nps = []
 
             if len(facts_same_nps) > 0 and not is_sensitive_case and not is_russian:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
