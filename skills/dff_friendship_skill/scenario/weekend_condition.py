@@ -13,7 +13,7 @@ from common.scenarios.games import was_game_mentioned
 
 LANGUAGE = getenv("LANGUAGE", "EN")
 
-GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
+GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
 link_to_skill2key_words = {
     skill_name: common_link.link_to_skill2key_words[skill_name]
     for skill_name in common_link.link_to_skill2key_words

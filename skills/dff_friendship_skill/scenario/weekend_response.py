@@ -26,7 +26,7 @@ MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
 MIDDLE_CONFIDENCE = 0.95
-GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
+GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
 
 
 def std_weekend_response(ctx: Context, actor: Actor) -> str:

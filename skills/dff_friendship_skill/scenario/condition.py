@@ -12,7 +12,7 @@ from common.emotion import is_positive_regexp_based, is_negative_regexp_based
 
 LANGUAGE = getenv("LANGUAGE", "EN")
 
-GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
+GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
 link_to_skill2key_words = {
     skill_name: common_link.link_to_skill2key_words[skill_name]
     for skill_name in common_link.link_to_skill2key_words
@@ -36,7 +36,7 @@ def offered_topic_choice_declined_condition(ctx: Context, actor: Actor, *args, *
         GREETING_STEPS[greeting_step_id - 1] == "what_to_talk_about" if greeting_step_id > 0 else False
     )
     user_asked_for_topic = any(
-        [resp.lower() in prev_bot_uttr.lower() for resp in common_greeting.GREETING_QUESTIONS["what_to_talk_about"]]
+        [resp.lower() in prev_bot_uttr.lower() for resp in common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"]]
     )
 
     was_active = "dff_friendship_skill" == int_ctx.get_last_bot_utterance(ctx, actor).get("active_skill", "")
@@ -53,7 +53,7 @@ def offered_topic_choice_declined_condition(ctx: Context, actor: Actor, *args, *
 def asked_for_events_and_got_yes_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     prev_bot_uttr = int_ctx.get_last_bot_utterance(ctx, actor).get("text", "")
     was_event_question = any(
-        [resp.lower() in prev_bot_uttr.lower() for resp in common_greeting.GREETING_QUESTIONS["recent_personal_events"]]
+        [resp.lower() in prev_bot_uttr.lower() for resp in common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"]]
     )
 
     agreed = int_cnd.is_yes_vars(ctx, actor)
@@ -80,16 +80,16 @@ def hello_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 def how_are_you_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     prev_frindship_skill = int_ctx.get_last_bot_utterance(ctx, actor).get("active_skill", "") == "dff_friendship_skill"
-    how_are_you_found = common_greeting.HOW_ARE_YOU_TEMPLATE.search(
+    how_are_you_found = common_greeting.HOW_ARE_YOU_TEMPLATE[LANGUAGE].search(
         int_ctx.get_last_human_utterance(ctx, actor)["text"]
     )
-    how_are_you_precise_found = common_greeting.HOW_ARE_YOU_PRECISE_TEMPLATE.search(
+    how_are_you_precise_found = common_greeting.HOW_ARE_YOU_PRECISE_TEMPLATE[LANGUAGE].search(
         int_ctx.get_last_human_utterance(ctx, actor)["text"]
     )
-    how_are_you_by_bot_found = common_greeting.HOW_ARE_YOU_TEMPLATE.search(
+    how_are_you_by_bot_found = common_greeting.HOW_ARE_YOU_TEMPLATE[LANGUAGE].search(
         int_ctx.get_last_bot_utterance(ctx, actor)["text"]
     )
-    any_you_in_user = common_greeting.ANY_YOU_TEMPLATE.search(int_ctx.get_last_human_utterance(ctx, actor)["text"])
+    any_you_in_user = common_greeting.ANY_YOU_TEMPLATE[LANGUAGE].search(int_ctx.get_last_human_utterance(ctx, actor)["text"])
 
     if how_are_you_precise_found:
         return True
@@ -105,7 +105,7 @@ def positive_or_negative_condition(ctx: Context, actor: Actor, *args, **kwargs) 
     neg_temp = is_negative_regexp_based(int_ctx.get_last_human_utterance(ctx, actor))
 
     bot_asked_how_are_you = any(
-        [resp in int_ctx.get_last_bot_utterance(ctx, actor)["text"] for resp in common_greeting.HOW_ARE_YOU_RESPONSES]
+        [resp in int_ctx.get_last_bot_utterance(ctx, actor)["text"] for resp in common_greeting.HOW_ARE_YOU_RESPONSES[LANGUAGE]]
     )
     if bot_asked_how_are_you and (usr_sentiment in ["positive", "negative"] or pos_temp or neg_temp):
         return True
@@ -123,7 +123,7 @@ def no_special_switch_off_requests_condition(ctx: Context, actor: Actor, *args, 
 def was_what_do_you_do_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     bot_uttr_text = int_ctx.get_last_bot_utterance(ctx, actor).get("text", "")
     if int_cnd.no_requests(ctx, actor) and any(
-        [phrase in bot_uttr_text for phrase in common_greeting.GREETING_QUESTIONS["what_do_you_do_on_weekdays"]]
+        [phrase in bot_uttr_text for phrase in common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_do_you_do_on_weekdays"]]
     ):
         return True
     return False

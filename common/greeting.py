@@ -9,11 +9,20 @@ HI_THIS_IS_DREAM = {
     "EN": f"Hi, {greeting_spec['EN']}!",
     "RU": f"Привет, {greeting_spec['RU']}!",
 }
-HOW_ARE_YOU_TEMPLATE = re.compile(r"(how are you|what about you|how about you|and you|how you doing)", re.IGNORECASE)
-HOW_ARE_YOU_PRECISE_TEMPLATE = re.compile(
-    r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE
-)
-ANY_YOU_TEMPLATE = re.compile(r"\b(you|your|yours|yourself)\b", re.IGNORECASE)
+HOW_ARE_YOU_TEMPLATE = {
+    "EN": re.compile(r"(how are you|what about you|how about you|and you|how you doing)", re.IGNORECASE),
+    "RU": re.compile(r"(а )?(как )?(у тебя |твои )(как )?( дела)?", re.IGNORECASE),
+}
+HOW_ARE_YOU_PRECISE_TEMPLATE = {
+    "EN": re.compile(
+        r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE),
+    "RU": re.compile(
+        r"(как (твои |у тебя )?(дела|жизнь|делишки|оно)?( сегодня)?)(\?|$)", re.IGNORECASE),
+}
+ANY_YOU_TEMPLATE = {
+    "EN": re.compile(r"\b(you|your|yours|yourself)\b", re.IGNORECASE),
+    "RU": re.compile(r"\b(ты|тебя|тебе|тобой|твое|твоё|твой)\b", re.IGNORECASE),
+}
 
 
 WHAT_DO_YOU_DO_RESPONSES = {
