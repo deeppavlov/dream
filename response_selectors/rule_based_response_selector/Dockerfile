@@ -5,7 +5,7 @@ RUN mkdir /src
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-ARG LANGUAGE
+ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 COPY . /src/

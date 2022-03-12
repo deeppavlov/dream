@@ -2,7 +2,7 @@ FROM python:3.8.0
 
 WORKDIR /src
 
-ARG LANGUAGE
+ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 COPY ./skills/emotion_skill/requirements.txt requirements.txt

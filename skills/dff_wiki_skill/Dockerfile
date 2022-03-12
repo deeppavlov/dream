@@ -16,7 +16,7 @@ RUN bash /scripts/programy_logger_off.sh
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
-ARG LANGUAGE
+ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .

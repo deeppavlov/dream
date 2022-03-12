@@ -3,7 +3,7 @@ FROM python:3.7.4
 RUN mkdir /src
 RUN mkdir /src/common
 
-ARG LANGUAGE
+ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 COPY ./skills/meta_script_skill/requirements.txt /src/requirements.txt

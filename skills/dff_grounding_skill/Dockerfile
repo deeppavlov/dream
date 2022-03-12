@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
-ARG LANGUAGE
+ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
