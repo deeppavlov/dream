@@ -66,6 +66,7 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
     if skill_name in link_to_skill2i_like_to_talk:
         response = random.choice(link_to_skill2i_like_to_talk[skill_name])
     else:
+
         response = f"Would you like to talk about {skill_name}?"
     int_ctx.save_to_shared_memory(ctx, actor, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
 
@@ -321,9 +322,12 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
         logger.info("step-id=0 or what_to_talk_about")
-        prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][-5:]
-        disliked_skills = int_ctx.get_disliked_skills(ctx, actor)
-        body = offer_topic(ctx, actor, excluded_skills=prev_active_skills + disliked_skills)
+        if LANGUAGE == "EN":
+            prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][-5:]
+            disliked_skills = int_ctx.get_disliked_skills(ctx, actor)
+            body = offer_topic(ctx, actor, excluded_skills=prev_active_skills + disliked_skills)
+        else:
+            body = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
     else:
         logger.info("choose according to step-id")
         body = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE][GREETING_STEPS[greeting_step_id]])
