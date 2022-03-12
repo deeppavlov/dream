@@ -144,16 +144,30 @@ WANT_LIKE = [
 ]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
 SOMETHING_LIKE = [
-    "anything", "something", "that", "everything", "thing", "stuff", "other things",
-    "что-нибудь", "что-то", "что угодно", "всё", "что-либо", "всякое", "другое"
+    "anything",
+    "something",
+    "that",
+    "everything",
+    "thing",
+    "stuff",
+    "other things",
+    "что-нибудь",
+    "что-то",
+    "что угодно",
+    "всё",
+    "что-либо",
+    "всякое",
+    "другое",
 ]
-NOTHING_LIKE = [
-    "nothing", "none", "neither",
-    "ничего", "нечего", "ни о чем", "не о чем", f"ни то,? ни то"
-]
+NOTHING_LIKE = ["nothing", "none", "neither", "ничего", "нечего", "ни о чем", "не о чем", r"ни то,? ни то"]
 DONOTKNOW_LIKE = [
-    r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none",
-    r"(я )?(не знаю|без понятия)", "(ты|сам) (выбери|выбирай|реши|решай)", "сложно (сказать|выбрать)",
+    r"(i )?(do not|don't) know",
+    "you (choose|decide|pick up)",
+    "hard (to say|one)",
+    "none",
+    r"(я )?(не знаю|без понятия)",
+    "(ты|сам) (выбери|выбирай|реши|решай)",
+    "сложно (сказать|выбрать)",
 ]
 KNOW_LIKE = ["know", "learn", "find out"]
 LIKE_TEMPLATE = ["like", "love", "prefer"]
@@ -166,8 +180,8 @@ SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
 SOMETHING_ELSE = re.compile(
-    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))",
-    re.IGNORECASE)
+    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))", re.IGNORECASE
+)
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(

@@ -277,7 +277,9 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     elif not _no_requests and len(_entities) > 0:
         # user wants to talk about something particular. We are just a dummy response, if no appropriate
         if _friendship_was_active:
-            ack = random.choice(common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE]["what_do_you_do_on_weekdays"])
+            ack = random.choice(
+                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE]["what_do_you_do_on_weekdays"]
+            )
             sent_ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
             ack = f"{sent_ack} {ack}"
         else:

@@ -14,10 +14,8 @@ HOW_ARE_YOU_TEMPLATE = {
     "RU": re.compile(r"(а )?(как )?(у тебя |твои )(как )?( дела)?", re.IGNORECASE),
 }
 HOW_ARE_YOU_PRECISE_TEMPLATE = {
-    "EN": re.compile(
-        r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE),
-    "RU": re.compile(
-        r"(как (твои |у тебя )?(дела|жизнь|делишки|оно)?( сегодня)?)(\?|$)", re.IGNORECASE),
+    "EN": re.compile(r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE),
+    "RU": re.compile(r"(как (твои |у тебя )?(дела|жизнь|делишки|оно)?( сегодня)?)(\?|$)", re.IGNORECASE),
 }
 ANY_YOU_TEMPLATE = {
     "EN": re.compile(r"\b(you|your|yours|yourself)\b", re.IGNORECASE),
@@ -144,10 +142,14 @@ GREETING_QUESTIONS = {
 }
 
 GREETING_QUESTIONS_TEXTS = [
-    question.lower() for lang in ["EN", "RU"] for t in GREETING_QUESTIONS[lang] for question in GREETING_QUESTIONS[lang][t]
+    question.lower()
+    for lang in ["EN", "RU"]
+    for t in GREETING_QUESTIONS[lang]
+    for question in GREETING_QUESTIONS[lang][t]
 ]
-GREETING_QUESTIONS_TEXTS += [t.lower() for lang in ["EN", "RU"]
-                             for t in WHAT_DO_YOU_DO_RESPONSES[lang] + FREE_TIME_RESPONSES[lang]]
+GREETING_QUESTIONS_TEXTS += [
+    t.lower() for lang in ["EN", "RU"] for t in WHAT_DO_YOU_DO_RESPONSES[lang] + FREE_TIME_RESPONSES[lang]
+]
 
 dont_tell_you_templates = re.compile(
     r"(\bno\b|\bnot\b|\bnone\b|nothing|anything|something|"
