@@ -118,7 +118,7 @@ GREETING_QUESTIONS = {
     "RU": {
         "recent_personal_events": [
             "Что главное произошло с тобой сегодня?",
-            "WЧто главное произошло с тобой на этой неделе?",
+            "Что главное произошло с тобой на этой неделе?",
             "Что-нибудь интересное произошло сегодня?",
             "Что самое лучшее случилось с тобой недавно?",
             "Что-нибудь необычное произошло с тобой недавно?",
@@ -142,6 +142,12 @@ GREETING_QUESTIONS = {
         ],
     },
 }
+
+GREETING_QUESTIONS_TEXTS = [
+    question.lower() for lang in ["EN", "RU"] for t in GREETING_QUESTIONS[lang] for question in GREETING_QUESTIONS[lang][t]
+]
+GREETING_QUESTIONS_TEXTS += [t.lower() for lang in ["EN", "RU"]
+                             for t in WHAT_DO_YOU_DO_RESPONSES[lang] + FREE_TIME_RESPONSES[lang]]
 
 dont_tell_you_templates = re.compile(
     r"(\bno\b|\bnot\b|\bnone\b|nothing|anything|something|"

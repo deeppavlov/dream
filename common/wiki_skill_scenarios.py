@@ -1,5 +1,3 @@
-import os
-
 from common.link import DFF_WIKI_LINKTO
 from common.universal_templates import DFF_WIKI_TEMPLATES, MY_FRIENDS_TEMPLATE, NO_FRIENDS_TEMPLATE, ANY_FRIEND_QUESTION
 from common.movies import WHAT_MOVIE_RECOMMEND
@@ -8,8 +6,7 @@ from common.hobbies import HOBBIES_RE
 from common.greeting import GREETING_QUESTIONS
 
 
-LANGUAGE = os.getenv("LANGUAGE", "EN")
-HOBBIES_TEMPLATE = f"({'|'.join(GREETING_QUESTIONS[LANGUAGE]['what_are_your_hobbies'])})"
+HOBBIES_TEMPLATE = '|'.join(sum([GREETING_QUESTIONS[lang]['what_are_your_hobbies'] for lang in ['EN', 'RU']], []))
 
 topic_config = {
     "hobbies": {
