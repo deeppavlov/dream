@@ -1,4 +1,5 @@
 import re
+from os import getenv
 
 from df_engine.core import Actor, Context
 
@@ -8,6 +9,8 @@ import common.greeting as common_greeting
 import common.link as common_link
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
 
+
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
 link_to_skill2key_words = {

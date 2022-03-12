@@ -16,6 +16,8 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+LANGUAGE = getenv("LANGUAGE", "EN")
+
 REPLY_TYPE = Tuple[str, float, dict, dict, dict]
 DIALOG_BEGINNING_START_CONFIDENCE = 0.98
 DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
