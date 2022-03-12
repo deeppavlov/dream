@@ -225,7 +225,8 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
             )
         else:
             user_mood_acknowledgement = int_cnd.get_not_used_and_save_sentiment_acknowledgement(
-                ctx, actor, sentiment="neutral", lang=LANGUAGE)
+                ctx, actor, sentiment="neutral", lang=LANGUAGE
+            )
 
     question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"])
     reply = (
