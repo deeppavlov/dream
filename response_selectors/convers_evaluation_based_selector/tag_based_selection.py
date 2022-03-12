@@ -48,6 +48,7 @@ from common.response_selection import (
 )
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -601,7 +602,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"
-            and any([g in cand_uttr["text"] for g in greeting_spec.values])
+            and any([g in cand_uttr["text"] for g in greeting_spec[LANGUAGE].values])
         ):
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif (
