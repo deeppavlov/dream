@@ -214,7 +214,8 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
                 f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP[LANGUAGE])}"
             )
         else:
-            user_mood_acknowledgement = "Okay."
+            user_mood_acknowledgement = int_cnd.get_not_used_and_save_sentiment_acknowledgement(
+                ctx, actor, sentiment="neutral", lang=LANGUAGE)
 
     question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"])
     reply = (
@@ -245,7 +246,9 @@ def offered_topic_choice_declined_response(ctx: Context, actor: Actor, *args, **
 
     logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
-    reply = f"Okay. {offer_topic_choose}"
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, sentiment="neutral", lang=LANGUAGE)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
+    reply = f"{ack} {offer_topic_choose}"
     return reply
 
 
