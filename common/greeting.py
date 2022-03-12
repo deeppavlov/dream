@@ -11,11 +11,11 @@ HI_THIS_IS_DREAM = {
 }
 HOW_ARE_YOU_TEMPLATE = {
     "EN": re.compile(r"(how are you|what about you|how about you|and you|how you doing)", re.IGNORECASE),
-    "RU": re.compile(r"(а )?(как )?(у тебя |твои )(как )?( дела)?", re.IGNORECASE),
+    "RU": re.compile(r"(а )?(как )?(у тебя|твои)( как)?( дела)?", re.IGNORECASE),
 }
 HOW_ARE_YOU_PRECISE_TEMPLATE = {
     "EN": re.compile(r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE),
-    "RU": re.compile(r"(как (твои |у тебя )?(дела|жизнь|делишки|оно)?( сегодня)?)(\?|$)", re.IGNORECASE),
+    "RU": re.compile(r"(как (твои|у тебя)?( дела| жизнь| делишки| оно)?( сегодня)?)(\?|$)", re.IGNORECASE),
 }
 ANY_YOU_TEMPLATE = {
     "EN": re.compile(r"\b(you|your|yours|yourself)\b", re.IGNORECASE),
