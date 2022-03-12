@@ -96,14 +96,17 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 **Please note, that DeepPavlov Dream components require a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml up --build
 ```
 We've also included a config with GPU allocations for multi-GPU environments.
 
 ```
-AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml up
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/test.yml up
 ```
-
+When you need to restart particular docker container without re-building (make sure mapping in `assistant_dists/dream/dev.yml` is correct):
+```
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
+```
 
 ### Let's chat
 In a separate terminal tab run:

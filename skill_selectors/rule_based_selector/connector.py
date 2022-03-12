@@ -105,6 +105,8 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("dff_grounding_skill")
+                # we have only russian version of dff_generative_skill
+                skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("dummy_skill")
 
                 skills_for_uttr += turn_on_skills(
@@ -153,6 +155,8 @@ class RuleBasedSkillSelectorConnector:
                         if hyp["skill_name"] == prev_active_skill:
                             skills_for_uttr.append(hyp["skill_name"])
             else:
+                # we have only russian version of dff_generative_skill
+                skills_for_uttr.append("dff_generative_skill")
                 # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
                 for skill_name in linked_to_skill_names:
                     skills_for_uttr.append(skill_name)

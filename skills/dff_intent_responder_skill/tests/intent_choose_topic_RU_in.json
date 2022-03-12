@@ -1,0 +1,212 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "\u043f\u0440\u0438\u0432\u0435\u0442",
+                    "annotations": {
+                        "spelling_preprocessing": "\u043f\u0440\u0438\u0432\u0435\u0442",
+                        "entity_detection": {},
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "intent_catcher": {
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.9863496422767639,
+                                "detected": 1
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "\u043e \u0447\u0435\u043c \u0442\u044b \u0445\u043e\u0447\u0435\u0448\u044c \u043f\u043e\u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c?",
+                    "annotations": {
+                        "spelling_preprocessing": "\u043e \u0447\u0435\u043c \u0442\u044b \u0445\u043e\u0447\u0435\u0448\u044c \u043f\u043e\u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c?",
+                        "entity_detection": {},
+                        "intent_catcher": {
+                            "choose_topic": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How are you?",
+                    "annotations": {
+                        "ner": [
+                            []
+                        ]
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ],
+            "called_intents": {
+                "choose_topic": false,
+                "exit": false,
+                "lets_chat_about": false,
+                "no": false,
+                "repeat": false,
+                "topic_switching": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": false,
+                "what_is_your_name": false,
+                "where_are_you_from": false,
+                "who_made_you": false,
+                "yes": true
+            },
+            "dialog_id": "ea23796268648171fb9ec2b020b5184f"
+        }
+    ],
+    "dff_intent_responder_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

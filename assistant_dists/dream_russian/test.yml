@@ -20,7 +20,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=9
   personal-info-skill:
   entity-linking:
     volumes:
