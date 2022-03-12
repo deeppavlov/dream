@@ -271,17 +271,17 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
             int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     elif not _no_requests and len(_entities) > 0:
         # user wants to talk about something particular. We are just a dummy response, if no appropriate
         if _friendship_was_active:
             ack = random.choice(common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE]["what_do_you_do_on_weekdays"])
-            sent_ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            sent_ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
             ack = f"{sent_ack} {ack}"
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
         int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     else:
@@ -293,7 +293,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         if _friendship_was_active and GREETING_STEPS[greeting_step_id] == "recent_personal_events":
             ack = random.choice(common_greeting.INTERESTING_PERSON_THANKS_FOR_CHATTING[LANGUAGE])
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     if health_problems(ctx, actor):
@@ -315,7 +315,7 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def new_entities_is_needed_for_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
     body = "Tell me more about that."
 
     int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
@@ -327,7 +327,7 @@ def new_entities_is_needed_for_response(ctx: Context, actor: Actor, *args, **kwa
 
 
 def closed_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
     body = ""
 
     int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
@@ -367,7 +367,7 @@ def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
 
 def link_to_by_enity_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     try:
-        ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+        ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
         entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
         if entities:
             logger.debug(f"entities= {entities}")
