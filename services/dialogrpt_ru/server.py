@@ -1,14 +1,15 @@
 import logging
 import time
 import os
-from typing import Dict, List
 
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
-from transformers import AutoTokenizer, AutoModelForCausalLM
+
+from main import Option
+from model import Scorer, JointScorer
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -30,14 +31,27 @@ else:
 
 logger.info(f"dialogrpt is set to run on {device}")
 
+params = {
+    "data": "./bla",
+    "batch": 256,
+    "vali_size": 1024,
+    "vali_print": 10,
+    "lr": 3e-5,
+    "cpu": False,
+    "max_seq_len": 50,
+    "mismatch": False,
+    "min_score_gap": 10,
+    "min_rank_gap": 10,
+    "max_hr_gap": 1,
+}
 
 try:
-    model = RussianDialogGPT(PRETRAINED_MODEL_NAME_OR_PATH)
-    model.model.eval()
-    if cuda:
-        model.model.cuda()
+    opt = Option(params)
+    model = Scorer(opt)
+    model.load(PRETRAINED_MODEL_NAME_OR_PATH)
+    model.predict(cxt="привет!", hyps=["привет. как дела?"])
 
-    logger.info("dialogpt model is ready")
+    logger.info("dialogrpt model is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -53,24 +67,20 @@ def respond():
     st_time = time.time()
 
     dialog_contexts = request.json.get("dialog_contexts", [])
-    num_return_sequences = request.json.get("num_return_sequences", 3)
+    hypotheses = request.json.get("hypotheses", [[]])
 
     try:
-        batch_generated_responses = []
-        for context in dialog_contexts:
-            # context is a list of dicts, each dict contains text and speaker label
-            # context = [{"text": "utterance text", "speaker": "human"}, ...]
-            inputs = [{"text": uttr["text"], "speaker": 1 if uttr["speaker"] == "bot" else 0} for uttr in context][-3:]
-            hypotheses = model.get_responses(inputs, params={"num_return_sequences": num_return_sequences})
-            logger.info(f"dialogpt hypotheses: {hypotheses}")
-            batch_generated_responses.append(hypotheses)
-
+        result_values = []
+        for cxt, hyps in zip(dialog_contexts, hypotheses):
+            prediction = model.predict(cxt=cxt, hyps=hyps)
+            # prediction is a list of float values
+            result_values.append(prediction)
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        batch_generated_responses = [[]] * len(dialog_contexts)
+        result_values = [[0. for _ in hyps] for hyps in hypotheses]
 
     total_time = time.time() - st_time
-    logger.info(f"dialogpt exec time: {total_time:.3f}s")
+    logger.info(f"dialogrpt exec time: {total_time:.3f}s")
 
-    return jsonify({"generated_responses": batch_generated_responses})
+    return jsonify({"scores": result_values})
