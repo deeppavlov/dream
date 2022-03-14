@@ -11,7 +11,6 @@ import common.link as common_link
 from common.emotion import is_positive_regexp_based, is_negative_regexp_based
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 LANGUAGE = getenv("LANGUAGE", "EN")
@@ -31,7 +30,7 @@ link_to_skill2i_like_to_talk = {
 
 
 def offered_topic_choice_declined_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("offered_topic_choice_declined_condition")
+    logger.debug("offered_topic_choice_declined_condition")
 
     prev_bot_uttr = int_ctx.get_last_bot_utterance(ctx, actor)["text"]
     # asked what to talk about
@@ -59,7 +58,7 @@ def offered_topic_choice_declined_condition(ctx: Context, actor: Actor, *args, *
 
 
 def asked_for_events_and_got_yes_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("asked_for_events_and_got_yes_condition")
+    logger.debug("asked_for_events_and_got_yes_condition")
     prev_bot_uttr = int_ctx.get_last_bot_utterance(ctx, actor).get("text", "")
     was_event_question = any(
         [
@@ -76,7 +75,7 @@ def asked_for_events_and_got_yes_condition(ctx: Context, actor: Actor, *args, **
 
 
 def false_positive_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("false_positive_condition")
+    logger.debug("false_positive_condition")
     flag = (
         bool(re.search(common_greeting.FALSE_POSITIVE_TURN_ON_RE, int_ctx.get_last_human_utterance(ctx, actor)["text"]))
         and int_ctx.get_human_utter_index(ctx, actor) == 0
@@ -85,7 +84,7 @@ def false_positive_condition(ctx: Context, actor: Actor, *args, **kwargs) -> boo
 
 
 def hello_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("hello_condition")
+    logger.debug("hello_condition")
     flag = True
     flag = flag and len(int_ctx.get_human_utterances(ctx, actor)) == 1
     flag = flag
@@ -93,7 +92,7 @@ def hello_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def how_are_you_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("how_are_you_condition")
+    logger.debug("how_are_you_condition")
     prev_frindship_skill = int_ctx.get_last_bot_utterance(ctx, actor).get("active_skill", "") == "dff_friendship_skill"
     how_are_you_found = common_greeting.HOW_ARE_YOU_TEMPLATE[LANGUAGE].search(
         int_ctx.get_last_human_utterance(ctx, actor)["text"]
@@ -116,7 +115,7 @@ def how_are_you_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def positive_or_negative_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("positive_or_negative_condition")
+    logger.debug("positive_or_negative_condition")
     # SYS_USR_ANSWERS_HOW_IS_HE_DOING
     usr_sentiment = int_ctx.get_human_sentiment(ctx, actor)
     pos_temp = is_positive_regexp_based(int_ctx.get_last_human_utterance(ctx, actor))
@@ -134,17 +133,17 @@ def positive_or_negative_condition(ctx: Context, actor: Actor, *args, **kwargs) 
 
 
 def no_requests_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("no_requests_condition")
+    logger.debug("no_requests_condition")
     return int_cnd.no_requests(ctx, actor)
 
 
 def no_special_switch_off_requests_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("no_special_switch_off_requests_condition")
+    logger.debug("no_special_switch_off_requests_condition")
     return int_cnd.no_special_switch_off_requests(ctx, actor)
 
 
 def was_what_do_you_do_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("was_what_do_you_do_condition")
+    logger.debug("was_what_do_you_do_condition")
     bot_uttr_text = int_ctx.get_last_bot_utterance(ctx, actor).get("text", "")
     if int_cnd.no_requests(ctx, actor) and any(
         [
@@ -157,28 +156,28 @@ def was_what_do_you_do_condition(ctx: Context, actor: Actor, *args, **kwargs) ->
 
 
 def is_yes_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("is_yes_condition")
+    logger.debug("is_yes_condition")
     if int_cnd.is_yes_vars(ctx, actor):
         return True
     return False
 
 
 def is_no_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("is_no_condition")
+    logger.debug("is_no_condition")
     if int_cnd.is_no_vars(ctx, actor):
         return True
     return False
 
 
 def not_is_no_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("not_is_no_condition")
+    logger.debug("not_is_no_condition")
     if not int_cnd.is_no_vars(ctx, actor):
         return True
     return False
 
 
 def std_greeting_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("std_greeting_condition")
+    logger.debug("std_greeting_condition")
     flag = True
     # flag = flag and not condition_utils.is_new_human_entity(vars)
     # flag = flag and not condition_utils.is_switch_topic(vars)
@@ -194,7 +193,7 @@ def std_greeting_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def new_entities_is_needed_for_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("new_entities_is_needed_for_condition")
+    logger.debug("new_entities_is_needed_for_condition")
     flag = True
     # what is the state in here?
     # flag = flag and int_cnd.is_first_time_of_state(ctx, actor, State.SYS_NEW_ENTITIES_IS_NEEDED_FOR)
@@ -206,7 +205,7 @@ def new_entities_is_needed_for_condition(ctx: Context, actor: Actor, *args, **kw
 
 
 def closed_answer_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("closed_answer_condition")
+    logger.debug("closed_answer_condition")
     flag = True
     flag = flag and not int_cnd.is_switch_topic(ctx, actor)
     flag = flag and not int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
@@ -215,7 +214,7 @@ def closed_answer_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool
 
 
 def link_to_by_enity_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    logger.info("link_to_by_enity_condition")
+    logger.debug("link_to_by_enity_condition")
     flag = True
     flag = flag and not int_cnd.is_switch_topic(ctx, actor)
     flag = flag and not int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
