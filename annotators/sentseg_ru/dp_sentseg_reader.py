@@ -10,15 +10,17 @@ log = getLogger(__name__)
 class SentSegDatasetReader(DatasetReader):
     """Class to read training datasets in CoNLL-2003 format"""
 
-    def read(self,
-             data_path: str,
-             dataset_name: str = None,
-             provide_pos: bool = False,
-             provide_chunk: bool = False,
-             provide_doc_ids: bool = False,
-             iob: bool = False,
-             iobes: bool = False,
-             docstart_token: str = None):
+    def read(
+        self,
+        data_path: str,
+        dataset_name: str = None,
+        provide_pos: bool = False,
+        provide_chunk: bool = False,
+        provide_doc_ids: bool = False,
+        iob: bool = False,
+        iobes: bool = False,
+        docstart_token: str = None,
+    ):
         self.provide_pos = provide_pos
         self.provide_chunk = provide_chunk
         self.provide_doc_ids = provide_doc_ids
@@ -28,25 +30,25 @@ class SentSegDatasetReader(DatasetReader):
         self.num_docs = 0
         self.x_is_tuple = self.provide_pos or self.provide_doc_ids
         data_path = Path(data_path)
-        files = list(data_path.glob('*.txt'))
-        if 'train.txt' not in {file_path.name for file_path in files}:
-            if dataset_name == 'sentseg_ru':
-                url = 'http://files.deeppavlov.ai/deeppavlov_data/sentseg_ru_subtitles_data.tar.gz'
+        files = list(data_path.glob("*.txt"))
+        if "train.txt" not in {file_path.name for file_path in files}:
+            if dataset_name == "sentseg_ru":
+                url = "http://files.deeppavlov.ai/deeppavlov_data/sentseg_ru_subtitles_data.tar.gz"
             else:
                 raise RuntimeError('train.txt not found in "{}"'.format(data_path))
             data_path.mkdir(exist_ok=True, parents=True)
             download_decompress(url, data_path)
-            files = list(data_path.glob('*.txt'))
+            files = list(data_path.glob("*.txt"))
         dataset = {}
 
         for file_name in files:
-            name = file_name.with_suffix('').name
+            name = file_name.with_suffix("").name
             dataset[name] = self.parse_ner_file(file_name)
         return dataset
 
     def parse_ner_file(self, file_name: Path):
         samples = []
-        with file_name.open(encoding='utf8') as f:
+        with file_name.open(encoding="utf8") as f:
             tokens = []
             pos_tags = []
             chunk_tags = []
@@ -54,7 +56,7 @@ class SentSegDatasetReader(DatasetReader):
             expected_items = 2 + int(self.provide_pos) + int(self.provide_chunk)
             for line in f:
                 # Check end of the document
-                if 'DOCSTART' in line:
+                if "DOCSTART" in line:
                     if len(tokens) > 1:
                         x = tokens if not self.x_is_tuple else (tokens,)
                         if self.provide_pos:
@@ -71,9 +73,9 @@ class SentSegDatasetReader(DatasetReader):
                     self.num_docs += 1
                     if self.docstart_token is not None:
                         tokens = [self.docstart_token]
-                        pos_tags = ['O']
-                        chunk_tags = ['O']
-                        tags = ['O']
+                        pos_tags = ["O"]
+                        chunk_tags = ["O"]
+                        tags = ["O"]
                 elif len(line) < 2:
                     if (len(tokens) > 0) and (tokens != [self.docstart_token]):
                         x = tokens if not self.x_is_tuple else (tokens,)
@@ -121,7 +123,7 @@ class SentSegDatasetReader(DatasetReader):
         iob_tags = []
 
         for n, tag in enumerate(tags):
-            if tag.startswith('B-') and (not n or (tags[n - 1][2:] != tag[2:])):
+            if tag.startswith("B-") and (not n or (tags[n - 1][2:] != tag[2:])):
                 tag = tag.replace("B-", "I-")
             iob_tags.append(tag)
 
