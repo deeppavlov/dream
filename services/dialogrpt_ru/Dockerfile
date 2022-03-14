@@ -4,10 +4,14 @@ FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 
 WORKDIR /src
 
-ARG PRETRAINED_MODEL_NAME_OR_PATH
-ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
+ARG PRETRAINED_MODEL_FNAME
+ENV PRETRAINED_MODEL_FNAME ${PRETRAINED_MODEL_FNAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
+
+RUN mkdir /data/
+
+RUN wget -c -q http://files.deeppavlov.ai/deeppavlov_data/${PRETRAINED_MODEL_FNAME} -P /data/
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

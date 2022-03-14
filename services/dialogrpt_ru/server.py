@@ -17,10 +17,10 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get(
-    "PRETRAINED_MODEL_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2"
+PRETRAINED_MODEL_FNAME = os.environ.get(
+    "PRETRAINED_MODEL_FNAME", "dialogrpt_ru_ckpt_v0.pth"
 )
-logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+logger.info(f"PRETRAINED_MODEL_FNAME = {PRETRAINED_MODEL_FNAME}")
 
 cuda = torch.cuda.is_available()
 if cuda:
@@ -32,6 +32,7 @@ else:
 logger.info(f"dialogrpt is set to run on {device}")
 
 params = {
+    "path_load": f"/data/{PRETRAINED_MODEL_FNAME}",
     "data": "./bla",
     "batch": 256,
     "vali_size": 1024,
@@ -48,7 +49,7 @@ params = {
 try:
     opt = Option(params)
     model = Scorer(opt)
-    model.load(PRETRAINED_MODEL_NAME_OR_PATH)
+    model.load(f"/data/{PRETRAINED_MODEL_FNAME}")
     model.predict(cxt="привет!", hyps=["привет. как дела?"])
 
     logger.info("dialogrpt model is ready")
