@@ -1,128 +1,170 @@
 {
   "dataset_reader": {
     "class_name": "conll2003_reader",
-    "data_path": "{DOWNLOADS_PATH}/dailydialog/",
-    "dataset_name": "dailydialog"
+    "data_path": "data/",
+    "dataset_name": "collection_rus",
+    "provide_pos": false
   },
   "dataset_iterator": {
     "class_name": "data_learning_iterator"
   },
   "chainer": {
     "in": ["x"],
-    "in_y": ["y_tokens"],
+    "in_y": ["y"],
     "pipe": [
       {
         "in": ["x"],
-        "out": ["x_tokens"],
-        "class_name": "lazy_tokenizer"
+        "class_name": "lazy_tokenizer",
+        "out": ["x_tokens"]
       },
       {
         "in": ["x_tokens"],
-        "out": ["x_lower", "sent_lengths", "x_tokens_elmo"],
-        "class_name": "ner_preprocessor",
-        "get_x_padded_for_elmo": true
+        "class_name": "str_lower",
+        "out": ["x_lower"]
       },
       {
         "in": ["x_lower"],
-        "out": ["x_tok_ind"],
-        "fit_on": ["x_lower"],
-        "class_name": "ner_vocab",
+        "class_name": "sanitizer",
+        "nums": true,
+        "out": ["x_san"]
+      },
+      {
+        "in": ["x_san"],
         "id": "word_vocab",
-        "save_path": "{MODELS_PATH}/word.dict",
-        "load_path": "{MODELS_PATH}/word.dict"
+        "class_name": "simple_vocab",
+        "pad_with_zeros": true,
+        "special_tokens": ["<UNK>"],
+        "fit_on": ["x_san"],
+        "save_path": "{MODEL_PATH}/word.dict",
+        "load_path": "{MODEL_PATH}/word.dict",
+        "out": ["x_tok_ind"]
+      },
+      {
+        "in": ["y"],
+        "id": "tag_vocab",
+        "class_name": "simple_vocab",
+        "pad_with_zeros": true,
+        "fit_on": ["y"],
+        "save_path": "{MODEL_PATH}/tag.dict",
+        "load_path": "{MODEL_PATH}/tag.dict",
+        "out": ["y_ind"]
       },
       {
         "in": ["x_tokens"],
-        "out": ["x_char_ind"],
-        "fit_on": ["x_tokens"],
-        "class_name": "ner_vocab",
-        "char_level": true,
+        "class_name": "char_splitter",
+        "out": ["x_char"]
+      },
+      {
+        "in": ["x_char"],
         "id": "char_vocab",
-        "save_path": "{MODELS_PATH}/char.dict",
-        "load_path": "{MODELS_PATH}/char.dict"
+        "class_name": "simple_vocab",
+        "pad_with_zeros": true,
+        "fit_on": ["x_char"],
+        "save_path": "{MODEL_PATH}/char.dict",
+        "load_path": "{MODEL_PATH}/char.dict",
+        "out": ["x_char_ind"]
       },
       {
-        "in": ["y_tokens"],
-        "out": ["y_ind"],
-        "fit_on": ["y_tokens"],
-        "class_name": "ner_vocab",
-        "id": "tag_vocab",
-        "save_path": "{MODELS_PATH}/tag.dict",
-        "load_path": "{MODELS_PATH}/tag.dict"
+        "in": ["x_san"],
+        "id": "embedder",
+        "class_name": "fasttext",
+        "pad_zero": true,
+        "load_path": "{DOWNLOADS_PATH}/embeddings/lenta_lower_100.bin",
+        "out": ["x_emb"]
       },
       {
-        "in": [
-          "sent_lengths",
-          "x_tok_ind",
-          "x_char_ind",
-          "x_tokens_elmo"
-        ],
+        "in": ["x_tokens"],
+        "class_name": "mask",
+        "out": ["mask"]
+      },
+      {
+        "class_name": "random_emb_mat",
+        "id": "embeddings",
+        "vocab_len": "#word_vocab.len",
+        "emb_dim": 100
+      },
+      {
+        "class_name": "random_emb_mat",
+        "id": "embeddings_char",
+        "vocab_len": "#char_vocab.len",
+        "emb_dim": 100
+      },
+      {
+        "id": "capitalization",
+        "class_name": "capitalization_featurizer",
+        "in": ["x_tokens"],
+        "out": ["cap"]
+      },
+      {
+        "in": ["x_emb", "mask", "x_char_ind", "cap"],
         "in_y": ["y_ind"],
         "out": ["y_predicted"],
-        "class_name": "hybrid_ner_model",
+        "class_name": "ner",
+        "main": true,
+        "n_hidden_list": [128],
+        "net_type": "rnn",
+        "cell_type": "lstm",
+        "use_cudnn_rnn": true,
         "n_tags": "#tag_vocab.len",
-        "word_emb_path": "{DOWNLOADS_PATH}/embeddings/glove.6B.100d.txt",
-        "word_emb_name": "glove",
-        "word_dim": 100,
-        "word_vocab": "#word_vocab",
-        "char_vocab_size": "#char_vocab.len",
-        "char_dim": 64,
-        "elmo_dim": 100,
-        "lstm_hidden_size": 256,
-        "save_path": "{MODELS_PATH}/sentseg_dailydialog",
-        "load_path": "{MODELS_PATH}/sentseg_dailydialog",
-        "learning_rate": 1e-3,
-        "learning_rate_drop_patience": 5,
-        "learning_rate_drop_div": 10,
+        "capitalization_dim": "#capitalization.dim",
+        "token_emb_dim": "#embedder.dim",
+        "char_emb_dim": 100,
+        "save_path": "{MODEL_PATH}/model",
+        "load_path": "{MODEL_PATH}/model",
+        "char_emb_mat": "#embeddings_char.emb_mat",
+        "use_crf": true,
+        "use_batch_norm": true,
+        "embeddings_dropout": true,
+        "top_dropout": true,
+        "intra_layer_dropout": true,
+        "l2_reg": 0,
+        "learning_rate": 1e-2,
         "dropout_keep_prob": 0.7
       },
       {
+        "ref": "tag_vocab",
         "in": ["y_predicted"],
-        "out": ["tags"],
-        "class_name": "convert_ids2tags",
-        "id2tag": "#tag_vocab.i2t"
-      },
-      {
-        "in": ["x_tokens","tags"],
-        "out": "punctuated_sents",
-        "class_name": "sentseg_restore_sent"
+        "out": ["tags"]
       }
     ],
-    "out": ["x", "punctuated_sents"]
+
+    "out": ["x_tokens", "tags"]
   },
   "train": {
     "epochs": 100,
-    "batch_size": 50,
+    "batch_size": 64,
     "metrics": [
       {
         "name": "ner_f1",
-        "inputs": ["y_tokens", "tags"]
+        "inputs": ["y", "tags"]
       },
       {
         "name": "ner_token_f1",
-        "inputs": ["y_tokens", "tags"]
+        "inputs": ["y", "tags"]
       }
     ],
-    "validation_patience": 10,
+    "validation_patience": 7,
     "val_every_n_epochs": 1,
+
     "log_every_n_epochs": 1,
     "show_examples": false,
+    "tensorboard_log_dir": "{MODEL_PATH}/logs",
     "class_name": "nn_trainer",
-    "evaluation_targets": ["valid", "test"]
+    "evaluation_targets": [
+      "valid",
+      "test"
+    ]
   },
   "metadata": {
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-      "MODELS_PATH": "{ROOT_PATH}/models/sentseg_dailydialog"
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/sentseg_ru_v0"
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/deeppavlov_data/sentseg_dailydialog.tar.gz",
-        "subdir": "{MODELS_PATH}"
-      },
-      {
-        "url": "http://files.deeppavlov.ai/embeddings/glove.6B.100d.txt",
+        "url": "http://files.deeppavlov.ai/embeddings/lenta_lower_100.bin",
         "subdir": "{DOWNLOADS_PATH}/embeddings"
       }
     ]
