@@ -10,10 +10,12 @@ def test_respond():
         ["пересматриваю Гордость и предубеждение иногда.", "я люблю играть в компьюетрные игры."],
     ]
     gold = [[0.334246, 0.33038276], [0.40354252, 0.3839873]]
+
     request_data = {"dialog_contexts": contexts, "hypotheses": hypotheses}
     result = requests.post(url, json=request_data).json()["scores"]
-    print(result)
-    assert len(result) == 3 and len(result[0]) > 0, f"Got\n{result}"
+    for i, sample in enumerate(result):
+        for j, score in enumerate(sample):
+            assert round(score, 4) == round(gold[i][j], 4), f"Expected:{gold[i][j]}\tGot\n{score}"
     print("Success!")
 
 
