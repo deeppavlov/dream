@@ -10,3 +10,6 @@ services:
   dialogpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  dialogrpt:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

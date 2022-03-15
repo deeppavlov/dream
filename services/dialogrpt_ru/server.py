@@ -66,7 +66,7 @@ def respond():
     st_time = time.time()
 
     dialog_contexts = request.json.get("dialog_contexts", [])
-    hypotheses = request.json.get("hypotheses", [[]])
+    hypotheses = request.json.get("hypothesis", [[]])
 
     try:
         result_values = []

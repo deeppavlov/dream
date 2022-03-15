@@ -286,6 +286,24 @@ services:
         reservations:
           memory: 128M
 
+  dialogrpt:
+    env_file: [ .env ]
+    build:
+      context: ./services/dialogrpt_ru/
+      args:
+        SERVICE_PORT: 8122
+        PRETRAINED_MODEL_NAME_OR_PATH: dialogrpt_ru_ckpt_v0.pth
+    command: flask run -h 0.0.0.0 -p 8122
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
+
   dff-template-skill:
     env_file: [.env]
     build:
@@ -301,4 +319,5 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
 version: '3.7'
