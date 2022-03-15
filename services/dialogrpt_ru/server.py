@@ -70,7 +70,7 @@ def respond():
     try:
         result_values = []
         for cxt, hyps in zip(dialog_contexts, hypotheses):
-            prediction = model.predict(cxt=cxt, hyps=hyps)
+            prediction = model.predict(cxt=cxt, hyps=hyps).tolist()
             # prediction is a list of float values
             result_values.append(prediction)
     except Exception as exc:
