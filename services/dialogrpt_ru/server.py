@@ -41,6 +41,7 @@ params = {
     "min_score_gap": 10,
     "min_rank_gap": 10,
     "max_hr_gap": 1,
+    "task": "vali"
 }
 
 try:
