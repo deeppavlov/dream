@@ -1,9 +1,9 @@
 # author: Xiang Gao at Microsoft Research AI NLP Group
 
+import os
 
-import torch, os
 import numpy as np
-
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 

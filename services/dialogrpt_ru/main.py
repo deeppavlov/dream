@@ -1,8 +1,10 @@
 # author: Xiang Gao at Microsoft Research AI NLP Group
 
-
-import argparse, torch, time
+import argparse
 import os
+import time
+
+import torch
 from master import Master
 
 

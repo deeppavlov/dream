@@ -62,7 +62,6 @@ class Master:
 
     def train(self):
         vali_loss, best_acc = self.vali()
-        best_trained = 0
         step = 0
         n_trained = 0
         t0 = time.time()
@@ -116,7 +115,6 @@ class Master:
                 if vali_acc > best_acc:
                     self.save(self.opt.fld_out + "/ckpt/best.pth")
                     best_acc = vali_acc
-                    best_trained = n_trained
                 sys.stdout.flush()
 
                 list_trained.append(n_trained / 1e6)
