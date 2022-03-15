@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:8091/respond"
+    url = "http://0.0.0.0:8122/respond"
 
     contexts = ["Привет! Как дела?", "Какой твой любимый фильм?"]
     hypotheses = [
