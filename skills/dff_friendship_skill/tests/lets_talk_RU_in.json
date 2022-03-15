@@ -6,9 +6,9 @@
         {
             "human_utterances": [
                 {
-                    "text": "\u043f\u0440\u0438\u0432\u0435\u0442",
+                    "text": "привет",
                     "annotations": {
-                        "spelling_preprocessing": "\u043f\u0440\u0438\u0432\u0435\u0442",
+                        "spelling_preprocessing": "привет",
                         "badlisted_words": {
                             "bad_words": false
                         },
