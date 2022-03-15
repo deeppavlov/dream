@@ -5,11 +5,10 @@ import os
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from main import Option
-from model import Scorer, JointScorer
+from model import Scorer
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -59,7 +58,6 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
