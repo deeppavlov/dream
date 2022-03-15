@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu:0.17.2
+FROM deeppavlov/base-gpu:0.14.1
 
 ARG CONFIG
 ARG SED_ARG=" | "

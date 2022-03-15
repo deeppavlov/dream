@@ -162,6 +162,10 @@
       "MODELS_PATH": "{ROOT_PATH}/models",
       "MODEL_PATH": "{MODELS_PATH}/sentseg_ru_v0"
     },
+    "requirements": [
+        "{DEEPPAVLOV_PATH}/requirements/fasttext.txt",
+        "{DEEPPAVLOV_PATH}/requirements/tf.txt"
+    ],
     "download": [
       {
         "url": "http://files.deeppavlov.ai/embeddings/lenta_lower_100.bin",
