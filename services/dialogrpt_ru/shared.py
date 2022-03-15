@@ -8,7 +8,8 @@ EOS_token = "<|endoftext|>"
 def download_model(path):
     if path is None:
         return
-    import os, subprocess
+    import os
+    import subprocess
 
     if os.path.exists(path):
         return

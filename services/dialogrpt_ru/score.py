@@ -1,8 +1,11 @@
-import torch, os, json
-from shared import _cat_
-import numpy as np
-from model import OptionInfer
+import os
+import json
 from collections import defaultdict
+
+import numpy as np
+import torch
+from model import OptionInfer
+from shared import _cat_
 
 
 def get_model(path, cuda=True):

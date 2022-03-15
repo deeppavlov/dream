@@ -1,8 +1,12 @@
 # author: Xiang Gao at Microsoft Research AI NLP Group
 
+import os
+import sys
+import time
+import warnings
 
-import torch, os, time, sys, warnings
 import numpy as np
+import torch
 from feeder import Feeder
 from model import Scorer, JointScorer
 
@@ -122,18 +126,18 @@ class Master:
                 list_vali_acc.append(vali_acc)
                 # _, axs = plt.subplots(3, 1, sharex=True)
 
-                axs[0].plot(list_trained, list_train_loss, "b", label="train")
-                axs[0].plot(list_trained, list_vali_loss, "r", label="vali")
-                axs[0].legend(loc="best")
-                axs[0].set_ylabel("loss")
-
-                axs[1].plot(list_trained, list_train_acc, "b", label="train")
-                axs[1].plot(list_trained, list_vali_acc, "r", label="vali")
-                axs[1].plot([best_trained / 1e6, n_trained / 1e6], [best_acc, best_acc], "k:")
-                axs[1].set_ylabel("acc")
-
-                axs[-1].set_xlabel("trained (M)")
-                axs[0].set_title(self.opt.fld_out + "\n" + self.opt.fld_data + "\nbest_acc = %.4f" % best_acc)
+                # axs[0].plot(list_trained, list_train_loss, "b", label="train")
+                # axs[0].plot(list_trained, list_vali_loss, "r", label="vali")
+                # axs[0].legend(loc="best")
+                # axs[0].set_ylabel("loss")
+                #
+                # axs[1].plot(list_trained, list_train_acc, "b", label="train")
+                # axs[1].plot(list_trained, list_vali_acc, "r", label="vali")
+                # axs[1].plot([best_trained / 1e6, n_trained / 1e6], [best_acc, best_acc], "k:")
+                # axs[1].set_ylabel("acc")
+                #
+                # axs[-1].set_xlabel("trained (M)")
+                # axs[0].set_title(self.opt.fld_out + "\n" + self.opt.fld_data + "\nbest_acc = %.4f" % best_acc)
                 # plt.tight_layout()
                 # plt.savefig(self.opt.fld_out + "/log.png")
                 # plt.close()

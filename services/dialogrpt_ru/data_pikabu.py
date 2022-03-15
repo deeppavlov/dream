@@ -1,7 +1,8 @@
 # author: Xiang Gao at Microsoft Research AI NLP Group
 
-
-import json, os, pickle
+import json
+import os
+import pickle
 import numpy as np
 
 
@@ -51,7 +52,6 @@ def get_dates(year_from, year_to=None):
 
 
 def extract_rc(date):
-    path_bz2 = "%s/RC_%s.bz2" % (fld_bz2, date)
     nodes = dict()
     edges = dict()
     subs = set()
@@ -116,9 +116,6 @@ def extract_rc(date):
 
 
 def extract_rs(date):
-    import zstandard as zstd
-
-    path_bz2 = "%s/RS_%s.zst" % (fld_bz2, date)
     roots = dict()
     subs = set()
     n = 0
@@ -309,7 +306,7 @@ def extract_trees(sub, year):
             trees[link][(parent, child)] = date
 
     if not trees:
-        print(f"no trees. Return from extract_trees")
+        print("no trees. Return from extract_trees")
         return
 
     print("[%s %i] %i trees %.1f nodes/tree" % (sub, year, len(trees), n / len(trees)))
@@ -548,6 +545,7 @@ def create_pairs(year, sub, feedback, overwrite=False):
     n_line = 0
     prev = None
     replies = []
+    cxt = ""
     for line in open(path_in):
         if line.startswith("#"):
             continue
