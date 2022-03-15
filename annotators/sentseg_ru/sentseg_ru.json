@@ -170,6 +170,10 @@
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/sentseg_ru_subtitles_data.tar.gz",
         "subdir": "{DOWNLOADS_PATH}/sentseg_ru_subtitles_data"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/sentseg_ru_v0.tar.gz",
+        "subdir": "{MODELS_PATH}"
       }
     ]
   }
