@@ -1,7 +1,7 @@
-import torch, pdb, os, json
+import torch, os, json
 from shared import _cat_
 import numpy as np
-from model import OptionInfer, Scorer
+from model import OptionInfer
 from collections import defaultdict
 
 

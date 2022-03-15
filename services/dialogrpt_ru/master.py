@@ -1,11 +1,10 @@
 # author: Xiang Gao at Microsoft Research AI NLP Group
 
 
-import torch, os, pdb, time, sys, warnings
+import torch, os, time, sys, warnings
 import numpy as np
 from feeder import Feeder
 from model import Scorer, JointScorer
-import matplotlib.pyplot as plt
 
 
 class Master:
@@ -121,7 +120,7 @@ class Master:
                 list_train_acc.append(avg_train_acc)
                 list_vali_loss.append(vali_loss)
                 list_vali_acc.append(vali_acc)
-                _, axs = plt.subplots(3, 1, sharex=True)
+                # _, axs = plt.subplots(3, 1, sharex=True)
 
                 axs[0].plot(list_trained, list_train_loss, "b", label="train")
                 axs[0].plot(list_trained, list_vali_loss, "r", label="vali")
@@ -135,9 +134,9 @@ class Master:
 
                 axs[-1].set_xlabel("trained (M)")
                 axs[0].set_title(self.opt.fld_out + "\n" + self.opt.fld_data + "\nbest_acc = %.4f" % best_acc)
-                plt.tight_layout()
-                plt.savefig(self.opt.fld_out + "/log.png")
-                plt.close()
+                # plt.tight_layout()
+                # plt.savefig(self.opt.fld_out + "/log.png")
+                # plt.close()
 
             if step % self.opt.step_save == 0:
                 self.save(self.opt.fld_out + "/ckpt/last.pth")

@@ -1,10 +1,8 @@
 # author: Xiang Gao at Microsoft Research AI NLP Group
 
 
-import bz2, json, os, pickle, pdb, time, random
-import urllib.request
+import json, os, pickle
 import numpy as np
-from shared import _cat_
 
 
 def valid_sub(sub):
