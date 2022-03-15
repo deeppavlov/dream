@@ -23,6 +23,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8012:8012
+  sentseg:
+    volumes:
+      - "./annotators/sentseg_ru:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8011:8011
   intent-catcher:
     volumes:
       - "./annotators/IntentCatcher/src:/src"

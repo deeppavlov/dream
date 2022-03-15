@@ -15,10 +15,11 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+config = getenv("CONFIG", "sentseg_ru.json")
 
 try:
     spacy_nlp = spacy.load("ru_core_news_sm")
-    sentseg_model = build_model("sentseg_ru.json", download=True)
+    sentseg_model = build_model(config, download=True)
     m = sentseg_model(["привет как дела"])
 except Exception as e:
     logger.exception("SentSeg Russian not loaded")
