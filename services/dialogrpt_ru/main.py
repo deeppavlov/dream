@@ -8,26 +8,49 @@ from master import Master
 
 class Option:
     def __init__(self, args):
-        if args.cpu or not torch.cuda.is_available():
-            self.cuda = False
+        if isinstance(args, dict):
+            if args["cpu"] or not torch.cuda.is_available():
+                self.cuda = False
+            else:
+                self.cuda = True
+            self.task = args["task"]
+            self.path_load = args["path_load"]
+            self.batch = args["batch"]
+            self.vali_size = max(self.batch, args["vali_size"])
+            self.vali_print = args["vali_print"]
+            self.lr = args["lr"]
+            self.max_seq_len = args["max_seq_len"]
+            self.min_score_gap = args["min_score_gap"]
+            self.min_rank_gap = args["min_rank_gap"]
+            self.max_hr_gap = args["max_hr_gap"]
+            self.mismatch = args["mismatch"]
+            self.fld_data = args["data"]
+            if args["task"] == "train" or self.path_load is None:
+                self.fld_out = "out/%i" % time.time()
+            else:
+                self.fld_out = "out/temp"
         else:
-            self.cuda = True
-        self.task = args.task
-        self.path_load = args.path_load
-        self.batch = args.batch
-        self.vali_size = max(self.batch, args.vali_size)
-        self.vali_print = args.vali_print
-        self.lr = args.lr
-        self.max_seq_len = args.max_seq_len
-        self.min_score_gap = args.min_score_gap
-        self.min_rank_gap = args.min_rank_gap
-        self.max_hr_gap = args.max_hr_gap
-        self.mismatch = args.mismatch
-        self.fld_data = args.data
-        if args.task == "train" or self.path_load is None:
-            self.fld_out = "out/%i" % time.time()
-        else:
-            self.fld_out = "out/temp"
+            if args.cpu or not torch.cuda.is_available():
+                self.cuda = False
+            else:
+                self.cuda = True
+            self.task = args.task
+            self.path_load = args.path_load
+            self.batch = args.batch
+            self.vali_size = max(self.batch, args.vali_size)
+            self.vali_print = args.vali_print
+            self.lr = args.lr
+            self.max_seq_len = args.max_seq_len
+            self.min_score_gap = args.min_score_gap
+            self.min_rank_gap = args.min_rank_gap
+            self.max_hr_gap = args.max_hr_gap
+            self.mismatch = args.mismatch
+            self.fld_data = args.data
+            if args.task == "train" or self.path_load is None:
+                self.fld_out = "out/%i" % time.time()
+            else:
+                self.fld_out = "out/temp"
+
         os.makedirs(self.fld_out, exist_ok=True)
 
         self.clip = 1
