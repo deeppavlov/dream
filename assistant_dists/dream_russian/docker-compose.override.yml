@@ -292,7 +292,7 @@ services:
       context: ./services/dialogrpt_ru/
       args:
         SERVICE_PORT: 8122
-        PRETRAINED_MODEL_NAME_OR_PATH: dialogrpt_ru_ckpt_v0.pth
+        PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
     command: flask run -h 0.0.0.0 -p 8122
     environment:
       - CUDA_VISIBLE_DEVICES=0
