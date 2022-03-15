@@ -16,9 +16,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-PRETRAINED_MODEL_FNAME = os.environ.get(
-    "PRETRAINED_MODEL_FNAME", "dialogrpt_ru_ckpt_v0.pth"
-)
+PRETRAINED_MODEL_FNAME = os.environ.get("PRETRAINED_MODEL_FNAME", "dialogrpt_ru_ckpt_v0.pth")
 logger.info(f"PRETRAINED_MODEL_FNAME = {PRETRAINED_MODEL_FNAME}")
 
 cuda = torch.cuda.is_available()
@@ -77,7 +75,7 @@ def respond():
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result_values = [[0. for _ in hyps] for hyps in hypotheses]
+        result_values = [[0.0 for _ in hyps] for hyps in hypotheses]
 
     total_time = time.time() - st_time
     logger.info(f"dialogrpt exec time: {total_time:.3f}s")

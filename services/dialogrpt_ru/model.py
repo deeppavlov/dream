@@ -14,7 +14,6 @@ class OptionInfer:
 tokenizer = AutoTokenizer.from_pretrained("Grossmend/rudialogpt3_medium_based_on_gpt2")
 
 
-
 class ScorerBase(torch.nn.Module):
     def __init__(self, opt):
         super().__init__()
@@ -23,12 +22,10 @@ class ScorerBase(torch.nn.Module):
         self.opt = opt
         self.tokenizer = tokenizer
 
-
     def core(self, ids, l_ids, return_logits=False):
         # to be implemented in child class
         return 0
 
-    
     def predict(self, cxt, hyps, max_cxt_turn=None):
         # cxt = str
         # hyps = list of str
@@ -36,7 +33,7 @@ class ScorerBase(torch.nn.Module):
         self.eval()
         cxt_turns = cxt.split(EOS_token)
         if max_cxt_turn is not None:
-            cxt_turns = cxt_turns[-min(max_cxt_turn, len(cxt_turns)):]
+            cxt_turns = cxt_turns[-min(max_cxt_turn, len(cxt_turns)) :]
         ids_cxt = []
         for turn in cxt_turns:
             ids_cxt += self.tokenizer.encode(turn.strip()) + [self.ix_EOS]
@@ -59,17 +56,16 @@ class ScorerBase(torch.nn.Module):
             if self.opt.cuda:
                 scores = scores.cpu()
             return scores.detach().numpy()
-            
+
         for k in scores:
             if self.opt.cuda:
                 scores[k] = scores[k].cpu()
             scores[k] = scores[k].detach().numpy()
         return scores
 
-
     def forward(self, batch):
-        logits_pos = self.core(batch['ids_pos'], batch['len_pos'], return_logits=True)
-        logits_neg = self.core(batch['ids_neg'], batch['len_neg'], return_logits=True)
+        logits_pos = self.core(batch["ids_pos"], batch["len_pos"], return_logits=True)
+        logits_neg = self.core(batch["ids_neg"], batch["len_neg"], return_logits=True)
         # softmax to get the `probability` to rank pos/neg correctly
         return torch.exp(logits_pos) / (torch.exp(logits_pos) + torch.exp(logits_neg))
 
@@ -87,7 +83,7 @@ class Scorer(ScorerBase):
         n = ids.shape[0]
         attention_mask = torch.ones_like(ids)
         for i in range(n):
-            attention_mask[i, l_ids[i]:] *= 0
+            attention_mask[i, l_ids[i] :] *= 0
         transformer_output = self.transformer(ids, attention_mask=attention_mask, output_hidden_states=True)
         logits = self.score(transformer_output.hidden_states[0]).squeeze(-1)
         logits = torch.stack([logits[i, l_ids[i] - 1] for i in range(n)])
@@ -96,12 +92,11 @@ class Scorer(ScorerBase):
         else:
             return torch.sigmoid(logits)
 
-    
     def load(self, path):
 
-        print('loading from '+path)
-        weights = torch.load(path, map_location=torch.device('cpu'))
-        if path.endswith('.pkl'):
+        print("loading from " + path)
+        weights = torch.load(path, map_location=torch.device("cpu"))
+        if path.endswith(".pkl"):
             # russian DialoGPT checkpoint
             pass
         else:
@@ -111,14 +106,13 @@ class Scorer(ScorerBase):
 
 
 class JointScorer(ScorerBase):
-    
     def core(self, ids, l_ids, return_logits=False):
-        assert(not return_logits)
+        assert not return_logits
         scores = dict()
-        for k in self.kk['prior'] + self.kk['cond']:
-            scorer = getattr(self, 'scorer_%s'%k)
+        for k in self.kk["prior"] + self.kk["cond"]:
+            scorer = getattr(self, "scorer_%s" % k)
             scores[k] = scorer.core(ids, l_ids)
-        
+
         def avg_score(kk):
             if not kk:
                 return 1
@@ -129,37 +123,34 @@ class JointScorer(ScorerBase):
                 sum_wt += self.wt[k]
             return sum_score_wt / sum_wt
 
-        prior = avg_score(self.kk['prior'])
-        cond = avg_score(self.kk['cond'])
-        scores['final'] = prior * cond
+        prior = avg_score(self.kk["prior"])
+        cond = avg_score(self.kk["cond"])
+        scores["final"] = prior * cond
         return scores
 
-    
     def load(self, path_config):
         import yaml
-        with open(path_config, 'r') as stream:
+
+        with open(path_config, "r") as stream:
             config = yaml.safe_load(stream)
         print(config)
 
         paths = dict()
         self.wt = dict()
         self.kk = dict()
-        for prefix in ['prior', 'cond']:
+        for prefix in ["prior", "cond"]:
             self.kk[prefix] = []
             for d in config[prefix]:
-                k = d['name']
+                k = d["name"]
                 self.kk[prefix].append(k)
-                self.wt[k] = d['wt']
-                paths[k] = d['path']
-        
+                self.wt[k] = d["wt"]
+                paths[k] = d["path"]
+
         for k in paths:
             path = paths[k]
-            print('setting up model `%s`'%k)
+            print("setting up model `%s`" % k)
             scorer = Scorer(OptionInfer(cuda=self.opt.cuda))
             scorer.load(path)
             if self.opt.cuda:
                 scorer.cuda()
-            setattr(self, 'scorer_%s'%k, scorer)
-
-
-
+            setattr(self, "scorer_%s" % k, scorer)
