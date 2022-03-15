@@ -63,7 +63,7 @@ def add_punctuation(tokens, pred_labels):
             punctuation = tag2text[tag]
         sent += " " + word
     sent += punctuation
-
+    logger.info(f"Punctuated: {sent}")
     return sent
 
 
@@ -77,8 +77,8 @@ def respond():
     st_time = time.time()
     utterances = request.json["utterances"]
     # TODO: remove punctuation if present
-    punctuated_tokens = sentseg_model(utterances)
-    punctuated = [add_punctuation(tokens, pred_labels) for tokens, pred_labels in zip(punctuated_tokens)]
+    ptokens = sentseg_model(utterances)
+    punctuated = [add_punctuation(tokens, pred_labels) for tokens, pred_labels in zip(ptokens[0], ptokens[1])]
     segments = [split_sentences(utt) for utt in punctuated]
 
     sentseg_result = []
