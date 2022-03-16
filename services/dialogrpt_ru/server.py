@@ -67,18 +67,16 @@ def respond():
     hypotheses = request.json.get("hypotheses", [])
 
     try:
-        result_values = []
         _cxts, _hyps = [], []
         for cxt, hyp in zip(dialog_contexts, hypotheses):
             _cxts += [cxt]
             _hyps += [hyp]
-        prediction = model.predict_on_batch(cxts=_cxts, hyps=_hyps).tolist()
-        # prediction is a list of float values
-        result_values.append(prediction)
+        result_values = model.predict_on_batch(cxts=_cxts, hyps=_hyps).tolist()
+        # result_values is a list of float values
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result_values = [[0.0 for _ in hyps] for hyps in hypotheses]
+        result_values = [0.0 for _ in hypotheses]
 
     total_time = time.time() - st_time
     logger.info(f"dialogrpt exec time: {total_time:.3f}s")
