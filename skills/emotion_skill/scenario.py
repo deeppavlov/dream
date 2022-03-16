@@ -25,6 +25,8 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+LANGUAGE = getenv("LANGUAGE", "EN")
+
 SCRIPTED_TRIGGER_PHRASES = []
 for skill in LIST_OF_SCRIPTED_TOPICS:
     SCRIPTED_TRIGGER_PHRASES.extend(list(skills_phrases_map[skill]))
@@ -210,7 +212,7 @@ class EmotionSkillScenario:
                 very_very_confident = very_confident and any(
                     [
                         how_are_you_response.lower() in prev_bot_phrase.lower()
-                        for how_are_you_response in HOW_ARE_YOU_RESPONSES
+                        for how_are_you_response in HOW_ARE_YOU_RESPONSES[LANGUAGE]
                     ]
                 )
                 # Confident if regezp

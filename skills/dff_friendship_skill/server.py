@@ -25,7 +25,7 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
