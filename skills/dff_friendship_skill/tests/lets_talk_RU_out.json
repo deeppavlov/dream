@@ -1,6 +1,6 @@
 [
     [
-        "Hi, this is a DREAM Socialbot! How are you?",
+        "Привет, это чат-бот Dream! Как дела?",
         1.0,
         {
             "dff_friendship_skill_state": {
@@ -16,7 +16,7 @@
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "6332e8b4-122d-4b64-bc7c-01d0a8f7dc75",
+                    "id": "59c2096b-1dbb-4d0d-b5c6-5b325cb62820",
                     "labels": {
                         "0": [
                             "greeting_flow",
@@ -24,10 +24,10 @@
                         ]
                     },
                     "requests": {
-                        "0": "hi."
+                        "0": "привет"
                     },
                     "responses": {
-                        "0": "Hi, this is a DREAM Socialbot! How are you?"
+                        "0": "Привет, это чат-бот Dream! Как дела?"
                     },
                     "misc": {},
                     "validation": false,
@@ -39,7 +39,7 @@
                 "cross_links": {}
             },
             "used_links": {},
-            "age_group": "unknown",
+            "age_group": "",
             "disliked_skills": []
         },
         {},

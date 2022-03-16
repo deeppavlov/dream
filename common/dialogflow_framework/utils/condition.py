@@ -250,7 +250,7 @@ def is_passive_user(vars, history_len=2):
     return False
 
 
-def get_not_used_and_save_sentiment_acknowledgement(vars):
+def get_not_used_and_save_sentiment_acknowledgement(vars, lang="EN"):
     sentiment = state_utils.get_human_sentiment(vars)
     if is_yes_vars(vars) or is_no_vars(vars):
         sentiment = "neutral"
@@ -259,7 +259,7 @@ def get_not_used_and_save_sentiment_acknowledgement(vars):
     last_acknowledgements = shared_memory.get("last_acknowledgements", [])
 
     ack = common_utils.get_not_used_template(
-        used_templates=last_acknowledgements, all_templates=GENERAL_ACKNOWLEDGEMENTS[sentiment]
+        used_templates=last_acknowledgements, all_templates=GENERAL_ACKNOWLEDGEMENTS[lang][sentiment]
     )
 
     used_acks = last_acknowledgements + [ack]

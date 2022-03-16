@@ -4,10 +4,12 @@ ARG CONFIG
 ARG COMMIT
 ARG PORT
 ARG SRC_DIR
+ARG LANGUAGE=EN
 
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 ENV COMMIT=$COMMIT
+ENV LANGUAGE=$LANGUAGE
 
 COPY ./annotators/wiki_parser/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

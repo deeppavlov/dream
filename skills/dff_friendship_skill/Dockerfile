@@ -3,18 +3,16 @@ FROM python:3.9.1
 # Do not change anything in this section 
 WORKDIR /src
 
-COPY common/dialogflow_framework/requirements.txt .
+COPY common/dff/requirements.txt .
 RUN pip install -r requirements.txt
-
-COPY common/dialogflow_framework/scripts /scripts
-
-RUN bash /scripts/programy_logger_off.sh
 
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt

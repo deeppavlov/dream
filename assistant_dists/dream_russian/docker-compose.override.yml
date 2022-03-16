@@ -16,7 +16,7 @@ services:
       args:
         SERVICE_PORT: 8008
         SERVICE_NAME: dff_program_y_skill
-        LANGUAGE: RUSSIAN
+        LANGUAGE: RU
       context: .
       dockerfile: ./skills/dff_program_y_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
@@ -32,6 +32,8 @@ services:
     build:
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
+      args:
+        LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8009
     environment:
       - FLASK_APP=server
@@ -99,7 +101,7 @@ services:
     env_file: [.env]
     build:
       args:
-        LANGUAGE: RUSSIAN
+        LANGUAGE: RU
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
@@ -196,6 +198,7 @@ services:
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+        LANGUAGE: RU
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
     command: flask run -h 0.0.0.0 -p 8077
@@ -235,6 +238,7 @@ services:
       args:
         SERVICE_PORT: 8086
         SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
+        LANGUAGE: RU
       context: .
       dockerfile: ./skills/dff_friendship_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
@@ -255,6 +259,7 @@ services:
         SERVICE_PORT: 8111
         SERVICE_NAME: dff_wiki_skill
         COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+        LANGUAGE: RU
       context: ./
       dockerfile: ./skills/dff_wiki_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8111
