@@ -1,0 +1,69 @@
+[
+    [
+        "Ну что ж, я все равно считаю тебя интересным человеком. Какие у тебя хобби?",
+        1.0,
+        {
+            "dff_friendship_skill_state": {
+                "shared_memory": {
+                    "greeting_step_id": 2,
+                    "greeting_type": "how_are_you"
+                },
+                "previous_human_utter_index": 2,
+                "history": {
+                    "0": [
+                        "greeting_flow",
+                        "hello_response_node"
+                    ],
+                    "1": [
+                        "greeting_flow",
+                        "how_are_you_node"
+                    ],
+                    "2": [
+                        "greeting_flow",
+                        "std_greeting_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "59c2096b-1dbb-4d0d-b5c6-5b325cb62820",
+                    "labels": {
+                        "1": [
+                            "greeting_flow",
+                            "how_are_you_node"
+                        ],
+                        "2": [
+                            "greeting_flow",
+                            "std_greeting_node"
+                        ]
+                    },
+                    "requests": {
+                        "1": "отлично! а у тебя?",
+                        "2": "ничего"
+                    },
+                    "responses": {
+                        "1": "Спасибо, у меня как всегда все прекрасно! Я слышала, что у людей бывают отпуска и выходные. Не мой выбор! Я могу без устали говорить день и ночь! Что главное произошло с тобой сегодня?",
+                        "2": "Ну что ж, я все равно считаю тебя интересным человеком. Какие у тебя хобби?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "must",
+            "response_parts": [
+                "acknowledgement",
+                "body"
+            ]
+        }
+    ]
+]

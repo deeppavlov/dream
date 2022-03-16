@@ -15,7 +15,7 @@ from spacy.tokens import Doc, Token
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-LANGUAGE = getenv("LANGUAGE", "ENGLISH")
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -144,7 +144,7 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
     return all_ngrams
 
 
-if LANGUAGE == "RUSSIAN":
+if LANGUAGE == "RU":
     nlp_pipeline = spacy.load("ru_core_news_sm", exclude=["senter", "ner"])
     badlists_dir = Path("./badlists")
     badlists_files = [f for f in badlists_dir.iterdir() if f.is_file() and "_ru" in f.name]

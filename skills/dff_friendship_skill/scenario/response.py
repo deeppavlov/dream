@@ -16,8 +16,9 @@ from df_engine.core import Actor, Context
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 REPLY_TYPE = Tuple[str, float, dict, dict, dict]
 DIALOG_BEGINNING_START_CONFIDENCE = 0.98
@@ -27,7 +28,7 @@ MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
 MIDDLE_CONFIDENCE = 0.95
-GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
+GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
 
 link_to_skill2key_words = {
     skill_name: common_link.link_to_skill2key_words[skill_name]
@@ -43,6 +44,7 @@ link_to_skill2i_like_to_talk = {
 
 
 def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> str:
+    logger.debug("compose_topic_offering")
     excluded_skills = [] if excluded_skills is None else excluded_skills
 
     available_skill_names = [
@@ -63,6 +65,7 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
     if skill_name in link_to_skill2i_like_to_talk:
         response = random.choice(link_to_skill2i_like_to_talk[skill_name])
     else:
+
         response = f"Would you like to talk about {skill_name}?"
     int_ctx.save_to_shared_memory(ctx, actor, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
 
@@ -70,6 +73,7 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
 
 
 def offer_topic(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
+    logger.debug("offer_topic")
     if excluded_skills is None:
         excluded_skills = int_ctx.get_disliked_skills(ctx, actor)
 
@@ -79,9 +83,9 @@ def offer_topic(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwarg
     #     offer_topic_choose = compose_topic_offering(ctx, actor, excluded_skills=excluded_skills)
     # else:
     #     # what do you want to talk about?
-    #     offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+    #     offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
     greeting_step_id = GREETING_STEPS.index("what_to_talk_about")
-    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    logger.debug(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return offer_topic_choose
 
@@ -95,6 +99,7 @@ def greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         bot attributes (empty),
         attributes MUST_CONTINUE or (empty)
     """
+    logger.debug("greeting_response")
     bot_utt = int_ctx.get_last_bot_utterance(ctx, actor)["text"].lower()
     if int_cnd.is_lets_chat_about_topic(ctx, actor):
         int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
@@ -113,9 +118,9 @@ def greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     )
     int_ctx.save_to_shared_memory(ctx, actor, greeting_type=which_start)
     if which_start == "how_are_you":
-        after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES)
+        after_hello_resp = random.choice(common_greeting.HOW_ARE_YOU_RESPONSES[LANGUAGE])
     elif which_start == "what_is_your_name":
-        after_hello_resp = random.choice(common_greeting.WHAT_IS_YOUR_NAME_RESPONSES)
+        after_hello_resp = random.choice(common_greeting.WHAT_IS_YOUR_NAME_RESPONSES[LANGUAGE])
     # elif which_start == "starter_genre":
     #     after_hello_resp = starter_flow.genre_response(ctx, actor)
     # elif which_start == "starter_weekday":
@@ -129,21 +134,23 @@ def greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if "seems like alexa decided to turn me on" in bot_utt:
         reply = after_hello_resp
     else:
-        reply = f"{common_greeting.HI_THIS_IS_ALEXA} {after_hello_resp}"
+        reply = f"{common_greeting.HI_THIS_IS_DREAM[LANGUAGE]} {after_hello_resp}"
     return reply
 
 
 def clarify_event_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("clarify_event_response")
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     reply = random.choice(["Cool! Tell me about it.", "Great! What is it?"])
     greeting_step_id = GREETING_STEPS.index("recent_personal_events")
-    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    logger.debug(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return reply
 
 
 def false_positive_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("false_positive_response")
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     reply = "Hi! Seems like Alexa decided to turn me on. Do you want to chat with me?"
@@ -151,6 +158,7 @@ def false_positive_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def bye_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("bye_response")
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
     reply = "Sorry, bye. #+#exit"
@@ -158,28 +166,31 @@ def bye_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def how_are_you_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("how_are_you_response")
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
-    how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES)
+    how_bot_is_doing_resp = random.choice(common_greeting.HOW_BOT_IS_DOING_RESPONSES[LANGUAGE])
 
-    question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS["recent_personal_events"])
+    question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"])
     reply = (
-        f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
+        f"{how_bot_is_doing_resp} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES[LANGUAGE])} "
         f"{question_about_activities}"
     )
     greeting_step_id = GREETING_STEPS.index("recent_personal_events")
-    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    logger.debug(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return reply
 
 
 def health_problems(ctx: Context, actor: Actor):
+    logger.debug("health_problems")
     if HEALTH_PROBLEMS.search(int_ctx.get_last_human_utterance(ctx, actor)["text"]):
         return True
     return False
 
 
 def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("how_human_is_doing_response")
     usr_sentiment = int_ctx.get_human_sentiment(ctx, actor)
     _no_entities = len(int_ctx.get_nounphrases_from_human_utterance(ctx, actor)) == 0
     _no_requests = int_cnd.no_requests(ctx, actor)
@@ -187,13 +198,13 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
     if is_positive_regexp_based(int_ctx.get_last_human_utterance(ctx, actor)):
         int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
-        user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
+        user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS[LANGUAGE])
     elif _is_unhealthy or is_negative_regexp_based(int_ctx.get_last_human_utterance(ctx, actor)):
         int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
         user_mood_acknowledgement = (
-            f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} "
-            f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
+            f"{random.choice(common_greeting.BAD_MOOD_REACTIONS[LANGUAGE])} "
+            f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP[LANGUAGE])}"
         )
     else:
         if _no_entities and _no_requests and usr_sentiment != "negative":
@@ -205,29 +216,32 @@ def how_human_is_doing_response(ctx: Context, actor: Actor, *args, **kwargs) -> 
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
         if usr_sentiment == "positive":
-            user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS)
+            user_mood_acknowledgement = random.choice(common_greeting.GOOD_MOOD_REACTIONS[LANGUAGE])
         elif usr_sentiment == "negative":
             user_mood_acknowledgement = (
-                f"{random.choice(common_greeting.BAD_MOOD_REACTIONS)} "
-                f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP)}"
+                f"{random.choice(common_greeting.BAD_MOOD_REACTIONS[LANGUAGE])} "
+                f"{random.choice(common_greeting.GIVE_ME_CHANCE_TO_CHEER_UP[LANGUAGE])}"
             )
         else:
-            user_mood_acknowledgement = "Okay."
+            user_mood_acknowledgement = int_cnd.get_not_used_and_save_sentiment_acknowledgement(
+                ctx, actor, sentiment="neutral", lang=LANGUAGE
+            )
 
-    question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS["recent_personal_events"])
+    question_about_activities = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["recent_personal_events"])
     reply = (
-        f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES)} "
+        f"{user_mood_acknowledgement} {random.choice(common_greeting.WHAT_DO_YOU_DO_RESPONSES[LANGUAGE])} "
         f"{question_about_activities}"
     )
     int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
     greeting_step_id = GREETING_STEPS.index("recent_personal_events")
-    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    logger.debug(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     return reply
 
 
 def offer_topics_choice_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("offer_topics_choice_response")
     int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     reply = offer_topic(ctx, actor)
@@ -235,19 +249,23 @@ def offer_topics_choice_response(ctx: Context, actor: Actor, *args, **kwargs) ->
 
 
 def offered_topic_choice_declined_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("offered_topic_choice_declined_response")
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     greeting_step_id = 0
     # what do you want to talk about?
-    offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS["what_to_talk_about"])
+    offer_topic_choose = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
 
-    logger.info(f"Assign greeting_step_id to {greeting_step_id + 1}")
+    logger.debug(f"Assign greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
-    reply = f"Okay. {offer_topic_choose}"
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, sentiment="neutral", lang=LANGUAGE)
+    int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
+    reply = f"{ack} {offer_topic_choose}"
     return reply
 
 
 def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("std_greeting_response")
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
 
@@ -262,49 +280,59 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     # acknowledgement, confidences
     if _nothing_dont_know or (_no_requests and len(_entities) == 0):
+        logger.debug("nothing OR no requests and no entities")
         if _friendship_was_active and greeting_step_id >= 1:
             ack = random.choice(
-                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[GREETING_STEPS[greeting_step_id - 1]]
+                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE][GREETING_STEPS[greeting_step_id - 1]]
             )
             int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
             int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     elif not _no_requests and len(_entities) > 0:
+        logger.debug("no requests but entities")
         # user wants to talk about something particular. We are just a dummy response, if no appropriate
         if _friendship_was_active:
-            ack = random.choice(common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY["what_do_you_do_on_weekdays"])
-            sent_ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = random.choice(
+                common_greeting.AFTER_GREETING_QUESTIONS_WHEN_NOT_TALKY[LANGUAGE]["what_do_you_do_on_weekdays"]
+            )
+            sent_ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
             ack = f"{sent_ack} {ack}"
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
         int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     else:
+        logger.debug("other cases")
         if len(_entities) == 0 or _no_requests:
             int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
         else:
             int_ctx.set_confidence(ctx, actor, MIDDLE_CONFIDENCE)
         # some request by user detected OR no requests but some entities detected
         if _friendship_was_active and GREETING_STEPS[greeting_step_id] == "recent_personal_events":
-            ack = random.choice(common_greeting.INTERESTING_PERSON_THANKS_FOR_CHATTING)
+            ack = random.choice(common_greeting.INTERESTING_PERSON_THANKS_FOR_CHATTING[LANGUAGE])
         else:
-            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+            ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
         int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
 
     if health_problems(ctx, actor):
         ack = "I'm so sorry to hear that. Hope, everything will be fine soon."
 
     if greeting_step_id == 0 or GREETING_STEPS[greeting_step_id] == "what_to_talk_about":
-        prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][-5:]
-        disliked_skills = int_ctx.get_disliked_skills(ctx, actor)
-        body = offer_topic(ctx, actor, excluded_skills=prev_active_skills + disliked_skills)
+        logger.debug("step-id=0 or what_to_talk_about")
+        if LANGUAGE == "EN":
+            prev_active_skills = [uttr.get("active_skill", "") for uttr in int_ctx.get_bot_utterances(ctx, actor)][-5:]
+            disliked_skills = int_ctx.get_disliked_skills(ctx, actor)
+            body = offer_topic(ctx, actor, excluded_skills=prev_active_skills + disliked_skills)
+        else:
+            body = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
     else:
-        body = random.choice(common_greeting.GREETING_QUESTIONS[GREETING_STEPS[greeting_step_id]])
+        logger.debug("choose according to step-id")
+        body = random.choice(common_greeting.GREETING_QUESTIONS[LANGUAGE][GREETING_STEPS[greeting_step_id]])
 
-    logger.info(f"Assign in std_greeting_response greeting_step_id to {greeting_step_id + 1}")
+    logger.debug(f"Assign in std_greeting_response greeting_step_id to {greeting_step_id + 1}")
     int_ctx.save_to_shared_memory(ctx, actor, greeting_step_id=greeting_step_id + 1)
     int_ctx.add_acknowledgement_to_response_parts(ctx, actor)
 
@@ -313,7 +341,8 @@ def std_greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def new_entities_is_needed_for_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+    logger.debug("new_entities_is_needed_for_response")
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
     body = "Tell me more about that."
 
     int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
@@ -325,7 +354,8 @@ def new_entities_is_needed_for_response(ctx: Context, actor: Actor, *args, **kwa
 
 
 def closed_answer_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+    logger.debug("closed_answer_response")
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
     body = ""
 
     int_cnd.set_conf_and_can_cont_by_universal_policy(ctx, actor)
@@ -342,6 +372,7 @@ MASKED_LM_SERVICE_URL = getenv("MASKED_LM_SERVICE_URL")
 
 
 def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
+    logger.debug("masked_lm")
     templates = ["Hello, it's [MASK] dog."] if templates is None else templates
     request_data = {"text": templates}
     try:
@@ -364,10 +395,12 @@ def masked_lm(templates=None, prob_threshold=0.0, probs_flag=False):
 
 
 def link_to_by_enity_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.debug("link_to_by_enity_response")
     try:
-        ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
+        ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
         entities = int_ctx.get_new_human_labeled_noun_phrase(ctx, actor)
         if entities:
+            logger.debug("entities detected")
             logger.debug(f"entities= {entities}")
             tgt_entity = list(entities)[-1]
             logger.debug(f"tgt_entity= {tgt_entity}")
@@ -385,6 +418,7 @@ def link_to_by_enity_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
                 }
                 skill_names = sorted(link_to_skill_scores, key=lambda x: link_to_skill_scores[x])[-2:]
         else:
+            logger.debug("no entities detected")
             skill_names = [random.choice(list(link_to_skill2key_words))]
 
         # used_links
