@@ -40,6 +40,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+LANGUAGE = getenv("LANGUAGE", "EN")
 REPLY_TYPE = Tuple[str, float, dict, dict, dict]
 
 
@@ -259,7 +260,7 @@ def ask_for_topic_after_two_no_in_a_row_to_linkto_response(ctx: Context) -> REPL
     confidence = 0.0
     attr = {}
     if prev_was_linkto and prev_prev_was_linkto and human_is_no and prev_human_is_no:
-        offer = random.choice(GREETING_QUESTIONS["what_to_talk_about"])
+        offer = random.choice(GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
         topics_to_offer = ", ".join(sum(link_to_skill2key_words.values(), []))
         reply = f"Okay then. {offer} {topics_to_offer}?"
         confidence = SUPER_CONF

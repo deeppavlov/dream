@@ -6,7 +6,7 @@ import common.test_utils as test_utils
 
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-LANGUAGE = os.getenv("LANGUAGE", "ENGLISH")
+LANGUAGE = os.getenv("LANGUAGE", "EN")
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 print(f"Selected dff-program-y-skill: {LANGUAGE} language.")
 
@@ -19,10 +19,10 @@ def handler(requested_data, random_seed):
 def run_test(handler):
     in_data, out_data = test_utils.get_dataset()
     for test_name in in_data:
-        if LANGUAGE == "RUSSIAN" and "RU" not in test_name:
+        if LANGUAGE == "RU" and "RU" not in test_name:
             # if russian language, skip english tests
             continue
-        elif LANGUAGE == "ENGLISH" and "RU" in test_name:
+        elif LANGUAGE == "EN" and "RU" in test_name:
             continue
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")

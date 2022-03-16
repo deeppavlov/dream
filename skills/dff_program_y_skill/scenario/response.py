@@ -9,8 +9,8 @@ from common.programy.model import get_programy_model
 from common.sensitive import psycho_help_spec
 
 logger = logging.getLogger(__name__)
-LANGUAGE = os.getenv("LANGUAGE", "ENGLISH")
-model_folder = "data_ru" if LANGUAGE == "RUSSIAN" else "data"
+LANGUAGE = os.getenv("LANGUAGE", "EN")
+model_folder = "data_ru" if LANGUAGE == "RU" else "data"
 logger.info(f"Selected dff-program-y-skill: {LANGUAGE} language.")
 
 try:

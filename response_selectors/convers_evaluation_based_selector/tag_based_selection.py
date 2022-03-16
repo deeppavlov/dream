@@ -57,6 +57,7 @@ ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = int(getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", 
 PROMPT_PROBA = float(getenv("PROMPT_PROBA", 0.3))
 ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
 PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -617,7 +618,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"
-            and greeting_spec in cand_uttr["text"]
+            and any([g in cand_uttr["text"] for g in greeting_spec.values()])
         ):
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif (
