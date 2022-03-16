@@ -920,4 +920,6 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
 
-    return [{"dialog_contexts": [dialog["human_utterances"][-1]["text"]], "hypotheses": [hypots]}]
+    contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
+
+    return [{"dialog_contexts": contexts, "hypotheses": hypots}]

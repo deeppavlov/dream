@@ -121,6 +121,47 @@ class ScorerBase(torch.nn.Module):
             scores[k] = scores[k].detach().numpy()
         return scores
 
+    def predict_on_batch(self, cxts, hyps, max_cxt_turn=None):
+        # cxt = list of str
+        # hyps = list of str
+
+        self.eval()
+
+        seqs = []
+        lens = []
+        for cxt, hyp in zip(cxts, hyps):
+            cxt_turns = cxt.split(EOS_token)
+            if max_cxt_turn is not None:
+                cxt_turns = cxt_turns[-min(max_cxt_turn, len(cxt_turns)) :]
+            ids_cxt = []
+            for turn in cxt_turns:
+                ids_cxt += self.tokenizer.encode(turn.strip()) + [self.ix_EOS]
+
+            seq = ids_cxt + self.tokenizer.encode(hyp.strip())
+            lens.append(len(seq))
+            seqs.append(seq)
+        max_len = max(lens)
+
+        ids = []
+        for seq in seqs:
+            ids.append(seq + [self.ix_EOS] * (max_len - len(seq)))
+
+        with torch.no_grad():
+            ids = torch.LongTensor(ids)
+            if self.opt.cuda:
+                ids = ids.cuda()
+            scores = self.core(ids, lens)
+        if not isinstance(scores, dict):
+            if self.opt.cuda:
+                scores = scores.cpu()
+            return scores.detach().numpy()
+
+        for k in scores:
+            if self.opt.cuda:
+                scores[k] = scores[k].cpu()
+            scores[k] = scores[k].detach().numpy()
+        return scores
+
     def forward(self, batch):
         logits_pos = self.core(batch["ids_pos"], batch["len_pos"], return_logits=True)
         logits_neg = self.core(batch["ids_neg"], batch["len_neg"], return_logits=True)
