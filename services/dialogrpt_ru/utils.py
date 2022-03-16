@@ -6,7 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 EOS_token = "<|endoftext|>"
-TOKENIZER_NAME_OR_PATH = os.getenv(TOKENIZER_NAME_OR_PATH, "Grossmend/rudialogpt3_medium_based_on_gpt2")
+TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2")
 
 
 class Option:
