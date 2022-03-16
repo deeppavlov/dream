@@ -6,9 +6,7 @@ import numpy as np
 import torch
 from transformers import AutoTokenizer
 
-
-tokenizer = AutoTokenizer.from_pretrained("Grossmend/rudialogpt3_medium_based_on_gpt2")
-
+TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2")
 
 class Feeder:
     # load train/vali/test data
@@ -21,7 +19,8 @@ class Feeder:
         for sub in ["train", "vali", "test"]:
             self.reset(sub)
         self.ix_EOS = 50257
-        self.ix_PAD = tokenizer.pad_token_id
+        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME_OR_PATH)
+        self.ix_PAD = self.tokenizer.pad_token_id
         self.ix_OMT = 655
 
     def reset(self, sub):

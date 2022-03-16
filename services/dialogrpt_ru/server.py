@@ -7,8 +7,7 @@ import torch
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from main import Option
-from model import Scorer
+from utils import Option, Scorer
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])

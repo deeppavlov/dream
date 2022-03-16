@@ -8,16 +8,13 @@ import warnings
 import numpy as np
 import torch
 from feeder import Feeder
-from model import Scorer, JointScorer
+from utils import Scorer
 
 
 class Master:
     def __init__(self, opt):
         self.opt = opt
-        if opt.path_load is not None and (opt.path_load.endswith(".yaml") or opt.path_load.endswith(".yml")):
-            self._model = JointScorer(opt)
-        else:
-            self._model = Scorer(opt)
+        self._model = Scorer(opt)
         if opt.path_load is not None:
             self._model.load(opt.path_load)
         self.parallel()

@@ -1,17 +1,75 @@
-# author: Xiang Gao at Microsoft Research AI NLP Group
-
+import os
+import time
 
 import torch
-from shared import EOS_token
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
-class OptionInfer:
-    def __init__(self, cuda=True):
-        self.cuda = cuda
+EOS_token = "<|endoftext|>"
+TOKENIZER_NAME_OR_PATH = os.getenv(TOKENIZER_NAME_OR_PATH, "Grossmend/rudialogpt3_medium_based_on_gpt2")
 
 
-tokenizer = AutoTokenizer.from_pretrained("Grossmend/rudialogpt3_medium_based_on_gpt2")
+class Option:
+    def __init__(self, args):
+        if isinstance(args, dict):
+            if args["cpu"] or not torch.cuda.is_available():
+                self.cuda = False
+            else:
+                self.cuda = True
+            self.task = args["task"]
+            self.path_load = args["path_load"]
+            self.batch = args["batch"]
+            self.vali_size = max(self.batch, args["vali_size"])
+            self.vali_print = args["vali_print"]
+            self.lr = args["lr"]
+            self.max_seq_len = args["max_seq_len"]
+            self.min_score_gap = args["min_score_gap"]
+            self.min_rank_gap = args["min_rank_gap"]
+            self.max_hr_gap = args["max_hr_gap"]
+            self.mismatch = args["mismatch"]
+            self.fld_data = args["data"]
+            if args["task"] == "train" or self.path_load is None:
+                self.fld_out = "out/%i" % time.time()
+            else:
+                self.fld_out = "out/temp"
+        else:
+            if args.cpu or not torch.cuda.is_available():
+                self.cuda = False
+            else:
+                self.cuda = True
+            self.task = args.task
+            self.path_load = args.path_load
+            self.batch = args.batch
+            self.vali_size = max(self.batch, args.vali_size)
+            self.vali_print = args.vali_print
+            self.lr = args.lr
+            self.max_seq_len = args.max_seq_len
+            self.min_score_gap = args.min_score_gap
+            self.min_rank_gap = args.min_rank_gap
+            self.max_hr_gap = args.max_hr_gap
+            self.mismatch = args.mismatch
+            self.fld_data = args.data
+            if args.task == "train" or self.path_load is None:
+                self.fld_out = "out/%i" % time.time()
+            else:
+                self.fld_out = "out/temp"
+
+        os.makedirs(self.fld_out, exist_ok=True)
+
+        self.clip = 1
+        self.step_max = 1e6
+        self.step_print = 10
+        self.step_vali = 100
+        self.step_save = 500
+        self.len_acc = self.step_vali
+
+    def save(self):
+        d = self.__dict__
+        lines = []
+        for k in d:
+            lines.append("%s\t%s" % (k, d[k]))
+        with open(self.fld_out + "/opt.tsv", "w") as f:
+            f.write("\n".join(lines))
 
 
 class ScorerBase(torch.nn.Module):
@@ -20,7 +78,7 @@ class ScorerBase(torch.nn.Module):
         self.ix_EOS = 50257
         self.ix_OMT = 655
         self.opt = opt
-        self.tokenizer = tokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME_OR_PATH)
 
     def core(self, ids, l_ids, return_logits=False):
         # to be implemented in child class
@@ -103,54 +161,3 @@ class Scorer(ScorerBase):
             self.load_state_dict(weights)
         if self.opt.cuda:
             self.cuda()
-
-
-class JointScorer(ScorerBase):
-    def core(self, ids, l_ids, return_logits=False):
-        assert not return_logits
-        scores = dict()
-        for k in self.kk["prior"] + self.kk["cond"]:
-            scorer = getattr(self, "scorer_%s" % k)
-            scores[k] = scorer.core(ids, l_ids)
-
-        def avg_score(kk):
-            if not kk:
-                return 1
-            sum_score_wt = 0
-            sum_wt = 0
-            for k in kk:
-                sum_score_wt = sum_score_wt + scores[k] * self.wt[k]
-                sum_wt += self.wt[k]
-            return sum_score_wt / sum_wt
-
-        prior = avg_score(self.kk["prior"])
-        cond = avg_score(self.kk["cond"])
-        scores["final"] = prior * cond
-        return scores
-
-    def load(self, path_config):
-        import yaml
-
-        with open(path_config, "r") as stream:
-            config = yaml.safe_load(stream)
-        print(config)
-
-        paths = dict()
-        self.wt = dict()
-        self.kk = dict()
-        for prefix in ["prior", "cond"]:
-            self.kk[prefix] = []
-            for d in config[prefix]:
-                k = d["name"]
-                self.kk[prefix].append(k)
-                self.wt[k] = d["wt"]
-                paths[k] = d["path"]
-
-        for k in paths:
-            path = paths[k]
-            print("setting up model `%s`" % k)
-            scorer = Scorer(OptionInfer(cuda=self.opt.cuda))
-            scorer.load(path)
-            if self.opt.cuda:
-                scorer.cuda()
-            setattr(self, "scorer_%s" % k, scorer)
