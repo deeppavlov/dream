@@ -8,6 +8,7 @@ from transformers import AutoTokenizer
 
 TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2")
 
+
 class Feeder:
     # load train/vali/test data
 
