@@ -14,7 +14,7 @@ from common.personal_info import NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN, RE
     TELL_USER_HIS_INFO_RESPONSE, RESPONSE_PHRASES, TELL_MY_COMPILED_PATTERNS, \
     BOT_KNOWS_INFO_KEY, BOT_DOESNT_KNOW_INFO_KEY, BOT_DOESNT_KNOW_USER_INFO_RESPONSES, \
     ASK_USER_ABOUT_NAME_AGAIN_RESPONSE, AS_YOU_WISH_RESPONSE, WHERE_DO_YOU_LIVE_NOW_RESPONSE, \
-    NEVER_HEARD_OF_NAME_RESPONSE, \
+    NEVER_HEARD_OF_NAME_RESPONSE, WHICH_INFO_RU_MAP, \
     where_are_you_from_pattern, what_is_your_location_pattern, is_secret_patterns, my_name_is_not_pattern, \
     what_is_your_name_pattern, my_location_is_pattern, my_name_is_pattern, my_origin_is_pattern, \
     how_do_you_know_my_info_patterns, how_do_you_know_my_info_responses
@@ -313,8 +313,8 @@ def tell_my_info(dialog, which_info="name"):
             attr["can_continue"] = MUST_CONTINUE
         else:
             name = dialog["human"]["profile"][which_info]
-            lang_which_info = "имя" if LANGUAGE == "RU" else which_info
-            response = TELL_USER_HIS_INFO_RESPONSE.format(which_info=which_info, info=name)
+            lang_which_info = WHICH_INFO_RU_MAP[which_info] if LANGUAGE == "RU" else which_info
+            response = TELL_USER_HIS_INFO_RESPONSE.format(which_info=lang_which_info, info=name)
             confidence = 1.0
             attr["can_continue"] = MUST_CONTINUE
     return response, confidence, attr
