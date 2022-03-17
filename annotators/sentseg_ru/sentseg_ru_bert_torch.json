@@ -141,7 +141,7 @@
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
-      "TRANSFORMER": "DeepPavlov/rubert-base-uncased",
+      "TRANSFORMER": "DeepPavlov/rubert-base-cased-conversational",
       "MODEL_PATH": "{MODELS_PATH}/sentseg_ru_bert_torch_v0"
     },
     "download": [
