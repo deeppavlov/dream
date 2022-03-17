@@ -33,7 +33,7 @@ else:
             }
         ]
     }
-    gold = "Nice to meet you, john."
+    gold = "Nice to meet you, John."
 
 result = requests.post(SKILL_URL, json=dialogs, timeout=2)
 result = result.json()
