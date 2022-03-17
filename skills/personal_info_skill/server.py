@@ -196,7 +196,7 @@ def process_info(dialog, which_info="name"):
     got_info = False
     # if user doesn't want to share his info
     if user_tells_bot_called_him_wrong(curr_uttr_dict, prev_bot_uttr, dialog["human"]["profile"]):
-        logger.info(f"User says My name is not Blabla")
+        logger.info("User says My name is not Blabla")
         response = ASK_USER_ABOUT_NAME_AGAIN_RESPONSE[LANGUAGE]
         confidence = 1.0
         got_info = True
@@ -209,7 +209,7 @@ def process_info(dialog, which_info="name"):
         attr["can_continue"] = CAN_NOT_CONTINUE
         return response, confidence, human_attr, bot_attr, attr
     elif re.search(RESPONSE_PHRASES["homeland"][0], prev_bot_uttr, re.IGNORECASE) and is_yes(curr_uttr_dict):
-        logger.info(f"Found location=homeland")
+        logger.info("Found location=homeland")
         if dialog["human"]["attributes"].get("homeland", None):
             human_attr["location"] = dialog["human"]["attributes"]["homeland"]
         else:
@@ -225,7 +225,7 @@ def process_info(dialog, which_info="name"):
         got_info = True
         attr["can_continue"] = MUST_CONTINUE
     elif re.search(RESPONSE_PHRASES["homeland"][0], prev_bot_uttr, re.IGNORECASE) and is_no(curr_uttr_dict):
-        logger.info(f"Found location is not homeland")
+        logger.info("Found location is not homeland")
         response = WHERE_DO_YOU_LIVE_NOW_RESPONSE[LANGUAGE]
         confidence = 1.0
         got_info = False
@@ -238,7 +238,7 @@ def process_info(dialog, which_info="name"):
         if which_info == "name" and found_info is not None:
             found_info = filter_unreadable_names(found_info)
         if found_info is None:
-            logger.info(f"found_info is None")
+            logger.info("found_info is None")
             if did_user_misunderstand_bot_question_about_geography(curr_user_uttr, which_info, prev_bot_uttr):
                 response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info][LANGUAGE]
                 confidence = 0.9

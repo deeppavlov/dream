@@ -186,14 +186,14 @@ TELL_MY_COMPILED_PATTERNS = {
 
 BOT_DOESNT_KNOW_USER_INFO_RESPONSES = {
     "EN": {
-        "name": f"Sorry, we are still not familiar. What is your name?",
-        "location": f"Sorry, I don't have this information. But you can tell me. What is your location?",
-        "homeland": f"Sorry, I don't have this information. But you can tell me. Where are you from?",
+        "name": "Sorry, we are still not familiar. What is your name?",
+        "location": "Sorry, I don't have this information. But you can tell me. What is your location?",
+        "homeland": "Sorry, I don't have this information. But you can tell me. Where are you from?",
     },
     "RU": {
-        "name": f"Извини, кажется, мы еще не знакомы. Как тебя зовут?",
-        "location": f"Извини, у меня нет такой информации, но ты можешь мне рассказать об этом. Где ты живешь сейчас?",
-        "homeland": f"Извини, у меня нет такой информации, но ты можешь мне рассказать об этом. Откуда ты родом?",
+        "name": "Извини, кажется, мы еще не знакомы. Как тебя зовут?",
+        "location": "Извини, у меня нет такой информации, но ты можешь мне рассказать об этом. Где ты живешь сейчас?",
+        "homeland": "Извини, у меня нет такой информации, но ты можешь мне рассказать об этом. Откуда ты родом?",
     },
 }
 
