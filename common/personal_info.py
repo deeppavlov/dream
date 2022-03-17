@@ -1,6 +1,6 @@
 import re
 
-from weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
+from common.weather import ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE
 
 
 def skill_trigger_phrases():
