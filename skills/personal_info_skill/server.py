@@ -9,15 +9,33 @@ from os import getenv
 import sentry_sdk
 
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, MUST_CONTINUE
-from common.personal_info import NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN, REPEAT_INFO_PHRASES, \
-    ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT, MAX_READABLE_NAME_WORD_LEN, \
-    TELL_USER_HIS_INFO_RESPONSE, RESPONSE_PHRASES, TELL_MY_COMPILED_PATTERNS, \
-    BOT_KNOWS_INFO_KEY, BOT_DOESNT_KNOW_INFO_KEY, BOT_DOESNT_KNOW_USER_INFO_RESPONSES, \
-    ASK_USER_ABOUT_NAME_AGAIN_RESPONSE, AS_YOU_WISH_RESPONSE, WHERE_DO_YOU_LIVE_NOW_RESPONSE, \
-    NEVER_HEARD_OF_NAME_RESPONSE, WHICH_INFO_RU_MAP, \
-    where_are_you_from_pattern, what_is_your_location_pattern, is_secret_patterns, my_name_is_not_pattern, \
-    what_is_your_name_pattern, my_location_is_pattern, my_name_is_pattern, my_origin_is_pattern, \
-    how_do_you_know_my_info_patterns, how_do_you_know_my_info_responses
+from common.personal_info import (
+    NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN,
+    REPEAT_INFO_PHRASES,
+    ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT,
+    MAX_READABLE_NAME_WORD_LEN,
+    TELL_USER_HIS_INFO_RESPONSE,
+    RESPONSE_PHRASES,
+    TELL_MY_COMPILED_PATTERNS,
+    BOT_KNOWS_INFO_KEY,
+    BOT_DOESNT_KNOW_INFO_KEY,
+    BOT_DOESNT_KNOW_USER_INFO_RESPONSES,
+    ASK_USER_ABOUT_NAME_AGAIN_RESPONSE,
+    AS_YOU_WISH_RESPONSE,
+    WHERE_DO_YOU_LIVE_NOW_RESPONSE,
+    NEVER_HEARD_OF_NAME_RESPONSE,
+    WHICH_INFO_RU_MAP,
+    where_are_you_from_pattern,
+    what_is_your_location_pattern,
+    is_secret_patterns,
+    my_name_is_not_pattern,
+    what_is_your_name_pattern,
+    my_location_is_pattern,
+    my_name_is_pattern,
+    my_origin_is_pattern,
+    how_do_you_know_my_info_patterns,
+    how_do_you_know_my_info_responses,
+)
 from common.utils import get_entities, get_named_locations, get_named_persons, is_no, is_yes
 
 

@@ -24,7 +24,8 @@ else:
         "dialogs": [
             {
                 "utterances": [
-                    {"text": "my name is john", "annotations": {"ner": [[{"text": "john", "type": "PER"}]]}}],
+                    {"text": "my name is john", "annotations": {"ner": [[{"text": "john", "type": "PER"}]]}}
+                ],
                 "bot_utterances": [],
                 "human": {"attributes": {}, "profile": {"name": None}},
                 "human_utterances": [
