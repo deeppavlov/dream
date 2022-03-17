@@ -8,57 +8,69 @@ def skill_trigger_phrases():
 
 
 what_is_your_name_pattern = re.compile(
-    r"((what is|what's|whats|tell me|may i know|ask you for) your? name|what name would you like)", re.IGNORECASE
+    r"((what is|what's|whats|tell me|may i know|ask you for) your? name|what name would you like|"
+    r"как( я могу| могу)? (тебя|вас) (зовут|звать|называть)|какое (у тебя|твое|твоё) (имя|прозвище|название)|"
+    r"как к тебе обращаться)", re.IGNORECASE
 )
-my_name_is_pattern = re.compile(r"(my (name is|name's)|call me)", re.IGNORECASE)
+my_name_is_pattern = re.compile(
+    r"(my (name is|name's)|call me|"
+    r"мо[её] (имя|прозвище|название)|меня зовут|(зови|называй) меня|обращайся ко мне)", re.IGNORECASE
+)
 _is_not_re = r"(is not|isn't|was not|wasn't|have (not|never) been|haven't been|had (not|never) been|hadn't been)"
 my_name_is_not_pattern = re.compile(
-    rf"my (name is not|name {_is_not_re}|name's not)|not call me|why do you call me|"
-    rf"(that|this|it) {_is_not_re} my name",
+    rf"(my (name {_is_not_re}|name's not)|(don't|not) call me|why do you call me|(that|this|it) {_is_not_re} my name|"
+    rf"меня зовут (не так|по-другому|иначе)|меня (не так|по-другому|иначе) зовут|не (зови|называй) меня|мое имя не\b)",
     re.IGNORECASE,
 )
 where_are_you_from_pattern = re.compile(
     r"(where are you from|where you (were|was) born|"
-    r"(what is|what's|whats|tell me) your "
-    r"(home\s?land|mother\s?land|native\s?land|birth\s?place))",
+    r"(what is|what's|whats|tell me) your (home\s?land|mother\s?land|native\s?land|birth\s?place)|"
+    r"откуда ты( родом)?[.\?]?$|где ты (родился|вырос)[.\?]?$)",
     re.IGNORECASE,
 )
 my_origin_is_pattern = re.compile(
-    r"(my ((home\s?land|mother\s?land|native\s?land|birth\s?place) "
-    r"is|(home\s?land|mother\s?land|native\s?land|birth\s?place)'s)|"
-    r"(i was|i were) born in|i am from|i'm from)",
+    r"(my ((home\s?land|mother\s?land|native\s?land|birth\s?place) is|"
+    r"(home\s?land|mother\s?land|native\s?land|birth\s?place)'s)|(i was|i were) born in|i am from|i'm from|"
+    r"я родом из|я вырос(ла)? в\b|я родил(ась|ся) в\b)",
     re.IGNORECASE,
 )
 what_is_your_location_pattern = re.compile(
-    r"((what is|what's|whats|tell me) your? location|"
-    r"where do you live|where are you now|"
-    r"is that where you live now)",
+    r"((what is|what's|whats|tell me) your? location|where do you live|where are you now|is that where you live now|"
+    r"где ты (сейчас )?(жив[её]шь|проживаешь|находишься|[.\?]?$))",
     re.IGNORECASE,
 )
 my_location_is_pattern = re.compile(
-    r"my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?now", re.IGNORECASE
+    r"(my (location is|location's)|(i am|i'm|i)( live| living)? in([a-zA-z ]+)?(now)|"
+    r"я (живу|проживаю|нахожусь) в\b)", re.IGNORECASE
 )
 
-_name_re = r"(first |last |middle |second )?name"
-_tell_re = r"((told|said|gave)|(tells|says|gives)|((have|had) (told|said|given)))"
+_name_re = r"((first |last |middle |second )?name)"
+_tell_re = r"((told|said|gave|tells|says|gives)|((have|had) (told|said|given))|)"
 _you_know_question_re = (
     r"((do|did|can|could) you (know|find out|learn)|(have|had) you (known|found out|learned|learnt))"
 )
 _how_re = r"(how|where|when|from whom)"
 _i_live_re = r"(i lived?|my (house|home) (is|was|have been)|my family live[sd]?)"
-_how_do_you_know_question = rf"({_how_re} {_you_know_question_re}|who {_tell_re} you)"
+_how_do_you_know = rf"({_how_re} {_you_know_question_re}|who {_tell_re} you|"\
+                            rf"кто (сказал|рассказал)|откуда (ты )?знаешь)"
+
 how_do_you_know_my_info_patterns = {
-    "name": re.compile(rf"{_how_do_you_know_question} (my {_name_re}|what is my {_name_re}|what my {_name_re} is)"),
-    "location": re.compile(rf"{_how_do_you_know_question} where {_i_live_re}"),
-    "homeland": re.compile(rf"{_how_do_you_know_question} where i am from"),
+    "name": re.compile(
+        rf"{_how_do_you_know} (my {_name_re}|what is my {_name_re}|what my {_name_re} is|мо[её] имя|как меня зовут)",
+        re.IGNORECASE),
+    "location": re.compile(
+        rf"{_how_do_you_know} (where {_i_live_re}|где я (живу|проживаю|нахожусь|сейчас))",
+        re.IGNORECASE),
+    "homeland": re.compile(
+        rf"{_how_do_you_know} (where i am from|откуда я (родом)?|где я вырос(ла)?)",
+        re.IGNORECASE),
 }
 
-_secret_word_re = r"(secret|private|confidential)"
-_common_secret_re = rf"(it|this|that) is (a )?{_secret_word_re}|^{_secret_word_re}"
+_common_secret_re = r"(((it|this|that) is (a )?|^)(secret|private|confidential)|(это |^)секрет|не скажу)"
 is_secret_patterns = {
-    "name": re.compile(rf"{_common_secret_re}|(sur|last |first |second |middle )?name is (a )?{_secret_word_re}"),
-    "location": re.compile(rf"{_common_secret_re}|location is (a )?{_secret_word_re}"),
-    "homeland": re.compile(rf"{_common_secret_re}"),
+    "name": re.compile(rf"({_common_secret_re}|\b(sur)?name is (a )?(secret|private|confidential))", re.IGNORECASE),
+    "location": re.compile(rf"({_common_secret_re}|location is (a )?(secret|private|confidential))", re.IGNORECASE),
+    "homeland": re.compile(rf"({_common_secret_re})", re.IGNORECASE),
 }
 
 BOT_DOESNT_KNOW_INFO_KEY = "bot_doesnt_know_info"
@@ -83,26 +95,10 @@ how_do_you_know_my_info_responses = {
     },
 }
 MAX_READABLE_NAME_WORD_LEN = 20
-NON_GEOGRAPHICAL_LOCATIONS = [
-    "hospital",
-    "school",
-    "work",
-    "home",
-    "car",
-    "train",
-    "train station",
-    "outdoors",
-    "bed",
-    "kitchen",
-    "bedroom",
-    "bathroom",
-    "basement",
-    "jail",
-    "prison",
-    "bath",
-]
 NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(
-    r"\b" + r"\b|\b".join(NON_GEOGRAPHICAL_LOCATIONS) + r"\b", re.I
+    r"\b" + r"\b|\b".join(r"(hospital|school|work|home|car|train|train station|outdoors|bed|kitchen|bedroom|bathroom|"
+                          r"basement|jail|prison|bath|больнице|школе|работе|дома|машине|поезде|станции|улице|кровати|"
+                          r"кухне|спальне|ванной|ванне|гостиной|тюрьме)") + r"\b", re.IGNORECASE
 )
 ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT = {
     "homeland": "Sorry, but I probably misheard you. "
@@ -125,19 +121,20 @@ REPEAT_INFO_PHRASES = {
 TELL_MY_COMPILED_PATTERNS = {
     "name": re.compile(
         r"(what is|what's|whats|tell me|you know|you remember|memorize|say) my name|how( [a-zA-Z ]+)?call me|"
-        r"my name is what|you( can| could| shall| will)? tell my name",
-        re.I,
+        r"my name is what|you( can| could| shall| will)? tell my name|"
+        r"как меня зовут|как мо[её] имя|как ты меня назвал", re.IGNORECASE
     ),
     "location": re.compile(
         r"((what is|what's|whats|tell me|you know|you remember|memorize|say) my (location|country|city|town)|"
         r"where (am i|i am)(\snow)?|where( do)?i live|where( am)?i( am)? living)|(what|which) "
-        r"(country|city|town)( do)? (i|am i|i am)",
-        re.I,
+        r"(country|city|town)( do)? (i|am i|i am)|"
+        r"где я( нахожусь| сейчас|[.\?]?$)", re.IGNORECASE
     ),
     "homeland": re.compile(
-        r"((what is|what's|whats|tell me|you know|you remember|memorize|say) "
-        r"my (home\s?land|mother\s?land|home\s?town|native\s?land|birth\s?place)|where (am i|i am) from)",
-        re.I,
+        r"(what is|what's|whats|tell me|you know|you remember|memorize|say) "
+        r"my (home\s?land|mother\s?land|home\s?town|native\s?land|birth\s?place)|where (am i|i am) from|"
+        r"откуда я( родом)[.\?]?$|где я родил(ась|ся)[.\?]?$",
+        re.IGNORECASE
     ),
 }
 
