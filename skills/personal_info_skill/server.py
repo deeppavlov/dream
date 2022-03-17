@@ -22,7 +22,7 @@ from common.utils import get_entities, get_named_locations, get_named_persons, i
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-
+LANGUAGE = getenv("LANGUAGE", "EN")
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
