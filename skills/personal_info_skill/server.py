@@ -23,10 +23,13 @@ from common.utils import get_entities, get_named_locations, get_named_persons, i
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 LANGUAGE = getenv("LANGUAGE", "EN")
+
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+RESPONSE_PHRASES = RESPONSE_PHRASES[LANGUAGE]
+BOT_DOESNT_KNOW_USER_INFO_RESPONSES = BOT_DOESNT_KNOW_USER_INFO_RESPONSES[LANGUAGE]
 
 
 @app.route("/respond", methods=["POST"])
@@ -86,18 +89,18 @@ def did_user_misunderstand_bot_question_about_geography(found_info_or_user_text,
         and (
             where_are_you_from_pattern.search(prev_bot_text)
             or what_is_your_location_pattern.search(prev_bot_text)
-            or REPEAT_INFO_PHRASES[which_info].lower() in prev_bot_text
+            or REPEAT_INFO_PHRASES[which_info][LANGUAGE].lower() in prev_bot_text
         )
     )
 
 
 def was_user_asked_to_clarify_info(prev_bot_text, which_info):
     if which_info == "name":
-        res = prev_bot_text == REPEAT_INFO_PHRASES[which_info].lower()
+        res = prev_bot_text == REPEAT_INFO_PHRASES[which_info][LANGUAGE].lower()
     else:
         res = (
-            prev_bot_text == REPEAT_INFO_PHRASES[which_info].lower()
-            or prev_bot_text == ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info].lower()
+            prev_bot_text == REPEAT_INFO_PHRASES[which_info][LANGUAGE].lower()
+            or prev_bot_text == ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info][LANGUAGE].lower()
         )
     return res
 
@@ -130,9 +133,10 @@ def user_tells_bot_called_him_wrong(curr_human_annotated_uttr, prev_bot_text, us
     if name is None:
         res = False
     else:
+        lang_which_info = "имя" if LANGUAGE == "RU" else "name"
         res = (
             my_name_is_not_pattern.search(curr_human_annotated_uttr.get("text", ""))
-            or TELL_USER_HIS_INFO_RESPONSE.format(which_info="name", info=name).lower() in prev_bot_text
+            or TELL_USER_HIS_INFO_RESPONSE.format(which_info=lang_which_info, info=name).lower() in prev_bot_text
             and is_no(curr_human_annotated_uttr)
         )
     return res
@@ -175,14 +179,14 @@ def process_info(dialog, which_info="name"):
     # if user doesn't want to share his info
     if user_tells_bot_called_him_wrong(curr_uttr_dict, prev_bot_uttr, dialog["human"]["profile"]):
         logger.info(f"User says My name is not Blabla")
-        response = ASK_USER_ABOUT_NAME_AGAIN_RESPONSE
+        response = ASK_USER_ABOUT_NAME_AGAIN_RESPONSE[LANGUAGE]
         confidence = 1.0
         got_info = True
         attr["can_continue"] = MUST_CONTINUE
     elif (is_about_templates[which_info] or was_user_asked_to_clarify_info(prev_bot_uttr, which_info)) and (
         is_no(curr_uttr_dict) or is_secret(curr_user_uttr, which_info)
     ):
-        response = AS_YOU_WISH_RESPONSE
+        response = AS_YOU_WISH_RESPONSE[LANGUAGE]
         confidence = 1.0
         attr["can_continue"] = CAN_NOT_CONTINUE
         return response, confidence, human_attr, bot_attr, attr
@@ -204,7 +208,7 @@ def process_info(dialog, which_info="name"):
         attr["can_continue"] = MUST_CONTINUE
     elif re.search(RESPONSE_PHRASES["homeland"][0], prev_bot_uttr, re.IGNORECASE) and is_no(curr_uttr_dict):
         logger.info(f"Found location is not homeland")
-        response = WHERE_DO_YOU_LIVE_NOW_RESPONSE
+        response = WHERE_DO_YOU_LIVE_NOW_RESPONSE[LANGUAGE]
         confidence = 1.0
         got_info = False
         attr["can_continue"] = MUST_CONTINUE
@@ -218,7 +222,7 @@ def process_info(dialog, which_info="name"):
         if found_info is None:
             logger.info(f"found_info is None")
             if did_user_misunderstand_bot_question_about_geography(curr_user_uttr, which_info, prev_bot_uttr):
-                response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info]
+                response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info][LANGUAGE]
                 confidence = 0.9
                 attr["can_continue"] = CAN_CONTINUE_SCENARIO
             elif which_info in ["homeland", "location"] and NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN.search(
@@ -236,11 +240,11 @@ def process_info(dialog, which_info="name"):
                 and len(curr_user_uttr.split()) == 1
                 and len(get_entities(curr_uttr_dict, only_named=False, with_labels=False)) > 0
             ):
-                response = NEVER_HEARD_OF_NAME_RESPONSE
+                response = NEVER_HEARD_OF_NAME_RESPONSE[LANGUAGE]
                 confidence = 1.0
                 attr["can_continue"] = MUST_CONTINUE
             else:
-                response = REPEAT_INFO_PHRASES[which_info]
+                response = REPEAT_INFO_PHRASES[which_info][LANGUAGE]
                 confidence = 1.0
                 attr["can_continue"] = MUST_CONTINUE
         else:
@@ -253,7 +257,7 @@ def process_info(dialog, which_info="name"):
             else:
                 if NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN.search(found_info):
                     if did_user_misunderstand_bot_question_about_geography(found_info, which_info, prev_bot_uttr):
-                        response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info]
+                        response = ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT[which_info][LANGUAGE]
                         confidence = 0.9
                         attr["can_continue"] = CAN_CONTINUE_SCENARIO
                     else:
@@ -287,9 +291,9 @@ def how_do_you_know_my_info(dialog, which_info="name"):
         attr = {}
     else:
         if dialog.get("human", {}).get("profile", {}).get(which_info, ""):
-            response = how_do_you_know_my_info_responses[which_info][BOT_KNOWS_INFO_KEY]
+            response = how_do_you_know_my_info_responses[which_info][BOT_KNOWS_INFO_KEY][LANGUAGE]
         else:
-            response = how_do_you_know_my_info_responses[which_info][BOT_DOESNT_KNOW_INFO_KEY]
+            response = how_do_you_know_my_info_responses[which_info][BOT_DOESNT_KNOW_INFO_KEY][LANGUAGE]
         confidence = 1.0
         attr = {"can_continue": MUST_CONTINUE}
     return response, confidence, attr
@@ -309,6 +313,7 @@ def tell_my_info(dialog, which_info="name"):
             attr["can_continue"] = MUST_CONTINUE
         else:
             name = dialog["human"]["profile"][which_info]
+            lang_which_info = "имя" if LANGUAGE == "RU" else which_info
             response = TELL_USER_HIS_INFO_RESPONSE.format(which_info=which_info, info=name)
             confidence = 1.0
             attr["can_continue"] = MUST_CONTINUE

@@ -45,9 +45,9 @@ my_location_is_pattern = re.compile(
 )
 
 _name_re = r"((first |last |middle |second )?name)"
-_tell_re = r"((told|said|gave|tells|says|gives)|((have|had) (told|said|given))|)"
+_tell_re = r"(told|said|gave|tells|says|gives)|((have|had) (told|said|given))"
 _you_know_question_re = (
-    r"((do|did|can|could) you (know|find out|learn)|(have|had) you (known|found out|learned|learnt))"
+    r"(do|did|can|could) you (know|find out|learn)|(have|had) you (known|found out|learned|learnt)"
 )
 _how_re = r"(how|where|when|from whom)"
 _i_live_re = r"(i lived?|my (house|home) (is|was|have been)|my family live[sd]?)"
@@ -68,30 +68,47 @@ how_do_you_know_my_info_patterns = {
 
 _common_secret_re = r"(((it|this|that) is (a )?|^)(secret|private|confidential)|(это |^)секрет|не скажу)"
 is_secret_patterns = {
-    "name": re.compile(rf"({_common_secret_re}|\b(sur)?name is (a )?(secret|private|confidential))", re.IGNORECASE),
-    "location": re.compile(rf"({_common_secret_re}|location is (a )?(secret|private|confidential))", re.IGNORECASE),
-    "homeland": re.compile(rf"({_common_secret_re})", re.IGNORECASE),
+    "name": re.compile(rf"{_common_secret_re}|\b(sur)?name is (a )?(secret|private|confidential)", re.IGNORECASE),
+    "location": re.compile(rf"{_common_secret_re}|location is (a )?(secret|private|confidential)", re.IGNORECASE),
+    "homeland": re.compile(rf"{_common_secret_re}", re.IGNORECASE),
 }
 
 BOT_DOESNT_KNOW_INFO_KEY = "bot_doesnt_know_info"
 BOT_KNOWS_INFO_KEY = "bot_knows_info"
 how_do_you_know_my_info_responses = {
     "name": {
-        BOT_DOESNT_KNOW_INFO_KEY: "Sorry, but I really do not know your name. "
-        "Would you be so kind to tell me you name?",
-        BOT_KNOWS_INFO_KEY: "Ah, you have probably forgotten that you told me your name before. "
-        "Maybe you told me your name the last time we talked.",
+        BOT_DOESNT_KNOW_INFO_KEY: {
+            "EN": "Sorry, but I really do not know your name. Would you be so kind to tell me you name?",
+            "RU": "Извини, кажется, я еще не знаю, как тебя зовут. Если ты не против, скажи мне, как тебя зовут?"
+        },
+        BOT_KNOWS_INFO_KEY: {
+            "EN": "Ah, you have probably forgotten that you told me your name before. "
+                  "Maybe you told me your name the last time we talked.",
+            "RU": "Кажется, я уже знаю твое имя из прошлых бесед."
+        },
     },
     "location": {
-        BOT_DOESNT_KNOW_INFO_KEY: "Sorry, but I really do not know where you live. Would tell me?",
-        BOT_KNOWS_INFO_KEY: "Ah, you have probably forgotten that"
-        "you told me where you live before. Maybe you told me this the last time we talked.",
+        BOT_DOESNT_KNOW_INFO_KEY: {
+            "EN": "Sorry, but I really do not know where you live. Would tell me?",
+            "RU": "Извини, кажется я еще этого не знаю. Расскажешь мне, где ты живешь?"
+        },
+        BOT_KNOWS_INFO_KEY: {
+            "EN": "Ah, you have probably forgotten that you told me where you live before. "
+                  "Maybe you told me this the last time we talked.",
+            "RU": "Кажется, я уже знаю, где ты живешь из прошлых бесед."
+        },
     },
     "homeland": {
-        BOT_DOESNT_KNOW_INFO_KEY: "Sorry, but I really do not know where you are from. "
-        "So, where are you from? I hope i am not tactless.",
-        BOT_KNOWS_INFO_KEY: "Ah, you have probably forgotten that you told me where you are from before. "
-        "Maybe you told me this the last time we talked",
+        BOT_DOESNT_KNOW_INFO_KEY: {
+            "EN": "Sorry, but I really do not know where you are from. So, where are you from? "
+                  "I hope i am not tactless.",
+            "RU": "Извини, но я еще не знаю, откуда ты. Расскажи мне, откуда ты родом?"
+        },
+        BOT_KNOWS_INFO_KEY: {
+            "EN": "Ah, you have probably forgotten that you told me where you are from before. "
+                  "Maybe you told me this the last time we talked",
+            "RU": "Кажется, я уже знаю, откуда ты, из прошлых бесед."
+        },
     },
 }
 MAX_READABLE_NAME_WORD_LEN = 20
@@ -101,21 +118,43 @@ NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(
                           r"кухне|спальне|ванной|ванне|гостиной|тюрьме)") + r"\b", re.IGNORECASE
 )
 ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT = {
-    "homeland": "Sorry, but I probably misheard you. "
-    "I am just curious to know the region or the city in which you were born",
-    "location": "Sorry, but I probably misheard you. " "Could you please tell me in which city or region you are now?",
+    "homeland": {
+        "EN": "Sorry, but I probably misheard you. "
+              "I am just curious to know the region or the city in which you were born.",
+        "RU": "Извини, кажется, я неверно поняла тебя. Мне просто было любопытно узнать, страну или город, откуда ты."
+    },
+    "location": {
+        "EN": "Sorry, but I probably misheard you. Could you please tell me in which city or region you are now?",
+        "RU": "Извини, кажется, я неверно поняла тебя. Я просто хотела спросить, в какой стране или городе ты живешь?"
+    },
 }
 
 RESPONSE_PHRASES = {
-    "name": ["Nice to meet you, "],
-    "location": [ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE, "Cool!"],
-    "homeland": ["Is that where you live now?", "Cool!"],
+    "EN": {
+        "name": ["Nice to meet you, "],
+        "location": [ASK_WEATHER_SKILL_FOR_HOMELAND_PHRASE, "Cool!"],
+        "homeland": ["Is that where you live now?", "Cool!"],
+    },
+    "RU": {
+        "name": ["Приятно познакомиться, "],
+        "location": ["Мне всегда нравилось узнавать новое о человеке!", "Классно!"],
+        "homeland": ["А сейчас ты живешь в этом же месте?", "Круто!"],
+    }
 }
 
 REPEAT_INFO_PHRASES = {
-    "name": "I didn't get your name. Could you, please, repeat it.",
-    "location": "I didn't get your location. Could you, please, repeat it.",
-    "homeland": "I didn't get where you have been born. Could you please repeat it?",
+    "name": {
+        "EN": "I didn't get your name. Could you, please, repeat it.",
+        "RU": "Ой, я не смогла распознать имя. Можешь, пожалуйста, повторить."
+    },
+    "location": {
+        "EN": "I didn't get your location. Could you, please, repeat it.",
+        "RU": "Ой, я не смогла распознать город или страну. Можешь, пожалуйста, повторить."
+    },
+    "homeland": {
+        "EN": "I didn't get where you have been born. Could you please repeat it?",
+        "RU": "Ой, я не смогла распознать город или страну. Можешь, пожалуйста, повторить."
+    },
 }
 
 TELL_MY_COMPILED_PATTERNS = {
@@ -139,15 +178,42 @@ TELL_MY_COMPILED_PATTERNS = {
 }
 
 BOT_DOESNT_KNOW_USER_INFO_RESPONSES = {
-    "name": f"Sorry, we are still not familiar. What is your name?",
-    "location": f"Sorry, I don't have this information. But you can tell me. What is your location?",
-    "homeland": f"Sorry, I don't have this information. But you can tell me. Where are you from?",
+    "EN": {
+        "name": f"Sorry, we are still not familiar. What is your name?",
+        "location": f"Sorry, I don't have this information. But you can tell me. What is your location?",
+        "homeland": f"Sorry, I don't have this information. But you can tell me. Where are you from?",
+    },
+    "RU": {
+        "name": f"Извини, кажется, мы еще не знакомы. Как тебя зовут?",
+        "location": f"Извини, у меня нет такой информации, но ты можешь мне рассказать об этом. Где ты живешь сейчас?",
+        "homeland": f"Извини, у меня нет такой информации, но ты можешь мне рассказать об этом. Откуда ты родом?",
+    }
 }
 
-TELL_USER_HIS_INFO_RESPONSE = "Your {which_info} is {info}."
+TELL_USER_HIS_INFO_RESPONSE = {
+    "EN": "Your {which_info} is {info}.",
+    "RU": "Твое {which_info} - {info}."
+}
+WHICH_INFO_RU_MAP = {
+    "name": "имя",
+    "location": "место проживания",
+    "homeland": "место рождения",
+}
 
-ASK_USER_ABOUT_NAME_AGAIN_RESPONSE = "My bad. What is your name again?"
+ASK_USER_ABOUT_NAME_AGAIN_RESPONSE = {
+    "EN": "My bad. What is your name again?",
+    "RU": "Ой, извини. Как тебя зовут еще раз?"
+}
 
-AS_YOU_WISH_RESPONSE = "As you wish."
-WHERE_DO_YOU_LIVE_NOW_RESPONSE = "So, where do you live now?"
-NEVER_HEARD_OF_NAME_RESPONSE = "I've never heard about this name."
+AS_YOU_WISH_RESPONSE = {
+    "EN": "As you wish.",
+    "RU": "Как считаешь нужным."
+}
+WHERE_DO_YOU_LIVE_NOW_RESPONSE = {
+    "EN": "So, where do you live now?",
+    "RU": "Так... А где ты сейчас живешь?"
+}
+NEVER_HEARD_OF_NAME_RESPONSE = {
+    "EN": "I've never heard about this name.",
+    "RU": "Никогда не слышала такого имени."
+}
