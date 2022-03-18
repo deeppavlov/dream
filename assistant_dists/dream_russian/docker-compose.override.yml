@@ -70,6 +70,7 @@ services:
         USE_MODEL_PATH: https://tfhub.dev/google/universal-sentence-encoder-multilingual/1
         INTENT_DATA_FNAME: intent_data_h3_RU.json
         INTENT_PHRASES_FNAME: intent_phrases_RU.json
+        LANGUAGE: RU
     command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
     environment:
       - FLASK_APP=server
@@ -104,6 +105,7 @@ services:
         PORT: 8021
         SRC_DIR: annotators/NER_ru
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: RU
       context: ./
       dockerfile: annotators/NER_ru/Dockerfile
     command: flask run -h 0.0.0.0 -p 8021
@@ -124,6 +126,7 @@ services:
         CONFIG: entity_detection_rus.json
         PORT: 8103
         SRC_DIR: annotators/entity_detection_rus
+        LANGUAGE: RU
       context: ./
       dockerfile: annotators/entity_detection_rus/Dockerfile
     command: flask run -h 0.0.0.0 -p 8103
@@ -159,6 +162,7 @@ services:
         CONFIG: entity_linking_rus.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking_rus
+        LANGUAGE: RU
       context: ./
       dockerfile: annotators/entity_linking_rus/Dockerfile
     environment:
@@ -203,6 +207,7 @@ services:
         PORT: 8074
         SRC_DIR: annotators/spelling_preprocessing_ru
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: RU
       context: ./
       dockerfile: annotators/spelling_preprocessing_ru/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
@@ -263,6 +268,7 @@ services:
       args:
         SERVICE_PORT: 8091
         PRETRAINED_MODEL_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+        LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8091
     environment:
       - CUDA_VISIBLE_DEVICES=0
@@ -280,6 +286,7 @@ services:
       args:
         SERVICE_PORT: 8092
         SERVICE_NAME: dff_generative_skill
+        LANGUAGE: RU
       context: .
       dockerfile: ./skills/dff_generative_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8092 --reload

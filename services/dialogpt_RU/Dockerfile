@@ -9,6 +9,9 @@ ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
