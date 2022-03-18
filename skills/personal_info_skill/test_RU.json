@@ -269,6 +269,52 @@
           }
         }
       ]
+    },
+    {
+      "expected_response": "Извини, кажется, я неверно поняла тебя. Я просто хотела спросить, в какой стране или городе ты живешь?",
+      "utterances": [
+        {
+          "text": "привет!",
+          "annotations": {
+          }
+        },
+        {
+          "text": "Где ты живешь?",
+          "annotations": {
+          }
+        },
+        {
+          "text": "на работе.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [
+        {
+          "text": "Где ты живешь?",
+          "annotations": {
+          }
+        }
+      ],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "на работе.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
     }
   ]
 }
