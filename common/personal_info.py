@@ -38,7 +38,7 @@ my_origin_is_pattern = re.compile(
     re.IGNORECASE,
 )
 what_is_your_location_pattern = re.compile(
-    r"((what is|what's|whats|tell me) your? location|where do you live|where are you now|is that where you live now|"
+    r"((what is|what's|whats|tell me) your? location|where do you live|where are you( now)?|is that where you live now|"
     r"где ты (сейчас )?(жив[её]шь|проживаешь|находишься|[.\?]?$))",
     re.IGNORECASE,
 )

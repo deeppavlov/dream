@@ -284,7 +284,7 @@
           }
         },
         {
-          "text": "on my work.",
+          "text": "at work.",
           "annotations": {
             "ner": [
               []
@@ -307,7 +307,7 @@
       },
       "human_utterances": [
         {
-          "text": "on my work.",
+          "text": "at work.",
           "annotations": {
             "ner": [
               []
