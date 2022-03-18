@@ -157,16 +157,14 @@ def is_secret(user_text, which_info):
 
 def user_tells_bot_called_him_wrong(curr_human_annotated_uttr, prev_bot_text, user_profile):
     name = user_profile.get("name")
-    if name is None:
-        res = False
-    else:
-        lang_which_info = "имя" if LANGUAGE == "RU" else "name"
-        res = (
-            my_name_is_not_pattern.search(curr_human_annotated_uttr.get("text", ""))
-            or (TELL_USER_HIS_INFO_RESPONSE[LANGUAGE].format(which_info=lang_which_info, info=name).lower()
-                in prev_bot_text
-                and is_no(curr_human_annotated_uttr))
-        )
+
+    lang_which_info = "имя" if LANGUAGE == "RU" else "name"
+    res = (
+        my_name_is_not_pattern.search(curr_human_annotated_uttr.get("text", ""))
+        or (TELL_USER_HIS_INFO_RESPONSE[LANGUAGE].format(which_info=lang_which_info, info=name).lower()
+            in prev_bot_text
+            and is_no(curr_human_annotated_uttr))
+    )
     return res
 
 
