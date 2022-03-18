@@ -20,7 +20,8 @@ my_name_is_pattern = re.compile(
 _is_not_re = r"(is not|isn't|was not|wasn't|have (not|never) been|haven't been|had (not|never) been|hadn't been)"
 my_name_is_not_pattern = re.compile(
     rf"(my (name {_is_not_re}|name's not)|(don't|not) call me|why do you call me|(that|this|it) {_is_not_re} my name|"
-    rf"меня зовут (не так|по-другому|иначе)|меня (не так|по-другому|иначе) зовут|не (зови|называй) меня|мое имя не\b)",
+    rf"меня зовут (не\b|не так|по-другому|иначе)|меня (не так|по-другому|иначе) зовут|не (зови|называй) меня|"
+    rf"мое имя не\b)",
     re.IGNORECASE,
 )
 where_are_you_from_pattern = re.compile(
