@@ -6,7 +6,7 @@ import requests
 SKILL_URL = "http://0.0.0.0:8030/respond"
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 
-with open(f"test_{LANGUAGE}", "r") as f:
+with open(f"test_{LANGUAGE}.json", "r") as f:
     dialogs = json.load(f)
 
 gold = []

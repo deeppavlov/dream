@@ -209,6 +209,36 @@
           }
         }
       ]
+    },
+    {
+      "expected_response": "Извини, кажется, мы еще не знакомы. Как тебя зовут?",
+      "utterances": [
+        {
+          "text": "ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
     }
   ]
 }
