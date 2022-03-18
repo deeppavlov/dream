@@ -17,7 +17,7 @@ result = requests.post(SKILL_URL, json=dialogs, timeout=2)
 result = result.json()
 
 for i in range(len(dialogs['dialogs'])):
-    print(f"check for human uttr `{dialogs['dialogs'][i]['human_utterances'][-1]['text']}`")
+    print(f"check for uttr `{dialogs['dialogs'][i]['human_utterances'][-1]['text']}`\n\tgold response: {gold[i]}")
     assert result[i][0] == gold[i], print(result[i])
 
 print("SUCCESS")
