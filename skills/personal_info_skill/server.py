@@ -154,7 +154,7 @@ def user_tells_bot_called_him_wrong(curr_human_annotated_uttr, prev_bot_text, us
         lang_which_info = "имя" if LANGUAGE == "RU" else "name"
         res = (
             my_name_is_not_pattern.search(curr_human_annotated_uttr.get("text", ""))
-            or TELL_USER_HIS_INFO_RESPONSE.format(which_info=lang_which_info, info=name).lower() in prev_bot_text
+            or TELL_USER_HIS_INFO_RESPONSE[LANGUAGE].format(which_info=lang_which_info, info=name).lower() in prev_bot_text
             and is_no(curr_human_annotated_uttr)
         )
     return res
@@ -332,7 +332,7 @@ def tell_my_info(dialog, which_info="name"):
         else:
             name = dialog["human"]["profile"][which_info]
             lang_which_info = WHICH_INFO_RU_MAP[which_info] if LANGUAGE == "RU" else which_info
-            response = TELL_USER_HIS_INFO_RESPONSE.format(which_info=lang_which_info, info=name)
+            response = TELL_USER_HIS_INFO_RESPONSE[LANGUAGE].format(which_info=lang_which_info, info=name)
             confidence = 1.0
             attr["can_continue"] = MUST_CONTINUE
     return response, confidence, attr
