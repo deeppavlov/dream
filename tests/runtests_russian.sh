@@ -139,7 +139,8 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
     for container in dff-program-y-skill intent-catcher convers-evaluation-selector personal-info-skill \
                      entity-linking wiki-parser badlisted-words spelling-preprocessing \
-                     dff-friendship-skill dff-intent-responder-skill entity-detection dialogpt dff-generative-skill; do
+                     dff-friendship-skill dff-intent-responder-skill entity-detection dialogpt dff-generative-skill \
+                     dialogrpt; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
