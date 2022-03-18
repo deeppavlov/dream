@@ -239,6 +239,36 @@
           }
         }
       ]
+    },
+    {
+      "expected_response": "Ой, я не смогла распознать имя. Можешь, пожалуйста, повторить.",
+      "utterances": [
+        {
+          "text": "меня зовут пупка.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "меня зовут пупка.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
     }
   ]
 }
