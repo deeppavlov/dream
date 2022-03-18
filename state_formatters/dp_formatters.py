@@ -914,3 +914,12 @@ def midas_predictor_formatter(dialog: Dict):
     midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
 
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
+
+
+def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+
+    contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
+
+    return [{"dialog_contexts": contexts, "hypotheses": hypots}]

@@ -1,25 +1,23 @@
+import json
+import os
 import requests
 
 
 SKILL_URL = "http://0.0.0.0:8030/respond"
+LANGUAGE = os.getenv("LANGUAGE", "EN")
 
+with open(f"test_{LANGUAGE}.json", "r") as f:
+    dialogs = json.load(f)
 
-dialogs = {
-    "dialogs": [
-        {
-            "utterances": [{"text": "my name is john", "annotations": {"ner": [[{"text": "john", "type": "PER"}]]}}],
-            "bot_utterances": [],
-            "human": {"attributes": {}, "profile": {"name": None}},
-            "human_utterances": [
-                {"text": "my name is john", "annotations": {"ner": [[{"text": "john", "type": "PER"}]]}}
-            ],
-        }
-    ]
-}
-gold = "Nice to meet you, john."
+gold = []
+for dialog in dialogs["dialogs"]:
+    gold += [dialog.pop("expected_response")]
+
 result = requests.post(SKILL_URL, json=dialogs, timeout=2)
 result = result.json()
 
-assert result[0][0] == "Nice to meet you, John.", print(result)
+for i in range(len(dialogs["dialogs"])):
+    print(f"check for uttr `{dialogs['dialogs'][i]['human_utterances'][-1]['text']}`\tgold response: `{gold[i]}`")
+    assert result[i][0] == gold[i], print(result[i])
 
 print("SUCCESS")

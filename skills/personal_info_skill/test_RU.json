@@ -1,0 +1,320 @@
+{
+  "dialogs": [
+    {
+      "expected_response": "Приятно познакомиться, Джо.",
+      "utterances": [
+        {
+          "text": "меня зовут джо.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "Джо",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "Меня зовут джо.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "Джо",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Ой, извини. Как тебя зовут еще раз?",
+      "utterances": [
+        {
+          "text": "меня зовут не джо.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "Джо",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "меня зовут не джо.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "Джо",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "А сейчас ты живешь в этом же месте?",
+      "utterances": [
+        {
+          "text": "я родом из москвы.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "москвы",
+                  "type": "LOC"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "я родом из москвы.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "москвы",
+                  "type": "LOC"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Извини, кажется, я еще не знаю, как тебя зовут. Если ты не против, скажи мне, как тебя зовут?",
+      "utterances": [
+        {
+          "text": "откуда ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "откуда ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Кажется, я уже знаю твое имя из прошлых бесед.",
+      "utterances": [
+        {
+          "text": "откуда ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": "Джо"
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "откуда ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Твое имя - Джо.",
+      "utterances": [
+        {
+          "text": "ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": "Джо"
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Извини, кажется, мы еще не знакомы. Как тебя зовут?",
+      "utterances": [
+        {
+          "text": "ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "ты знаешь мое имя?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Ой, я не смогла распознать имя. Можешь, пожалуйста, повторить.",
+      "utterances": [
+        {
+          "text": "меня зовут пупка.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "меня зовут пупка.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Извини, кажется, я неверно поняла тебя. Я просто хотела спросить, в какой стране или городе ты живешь?",
+      "utterances": [
+        {
+          "text": "привет!",
+          "annotations": {
+          }
+        },
+        {
+          "text": "Где ты живешь?",
+          "annotations": {
+          }
+        },
+        {
+          "text": "на работе.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [
+        {
+          "text": "Где ты живешь?",
+          "annotations": {
+          }
+        }
+      ],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "на работе.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

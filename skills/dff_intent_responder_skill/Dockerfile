@@ -9,6 +9,9 @@ RUN pip install -r requirements.txt
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
