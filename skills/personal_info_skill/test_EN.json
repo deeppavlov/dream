@@ -271,7 +271,7 @@
       ]
     },
     {
-      "expected_response": "Sorry, but I probably misheard you. I am just curious to know the region or the city in which you were born.",
+      "expected_response": "Sorry, but I probably misheard you. Could you please tell me in which city or region you are now?",
       "utterances": [
         {
           "text": "hi!",
