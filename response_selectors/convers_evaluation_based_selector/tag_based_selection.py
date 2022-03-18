@@ -255,6 +255,9 @@ def compute_curr_single_scores(candidates, scores, confidences):
     if all(["hypothesis_scorer" in cand["annotations"] for cand in candidates]):
         for i in range(len(candidates)):
             curr_single_scores.append(candidates[i]["annotations"]["hypothesis_scorer"])
+    elif all(["dialogrpt" in cand["annotations"] for cand in candidates]):
+        for i in range(len(candidates)):
+            curr_single_scores.append(candidates[i]["annotations"]["dialogrpt"])
     else:
         for i in range(len(scores)):
             cand_scores = scores[i]

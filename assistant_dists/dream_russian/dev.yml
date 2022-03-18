@@ -100,6 +100,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8092:8092
+  dialogrpt:
+    volumes:
+      - "./services/dialogrpt_ru:/src"
+    ports:
+      - 8122:8122
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
