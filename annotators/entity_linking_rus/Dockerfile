@@ -7,6 +7,9 @@ xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 
 RUN apt-get install -y sqlite3
 
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
 ARG CONFIG
 ARG PORT
 ARG SRC_DIR

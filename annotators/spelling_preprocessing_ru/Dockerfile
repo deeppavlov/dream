@@ -4,6 +4,9 @@ RUN apt-get -y update && \
     apt-get install -y software-properties-common && \
     apt-get update && apt-get install git -y
 
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
 ARG CONFIG
 ARG COMMIT=0.13.0
 ARG PORT
