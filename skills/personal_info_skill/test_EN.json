@@ -1,0 +1,44 @@
+{
+  "dialogs": [
+    {
+      "expected_response": "Nice to meet you, John.",
+      "utterances": [
+        {
+          "text": "my name is john",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "john",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "my name is john",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "john",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
