@@ -307,7 +307,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://entity-detection:8122/respond"
+                    "url": "http://dialogrpt:8122/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
