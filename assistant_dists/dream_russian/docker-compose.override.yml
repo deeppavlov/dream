@@ -65,7 +65,7 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: sentseg_ru.json
+        CONFIG: sentseg_ru_bert_torch.json
       context: ./annotators/sentseg_ru
     command: flask run -h 0.0.0.0 -p 8011
     environment:
