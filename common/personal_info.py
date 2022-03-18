@@ -14,7 +14,8 @@ what_is_your_name_pattern = re.compile(
     re.IGNORECASE,
 )
 my_name_is_pattern = re.compile(
-    r"(my (name is|name's)|call me|" r"мо[её] (имя|прозвище|название)|меня зовут|(зови|называй) меня|обращайся ко мне)",
+    r"my (name is|name's)|call me|"
+    r"мо[её] (имя [а-яА-ЯЙйЁё]+|прозвище|название)|меня зовут|(зови|называй) меня|обращайся ко мне",
     re.IGNORECASE,
 )
 _is_not_re = r"(is not|isn't|was not|wasn't|have (not|never) been|haven't been|had (not|never) been|hadn't been)"
