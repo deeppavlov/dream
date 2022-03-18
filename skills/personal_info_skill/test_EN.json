@@ -1,7 +1,7 @@
 {
   "dialogs": [
     {
-      "expected_response": "to meet you, John.",
+      "expected_response": "Nice to meet you, John.",
       "utterances": [
         {
           "text": "my name is john.",
