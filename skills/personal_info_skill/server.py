@@ -172,12 +172,8 @@ def process_info(dialog, which_info="name"):
     curr_user_uttr = curr_uttr_dict["text"].lower()
     curr_user_annot = curr_uttr_dict["annotations"]
     bot_utterance_texts = [u["text"].lower() for u in dialog["bot_utterances"]]
-    if len(dialog["bot_utterances"]):
-        prev_bot_uttr = dialog["bot_utterances"][-1]["text"].lower()
-    else:
-        prev_bot_uttr = ""
+    prev_bot_uttr = bot_utterance_texts[-1] if len(bot_utterance_texts) > 0 else ""
 
-    logger.info(f"Previous bot uterance: {prev_bot_uttr}")
     is_about_templates = {
         "name": what_is_your_name_pattern.search(prev_bot_uttr) or my_name_is_pattern.search(curr_user_uttr),
         "homeland": where_are_you_from_pattern.search(prev_bot_uttr) or my_origin_is_pattern.search(curr_user_uttr),
@@ -197,7 +193,7 @@ def process_info(dialog, which_info="name"):
     got_info = False
     # if user doesn't want to share his info
     if user_tells_bot_called_him_wrong(curr_uttr_dict, prev_bot_uttr, dialog["human"]["profile"]):
-        logger.info("User says My name is not Blabla")
+        logger.info("User says My name is not Blabla. Clarify name again")
         response = ASK_USER_ABOUT_NAME_AGAIN_RESPONSE[LANGUAGE]
         confidence = 1.0
         got_info = True
@@ -205,6 +201,7 @@ def process_info(dialog, which_info="name"):
     elif (is_about_templates[which_info] or was_user_asked_to_clarify_info(prev_bot_uttr, which_info)) and (
         is_no(curr_uttr_dict) or is_secret(curr_user_uttr, which_info)
     ):
+        logger.info("User does not want to share private info. Finish")
         response = AS_YOU_WISH_RESPONSE[LANGUAGE]
         confidence = 1.0
         attr["can_continue"] = CAN_NOT_CONTINUE
