@@ -135,7 +135,7 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 def clean_up_utterances_to_avoid_unwanted_keys(
     dialog,
-    wanted_keys=["text", "annotations", "active_skill"],
+    wanted_keys=["text", "annotations", "active_skill", "user"],
     types_utterances=["human_utterances", "bot_utterances", "utterances"],
     used_annotations=None,
 ):
