@@ -81,4 +81,4 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"dialogrpt exec time: {total_time:.3f}s")
 
-    return jsonify({"scores": result_values})
+    return jsonify([{"batch": result_values}])
