@@ -14,7 +14,7 @@ def test_respond():
     gold = [0.334246, 0.33038276, 0.40354252, 0.3839873]
 
     request_data = {"dialog_contexts": contexts, "hypotheses": hypotheses}
-    result = requests.post(url, json=request_data).json()["batch"]
+    result = requests.post(url, json=request_data).json()[0]["batch"]
     print(result)
     for i, score in enumerate(result):
         assert round(score, 4) == round(gold[i], 4), f"Expected:{gold[i]}\tGot\n{score}"
