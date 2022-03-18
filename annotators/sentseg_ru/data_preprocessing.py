@@ -1,6 +1,7 @@
-from nltk.tokenize import sent_tokenize, word_tokenize
-import re
 import string
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+
 
 # Segmentation task
 # dataset: one sample = (list of token without punctuations, list of tags):
