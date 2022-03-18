@@ -122,7 +122,7 @@ NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(
 ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT = {
     "homeland": {
         "EN": "Sorry, but I probably misheard you. "
-        "I am just curious to know the region or the city in which you were born.",
+              "I am just curious to know the region or the city in which you were born.",
         "RU": "Извини, кажется, я неверно поняла тебя. Мне просто было любопытно узнать, страну или город, откуда ты.",
     },
     "location": {

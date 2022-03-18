@@ -63,28 +63,37 @@ def respond():
     for dialog in dialogs_batch:
         human_attr, bot_attr = {}, {}
         response, confidence, attr = how_do_you_know_my_info(dialog, which_info="name")
+        logger.info(f"how_do_you_know_my_info `name` returns {response}")
         if confidence == 0.0:
             response, confidence, attr = how_do_you_know_my_info(dialog, which_info="location")
+            logger.info(f"how_do_you_know_my_info `location` returns {response}")
         if confidence == 0.0:
             response, confidence, attr = how_do_you_know_my_info(dialog, which_info="homeland")
+            logger.info(f"how_do_you_know_my_info `homeland` returns {response}")
 
         if confidence == 0.0:
             response, confidence, human_attr, bot_attr, attr = process_info(dialog, which_info="name")
+            logger.info(f"process_info `name` returns {response}")
 
         if confidence == 0.0:
             response, confidence, human_attr, bot_attr, attr = process_info(dialog, which_info="homeland")
+            logger.info(f"process_info `homeland` returns {response}")
 
         if confidence == 0.0:
             response, confidence, human_attr, bot_attr, attr = process_info(dialog, which_info="location")
+            logger.info(f"process_info `location` returns {response}")
 
         if confidence == 0.0:
             response, confidence, attr = tell_my_info(dialog, which_info="name")
+            logger.info(f"tell_my_info `name` returns {response}")
 
         if confidence == 0.0:
             response, confidence, attr = tell_my_info(dialog, which_info="location")
+            logger.info(f"tell_my_info `location` returns {response}")
 
         if confidence == 0.0:
             response, confidence, attr = tell_my_info(dialog, which_info="homeland")
+            logger.info(f"tell_my_info `homeland` returns {response}")
 
         responses.append(response)
         confidences.append(confidence)
