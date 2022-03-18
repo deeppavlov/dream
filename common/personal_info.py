@@ -114,13 +114,9 @@ how_do_you_know_my_info_responses = {
 }
 MAX_READABLE_NAME_WORD_LEN = 20
 NON_GEOGRAPHICAL_LOCATIONS_COMPILED_PATTERN = re.compile(
-    r"\b"
-    + r"\b|\b".join(
-        r"(hospital|school|work|home|car|train|train station|outdoors|bed|kitchen|bedroom|bathroom|"
-        r"basement|jail|prison|bath|больнице|школе|работе|дома|машине|поезде|станции|улице|кровати|"
-        r"кухне|спальне|ванной|ванне|гостиной|тюрьме)"
-    )
-    + r"\b",
+    r"\b(hospital|school|work|home|car|train|train station|outdoors|bed|kitchen|bedroom|bathroom|"
+    r"basement|jail|prison|bath|больнице|школе|работе|дома|машине|поезде|станции|улице|кровати|"
+    r"кухне|спальне|ванной|ванне|гостиной|тюрьме)\b",
     re.IGNORECASE,
 )
 ASK_GEOGRAPHICAL_LOCATION_BECAUSE_USER_MISUNDERSTOOD_BOT = {
