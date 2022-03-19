@@ -16,6 +16,7 @@ COPY . /src/
 WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
+RUN pip install spacy==3.2.0
 RUN python -m spacy download ru_core_news_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
