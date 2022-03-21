@@ -46,6 +46,17 @@ This version of Dream Socialbot consumes a lot of resources
 because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
 We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai).
 
+### Dream SFC
+Experimental full version of DeepPavlov Dream Socialbot combined with the Speech Functions Classifier & Predictor as shown at NVIDIA GTC 2022.
+This is almost the same version of the DREAM socialbot as at 
+[the end of Alexa Prize Challenge 4](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf).
+Some API services are replaced with trainable models.
+Some services (e.g., News Annotator, Game Skill, Weather Skill) require private keys for underlying APIs,
+most of them can be obtained for free.
+If you want to use these services in local deployments, add your keys to the environmental variables (e.g., `./.env`).
+This version of Dream Socialbot consumes a lot of resources 
+because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
+We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai).
 
 # Quick Start
 
