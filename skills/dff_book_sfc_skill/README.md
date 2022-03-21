@@ -39,7 +39,7 @@ Here is a list of all speech functions available for use in this version: <br>
  | React.Respond.Support.Engage | Drawing attention or a response to a greeting? |  Hi! <br> Hey, David. |
  | React.Respond.Support.Register | A manifestation of emotions or a display of attention to the interlocutor. | Yeah.<br> Right.<br> Hmm... |
  | React.Respond.Support.Reply.Acknowledge | Indicating knowledge or understanding of the information provided. | I know.<br>I see. |
- | eact.Respond.Support.Reply.Affirm | A positive answer to a question or confirmation of the information provided. Yes/его synonyms or affirmation. NB! The speaker confirms the information that he already knew before. | Nick: He went to London.<br>**Fay: He did.** |
+ | React.Respond.Support.Reply.Affirm | A positive answer to a question or confirmation of the information provided. Yes/его synonyms or affirmation. NB! The speaker confirms the information that he already knew before. | Nick: He went to London.<br>**Fay: He did.** |
  | React.Respond.Support.Reply.Agree | Agreement with the information provided. In most cases, the information that the speaker agrees with is new to him. Yes/its synonyms or affirmation. | Steve: We're gonna make it.<br>**Mike: Yeah, right.** |
  | Sustain.Continue.Monitor | Checking the involvement of the listener or trying to pass on the role of speaker to them. | You met his sister that night we were doing the cutting and pasting up. **Do you remember?** |
  | Sustain.Continue.Prolong.Elaborate | Clarifying / rephrasing the previous statement or giving examples to it. A declarative sentence or phrase (may include for example, I mean, like). | Dave: Yeah but I don’t like people… um... **I don’t want to be INVOLVED with people.** |
