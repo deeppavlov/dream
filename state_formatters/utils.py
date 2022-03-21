@@ -264,7 +264,7 @@ def dff_formatter(
             "human_utter_index_batch": [human_utter_index],
             "dialog_batch": [new_dialog],
             f"{state_name}_batch": [state],
-            f"dff_shared_state_batch": [dff_shared_state],
+            "dff_shared_state_batch": [dff_shared_state],
             "entities_batch": [entities],
             "used_links_batch": [used_links],
             "age_group_batch": [age_group],

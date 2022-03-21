@@ -1,5 +1,4 @@
 import logging
-import re
 import time
 from os import getenv
 
