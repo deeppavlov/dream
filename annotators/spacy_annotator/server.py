@@ -32,7 +32,7 @@ def get_result(request):
             for attr in TOKEN_ATTRIBUTES:
                 curr_token[attr] = getattr(token, attr)
             curr_tokens += [curr_token]
-
+        result += [curr_tokens]
     total_time = time.time() - st_time
     logger.info(f"spacy_annotator exec time: {total_time:.3f}s")
     return result
