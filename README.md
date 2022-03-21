@@ -46,6 +46,18 @@ This version of Dream Socialbot consumes a lot of resources
 because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
 We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai).
 
+### Dream SFC
+Experimental full version of DeepPavlov Dream Socialbot combined with the Speech Functions Classifier & Predictor as shown at NVIDIA GTC 2022.
+This is almost the same version of the DREAM socialbot as at 
+[the end of Alexa Prize Challenge 4](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf).
+Some API services are replaced with trainable models.
+Some services (e.g., News Annotator, Game Skill, Weather Skill) require private keys for underlying APIs,
+most of them can be obtained for free.
+If you want to use these services in local deployments, add your keys to the environmental variables (e.g., `./.env`).
+This version of Dream Socialbot consumes a lot of resources 
+because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
+We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai).
+
 
 # Quick Start
 
@@ -93,7 +105,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 
 #### **Dream (locally)**
 
-**Please note, that DeepPavlov Dream components require a lot of resources.**
+**Please note that DeepPavlov Dream components require a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml up --build
@@ -104,12 +116,43 @@ We've also included a config with GPU allocations for multi-GPU environments.
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml up
 ```
 
+#### **Dream (SFC) (via proxy)**
+The easiest way to try out experimental Dream (SFC) is to deploy it via proxy. 
+All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
+See [proxy usage](#proxy-usage) for details.
+```
+docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml -f assistant_dists/dream_sfc/proxy.yml up --build
+```
+
+#### **Dream (SFC) (locally)**
+
+**Please note that DeepPavlov Dream (SFC) components require a lot of resources.**
+Refer to the [components](#components) section to see estimated requirements.
+```
+docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml up --build
+```
+We've also included a config with GPU allocations for multi-GPU environments.
+
+```
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml -f assistant_dists/dream_sfc/test.yml up
+```
+
 
 ### Let's chat
+#### Chat with Dream
 In a separate terminal tab run:
 
 ```
 docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream/pipeline_conf.json
+```
+
+Enter your username and have a chat with Dream!
+
+#### Chat with Dream (SFC)
+In a separate terminal tab run:
+
+```
+docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream_sfc/pipeline_conf.json
 ```
 
 Enter your username and have a chat with Dream!
