@@ -4,7 +4,7 @@ This is an SFC-customized Book Skill service that discusses books with the user.
 # Example of using SFs in DFF DSL
 In this version, you can see how conditions based on speech functions can be used for transition to desired nodes. <br> 
 
-To see how SFs can be used as conditions for transition to the nest node, check out:
+To see how SFs can be used as conditions for transition to the next node, check out:
 
 ```/skills/dff_book_sfc_skill/scenario/main.py```, [line #234](https://github.com/deepmipt/dream/blob/feat/sf-bookskill-new/skills/dff_book_sfc_skill/scenario/main.py#L234)
 
