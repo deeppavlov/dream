@@ -145,6 +145,10 @@
       "MODEL_PATH": "{MODELS_PATH}/sentseg_ru_bert_torch_v0"
     },
     "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/sentseg_ru_bert_torch_v0.tar.gz",
+        "subdir": "{MODELS_PATH}"
+      }
     ]
   }
 }

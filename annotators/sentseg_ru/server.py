@@ -75,7 +75,7 @@ def split_sentences(sentences):
 @app.route("/sentseg", methods=["POST"])
 def respond():
     st_time = time.time()
-    utterances = request.json["utterances"]
+    utterances = request.json["sentences"]
     # TODO: remove punctuation if present
     ptokens = sentseg_model(utterances)
     punctuated = [add_punctuation(tokens, pred_labels) for tokens, pred_labels in zip(ptokens[0], ptokens[1])]

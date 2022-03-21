@@ -2,7 +2,7 @@ import requests
 
 
 url = "http://0.0.0.0:8011/sentseg"
-sentences = {"utterances": ["привет как дела"]}
+sentences = {"sentences": ["привет как дела"]}
 
 gold = "привет. как дела?"
 segments_gold = ["привет.", "как дела?"]
