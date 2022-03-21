@@ -2,7 +2,7 @@
 
 Model adds punctuation marks (`.` and `?`) in Russian lower-cased text.
 
-Models is trained on Russian Open Subtitles dataset using NER setup. The training scores are the following:
+Models is trained on Russian Open Subtitles dataset using ruBERT-based NER setup. The training scores are the following:
 ```
 {
     "valid": {
