@@ -77,6 +77,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
+  spacy-annotator:
+    volumes:
+      - "./annotators/spacy_annotator:/src"
+    ports:
+      - 8125:8125
   dff-friendship-skill:
     volumes:
       - "./skills/dff_friendship_skill:/src"
