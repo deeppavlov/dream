@@ -30,7 +30,7 @@ def get_result(request):
         for token in doc:
             curr_token = {"text": token.text}
             for attr in TOKEN_ATTRIBUTES:
-                curr_token[attr] = getattr(token, attr)
+                curr_token[attr] = str(getattr(token, attr))
             curr_tokens += [curr_token]
         result += [curr_tokens]
     total_time = time.time() - st_time
