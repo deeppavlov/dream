@@ -54,6 +54,7 @@ class EntityDetectionParser(Component):
         return_entities_with_tags: bool = False,
         add_nouns: bool = False,
         thres_proba: float = 0.8,
+        misc_proba: float = 0.8,
         **kwargs
     ):
         """
@@ -73,6 +74,7 @@ class EntityDetectionParser(Component):
         self.ignore_points = ignore_points
         self.return_entities_with_tags = return_entities_with_tags
         self.thres_proba = thres_proba
+        self.misc_proba = misc_proba
         self.tag_ind_dict = {}
         with open(str(expand_path(tags_file))) as fl:
             tags = [line.split("\t")[0] for line in fl.readlines()]
@@ -206,7 +208,10 @@ class EntityDetectionParser(Component):
 
                 entity_dict[f_tag].append(tok)
                 entity_positions_dict[f_tag].append(cnt)
-                entity_probas_dict[f_tag].append(probas[self.tags_ind[tag]])
+                if self.tags_ind[tag] < len(probas):
+                    entity_probas_dict[f_tag].append(probas[self.tags_ind[tag]])
+                else:
+                    entity_probas_dict[f_tag].append(self.misc_proba)
 
             elif any(entity_dict.values()):
                 for tag, entity in entity_dict.items():
