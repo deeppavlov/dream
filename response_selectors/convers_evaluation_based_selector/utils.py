@@ -72,6 +72,7 @@ def add_question_to_statement(
     link_to_question,
     link_to_human_attrs,
     not_sure_factoid,
+    prev_skill_names
 ):
 
     if not_sure_factoid and "factoid_qa" in best_skill_name:
@@ -91,6 +92,10 @@ def add_question_to_statement(
             best_candidate["human_attributes"] = join_used_links_in_attributes(
                 best_candidate.get("human_attributes", {}), link_to_human_attrs
             )
+    elif LANGUAGE == "RU" and best_skill_name == "dff_generative_skill":
+        if prev_skill_names[-3:] == 3 * ["dff_generative_skill"] and random.random() < ASK_DUMMY_QUESTION_PROB:
+            logger.info(f"adding russian {dummy_question} to dff-generative-skill response.")
+            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])} {dummy_question}"
 
     return best_candidate
 
