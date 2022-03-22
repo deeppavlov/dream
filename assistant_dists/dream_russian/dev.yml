@@ -37,7 +37,7 @@ services:
       - 8014:8014
   badlisted-words:
     volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
+      - "./annotators/BadlistedWordsDetector_ru:/src"
       - "./common:/src/common"
     ports:
       - 8018:8018
