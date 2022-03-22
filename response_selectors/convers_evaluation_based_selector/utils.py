@@ -21,6 +21,7 @@ from common.utils import (
 )
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -36,12 +37,20 @@ misheard_with_spec1 = "I misheard you"
 misheard_with_spec2 = "like to chat about"
 alexa_abilities_spec = "If you want to use the requested feature say"
 
-LET_ME_ASK_YOU_PHRASES = [
-    "Let me ask you something.",
-    "I would like to ask you a question.",
-    "Hey, I have a quesiton to you.",
-    "May I ask you one interesting thing.",
-]
+LET_ME_ASK_YOU_PHRASES = {
+    "EN": [
+        "Let me ask you something.",
+        "I would like to ask you a question.",
+        "Hey, I have a quesiton to you.",
+        "May I ask you one interesting thing.",
+    ],
+    "RU": [
+        "Я бы хотела кое-что спросить.",
+        "О, у меня как раз есть вопрос для обсуждения.",
+        "Я хочу спросить тебя кое-о-чем интересном.",
+        "У меня есть кое-что интересное для обсуждения.",
+    ]
+}
 
 
 def join_used_links_in_attributes(main_attrs, add_attrs):
@@ -70,7 +79,7 @@ def add_question_to_statement(
     if best_candidate["text"].strip() in okay_statements:
         if dummy_question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
             logger.info(f"adding {dummy_question} to response.")
-            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES)} {dummy_question}"
+            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])} {dummy_question}"
             # if this is not a link-to question, bot attributes will be still empty
             best_candidate["human_attributes"] = join_used_links_in_attributes(
                 best_candidate.get("human_attributes", {}), dummy_question_human_attr
