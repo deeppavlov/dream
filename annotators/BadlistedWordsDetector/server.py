@@ -15,7 +15,6 @@ from spacy.tokens import Doc, Token
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -61,6 +60,7 @@ def lemmatize(utterance: Doc) -> List[List[str]]:
             else:
                 utterance_lemmatized_unambiguously.append(t_variants.pop())
         else:
+            utterance_lemmatized_unambiguously.append(token.lemma_)
             utterance_lemmatized_unambiguously.append(str(token))
     if variants:
         result = []
@@ -144,20 +144,12 @@ def collect_ngrams(utterance: Doc, max_ngram: int):
     return all_ngrams
 
 
-if LANGUAGE == "RU":
-    nlp_pipeline = spacy.load("ru_core_news_sm", exclude=["senter", "ner"])
-    badlists_dir = Path("./badlists")
-    badlists_files = [f for f in badlists_dir.iterdir() if f.is_file() and "_ru" in f.name]
+nlp_pipeline = spacy.load("en_core_web_sm", exclude=["senter", "ner"])
+badlists_dir = Path("./badlists")
+badlists_files = [f for f in badlists_dir.iterdir() if f.is_file() and "_ru" not in f.name]
 
-    badlists = [Badlist(file) for file in badlists_files]
-    logger.info(f"badlisted_words initialized with following badlists: {badlists}")
-else:
-    nlp_pipeline = spacy.load("en_core_web_sm", exclude=["senter", "ner"])
-    badlists_dir = Path("./badlists")
-    badlists_files = [f for f in badlists_dir.iterdir() if f.is_file() and "_ru" not in f.name]
-
-    badlists = [Badlist(file) for file in badlists_files]
-    logger.info(f"badlisted_words initialized with following badlists: {badlists}")
+badlists = [Badlist(file) for file in badlists_files]
+logger.info(f"badlisted_words initialized with following badlists: {badlists}")
 
 
 def check_for_badlisted_phrases(sentences):
