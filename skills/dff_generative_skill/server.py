@@ -74,6 +74,7 @@ while True:
     if result:
         break
     else:
+        time.sleep(5)
         continue
 
 try:
