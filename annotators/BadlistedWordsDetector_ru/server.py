@@ -5,11 +5,10 @@ import re
 import time
 from os import getenv
 from pathlib import Path
-from typing import List, Set
+from typing import Set
 
 import pymorphy2
 import sentry_sdk
-import spacy
 from flask import Flask, request, jsonify
 
 
@@ -33,7 +32,7 @@ def tokenize_sentence(sentence):
     else:
         sentence = ANYTHING_EXCEPT_OF_LETTERS_RUSSIAN.sub(" ", sentence)
         sentence = SPACES.sub(" ", sentence)
-        return sentence.split()
+        return sentence.lower().split()
 
 
 def lemmatize_token(token):
@@ -87,7 +86,7 @@ logger.info(f"badlisted_words initialized with following badlists: {badlists}")
 
 def check_for_badlisted_phrases(sentences):
     result = []
-    tokenized_sents = [tokenize_sentence(s.lower()) for s in sentences]
+    tokenized_sents = [tokenize_sentence(s) for s in sentences]
     tokenized_lemmatized_sents = [[lemmatize_token(token) for token in sent] for sent in sentences]
     unigrams = [set(tokens + lemmas) for tokens, lemmas in zip(tokenized_sents, tokenized_lemmatized_sents)]
     for sent_unigrams in unigrams:
@@ -97,7 +96,10 @@ def check_for_badlisted_phrases(sentences):
 
 def get_result(request):
     st_time = time.time()
-    sentences = request.json["sentences"]
+    if "tokenized_sentences" in request:
+        sentences = request.json["tokenized_sentences"]
+    else:
+        sentences = request.json["sentences"]
     result = check_for_badlisted_phrases(sentences)
     total_time = time.time() - st_time
     logger.info(f"badlisted_words exec time: {total_time:.3f}s")
