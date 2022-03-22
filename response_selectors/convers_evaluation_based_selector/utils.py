@@ -49,7 +49,7 @@ LET_ME_ASK_YOU_PHRASES = {
         "О, у меня как раз есть вопрос для обсуждения.",
         "Я хочу спросить тебя кое-о-чем интересном.",
         "У меня есть кое-что интересное для обсуждения.",
-    ]
+    ],
 }
 
 
@@ -72,7 +72,7 @@ def add_question_to_statement(
     link_to_question,
     link_to_human_attrs,
     not_sure_factoid,
-    prev_skill_names
+    prev_skill_names,
 ):
 
     if not_sure_factoid and "factoid_qa" in best_skill_name:
