@@ -4,9 +4,6 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  entity-detection:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   dialogpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
