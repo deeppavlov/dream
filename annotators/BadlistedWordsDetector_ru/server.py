@@ -96,9 +96,9 @@ def check_for_badlisted_phrases(sentences):
 
 def get_result(request):
     st_time = time.time()
-    if "tokenized_sentences" in request:
-        sentences = request.json["tokenized_sentences"]
-    else:
+    sentences = request.json.get("tokenized_sentences", [])
+
+    if len(sentences) == 0:
         sentences = request.json["sentences"]
     result = check_for_badlisted_phrases(sentences)
     total_time = time.time() - st_time
