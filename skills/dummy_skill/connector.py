@@ -77,7 +77,7 @@ with open("skills/dummy_skill/facts_map.json", "r") as f:
 with open("skills/dummy_skill/nounphrases_facts_map.json", "r") as f:
     NP_FACTS = json.load(f)
 
-with open("russian_random_questions.txt", "r") as f:
+with open("skills/dummy_skill/russian_random_questions.txt", "r") as f:
     RUSSIAN_RANDOM_QUESTIONS = f.readlines()
 
 
