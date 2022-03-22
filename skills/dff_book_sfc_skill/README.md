@@ -5,9 +5,11 @@ Unlike the original Book Skill, this Skill has been augmented with the MIDAS cla
 
 # If you want to use MIDAS in DFF DSL
 
-To use MIDAS as conditions for transition to the next node, you can write in TRANSITIONS `"transition_node_name": dm_cnd.is_midas("pos_answer")`.
+To use MIDAS as conditions for transition to the next node, you can write in TRANSITIONS
+`"transition_node_name": dm_cnd.is_midas("pos_answer")`.
 
-To use MIDAS to specify a dialog act of a bot's utterance to be able to make predictions for this utterance, you can write in MISC `"dialog_act": ["open_question_factual"]
+To use MIDAS to specify a dialog act of a bot's utterance to be able to make predictions for this utterance, you can write in MISC
+`"dialog_act": ["open_question_factual"]`
 
 # All dialog acts available for use
 Here is a list of all dialog acts available for use in this version: <br>`
