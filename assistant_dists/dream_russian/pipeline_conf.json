@@ -1,5 +1,10 @@
 {
     "connectors": {
+        "sentseg": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://sentseg:8011/sentseg"
+        },
         "ner": {
             "protocol": "http",
             "timeout": 1.5,
@@ -13,6 +18,13 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
                 "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    },
                     "ner": [
                         []
                     ]
@@ -29,6 +41,13 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
                 "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "segments": [
+                            "Sorry, I need to think more on that.",
+                            "Let's talk about something else."
+                        ]
+                    },
                     "ner": [
                         []
                     ]
@@ -44,6 +63,7 @@
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
+                    "sentseg",
                     "ner"
                 ]
             },
@@ -53,12 +73,22 @@
             ]
         },
         "post_annotators": {
+            "sentseg": {
+                "connector": "connectors.sentseg",
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "bot_annotator_selector"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt"
+            },
             "ner": {
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "required_previous_services": [
-                    "bot_annotator_selector"
+                    "bot_annotator_selector",
+                    "post_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
@@ -84,6 +114,15 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
             },
+            "sentseg": {
+                "connector": "connectors.sentseg",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
             "badlisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -92,7 +131,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -106,8 +145,9 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
                 ]
             },
             "ner": {
@@ -115,8 +155,9 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
                 ]
             },
             "entity_detection": {
@@ -128,8 +169,9 @@
                 "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
                 ]
             },
             "entity_linking": {
@@ -141,10 +183,8 @@
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.ner"
-                ],
                 "previous_services": [
+                    "annotators.ner",
                     "annotators.entity_detection"
                 ]
             },
@@ -172,9 +212,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators"
-                ],
-                "required_previous_services": [
-                    "annotators.badlisted_words"
                 ],
                 "tags": [
                     "selector"

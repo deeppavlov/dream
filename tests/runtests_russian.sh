@@ -138,7 +138,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
 
     for container in dff-program-y-skill intent-catcher convers-evaluation-selector personal-info-skill \
-                     entity-linking wiki-parser badlisted-words spelling-preprocessing \
+                     entity-linking wiki-parser badlisted-words spelling-preprocessing sentseg \
                      dff-friendship-skill dff-intent-responder-skill entity-detection dialogpt dff-generative-skill \
                      dialogrpt; do
 
