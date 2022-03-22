@@ -120,7 +120,7 @@ When you need to restart particular docker container without re-building (make s
 ```
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
 ```
-
+ 
 ### Let's chat
 In a separate terminal tab run:
 
@@ -131,6 +131,34 @@ docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dre
 Enter your username and have a chat with Dream!
 
 
+#### **Dream SFC (via proxy)**
+ The easiest way to try out experimental Dream (SFC) is to deploy it via proxy. 
+ All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
+ See [proxy usage](#proxy-usage) for details.
+ ```
+ docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml -f assistant_dists/dream_sfc/proxy.yml up --build
+ ```
+
+ #### **Dream SFC (locally)**
+
+ **Please note that DeepPavlov Dream SFC components require a lot of resources.**
+ Refer to the [components](#components) section to see estimated requirements.
+ ```
+ docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml up --build
+ ```
+ We've also included a config with GPU allocations for multi-GPU environments.
+
+ ```
+ AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml -f assistant_dists/dream_sfc/test.yml up
+ ```
+ 
+ ### Let's chat
+In a separate terminal tab run:
+
+```
+docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream_sfc/pipeline_conf.json
+```
+ 
 ### Let's talk via HTTP API
 Once you've started the bot, DeepPavlov's Agent API will run on `http://localhost:4242'. You can learn about its API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
 
