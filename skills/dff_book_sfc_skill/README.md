@@ -22,10 +22,8 @@ Here is a list of all dialog acts available for use in this version: <br>`
 | neg_answer | negative response to a previous question | no; not really; nothing right now |
 | open_question_factual | factual questions | How old is Tom Cruise; How’s the weather today |
 | open_question_opinion | opinionated questions | What’s your favorite book; what do you think of disney movies |
-| opinion | personal view with polarized sentiment | dogs are adorable; (A: How do you like Tom) B: i think he is
-great |
-| other_answers | answers that are neither positive or negative | I don’t know; i don’t have a favorite; (A: do you like listening
-to music) B: occasionally |
+| opinion | personal view with polarized sentiment | dogs are adorable; (A: How do you like Tom) B: i think he is great |
+| other_answers | answers that are neither positive or negative | I don’t know; i don’t have a favorite; (A: do you like listening to music) B: occasionally |
 | pos_answer | positive answers | yes; sure; i think so; why not |
 | statement | factual information | I have a dog named Max; I am 10 years old; (A: what movie have you seen recently) B: the avengers |
 | yes_no_question | opinionated questions | What’s your favorite book; what do you think of disney movies |
