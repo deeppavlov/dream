@@ -50,7 +50,8 @@ class Badlist:
         self.name = path.stem
         self.badlist = set()
         with path.open() as f:
-            for token in f:
+            for line in f:
+                token = line.strip().lower()
                 self.badlist.add(token)
                 self.badlist.add(lemmatize_token(token))
 
