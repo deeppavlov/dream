@@ -13,3 +13,6 @@ services:
   dialogrpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  sentseg:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
