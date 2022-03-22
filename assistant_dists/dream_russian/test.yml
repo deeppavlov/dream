@@ -36,8 +36,6 @@ services:
   entity-detection:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   sentseg:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

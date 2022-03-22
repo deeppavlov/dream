@@ -153,7 +153,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 By default, `proxy.yml` contains all available proxy definitions.
 
 
-# Components
+# Components English Version
 
 Dream Architecture is presented in the following image:
 ![DREAM](DREAM.png)
@@ -220,7 +220,7 @@ Dream Architecture is presented in the following image:
 | DFF Bot Persona skill     | 170 MiB RAM             | aims to discuss user favorites and 20 most popular things with short stories expressing the socialbot's opinion towards them                                                                                       |
 | DFF Coronavirus skill     | 150 MiB RAM             | **[New DFF version]** retrieves data about the number of coronavirus cases and deaths in different locations sourced from the John Hopkins University Center for System Science and Engineering                    |
 | DFF Food skill            | 170 MiB RAM             | constructed with DFF to encourage food-related conversation                                                                                                                                                        |
-| DFF Friendship skill      | 100 MiB RAM             | DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill                                                                                                      |
+| DFF Friendship skill      | 100 MiB RAM             | **[New DFF version]** DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill                                                                                                      |
 | DFF Funfact skill         | 100 MiB RAM             | **[New DFF version]** Tells user fun facts                                                                                                                                                                         |
 | DFF Gaming skill          | 120 MiB RAM             | provides a video games discussion. Gaming Skill is for more general talk about video games                                                                                                                         |
 | DFF Gossip skill          | 95 MiB RAM              | DFF-based skill to discuss other people with news about them                                                                                                                                                       |
@@ -233,6 +233,39 @@ Dream Architecture is presented in the following image:
 | DFF Travel skill          | 90 MiB RAM              | DFF-based skill to discuss travel                                                                                                                                                                                  |
 | DFF Weather skill         | 1.4 GiB RAM             | **[New DFF version]** uses the OpenWeatherMap service to get the forecast for the user's location                                                                                                                  |
 | DFF Wiki skill            | 160 MiB RAM             | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                                                                                                      |
+
+
+# Components Russian Version
+
+Dream Architecture is presented in the following image:
+![DREAM](DREAM.png)
+
+## Annotators
+
+| Name                   | Requirements            | Description                                                                                                                                                                   |
+|------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Badlisted words        | ?? MiB RAM              | detects obscene Russian words from the badlist                                                                                                                                |
+| Entity detection       | ?? GiB RAM              | extracts entities and their types from utterances                                                                                                                             |
+| Entity linking         | ?? GiB RAM, ?? GiB GPU  | finds Wikidata entity ids for the entities detected with Entity Detection                                                                                                     |
+| Intent catcher         | 2.7 GiB RAM             | classifies user utterances into a number of predefined intents which are trained on a set of phrases and regexps                                                              |
+| NER                    | ?? MiB RAM, 4.9 Gib GPU | extracts person names, names of locations, organizations from uncased text using ruBert-based (pyTorch) model                                                                 |
+| Sentseg                | ?? GiB RAM, 4.9 Gib GPU | recovers punctuation using ruBert-based (pyTorch) model and splits into sentences                                                                                             |
+| Spacy Annotator        | ?? MiB RAM              | token-wise annotations by Spacy                                                                                                                                               |
+| Spelling preprocessing | ?? MiB RAM              | Russian Levenshtein correction model                                                                                                                                          |
+| Wiki parser            | ?? MiB RAM,             | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                      |
+| DialogRPT              | ?? MiB RAM,  2 GiB GPU  | DialogRPT model which is based on Russian DialoGPT (see https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) and fine-tuned on Russian Pikabu Comment sequences |
+
+## Skills & Services
+| Name                 | Requirements          | Description                                                                                                                                                                      |
+|----------------------|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DialoGPT             | ?? MiB RAM, 2 GiB GPU | Russian DialoGPT model https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2                                                                                         |
+| Dummy Skill          |                       | a fallback skill with multiple non-toxic candidate responses and random Russian questions                                                                                        |
+| Intent Responder     | 40 MiB RAM            | provides template-based replies for some of the intents detected by Intent Catcher annotator                                                                                     |
+| Personal Info skill  | 40 MiB RAM            | queries and stores user's name, birthplace, and location                                                                                                                         |
+| Program Y            | ?? MiB RAM            | **[New DFF version]** Chatbot Program Y (https://github.com/keiffster/program-y) adapted for Dream socialbot                                                                     |
+| DFF Friendship skill | ?? MiB RAM            | **[New DFF version]** DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill                                              |
+| DFF Grounding skill  | ?? MiB RAM            | **[New DFF version]** DFF-based skill to answer what is the topic of the conversation, to generate acknowledgement, to generate universal responses on some dialog acts by MIDAS |
+| DFF Wiki skill       | ?? MiB RAM            | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                                                                   |
 
 # Papers
 ### Alexa Prize 3
