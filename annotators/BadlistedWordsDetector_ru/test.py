@@ -5,7 +5,7 @@ def main():
     url = "http://0.0.0.0:8018/badlisted_words"
 
     request_data = {
-        "sentences": ["any fucks in this sentence", "good one", "fucked one"],
+        "sentences": ["не пизди.", "застрахуйте уже его", "пошел нахер!"],
     }
 
     result = requests.post(url, json=request_data).json()

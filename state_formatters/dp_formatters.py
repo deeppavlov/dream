@@ -238,6 +238,26 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
+    # Used by: sentseg over human uttrs
+    tokens = dialog["human_utterances"][-1]["annotations"].get("spacy_annotator", [])
+    tokens = [token["text"] for token in tokens]
+    result = [
+        {
+            "sentences": [
+                dialog["human_utterances"][-1]["annotations"].get(
+                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                )
+            ]
+        }
+    ]
+
+    if len(tokens):
+        result["tokenized_sentences"] = [tokens]
+
+    return result
+
+
 def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
     if len(dialog["bot_utterances"]):
         return [{"sentences": [dialog["bot_utterances"][-1]["text"]]}]
@@ -268,6 +288,18 @@ def hypotheses_segmented_list(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [[h["text"]] for h in hypotheses]
     return [{"sentences": hypots}]
+
+
+def tokenized_hypotheses_list(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    tokens = [h.get("annotations", {}).get("spacy_annotator", []) for h in hypotheses]
+    tokens = [[token["text"] for token in h] for h in tokens]
+    hypots = [h["text"] for h in hypotheses]
+    if len(tokens):
+        result = [{"sentences": hypots, "tokenized_sentences": tokens}]
+    else:
+        result = [{"sentences": hypots}]
+    return result
 
 
 def ner_hypotheses_segmented_list(dialog: Dict):
