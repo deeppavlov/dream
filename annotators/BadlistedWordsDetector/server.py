@@ -60,7 +60,6 @@ def lemmatize(utterance: Doc) -> List[List[str]]:
             else:
                 utterance_lemmatized_unambiguously.append(t_variants.pop())
         else:
-            utterance_lemmatized_unambiguously.append(token.lemma_)
             utterance_lemmatized_unambiguously.append(str(token))
     if variants:
         result = []
