@@ -80,6 +80,8 @@ with open("skills/dummy_skill/nounphrases_facts_map.json", "r") as f:
 with open("skills/dummy_skill/russian_random_questions.txt", "r") as f:
     RUSSIAN_RANDOM_QUESTIONS = f.readlines()
 
+RUSSIAN_RANDOM_QUESTIONS = [q.strip() for q in RUSSIAN_RANDOM_QUESTIONS]
+
 
 class RandomTopicResponder:
     def __init__(self, filename, topic, text):
