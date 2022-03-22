@@ -87,7 +87,7 @@ logger.info(f"badlisted_words initialized with following badlists: {badlists}")
 def check_for_badlisted_phrases(sentences):
     result = []
     tokenized_sents = [tokenize_sentence(s) for s in sentences]
-    tokenized_lemmatized_sents = [[lemmatize_token(token) for token in sent] for sent in sentences]
+    tokenized_lemmatized_sents = [[lemmatize_token(token) for token in sent] for sent in tokenized_sents]
     unigrams = [set(tokens + lemmas) for tokens, lemmas in zip(tokenized_sents, tokenized_lemmatized_sents)]
     for sent_unigrams in unigrams:
         result += [{blist.name: blist.check_set_of_strings(sent_unigrams) for blist in badlists}]
