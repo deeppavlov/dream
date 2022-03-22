@@ -8,7 +8,7 @@ def main():
     LANGUAGE = getenv("LANGUAGE", "EN")
     if LANGUAGE == "RU":
         request_data = {
-            "sentences": ["пизда настала", "застрахуйте уже его", "пошел нахер!"],
+            "sentences": ["не пизди", "застрахуйте уже его", "пошел нахер!"],
         }
     else:
         request_data = {
