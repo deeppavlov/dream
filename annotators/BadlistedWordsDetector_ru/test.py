@@ -1,5 +1,4 @@
 import requests
-from os import getenv
 
 
 def main():

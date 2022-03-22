@@ -242,13 +242,15 @@ def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     tokens = dialog["human_utterances"][-1]["annotations"].get("spacy_annotator", [])
     tokens = [token["text"] for token in tokens]
-    result = [{
-        "sentences": [
-            dialog["human_utterances"][-1]["annotations"].get(
-                "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-            )
-        ]
-    }]
+    result = [
+        {
+            "sentences": [
+                dialog["human_utterances"][-1]["annotations"].get(
+                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                )
+            ]
+        }
+    ]
 
     if len(tokens):
         result["tokenized_sentences"] = [tokens]
