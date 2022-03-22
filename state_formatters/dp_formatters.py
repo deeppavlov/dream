@@ -253,7 +253,7 @@ def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
     if len(tokens):
-        result["tokenized_sentences"] = [tokens]
+        result[0]["tokenized_sentences"] = [tokens]
 
     return result
 
