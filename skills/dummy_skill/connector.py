@@ -77,6 +77,9 @@ with open("skills/dummy_skill/facts_map.json", "r") as f:
 with open("skills/dummy_skill/nounphrases_facts_map.json", "r") as f:
     NP_FACTS = json.load(f)
 
+with open("russian_random_questions.txt", "r") as f:
+    RUSSIAN_RANDOM_QUESTIONS = f.readlines()
+
 
 class RandomTopicResponder:
     def __init__(self, filename, topic, text):
@@ -270,6 +273,11 @@ class DummySkillConnector:
                 cands += [link_to_question]
                 attrs += [{"type": "link_to_for_response_selector"}]
                 human_attrs += [human_attr]
+                bot_attrs += [{}]
+            elif is_russian:
+                cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
+                attrs += [{"type": "link_to_for_response_selector"}]
+                human_attrs += [{}]
                 bot_attrs += [{}]
 
             if not is_russian:
