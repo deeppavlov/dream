@@ -342,7 +342,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         link_to_question,
         link_to_human_attrs,
         not_sure_factoid,
-        prev_skill_names
+        prev_skill_names,
     )
 
     return best_candidate, best_id, curr_single_scores
