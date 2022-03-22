@@ -329,7 +329,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://spacy-annotator:8125/batch_respond"
+                    "url": "http://spacy-annotator:8125/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
