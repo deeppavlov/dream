@@ -325,6 +325,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
     best_id = np.argmax(curr_single_scores)
     best_candidate = candidates[best_id]
     best_skill_name = skill_names[int(best_id)]
+    prev_skill_names = [uttr["skill_name"] for uttr in dialog["bot_utterances"][-5:]]
 
     best_candidate = add_question_to_statement(
         best_candidate,
@@ -334,6 +335,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         link_to_question,
         link_to_human_attrs,
         not_sure_factoid,
+        prev_skill_names,
     )
 
     return best_candidate, best_id, curr_single_scores
