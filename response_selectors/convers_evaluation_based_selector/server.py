@@ -14,7 +14,7 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, DUMMY_DONTKNOW_RESPONSES
 from common.utils import (
     get_intent_name,
     low_priority_intents,
@@ -127,7 +127,7 @@ def respond():
             else:
                 logger.info("Response Selector Error: randomly choosing response among dummy responses.")
                 best_cand = {
-                    "text": random.choice(MOST_DUMMY_RESPONSES),
+                    "text": random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]),
                     "confidence": 0.1,
                     "human_attributes": {},
                     "bot_attributes": {},
@@ -346,7 +346,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(scores, confidences, is_toxics)
     if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
-        return None, np.random.choice(MOST_DUMMY_RESPONSES), 1.0, {}, {}
+        return None, np.random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]), 1.0, {}, {}
 
     # REPEAT checks
     bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
