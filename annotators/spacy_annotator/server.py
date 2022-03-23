@@ -12,6 +12,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 spacy_nlp = spacy.load(getenv("SPACY_MODEL"))
 TOKEN_ATTRIBUTES = getenv("TOKEN_ATTRIBUTES").split("|")
+ANNOTATE_BATCH_WITH_TOKENS_ONLY = getenv("ANNOTATE_BATCH_WITH_TOKENS_ONLY", False)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -23,7 +24,7 @@ def remove_quotes(text):
     return re.sub(r"\s+", " ", re.sub(r"\'\"", " ", text)).strip()
 
 
-def get_result(request):
+def get_result(request, only_tokens=False):
     st_time = time.time()
     sentences = request.json["sentences"]
     result = []
@@ -33,8 +34,9 @@ def get_result(request):
         curr_tokens = []
         for token in doc:
             curr_token = {"text": token.text}
-            for attr in TOKEN_ATTRIBUTES:
-                curr_token[attr] = str(getattr(token, attr))
+            if not only_tokens:
+                for attr in TOKEN_ATTRIBUTES:
+                    curr_token[attr] = str(getattr(token, attr))
             curr_tokens += [curr_token]
         result += [curr_tokens]
     total_time = time.time() - st_time
@@ -50,7 +52,7 @@ def respond():
 
 @app.route("/respond_batch", methods=["POST"])
 def respond_batch():
-    result = get_result(request)
+    result = get_result(request, only_tokens=ANNOTATE_BATCH_WITH_TOKENS_ONLY)
     return jsonify([{"batch": result}])
 
 
