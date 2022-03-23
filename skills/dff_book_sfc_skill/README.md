@@ -12,7 +12,7 @@ To use MIDAS to specify a dialog act of a bot's utterance to be able to make pre
 `"dialog_act": ["open_question_factual"]`
 
 # All dialog acts available for use
-Here is a list of all dialog acts available for use in this version: <br>`
+Here is a list of all dialog acts available for use in this version: <br>
 
 | MIDAS | Explanation | Example |
 | --- | --- | --- |
