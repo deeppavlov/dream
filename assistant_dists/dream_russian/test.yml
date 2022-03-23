@@ -32,7 +32,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
   dff-friendship-skill:
-  dff-wiki-skill:
   entity-detection:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

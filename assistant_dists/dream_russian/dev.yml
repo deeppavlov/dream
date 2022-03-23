@@ -88,12 +88,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8086:8086
-  dff-wiki-skill:
-    volumes:
-      - "./skills/dff_wiki_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8111:8111
   entity-detection:
     volumes:
       - "./annotators/entity_detection_rus:/src"
