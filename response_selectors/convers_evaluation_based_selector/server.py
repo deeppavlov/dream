@@ -14,7 +14,7 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, DUMMY_DONTKNOW_RESPONSES
 from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, is_toxic_or_badlisted_utterance
 from tag_based_selection import tag_based_response_selection
 from utils import (
@@ -44,11 +44,7 @@ app = Flask(__name__)
 CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
 SHOW_DIALOG_ID = False
 TAG_BASED_SELECTION = True
-MOST_DUMMY_RESPONSES = [
-    "I really do not know what to answer.",
-    "Sorry, probably, I didn't get what you mean.",
-    "I didn't get it. Sorry",
-]
+
 LANGUAGE = getenv("LANGUAGE", "EN")
 
 
@@ -130,7 +126,7 @@ def respond():
                 best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
             else:
                 best_cand = {
-                    "text": random.choice(MOST_DUMMY_RESPONSES),
+                    "text": random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]),
                     "confidence": 0.1,
                     "human_attributes": {},
                     "bot_attributes": {},
@@ -353,7 +349,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(scores, confidences, is_toxics)
     if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
-        return None, np.random.choice(MOST_DUMMY_RESPONSES), 1.0, {}, {}
+        return None, np.random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]), 1.0, {}, {}
 
     # REPEAT checks
     bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]

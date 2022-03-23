@@ -24,7 +24,8 @@ from common.link import (
     compose_linkto_with_connection_phrase,
 )
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic
+from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic, \
+    DUMMY_DONTKNOW_RESPONSES
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
 
@@ -50,20 +51,6 @@ ASK_ME_QUESTION_PATTERN = re.compile(
     r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE
 )
 
-donotknow_answers = {
-    "EN": [
-        "What do you want to talk about?",
-        "I am a bit confused. What would you like to chat about?",
-        "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
-        "Sorry, I didn't catch that. What would you like to chat about?",
-    ],
-    "RU": [
-        "О чем ты хочешь поговорить?",
-        "Кажется, я немного потерялась. О чем ты хочешь поговорить?",
-        "Извини, возможно я не совсем поняла, что ты имеешь в виду. О чем ты хочешь поговорить?",
-        "Извини, я не уловила информацию. О чем ты хочешь поболтать?",
-    ],
-}
 
 with open("skills/dummy_skill/questions_map.json", "r") as f:
     QUESTIONS_MAP = json.load(f)
@@ -210,9 +197,9 @@ class DummySkillConnector:
             attrs = []
             is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"])
             if is_russian:
-                cands += [choice(donotknow_answers["RU"])]
+                cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
             else:
-                cands += [choice(donotknow_answers["EN"])]
+                cands += [choice(DUMMY_DONTKNOW_RESPONSES["EN"])]
             confs += [0.5]
             attrs += [{"type": "dummy"}]
             human_attrs += [{}]
