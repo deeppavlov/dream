@@ -265,6 +265,7 @@ class DummySkillConnector:
                 bot_attrs += [{}]
             elif is_russian:
                 cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
+                confs += [0.8]
                 attrs += [{"type": "link_to_for_response_selector"}]
                 human_attrs += [{}]
                 bot_attrs += [{}]
