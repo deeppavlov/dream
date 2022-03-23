@@ -268,8 +268,7 @@ def compute_curr_single_scores(candidates, scores, confidences):
             toxicity = max(candidates[i].get("annotations", {}).get("toxic_classification", {"toxic": 0.0}).values())
 
             logger.info(
-                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. "
-                f"Toxicity: {toxicity}. Cand scores: {cand_scores}"
+                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}."
             )
             curr_single_scores.append(score)
 
