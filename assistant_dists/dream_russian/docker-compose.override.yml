@@ -123,7 +123,7 @@ services:
         LANGUAGE: RU
       context: ./
       dockerfile: annotators/NER_ru/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8021
+    command: flask run -h 0.0.0.0 -p 8021 --without-threads
     environment:
       - FLASK_APP=server
     tty: true
