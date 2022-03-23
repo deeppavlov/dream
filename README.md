@@ -115,6 +115,15 @@ We've also included a config with GPU allocations for multi-GPU environments.
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml up
 ```
 
+### Let's chat (Dream)
+In a separate terminal tab run:
+
+```
+docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream/pipeline_conf.json
+```
+
+Enter your username and have a chat with Dream!
+ 
 #### **Dream SFC (via proxy)**
 The easiest way to try out experimental Dream (SFC) is to deploy it via proxy. 
 All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
@@ -136,14 +145,14 @@ We've also included a config with GPU allocations for multi-GPU environments.
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream_sfc/docker-compose.override.yml -f assistant_dists/dream_sfc/test.yml up
 ```
 
-### Let's chat
+### Let's chat (Dream SFC)
 In a separate terminal tab run:
 
 ```
 docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream_sfc/pipeline_conf.json
 ```
 
-Enter your username and have a chat with Dream!
+Enter your username and have a chat with Dream SFC!
 
 
 ### Let's talk via HTTP API
