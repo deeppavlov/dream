@@ -7,7 +7,7 @@ from typing import Any
 import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
 from df_engine.core import Context, Actor
-from common.constants import CAN_NOT_CONTINUE
+from common.constants import CAN_CONTINUE_SCENARIO
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -58,7 +58,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
 
     for hyp in hypotheses:
-        gathering_responses(hyp, 0.95, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
 
     if len(curr_responses) == 0:
         return "", 0.01, {}, {}, {}
