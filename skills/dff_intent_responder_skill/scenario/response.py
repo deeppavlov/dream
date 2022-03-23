@@ -5,7 +5,6 @@ import scenario.response_funcs as response_funcs
 from df_engine.core import Actor, Context
 
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -62,7 +61,7 @@ def get_detected_intents(annotated_utterance):
     intents = get_intents(annotated_utterance)
     intent, confidence = None, 0.0
     for key, value in intents.items():
-        if value.get("detected", 0) == 1:
+        if value.get("detected", 0) == 1 and key in response_funcs.get_respond_funcs():
             confidence_current = value.get("confidence", 0.0)
             if confidence_current > confidence:
                 intent, confidence = key, confidence_current
