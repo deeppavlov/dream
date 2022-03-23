@@ -251,15 +251,15 @@ def compute_curr_single_scores(candidates, scores, confidences):
     if all(["hypothesis_scorer" in cand["annotations"] for cand in candidates]):
         for i in range(len(candidates)):
             curr_single_scores.append(candidates[i]["annotations"]["hypothesis_scorer"])
-    elif all(["dialogrpt" in cand["annotations"] for cand in candidates]):
-        for i in range(len(candidates)):
-            curr_single_scores.append(candidates[i]["annotations"]["dialogrpt"])
     else:
         for i in range(len(scores)):
             cand_scores = scores[i]
             confidence = confidences[i]
             skill_name = candidates[i]["skill_name"]
-            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
+            if all(["dialogrpt" in cand["annotations"] for cand in candidates]):
+                score_conv_eval = candidates[i]["annotations"]["dialogrpt"]
+            else:
+                score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
             toxicity = max(candidates[i].get("annotations", {}).get("toxic_classification", {"toxic": 0.0}).values())
 
