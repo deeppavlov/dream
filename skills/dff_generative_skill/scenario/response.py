@@ -58,6 +58,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
 
     for hyp in hypotheses:
+        if hyp[-1] not in [".", "?", "!"]:
+            hyp += "."
         gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
 
     if len(curr_responses) == 0:
