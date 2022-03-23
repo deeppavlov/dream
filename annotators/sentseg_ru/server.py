@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 config = getenv("CONFIG", "sentseg_ru.json")
-PUNCTUATION = re.compile(r"[\.\?\!]+")
+PUNCTUATION = re.compile(r"[\.\?\!\,]+")
 DOUBLE_SPACE = re.compile(r"\s+")
 
 
