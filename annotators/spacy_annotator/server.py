@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 from os import getenv
 
@@ -18,13 +19,17 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 
+def remove_quotes(text):
+    return re.sub(r"\s+", " ", re.sub(r"\'\"", " ", text)).strip()
+
+
 def get_result(request):
     st_time = time.time()
     sentences = request.json["sentences"]
     result = []
 
     for uttr in sentences:
-        doc = spacy_nlp(uttr)
+        doc = spacy_nlp(remove_quotes(uttr))
         curr_tokens = []
         for token in doc:
             curr_token = {"text": token.text}
