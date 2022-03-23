@@ -23,9 +23,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 128M
         reservations:
-          memory: 1024M
+          memory: 128M
 
   convers-evaluation-selector:
     env_file: [.env]
@@ -74,9 +74,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 3G
         reservations:
-          memory: 500M
+          memory: 3G
 
   intent-catcher:
     env_file: [.env]
@@ -94,9 +94,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3.5G
+          memory: 1.5G
         reservations:
-          memory: 3.5G
+          memory: 1.5G
 
   badlisted-words:
     env_file: [.env]
@@ -108,9 +108,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 128M
         reservations:
-          memory: 256M
+          memory: 128M
 
   ner:
     env_file: [.env]
@@ -130,9 +130,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1512M
+          memory: 2G
         reservations:
-          memory: 1512M
+          memory: 2G
   
   entity-detection:
     env_file: [.env]
@@ -151,9 +151,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1512M
+          memory: 3.5G
         reservations:
-          memory: 1512M
+          memory: 3.5G
 
   personal-info-skill:
     env_file: [.env]
@@ -187,9 +187,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3G
+          memory: 700M
         reservations:
-          memory: 3G
+          memory: 700M
 
   wiki-parser:
     env_file: [.env]
@@ -233,9 +233,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 5G
         reservations:
-          memory: 256M
+          memory: 5G
 
   spacy-annotator:
     env_file: [.env]
@@ -253,9 +253,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 256M
         reservations:
-          memory: 128M
+          memory: 256M
 
   dff-friendship-skill:
     env_file: [.env]
@@ -273,9 +273,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 128M
         reservations:
-          memory: 256M
+          memory: 128M
 
   dff-wiki-skill:
     env_file: [.env]
@@ -313,9 +313,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 3G
         reservations:
-          memory: 2.5G
+          memory: 3G
 
   dff-generative-skill:
     env_file: [ .env ]
@@ -349,9 +349,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 4G
         reservations:
-          memory: 2.5G
+          memory: 4G
 
   dff-template-skill:
     env_file: [.env]
