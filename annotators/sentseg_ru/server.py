@@ -16,6 +16,9 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 config = getenv("CONFIG", "sentseg_ru.json")
+PUNCTUATION = re.compile(r"[\.\?\!]+")
+DOUBLE_SPACE = re.compile(r"\s+")
+
 
 try:
     spacy_nlp = spacy.load("ru_core_news_sm")
@@ -28,7 +31,7 @@ except Exception as e:
 
 
 def split_segments(sentence):
-    segm = re.split(r"([\.\?\!])", sentence)
+    segm = re.split(PUNCTUATION, sentence)
     segm = [sent.strip() for sent in segm if sent != ""]
 
     curr_sent = ""
@@ -36,7 +39,7 @@ def split_segments(sentence):
     segments = []
 
     for s in segm:
-        if re.match(r"[\.\?\!]", s):
+        if re.match(PUNCTUATION, s):
             punct_occur = True
             curr_sent += s
         elif punct_occur:
@@ -76,7 +79,7 @@ def split_sentences(sentences):
 def respond():
     st_time = time.time()
     utterances = request.json["sentences"]
-    # TODO: remove punctuation if present
+    utterances = [DOUBLE_SPACE.sub(" ", PUNCTUATION.sub(" ", uttr)) for uttr in utterances]
     ptokens = sentseg_model(utterances)
     punctuated = [add_punctuation(tokens, pred_labels) for tokens, pred_labels in zip(ptokens[0], ptokens[1])]
     segments = [split_sentences(utt) for utt in punctuated]
