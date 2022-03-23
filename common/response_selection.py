@@ -34,6 +34,7 @@ ACTIVE_SKILLS = [
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill",
     "dff_friendship_skill",
+    "dff_generative_skill"
 ]
 UNPREDICTABLE_SKILLS = [
     "convert_reddit",

@@ -685,17 +685,12 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4
     )
 
-    if (_no_script_two_times_in_a_row
-        and _is_short_or_question_by_not_script
-        and no_question_by_user
-        and LANGUAGE == "EN") or (
-        _no_to_first_linkto
-        and _is_best_not_script
-        and LANGUAGE == "EN"
+    if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
+        _no_to_first_linkto and _is_best_not_script
     ):
         # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
         # and user utterance does not contain "?", replace utterance with dummy!
-        logger.info("No scripts 2 times in a row, OR reject to previous linkto for ENGLISH version.")
+        logger.info("No scripts 2 times in a row, OR reject to previous linkto.")
         best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
         best_candidate = deepcopy(candidates[best_prompt_id])
         best_cand_id = best_prompt_id
