@@ -1,6 +1,0 @@
-- добавляет hi this is dream socialbot  в начале фразы
-
-- entity detection не работает internal error
-- gemnerative internal error
-- program-y не овтетил на отлично, а у тебя как?
-
