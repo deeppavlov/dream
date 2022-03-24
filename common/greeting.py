@@ -11,7 +11,7 @@ HI_THIS_IS_DREAM = {
 }
 HOW_ARE_YOU_TEMPLATE = {
     "EN": re.compile(r"(how are you|what about you|how about you|and you|how you doing)", re.IGNORECASE),
-    "RU": re.compile(r"(а )?(как )?(у тебя|твои)( как)?( дела)?", re.IGNORECASE),
+    "RU": re.compile(r"(а )?(как )?(у тебя|твои|твой|у вас)( как)?( дела)?(\?|$)", re.IGNORECASE),
 }
 HOW_ARE_YOU_PRECISE_TEMPLATE = {
     "EN": re.compile(r"(how (are )?you( doing)?( today)?|how are things|what('s| is| us) up)(\?|$)", re.IGNORECASE),
