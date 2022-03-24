@@ -24,8 +24,12 @@ from common.link import (
     compose_linkto_with_connection_phrase,
 )
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic, \
-    DUMMY_DONTKNOW_RESPONSES
+from common.universal_templates import (
+    opinion_request_question,
+    is_switch_topic,
+    if_choose_topic,
+    DUMMY_DONTKNOW_RESPONSES,
+)
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
 
