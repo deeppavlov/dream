@@ -39,6 +39,7 @@ from utils import (
     alexa_abilities_spec,
     join_used_links_in_attributes,
     get_updated_disliked_skills,
+    LET_ME_ASK_YOU_PHRASES,
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
@@ -712,8 +713,14 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
-            best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
-            # TODO: how to correctly reassign human-/bot-/hyp- attributes??? how to deal with skill name?
+
+            if "prelinkto_connections" in best_prompt.get("human_attributes", {}):
+                # prelinkto connection phrase is already in the prompt (added in dummy skill)
+                best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
+            else:
+                prelinkto = np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])
+                best_candidate["text"] = f'{best_candidate["text"]} {prelinkto} {best_prompt["text"]}'
+            
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
 
