@@ -238,7 +238,7 @@ Dream Architecture is presented in the following image:
 # Components Russian Version
 
 Dream Architecture is presented in the following image:
-![DREAM](DREAM.png)
+![DREAM](RussianDREAM.png)
 
 ## Annotators
 
