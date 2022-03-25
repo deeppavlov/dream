@@ -7,8 +7,8 @@ To get architecture documentation, please refer to DeepPavlov Agent [readthedocs
 
 # Distributions
 
-We've already included five distributions: four of them are based on lightweight Deepy socialbot
-and one is a full-sized Dream chatbot.
+We've already included six distributions: four of them are based on lightweight Deepy socialbot,
+one is a full-sized Dream chatbot (based on Alexa Prize Challenge version) in English and a Dream chatbot in Russian.
 
 ### Deepy Base
 Base version of Lunar assistant. 
