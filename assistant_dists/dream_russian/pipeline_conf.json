@@ -137,6 +137,19 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
+            "toxic_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://toxic-classification:8126/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
