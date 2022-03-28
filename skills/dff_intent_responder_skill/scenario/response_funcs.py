@@ -10,7 +10,7 @@ from df_engine.core import Actor, Context
 
 
 INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
-
+LANGUAGE = getenv("LANGUAGE", "EN")
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FNAME}")
@@ -18,6 +18,18 @@ logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FN
 with open(f"scenario/data/{INTENT_RESPONSE_PHRASES_FNAME}", "r") as fp:
     RESPONSES = json.load(fp)
 
+WHERE_ARE_YOU_FROM = {
+    "EN": "Where are you from?", 
+    "RU": "Откуда ты родом?"
+}
+WHERE_ARE_YOU_NOW = {
+    "EN": "What is your location?", 
+    "RU": "А где ты сейчас живешь?"
+}
+DIDNOT_SAY_ANYTHING = {
+    "EN": "I did not say anything!", 
+    "RU": "А я ничего и не говорила."
+}
 
 def repeat_respond(ctx: Context, actor: Actor, intention: str):
     utterances_bot = int_ctx.get_bot_utterances(ctx, actor)
@@ -36,7 +48,7 @@ def repeat_respond(ctx: Context, actor: Actor, intention: str):
             bot_utt = utterances_human[-2]["text"]
     else:
         bot_utt = ""
-    return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
+    return bot_utt if len(bot_utt) > 0 else DIDNOT_SAY_ANYTHING[LANGUAGE]
 
 
 def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
@@ -48,11 +60,11 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
     if human_profile_exists:
         already_known_user_property = dialog["human"]["profile"].get("homeland", None)
     if already_known_user_property is None:
-        response = random.choice(response_phrases).strip() + " Where are you from?"
+        response = f"{random.choice(response_phrases).strip()} {WHERE_ARE_YOU_FROM[LANGUAGE]}"
     else:
         already_known_user_property = dialog["human"]["profile"].get("location", None)
         if already_known_user_property is None:
-            response = random.choice(response_phrases).strip() + " What is your location?"
+            response = f"{random.choice(response_phrases).strip()} {WHERE_ARE_YOU_NOW[LANGUAGE]}"
         else:
             response = random.choice(response_phrases).strip()
     return response
