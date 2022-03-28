@@ -49,11 +49,7 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-@app.route("/respond", methods=["POST"])
-def respond():
-    st_time = time.time()
-    sentences = request.json.get("sentences", [])
-
+def classify_sentences(sentences):
     try:
         batch_tokens = []
         for sent in sentences:
@@ -71,8 +67,26 @@ def respond():
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         result = [{"toxic": 0.0}] * len(sentences)
+    return result
 
+
+@app.route("/respond", methods=["POST"])
+def respond():
+    st_time = time.time()
+    sentences = request.json.get("sentences", [])
+    result = classify_sentences(sentences)
     total_time = time.time() - st_time
     logger.info(f"toxic-classification exec time: {total_time:.3f}s")
 
-    return jsonify({"toxic_classification": result})
+    return jsonify(result)
+
+
+@app.route("/respond_batch", methods=["POST"])
+def respond_batch():
+    st_time = time.time()
+    sentences = request.json.get("sentences", [])
+    result = classify_sentences(sentences)
+    total_time = time.time() - st_time
+    logger.info(f"toxic-classification exec time: {total_time:.3f}s")
+
+    return jsonify([{"batch": result}])

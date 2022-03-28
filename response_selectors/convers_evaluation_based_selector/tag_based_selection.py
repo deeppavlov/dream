@@ -266,7 +266,6 @@ def compute_curr_single_scores(candidates, scores, confidences):
             else:
                 score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
-            toxicity = max(candidates[i].get("annotations", {}).get("toxic_classification", {"toxic": 0.0}).values())
 
             logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
             curr_single_scores.append(score)
