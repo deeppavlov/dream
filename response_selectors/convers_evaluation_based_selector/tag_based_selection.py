@@ -262,7 +262,6 @@ def compute_curr_single_scores(candidates, scores, confidences):
             else:
                 score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
-            toxicity = max(candidates[i].get("annotations", {}).get("toxic_classification", {"toxic": 0.0}).values())
 
             logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
             curr_single_scores.append(score)
@@ -720,7 +719,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             else:
                 prelinkto = np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])
                 best_candidate["text"] = f'{best_candidate["text"]} {prelinkto} {best_prompt["text"]}'
-            
+
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
 

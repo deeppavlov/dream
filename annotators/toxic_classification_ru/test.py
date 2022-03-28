@@ -7,8 +7,7 @@ def test_respond():
     sentences = ["иди в жопу", "иду иду"]
     gold = [0.9885, 0.0086]
     request_data = {"sentences": sentences}
-    result = requests.post(url, json=request_data).json()["toxic_classification"]
-    print(result)
+    result = requests.post(url, json=request_data).json()
     assert round(result[0]["toxic"], 4) == gold[0] and round(result[1]["toxic"], 4) == gold[1], f"Got\n{result}"
     print("Success!")
 
