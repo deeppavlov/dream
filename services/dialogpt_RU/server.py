@@ -142,7 +142,7 @@ def respond():
     st_time = time.time()
 
     dialog_contexts = request.json.get("dialog_contexts", [])
-    num_return_sequences = request.json.get("num_return_sequences", 3)
+    num_return_sequences = request.json.get("num_return_sequences", 5)
 
     try:
         batch_generated_responses = []
