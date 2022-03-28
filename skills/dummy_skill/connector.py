@@ -199,7 +199,8 @@ class DummySkillConnector:
             human_attrs = []
             bot_attrs = []
             attrs = []
-            is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"])
+            prev_human_uttr_text = dialog["human_utterances"][-2]["text"] if len(dialog["human_utterances"]) > 1 else ""
+            is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"]) or re.search(r"[а-яА-Я]+", prev_human_uttr_text)
             if is_russian:
                 cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
             else:
