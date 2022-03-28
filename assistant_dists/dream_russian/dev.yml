@@ -41,6 +41,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
+  toxic-classification:
+    volumes:
+      - "./annotators/toxic_classification_ru:/src"
+    ports:
+      - 8126:8126
   ner:
     volumes:
       - './annotators/NER_ru:/src'

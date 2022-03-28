@@ -16,6 +16,9 @@ services:
   dff-generative-skill:
   intent-catcher:
   badlisted-words:
+  toxic-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
   ner:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

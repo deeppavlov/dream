@@ -13,3 +13,6 @@ services:
   sentseg:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  toxic-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
