@@ -18,18 +18,10 @@ logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FN
 with open(f"scenario/data/{INTENT_RESPONSE_PHRASES_FNAME}", "r") as fp:
     RESPONSES = json.load(fp)
 
-WHERE_ARE_YOU_FROM = {
-    "EN": "Where are you from?", 
-    "RU": "Откуда ты родом?"
-}
-WHERE_ARE_YOU_NOW = {
-    "EN": "What is your location?", 
-    "RU": "А где ты сейчас живешь?"
-}
-DIDNOT_SAY_ANYTHING = {
-    "EN": "I did not say anything!", 
-    "RU": "А я ничего и не говорила."
-}
+WHERE_ARE_YOU_FROM = {"EN": "Where are you from?", "RU": "Откуда ты родом?"}
+WHERE_ARE_YOU_NOW = {"EN": "What is your location?", "RU": "А где ты сейчас живешь?"}
+DIDNOT_SAY_ANYTHING = {"EN": "I did not say anything!", "RU": "А я ничего и не говорила."}
+
 
 def repeat_respond(ctx: Context, actor: Actor, intention: str):
     utterances_bot = int_ctx.get_bot_utterances(ctx, actor)
