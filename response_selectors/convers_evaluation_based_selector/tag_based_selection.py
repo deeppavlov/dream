@@ -63,10 +63,7 @@ LETS_CHAT_ABOUT_PARTICULAR_TOPICS = json.load(open(lets_chat_about_triggers_fnam
 require_action_intents_fname = "require_action_intents.json"
 REQUIRE_ACTION_INTENTS = json.load(open(require_action_intents_fname))
 
-PROMPT_PROBA = {
-    "EN": 0.3, 
-    "RU": 0.1
-}
+PROMPT_PROBA = {"EN": 0.3, "RU": 0.1}
 ACKNOWLEDGEMENT_PROBA = 0.5
 
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
