@@ -1,7 +1,8 @@
-Flask==1.1.1
-itsdangerous==2.0.1
+Flask==2.0.1
 nltk==3.2.5
-numpy==1.15.4
+spacy==3.2.0
 gunicorn==19.9.0
 requests==2.22.0
 sentry-sdk==0.12.3
+transformers==4.6.0
+deeppavlov==0.17.2
