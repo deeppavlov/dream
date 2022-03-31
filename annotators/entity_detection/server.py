@@ -64,17 +64,27 @@ def get_result(request):
     utt_entities = {}
     if utts_list:
         logger.info(f"input {utts_list}")
-        entity_substr_batch, entity_offsets_batch, entity_positions_batch, tokens_batch, tags_batch, \
-        finegrained_tags_batch, sentences_offsets_batch, sentences_batch, probas_batch, tokens_conf_batch = \
-            entity_detection(utts_list)
+        (
+            entity_substr_batch,
+            entity_offsets_batch,
+            entity_positions_batch,
+            tokens_batch,
+            tags_batch,
+            finegrained_tags_batch,
+            sentences_offsets_batch,
+            sentences_batch,
+            probas_batch,
+            tokens_conf_batch,
+        ) = entity_detection(utts_list)
         logger.info(f"entity_substr_batch {entity_substr_batch} finegrained_tags_batch {finegrained_tags_batch}")
 
-        for entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list, last_utt_start, num in \
-                zip(entity_substr_batch, tags_batch, finegrained_tags_batch, entity_offsets_batch, last_utt_starts,
-                    utts_nums):
+        for entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list, last_utt_start, num in zip(
+            entity_substr_batch, tags_batch, finegrained_tags_batch, entity_offsets_batch, last_utt_starts, utts_nums
+        ):
             utt_entities = {}
-            for entity, tag, finegrained_tag, (start_offset, end_offset) in \
-                    zip(entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list):
+            for entity, tag, finegrained_tag, (start_offset, end_offset) in zip(
+                entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list
+            ):
                 if entity not in stopwords and len(entity) > 2 and start_offset >= last_utt_start:
                     entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                     entity = DOUBLE_SPACES.sub(" ", entity).strip()
@@ -85,14 +95,21 @@ def get_result(request):
                     if "entities" in utt_entities:
                         utt_entities["entities"].append(entity)
                         utt_entities["labelled_entities"].append(
-                            {"text": entity, "label": tag,
-                             "offsets": (start_offset - last_utt_start, end_offset - last_utt_start)}
+                            {
+                                "text": entity,
+                                "label": tag,
+                                "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
+                            }
                         )
                     else:
                         utt_entities["entities"] = [entity]
-                        utt_entities["labelled_entities"] = \
-                            [{"text": entity, "label": tag,
-                              "offsets": (start_offset - last_utt_start, end_offset - last_utt_start)}]
+                        utt_entities["labelled_entities"] = [
+                            {
+                                "text": entity,
+                                "label": tag,
+                                "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
+                            }
+                        ]
 
             if utt_entities:
                 utt_entities_batch[num] = utt_entities

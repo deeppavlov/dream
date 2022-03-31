@@ -26,7 +26,7 @@ from deeppavlov.core.models.component import Component
 log = getLogger(__name__)
 
 
-@register('question_sign_checker')
+@register("question_sign_checker")
 class QuestionSignChecker(Component):
     """This class adds question sign if it is absent or replaces dot with question sign"""
 
@@ -36,22 +36,30 @@ class QuestionSignChecker(Component):
     def __call__(self, questions: List[str]) -> List[str]:
         questions_sanitized = []
         for question in questions:
-            if not question.endswith('?'):
-                if question.endswith('.'):
-                    question = question[:-1] + '?'
+            if not question.endswith("?"):
+                if question.endswith("."):
+                    question = question[:-1] + "?"
                 else:
-                    question += '?'
+                    question += "?"
             questions_sanitized.append(question)
         return questions_sanitized
 
 
-@register('entity_detection_parser')
+@register("entity_detection_parser")
 class EntityDetectionParser(Component):
     """This class parses probabilities of tokens to be a token from the entity substring."""
 
-    def __init__(self, o_tag: str, tags_file: str, entity_tags: List[str] = None,
-                 return_entities_with_tags: bool = False, add_nouns: bool = False, thres_proba: float = 0.95,
-                 misc_proba: float = 0.7, **kwargs):
+    def __init__(
+        self,
+        o_tag: str,
+        tags_file: str,
+        entity_tags: List[str] = None,
+        return_entities_with_tags: bool = False,
+        add_nouns: bool = False,
+        thres_proba: float = 0.95,
+        misc_proba: float = 0.7,
+        **kwargs
+    ):
         self.entity_tags = entity_tags
         self.o_tag = o_tag
         self.return_entities_with_tags = return_entities_with_tags
@@ -60,16 +68,18 @@ class EntityDetectionParser(Component):
         self.tag_ind_dict = {}
         self.stopwords = set(stopwords.words("english"))
         with open(str(expand_path(tags_file))) as fl:
-            tags = [line.split('\t')[0] for line in fl.readlines()]
+            tags = [line.split("\t")[0] for line in fl.readlines()]
             self.tags = tags
             if add_nouns:
                 tags.append("B-MISC")
             if self.entity_tags is None:
                 self.entity_tags = list(
-                    {tag.split('-')[1] for tag in tags if len(tag.split('-')) > 1}.difference({self.o_tag}))
+                    {tag.split("-")[1] for tag in tags if len(tag.split("-")) > 1}.difference({self.o_tag})
+                )
 
-            self.entity_prob_ind = {entity_tag: [i for i, tag in enumerate(tags) if entity_tag in tag]
-                                    for entity_tag in self.entity_tags}
+            self.entity_prob_ind = {
+                entity_tag: [i for i, tag in enumerate(tags) if entity_tag in tag] for entity_tag in self.entity_tags
+            }
             self.tags_ind = {tag: i for i, tag in enumerate(tags)}
             self.et_prob_ind = [i for tag, ind in self.entity_prob_ind.items() for i in ind]
             for entity_tag, tag_ind in self.entity_prob_ind.items():
@@ -77,8 +87,13 @@ class EntityDetectionParser(Component):
                     self.tag_ind_dict[ind] = entity_tag
             self.tag_ind_dict[0] = self.o_tag
 
-    def __call__(self, text_batch: List[str], tokens_batch: List[List[str]], tags_batch: List[List[List[float]]],
-                 tokens_probas_batch: np.ndarray):
+    def __call__(
+        self,
+        text_batch: List[str],
+        tokens_batch: List[List[str]],
+        tags_batch: List[List[List[float]]],
+        tokens_probas_batch: np.ndarray,
+    ):
         entities_batch, positions_batch, probas_batch, tokens_conf_batch, new_tags_batch = [], [], [], [], []
         for tokens, probas in zip(tokens_batch, tokens_probas_batch):
             new_tags, new_tag_probas = self.tags_from_probas(tokens, probas)
@@ -139,16 +154,15 @@ class EntityDetectionParser(Component):
         entities_positions_dict = defaultdict(list)
         entities_probas_dict = defaultdict(list)
         entity_probas_dict = defaultdict(list)
-        replace_tokens = [("'s", ''), (' .', ''), ('{', ''), ('}', ''),
-                          ('  ', ' '), ('"', "'"), ('(', ''), (')', '')]
+        replace_tokens = [("'s", ""), (" .", ""), ("{", ""), ("}", ""), ("  ", " "), ('"', "'"), ("(", ""), (")", "")]
 
         cnt = 0
         for n, (tok, tag, probas) in enumerate(zip(tokens, tags, tag_probas)):
-            if tag.split('-')[-1] in self.entity_tags:
+            if tag.split("-")[-1] in self.entity_tags:
                 f_tag = tag.split("-")[-1]
                 if tag.startswith("B-") and any(entity_dict.values()):
                     for c_tag, entity in entity_dict.items():
-                        entity = ' '.join(entity)
+                        entity = " ".join(entity)
                         for old, new in replace_tokens:
                             entity = entity.replace(old, new)
                         if entity:
@@ -170,11 +184,11 @@ class EntityDetectionParser(Component):
             elif any(entity_dict.values()):
                 for tag, entity in entity_dict.items():
                     c_tag = tag.split("-")[-1]
-                    entity = ' '.join(entity)
+                    entity = " ".join(entity)
                     for old, new in replace_tokens:
                         entity = entity.replace(old, new)
-                        if entity.replace(' - ', '-').lower() in text.lower():
-                            entity = entity.replace(' - ', '-')
+                        if entity.replace(" - ", "-").lower() in text.lower():
+                            entity = entity.replace(" - ", "-")
                     if entity:
                         entities_dict[c_tag].append(entity)
                         entities_positions_dict[c_tag].append(entity_positions_dict[c_tag])
@@ -187,8 +201,9 @@ class EntityDetectionParser(Component):
             cnt += 1
 
         entities_list = [entity for tag, entities in entities_dict.items() for entity in entities]
-        entities_positions_list = [position for tag, positions in entities_positions_dict.items()
-                                   for position in positions]
+        entities_positions_list = [
+            position for tag, positions in entities_positions_dict.items() for position in positions
+        ]
         entities_probas_list = [proba for tag, proba in entities_probas_dict.items() for proba in probas]
 
         if self.return_entities_with_tags:

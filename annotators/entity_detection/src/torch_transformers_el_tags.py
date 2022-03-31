@@ -15,26 +15,25 @@ from deeppavlov.core.models.torch_model import TorchModel
 log = getLogger(__name__)
 
 
-@register('torch_transformers_el_tags')
+@register("torch_transformers_el_tags")
 class TorchTransformersElTags(TorchModel):
-
     def __init__(
-            self,
-            model_name: str,
-            encoder_save_path: str,
-            emb_size: int,
-            n_tags: int,
-            pretrained_bert: str = None,
-            bert_config_file: Optional[str] = None,
-            criterion: str = "CrossEntropyLoss",
-            optimizer: str = "AdamW",
-            optimizer_parameters: Dict = {"lr": 5e-5, "weight_decay": 0.01, "eps": 1e-6},
-            return_probas: bool = False,
-            attention_probs_keep_prob: Optional[float] = None,
-            hidden_keep_prob: Optional[float] = None,
-            clip_norm: Optional[float] = None,
-            threshold: Optional[float] = None,
-            **kwargs
+        self,
+        model_name: str,
+        encoder_save_path: str,
+        emb_size: int,
+        n_tags: int,
+        pretrained_bert: str = None,
+        bert_config_file: Optional[str] = None,
+        criterion: str = "CrossEntropyLoss",
+        optimizer: str = "AdamW",
+        optimizer_parameters: Dict = {"lr": 5e-5, "weight_decay": 0.01, "eps": 1e-6},
+        return_probas: bool = False,
+        attention_probs_keep_prob: Optional[float] = None,
+        hidden_keep_prob: Optional[float] = None,
+        clip_norm: Optional[float] = None,
+        threshold: Optional[float] = None,
+        **kwargs,
     ):
         self.encoder_save_path = encoder_save_path
         self.emb_size = emb_size
@@ -52,11 +51,12 @@ class TorchTransformersElTags(TorchModel):
             criterion=criterion,
             optimizer_parameters=optimizer_parameters,
             return_probas=return_probas,
-            **kwargs)
+            **kwargs,
+        )
 
     def train_on_batch(self, input_ids, attention_mask, entity_subw_indices_batch, labels) -> float:
 
-        _input = {'entity_subw_indices': entity_subw_indices_batch}
+        _input = {"entity_subw_indices": entity_subw_indices_batch}
         _input["input_ids"] = torch.LongTensor(input_ids).to(self.device)
         _input["attention_mask"] = torch.LongTensor(attention_mask).to(self.device)
         _input["labels"] = labels
@@ -81,7 +81,7 @@ class TorchTransformersElTags(TorchModel):
     def __call__(self, input_ids, attention_mask, entity_subw_indices_batch):
 
         self.model.eval()
-        _input = {'entity_subw_indices': entity_subw_indices_batch}
+        _input = {"entity_subw_indices": entity_subw_indices_batch}
         _input["input_ids"] = torch.LongTensor(input_ids).to(self.device)
         _input["attention_mask"] = torch.LongTensor(attention_mask).to(self.device)
 
@@ -108,7 +108,7 @@ class TorchTransformersElTags(TorchModel):
             bert_tokenizer_config_file=self.pretrained_bert,
             device=self.device,
             emb_size=self.emb_size,
-            n_tags=self.n_tags
+            n_tags=self.n_tags,
         )
 
     def save(self, fname: Optional[str] = None, *args, **kwargs) -> None:
@@ -118,21 +118,28 @@ class TorchTransformersElTags(TorchModel):
             raise ConfigError("Provided save path is incorrect!")
         weights_path = Path(fname).with_suffix(f".pth.tar")
         log.info(f"Saving model to {weights_path}.")
-        torch.save({
-            "model_state_dict": self.model.cpu().state_dict(),
-            "optimizer_state_dict": self.optimizer.state_dict(),
-            "epochs_done": self.epochs_done
-        }, weights_path)
+        torch.save(
+            {
+                "model_state_dict": self.model.cpu().state_dict(),
+                "optimizer_state_dict": self.optimizer.state_dict(),
+                "epochs_done": self.epochs_done,
+            },
+            weights_path,
+        )
         self.model.to(self.device)
         self.model.save()
 
 
 class TextEncoder(nn.Module):
-    def __init__(self, pretrained_bert: str, emb_size: int, n_tags: int,
-                 bert_tokenizer_config_file: str = None,
-                 bert_config_file: str = None,
-                 device: str = "gpu"
-                 ):
+    def __init__(
+        self,
+        pretrained_bert: str,
+        emb_size: int,
+        n_tags: int,
+        bert_tokenizer_config_file: str = None,
+        bert_config_file: str = None,
+        device: str = "gpu",
+    ):
         super().__init__()
         self.pretrained_bert = pretrained_bert
         self.bert_config_file = bert_config_file
@@ -175,9 +182,7 @@ class TextEncoder(nn.Module):
         if self.pretrained_bert:
             log.info(f"From pretrained {self.pretrained_bert}.")
             self.pretrained_bert = str(expand_path(self.pretrained_bert))
-            self.config = AutoConfig.from_pretrained(
-                self.pretrained_bert, output_hidden_states=True
-            )
+            self.config = AutoConfig.from_pretrained(self.pretrained_bert, output_hidden_states=True)
             self.encoder = AutoModel.from_pretrained(self.pretrained_bert, config=self.config)
 
         elif self.bert_config_file and Path(self.bert_config_file).is_file():
@@ -189,16 +194,15 @@ class TextEncoder(nn.Module):
 
 
 class SiameseBertElModel(nn.Module):
-
     def __init__(
-            self,
-            encoder_save_path: str,
-            emb_size: int,
-            n_tags: int,
-            pretrained_bert: str = None,
-            bert_tokenizer_config_file: str = None,
-            bert_config_file: str = None,
-            device: str = "gpu"
+        self,
+        encoder_save_path: str,
+        emb_size: int,
+        n_tags: int,
+        pretrained_bert: str = None,
+        bert_tokenizer_config_file: str = None,
+        bert_config_file: str = None,
+        device: str = "gpu",
     ):
         super().__init__()
         self.pretrained_bert = pretrained_bert
