@@ -14,16 +14,10 @@
 
 import re
 import random
-from collections import defaultdict
-from dataclasses import dataclass
 from logging import getLogger
-from pathlib import Path
-import torch
-from typing import Tuple, List, Optional, Union, Dict, Set
+from typing import Tuple, List, Union
 
-import numpy as np
 from transformers import AutoTokenizer
-from transformers.data.processors.utils import InputFeatures
 
 from deeppavlov.core.commands.utils import expand_path
 from deeppavlov.core.common.registry import register
@@ -185,7 +179,7 @@ class TorchTransformersNerPreprocessor(Component):
 
 @register('torch_transformers_el_tags_preprocessor')
 class TorchTransformersElTagPreprocessor(Component):
-    
+
     def __init__(self,
                  vocab_file: str,
                  do_lower_case: bool = False,
@@ -195,7 +189,7 @@ class TorchTransformersElTagPreprocessor(Component):
                  return_offsets: bool = False,
                  **kwargs):
         self._re_tokenizer = re.compile(r"[\w']+|[^\w ]")
-        
+
         self.max_seq_length = max_seq_length
         self.max_subword_length = max_subword_length
         vocab_file = str(expand_path(vocab_file))
@@ -208,7 +202,7 @@ class TorchTransformersElTagPreprocessor(Component):
             mentions_batch = [[] for _ in tokens_batch]
         if pages_batch is None:
             pages_batch = [[] for _ in tokens_batch]
-        
+
         for tokens, entity_offsets_list, mentions_list, pages_list in \
                 zip(tokens_batch, entity_offsets_batch, mentions_batch, pages_batch):
             tokens_list = []
@@ -216,7 +210,7 @@ class TorchTransformersElTagPreprocessor(Component):
             for elem in re.finditer(self._re_tokenizer, tokens):
                 tokens_list.append(elem[0])
                 tokens_offsets_list.append((elem.start(), elem.end()))
-            
+
             entity_indices_list = []
             for start_offset, end_offset in entity_offsets_list:
                 entity_indices = []
@@ -229,7 +223,7 @@ class TorchTransformersElTagPreprocessor(Component):
                             entity_indices.append(ind)
                             break
                 entity_indices_list.append(set(entity_indices))
-            
+
             ind = 0
             subw_tokens_list = ["[CLS]"]
             entity_subw_indices_list = [[] for _ in entity_indices_list]
@@ -243,16 +237,16 @@ class TorchTransformersElTagPreprocessor(Component):
                 ind += len(subw_tok)
             subw_tokens_list.append("[SEP]")
             subw_tokens_batch.append(subw_tokens_list)
-            
+
             for n in range(len(entity_subw_indices_list)):
                 entity_subw_indices_list[n] = sorted(entity_subw_indices_list[n])
             entity_subw_indices_batch.append(entity_subw_indices_list)
-        
+
         token_ids_batch = [self.tokenizer.convert_tokens_to_ids(subw_tokens_list)
                            for subw_tokens_list in subw_tokens_batch]
         token_ids_batch = zero_pad(token_ids_batch, dtype=int, padding=0)
         attention_mask_batch = Mask()(subw_tokens_batch)
-        
+
         return token_ids_batch, attention_mask_batch, entity_subw_indices_batch
 
 
@@ -265,7 +259,7 @@ class TorchTransformersElTagPostprocessor(Component):
             lines = fl.readlines()
             for line in lines:
                 self.tags_list.append(line.strip().split()[0])
-    
+
     def __call__(self, probas_batch):
         ent_tag_proba_batch = []
         for probas_list in probas_batch:

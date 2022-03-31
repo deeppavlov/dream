@@ -31,7 +31,6 @@ from src.entity_detection_parser import EntityDetectionParser
 log = getLogger(__name__)
 
 
-
 @register('ner_chunker')
 class NerChunker(Component):
     """
@@ -263,7 +262,7 @@ class NerChunkModel(Component):
                             k += 3
                         if found and ner_probas_batch[i][j] == "O":
                             ner_probas_batch[i][j] = "B-MISC"
-            
+
             entity_substr_batch, entity_positions_batch, entity_probas_batch, tokens_conf_batch = \
                 self.ner_parser(text_batch, ner_tokens_batch, ner_probas_batch, probas_batch)
             tm_ner_end = time.time()
@@ -292,7 +291,8 @@ class NerChunkModel(Component):
                         end_offset = ner_tokens_offsets_list[entity_positions[-1]][1]
                         entity_offsets_list.append((start_offset, end_offset))
                 else:
-                    entity_substr_list, entity_offsets_list, tags_list, probas_list, entity_positions_list = [], [], [], [], []
+                    entity_substr_list, entity_offsets_list, tags_list, probas_list, \
+                    entity_positions_list = [], [], [], [], []
                 entity_substr_batch.append(list(entity_substr_list))
                 entity_offsets_batch.append(list(entity_offsets_list))
                 tags_batch.append(list(tags_list))
@@ -326,7 +326,8 @@ class NerChunkModel(Component):
 
         doc_entity_substr_batch, doc_tags_batch, doc_entity_offsets_batch, doc_probas_batch = [], [], [], []
         doc_sentences_offsets_batch, doc_sentences_batch = [], []
-        doc_ner_tokens_batch, doc_tokens_conf_batch, doc_entity_positions_batch, doc_sentences_tokens_batch = [], [], [], []
+        doc_ner_tokens_batch, doc_tokens_conf_batch, doc_entity_positions_batch, \
+        doc_sentences_tokens_batch = [], [], [], []
         doc_entity_substr, doc_tags, doc_probas, doc_entity_offsets = [], [], [], []
         doc_sentences_offsets, doc_sentences = [], []
         doc_ner_tokens, doc_tokens_conf, doc_entity_positions, doc_sentences_tokens = [], [], [], []
@@ -334,15 +335,17 @@ class NerChunkModel(Component):
         text_len_sum = 0
         tokens_len_sum = 0
         for entity_substr_batch, tags_batch, probas_batch, entity_offsets_batch, sentences_offsets_batch, \
-            sentences_batch, text_len_batch, nums_batch, ner_tokens_batch, tokens_conf_batch, entity_positions_batch, sentences_tokens_batch in \
+            sentences_batch, text_len_batch, nums_batch, ner_tokens_batch, tokens_conf_batch, entity_positions_batch, \
+            sentences_tokens_batch in \
                 zip(entity_substr_batch_list, tags_batch_list, entity_probas_batch_list, entity_offsets_batch_list,
                     sentences_offsets_batch_list, sentences_batch_list, text_len_batch_list, nums_batch_list,
-                    ner_tokens_batch_list, tokens_conf_batch_list, entity_positions_batch_list, sentences_tokens_batch_list):
+                    ner_tokens_batch_list, tokens_conf_batch_list, entity_positions_batch_list,
+                    sentences_tokens_batch_list):
             for entity_substr, tag, probas, entity_offsets, sentences_offsets, sentences, text_len, doc_num, \
                 ner_tokens, tokens_conf, entity_positions, sentences_tokens in \
                     zip(entity_substr_batch, tags_batch, probas_batch, entity_offsets_batch, sentences_offsets_batch,
-                        sentences_batch, text_len_batch, nums_batch, ner_tokens_batch, tokens_conf_batch, entity_positions_batch,
-                        sentences_tokens_batch):
+                        sentences_batch, text_len_batch, nums_batch, ner_tokens_batch, tokens_conf_batch,
+                        entity_positions_batch, sentences_tokens_batch):
                 if doc_num == cur_doc_num:
                     doc_entity_substr += entity_substr
                     doc_tags += tag

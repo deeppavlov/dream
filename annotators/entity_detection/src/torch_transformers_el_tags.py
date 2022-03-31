@@ -1,14 +1,10 @@
-import itertools
 from pathlib import Path
 from logging import getLogger
-from typing import List, Optional, Dict, Tuple, Union, Any
+from typing import Optional, Dict
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import numpy as np
-from torch import Tensor
-# from apex import amp
 
 from deeppavlov.core.commands.utils import expand_path
 from transformers import AutoConfig, AutoTokenizer, AutoModel
@@ -67,7 +63,7 @@ class TorchTransformersElTags(TorchModel):
 
         self.model.train()
         self.model.zero_grad()
-        self.optimizer.zero_grad()      # zero the parameter gradients
+        self.optimizer.zero_grad()  # zero the parameter gradients
 
         loss, softmax_scores = self.model(**_input)
         loss.backward()
@@ -91,7 +87,7 @@ class TorchTransformersElTags(TorchModel):
 
         with torch.no_grad():
             logits = self.model(**_input)
-        
+
         probas = torch.nn.functional.softmax(logits, dim=-1)
         probas = probas.detach().cpu().numpy()
 
@@ -114,7 +110,7 @@ class TorchTransformersElTags(TorchModel):
             emb_size=self.emb_size,
             n_tags=self.n_tags
         )
-        
+
     def save(self, fname: Optional[str] = None, *args, **kwargs) -> None:
         if fname is None:
             fname = self.save_path
@@ -146,7 +142,7 @@ class TextEncoder(nn.Module):
         self.tokenizer = AutoTokenizer.from_pretrained(self.pretrained_bert)
         self.zero_emb = torch.Tensor([0.0 for _ in range(emb_size)]).to(self.device)
         self.fc = nn.Linear(emb_size, n_tags).to(self.device)
-        
+
     def forward(self, input_ids, attention_mask, entity_subw_indices_batch):
         outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
         hidden_states = outputs.last_hidden_state
@@ -165,16 +161,16 @@ class TextEncoder(nn.Module):
         for i in range(len(embs_batch)):
             for j in range(max_seq_len - len(embs_batch[i])):
                 embs_batch[i].append(self.zero_emb)
-        
+
         embs_tensors = []
         for embs_list in embs_batch:
             embs_tensors.append(torch.stack(embs_list))
-        
+
         embs_tensor = torch.stack(embs_tensors).to(self.device)
         logits = self.fc(embs_tensor)
-        
+
         return logits
-            
+
     def load(self) -> None:
         if self.pretrained_bert:
             log.info(f"From pretrained {self.pretrained_bert}.")
@@ -215,7 +211,7 @@ class SiameseBertElModel(nn.Module):
         # initialize parameters that would be filled later
         self.encoder = TextEncoder(self.pretrained_bert, emb_size, n_tags, device=self.device)
 
-    def forward(self, input_ids, attention_mask, entity_subw_indices, labels = None):
+    def forward(self, input_ids, attention_mask, entity_subw_indices, labels=None):
         logits = self.encoder(input_ids, attention_mask, entity_subw_indices)
         if labels is not None:
             labels_len = [len(elem) for elem in labels]
@@ -227,12 +223,12 @@ class SiameseBertElModel(nn.Module):
             for i in range(len(labels)):
                 for j in range(len(labels[i]) - len(entity_subw_indices[i])):
                     labels[i][j] = -1
-            
+
             token_attention_mask = torch.LongTensor(token_attention_mask).to(self.device)
             labels = torch.LongTensor(labels).to(self.device)
-            
+
             loss_fct = torch.nn.CrossEntropyLoss(ignore_index=-1)
-            
+
             if token_attention_mask is not None:
                 active_loss = token_attention_mask.view(-1) == 1
                 active_logits = logits.view(-1, self.n_tags)
@@ -245,7 +241,7 @@ class SiameseBertElModel(nn.Module):
             return loss, logits
         else:
             return logits
-        
+
     def save(self) -> None:
         encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(f".pth.tar")
         log.info(f"Saving encoder to {encoder_weights_path}.")

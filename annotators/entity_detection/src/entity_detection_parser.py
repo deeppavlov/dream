@@ -13,8 +13,7 @@
 # limitations under the License.
 
 from logging import getLogger
-from string import punctuation
-from typing import List, Tuple, Union, Dict
+from typing import List
 from collections import defaultdict
 
 import numpy as np
@@ -24,8 +23,8 @@ from deeppavlov.core.commands.utils import expand_path
 from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
 
-
 log = getLogger(__name__)
+
 
 @register('question_sign_checker')
 class QuestionSignChecker(Component):
@@ -50,8 +49,9 @@ class QuestionSignChecker(Component):
 class EntityDetectionParser(Component):
     """This class parses probabilities of tokens to be a token from the entity substring."""
 
-    def __init__(self, o_tag: str, tags_file: str, entity_tags: List[str] = None, return_entities_with_tags: bool = False,
-                 add_nouns: bool = False, thres_proba: float = 0.95, misc_proba: float = 0.7, **kwargs):
+    def __init__(self, o_tag: str, tags_file: str, entity_tags: List[str] = None,
+                 return_entities_with_tags: bool = False, add_nouns: bool = False, thres_proba: float = 0.95,
+                 misc_proba: float = 0.7, **kwargs):
         self.entity_tags = entity_tags
         self.o_tag = o_tag
         self.return_entities_with_tags = return_entities_with_tags
@@ -78,12 +78,12 @@ class EntityDetectionParser(Component):
             self.tag_ind_dict[0] = self.o_tag
 
     def __call__(self, text_batch: List[str], tokens_batch: List[List[str]], tags_batch: List[List[List[float]]],
-                       tokens_probas_batch: np.ndarray):
+                 tokens_probas_batch: np.ndarray):
         entities_batch, positions_batch, probas_batch, tokens_conf_batch, new_tags_batch = [], [], [], [], []
         for tokens, probas in zip(tokens_batch, tokens_probas_batch):
             new_tags, new_tag_probas = self.tags_from_probas(tokens, probas)
             new_tags_batch.append(new_tags)
-        
+
         res_tags_batch = []
         for tokens_list, tags_list, new_tags_list in zip(tokens_batch, tags_batch, new_tags_batch):
             res_tags_list = []
@@ -93,7 +93,7 @@ class EntityDetectionParser(Component):
                 else:
                     res_tags_list.append(tag)
             res_tags_batch.append(res_tags_list)
-        
+
         for probas in tokens_probas_batch:
             tokens_conf = [round(1.0 - proba[0], 4) for proba in probas]
             tokens_conf_batch.append(tokens_conf)
