@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  dumper:
+    build:
+      context: .
+    environment:
+      - AGENT_URL=${AGENT_URL}
+    volumes:
+      - ${DUMP_PATH}:/data
+    mem_limit: 1G
