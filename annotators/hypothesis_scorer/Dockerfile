@@ -16,7 +16,8 @@ RUN curl $CONVERT_DATA_URL --output /tmp/convert.tar.gz && tar -zvxf /tmp/conver
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 RUN pip uninstall -y protobuf tensorflow tensorflow-gpu && \
-    pip install --upgrade --force-reinstall tensorflow-gpu==1.14.0
+    pip install --upgrade --force-reinstall tensorflow-gpu==1.14.0 && \
+    pip install Werkzeug==2.0.3
 
 COPY . /src/
 
