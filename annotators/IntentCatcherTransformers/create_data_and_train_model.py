@@ -57,10 +57,7 @@ def encode_dataset(df):
 
 
 def load(train_path, valid_path):
-    dataset = load_dataset(
-        "csv",
-        data_files={"train": [train_path], "valid": valid_path}
-    )
+    dataset = load_dataset("csv", data_files={"train": [train_path], "valid": valid_path})
     encoded_dataset = dataset.map(encode_dataset, batched=True)
     encoded_dataset.set_format("torch")
     return encoded_dataset
@@ -101,13 +98,18 @@ for intent, data in intent_phrases.items():
     }
     print(f"{intent}: {len(phrases)//len(data['punctuation'])}")
 
-dump_dataset(intent_data, random_phrases, intents,
-             train_path=f"data/{MODEL_PATH}/intent_train.csv",
-             valid_path=f"data/{MODEL_PATH}/intent_valid.csv")
+dump_dataset(
+    intent_data,
+    random_phrases,
+    intents,
+    train_path=f"data/{MODEL_PATH}/intent_train.csv",
+    valid_path=f"data/{MODEL_PATH}/intent_valid.csv",
+)
 print("Dumped csv datasets")
 
-encoded_dataset = load(train_path=f"data/{MODEL_PATH}/intent_train.csv",
-                       valid_path=f"data/{MODEL_PATH}/intent_valid.csv")
+encoded_dataset = load(
+    train_path=f"data/{MODEL_PATH}/intent_train.csv", valid_path=f"data/{MODEL_PATH}/intent_valid.csv"
+)
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
