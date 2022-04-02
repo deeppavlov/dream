@@ -6,6 +6,7 @@ import argparse
 from collections import OrderedDict
 
 import numpy as np
+import torch
 from datasets import Dataset, load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer, EvalPrediction
 
@@ -91,6 +92,9 @@ classification_model = AutoModelForSequenceClassification.from_pretrained(
     id2label=id2label,
     label2id=label2id
 )
+if torch.cuda.cuda_is_available():
+    classification_model.to("cuda")
+
 print("Loaded pre-trained model for fine-tuning")
 
 for intent, data in intent_phrases.items():
