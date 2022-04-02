@@ -93,7 +93,7 @@ classification_model = AutoModelForSequenceClassification.from_pretrained(
 )
 if torch.cuda.is_available():
     classification_model.to("cuda")
-
+classification_model.train()
 print("Loaded pre-trained model for fine-tuning")
 
 for intent, data in intent_phrases.items():

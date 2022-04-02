@@ -44,6 +44,7 @@ try:
     )
     if torch.cuda.is_available():
         classification_model.to("cuda")
+    classification_model.eval()
     logger.info("Intents model loaded")
 
 except Exception as e:
