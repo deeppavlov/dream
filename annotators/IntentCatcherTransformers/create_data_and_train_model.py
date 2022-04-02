@@ -6,8 +6,6 @@ import argparse
 from collections import OrderedDict
 
 import numpy as np
-import torch
-from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
 from datasets import Dataset, load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer, EvalPrediction
 
@@ -78,6 +76,9 @@ with open(args.intent_phrases_path, "r") as fp:
 
 intent_data = {}
 intents = sorted(list(intent_phrases.keys()))
+with open("intents.txt", "w") as f:
+    for intent in intents:
+        f.write(intent + "\n")
 
 print("Creating  data...")
 print("Intent: number of original phrases")
