@@ -18,7 +18,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
 
 INTENT_PHRASES_PATH = os.environ.get("INTENT_PHRASES_PATH", "intent_phrases.json")
-INTENTS_MODEL_PATH = os.environ.get("INTENTS_MODEL_PATH", None)
+INTENTS_MODEL_PATH = os.environ.get("INTENTS_MODEL_PATH", "intent_model_v0")
 TRANSFORMERS_MODEL_PATH = os.environ.get("TRANSFORMERS_MODEL_PATH", None)
 
 
@@ -35,7 +35,7 @@ try:
     logger.info("Intents map loaded")
 
     classification_model = AutoModelForSequenceClassification.from_pretrained(
-        INTENTS_MODEL_PATH,
+        f"/data/{INTENTS_MODEL_PATH}",
         num_labels=len(intents),
         problem_type="multi_label_classification",
         id2label=id2label,

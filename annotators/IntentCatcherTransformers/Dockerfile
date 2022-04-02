@@ -7,15 +7,18 @@ RUN mkdir /data
 
 WORKDIR /src
 
-
-ARG INTENT_PHRASES_PATH="intent_phrases.json"
+ARG INTENT_PHRASES_PATH
 ENV INTENT_PHRASES_PATH ${INTENT_PHRASES_PATH}
-ARG INTENTS_MODEL_PATH="/data/intent_model_v0"
+ARG INTENTS_MODEL_PATH
 ENV INTENTS_MODEL_PATH ${INTENTS_MODEL_PATH}
-ARG TRANSFORMERS_MODEL_PATH="distilbert-base-uncased"
+ARG TRANSFORMERS_MODEL_PATH
 ENV TRANSFORMERS_MODEL_PATH ${TRANSFORMERS_MODEL_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
+
+RUN wget -c -q http://lnsigo.mipt.ru/export/deeppavlvo_data/${INTENTS_MODEL_PATH}.tar.gz -P /data/ && \
+    tar -xzf /data/${INTENTS_MODEL_PATH}.tar.gz -C /data/ && \
+    rm /data/${INTENTS_MODEL_PATH}.tar.gz
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
