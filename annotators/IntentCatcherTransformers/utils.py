@@ -1,3 +1,5 @@
+import json
+import re
 from itertools import chain
 
 import numpy as np
@@ -26,6 +28,20 @@ def generate_phrases(template_re, punctuation, limit=2500):
             raise e
     phrases = [phrases] + [[phrase + punct for phrase in phrases] for punct in punctuation]
     return list(chain.from_iterable(phrases))
+
+
+def get_regexp(intent_phrases_path):
+    regexp = {
+        intent: list(
+            chain.from_iterable(
+                [[phrase + "\\" + punct for phrase in data["phrases"]] for punct in data["punctuation"]]
+            )
+        )
+                + [rf"^{pattern}[\.\?!]?$" for pattern in data.get("reg_phrases", [])]
+        for intent, data in json.load(open(intent_phrases_path))["intent_phrases"].items()
+    }
+    regexp = {intent: [re.compile(phrase) for phrase in phrases] for intent, phrases in regexp.items()}
+    return regexp
 
 
 def create_label_map(labels):
