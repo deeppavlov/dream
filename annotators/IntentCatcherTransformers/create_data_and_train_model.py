@@ -104,7 +104,8 @@ for intent, data in intent_phrases.items():
     }
     print(f"{intent}: {len(phrases)//len(data['punctuation'])}")
 
-dump_dataset(intent_data, random_phrases, intents)
+dump_dataset(intent_data, random_phrases, intents,
+             train_path="data/intent_train.csv", valid_path="data/intent_valid.csv")
 print("Dumped csv datasets")
 
 encoded_dataset = load(train_path="data/intent_train.csv", valid_path="data/intent_valid.csv")

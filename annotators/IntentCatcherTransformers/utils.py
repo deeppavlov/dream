@@ -50,7 +50,7 @@ def create_label_map(labels):
     return id2label, label2id
 
 
-def dump_dataset(intent_data, random_phrases, labels):
+def dump_dataset(intent_data, random_phrases, labels, train_path, valid_path):
     texts = []
     text_labels = []
     for intent in labels:
@@ -67,10 +67,10 @@ def dump_dataset(intent_data, random_phrases, labels):
     for train_index, test_index in skf.split(df["text"], df["intents"]):
         df_train = df.loc[train_index, :]
         df_train.reset_index(drop=True)
-        df_train.to_csv("intent_train.csv", index=False)
+        df_train.to_csv(train_path, index=False)
         df_test = df.loc[test_index, :]
         df_test.reset_index(drop=True)
-        df_test.to_csv("intent_valid.csv", index=False)
+        df_test.to_csv(valid_path, index=False)
         break
     return
 
