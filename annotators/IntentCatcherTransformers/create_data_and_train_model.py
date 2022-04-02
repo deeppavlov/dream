@@ -7,8 +7,8 @@ from collections import OrderedDict
 
 import numpy as np
 import torch
-from datasets import Dataset, load_dataset
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer, EvalPrediction
+from datasets import load_dataset
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 
 from utils import generate_phrases, create_label_map, dump_dataset, compute_metrics
 
@@ -111,7 +111,7 @@ encoded_dataset = load(train_path=f"data/{MODEL_PATH}/intent_train.csv",
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
-    f"bert-finetuned-sem_eval-english",
+    "bert-finetuned-sem_eval-english",
     evaluation_strategy="epoch",
     save_strategy="epoch",
     learning_rate=2e-5,

@@ -6,7 +6,7 @@ import sentry_sdk
 import torch
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer, EvalPrediction
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from utils import create_label_map, get_regexp
 
 # logging here because it conflicts with tf
