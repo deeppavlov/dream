@@ -107,7 +107,7 @@ for intent, data in intent_phrases.items():
 dump_dataset(intent_data, random_phrases, intents)
 print("Dumped csv datasets")
 
-encoded_dataset = load(train_path="./data/intent_train.csv", valid_path="./data/intent_valid.csv")
+encoded_dataset = load(train_path="data/intent_train.csv", valid_path="data/intent_valid.csv")
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
