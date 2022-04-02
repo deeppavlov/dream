@@ -63,8 +63,7 @@ def encode_dataset(df):
 
 
 def load(train_path, valid_path):
-    dataset = load_dataset('csv', data_files={'train': [train_path],
-                                              'valid': valid_path})
+    dataset = load_dataset("csv", data_files={"train": [train_path], "valid": valid_path})
     encoded_dataset = dataset.map(encode_dataset, batched=True)
     encoded_dataset.set_format("torch")
     return encoded_dataset
@@ -90,7 +89,7 @@ classification_model = AutoModelForSequenceClassification.from_pretrained(
     num_labels=len(intents),
     problem_type="multi_label_classification",
     id2label=id2label,
-    label2id=label2id
+    label2id=label2id,
 )
 if torch.cuda.is_available():
     classification_model.to("cuda")
@@ -108,7 +107,7 @@ for intent, data in intent_phrases.items():
 dump_dataset(intent_data, random_phrases, intents)
 print("Dumped csv datasets")
 
-encoded_dataset = load(train_path='./data/intent_train.csv', valid_path='./data/intent_valid.csv')
+encoded_dataset = load(train_path="./data/intent_train.csv", valid_path="./data/intent_valid.csv")
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
@@ -129,7 +128,7 @@ trainer = Trainer(
     train_dataset=encoded_dataset["train"],
     eval_dataset=encoded_dataset["valid"],
     tokenizer=tokenizer,
-    compute_metrics=compute_metrics
+    compute_metrics=compute_metrics,
 )
 print("Initial evaluation")
 trainer.evaluate()

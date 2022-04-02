@@ -40,7 +40,7 @@ try:
         num_labels=len(intents),
         problem_type="multi_label_classification",
         id2label=id2label,
-        label2id=label2id
+        label2id=label2id,
     )
     if torch.cuda.is_available():
         classification_model.to("cuda")
@@ -90,4 +90,3 @@ def detect():
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=8014)
-

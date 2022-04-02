@@ -37,7 +37,7 @@ def get_regexp(intent_phrases_path):
                 [[phrase + "\\" + punct for phrase in data["phrases"]] for punct in data["punctuation"]]
             )
         )
-                + [rf"^{pattern}[\.\?!]?$" for pattern in data.get("reg_phrases", [])]
+        + [rf"^{pattern}[\.\?!]?$" for pattern in data.get("reg_phrases", [])]
         for intent, data in json.load(open(intent_phrases_path))["intent_phrases"].items()
     }
     regexp = {intent: [re.compile(phrase) for phrase in phrases] for intent, phrases in regexp.items()}
@@ -67,10 +67,10 @@ def dump_dataset(intent_data, random_phrases, labels):
     for train_index, test_index in skf.split(df["text"], df["intents"]):
         df_train = df.loc[train_index, :]
         df_train.reset_index(drop=True)
-        df_train.to_csv('intent_train.csv', index=False)
+        df_train.to_csv("intent_train.csv", index=False)
         df_test = df.loc[test_index, :]
         df_test.reset_index(drop=True)
-        df_test.to_csv('intent_valid.csv', index=False)
+        df_test.to_csv("intent_valid.csv", index=False)
         break
     return
 
@@ -85,20 +85,15 @@ def multi_label_metrics(predictions, labels, threshold=0.5):
     y_pred[np.where(probs >= threshold)] = 1
     # finally, compute metrics
     y_true = labels
-    f1_micro_average = f1_score(y_true=y_true, y_pred=y_pred, average='micro')
-    roc_auc = roc_auc_score(y_true, y_pred, average='micro')
+    f1_micro_average = f1_score(y_true=y_true, y_pred=y_pred, average="micro")
+    roc_auc = roc_auc_score(y_true, y_pred, average="micro")
     accuracy = accuracy_score(y_true, y_pred)
     # return as dictionary
-    metrics = {'f1': f1_micro_average,
-               'roc_auc': roc_auc,
-               'accuracy': accuracy}
+    metrics = {"f1": f1_micro_average, "roc_auc": roc_auc, "accuracy": accuracy}
     return metrics
 
 
 def compute_metrics(p: EvalPrediction):
-    preds = p.predictions[0] if isinstance(p.predictions,
-                                           tuple) else p.predictions
-    result = multi_label_metrics(
-        predictions=preds,
-        labels=p.label_ids)
+    preds = p.predictions[0] if isinstance(p.predictions, tuple) else p.predictions
+    result = multi_label_metrics(predictions=preds, labels=p.label_ids)
     return result
