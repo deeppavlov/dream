@@ -20,8 +20,7 @@ app = Flask(__name__)
 INTENT_PHRASES_PATH = os.environ.get("INTENT_PHRASES_PATH", "intent_phrases.json")
 INTENTS_MODEL_PATH = os.environ.get("INTENTS_MODEL_PATH", None)
 TRANSFORMERS_MODEL_PATH = os.environ.get("TRANSFORMERS_MODEL_PATH", None)
-if TRANSFORMERS_MODEL_PATH is None:
-    TRANSFORMERS_MODEL_PATH = "sentence-transformers/distiluse-base-multilingual-cased-v2"
+
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(TRANSFORMERS_MODEL_PATH)
