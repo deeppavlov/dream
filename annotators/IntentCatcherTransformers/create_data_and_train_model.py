@@ -45,10 +45,8 @@ def encode_dataset(df):
     global tokenizer
 
     text_labels = np.array(df["intents"])
-    print(text_labels)
     labels = list(set(df["intents"]))
     labels = [label for label in labels if label != "none"]
-    print(labels)
     # encode them
     encoding = tokenizer(df["text"], padding="max_length", truncation=True, max_length=MAX_LENGTH)
 
@@ -65,9 +63,7 @@ def encode_dataset(df):
 def load(train_path, valid_path):
     dataset = load_dataset(
         "csv",
-        data_files={"train": [train_path], "valid": valid_path},
-        delimeter=",",
-        line_terminator="\n"
+        data_files={"train": [train_path], "valid": valid_path}
     )
     encoded_dataset = dataset.map(encode_dataset, batched=True)
     encoded_dataset.set_format("torch")
