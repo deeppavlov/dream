@@ -42,18 +42,16 @@ tokenizer = AutoTokenizer.from_pretrained(TRANSFORMERS_MODEL_PATH)
 
 
 def encode_dataset(df):
-    global tokenizer
+    global tokenizer, intents
 
     text_labels = np.array(df["intents"])
-    labels = list(set(df["intents"]))
-    labels = [label for label in labels if label != "none"]
     # encode them
     encoding = tokenizer(df["text"], padding="max_length", truncation=True, max_length=MAX_LENGTH)
 
     # create numpy array of shape (batch_size, num_labels)
-    labels_matrix = np.zeros((len(df["text"]), len(labels)))
+    labels_matrix = np.zeros((len(df["text"]), len(intents)))
     # fill numpy array
-    for idx, label in enumerate(labels):
+    for idx, label in enumerate(intents):
         labels_matrix[:, idx] = 1 * (text_labels == label)
 
     encoding["labels"] = labels_matrix.tolist()
