@@ -28,7 +28,7 @@ try:
 
     regexp = get_regexp(INTENT_PHRASES_PATH)
 
-    with open(f"{INTENTS_MODEL_PATH}/intents.txt", "r") as f:
+    with open(f"/data/{INTENTS_MODEL_PATH}/intents.txt", "r") as f:
         intents = f.readlines()
         intents = [intent for intent in intents if intent]
     id2label, label2id = create_label_map(intents)
