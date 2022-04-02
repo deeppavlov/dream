@@ -28,13 +28,10 @@ parser.add_argument("--model_path", help="path where to save the model", default
 parser.add_argument("--epochs", help="number of epochs to train model", default=7)
 # Whereas to calc metrics or not (default value = True)
 args = parser.parse_args()
-# Create metrics directory if not exists
-if not os.path.exists("../metrics/"):
-    os.makedirs("../metrics")
 
 TRANSFORMERS_MODEL_PATH = os.environ.get("TRANSFORMERS_MODEL_PATH", None)
 if TRANSFORMERS_MODEL_PATH is None:
-    TRANSFORMERS_MODEL_PATH = "sentence-transformers/distiluse-base-multilingual-cased-v2"
+    TRANSFORMERS_MODEL_PATH = "distilbert-base-uncased"
 BATCH_SIZE = int(os.environ.get("BATCH_SIZE", 8))
 MAX_LENGTH = int(os.environ.get("MAX_LENGTH", 64))
 MODEL_PATH = args.model_path
@@ -76,7 +73,7 @@ with open(args.intent_phrases_path, "r") as fp:
 
 intent_data = {}
 intents = sorted(list(intent_phrases.keys()))
-with open("intents.txt", "w") as f:
+with open(f"{MODEL_PATH}/intents.txt", "w") as f:
     for intent in intents:
         f.write(intent + "\n")
 
@@ -105,10 +102,12 @@ for intent, data in intent_phrases.items():
     print(f"{intent}: {len(phrases)//len(data['punctuation'])}")
 
 dump_dataset(intent_data, random_phrases, intents,
-             train_path="data/intent_train.csv", valid_path="data/intent_valid.csv")
+             train_path=f"data/{MODEL_PATH}/intent_train.csv",
+             valid_path=f"data/{MODEL_PATH}/intent_valid.csv")
 print("Dumped csv datasets")
 
-encoded_dataset = load(train_path="data/intent_train.csv", valid_path="data/intent_valid.csv")
+encoded_dataset = load(train_path=f"data/{MODEL_PATH}/intent_train.csv",
+                       valid_path=f"data/{MODEL_PATH}/intent_valid.csv")
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
