@@ -37,6 +37,7 @@ if TRANSFORMERS_MODEL_PATH is None:
     TRANSFORMERS_MODEL_PATH = "sentence-transformers/distiluse-base-multilingual-cased-v2"
 BATCH_SIZE = int(os.environ.get("BATCH_SIZE", 8))
 MAX_LENGTH = int(os.environ.get("MAX_LENGTH", 64))
+MODEL_PATH = args.model_path
 
 tokenizer = AutoTokenizer.from_pretrained(TRANSFORMERS_MODEL_PATH)
 
@@ -137,5 +138,5 @@ trainer.train()
 print("Final evaluation")
 trainer.evaluate()
 
-print(f"Saving model to: {args.model_path}")
-trainer.model.save_pretrained(args.model_path)
+print(f"Saving model to: {MODEL_PATH}")
+trainer.model.save_pretrained(MODEL_PATH)
