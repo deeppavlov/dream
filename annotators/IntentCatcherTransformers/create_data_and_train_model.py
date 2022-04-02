@@ -62,7 +62,7 @@ def encode_dataset(df):
     return encoding
 
 
-def load(train_path='intent_train.csv', valid_path='intent_valid.csv'):
+def load(train_path, valid_path):
     dataset = load_dataset('csv', data_files={'train': [train_path],
                                               'valid': valid_path})
     encoded_dataset = dataset.map(encode_dataset, batched=True)
@@ -108,7 +108,7 @@ for intent, data in intent_phrases.items():
 dump_dataset(intent_data, random_phrases, intents)
 print("Dumped csv datasets")
 
-encoded_dataset = load(train_path='intent_train.csv', valid_path='intent_valid.csv')
+encoded_dataset = load(train_path='./data/intent_train.csv', valid_path='./data/intent_valid.csv')
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
