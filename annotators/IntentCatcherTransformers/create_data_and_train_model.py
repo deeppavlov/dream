@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--intent_phrases_path", help="file with phrases for embedding generation", default="intent_phrases.json"
 )
-parser.add_argument("--model_path", help="path where to save the model", default="./models/" + MODEL_NAME + ".h5")
+parser.add_argument("--model_path", help="path where to save the model", default="./intents_model_v0")
 parser.add_argument("--epochs", help="number of epochs to train model", default=7)
 # Whereas to calc metrics or not (default value = True)
 args = parser.parse_args()
@@ -92,7 +92,7 @@ classification_model = AutoModelForSequenceClassification.from_pretrained(
     id2label=id2label,
     label2id=label2id
 )
-if torch.cuda.cuda_is_available():
+if torch.cuda.is_available():
     classification_model.to("cuda")
 
 print("Loaded pre-trained model for fine-tuning")
@@ -118,7 +118,7 @@ args = TrainingArguments(
     learning_rate=2e-5,
     per_device_train_batch_size=BATCH_SIZE,
     per_device_eval_batch_size=BATCH_SIZE,
-    num_train_epochs=5,
+    num_train_epochs=int(args.epochs),
     weight_decay=0.01,
     load_best_model_at_end=True,
     metric_for_best_model="f1",

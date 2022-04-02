@@ -42,7 +42,7 @@ try:
         id2label=id2label,
         label2id=label2id
     )
-    if torch.cuda.cuda_is_available():
+    if torch.cuda.is_available():
         classification_model.to("cuda")
     logger.info("Intents model loaded")
 
