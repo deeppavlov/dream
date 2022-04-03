@@ -4,6 +4,7 @@ import os
 import json
 import argparse
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -68,9 +69,11 @@ with open(args.intent_phrases_path, "r") as fp:
     intent_phrases = OrderedDict(all_data["intent_phrases"])
     random_phrases = all_data["random_phrases"]
 
+Path(f"data/{MODEL_PATH}/").mkdir(exist_ok=True)
+
 intent_data = {}
 intents = sorted(list(intent_phrases.keys()))
-with open(f"{MODEL_PATH}/intents.txt", "w") as f:
+with open(f"data/{MODEL_PATH}/intents.txt", "w") as f:
     for intent in intents:
         f.write(intent + "\n")
 
