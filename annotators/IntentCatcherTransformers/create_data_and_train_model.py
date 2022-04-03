@@ -142,5 +142,5 @@ trainer.train()
 print("Final evaluation")
 trainer.evaluate()
 
-print(f"Saving model to: {MODEL_PATH}")
+print(f"Saving model to: `data/{MODEL_PATH}`")
 trainer.model.save_pretrained(f"data/{MODEL_PATH}")
