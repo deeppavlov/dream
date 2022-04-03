@@ -79,7 +79,7 @@ def predict_intents(text: List[str]):
 
 @app.route("/detect", methods=["POST"])
 def detect():
-    utterances = request.json["segments"]
+    utterances = request.json["sentences"]
     logger.info(f"Number of utterances: {len(utterances)}")
     results = []
     for uttr in utterances:
