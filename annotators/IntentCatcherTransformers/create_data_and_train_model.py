@@ -116,7 +116,7 @@ encoded_dataset = load(
 print("Loaded encoded datasets")
 
 args = TrainingArguments(
-    "bert-finetuned-sem_eval-english",
+    "checkpoints",
     evaluation_strategy="epoch",
     save_strategy="epoch",
     learning_rate=2e-5,
@@ -143,4 +143,4 @@ print("Final evaluation")
 trainer.evaluate()
 
 print(f"Saving model to: {MODEL_PATH}")
-trainer.model.save_pretrained(MODEL_PATH)
+trainer.model.save_pretrained(f"data/{MODEL_PATH}")
