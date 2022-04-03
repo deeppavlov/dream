@@ -58,7 +58,7 @@ def encode_dataset(df):
 
 
 def load(train_path, valid_path):
-    dataset = load_dataset("csv", data_files={"train": [train_path], "valid": valid_path})
+    dataset = load_dataset("csv", data_files={"train": [train_path], "valid": valid_path}, lineterminator="\n")
     encoded_dataset = dataset.map(encode_dataset, batched=True)
     encoded_dataset.set_format("torch")
     return encoded_dataset
