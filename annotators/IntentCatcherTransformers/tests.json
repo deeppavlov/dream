@@ -4,10 +4,6 @@
         "intent": "topic_switching"
     },
     {
-        "sentence": "tell me something else.",
-        "intent": "topic_switching"
-    },
-    {
         "sentence": "stop talking about that",
         "intent": "topic_switching"
     },
@@ -348,7 +344,7 @@
         "intent": null
     },
     {
-        "sentence": "i have a good day",
+        "sentence": "i had a good day",
         "intent": null
     },
     {
