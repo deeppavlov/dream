@@ -29,10 +29,10 @@ try:
     regexp = get_regexp(INTENT_PHRASES_PATH)
 
     with open(f"/data/{INTENTS_MODEL_PATH}/intents.txt", "r") as f:
-        intents = f.readlines()
-        intents = [intent for intent in intents if intent]
+        intents = f.read().splitlines()
+        intents = [intent.strip() for intent in intents if intent]
     id2label, label2id = create_label_map(intents)
-    logger.info("Intents map loaded")
+    logger.info(f"Intents map loaded: {intents}")
 
     classification_model = AutoModelForSequenceClassification.from_pretrained(
         f"/data/{INTENTS_MODEL_PATH}",
@@ -66,7 +66,7 @@ def predict_intents(text: List[str]):
                     break
     with torch.no_grad():
         outputs = classification_model(**encoding)
-        predictions = torch.sigmoid(outputs.logits).numpy()
+        predictions = torch.sigmoid(outputs.logits).numpy()[0]
 
     resp = {
         intent: resp[intent]

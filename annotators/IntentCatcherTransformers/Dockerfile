@@ -16,9 +16,10 @@ ENV TRANSFORMERS_MODEL_PATH ${TRANSFORMERS_MODEL_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-RUN wget -c -q http://files.deeppavlov.ai/deeppavlov_data/${INTENTS_MODEL_PATH}.tar.gz -P /data/ && \
-    tar -xzf /data/${INTENTS_MODEL_PATH}.tar.gz -C /data/ && \
-    rm /data/${INTENTS_MODEL_PATH}.tar.gz
+
+RUN wget -c -q http://files.deeppavlov.ai/deeppavlov_data/${INTENTS_MODEL_PATH}.tar.gz -P /data/
+RUN tar -xzf /data/${INTENTS_MODEL_PATH}.tar.gz -C /data/
+RUN rm /data/${INTENTS_MODEL_PATH}.tar.gz
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
