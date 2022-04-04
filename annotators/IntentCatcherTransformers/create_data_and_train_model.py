@@ -68,6 +68,7 @@ with open(args.intent_phrases_path, "r") as fp:
     all_data = json.load(fp)
     intent_phrases = OrderedDict(all_data["intent_phrases"])
     random_phrases = all_data["random_phrases"]
+    random_phrases = generate_phrases(random_phrases["phrases"], random_phrases["punctuation"])
 
 Path(f"data/{MODEL_PATH}/").mkdir(exist_ok=True)
 
