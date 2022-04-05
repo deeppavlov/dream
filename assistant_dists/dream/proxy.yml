@@ -594,6 +594,15 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8121
       - PORT=8121
 
+  # human-goals-annotator:
+  #   command: [ "nginx", "-g", "daemon off;" ]
+  #   build:
+  #     context: dp/proxy/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PROXY_PASS=dream.deeppavlov.ai:???? # какой-то порт
+  #     - PORT=????  # какой-то порт
+
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:

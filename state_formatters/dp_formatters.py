@@ -186,7 +186,7 @@ def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def last_utt_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification
+    # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification, human_goals_detector
     return [{"sentences": [dialog["utterances"][-1]["text"]]}]
 
 
@@ -720,6 +720,11 @@ def dff_art_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_grounding_skill_formatter(dialog: Dict) -> List[Dict]:
+    import json
+    jsonString = json.dumps(dialog)
+    jsonFile = open("dialog_sample.json", "w")
+    jsonFile.write(jsonString)
+    jsonFile.close()
     return utils.dff_formatter(dialog, "dff_grounding_skill")
 
 
@@ -729,6 +734,14 @@ def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_short_story_skill")
+
+
+def dff_gain_assistance_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_gain_assistance_skill")
+
+
+def dff_get_recommendation_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_get_recommendation_skill")
 
 
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
@@ -902,3 +915,16 @@ def midas_predictor_formatter(dialog: Dict):
     midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
 
     return [{"last_midas_labels": max(midas_dist, key=midas_dist.get), "return_probas": 1}]
+
+
+# def human_goals_detector_formatter(dialog: Dict):
+#     # dialog = utils.get_last_n_turns(dialog)
+#     # dialog = utils.remove_clarification_turns_from_dialog(dialog)
+#     # utterances, goals = [], []
+#     # for utt in dialog["utterances"]:
+#     #     utterances.append(utt["text"])
+#     #     goals.append(utt.get("annotations", {}).get("human_goals", [{}])) # ?
+
+#     # goals = dialog["human_utterances"][-1].get("annotations", {}).get("human_goals", [{}])[-1]
+
+#     return [{"sentences": utterances[-1], "human_goals": goals[-1]}]

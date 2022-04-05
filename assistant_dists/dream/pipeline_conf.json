@@ -431,6 +431,16 @@
                     "annotators.midas_classification",
                     "annotators.combined_classification"
                 ]
+            },
+            "human_goals_detector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://human-goals-detector:8122/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {
@@ -953,6 +963,32 @@
                     "url": "http://dff-art-skill:8117/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_art_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_gain_assistance_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-gain-assistance-skill:8123/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_gain_assistance_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_get_recommendation_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-get-recommendation-skill:8124/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_get_recommendation_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

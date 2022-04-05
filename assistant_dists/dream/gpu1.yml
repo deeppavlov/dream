@@ -187,6 +187,8 @@ services:
     restart: unless-stopped
   midas-predictor:
     restart: unless-stopped
+  # human-goals-annotator:
+  #   restart: unless-stopped
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'

@@ -393,6 +393,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8037:8037
+  dff-gain-assistance-skill:
+    volumes:
+      - "./skills/dff_gain_assistance_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8123:8123
+  dff-get-recommendation-skill:
+    volumes:
+      - "./skills/dff_get_recommendation_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8124:8124
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

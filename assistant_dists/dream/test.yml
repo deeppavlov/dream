@@ -126,5 +126,7 @@ services:
   midas-predictor:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  # human-goals-annotator:
+  # что тут писать и писать ли?
   dff-template-skill:
 version: '3.7'

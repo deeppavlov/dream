@@ -119,6 +119,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_funfact_skill",
                         "dff_weather_skill",
                         "dff_short_story_skill",
+                        "dff_gain_assistance_skill"
                     ],
                 )
 
@@ -229,6 +230,8 @@ class RuleBasedSkillSelectorConnector:
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
                         "dff_short_story_skill",
+                        "dff_gain_assistance_skill",
+                        "dff_get_recommendation_skill"
                     ],
                 )
 

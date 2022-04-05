@@ -244,7 +244,7 @@ flows = {
                 "test_1": dm_cnd.is_sf("React.Rejoinder.Support.Track.Clarify"),
                 "likes_reading": cnd.true(),
             },
-            MISC: {"speech_functions": ["Open.Demand.Fact"]},
+            MISC: {"speech_functions": ["React.Rejoinder.Support.Track.Clarify"]},
         },
         "book_restart": {
             RESPONSE: loc_rsp.append_unused(
