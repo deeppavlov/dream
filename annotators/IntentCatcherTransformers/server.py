@@ -72,7 +72,7 @@ def predict_intents(text: List[str]):
         predictions = torch.sigmoid(outputs.logits)
         if torch.cuda.is_available():
             predictions = predictions.cpu()
-        predictions = predictions.numpy()[0]        
+        predictions = predictions.numpy()[0]
 
     resp = {
         intent: resp[intent]
