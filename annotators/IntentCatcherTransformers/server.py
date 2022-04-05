@@ -43,6 +43,7 @@ try:
     )
     if torch.cuda.is_available():
         classification_model.to("cuda")
+        logger.info("Intents model set on cuda")
     classification_model.eval()
     logger.info("Intents model loaded")
 
@@ -65,8 +66,13 @@ def predict_intents(text: List[str]):
                     resp[intent]["confidence"] = 1.0
                     break
     with torch.no_grad():
+        if torch.cuda.is_available():
+            encoding.to("cuda")
         outputs = classification_model(**encoding)
-        predictions = torch.sigmoid(outputs.logits).numpy()[0]
+        predictions = torch.sigmoid(outputs.logits)
+        if torch.cuda.is_available():
+            predictions = predictions.cpu()
+        predictions = predictions.numpy()[0]        
 
     resp = {
         intent: resp[intent]
