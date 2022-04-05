@@ -45,6 +45,8 @@ services:
   sentrewrite:
   dff-intent-responder-skill:
   intent-catcher:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   badlisted-words:
   dff-program-y-dangerous-skill:
   dff-movie-skill:
