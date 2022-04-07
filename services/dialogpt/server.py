@@ -24,7 +24,7 @@ try:
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info(f"dialogpt is set to run on cuda")
+        logger.info("dialogpt is set to run on cuda")
 
     logger.info("dialogpt is ready")
 except Exception as e:
@@ -40,23 +40,25 @@ def generate_response(context):
     global model, tokenizer
     encoded_context = []
     for uttr in context[-MAX_HISTORY_DEPTH:]:
-        encoded_context += [tokenizer.encode(uttr + tokenizer.eos_token, return_tensors='pt')]
+        encoded_context += [tokenizer.encode(uttr + tokenizer.eos_token, return_tensors="pt")]
     bot_input_ids = torch.cat(encoded_context, dim=-1)
 
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
-        chat_history_ids = model.generate(bot_input_ids, do_sample=True, max_length=50, top_k=3, pad_token_id=tokenizer.eos_token_id)
+        chat_history_ids = model.generate(
+            bot_input_ids, do_sample=True, max_length=50, top_k=3, pad_token_id=tokenizer.eos_token_id
+        )
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
-    return tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
+    return tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1] :][0], skip_special_tokens=True)
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
-    
+
     try:
         responses = []
         confidences = []
@@ -66,8 +68,8 @@ def respond():
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = [""] * len(contexts)
-        confidences = [0.] * len(contexts)
+        responses = [""] * len(contexts)
+        confidences = [0.0] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"masked_lm exec time: {total_time:.3f}s")
