@@ -128,6 +128,6 @@ services:
       - CUDA_VISIBLE_DEVICES=6
   dialogpt:
     environment:
-      - CUDA_VISIBLE_DEVICES=2
+      - CUDA_VISIBLE_DEVICES=6
   dff-template-skill:
 version: '3.7'
