@@ -13,6 +13,8 @@ import common.dff.integration.response as int_rsp
 
 import common.constants as common_constants
 
+from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
+
 from . import condition as loc_cnd
 from . import response as loc_rsp
 
@@ -39,9 +41,9 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("gain_assistance", "send2specialist"): loc_cnd.has_forbidden_words(),
-            ("gain_assistance", "bad_day"): loc_cnd.has_bad_day_words(),
-            ("gain_assistance", "try2comfort"): loc_cnd.has_relationship_words()
+            ("gain_assistance", "send2specialist"): cnd.regexp(DEPRESSION_PATTERN),
+            ("gain_assistance", "bad_day"): cnd.regexp(BAD_DAY_PATTERN),
+            ("gain_assistance", "try2comfort"): cnd.regexp(PROBLEMS_PATTERN)
         },
     },
     "sevice": {

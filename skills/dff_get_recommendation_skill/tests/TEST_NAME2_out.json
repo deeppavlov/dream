@@ -1,0 +1,71 @@
+[
+    [
+        "Oh, then you should read We by Zamyatin",
+        2.0,
+        {
+            "dff_get_recommendation_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 5,
+                "history": {
+                    "1": [
+                        "book_by_genre",
+                        "genre_q"
+                    ],
+                    "3": [
+                        "book_by_genre",
+                        "genre_q"
+                    ],
+                    "4": [
+                        "book_by_genre",
+                        "fan_of_genre"
+                    ],
+                    "5": [
+                        "book_by_genre",
+                        "recommend_book_by_genre"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "133fa70d-8438-4f32-8ebf-c999d637fc13",
+                    "labels": {
+                        "2": [
+                            "book_by_genre",
+                            "fan_of_genre"
+                        ],
+                        "3": [
+                            "book_by_genre",
+                            "recommend_book_by_genre"
+                        ]
+                    },
+                    "requests": {
+                        "2": "yes.",
+                        "3": "brave new world."
+                    },
+                    "responses": {
+                        "2": "What dystopian novels have you read?",
+                        "3": "Oh, then you should read We by Zamyatin"
+                    },
+                    "misc": {
+                        "slots": {
+                            "book_recommend": "We by Zamyatin",
+                            "fav_book_genre": "dystopian"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

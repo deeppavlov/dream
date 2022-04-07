@@ -1,0 +1,72 @@
+[
+    [
+        "Oh, then you should read The Lord of the Rings by Tolkien",
+        2.0,
+        {
+            "dff_get_recommendation_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 7,
+                "history": {
+                    "2": [
+                        "book_by_genre",
+                        "fan_of_genre2"
+                    ],
+                    "4": [
+                        "book_by_genre",
+                        "recommend_book_by_genre"
+                    ],
+                    "6": [
+                        "book_by_genre",
+                        "fan_of_genre2"
+                    ],
+                    "7": [
+                        "book_by_genre",
+                        "recommend_book_by_genre"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "7445639b-fa88-4a6b-b9f2-e7dff13855bb",
+                    "labels": {
+                        "2": [
+                            "book_by_genre",
+                            "fan_of_genre2"
+                        ],
+                        "3": [
+                            "book_by_genre",
+                            "recommend_book_by_genre"
+                        ]
+                    },
+                    "requests": {
+                        "2": "i like fantasy.",
+                        "3": "harry potter."
+                    },
+                    "responses": {
+                        "2": "What fantasy novels have you read?",
+                        "3": "Oh, then you should read The Lord of the Rings by Tolkien"
+                    },
+                    "misc": {
+                        "slots": {
+                            "book_recommend": "The Lord of the Rings by Tolkien",
+                            "fav_genre": "fantasy",
+                            "fav_book_genre": "fantasy"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

@@ -1,0 +1,599 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            {
+                                "human_goals": []
+                            }
+                        ],
+                        "spelling_preprocessing": "hi",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
+                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
+                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
+                                    "publishedAt": "2022-04-07T07:35:54Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Ukraine-Russia War: Live Updates",
+                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "my favorite book is 1984.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            {
+                                "human_goals": [
+                                    "recommend_book_by_genre"
+                                ]
+                            }
+                        ],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "my favorite book is 1984",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "my favorite book"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "my favorite book is 1984.",
+                            "segments": [
+                                "my favorite book is 1984."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0009204045054502785,
+                                "command": 0.0025866522919386625,
+                                "comment": 0.0016277602408081293,
+                                "complaint": 0.0008673873380757868,
+                                "dev_command": 0.0011506186565384269,
+                                "neg_answer": 0.000800667388830334,
+                                "open_question_factual": 0.0017280286410823464,
+                                "open_question_opinion": 0.001375458319671452,
+                                "opinion": 0.9645191431045532,
+                                "other_answers": 0.0007058573537506163,
+                                "pos_answer": 0.0010682352585718036,
+                                "statement": 0.021831145510077477,
+                                "yes_no_question": 0.000818548898678273
+                            }
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9398437142372131
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9998003840446472
+                            },
+                            "cobot_topics": {
+                                "Literature": 0.9998675584793091
+                            },
+                            "emotion_classification": {
+                                "joy": 0.9998528957366943
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999942779541016
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9999960660934448
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999946355819702
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "book",
+                                "1984"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        12,
+                                        16
+                                    ],
+                                    "text": "book"
+                                },
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        20,
+                                        24
+                                    ],
+                                    "text": "1984"
+                                }
+                            ]
+                        },
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "my favorite book is 1984."
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you doing today?",
+                                "my favorite book is 1984."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
+                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
+                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
+                                    "publishedAt": "2022-04-07T07:35:54Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Ukraine-Russia War: Live Updates",
+                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "book",
+                                "news": {
+                                    "content": "If you love the art and design aspects of theme parks, a new release you\u2019re bound to enjoy is coming on April 12. \u201cThe Art of Disneyland Paris\u201d is coming in celebration of the resort\u2019s 30th anniversary.\n\u201cThe Art of Disneyland Paris\u201d Book\nThe book was... [575 chars]",
+                                    "description": "If you love the art and design aspects of theme parks, a new release you\u2019re bound to enjoy is coming on April 12. \u201cThe Art of Disneyland Paris\u201d is coming in celebration of the resort\u2019s 30th anniversary.",
+                                    "image": "https://media.wdwnt.com/2022/04/DLP-The-Art-of-Disneyland-Paris-book.png",
+                                    "publishedAt": "2022-04-07T00:30:14Z",
+                                    "source": {
+                                        "name": "wdwnt.com",
+                                        "url": "https://wdwnt.com"
+                                    },
+                                    "title": "New 'The Art of Disneyland Paris' Book to Be Released in Celebration of 30th Anniversary",
+                                    "url": "https://wdwnt.com/2022/04/new-the-art-of-disneyland-paris-book-to-be-released-in-celebration-of-30th-anniversary/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "1984",
+                                "news": {
+                                    "content": "Doublespeak traces its roots to two of George Orwell\u2019s coinages in the novel \u201c 1984 \u2033: \u201c doublethink \u201d (\u201cto be conscious of complete truthfulness while telling carefully constructed lies\u201d) and \u201c Newspeak \u201d (e.g., \u201cprolefeed\u201d for popular culture).\nIt ... [4045 chars]",
+                                    "description": "Doublespeak traces its roots to two of George Orwell\u2019s coinages in the novel \u201c 1984 \u2033: \u201c doublethink \u201d (\u201cto be conscious of complete truthfulness while telling carefully constructed lies\u201d) and \u201c Newspeak \u201d (e.g., \u201cprolefeed\u201d for popular culture).",
+                                    "image": "https://bostonglobe-prod.cdn.arcpublishing.com/resizer/1zgGBrcQ3BYwIjGYuksXOBV6tTw=/506x0/cloudfront-us-east-1.images.arcpublishing.com/bostonglobe/64QK5O4E4JAGVF4GDDTBTTHMYY.jpg",
+                                    "publishedAt": "2022-04-01T04:00:00Z",
+                                    "source": {
+                                        "name": "The Boston Globe",
+                                        "url": "https://www.bostonglobe.com"
+                                    },
+                                    "title": "The Doublespeak awards can\u2019t return soon enough",
+                                    "url": "https://www.bostonglobe.com/2022/04/01/opinion/doublespeak-awards-cant-return-soon-enough/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "book": {
+                                "SymbolOf": [
+                                    "knowledge",
+                                    "life",
+                                    "wisdom"
+                                ],
+                                "HasProperty": [
+                                    "heavy",
+                                    "expensive",
+                                    "fun"
+                                ],
+                                "Causes": [
+                                    "learn",
+                                    "you learn something new",
+                                    "knowledge"
+                                ],
+                                "CausesDesire": [
+                                    "read",
+                                    "read book",
+                                    "learn"
+                                ]
+                            },
+                            "1984": {
+                                "SymbolOf": [
+                                    "mathematics",
+                                    "computer",
+                                    "university"
+                                ],
+                                "HasProperty": [
+                                    "1980s",
+                                    "1984",
+                                    "american"
+                                ],
+                                "Causes": [
+                                    "global thermonuclear war",
+                                    "death",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "celebrate",
+                                    "make friend",
+                                    "write novel"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How are you doing today?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you doing today?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How are you doing today?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you doing today?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_get_recommendation_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "my favorite book": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "my favorite book",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "my favorite book"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

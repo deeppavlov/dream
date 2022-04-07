@@ -1,0 +1,65 @@
+[
+    [
+        "You should read it! I really liked the plot and the characters!",
+        2.0,
+        {
+            "dff_get_recommendation_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 2,
+                "history": {
+                    "1": [
+                        "book_by_genre",
+                        "q_book_by_genre"
+                    ],
+                    "2": [
+                        "book_by_genre",
+                        "suggest2read"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "7aa6afc2-83b9-43ce-bf2c-45161824f3dd",
+                    "labels": {
+                        "0": [
+                            "book_by_genre",
+                            "q_book_by_genre"
+                        ],
+                        "1": [
+                            "book_by_genre",
+                            "suggest2read"
+                        ]
+                    },
+                    "requests": {
+                        "0": "recommend me any fantasy novel please.",
+                        "1": "no."
+                    },
+                    "responses": {
+                        "0": "Have you read The Lord of the Rings by Tolkien ?",
+                        "1": "You should read it! I really liked the plot and the characters!"
+                    },
+                    "misc": {
+                        "slots": {
+                            "book_recommend": "The Lord of the Rings by Tolkien",
+                            "fav_genre": "fantasy"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

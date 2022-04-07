@@ -13,6 +13,8 @@ import common.dff.integration.response as int_rsp
 
 import common.constants as common_constants
 
+from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN
+
 from . import condition as loc_cnd
 from . import response as loc_rsp
 from . import processing as loc_prs
@@ -41,16 +43,22 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("book_by_genre", "genre_q"): cnd.all([loc_cnd.mentioned_book, loc_cnd.mentioned_fav]),
-            ("book_by_genre", "fan_of_genre2"): cnd.all([loc_cnd.mentioned_genre, loc_cnd.mentioned_fav]),
-            ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), loc_cnd.mentioned_genre]),
-            ("book_by_genre", "q_fav_genre"): cnd.regexp(r"recommend", re.IGNORECASE)
+            ("book_by_genre", "genre_q"): cnd.all([cnd.regexp(BOOKS_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
+            ("book_by_genre", "fan_of_genre2"): cnd.all([cnd.regexp(GENRES_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
+            ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(GENRES_PATTERN)]),
+            ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)]) # не отрабатывает
         },
     },
     "sevice": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("book_by_genre", "genre_q"): cnd.true()},
+            TRANSITIONS: {
+                # ("book_by_genre", "genre_q"): cnd.true()
+                ("book_by_genre", "genre_q"): cnd.all([cnd.regexp(BOOKS_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
+                ("book_by_genre", "fan_of_genre2"): cnd.all([cnd.regexp(GENRES_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
+                ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(GENRES_PATTERN)]),
+                ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)])
+                },
         },
         "fallback": {
             RESPONSE: "Ooops",
@@ -63,44 +71,43 @@ flows = {
     "book_by_genre": {
         LOCAL: {
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
+                "set_confidence": int_prs.set_confidence(2.0),
                 "set_can_continue": int_prs.set_can_continue(),
+                "extract_book_genre": loc_prs.extract_book_genre(),
+                "extract_fav_genre": loc_prs.extract_fav_genre()
             },
         },
         "genre_q": {
             RESPONSE: "So you're a fan of {fav_book_genre} novels, aren't you?",  
             PROCESSING: {
-                1: loc_prs.extract_book_genre,
-                2: loc_prs.fill_slots
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots()
             },
             TRANSITIONS: {"fan_of_genre": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars])},
         },
         "fan_of_genre": {
             RESPONSE: "What {fav_book_genre} novels have you read?",
             PROCESSING: {
-                1: loc_prs.fill_slots
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
             },
             TRANSITIONS: {"recommend_book_by_genre": cnd.true()},
         },
          "recommend_book_by_genre": {
             RESPONSE: "Oh, then you should read {book_recommend}",
             PROCESSING: {
-                1: loc_prs.fill_slots
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
                 },
         },
         "fan_of_genre2": {
-            RESPONSE: "What {fav_genre} have you read?",
+            RESPONSE: "What {fav_genre} novels have you read?",
             PROCESSING: {
-                1: loc_prs.extract_fav_genre,
-                2: loc_prs.fill_slots
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
             },
             TRANSITIONS: {"recommend_book_by_genre": cnd.true()},
         },
         "q_book_by_genre": {
-            RESPONSE: "Have you read {book_recommend}",
+            RESPONSE: "Have you read {book_recommend} ?",
             PROCESSING:  {
-                1: loc_prs.extract_fav_genre,
-                2: loc_prs.fill_slots
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
                 },
             TRANSITIONS: {
                 "already_read": int_cnd.is_yes_vars,
@@ -110,8 +117,11 @@ flows = {
         "q_fav_genre": {
             RESPONSE: "What is your favorite genre?",
             TRANSITIONS: {
-                "q_book_by_genre": loc_cnd.mentioned_genre
+                "q_book_by_genre": cnd.regexp(GENRES_PATTERN)
             },
+            PROCESSING: {
+                "extract_fav_genre": loc_prs.extract_fav_genre()
+            }
         },
         "already_read": {
             RESPONSE: "Did you like it?",

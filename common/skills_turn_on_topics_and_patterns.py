@@ -22,7 +22,8 @@ from common.sport import (
 from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BEEN_TEMPLATE
 from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
-from common.gain_assistance import DEPRESSION_PATTERN
+from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
+from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN
 
 SKILL_TRIGGERS = {
     "dff_movie_skill": {
@@ -167,14 +168,14 @@ SKILL_TRIGGERS = {
         "intents": ["tell_me_a_story"],
     },
      "dff_gain_assistance_skill": {
-        "compiled_patterns": [DEPRESSION_PATTERN],
+        "compiled_patterns": [DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
         "intents": [],
     },
      "dff_get_recommendation_skill": {
-        "compiled_patterns": [],
+        "compiled_patterns": [BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],

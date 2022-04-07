@@ -1,0 +1,1164 @@
+{
+    "human_utter_index_batch": [
+        7
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "i like fantasy.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            {
+                                "human_goals": [
+                                    "recommend_book_by_genre"
+                                ]
+                            }
+                        ],
+                        "spelling_preprocessing": "i like fantasy",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "fantasy"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "i like fantasy.",
+                            "segments": [
+                                "i like fantasy."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9999372959136963
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.999396800994873
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9999755620956421
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9410609602928162
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999974966049194
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9803622961044312
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999775886535645
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.9867681264877319,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0010758346179500222,
+                                "command": 0.0009461725712753832,
+                                "comment": 0.0025797178968787193,
+                                "complaint": 0.0004474049201235175,
+                                "dev_command": 0.0005512469215318561,
+                                "neg_answer": 0.00037781285936944187,
+                                "open_question_factual": 0.0005353098968043923,
+                                "open_question_opinion": 0.0006998623139224946,
+                                "opinion": 0.9853113889694214,
+                                "other_answers": 0.0007364560151472688,
+                                "pos_answer": 0.001404549228027463,
+                                "statement": 0.004957119934260845,
+                                "yes_no_question": 0.0003771625051740557
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "fantasy"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "genre",
+                                    "offsets": [
+                                        7,
+                                        14
+                                    ],
+                                    "text": "fantasy"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "i like fantasy."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Oh , then you should read he Twelve Rooms of the Nile by Enid Shomer.",
+                                "i lile fantasy.",
+                                "Cool! How does it make you feel?",
+                                "i like fantasy."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 7,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "fantasy": {
+                                "SymbolOf": [
+                                    "fantasy",
+                                    "love",
+                                    "art"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "good",
+                                    "funny"
+                                ],
+                                "Causes": [
+                                    "you get hurt",
+                                    "nightmare",
+                                    "fun"
+                                ],
+                                "CausesDesire": [
+                                    "masturbate",
+                                    "write novel",
+                                    "write story"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
+                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
+                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
+                                    "publishedAt": "2022-04-07T07:35:54Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Ukraine-Russia War: Live Updates",
+                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "fantasy",
+                                "news": {
+                                    "content": "FRD vs PNJ Dream11 Prediction Fantasy Cricket Tips, Dream11 Team, Playing XI, Pitch Report, Injury Update of FanCode ECS T10 Cartaxo match between Friendship CC and Punjab CC.\nLSG vs DC Dream11 Prediction\nFRD vs PNJ FanCode ECS T10 Cartaxo Match 39 a... [4325 chars]",
+                                    "description": "FRD vs PNJ Dream11 Prediction Fantasy Cricket Tips, Dream11 Team, Playing XI, Pitch Report, Injury Update of FanCode ECS T10 Cartaxo match between Friendship CC and Punjab CC.",
+                                    "image": "https://cricketaddictor.com/wp-content/uploads/2022/02/Barabati-Stadium-in-Cuttack.-Photo-Facebook.jpg",
+                                    "publishedAt": "2022-04-07T09:19:50Z",
+                                    "source": {
+                                        "name": "Cricket Addictor",
+                                        "url": "https://cricketaddictor.com"
+                                    },
+                                    "title": "FRD vs PNJ Dream11 Prediction, Fantasy Cricket Tips, Dream11 Team, Playing XI, Pitch Report, Injury Update- FanCode ECS T10 Cartaxo",
+                                    "url": "https://cricketaddictor.com/fantasy-cricket/frd-vs-pnj-dream11-prediction-fantasy-cricket-tips-dream11-team-playing-xi-pitch-report-injury-update-fancode-ecs-t10-cartaxo/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "harry potter.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            {
+                                "human_goals": [
+                                    "recommend_book_by_genre"
+                                ]
+                            }
+                        ],
+                        "spelling_preprocessing": "harry potter",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "harry potter"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "harry potter.",
+                            "segments": [
+                                "harry potter."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9999101161956787
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9998999834060669
+                            },
+                            "cobot_topics": {
+                                "Literature": 0.9998769760131836
+                            },
+                            "emotion_classification": {
+                                "anger": 0.47386690974235535
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9991486072540283
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.837631344795227
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.998160183429718
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0014211781090125442,
+                                "command": 0.004441353026777506,
+                                "comment": 0.002842315472662449,
+                                "complaint": 0.0016632654005661607,
+                                "dev_command": 0.0022737199906259775,
+                                "neg_answer": 0.0007869619294069707,
+                                "open_question_factual": 0.0019242296693846583,
+                                "open_question_opinion": 0.0017058324301615357,
+                                "opinion": 0.48193520307540894,
+                                "other_answers": 0.001985326409339905,
+                                "pos_answer": 0.0015600387705489993,
+                                "statement": 0.4956018328666687,
+                                "yes_no_question": 0.001858654897660017
+                            }
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 2,
+                                    "start_pos": 0,
+                                    "text": "harry potter",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "harry potter"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        12
+                                    ],
+                                    "text": "harry potter"
+                                }
+                            ]
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Cool! How does it make you feel?",
+                                "i like fantasy.",
+                                "Thank you for being so brilliant. It's been really cool getting to know you better. What fantasy novels have you read?",
+                                "harry potter."
+                            ]
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.8019860982894897,
+                                    0.9309101104736328,
+                                    0.9604362845420837,
+                                    0.3295646905899048,
+                                    0.955962598323822
+                                ],
+                                "entity_ids": [
+                                    "Q3244512",
+                                    "Q216930",
+                                    "Q8337",
+                                    "Q161678",
+                                    "Q80817"
+                                ],
+                                "entity_pages": [
+                                    "Harry James Potter is a fictional character and the titular protagonist in J. K. Rowlings series of eponymous novels. The majority of the books plot covers seven years in the life of the orphan Harry, who, on his eleventh birthday, learns he is a wizard. Thus, he attends Hogwarts School of Witchcraft and Wizardry to practise magic under the guidance of the kindly headmaster Albus Dumbledore and other school professors along with his best friends Ron Weasley and Hermione Granger. Harry also discovers that he is already famous throughout the novels magical community, and that his fate is tied with that of Lord Voldemort \u2013 the internationally feared Dark Wizard and murderer of his parents, Lily and James. The book and film series revolve around Harrys struggle to adapt to the wizarding world and defeat Voldemort.",
+                                    "Harry Potter is a film series based on the eponymous novels by J. K. Rowling. The series is distributed by Warner Bros. and consists of eight fantasy films, beginning with Harry Potter and the Philosophers Stone (2001) and culminating with Harry Potter and the Deathly Hallows \u2013 Part 2 (2011). A spin-off prequel series that will consist of five films started with Fantastic Beasts and Where to Find Them (2016), marking the beginning of the Wizarding World shared media franchise."
+                                ],
+                                "entity_pages_titles": [
+                                    "Harry Potter (character)",
+                                    "Harry Potter (film series)",
+                                    "Harry Potter",
+                                    "Harry Potter and the Deathly Hallows \u2013 Part 1",
+                                    "Harry Potter and the Order of the Phoenix"
+                                ],
+                                "entity_substr": "harry potter",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "harry potter."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "harry potter": {
+                                    "age": 42,
+                                    "conf": 0.8019860982894897,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q145",
+                                            "United Kingdom"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1980-07-31^^T\"",
+                                            "31 July 1980"
+                                        ]
+                                    ],
+                                    "entity_label": "Harry Potter",
+                                    "instance of": [
+                                        [
+                                            "Q10298203",
+                                            "horcrux"
+                                        ],
+                                        [
+                                            "Q15298259",
+                                            "wizard in the Harry Potter universe"
+                                        ],
+                                        [
+                                            "Q15773347",
+                                            "film character"
+                                        ],
+                                        [
+                                            "Q33179355",
+                                            "Gryffindor student"
+                                        ],
+                                        [
+                                            "Q3375722",
+                                            "theatrical character"
+                                        ],
+                                        [
+                                            "Q3658341",
+                                            "literary character"
+                                        ],
+                                        [
+                                            "Q66118879",
+                                            "half-blood"
+                                        ]
+                                    ],
+                                    "member of sport team": [
+                                        [
+                                            "Q4833247",
+                                            "Gryffindor quidditch team"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q1050486",
+                                            "auror"
+                                        ],
+                                        [
+                                            "Q1162163",
+                                            "director"
+                                        ],
+                                        [
+                                            "Q21505200",
+                                            "Quidditch player"
+                                        ],
+                                        [
+                                            "Q48282",
+                                            "student"
+                                        ]
+                                    ],
+                                    "participant in": [
+                                        [
+                                            "Q12162452",
+                                            "1994\u201395 Triwizard Tournament"
+                                        ]
+                                    ],
+                                    "performer": [
+                                        [
+                                            "Q38119",
+                                            "Daniel Radcliffe"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q3244512",
+                                    "pos": 0,
+                                    "position played on team": [
+                                        [
+                                            "Q18237877",
+                                            "seeker"
+                                        ]
+                                    ],
+                                    "songs of singer": [
+                                        [
+                                            "Q12302905",
+                                            "Barny Weasley"
+                                        ]
+                                    ],
+                                    "sport": [
+                                        [
+                                            "Q305561",
+                                            "Quidditch"
+                                        ]
+                                    ],
+                                    "spouse": [
+                                        [
+                                            "Q187923",
+                                            "Ginny Weasley"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q15831596",
+                                            "class of fictional entities"
+                                        ],
+                                        [
+                                            "Q15632617",
+                                            "fictional human"
+                                        ],
+                                        [
+                                            "Q1791627",
+                                            "cultural artifact"
+                                        ],
+                                        [
+                                            "Q66118879",
+                                            "half-blood"
+                                        ],
+                                        [
+                                            "Q190327",
+                                            "magical object in Harry Potter"
+                                        ],
+                                        [
+                                            "Q148401",
+                                            "magician in fantasy"
+                                        ],
+                                        [
+                                            "Q33179355",
+                                            "Gryffindor student"
+                                        ],
+                                        [
+                                            "Q3658341",
+                                            "literary character"
+                                        ],
+                                        [
+                                            "Q15298259",
+                                            "wizard in the Harry Potter universe"
+                                        ],
+                                        [
+                                            "Q15773347",
+                                            "film character"
+                                        ],
+                                        [
+                                            "Q33295419",
+                                            "Hogwarts student"
+                                        ],
+                                        [
+                                            "Q3375722",
+                                            "theatrical character"
+                                        ],
+                                        [
+                                            "Q95074",
+                                            "fictional character"
+                                        ],
+                                        [
+                                            "Q30237636",
+                                            "magic object"
+                                        ],
+                                        [
+                                            "Q10298203",
+                                            "horcrux"
+                                        ],
+                                        [
+                                            "Q24577840",
+                                            "fictional group of characters"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "harry potter": {
+                                    "author": [
+                                        [
+                                            "Q34660",
+                                            "J K Rowling"
+                                        ]
+                                    ],
+                                    "conf": 0.9604362845420837,
+                                    "entity_label": "Harry Potter",
+                                    "genre": [
+                                        [
+                                            "Q10992055",
+                                            "speculative fiction novel"
+                                        ],
+                                        [
+                                            "Q11163999",
+                                            "youth and children's literature"
+                                        ],
+                                        [
+                                            "Q11825892",
+                                            "young adult novel"
+                                        ],
+                                        [
+                                            "Q1312571",
+                                            "developmental novel"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q1667921",
+                                            "novel series"
+                                        ],
+                                        [
+                                            "Q614101",
+                                            "heptalogy"
+                                        ]
+                                    ],
+                                    "narrative location": [
+                                        [
+                                            "Q21",
+                                            "England"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q8337",
+                                    "pos": 2,
+                                    "publication date": [
+                                        [
+                                            "\"+1997-00-00^^T\"",
+                                            "1997"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q20936777",
+                                            "series of specified number of works"
+                                        ],
+                                        [
+                                            "Q614101",
+                                            "heptalogy"
+                                        ],
+                                        [
+                                            "Q6630149",
+                                            "narrative form"
+                                        ],
+                                        [
+                                            "Q29441572",
+                                            "heptad"
+                                        ],
+                                        [
+                                            "Q1667921",
+                                            "novel series"
+                                        ],
+                                        [
+                                            "Q277759",
+                                            "book series"
+                                        ],
+                                        [
+                                            "Q15980953",
+                                            "fiction series"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 8,
+                            "wiki_skill_entities_info": {
+                                "harry potter": {
+                                    "age": 42,
+                                    "conf": 0.8019860982894897,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q145",
+                                            "United Kingdom"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1980-07-31^^T\"",
+                                            "31 July 1980"
+                                        ]
+                                    ],
+                                    "entity_label": "Harry Potter",
+                                    "instance of": [
+                                        [
+                                            "Q10298203",
+                                            "horcrux"
+                                        ],
+                                        [
+                                            "Q15298259",
+                                            "wizard in the Harry Potter universe"
+                                        ],
+                                        [
+                                            "Q15773347",
+                                            "film character"
+                                        ],
+                                        [
+                                            "Q33179355",
+                                            "Gryffindor student"
+                                        ],
+                                        [
+                                            "Q3375722",
+                                            "theatrical character"
+                                        ],
+                                        [
+                                            "Q3658341",
+                                            "literary character"
+                                        ],
+                                        [
+                                            "Q66118879",
+                                            "half-blood"
+                                        ]
+                                    ],
+                                    "member of sport team": [
+                                        [
+                                            "Q4833247",
+                                            "Gryffindor quidditch team"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q1050486",
+                                            "auror"
+                                        ],
+                                        [
+                                            "Q1162163",
+                                            "director"
+                                        ],
+                                        [
+                                            "Q21505200",
+                                            "Quidditch player"
+                                        ],
+                                        [
+                                            "Q48282",
+                                            "student"
+                                        ]
+                                    ],
+                                    "participant in": [
+                                        [
+                                            "Q12162452",
+                                            "1994\u201395 Triwizard Tournament"
+                                        ]
+                                    ],
+                                    "performer": [
+                                        [
+                                            "Q38119",
+                                            "Daniel Radcliffe"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q3244512",
+                                    "pos": 0,
+                                    "position played on team": [
+                                        [
+                                            "Q18237877",
+                                            "seeker"
+                                        ]
+                                    ],
+                                    "songs of singer": [
+                                        [
+                                            "Q12302905",
+                                            "Barny Weasley"
+                                        ]
+                                    ],
+                                    "sport": [
+                                        [
+                                            "Q305561",
+                                            "Quidditch"
+                                        ]
+                                    ],
+                                    "spouse": [
+                                        [
+                                            "Q187923",
+                                            "Ginny Weasley"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q15831596",
+                                            "class of fictional entities"
+                                        ],
+                                        [
+                                            "Q15632617",
+                                            "fictional human"
+                                        ],
+                                        [
+                                            "Q1791627",
+                                            "cultural artifact"
+                                        ],
+                                        [
+                                            "Q66118879",
+                                            "half-blood"
+                                        ],
+                                        [
+                                            "Q190327",
+                                            "magical object in Harry Potter"
+                                        ],
+                                        [
+                                            "Q148401",
+                                            "magician in fantasy"
+                                        ],
+                                        [
+                                            "Q33179355",
+                                            "Gryffindor student"
+                                        ],
+                                        [
+                                            "Q3658341",
+                                            "literary character"
+                                        ],
+                                        [
+                                            "Q15298259",
+                                            "wizard in the Harry Potter universe"
+                                        ],
+                                        [
+                                            "Q15773347",
+                                            "film character"
+                                        ],
+                                        [
+                                            "Q33295419",
+                                            "Hogwarts student"
+                                        ],
+                                        [
+                                            "Q3375722",
+                                            "theatrical character"
+                                        ],
+                                        [
+                                            "Q95074",
+                                            "fictional character"
+                                        ],
+                                        [
+                                            "Q30237636",
+                                            "magic object"
+                                        ],
+                                        [
+                                            "Q10298203",
+                                            "horcrux"
+                                        ],
+                                        [
+                                            "Q24577840",
+                                            "fictional group of characters"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "conceptnet": {
+                            "harry potter": {
+                                "SymbolOf": [
+                                    "science fiction",
+                                    "christianity",
+                                    "psychology"
+                                ],
+                                "HasProperty": [
+                                    "fictional",
+                                    "dead",
+                                    "funny"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "hallucination",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "play game of chess",
+                                    "play chess",
+                                    "study"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
+                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
+                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
+                                    "publishedAt": "2022-04-07T07:35:54Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Ukraine-Russia War: Live Updates",
+                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "harry potter",
+                                "news": {
+                                    "content": "Jodie Foster graduated from Yale in 1985 with a degree in English literature.\nJodie Foster. Mark Metcalfe/Getty Images\nFoster became famous when she was just 5 years old, with a role in the sitcom \"Mayberry R.F.D.,\" and she won critical acclaim as a ... [377 chars]",
+                                    "description": "Jodie Foster graduated from Yale in 1985 with a degree in English literature. Jodie Foster.",
+                                    "image": "https://i.insider.com/62435daf71996c00193ea348?width=1200&format=jpeg",
+                                    "publishedAt": "2022-04-06T04:00:00Z",
+                                    "source": {
+                                        "name": "INSIDER",
+                                        "url": "https://www.insider.com"
+                                    },
+                                    "title": "Child Stars Who Went to College After Becoming Famous",
+                                    "url": "https://www.insider.com/child-stars-who-graduated-college-majors-degrees"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Thank you for being so brilliant. It's been really cool getting to know you better. What fantasy novels have you read?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Thank you for being so brilliant. It's been really cool getting to know you better. What fantasy novels have you read?",
+                            "segments": [
+                                "Thank you for being so brilliant.",
+                                "It's been really cool getting to know you better.",
+                                "What fantasy novels have you read?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "i lile fantasy.",
+                                "Cool! How does it make you feel?",
+                                "i like fantasy.",
+                                "Thank you for being so brilliant. It's been really cool getting to know you better. What fantasy novels have you read?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_get_recommendation_skill"
+                }
+            ]
+        }
+    ],
+    "dff_get_recommendation_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "7445639b-fa88-4a6b-b9f2-e7dff13855bb",
+                "labels": {
+                    "1": [
+                        "book_by_genre",
+                        "recommend_book_by_genre"
+                    ],
+                    "2": [
+                        "book_by_genre",
+                        "fan_of_genre2"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "book_recommend": "The Lord of the Rings by Tolkien",
+                        "fav_genre": "fantasy"
+                    }
+                },
+                "requests": {
+                    "1": "i love historical novels.",
+                    "2": "i like fantasy."
+                },
+                "responses": {
+                    "1": "Oh, then you should read he Twelve Rooms of the Nile by Enid Shomer",
+                    "2": "What fantasy novels have you read?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "2": [
+                    "book_by_genre",
+                    "fan_of_genre2"
+                ],
+                "4": [
+                    "book_by_genre",
+                    "recommend_book_by_genre"
+                ],
+                "6": [
+                    "book_by_genre",
+                    "fan_of_genre2"
+                ]
+            },
+            "previous_human_utter_index": 6,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "fantasy": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "fantasy",
+                        "human_utterance_index": 6,
+                        "next_skill_name": "dff_get_recommendation_skill",
+                        "previous_skill_name": "emotion_skill"
+                    }
+                ],
+                "name": "fantasy"
+            },
+            "historical novels": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "historical novels",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    },
+                    {
+                        "full_name": "historical novels",
+                        "human_utterance_index": 4,
+                        "previous_skill_name": "emotion_skill"
+                    }
+                ],
+                "name": "historical novels"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
