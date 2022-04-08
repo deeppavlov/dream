@@ -1041,19 +1041,6 @@
                     "skills"
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "hypothesis_scorer": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://hypothesis-scorer:8110/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_scorer_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },
         "response_selectors": {
