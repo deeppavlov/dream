@@ -101,9 +101,6 @@ services:
   dff-bot-persona-skill:
   dff-funfact-skill:
   dff-gossip-skill:
-  hypothesis-scorer:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-wiki-skill:
   topic-recommendation:
   user-persona-extractor:
