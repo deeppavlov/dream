@@ -231,7 +231,7 @@ def make_utt_with_ack(vars, prev_what_to_ask, what_to_ask):
         if users_pet:
             question = f"What is your {users_pet}'s name?"
         else:
-            question = f"What is your pet's name?"
+            question = "What is your pet's name?"
     if what_to_ask == "breed":
         if users_pet in CATS_DOGS:
             repl_pet = replace_pet(users_pet)
@@ -455,7 +455,7 @@ def another_pet_response(vars):
         state_utils.set_confidence(vars, confidence=CONF_1)
         state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     else:
-        response = f"Very interesting! Could you tell more about your pet?"
+        response = "Very interesting! Could you tell more about your pet?"
         state_utils.set_confidence(vars, confidence=CONF_2)
         state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     state_utils.save_to_shared_memory(vars, start=True)
