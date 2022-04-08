@@ -49,8 +49,8 @@ def answer_users_question(vars):
         my_pet_breed = my_pets_info[my_pet]["breed"]
 
     answer = ""
-    conf = CONF_1
-    continue_flag = common_constants.MUST_CONTINUE
+    conf = CONF_2
+    continue_flag = common_constants.CAN_CONTINUE_SCENARIO
     logger.info(f"answer_users_question {user_text} {my_pet_name}")
     if "?" in user_text and ("your" in user_text or (my_pet_name and my_pet_name in user_text)):
         if "name" in user_text and my_pet and my_pet_name:
