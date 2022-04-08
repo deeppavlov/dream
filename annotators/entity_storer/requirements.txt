@@ -7,4 +7,6 @@ six==1.15.0
 spacy==3.0.0
 nltk==3.5
 click==7.1.2
-requests==2.25.1 
+requests==2.25.1
+jinja2<=3.0.3
+Werkzeug<=2.0.3

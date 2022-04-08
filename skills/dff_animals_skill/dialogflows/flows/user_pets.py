@@ -231,7 +231,7 @@ def make_utt_with_ack(vars, prev_what_to_ask, what_to_ask):
         if users_pet:
             question = f"What is your {users_pet}'s name?"
         else:
-            question = f"What is your pet's name?"
+            question = "What is your pet's name?"
     if what_to_ask == "breed":
         if users_pet in CATS_DOGS:
             repl_pet = replace_pet(users_pet)
@@ -452,11 +452,13 @@ def another_pet_response(vars):
     users_pet = re.findall(r"my (cat|dog)", user_uttr["text"])
     if users_pet:
         response = f"Very interesting! Could you tell more about your {users_pet[0]}?"
+        state_utils.set_confidence(vars, confidence=CONF_1)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     else:
-        response = f"Very interesting! Could you tell more about your pet?"
+        response = "Very interesting! Could you tell more about your pet?"
+        state_utils.set_confidence(vars, confidence=CONF_2)
+        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
     return response
 
 
@@ -502,8 +504,8 @@ def ask_about_pet_response(vars):
         used_pets_q.append(what_to_ask)
     state_utils.save_to_shared_memory(vars, used_pets_q=used_pets_q)
     state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    state_utils.set_confidence(vars, confidence=CONF_2)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -511,8 +513,8 @@ def suggest_pet_response(vars):
     phrases = [phrase for pet_phrases in CATS_DOGS_PHRASES.values() for phrase in pet_phrases]
     response = random.choice(phrases)
     state_utils.save_to_shared_memory(vars, start=True)
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    state_utils.set_confidence(vars, confidence=CONF_2)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
