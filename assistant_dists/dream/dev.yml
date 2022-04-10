@@ -401,17 +401,18 @@ services:
   human-goals-detector:
     volumes:
       - "./annotators/human_goals_detector:/src"
+      - "./common:/src/common"
     ports:
       - 8122:8122
-  dff-gain-assistance-skill:
+  dff-share-problems-skill:
     volumes:
-      - "./skills/dff_gain_assistance_skill:/src"
+      - "./skills/dff_share_problems_skill:/src"
       - "./common:/src/common"
     ports:
       - 8123:8123
-  dff-get-recommendation-skill:
+  dff-book-recommendation-skill:
     volumes:
-      - "./skills/dff_get_recommendation_skill:/src"
+      - "./skills/dff_book_recommendation_skill:/src"
       - "./common:/src/common"
     ports:
       - 8124:8124

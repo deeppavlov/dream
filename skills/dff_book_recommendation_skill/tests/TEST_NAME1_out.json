@@ -3,7 +3,7 @@
         "So you're a fan of dystopian novels, aren't you?",
         2.0,
         {
-            "dff_get_recommendation_skill_state": {
+            "dff_book_recommendation_skill_state": {
                 "shared_memory": {},
                 "previous_human_utter_index": 1,
                 "history": {

@@ -167,14 +167,14 @@ SKILL_TRIGGERS = {
         "cobot_topics": [],
         "intents": ["tell_me_a_story"],
     },
-     "dff_gain_assistance_skill": {
+     "dff_share_problems_skill": {
         "compiled_patterns": [DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
         "intents": [],
     },
-     "dff_get_recommendation_skill": {
+     "dff_book_recommendation_skill": {
         "compiled_patterns": [BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],

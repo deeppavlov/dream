@@ -736,12 +736,12 @@ def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_short_story_skill")
 
 
-def dff_gain_assistance_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_gain_assistance_skill")
+def dff_share_problems_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_share_problems_skill")
 
 
-def dff_get_recommendation_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_get_recommendation_skill")
+def dff_book_recommendation_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_book_recommendation_skill")
 
 
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:

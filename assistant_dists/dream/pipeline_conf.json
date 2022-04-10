@@ -969,26 +969,26 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_gain_assistance_skill": {
+            "dff_share_problems_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-gain-assistance-skill:8123/respond"
+                    "url": "http://dff-share-problems-skill:8123/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_gain_assistance_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_share_problems_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_get_recommendation_skill": {
+            "dff_book_recommendation_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-get-recommendation-skill:8124/respond"
+                    "url": "http://dff-book-recommendation-skill:8124/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_get_recommendation_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_book_recommendation_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

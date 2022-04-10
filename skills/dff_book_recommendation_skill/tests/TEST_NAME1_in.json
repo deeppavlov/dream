@@ -558,7 +558,7 @@
             ]
         }
     ],
-    "dff_get_recommendation_skill_state_batch": [
+    "dff_book_recommendation_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [

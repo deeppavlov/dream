@@ -1,287 +1,19 @@
 {
     "human_utter_index_batch": [
-        2
+        5
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "recommend me any fantasy novel please.",
-                    "annotations": {
-                        "human_goals_detector": [
-                            {
-                                "human_goals": [
-                                    "recommend_book_by_genre"
-                                ]
-                            }
-                        ],
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "spelling_preprocessing": "recommend me any fantasy novel please",
-                        "badlisted_words": {
-                            "bad_words": false
-                        },
-                        "spacy_nounphrases": [
-                            "any fantasy novel"
-                        ],
-                        "sentseg": {
-                            "punct_sent": "recommend me any fantasy novel please.",
-                            "segments": [
-                                "recommend me any fantasy novel please."
-                            ]
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.006660853512585163,
-                                "command": 0.8673305511474609,
-                                "comment": 0.0030296682380139828,
-                                "complaint": 0.005525552202016115,
-                                "dev_command": 0.049896787852048874,
-                                "neg_answer": 0.0017165547469630837,
-                                "open_question_factual": 0.005130940116941929,
-                                "open_question_opinion": 0.009486805647611618,
-                                "opinion": 0.017143985256552696,
-                                "other_answers": 0.0021787111181765795,
-                                "pos_answer": 0.0024466977920383215,
-                                "statement": 0.020532360300421715,
-                                "yes_no_question": 0.008920605294406414
-                            }
-                        ],
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.9999403953552246
-                            },
-                            "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9992194175720215
-                            },
-                            "cobot_topics": {
-                                "Movies_TV": 0.9996316432952881
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9999878406524658
-                            },
-                            "factoid_classification": {
-                                "is_conversational": 0.9999337196350098
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.646432101726532
-                            },
-                            "toxic_classification": {
-                                "not_toxic": 0.9999936819076538
-                            }
-                        },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
-                        "entity_detection": {
-                            "entities": [
-                                "fantasy novel"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "genre",
-                                    "offsets": [
-                                        17,
-                                        30
-                                    ],
-                                    "text": "fantasy novel"
-                                }
-                            ]
-                        },
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [],
-                        "fact_random": {
-                            "facts": [],
-                            "response": "recommend me any fantasy novel please."
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me any fantasy novel please."
-                            ]
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 2,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "conceptnet": {
-                            "fantasy novel": {
-                                "SymbolOf": [
-                                    "fantasy",
-                                    "imagination",
-                                    "evil"
-                                ],
-                                "HasProperty": [
-                                    "fun",
-                                    "entertain",
-                                    "good"
-                                ],
-                                "Causes": [
-                                    "writer cramp",
-                                    "you become famous",
-                                    "nightmare"
-                                ],
-                                "CausesDesire": [
-                                    "write novel",
-                                    "write book",
-                                    "read about alien life"
-                                ]
-                            }
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
-                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
-                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
-                                    "publishedAt": "2022-04-07T07:35:54Z",
-                                    "source": {
-                                        "name": "The New York Times",
-                                        "url": "https://www.nytimes.com"
-                                    },
-                                    "title": "Ukraine-Russia War: Live Updates",
-                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
-                                },
-                                "which": "all"
-                            },
-                            {
-                                "entity": "fantasy novel",
-                                "news": {
-                                    "content": "Fans of Heather Fawcett\u2019s YA and middle-grade books (including Even the Darkest Stars and The School Between Winter and Fairyland) won\u2019t be surprised to hear her adult debut, due out in January, keeps within that same fantastical vein\u2014though its char... [15416 chars]",
-                                    "description": "io9 has a first look at the adult debut from acclaimed YA and middle-grade fantasy author Heather Fawcett.",
-                                    "image": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/cc6880549199aadf02af35fc09f3811b.png",
-                                    "publishedAt": "2022-03-24T18:00:00Z",
-                                    "source": {
-                                        "name": "Gizmodo",
-                                        "url": "https://gizmodo.com"
-                                    },
-                                    "title": "Heather Fawcett Encyclopaedia of Faeries Fantasy Novel Reveal",
-                                    "url": "https://gizmodo.com/heather-fawcett-encyclopaedia-of-faeries-reveal-excerpt-1848673903"
-                                },
-                                "which": "human"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "text": "no.",
+                    "text": "yes.",
                     "annotations": {
                         "human_goals_detector": [
                             {
                                 "human_goals": []
                             }
                         ],
-                        "spelling_preprocessing": "no",
+                        "spelling_preprocessing": "yes",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
@@ -290,9 +22,9 @@
                         },
                         "spacy_nounphrases": [],
                         "sentseg": {
-                            "punct_sent": "no.",
+                            "punct_sent": "yes.",
                             "segments": [
-                                "no."
+                                "yes."
                             ]
                         },
                         "intent_catcher": {
@@ -321,8 +53,221 @@
                                 "detected": 0
                             },
                             "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
                                 "confidence": 1.0,
                                 "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0011473571648821235,
+                                "command": 0.0013034904841333628,
+                                "comment": 0.000961664947681129,
+                                "complaint": 0.0003198728954885155,
+                                "dev_command": 0.000731552136130631,
+                                "neg_answer": 0.0008471946348436177,
+                                "open_question_factual": 0.00034372758818790317,
+                                "open_question_opinion": 0.00039665502845309675,
+                                "opinion": 0.0008233270491473377,
+                                "other_answers": 0.0006967131630517542,
+                                "pos_answer": 0.9900596141815186,
+                                "statement": 0.00173712067771703,
+                                "yes_no_question": 0.0006316847284324467
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9999411106109619
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9999240636825562
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999920129776001
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "topic_recommendation": [
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Books are my diamonds. Do you love reading?",
+                                "my fav book is 1984.",
+                                "So you are a fan of dystopian novels, aren't you?",
+                                "yes."
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
+                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
+                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
+                                    "publishedAt": "2022-04-07T07:35:54Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Ukraine-Russia War: Live Updates",
+                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "brave new world.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            {
+                                "human_goals": []
+                            }
+                        ],
+                        "spelling_preprocessing": "brave new world",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "brave new world"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "brave new world.",
+                            "segments": [
+                                "brave new world."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
                             },
                             "opinion_request": {
                                 "confidence": 0.0,
@@ -387,55 +332,120 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.00048039175453595817,
-                                "command": 0.0009305914863944054,
-                                "comment": 0.0006701317033730447,
-                                "complaint": 0.006486934144049883,
-                                "dev_command": 0.0011654896661639214,
-                                "neg_answer": 0.9781666994094849,
-                                "open_question_factual": 0.0012860584538429976,
-                                "open_question_opinion": 0.0008565900498069823,
-                                "opinion": 0.0014695296995341778,
-                                "other_answers": 0.0030419162940233946,
-                                "pos_answer": 0.0029163153376430273,
-                                "statement": 0.00103000458329916,
-                                "yes_no_question": 0.0014992189826443791
+                                "appreciation": 0.0014187581837177277,
+                                "command": 0.0066425190307199955,
+                                "comment": 0.0032403089571744204,
+                                "complaint": 0.0019946235697716475,
+                                "dev_command": 0.002320376690477133,
+                                "neg_answer": 0.0008487050654366612,
+                                "open_question_factual": 0.0025937468744814396,
+                                "open_question_opinion": 0.001662936992943287,
+                                "opinion": 0.6556381583213806,
+                                "other_answers": 0.0012711638119071722,
+                                "pos_answer": 0.0013637540396302938,
+                                "statement": 0.31917113065719604,
+                                "yes_no_question": 0.001833853661082685
                             }
                         ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9999282360076904
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9999487400054932
+                            },
+                            "cobot_topics": {
+                                "Literature": 0.9951871037483215
+                            },
+                            "emotion_classification": {
+                                "joy": 0.9994509816169739
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999737739562988
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9999778270721436
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999879598617554
+                            }
+                        },
                         "ner": [
                             []
                         ],
-                        "entity_detection": {},
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.9998713731765747
-                            },
-                            "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9989094734191895
-                            },
-                            "cobot_topics": {
-                                "Phatic": 0.9999938011169434
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9890186786651611
-                            },
-                            "factoid_classification": {
-                                "is_conversational": 0.9981480836868286
-                            },
-                            "sentiment_classification": {
-                                "negative": 0.9439201354980469
-                            },
-                            "toxic_classification": {
-                                "not_toxic": 0.9998563528060913
-                            }
+                        "entity_detection": {
+                            "entities": [
+                                "brave new world"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "videoname",
+                                    "offsets": [
+                                        0,
+                                        15
+                                    ],
+                                    "text": "brave new world"
+                                }
+                            ]
                         },
                         "entity_linking": [],
-                        "conceptnet": {},
                         "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
+                            "dff_gossip_skill",
+                            "dff_movie_skill"
                         ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "brave new world."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "So you are a fan of dystopian novels, aren't you?",
+                                "yes.",
+                                "What dystopian novels have you read?",
+                                "brave new world."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "brave new world": {
+                                "SymbolOf": [
+                                    "freedom",
+                                    "new age",
+                                    "america"
+                                ],
+                                "HasProperty": [
+                                    "open to everyone",
+                                    "wonderful",
+                                    "open"
+                                ],
+                                "Causes": [
+                                    "global thermonuclear war",
+                                    "peace",
+                                    "global thermonuclear war and genocide"
+                                ],
+                                "CausesDesire": [
+                                    "travel",
+                                    "go to war",
+                                    "celebrate"
+                                ]
+                            }
+                        },
                         "news_api_annotator": [
                             {
                                 "entity": "all",
@@ -452,98 +462,83 @@
                                     "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
                                 },
                                 "which": "all"
+                            },
+                            {
+                                "entity": "brave new world",
+                                "news": {
+                                    "content": "We are excited to bring Transform 2022 back in-person July 19 and virtually July 20 - August 3. Join AI and data leaders for insightful talks and exciting networking opportunities. Learn More\nBy the end of 2021, the word \u201cmetaverse\u201d had generated a l... [6261 chars]",
+                                    "description": "We are excited to bring Transform 2022 back in-person July 19 and virtually July 20 - August 3. Join AI and data leaders for insightful talks and exciting networking opportunities.",
+                                    "image": "https://venturebeat.com/wp-content/uploads/2022/03/GettyImages-1369741848.jpg?w=1200&strip=all",
+                                    "publishedAt": "2022-03-26T16:10:00Z",
+                                    "source": {
+                                        "name": "VentureBeat",
+                                        "url": "https://venturebeat.com"
+                                    },
+                                    "title": "Languages in the metaverse: Why AI is critical for communication in the brave new world",
+                                    "url": "https://venturebeat.com/2022/03/26/languages-in-the-metaverse-why-ai-is-critical-for-communication-in-the-brave-new-world/"
+                                },
+                                "which": "human"
                             }
-                        ],
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "fact_random": {
-                            "facts": [],
-                            "response": "no."
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 3,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me any fantasy novel please.",
-                                "Have you read The Lord of the Rings by Tolkien?",
-                                "no, i haven't read the lord of the rings by tolkien. "
-                            ]
-                        }
+                        ]
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "Have you read The Lord of the Rings by Tolkien ?",
+                    "text": "What dystopian novels have you read?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Have you read The Lord of the Rings by Tolkien ?",
+                            "punct_sent": "What dystopian novels have you read?",
                             "segments": [
-                                "Have you read The Lord of the Rings by Tolkien?"
+                                "What dystopian novels have you read?"
                             ]
                         },
                         "ner": [
-                            [
-                                {
-                                    "confidence": 1,
-                                    "end_pos": 10,
-                                    "start_pos": 9,
-                                    "text": "tolkien",
-                                    "type": "PER"
-                                }
-                            ]
+                            []
                         ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hi.",
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me any fantasy novel please.",
-                                "Have you read The Lord of the Rings by Tolkien?"
+                                "my fav book is 1984.",
+                                "So you are a fan of dystopian novels, aren't you?",
+                                "yes.",
+                                "What dystopian novels have you read?"
                             ]
                         }
                     },
-                    "active_skill": "dff_get_recommendation_skill"
+                    "active_skill": "dff_book_recommendation_skill"
                 }
             ]
         }
     ],
-    "dff_get_recommendation_skill_state_batch": [
+    "dff_book_recommendation_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},
-                "id": "7aa6afc2-83b9-43ce-bf2c-45161824f3dd",
+                "id": "133fa70d-8438-4f32-8ebf-c999d637fc13",
                 "labels": {
-                    "0": [
+                    "1": [
                         "book_by_genre",
-                        "q_book_by_genre"
+                        "genre_q"
+                    ],
+                    "2": [
+                        "book_by_genre",
+                        "fan_of_genre"
                     ]
                 },
                 "misc": {
                     "slots": {
-                        "book_recommend": "The Lord of the Rings by Tolkien",
-                        "fav_genre": "fantasy"
+                        "book_recommend": "We by Zamyatin",
+                        "fav_book_genre": "dystopian"
                     }
                 },
                 "requests": {
-                    "0": "recommend me any fantasy novel please."
+                    "1": "my fav book is 1984.",
+                    "2": "yes."
                 },
                 "responses": {
-                    "0": "Have you read The Lord of the Rings by Tolkien ?"
+                    "1": "So you're a fan of dystopian novels, aren't you?",
+                    "2": "What dystopian novels have you read?"
                 },
                 "validation": false
             },
@@ -551,10 +546,18 @@
             "history": {
                 "1": [
                     "book_by_genre",
-                    "q_book_by_genre"
+                    "genre_q"
+                ],
+                "3": [
+                    "book_by_genre",
+                    "genre_q"
+                ],
+                "4": [
+                    "book_by_genre",
+                    "fan_of_genre"
                 ]
             },
-            "previous_human_utter_index": 1,
+            "previous_human_utter_index": 4,
             "shared_memory": {}
         }
     ],
@@ -565,7 +568,28 @@
         }
     ],
     "entities_batch": [
-        {}
+        {
+            "book": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "book"
+            },
+            "my favorite book": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "my favorite book",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "my favorite book"
+            }
+        }
     ],
     "used_links_batch": [
         {}
@@ -574,9 +598,7 @@
         "unknown"
     ],
     "disliked_skills_batch": [
-        [
-            "emotion_skill"
-        ]
+        []
     ],
     "clarification_request_flag_batch": [
         false

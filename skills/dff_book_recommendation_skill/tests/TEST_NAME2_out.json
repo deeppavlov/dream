@@ -1,36 +1,36 @@
 [
     [
-        "Oh, then you should read The Lord of the Rings by Tolkien",
+        "Oh, then you should read We by Zamyatin",
         2.0,
         {
-            "dff_get_recommendation_skill_state": {
+            "dff_book_recommendation_skill_state": {
                 "shared_memory": {},
-                "previous_human_utter_index": 7,
+                "previous_human_utter_index": 5,
                 "history": {
-                    "2": [
+                    "1": [
                         "book_by_genre",
-                        "fan_of_genre2"
+                        "genre_q"
+                    ],
+                    "3": [
+                        "book_by_genre",
+                        "genre_q"
                     ],
                     "4": [
                         "book_by_genre",
-                        "recommend_book_by_genre"
+                        "fan_of_genre"
                     ],
-                    "6": [
-                        "book_by_genre",
-                        "fan_of_genre2"
-                    ],
-                    "7": [
+                    "5": [
                         "book_by_genre",
                         "recommend_book_by_genre"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "7445639b-fa88-4a6b-b9f2-e7dff13855bb",
+                    "id": "133fa70d-8438-4f32-8ebf-c999d637fc13",
                     "labels": {
                         "2": [
                             "book_by_genre",
-                            "fan_of_genre2"
+                            "fan_of_genre"
                         ],
                         "3": [
                             "book_by_genre",
@@ -38,18 +38,17 @@
                         ]
                     },
                     "requests": {
-                        "2": "i like fantasy.",
-                        "3": "harry potter."
+                        "2": "yes.",
+                        "3": "brave new world."
                     },
                     "responses": {
-                        "2": "What fantasy novels have you read?",
-                        "3": "Oh, then you should read The Lord of the Rings by Tolkien"
+                        "2": "What dystopian novels have you read?",
+                        "3": "Oh, then you should read We by Zamyatin"
                     },
                     "misc": {
                         "slots": {
-                            "book_recommend": "The Lord of the Rings by Tolkien",
-                            "fav_genre": "fantasy",
-                            "fav_book_genre": "fantasy"
+                            "book_recommend": "We by Zamyatin",
+                            "fav_book_genre": "dystopian"
                         }
                     },
                     "validation": false,

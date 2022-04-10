@@ -1052,12 +1052,12 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_get_recommendation_skill"
+                    "active_skill": "dff_book_recommendation_skill"
                 }
             ]
         }
     ],
-    "dff_get_recommendation_skill_state_batch": [
+    "dff_book_recommendation_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},
@@ -1123,7 +1123,7 @@
                     {
                         "full_name": "fantasy",
                         "human_utterance_index": 6,
-                        "next_skill_name": "dff_get_recommendation_skill",
+                        "next_skill_name": "dff_book_recommendation_skill",
                         "previous_skill_name": "emotion_skill"
                     }
                 ],

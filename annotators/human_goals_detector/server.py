@@ -2,11 +2,16 @@ import logging
 import json
 import os
 import time
+import re
+
 
 # import sentry_sdk
 from healthcheck import HealthCheck
 from flask import Flask, jsonify, request
 
+from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
+from common.get_book_recommendation import BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN
+from common.get_book_info import BOOK_INFO_PATTERN
 
 # sentry_sdk.init(os.getenv("SENTRY_DSN")) эта штука всегда и везде не работает, потому что SENTRY_DSN не прописан
 
@@ -16,13 +21,8 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 
-gain_assistance_checklist = ['problem with', 'problems with', 'trouble with', 'trouble with',
-'difficulty', 'feel bad', 'feel awful', 'suicide', 'death', 'kill myself', 'tired', "bad day",
-"awful day", "hard day", "feel sad"]
-recommend_book_by_genre_checklist = ['fantasy', 'historical', 'dystopian', 'recommend a book', 'harry potter', 'war and peace',
- '1984', 'recommend a book', 'what book would you suggest', 'recommend a dystopian novel',
- 'recommend a historical novel', 'recommend a fantasy novel']
-get_info_book_checklist = ['tell me about harry potter', 'tell me about war and peace', 'tell me about little prince']
+share_problems_patterns = [DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN]
+recommend_book_by_genre_patterns = [BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN]
 
 
 def detect_goal(requested_data):
@@ -50,18 +50,24 @@ def detect_goal(requested_data):
     if utterances_list:
         for utterance in utterances_list:
             human_goal = {'human_goals': []}
-            for gain_assist in gain_assistance_checklist:
-                if gain_assist in utterance:
-                    human_goal["human_goals"].append('gain_assistance')
-            for rec_book in recommend_book_by_genre_checklist:
-                if rec_book in utterance:
+            for pattern in share_problems_patterns:
+                flag_problems = bool(pattern.search(utterance))
+                if flag_problems:
+                    human_goal["human_goals"].append('share_personal_problems')
+
+            for pattern in recommend_book_by_genre_patterns:
+                flag_rec_book = bool(pattern.search(utterance))
+                if flag_rec_book:
                     human_goal["human_goals"].append('recommend_book_by_genre')
-            for get_info in get_info_book_checklist:
-                if get_info in utterance:
-                    human_goal["human_goals"].append('get_information_about_book')
 
-            results.append([human_goal])
+            flag_book_info = bool(BOOK_INFO_PATTERN.search(utterance))
+            if flag_book_info:
+                human_goal["human_goals"].append('get_information_about_book')
 
+
+            results.append(list(set(human_goal["human_goals"])))
+
+    
     total_time = time.time() - st_time
     logger.info(f"human_goals exec time: {total_time:.3f}s")
     return results
