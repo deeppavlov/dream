@@ -19,7 +19,6 @@ flows = {
     "global_flow": {
         "start": {
             RESPONSE: "",
-            PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
             TRANSITIONS: {
                 ("greeting_flow", "false_positive_node"): loc_cnd.false_positive_condition,
                 ("greeting_flow", "hello_response_node"): loc_cnd.hello_condition,
@@ -31,12 +30,11 @@ flows = {
             },
         },
         "fallback": {
-            RESPONSE: "",
+            RESPONSE: "Sorry",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(CAN_NOT_CONTINUE),
-            },
-            TRANSITIONS: {},
+            }
         },
     },
     "greeting_flow": {
