@@ -42,6 +42,7 @@ flows = {
         TRANSITIONS: {
             ("global_flow", "fallback", 1.5): loc_cnd.exit_skill,
             ("books_general", "dislikes_reading", 1.5): loc_cnd.dislikes_reading,
+            ("books_general", "book_start"): loc_cnd.start_condition,
             ("books_general", "book_start"): cnd.all(
                 [
                     loc_cnd.is_proposed_skill,
