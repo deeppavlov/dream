@@ -30,19 +30,15 @@ def is_ext_sf(ext_sf_name="React.Respond.Support.Reply.Agree"):
     return is_ext_sf_handler
 
 
-def is_midas(midas_name="opinion"):
+def is_midas(midas_name="pos_answer", threshold=0.5):
     def is_midas_handler(ctx: Context, actor: Actor, *args, **kwargs):
-        print(logger.info(str(ctx.misc)))
         try:
             last_utterance = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", {})[-1]
-            utterance_midas = last_utterance.get("annotations", {}).get("midas_classification", [])
-            #midas = max(utterance_midas.items(), key=operator.itemgetter(1))
-            max_value = max(utterance_midas.values())  # maximum value
-            midas = [k for k, v in max_value.items() if v == max_value]
+            midas = last_utterance.get('annotations', {}).get('midas_classification', [{}])[-1]
+            midas_keys = [key for key, val in midas.items() if val > threshold]
         except KeyError:
-            midas = []
-
-        return midas_name in midas
+            midas_keys = []
+        return midas_name in midas_keys
 
     return is_midas_handler
 
