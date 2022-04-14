@@ -4,7 +4,6 @@
 e.g. should be responded by a bookname.
 """
 import logging
-import sentry_sdk
 from os import getenv
 import random
 
@@ -31,7 +30,7 @@ import scenario.response as loc_rsp
 fav_keys = list(loc_rsp.FAVOURITE_BOOK_ATTRS.keys())
 fav_keys = iter(fav_keys)
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+#sentry_sdk.init(getenv("SENTRY_DSN"))
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +65,7 @@ flows = {
                     loc_cnd.asked_fav_book,
                 ]
             ),
-            ("bot_fav_book", "fav_denied", 2): cnd.all( 
+            ("concrete_book_flow", "denied_information"): cnd.all( 
                 [loc_cnd.is_last_used_phrase(loc_rsp.FAVOURITE_BOOK_PHRASES), int_cnd.is_no_vars]
             ),
             ("bible_flow", "bible_start", 1.8): cnd.all(
@@ -236,20 +235,39 @@ flows = {
                 "dislikes_reading": cnd.any(                    [dm_cnd.is_sf("React.Respond.Confront.Reply.Disagree"),                    dm_cnd.is_sf("React.Respond.Support.Reply.Disavow"),                    dm_cnd.is_sf("React.Rejoinder.Confront.Challenge.Counter"), int_cnd.is_no_vars]),
                 "likes_reading": cnd.true(),
             },
-            MISC: {"speech_functions": ["Open.Demand.Fact"]},
+            MISC: {
+                "speech_functions": ["Open.Demand.Fact"],
+                "dialog_act": "open_question_factual"
+            },
         },
         "book_restart": {
-            RESPONSE: loc_rsp.append_unused(
+            RESPONSE: 
+            # int_rsp.multi_response(
+            #     replies=[loc_rsp.append_unused(
+            #     initial="Speaking of books, ",
+            #     phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
+            # ), loc_rsp.append_unused(
+            #     initial="That's interesting! By the way, ",
+            #     phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
+            # # )],
+            #     confidences=[1.0, 1.0],
+            #     hype_attr=[
+            #         {"can_continue": common_constants.MUST_CONTINUE},  # for the first hyp
+            #         {"can_continue": common_constants.CAN_CONTINUE_SCENARIO},  # for the second hyp
+            #     ],
+            loc_rsp.append_unused(
                 initial="Speaking of books, ",
                 phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
-                exit_on_exhaust=True,
             ),
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
                 "set_flag": loc_prs.set_flag("book_skill_active", True),
                 "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
-            TRANSITIONS: {("undetected_flow", "ask_to_repeat"): cnd.true()},
+            TRANSITIONS: {
+                ("bible_flow", "bible_start"): cnd.neg(loc_cnd.check_flag("bible_start_visited")),
+                ("undetected_flow", "ask_to_repeat"): cnd.true()
+            },
         },
         "dislikes_reading": {
             RESPONSE: "Why don't you love reading? Maybe you haven't found the right book?",
@@ -288,7 +306,7 @@ flows = {
         "bot_answer": {
             RESPONSE: int_rsp.multi_response(
                 replies=["I think that reading is cool and all people should read books!", 
-                "I just cannot imagine my life without books."],
+                "When I read, I learn so much about humans and their lives."],
                 confidences=[1.0, 1.0],
                 hype_attr=[
                     {"can_continue": common_constants.MUST_CONTINUE},  # for the first hyp
@@ -323,8 +341,10 @@ flows = {
         },
         "change_subject": {
             RESPONSE: "All right. By the way, I'm really interested in books that are important for the mankind. Have you ever read the Bible?",
-            TRANSITIONS: {("bible_flow", "bible_elaborate_not_read"): cnd.any(                    [dm_cnd.is_sf("React.Respond.Confront.Reply.Disagree"),                    dm_cnd.is_sf("React.Respond.Support.Reply.Disavow"),                    dm_cnd.is_sf("React.Rejoinder.Confront.Challenge.Counter"), int_cnd.is_no_vars]),
-                ("bible_flow", "bible_elaborate"): cnd.true()},
+            TRANSITIONS: {
+                ("bible_flow", "bible_elaborate_not_read"): cnd.any(                    [dm_cnd.is_sf("React.Respond.Confront.Reply.Disagree"),                    dm_cnd.is_sf("React.Respond.Support.Reply.Disavow"),                    dm_cnd.is_sf("React.Rejoinder.Confront.Challenge.Counter"), int_cnd.is_no_vars]),
+                ("bible_flow", "bible_elaborate"): cnd.true()
+            },
             MISC: {"speech_functions": ["React.Rejoinder.Support.Track.Clarify"]},
         },
     },
@@ -338,7 +358,7 @@ flows = {
             },
             TRANSITIONS: {
                 # "fav_denied": cnd.true(3),
-                "fav_denied": int_cnd.is_no_vars,
+                ("concrete_book_flow", "denied_information"): int_cnd.is_no_vars,
             },
         },
         "fav_elaborate": {
@@ -348,17 +368,18 @@ flows = {
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {
+                ("concrete_book_flow", "denied_information"): int_cnd.is_no_vars,
                 ("concrete_book_flow", "offer_date"): cnd.true(),
             },
         },
         "fav_denied": {
-            RESPONSE: "OK, let me ask you something else then, alright?",
+            RESPONSE: loc_rsp.append_unused(initial="OK, let me ask you something else then.", phrases=[loc_rsp.TELL_REQUEST2]),
             PROCESSING: {
                 "set_flag": loc_prs.set_flag("denied_favorite", True),
                 "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
             },
             TRANSITIONS: {
-                ("books_general", "book_restart"): int_cnd.is_yes_vars,
+                ("books_general", "book_restart"): cnd.true(),
             },
         },
     },
@@ -436,8 +457,8 @@ flows = {
             },
             # NEW
             TRANSITIONS: {
-                ("bible_flow", "bible_start"): cnd.true(),
                 "denied_information": int_cnd.is_no_vars,
+                ("books_general", "book_restart"): cnd.true(),
             },
         },
         # new node
@@ -508,8 +529,18 @@ flows = {
             },
         },
         "denied_information": {
-            RESPONSE: loc_rsp.append_question(initial="As you wish. "),
-            TRANSITIONS: {("bible_flow", "bible_start", 10):  cnd.true()},
+            RESPONSE:  loc_rsp.append_unused(
+                initial="All right. ",
+                phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
+                exit_on_exhaust=True,
+                ), 
+            PROCESSING: {
+                "get_book": loc_prs.get_book,
+                },
+            TRANSITIONS: {
+                ("books_general", "book_restart"):  loc_cnd.check_slot("get_book"),
+                ("bible_flow", "bible_start"): cnd.neg(loc_cnd.check_flag("bible_start_visited"))
+            }
         },
     },
     "genre_flow": {
@@ -561,13 +592,16 @@ flows = {
                     {"cur_genre", random.choice(list(loc_rsp.GENRE_PHRASES.keys()))}
                 )
             },
-            TRANSITIONS: {},
+            TRANSITIONS: {("bible_flow", "bible_start"): cnd.true()},
         },
     },
     "bible_flow": {
         "bible_start": {
             RESPONSE: "You have good taste in books! By the way, I know that Bible is one of the most widespread books on Earth. "
             "It is the foundation stone of Christianity. Have you read the whole Bible?",
+            PROCESSING: {
+                "set_flag": loc_prs.set_flag("bible_start_visited"),
+            },
             TRANSITIONS: {
                 "bible_elaborate_not_read": cnd.any(                    [dm_cnd.is_sf("React.Respond.Confront.Reply.Disagree"),                    dm_cnd.is_sf("React.Respond.Support.Reply.Disavow"),                    dm_cnd.is_sf("React.Rejoinder.Confront.Challenge.Counter"), int_cnd.is_no_vars]),
                 "bible_elaborate": cnd.true(),
@@ -581,15 +615,22 @@ flows = {
                 "Apart from the Bible, ",
                 phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
             ),
+            PROCESSING: {
+                "set_flag": loc_prs.set_flag("bible_start_visited"),
+            },
             TRANSITIONS: {
                 ("books_general", "book_restart"): cnd.true(),
             },
+            MISC: {"speech_functions": ["Sustain.Continue.Prolong.Elaborate"]},
         },
         "bible_elaborate_not_read": {
             RESPONSE: loc_rsp.append_unused(
-                initial='''I definitely recommend you to read it one day! All right, let's discuss something else. ''',
+                initial='''I definitely recommend you to read it one day! Well, let's discuss something else. ''',
                 phrases=loc_rsp.QUESTIONS_ABOUT_BOOKS,
             ),
+            PROCESSING: {
+                "set_flag": loc_prs.set_flag("bible_start_visited"),
+            },
             TRANSITIONS: {
                 ("books_general", "book_restart"): cnd.true(),
             },
