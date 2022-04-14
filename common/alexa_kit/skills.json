@@ -1,0 +1,74 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "chat with dream",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "ChatWithDream",
+                    "slots": [
+                        {
+                            "name": "raw_input",
+                            "type": "GetInput"
+                        }
+                    ],
+                    "samples": [
+                        "{raw_input}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "GetInput",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Ut enim ad minim veniam"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

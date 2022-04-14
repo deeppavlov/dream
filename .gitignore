@@ -140,3 +140,6 @@ network.yml
 
 kubernetes/models
 docker-compose-one-replica.yml
+
+*.pem
+common/alexa_kit/.env

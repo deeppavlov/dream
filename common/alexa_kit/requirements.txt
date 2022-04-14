@@ -1,0 +1,2 @@
+flask-ask-sdk==1.0.0
+uvicorn==0.17.6
