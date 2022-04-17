@@ -21,6 +21,8 @@ from common.movies import extract_movies_names_from_annotations
 
 from common.gossip import check_is_celebrity_mentioned
 
+from common.goal_state_tracker import GoalTracker
+
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -270,11 +272,28 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
 
+            goals_tracker_state = dialog["human"]["attributes"].get("goals_tracker", [])
+
+            skills_for_goal = []
+            if goals_tracker_state:
+                goals_state_last = goals_tracker_state[-1]
+                for goal, status in goals_state_last:
+                    if status == 'goal_detected':
+                        skills_for_goal.append(GoalTracker.map_goal2skill[goal])
+
+                    if not skills_for_goal:
+                        if status == 'goal_in_progress':
+                            skills_for_goal.append(GoalTracker.map_goal2skill[goal])
+
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+            if skills_for_goal:
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_goal))))
+            else:
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")

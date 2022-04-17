@@ -3,12 +3,13 @@ from common.constants import GOAL_DETECTED, GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOA
 
 class GoalTracker:
 
-    def __init__(self):
-        self.state = []
-        self.map_goal2skill = {
+    map_goal2skill = {
             "share_personal_problems": "dff_share_problems_skill",
             "get_book_recommendation": "dff_book_recommendation_skill"
         }
+
+    def __init__(self):
+        self.state = []
         
         
     def load_state(self, prev_goals_state):
@@ -23,8 +24,8 @@ class GoalTracker:
             for goal_tuple in last_user_utt_goals:
                 goal = goal_tuple[0]
                 status = goal_tuple[1]
-                if goal in self.map_goal2skill.keys():
-                    if active_skill == self.map_goal2skill[goal]:
+                if goal in GoalTracker.map_goal2skill.keys():
+                    if active_skill == GoalTracker.map_goal2skill[goal]:
                         if status == GOAL_DETECTED:
                             if prev_skill_goal_status == GOAL_IN_PROGRESS:
                                 new_status = (goal, GOAL_IN_PROGRESS)
