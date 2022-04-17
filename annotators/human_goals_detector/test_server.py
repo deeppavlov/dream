@@ -10,19 +10,19 @@ test_config = [
 
 gold_result = [
     [
-        {'human_goals': ['gain_assistance']}
+        ['share_personal_problems']
     ],
     [
-        {'human_goals': ['get_book_recommendation']}
+        ['get_book_recommendation']
     ],
     [
-        {'human_goals': ['get_information_about_book']}
+        ['get_information_about_book', 'get_book_recommendation']
     ],
     [
-        {'human_goals': ['gain_assistance', 'get_information_about_book']}
+        ['get_information_about_book', 'get_book_recommendation', 'share_personal_problems']
     ],
     [
-        {'human_goals': []}
+        []
     ]
 ]
 
@@ -33,9 +33,8 @@ if __name__ == "__main__":
     for utt, gold_res in zip(test_config, gold_result):
         result = requests.post(url, json=utt).json()
         results.append(result)
-        print(result)
         if result == gold_res:
             count += 1
         
-    assert count != len(test_config)
+    assert count == len(test_config)
     print("Success")
