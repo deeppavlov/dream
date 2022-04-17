@@ -14,6 +14,9 @@ import common.dff.integration.response as int_rsp
 import common.constants as common_constants
 
 from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
+from common.constants import GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_OFFERED
+
+import common.set_goal_flag as goal_status
 
 from . import condition as loc_cnd
 from . import response as loc_rsp
@@ -67,10 +70,16 @@ flows = {
             },
         },
         "send2specialist": {
-            RESPONSE: "I'm very sorry for you... But I belive that a psychologist can help you in this situation",
+            RESPONSE: "I'm very sorry for you... But I belive that a psychologist can help you in this situation", # дописать эту ветку
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
+            }
         },
         "bad_day": {
-            RESPONSE: "I'm sorry you had a hard day. Do you want to know how my day was?",
+            RESPONSE: "I'm sorry you had a hard day. Do you want to know how my day was?", 
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            },
             TRANSITIONS: {
                 "bot_day": int_cnd.is_yes_vars,
                 "goodbye_node": int_cnd.is_no_vars
@@ -78,13 +87,22 @@ flows = {
         },
         "bot_day": {
             RESPONSE: "The servers crashed today and I thought I was dead."
-            " But then I woke up and saw a message from the best user in the world (you)",
+            " But then I woke up and saw a message from the best user in the world (you)", # дописать эту ветку
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
+            }
         },
         "goodbye_node": {
-            RESPONSE: "Ok. Maybe I can cheer you up some other way",
+            RESPONSE: "Ok. Maybe I can cheer you up some other way", # тоже дописать
+             PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            }
         },
         "try2comfort": {
             RESPONSE: "Do you want to discuss it?",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            },
             TRANSITIONS: {
                 "gratitude": cnd.all(
                     [int_cnd.is_yes_vars, loc_cnd.is_detailed()]
@@ -95,9 +113,15 @@ flows = {
         },
         "gratitude": {
             RESPONSE: "I'm sorry to hear that. Thank you for sharing this with me.",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
+            }
         },
         "clarify": {
             RESPONSE: "What happened?",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            },
             TRANSITIONS: {
                 "gratitude": cnd.true()
             },

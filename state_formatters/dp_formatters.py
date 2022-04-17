@@ -896,7 +896,6 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
         )
 
     contexts = len(hypotheses) * [[uttr["text"] for uttr in dialog["utterances"]]]
-
     return [{"contexts": contexts, "hypotheses": hypotheses}]
 
 
@@ -917,14 +916,26 @@ def midas_predictor_formatter(dialog: Dict):
     return [{"last_midas_labels": max(midas_dist, key=midas_dist.get), "return_probas": 1}]
 
 
-# def human_goals_detector_formatter(dialog: Dict):
-#     # dialog = utils.get_last_n_turns(dialog)
-#     # dialog = utils.remove_clarification_turns_from_dialog(dialog)
-#     # utterances, goals = [], []
-#     # for utt in dialog["utterances"]:
-#     #     utterances.append(utt["text"])
-#     #     goals.append(utt.get("annotations", {}).get("human_goals", [{}])) # ?
-
-#     # goals = dialog["human_utterances"][-1].get("annotations", {}).get("human_goals", [{}])[-1]
-
-#     return [{"sentences": utterances[-1], "human_goals": goals[-1]}]
+def goals_tracker_formatter(dialog: Dict):
+    prev_skill_goal_status = None
+    detected_goals = dialog["human_utterances"][-1].get("annotations", {}).get("human_goals_detector", [])
+    goals_state = dialog.get("human_attributes", {}).get("goals_tracker", [])
+    try:
+        hypotheses = dialog["human_utterances"][-2]["hypotheses"]
+        active_skill_name = dialog["bot_utterances"][-1]["active_skill"]
+        for i, hypothesis in enumerate(hypotheses): 
+            if hypothesis["skill_name"] == active_skill_name:
+                skill_attributes = hypotheses[i]
+                break
+    except:
+        skill_attributes = None
+        active_skill_name = None
+    
+    if skill_attributes:
+        try:
+            prev_skill_goal_status = skill_attributes["goal_status"]
+        except:
+            prev_skill_goal_status = prev_skill_goal_status
+    
+    return [{"last_detected_goals": detected_goals, "goals_tracker_state": goals_state, "skill_goal_status": prev_skill_goal_status,
+     "last_active_skill": active_skill_name}]

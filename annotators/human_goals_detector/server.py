@@ -58,7 +58,7 @@ def detect_goal(requested_data):
             for pattern in recommend_book_by_genre_patterns:
                 flag_rec_book = bool(pattern.search(utterance))
                 if flag_rec_book:
-                    human_goal["human_goals"].append('recommend_book_by_genre')
+                    human_goal["human_goals"].append('get_book_recommendation')
 
             flag_book_info = bool(BOOK_INFO_PATTERN.search(utterance))
             if flag_book_info:

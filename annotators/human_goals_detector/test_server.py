@@ -13,7 +13,7 @@ gold_result = [
         {'human_goals': ['gain_assistance']}
     ],
     [
-        {'human_goals': ['recommend_book_by_genre']}
+        {'human_goals': ['get_book_recommendation']}
     ],
     [
         {'human_goals': ['get_information_about_book']}
@@ -33,6 +33,7 @@ if __name__ == "__main__":
     for utt, gold_res in zip(test_config, gold_result):
         result = requests.post(url, json=utt).json()
         results.append(result)
+        print(result)
         if result == gold_res:
             count += 1
         

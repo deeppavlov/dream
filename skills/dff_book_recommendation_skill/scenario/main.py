@@ -14,6 +14,9 @@ import common.dff.integration.response as int_rsp
 import common.constants as common_constants
 
 from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN
+from common.constants import GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_OFFERED
+
+import common.set_goal_flag as goal_status
 
 from . import condition as loc_cnd
 from . import response as loc_rsp
@@ -80,34 +83,39 @@ flows = {
         "genre_q": {
             RESPONSE: "So you're a fan of {fav_book_genre} novels, aren't you?",  
             PROCESSING: {
-                "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
             },
             TRANSITIONS: {"fan_of_genre": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars])},
         },
         "fan_of_genre": {
             RESPONSE: "What {fav_book_genre} novels have you read?",
             PROCESSING: {
-                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
             },
             TRANSITIONS: {"recommend_book_by_genre": cnd.true()},
         },
          "recommend_book_by_genre": {
             RESPONSE: "Oh, then you should read {book_recommend}",
             PROCESSING: {
-                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
                 },
         },
         "fan_of_genre2": {
             RESPONSE: "What {fav_genre} novels have you read?",
             PROCESSING: {
-                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
             },
             TRANSITIONS: {"recommend_book_by_genre": cnd.true()},
         },
         "q_book_by_genre": {
             RESPONSE: "Have you read {book_recommend} ?",
             PROCESSING:  {
-                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
                 },
             TRANSITIONS: {
                 "already_read": int_cnd.is_yes_vars,
@@ -125,9 +133,15 @@ flows = {
         },
         "already_read": {
             RESPONSE: "Did you like it?",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            }
         },
         "suggest2read": {
-            RESPONSE: "You should read it! I really liked the plot and the characters!"
+            RESPONSE: "You should read it! I really liked the plot and the characters!",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
+            }
         }
     },
 }

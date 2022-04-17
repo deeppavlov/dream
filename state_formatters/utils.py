@@ -269,7 +269,7 @@ def dff_formatter(
             "used_links_batch": [used_links],
             "age_group_batch": [age_group],
             "disliked_skills_batch": [disliked_skills],
-            "clarification_request_flag_batch": [clarification_request_flag],
+            "clarification_request_flag_batch": [clarification_request_flag]
         }
     ]
 

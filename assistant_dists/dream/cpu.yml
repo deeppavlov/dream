@@ -49,3 +49,6 @@ services:
   human-goals-detector:
      environment:
       CUDA_VISIBLE_DEVICES: ""
+  goals-tracker:
+     environment:
+      CUDA_VISIBLE_DEVICES: ""

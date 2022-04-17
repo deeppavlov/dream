@@ -42,7 +42,7 @@ def load_ctxs(requested_data):
         used_links,
         age_group,
         disliked_skills,
-        clarification_request_flag,
+        clarification_request_flag
     ) in zip(
         human_utter_index_batch,
         dialog_batch,
@@ -52,7 +52,7 @@ def load_ctxs(requested_data):
         used_links_batch,
         age_group_batch,
         disliked_skills_batch,
-        clarification_request_flag_batch,
+        clarification_request_flag_batch
     ):
         ctx = get_ctx(
             human_utter_index,
@@ -63,7 +63,7 @@ def load_ctxs(requested_data):
             used_links,
             age_group,
             disliked_skills,
-            clarification_request_flag,
+            clarification_request_flag
         )
         ctxs += [ctx]
     return ctxs
@@ -78,7 +78,7 @@ def get_ctx(
     used_links,
     age_group,
     disliked_skills,
-    clarification_request_flag,
+    clarification_request_flag
 ):
     context = state.get("context", {})
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
@@ -98,7 +98,7 @@ def get_ctx(
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
-        "clarification_request_flag": clarification_request_flag,
+        "clarification_request_flag": clarification_request_flag
     }
     ctx = Context.cast(context)
     ctx.misc["agent"] = agent
@@ -126,6 +126,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     confidence = ctx.misc["agent"]["response"].get("confidence", 0.85)
     can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
+    goal_status = ctx.misc["agent"]["response"].get("goal_status", "")
     ctx.clear(2, ["requests", "responses", "labels"])
     del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
@@ -135,9 +136,9 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "dff_shared_state": dff_shared_state,
         "used_links": used_links,
         "age_group": age_group,
-        "disliked_skills": disliked_skills,
+        "disliked_skills": disliked_skills
     }
-    hype_attr = {"can_continue": can_continue}
+    hype_attr = {"can_continue": can_continue, "goal_status": goal_status}
     if response_parts:
         hype_attr["response_parts"] = response_parts
     response = ctx.last_response

@@ -404,6 +404,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8122:8122
+  goals-tracker:
+    volumes:
+      - "./annotators/goals_tracker:/src"
+      - "./common:/src/common"
+    ports:
+      - 8125:8125
   dff-share-problems-skill:
     volumes:
       - "./skills/dff_share_problems_skill:/src"
