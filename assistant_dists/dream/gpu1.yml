@@ -153,10 +153,6 @@ services:
     restart: unless-stopped
   dff-gossip-skill:
     restart: unless-stopped
-  hypothesis-scorer:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   dff-wiki-skill:
     restart: unless-stopped
   topic-recommendation:
