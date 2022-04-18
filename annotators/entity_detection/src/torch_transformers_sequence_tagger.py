@@ -30,7 +30,7 @@ log = getLogger(__name__)
 
 
 def token_from_subtoken(units: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-    """ Assemble token level units from subtoken level units
+    """Assemble token level units from subtoken level units
 
     Args:
         units: torch.Tensor of shape [batch_size, SUBTOKEN_seq_length, n_features]
@@ -306,7 +306,7 @@ class TorchTransformersSequenceTagger(TorchModel):
         input_masks: Union[List[List[int]], np.ndarray],
         y_masks: Union[List[List[int]], np.ndarray],
     ) -> Union[List[List[int]], List[np.ndarray]]:
-        """ Predicts tag indices for a given subword tokens batch
+        """Predicts tag indices for a given subword tokens batch
 
         Args:
             input_ids: indices of the subwords

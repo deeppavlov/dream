@@ -34,8 +34,8 @@ log = getLogger(__name__)
 @register("ner_chunker")
 class NerChunker(Component):
     """
-        Class to split documents into chunks of max_chunk_len symbols so that the length will not exceed
-        maximal sequence length to feed into BERT
+    Class to split documents into chunks of max_chunk_len symbols so that the length will not exceed
+    maximal sequence length to feed into BERT
     """
 
     def __init__(
@@ -214,7 +214,7 @@ class NerChunker(Component):
 @register("ner_chunk_model")
 class NerChunkModel(Component):
     """
-        Class for linking of entity substrings in the document to entities in Wikidata
+    Class for linking of entity substrings in the document to entities in Wikidata
     """
 
     def __init__(self, ner: Chainer, ner_parser: EntityDetectionParser, add_nouns: False, **kwargs) -> None:
