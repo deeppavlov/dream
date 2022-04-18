@@ -333,7 +333,7 @@ class TorchTransformersSequenceTagger(TorchModel):
         logits = logits.detach().cpu().numpy()
         pred = np.argmax(logits, axis=-1)
         seq_lengths = np.sum(y_masks, axis=1)
-        pred = [p[:l] for l, p in zip(seq_lengths, pred)]
+        pred = [pred_elem[:seq_len] for seq_len, pred_elem in zip(seq_lengths, pred)]
 
         if self.return_probas:
             return pred, probas
@@ -378,7 +378,7 @@ class TorchTransformersSequenceTagger(TorchModel):
                 raise ConfigError("Provided load path is incorrect!")
 
             weights_path = Path(self.load_path.resolve())
-            weights_path = weights_path.with_suffix(f".pth.tar")
+            weights_path = weights_path.with_suffix(".pth.tar")
             if weights_path.exists():
                 log.info(f"Load path {weights_path} exists.")
                 log.info(f"Initializing `{self.__class__.__name__}` from saved.")

@@ -94,7 +94,7 @@ class TorchTransformersElTags(TorchModel):
         logits = logits.detach().cpu().numpy()
         pred = np.argmax(logits, axis=-1)
         seq_lengths = [len(elem) for elem in entity_subw_indices_batch]
-        pred = [p[:l] for l, p in zip(seq_lengths, pred)]
+        pred = [pred_elem[:seq_len] for seq_len, pred_elem in zip(seq_lengths, pred)]
 
         if self.return_probas:
             return pred, probas
@@ -116,7 +116,7 @@ class TorchTransformersElTags(TorchModel):
             fname = self.save_path
         if not fname.parent.is_dir():
             raise ConfigError("Provided save path is incorrect!")
-        weights_path = Path(fname).with_suffix(f".pth.tar")
+        weights_path = Path(fname).with_suffix(".pth.tar")
         log.info(f"Saving model to {weights_path}.")
         torch.save(
             {
@@ -247,7 +247,7 @@ class SiameseBertElModel(nn.Module):
             return logits
 
     def save(self) -> None:
-        encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(f".pth.tar")
+        encoder_weights_path = expand_path(self.encoder_save_path).with_suffix(".pth.tar")
         log.info(f"Saving encoder to {encoder_weights_path}.")
         torch.save({"model_state_dict": self.encoder.cpu().state_dict()}, encoder_weights_path)
         self.encoder.to(self.device)
