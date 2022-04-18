@@ -44,8 +44,8 @@
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
-      "NER_PATH": "{MODELS_PATH}/entity_detection_wikipedia_tinyroberta",
-      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/roberta_tiny_cased"
+      "NER_PATH": "{MODELS_PATH}/entity_detection_wikipedia_distilbert",
+      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/distilbert_base_uncased"
     },
     "download": [
     ]
