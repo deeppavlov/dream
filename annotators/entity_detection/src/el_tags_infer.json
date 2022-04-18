@@ -42,6 +42,10 @@
       "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/distilbert_base_uncased",
       "MODEL_PATH": "{MODELS_PATH}/el_tags_distilbert"
       },
+    "requirements": [
+      "{DEEPPAVLOV_PATH}/requirements/transformers.txt",
+      "{DEEPPAVLOV_PATH}/requirements/pytorch16.txt"
+    ],
     "download": [
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/distilbert_base_uncased.tar.gz",
