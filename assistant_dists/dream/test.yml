@@ -83,6 +83,7 @@ services:
   masked-lm:
     environment:
       - CUDA_VISIBLE_DEVICES=7
+  infilling:
   dff-friendship-skill:
   entity-storer:
   knowledge-grounding-skill:

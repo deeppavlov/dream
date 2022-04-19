@@ -1,0 +1,84 @@
+import logging
+import time
+import os
+import pickle
+
+
+import torch
+from flask import Flask, request, jsonify
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+import ilm.tokenize_util
+from transformers import GPT2LMHeadModel
+from ilm.infer import infill_with_ilm
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+MODEL_DIR = '/home/admin/ilm/model'
+logging.info(f"MODEL_DIR = {MODEL_DIR}")
+# MASK_ID = 103
+
+try:
+    cuda = torch.cuda.is_available()
+    if cuda:
+        torch.cuda.set_device(0)  # singe gpu
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
+
+    logger.info(f"infilling is set to run on {device}")
+
+    # init model
+    tokenizer = ilm.tokenize_util.Tokenizer.GPT2
+    with open(os.path.join(MODEL_DIR, 'additional_ids_to_tokens.pkl'), 'rb') as f:
+        additional_ids_to_tokens = pickle.load(f)
+    additional_tokens_to_ids = {v:k for k, v in additional_ids_to_tokens.items()}
+    try:
+        ilm.tokenize_util.update_tokenizer(additional_ids_to_tokens, tokenizer)
+    except ValueError:
+        logger.info('Tokenizer already updated')
+    logger.info(additional_tokens_to_ids)
+    model = GPT2LMHeadModel.from_pretrained(MODEL_DIR)
+    model.eval()
+    if cuda:
+        model.cuda()
+
+    logger.info("infilling model is ready")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
+
+app = Flask(__name__)
+logging.getLogger("werkzeug").setLevel("WARNING")
+
+
+@app.route("/respond", methods=["POST"])
+def respond():
+    st_time = time.time()
+
+    text = request.json.get("text", [])
+    try:
+        inputs = ilm.tokenize_util.encode(text, tokenizer)
+        _blank_id = ilm.tokenize_util.encode(' _', tokenizer)[0]
+        flag = 0
+        while not flag:  # надо исправить костыль
+            try:
+                inputs[inputs.index(_blank_id)] = additional_tokens_to_ids['<|infill_ngram|>']
+            except Exception:
+                flag = 1
+        inputs = {k: v.cuda() for k, v in inputs.items()} if cuda else inputs
+        generated = infill_with_ilm(model, additional_tokens_to_ids, inputs, num_infills=1)
+        output = ilm.tokenize_util.decode(generated[0], tokenizer)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        output = [[]] * len(text)
+
+    total_time = time.time() - st_time
+    logger.info(f"infilling exec time: {total_time:.3f}s")
+    return jsonify({"predicted_tokens": output})
