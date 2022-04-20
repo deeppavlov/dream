@@ -268,7 +268,7 @@ flows = {
                 phrases=[loc_rsp.WHAT_BOOK_LAST_READ],
             ),
             TRANSITIONS: {("bot_fav_book", "fav_name"): cnd.true()},
-        }
+        },
     },
     "bot_fav_book": {
         "fav_name": {
