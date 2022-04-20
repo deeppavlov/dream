@@ -15,7 +15,9 @@
                         "badlisted_words": {
                             "bad_words": false
                         },
-                        "spacy_nounphrases": [],
+                        "spacy_nounphrases": [
+                            "books"
+                        ],
                         "sentseg": {
                             "punct_sent": "let's talk about books.",
                             "segments": [
@@ -44,8 +46,8 @@
                                 "detected": 0
                             },
                             "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
+                                "confidence": 1.0,
+                                "detected": 1
                             },
                             "no": {
                                 "confidence": 0.0,
@@ -114,86 +116,93 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0037371967919170856,
-                                "command": 0.014534023590385914,
-                                "comment": 0.007815568707883358,
-                                "complaint": 0.013871942646801472,
-                                "dev_command": 0.011961258016526699,
-                                "neg_answer": 0.0012791282497346401,
-                                "open_question_factual": 0.00706735672429204,
-                                "open_question_opinion": 0.0020942040719091892,
-                                "opinion": 0.028205107897520065,
-                                "other_answers": 0.0029170422349125147,
-                                "pos_answer": 0.003618006594479084,
-                                "statement": 0.8965855836868286,
-                                "yes_no_question": 0.006313641089946032
+                                "appreciation": 0.0017878437647596002,
+                                "command": 0.9731636047363281,
+                                "comment": 0.0012271953746676445,
+                                "complaint": 0.0019538358319550753,
+                                "dev_command": 0.007522969506680965,
+                                "neg_answer": 0.0012253294698894024,
+                                "open_question_factual": 0.0013211232144385576,
+                                "open_question_opinion": 0.0017928575398400426,
+                                "opinion": 0.001923633273690939,
+                                "other_answers": 0.0007157829240895808,
+                                "pos_answer": 0.003168173599988222,
+                                "statement": 0.0020507643930613995,
+                                "yes_no_question": 0.00214685732498765
                             }
                         ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9999673366546631
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9999250173568726
+                            },
+                            "cobot_topics": {
+                                "Music": 0.9999924898147583
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999861717224121
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999961853027344
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9999853372573853
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999828338623047
+                            }
+                        },
+                        "midas_predictor": {
+                            "command": 0.06747467438494935,
+                            "opinion": 0.22919681620839363,
+                            "pos_answer": 0.1676917510853835,
+                            "statement": 0.47503617945007237,
+                            "yes_no_question": 0.060600578871201155
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "books"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        17,
+                                        22
+                                    ],
+                                    "text": "books"
+                                }
+                            ]
+                        },
                         "ner": [
                             []
                         ],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "let's talk about books."
-                            ]
-                        },
-                        "entity_detection": {},
                         "entity_linking": [],
-                        "conceptnet": {},
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "let's talk about books."
                         },
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "fact_random": {
-                            "facts": [],
-                            "response": "let's talk about books."
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"\nKuleba's comments come after Russia's foreign minister earlier denied tha... [1518 chars]",
-                                    "description": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"",
-                                    "image": "https://image.cnbcfm.com/api/v1/image/107020827-1645799231530-gettyimages-1238738593-Lev_Radin_022422.jpeg?v=1646899141",
-                                    "publishedAt": "2022-03-10T11:41:32Z",
-                                    "source": {
-                                        "name": "CNBC",
-                                        "url": "https://www.cnbc.com"
-                                    },
-                                    "title": "Ukraine foreign minister says Russian officials 'live in their own reality'",
-                                    "url": "https://www.cnbc.com/2022/03/10/ukraine-foreign-minister-says-russian-officials-live-in-their-own-reality.html"
-                                },
-                                "which": "all"
-                            }
-                        ],
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9993996620178223
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.852918803691864
-                            },
-                            "cobot_topics": {
-                                "Phatic": 0.9994450211524963
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9995929598808289
-                            },
-                            "factoid_classification": {
-                                "is_conversational": 0.9019225835800171
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.9970402121543884
-                            },
-                            "toxic_classification": {
-                                "not_toxic": 0.9999749660491943
-                            }
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about books."
+                            ]
                         },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
@@ -202,18 +211,64 @@
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
                         },
-                        "midas_predictor": {
-                            "comment": 0.1578786216398964,
-                            "opinion": 0.30365002615363024,
-                            "pos_answer": 0.10622201242616383,
-                            "statement": 0.35850886033961443,
-                            "yes_no_question": 0.07374047944069505
-                        },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ]
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Major Serhiy Volyna, commander of Ukraine's 36th Separate Marine Brigade, issued a desperate plea to world leaders in a Facebook video posted from the besieged city of Mariupol.\n\"This is our appeal to the world. This could be the last appeal of our l... [959 chars]",
+                                    "description": "Major Serhiy Volyna, commander of Ukraine's 36th Separate Marine Brigade, issued a desperate plea to world leaders in a Facebook video posted from the besieged city of Mariupol. \"This is our appeal to the world.",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/107047718-16502885112022-04-18t112625z_827114355_rc2npt9buj3j_rtrmadp_0_ukraine-crisis-mariupol.jpeg?v=1650288631&w=1920&h=1080",
+                                    "publishedAt": "2022-04-20T08:45:00Z",
+                                    "source": {
+                                        "name": "CNBC",
+                                        "url": "https://www.cnbc.com"
+                                    },
+                                    "title": "Latest news on Russia and the war in Ukraine",
+                                    "url": "https://www.cnbc.com/2022/04/20/russia-ukraine-live-updates.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "books",
+                                "news": {
+                                    "content": "Punjab Kings (PBKS) opener Shikhar Dhawan is likely to etch his name in the record books of IPL on Wednesday when his side faces his former team Delhi Capitals in Mumbai. Dhawan is the most prolific batter in the Punjab team who can provide the perfe... [2085 chars]",
+                                    "description": "Punjab Kings (PBKS) opener Shikhar Dhawan is likely to etch his name in the record books of IPL on Wednesday when his side faces his former team Delhi Capitals in Mumbai.",
+                                    "image": "https://cricketaddictor.com/wp-content/uploads/2018/03/maxresdefault.jpg",
+                                    "publishedAt": "2022-04-20T05:53:37Z",
+                                    "source": {
+                                        "name": "Cricket Addictor",
+                                        "url": "https://cricketaddictor.com"
+                                    },
+                                    "title": "DC vs PBKS: Shikhar Dhawan 11 Runs Away To Join Virat Kohli In The Elite List",
+                                    "url": "https://cricketaddictor.com/indian-premier-league-ipl-2022/dc-vs-pbks-shikhar-dhawan-11-runs-away-to-join-virat-kohli-in-the-elite-list/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "conceptnet": {
+                            "books": {
+                                "SymbolOf": [
+                                    "knowledge",
+                                    "life",
+                                    "education"
+                                ],
+                                "HasProperty": [
+                                    "heavy",
+                                    "expensive",
+                                    "good than book"
+                                ],
+                                "Causes": [
+                                    "knowledge",
+                                    "learn",
+                                    "you learn"
+                                ],
+                                "CausesDesire": [
+                                    "read",
+                                    "read book",
+                                    "learn"
+                                ]
+                            }
+                        }
                     }
                 }
             ],
@@ -230,7 +285,21 @@
         }
     ],
     "entities_batch": [
-        {}
+        {
+            "book": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "books",
+                        "human_utterance_index": 0,
+                        "previous_skill_name": "pre_start"
+                    }
+                ],
+                "name": "book"
+            }
+        }
     ],
     "used_links_batch": [
         {}
