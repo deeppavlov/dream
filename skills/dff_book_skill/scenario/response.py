@@ -14,7 +14,10 @@ logger = logging.getLogger(__name__)
 # ....
 
 START_PHRASE = "Books are my diamonds. Do you love reading?"
-UNCERTAINTY = [" It's not always easy to tell, of course.", " It's only my opinion, though."]
+UNCERTAINTY = [
+    " It's not always easy to tell, of course.",
+    " It's only my opinion, though.",
+]
 FAVOURITE_BOOK_PHRASES = [
     "Do you want to know what my favourite book is?",
     "Do you want to know what my other favourite book is?",
@@ -32,7 +35,10 @@ READ_BOOK_ADVICES = [
     "I think you will love this book!",
 ]
 
-DID_NOT_EXIST = ["I didn't exist at that time.", "I'm a bit too young to remember those times though."]
+DID_NOT_EXIST = [
+    "I didn't exist at that time.",
+    "I'm a bit too young to remember those times though.",
+]
 
 HAVE_YOU_READ_BOOK = "Have you read it?"
 ASK_ABOUT_OFFERED_BOOK = "It's a real showpiece. Have you read it?"
