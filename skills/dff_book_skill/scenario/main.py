@@ -8,26 +8,23 @@ import sentry_sdk
 from os import getenv
 import random
 
-from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+import df_engine.conditions as cnd
 from df_engine.core.keywords import (
     PROCESSING,
     TRANSITIONS,
     GLOBAL,
     RESPONSE,
-    MISC,
 )
 from df_engine.core import Actor
-import df_engine.conditions as cnd
-import df_engine.labels as lbl
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
-
-from common.movies import SWITCH_MOVIE_SKILL_PHRASE
-from common.science import OFFER_TALK_ABOUT_SCIENCE
 import scenario.condition as loc_cnd
 import scenario.processing as loc_prs
 import scenario.response as loc_rsp
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.movies import SWITCH_MOVIE_SKILL_PHRASE
+from common.science import OFFER_TALK_ABOUT_SCIENCE
 
 
 fav_keys = list(loc_rsp.FAVOURITE_BOOK_ATTRS.keys())
