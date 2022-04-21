@@ -27,7 +27,6 @@ parser.add_argument(
 )
 parser.add_argument("--model_path", help="path where to save the model", default="./intents_model_v0")
 parser.add_argument("--epochs", help="number of epochs to train model", default=7)
-# Whereas to calc metrics or not (default value = True)
 args = parser.parse_args()
 
 TRANSFORMERS_MODEL_PATH = os.environ.get("TRANSFORMERS_MODEL_PATH", None)
