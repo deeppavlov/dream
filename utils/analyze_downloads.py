@@ -31,7 +31,7 @@ for service_name, service_args in data["services"].items():
                 with open(config_path) as fin:
                     lines = fin.readlines()
                 with open(config_path, "w") as fout:
-                    fout.writelines([l.replace('"src/', '"annotators/entity_detection/src/') for l in lines])
+                    fout.writelines([line.replace('"src/', '"annotators/entity_detection/src/') for line in lines])
             config_downloads = dict(get_configs_downloads(config_path))
             for url, paths in config_downloads.items():
                 md5_url = path_set_md5(url)
