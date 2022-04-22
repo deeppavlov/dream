@@ -27,10 +27,10 @@ for service_name, service_args in data["services"].items():
         repo.git.checkout(commit)
         config_path = Path(service_args["build"]["args"]["SRC_DIR"]) / service_args["build"]["args"]["CONFIG"]
         try:
-            if service_name == 'entity-detection':
+            if service_name == "entity-detection":
                 with open(config_path) as fin:
                     lines = fin.readlines()
-                with open(config_path, 'w') as fout:
+                with open(config_path, "w") as fout:
                     fout.writelines([l.replace('"src/', '"annotators/entity_detection/src/') for l in lines])
             config_downloads = dict(get_configs_downloads(config_path))
             for url, paths in config_downloads.items():
