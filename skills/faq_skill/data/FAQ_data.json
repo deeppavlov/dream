@@ -1,0 +1,28 @@
+[
+  {
+    "examples": [
+      "hi",
+      "hello",
+      "hey",
+      "good morning",
+      "good afternoon"
+    ],
+    "responses": [
+      "Hi! How are you doing?"
+    ]
+  },
+  {
+    "examples": [
+      "how are you",
+      "how are you doing",
+      "what is up",
+      "what's up",
+      "whats up",
+      "whatsup",
+      "whazup"
+    ],
+    "responses": [
+      "I'm doing great as always! Thanks for asking. What do you want to talk about?"
+    ]
+  }
+]
