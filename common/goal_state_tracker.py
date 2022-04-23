@@ -19,7 +19,7 @@ class GoalTracker:
     
     def update_human_goals_from_bot(self, prev_skill_goal_status, active_skill):
         new_utt_goals_status = []
-        if self.state:
+        if self.state != []:
             last_user_utt_goals = self.state[-1]
             for goal_tuple in last_user_utt_goals:
                 goal = goal_tuple[0]
@@ -43,14 +43,21 @@ class GoalTracker:
                             new_status = (goal, GOAL_IGNORED)
                         elif status == GOAL_IN_PROGRESS:
                             new_status = (goal, GOAL_NOT_ACHIEVED)
-
+                        
                     if new_status:
                         new_utt_goals_status.append(new_status)
+            
+        if prev_skill_goal_status == GOAL_OFFERED:
+            for goal, skill in GoalTracker.map_goal2skill.items():
+                print(skill)
+                print(active_skill)
+                if skill == active_skill:
+                    new_utt_goals_status.append((goal, GOAL_OFFERED))
             
         self.state.append(new_utt_goals_status)
 
 
-    def update_human_goals(self, detected_goals):
+    def update_human_goals(self, detected_goals, active_skill):
         curr_hum_utt_status = []
         if detected_goals:
             for goal in detected_goals:
@@ -60,6 +67,13 @@ class GoalTracker:
             for goal, status in self.state[-1]:
                 if status == GOAL_IN_PROGRESS:
                     curr_hum_utt_status.append((goal, status))
+                elif status == GOAL_OFFERED:
+                    print(active_skill)
+                    print(GoalTracker.map_goal2skill[goal])
+                    if active_skill == GoalTracker.map_goal2skill[goal]:
+                        curr_hum_utt_status.append((goal, GOAL_DETECTED))
+                    else:
+                        curr_hum_utt_status.append((goal, GOAL_REJECTED))
 
         self.state.append(curr_hum_utt_status)
     

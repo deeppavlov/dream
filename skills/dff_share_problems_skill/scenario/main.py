@@ -101,7 +101,7 @@ flows = {
         "try2comfort": {
             RESPONSE: "Do you want to discuss it?",
             PROCESSING: {
-                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_OFFERED)
             },
             TRANSITIONS: {
                 "gratitude": cnd.all(

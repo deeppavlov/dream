@@ -28,8 +28,10 @@ def update_goals_state(requested_data):
     tracker.load_state(requested_data["goals_tracker_state"])
     prev_skill_goal_status = requested_data["skill_goal_status"]
     active_skill = requested_data["last_active_skill"]
+    print(prev_skill_goal_status)
+    print(active_skill)
     tracker.update_human_goals_from_bot(prev_skill_goal_status, active_skill)
-    tracker.update_human_goals(detected_goals)
+    tracker.update_human_goals(detected_goals, active_skill)
     results.append({"human_attributes": {"goals_tracker": tracker.save_state()}})
     total_time = time.time() - st_time
     logger.info(f"human_goals exec time: {total_time:.3f}s")

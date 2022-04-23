@@ -13,8 +13,8 @@ import common.dff.integration.response as int_rsp
 
 import common.constants as common_constants
 
-from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN
-from common.constants import GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_OFFERED
+from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN
+from common.constants import GOAL_DETECTED, GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_OFFERED
 
 import common.set_goal_flag as goal_status
 
@@ -49,7 +49,8 @@ flows = {
             ("book_by_genre", "genre_q"): cnd.all([cnd.regexp(BOOKS_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
             ("book_by_genre", "fan_of_genre2"): cnd.all([cnd.regexp(GENRES_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
             ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(GENRES_PATTERN)]),
-            ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)]) # не отрабатывает
+            ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)]), # не отрабатывает
+            ("book_by_genre", "offer_recommend_book"): cnd.regexp(BOOKS_TOPIC_PATTERN)
         },
     },
     "sevice": {
@@ -60,7 +61,8 @@ flows = {
                 ("book_by_genre", "genre_q"): cnd.all([cnd.regexp(BOOKS_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
                 ("book_by_genre", "fan_of_genre2"): cnd.all([cnd.regexp(GENRES_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
                 ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(GENRES_PATTERN)]),
-                ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)])
+                ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)]),
+                ("book_by_genre", "offer_recommend_book"): cnd.regexp(BOOKS_TOPIC_PATTERN)
                 },
         },
         "fallback": {
@@ -79,6 +81,15 @@ flows = {
                 "extract_book_genre": loc_prs.extract_book_genre(),
                 "extract_fav_genre": loc_prs.extract_fav_genre()
             },
+        },
+        "offer_recommend_book": {
+            RESPONSE: "Sure! I believe that I can recommend you one. Do you want me to?",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_OFFERED)
+            },
+            TRANSITIONS: {
+                "q_fav_genre_2": int_cnd.is_yes_vars,
+            }
         },
         "genre_q": {
             RESPONSE: "So you're a fan of {fav_book_genre} novels, aren't you?",  
@@ -112,7 +123,7 @@ flows = {
             TRANSITIONS: {"recommend_book_by_genre": cnd.true()},
         },
         "q_book_by_genre": {
-            RESPONSE: "Have you read {book_recommend} ?",
+            RESPONSE: "Have you read {book_recommend}?",
             PROCESSING:  {
                  "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                  "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
@@ -128,7 +139,18 @@ flows = {
                 "q_book_by_genre": cnd.regexp(GENRES_PATTERN)
             },
             PROCESSING: {
-                "extract_fav_genre": loc_prs.extract_fav_genre()
+                "extract_fav_genre": loc_prs.extract_fav_genre(),
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            }
+        },
+        "q_fav_genre_2": {
+            RESPONSE: "Great! What is your favorite genre?",
+            TRANSITIONS: {
+                "q_book_by_genre": cnd.regexp(GENRES_PATTERN)
+            },
+            PROCESSING: {
+                "extract_fav_genre": loc_prs.extract_fav_genre(),
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_DETECTED)
             }
         },
         "already_read": {

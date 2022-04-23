@@ -282,7 +282,7 @@ class RuleBasedSkillSelectorConnector:
                         skills_for_goal.append(GoalTracker.map_goal2skill[goal])
 
                     if not skills_for_goal:
-                        if status == 'goal_in_progress':
+                        if status == 'goal_in_progress' or status == 'goal_offered':
                             skills_for_goal.append(GoalTracker.map_goal2skill[goal])
 
             logger.info(f"Selected skills: {skills_for_uttr}")
