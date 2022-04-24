@@ -5,7 +5,6 @@ import time
 import re
 from common.goal_state_tracker import GoalTracker
 
-
 # import sentry_sdk
 from healthcheck import HealthCheck
 from flask import Flask, jsonify, request
@@ -28,10 +27,10 @@ def update_goals_state(requested_data):
     tracker.load_state(requested_data["goals_tracker_state"])
     prev_skill_goal_status = requested_data["skill_goal_status"]
     active_skill = requested_data["last_active_skill"]
-    print(prev_skill_goal_status)
-    print(active_skill)
+    user_utt = requested_data["user_utt"]
     tracker.update_human_goals_from_bot(prev_skill_goal_status, active_skill)
-    tracker.update_human_goals(detected_goals, active_skill)
+    tracker.update_human_goals(detected_goals, active_skill, user_utt)
+    tracker.dump_state(tracker)
     results.append({"human_attributes": {"goals_tracker": tracker.save_state()}})
     total_time = time.time() - st_time
     logger.info(f"human_goals exec time: {total_time:.3f}s")

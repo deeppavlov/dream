@@ -52,7 +52,11 @@ flows = {
     "sevice": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("gain_assistance", "send2specialist"): cnd.true()},
+            TRANSITIONS: {
+                ("gain_assistance", "send2specialist"): cnd.regexp(DEPRESSION_PATTERN),
+                ("gain_assistance", "bad_day"): cnd.regexp(BAD_DAY_PATTERN),
+                ("gain_assistance", "try2comfort"): cnd.regexp(PROBLEMS_PATTERN)
+            },
         },
         "fallback": {
             RESPONSE: "Ooops",
@@ -101,7 +105,7 @@ flows = {
         "try2comfort": {
             RESPONSE: "Do you want to discuss it?",
             PROCESSING: {
-                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_OFFERED)
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
             },
             TRANSITIONS: {
                 "gratitude": cnd.all(

@@ -150,7 +150,7 @@ flows = {
             },
             PROCESSING: {
                 "extract_fav_genre": loc_prs.extract_fav_genre(),
-                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_DETECTED)
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
             }
         },
         "already_read": {

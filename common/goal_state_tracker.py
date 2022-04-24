@@ -1,5 +1,9 @@
 # from http.client import NOT_IMPLEMENTED
+import re
+import json
+
 from common.constants import GOAL_DETECTED, GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_NOT_ACHIEVED, GOAL_IGNORED, GOAL_OFFERED, GOAL_REJECTED
+from common.utils import yes_templates
 
 class GoalTracker:
 
@@ -49,28 +53,29 @@ class GoalTracker:
             
         if prev_skill_goal_status == GOAL_OFFERED:
             for goal, skill in GoalTracker.map_goal2skill.items():
-                print(skill)
-                print(active_skill)
                 if skill == active_skill:
                     new_utt_goals_status.append((goal, GOAL_OFFERED))
             
         self.state.append(new_utt_goals_status)
 
 
-    def update_human_goals(self, detected_goals, active_skill):
+    def update_human_goals(self, detected_goals, active_skill, user_utt):
         curr_hum_utt_status = []
         if detected_goals:
             for goal in detected_goals:
-                curr_hum_utt_status.append((goal, GOAL_DETECTED))
+                if self.state[-1]:
+                    for goal_prev, status in self.state[-1]:
+                        if goal != goal_prev:
+                            curr_hum_utt_status.append((goal, GOAL_DETECTED))
+                else:
+                    curr_hum_utt_status.append((goal, GOAL_DETECTED))
         
         if self.state[-1]:
             for goal, status in self.state[-1]:
                 if status == GOAL_IN_PROGRESS:
                     curr_hum_utt_status.append((goal, status))
                 elif status == GOAL_OFFERED:
-                    print(active_skill)
-                    print(GoalTracker.map_goal2skill[goal])
-                    if active_skill == GoalTracker.map_goal2skill[goal]:
+                    if bool(yes_templates.search(user_utt)):
                         curr_hum_utt_status.append((goal, GOAL_DETECTED))
                     else:
                         curr_hum_utt_status.append((goal, GOAL_REJECTED))
@@ -80,6 +85,13 @@ class GoalTracker:
 
     def save_state(self):
         return self.state
+
+
+    def dump_state(self, class_object):
+        jsonStr = json.dumps(class_object.__dict__)
+        jsonFile = open("goals_tracker_dump.json", "w")
+        jsonFile.write(jsonStr)
+        jsonFile.close()
         
 
         
