@@ -8,9 +8,9 @@ import torch
 from flask import Flask, request, jsonify
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
-import ilm.tokenize_util
+import tokenize_util
 from transformers import GPT2LMHeadModel
-from ilm.infer import infill_with_ilm
+from infer import infill_with_ilm
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
