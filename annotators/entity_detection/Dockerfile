@@ -14,8 +14,6 @@ ENV CONFIG=$CONFIG
 ENV LOWERCASE=$LOWERCASE
 ENV PORT=$PORT
 
-RUN pip install torch==1.6.0
-
 COPY ./annotators/entity_detection/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
