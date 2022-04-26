@@ -229,6 +229,7 @@ def test():
 def respond():
     st_time = time.time()
     # to clarify, there's just one (1) dialog returned, not multiple
+    out = open("log_fact.txt", 'a')
     dialogs_batch = request.json["dialogs"]
     confidences = []
     responses = []
@@ -250,8 +251,9 @@ def respond():
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
         nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-        is_factoid_class = uttr["annotations"].get("factoid_classification", {}).get("factoid", 0)
-        is_factoid = is_factoid_class and (names or nounphrases) and check_factoid(last_phrase)
+        combined_clsf = uttr["annotations"].get("combined_classification", {})
+        is_factoid_cls = combined_clsf.get("factoid_classification", {}).get("is_factoid", 0.0) > 0.9
+        is_factoid = is_factoid_cls and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
 
@@ -325,6 +327,7 @@ def respond():
         else:
             curr_uttr_rewritten = curr_ann_uttr["text"]
         is_question = "?" in curr_uttr_rewritten
+        logger.info(f"is_factoid {is_factoid} tell_me_about {tell_me_about_intent} is_question {is_question}")
         if is_factoid and (tell_me_about_intent or is_question):
             logger.info("Question is classified as factoid. Querying KBQA and ODQA.")
             print("Question is classified as factoid. Querying KBQA and ODQA...", flush=True)
