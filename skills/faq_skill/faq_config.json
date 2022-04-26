@@ -148,7 +148,7 @@
       "faq_response_generator"
     ],
     "variables": {
-      "TRANSFORMER": "bert-base-uncased",
+      "TRANSFORMER": "distilbert-base-uncased",
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
