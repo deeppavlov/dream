@@ -28,7 +28,7 @@
       {
         "class_name": "src.torch_transformers_preprocessor:TorchTransformersElTagPostprocessor",
         "tags_file": "{MODEL_PATH}/tag.dict",
-        "in": ["probas"],
+        "in": ["entity_substr", "probas"],
         "out": ["tags_with_probas"]
       }
     ],

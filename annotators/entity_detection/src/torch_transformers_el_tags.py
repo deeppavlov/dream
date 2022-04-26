@@ -171,6 +171,8 @@ class TextEncoder(nn.Module):
 
         embs_tensors = []
         for embs_list in embs_batch:
+            if not embs_list:
+                embs_list = [self.zero_emb]
             embs_tensors.append(torch.stack(embs_list))
 
         embs_tensor = torch.stack(embs_tensors).to(self.device)
