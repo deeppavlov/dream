@@ -550,7 +550,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 83fa40d7f600137910c663bda9a4d81fa425fe12
+        COMMIT: 70511af90175ff9625b80e7410a0a19c303cb65f
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
