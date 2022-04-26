@@ -39,7 +39,6 @@ class RelRankingPreprocessor(Component):
         self.return_tokens = return_tokens
         self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         self.add_special_tokens = add_special_tokens
-        special_tokens_dict = {"additional_special_tokens": add_special_tokens}
 
     def __call__(self, questions_batch: List[List[str]], rels_batch: List[List[str]] = None) -> Dict[str, torch.tensor]:
 

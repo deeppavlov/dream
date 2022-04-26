@@ -229,7 +229,6 @@ def test():
 def respond():
     st_time = time.time()
     # to clarify, there's just one (1) dialog returned, not multiple
-    out = open("log_fact.txt", "a")
     dialogs_batch = request.json["dialogs"]
     confidences = []
     responses = []
@@ -291,9 +290,9 @@ def respond():
     text_qa_response_batch = [{"answer": "", "answer_sentence": "", "confidence": 0.0} for _ in dialogs_batch]
     resp = requests.post(TEXT_QA_URL, json={"question_raw": questions_batch, "top_facts": facts_batch}, timeout=0.5)
     if resp.status_code != 200:
-        logger.info(f"API Error: Text QA inaccessible")
+        logger.info("API Error: Text QA inaccessible")
     else:
-        logger.info(f"Query against Text QA succeeded")
+        logger.info("Query against Text QA succeeded")
         text_qa_resp = resp.json()
         text_qa_response_batch = []
         cnt_fnd = 0

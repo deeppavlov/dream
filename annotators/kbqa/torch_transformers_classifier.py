@@ -266,7 +266,7 @@ class TorchTransformersClassifierModel(TorchModel):
                 raise ConfigError("Provided load path is incorrect!")
 
             weights_path = Path(self.load_path.resolve())
-            weights_path = weights_path.with_suffix(f".pth.tar")
+            weights_path = weights_path.with_suffix(".pth.tar")
             if weights_path.exists():
                 log.info(f"Load path {weights_path} exists.")
                 log.info(f"Initializing `{self.__class__.__name__}` from saved.")
