@@ -557,16 +557,12 @@ def kbqa_formatter_dialog(dialog: Dict):
     entity_substr = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=False)
     nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
     entities = []
-    for n, entities_list in enumerate(entity_substr):
-        if entities_list:
-            entities.append([entities_list[0]])
-        elif nounphrases and len(nounphrases) > n:
-            entities.append(nounphrases[n])
-        else:
-            entities.append([])
-    if not entities:
-        entities = [[] for _ in sentences]
-    entities = entities[: len(sentences)]
+    if entity_substr:
+        entities = [entity_substr]
+    elif nounphrases:
+        entities = [nounphrases]
+    else:
+        entities = [[]]
 
     return [{"x_init": sentences, "entities": entities}]
 

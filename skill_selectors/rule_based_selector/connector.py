@@ -48,7 +48,8 @@ class RuleBasedSkillSelectorConnector:
             cobot_dialogact_topics = set(get_topics(user_uttr, which="cobot_dialogact_topics"))
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
 
-            is_factoid = user_uttr_annotations.get("factoid_classification", {}).get("factoid", 0.0) > 0.9
+            combined_clsf = user_uttr_annotations.get("combined_classification", {})
+            is_factoid = combined_clsf.get("factoid_classification", {}).get("is_factoid", 0.0) > 0.9
 
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
