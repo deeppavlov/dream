@@ -3,7 +3,7 @@ import json
 import os
 import time
 import re
-from common.goal_state_tracker import GoalTracker
+from common.goal_state_tracker import HumanGoalTracker
 
 # import sentry_sdk
 from healthcheck import HealthCheck
@@ -17,21 +17,21 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 
-tracker = GoalTracker()
-
 
 def update_goals_state(requested_data):
     results = []
     st_time = time.time()
-    detected_goals = requested_data["last_detected_goals"]
-    tracker.load_state(requested_data["goals_tracker_state"])
-    prev_skill_goal_status = requested_data["skill_goal_status"]
-    active_skill = requested_data["last_active_skill"]
-    user_utt = requested_data["user_utt"]
-    tracker.update_human_goals_from_bot(prev_skill_goal_status, active_skill)
-    tracker.update_human_goals(detected_goals, active_skill, user_utt)
-    tracker.dump_state(tracker)
-    results.append({"human_attributes": {"goals_tracker": tracker.save_state()}})
+    dialog = requested_data["dialog"]
+    try:
+        goals_state = dialog["human"]["attributes"]["goals_tracker"]
+    except:
+        goals_state = None
+
+    tracker = HumanGoalTracker(initial_state=goals_state)
+    tracker.update_goals_after_interlocutor(dialog)
+    tracker.update_goals(dialog)
+    new_state = tracker.dump_state()
+    results.append({"human_attributes": {"goals_tracker": new_state}})
     total_time = time.time() - st_time
     logger.info(f"human_goals exec time: {total_time:.3f}s")
     return results

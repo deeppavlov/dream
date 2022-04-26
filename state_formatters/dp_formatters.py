@@ -917,26 +917,4 @@ def midas_predictor_formatter(dialog: Dict):
 
 
 def goals_tracker_formatter(dialog: Dict):
-    prev_skill_goal_status = None
-    detected_goals = dialog["human_utterances"][-1].get("annotations", {}).get("human_goals_detector", [])
-    goals_state = dialog.get("human_attributes", {}).get("goals_tracker", [])
-    user_utt = dialog["utterances"][-1]["text"]
-    try:
-        hypotheses = dialog["human_utterances"][-2]["hypotheses"]
-        active_skill_name = dialog["bot_utterances"][-1]["active_skill"]
-        for i, hypothesis in enumerate(hypotheses): 
-            if hypothesis["skill_name"] == active_skill_name:
-                skill_attributes = hypotheses[i]
-                break
-    except:
-        skill_attributes = None
-        active_skill_name = None
-    
-    if skill_attributes:
-        try:
-            prev_skill_goal_status = skill_attributes["goal_status"]
-        except:
-            prev_skill_goal_status = prev_skill_goal_status
-    
-    return [{"last_detected_goals": detected_goals, "goals_tracker_state": goals_state, "skill_goal_status": prev_skill_goal_status,
-     "last_active_skill": active_skill_name, "user_utt": user_utt}]
+    return [{"dialog": dialog}]

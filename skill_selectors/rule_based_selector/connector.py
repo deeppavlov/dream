@@ -4,6 +4,7 @@ import re
 import time
 from os import getenv
 from typing import Dict, Callable
+import json
 
 import sentry_sdk
 
@@ -21,7 +22,7 @@ from common.movies import extract_movies_names_from_annotations
 
 from common.gossip import check_is_celebrity_mentioned
 
-from common.goal_state_tracker import GoalTracker
+from common.goal_state_tracker import HumanGoalTracker
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
@@ -272,18 +273,25 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
 
-            goals_tracker_state = dialog["human"]["attributes"].get("goals_tracker", [])
-
+            # goals_tracker_state = dialog["human"]["attributes"].get("goals_tracker", [])
             skills_for_goal = []
-            if goals_tracker_state:
-                goals_state_last = goals_tracker_state[-1]
-                for goal, status in goals_state_last:
-                    if status == 'goal_detected':
-                        skills_for_goal.append(GoalTracker.map_goal2skill[goal])
+            try:
+                goals_tracker_state = json.loads(dialog["human"]["attributes"]["goals_tracker"])
 
+                if goals_tracker_state["state"] != []:
+                    goals_state_last = goals_tracker_state["state"][-1]
+                    for goal, status in goals_state_last:
+                        if status == 'goal_detected':
+                            skills_for_goal.append(HumanGoalTracker.map_goal2skill[goal])
+                    
                     if not skills_for_goal:
-                        if status == 'goal_in_progress' or status == 'goal_offered':
-                            skills_for_goal.append(GoalTracker.map_goal2skill[goal])
+                        goals_state_bot_last = goals_tracker_state["state"][-2]
+                        for goal, status in goals_state_bot_last:
+                            if status == 'goal_in_progress' or status == 'goal_offered':
+                                skills_for_goal.append(HumanGoalTracker.map_goal2skill[goal])
+
+            except:
+                pass
 
             logger.info(f"Selected skills: {skills_for_uttr}")
 
