@@ -5,7 +5,7 @@ import scenario.condition as loc_cnd
 import scenario.response as loc_rsp
 import scenario.weekend_condition as loc_wkd_cnd
 import scenario.weekend_response as loc_wkd_rsp
-from common.constants import MUST_CONTINUE, CAN_NOT_CONTINUE
+from common.constants import CAN_NOT_CONTINUE
 from df_engine.core.keywords import PROCESSING, TRANSITIONS, RESPONSE
 from df_engine.core import Actor
 
@@ -19,7 +19,6 @@ flows = {
     "global_flow": {
         "start": {
             RESPONSE: "",
-            PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
             TRANSITIONS: {
                 ("greeting_flow", "false_positive_node"): loc_cnd.false_positive_condition,
                 ("greeting_flow", "hello_response_node"): loc_cnd.hello_condition,
@@ -31,12 +30,11 @@ flows = {
             },
         },
         "fallback": {
-            RESPONSE: "",
+            RESPONSE: "Sorry",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(CAN_NOT_CONTINUE),
             },
-            TRANSITIONS: {},
         },
     },
     "greeting_flow": {

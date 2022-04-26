@@ -205,7 +205,7 @@ flows = {
         "start": {
             RESPONSE: "",
             PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
-            TRANSITIONS: {("books_general", "book_start"): cnd.true()},
+            TRANSITIONS: {("books_general", "book_start"): loc_cnd.start_condition},
         },
         "fallback": {
             RESPONSE: loc_rsp.append_unused(
