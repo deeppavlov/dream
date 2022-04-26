@@ -27,13 +27,13 @@ log = getLogger(__name__)
 @register("rel_ranking_preprocessor")
 class RelRankingPreprocessor(Component):
     def __init__(
-            self,
-            vocab_file: str,
-            add_special_tokens: List[str],
-            do_lower_case: bool = True,
-            max_seq_length: int = 512,
-            return_tokens: bool = False,
-            **kwargs,
+        self,
+        vocab_file: str,
+        add_special_tokens: List[str],
+        do_lower_case: bool = True,
+        max_seq_length: int = 512,
+        return_tokens: bool = False,
+        **kwargs,
     ) -> None:
         self.max_seq_length = max_seq_length
         self.return_tokens = return_tokens

@@ -229,7 +229,7 @@ def test():
 def respond():
     st_time = time.time()
     # to clarify, there's just one (1) dialog returned, not multiple
-    out = open("log_fact.txt", 'a')
+    out = open("log_fact.txt", "a")
     dialogs_batch = request.json["dialogs"]
     confidences = []
     responses = []
