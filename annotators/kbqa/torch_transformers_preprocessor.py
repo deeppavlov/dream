@@ -12,24 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
-import random
-from collections import defaultdict
-from dataclasses import dataclass
 from logging import getLogger
-from pathlib import Path
 import torch
-from typing import Tuple, List, Optional, Union, Dict, Set
+from typing import List, Dict
 
-import numpy as np
 from transformers import AutoTokenizer
-from transformers.data.processors.utils import InputFeatures
 
-from deeppavlov.core.commands.utils import expand_path
 from deeppavlov.core.common.registry import register
-from deeppavlov.core.data.utils import zero_pad
 from deeppavlov.core.models.component import Component
-from deeppavlov.models.preprocessors.mask import Mask
 
 log = getLogger(__name__)
 
@@ -37,20 +27,19 @@ log = getLogger(__name__)
 @register("rel_ranking_preprocessor")
 class RelRankingPreprocessor(Component):
     def __init__(
-        self,
-        vocab_file: str,
-        add_special_tokens: List[str],
-        do_lower_case: bool = True,
-        max_seq_length: int = 512,
-        return_tokens: bool = False,
-        **kwargs,
+            self,
+            vocab_file: str,
+            add_special_tokens: List[str],
+            do_lower_case: bool = True,
+            max_seq_length: int = 512,
+            return_tokens: bool = False,
+            **kwargs,
     ) -> None:
         self.max_seq_length = max_seq_length
         self.return_tokens = return_tokens
         self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         self.add_special_tokens = add_special_tokens
         special_tokens_dict = {"additional_special_tokens": add_special_tokens}
-        num_added_toks = self.tokenizer.add_special_tokens(special_tokens_dict)
 
     def __call__(self, questions_batch: List[List[str]], rels_batch: List[List[str]] = None) -> Dict[str, torch.tensor]:
 
