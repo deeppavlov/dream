@@ -2,6 +2,8 @@
 
 FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 
+RUN apt-get update && apt-get install -y --allow-unauthenticated wget
+
 WORKDIR /src
 
 ARG PRETRAINED_MODEL_NAME_OR_PATH
@@ -12,10 +14,13 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN python -c 'from transformers import BertTokenizer; BertTokenizer.from_pretrained("bert-base-uncased");'
-RUN python -c 'from transformers import BertForMaskedLM; BertForMaskedLM.from_pretrained("bert-base-uncased");'
 
 COPY . /src
+
+RUN mkdir /data/
+RUN mkdir /data/infilling
+RUN python download_model.py model sto ilm | bash
+
 
 HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 

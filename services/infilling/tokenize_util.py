@@ -5,9 +5,9 @@ import os
 import regex as re
 import warnings
 
-from .constants import GPT2_TOKENIZER_LEN
-from .paths import OFFICIAL_GPT2_ENCODER_DIR
-from .encoder import Encoder as OfficialEncoder
+from constants import GPT2_TOKENIZER_LEN
+from paths import OFFICIAL_GPT2_ENCODER_DIR
+from encoder import Encoder as OfficialEncoder
 
 class Tokenizer(Enum):
   CUSTOM = 0
@@ -36,9 +36,9 @@ def _get_tokenizer_state(tokenizer):
 
   if tokenizer not in _TOKENIZER_TO_STATE:
     if tokenizer == Tokenizer.GPT2:
-      with open(os.path.join(OFFICIAL_GPT2_ENCODER_DIR, 'encoder.json'), 'r') as f:
+      with open('encoder.json', 'r') as f:
         encoder_json = json.load(f)
-      with open(os.path.join(OFFICIAL_GPT2_ENCODER_DIR, 'vocab.bpe'), 'r', encoding='utf-8') as f:
+      with open('vocab.bpe', 'r', encoding='utf-8') as f:
         bpe_data = f.read()
       bpe_merges = [tuple(merge_str.split()) for merge_str in bpe_data.split('\n')[1:-1]]
       official_encoder = OfficialEncoder(
