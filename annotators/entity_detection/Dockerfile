@@ -1,5 +1,8 @@
 FROM deeppavlov/base-gpu:0.12.1
 
+RUN apt-get update && apt-get install git -y
+
+ARG COMMIT=0.13.0
 ARG SEQ_TAG_CONFIG
 ARG EL_TAG_CONFIG
 ARG CONFIG
@@ -16,6 +19,8 @@ ENV PORT=$PORT
 
 COPY ./annotators/entity_detection/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+
+RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 
 RUN pip install pyopenssl==22.0.0
 RUN python -m spacy download en_core_web_sm

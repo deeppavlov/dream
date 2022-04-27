@@ -1044,6 +1044,7 @@ services:
         LOWERCASE: 0
         PORT: 8103
         SRC_DIR: annotators/entity_detection/
+        COMMIT: f213c19d022825bf39c61bbcd665d1df096ecb82
       context: ./
       dockerfile: annotators/entity_detection/Dockerfile
     command: flask run -h 0.0.0.0 -p 8103
