@@ -18,7 +18,7 @@ ENV PORT=$PORT
 COPY ./annotators/fact_retrieval/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
+RUN pip install pyopenssl==22.0.0 git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 
 COPY $SRC_DIR /src
 

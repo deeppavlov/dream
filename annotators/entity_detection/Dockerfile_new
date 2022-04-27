@@ -19,7 +19,7 @@ RUN pip install -r /src/requirements.txt
 COPY $SRC_DIR /src
 WORKDIR /src
 
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
+RUN pip install pyopenssl==22.0.0 git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 RUN python -m deeppavlov install $CONFIG
 
 ARG SERVICE_PORT

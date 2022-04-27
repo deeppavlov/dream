@@ -13,7 +13,7 @@ COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN apt-get update && apt-get install git -y
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
+RUN pip install pyopenssl==22.0.0 git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 
 COPY . /src
 
