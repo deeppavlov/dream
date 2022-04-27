@@ -1,0 +1,65 @@
+[
+    [
+        "I'm sorry to hear that. Thank you for sharing this with me.",
+        1.0,
+        {
+            "dff_share_problems_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 3,
+                "history": {
+                    "1": [
+                        "gain_assistance",
+                        "try2comfort"
+                    ],
+                    "2": [
+                        "gain_assistance",
+                        "clarify"
+                    ],
+                    "3": [
+                        "gain_assistance",
+                        "gratitude"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "0054f7f2-f190-4588-bf9a-552935de41ff",
+                    "labels": {
+                        "1": [
+                            "gain_assistance",
+                            "clarify"
+                        ],
+                        "2": [
+                            "gain_assistance",
+                            "gratitude"
+                        ]
+                    },
+                    "requests": {
+                        "1": "yes.",
+                        "2": "there are a lot of bugs needed to be fixed."
+                    },
+                    "responses": {
+                        "1": "What happened?",
+                        "2": "I'm sorry to hear that. Thank you for sharing this with me."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

@@ -1,0 +1,519 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium. In response, Garrett Fredley has made attempts to clar... [3094 chars]",
+                                    "description": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium.",
+                                    "image": "https://images.pushsquare.com/cfc77fca63e9f/1280x720.jpg",
+                                    "publishedAt": "2022-04-27T14:02:50Z",
+                                    "source": {
+                                        "name": "Push Square",
+                                        "url": "https://www.pushsquare.com"
+                                    },
+                                    "title": "Sony's Game Preservation Team May Not Be Quite as Exciting as It Sounds",
+                                    "url": "https://www.pushsquare.com/news/2022/04/sonys-game-preservation-team-may-not-be-quite-as-exciting-as-it-sounds"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "i had an awful day.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "share_personal_problems"
+                        ],
+                        "spelling_preprocessing": "i had an awful day",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "an awful day"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "i had an awful day.",
+                            "segments": [
+                                "i had an awful day."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0015962349716573954,
+                                "command": 0.0038567546289414167,
+                                "comment": 0.009006213396787643,
+                                "complaint": 0.002757095964625478,
+                                "dev_command": 0.0017187577905133367,
+                                "neg_answer": 0.0017553429352119565,
+                                "open_question_factual": 0.0041585355065763,
+                                "open_question_opinion": 0.001842527068220079,
+                                "opinion": 0.49835729598999023,
+                                "other_answers": 0.0020181380677968264,
+                                "pos_answer": 0.0023746411316096783,
+                                "statement": 0.4680999517440796,
+                                "yes_no_question": 0.002458521630614996
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "awful day"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        9,
+                                        18
+                                    ],
+                                    "text": "awful day"
+                                }
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9999161958694458
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.9700120687484741
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994193315505981
+                            },
+                            "emotion_classification": {
+                                "sadness": 0.9956057667732239
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999957084655762
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9999181032180786
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999395608901978
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "i had an awful day."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "i had an awful day."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "awful day": {
+                                "SymbolOf": [
+                                    "bad luck",
+                                    "rest",
+                                    "good"
+                                ],
+                                "HasProperty": [
+                                    "past",
+                                    "bad",
+                                    "over"
+                                ],
+                                "Causes": [
+                                    "depression",
+                                    "you feel sad",
+                                    "sadness"
+                                ],
+                                "CausesDesire": [
+                                    "go to work",
+                                    "sleep",
+                                    "have rest"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium. In response, Garrett Fredley has made attempts to clar... [3094 chars]",
+                                    "description": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium.",
+                                    "image": "https://images.pushsquare.com/cfc77fca63e9f/1280x720.jpg",
+                                    "publishedAt": "2022-04-27T14:02:50Z",
+                                    "source": {
+                                        "name": "Push Square",
+                                        "url": "https://www.pushsquare.com"
+                                    },
+                                    "title": "Sony's Game Preservation Team May Not Be Quite as Exciting as It Sounds",
+                                    "url": "https://www.pushsquare.com/news/2022/04/sonys-game-preservation-team-may-not-be-quite-as-exciting-as-it-sounds"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "awful day",
+                                "news": {},
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How is the day going so far for you?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_share_problems_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

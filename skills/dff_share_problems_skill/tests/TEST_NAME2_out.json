@@ -1,0 +1,61 @@
+[
+    [
+        "The servers crashed today and I thought I was dead. But then I woke up and saw a message from the best user in the world (you). I believe there is always something that can make day better!",
+        1.0,
+        {
+            "dff_share_problems_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 2,
+                "history": {
+                    "1": [
+                        "gain_assistance",
+                        "bad_day"
+                    ],
+                    "2": [
+                        "gain_assistance",
+                        "bot_day"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "082ce6b8-c121-4df3-8288-5b23151e864c",
+                    "labels": {
+                        "0": [
+                            "gain_assistance",
+                            "bad_day"
+                        ],
+                        "1": [
+                            "gain_assistance",
+                            "bot_day"
+                        ]
+                    },
+                    "requests": {
+                        "0": "i had an awful day.",
+                        "1": "yes."
+                    },
+                    "responses": {
+                        "0": "I'm sorry you had a hard day. Do you want to know how my day was?",
+                        "1": "The servers crashed today and I thought I was dead. But then I woke up and saw a message from the best user in the world (you). I believe there is always something that can make day better!"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

@@ -1,0 +1,572 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0011439942754805088,
+                                "command": 0.0012855178210884333,
+                                "comment": 0.0008669759845361114,
+                                "complaint": 0.0003016189730260521,
+                                "dev_command": 0.0006917291902936995,
+                                "neg_answer": 0.001077913912013173,
+                                "open_question_factual": 0.00032593979267403483,
+                                "open_question_opinion": 0.0004255201492924243,
+                                "opinion": 0.0005785832181572914,
+                                "other_answers": 0.0006806261371821165,
+                                "pos_answer": 0.9910379648208618,
+                                "statement": 0.0009891457157209516,
+                                "yes_no_question": 0.0005945104057900608
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9997877478599548
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999103546142578
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999936819076538
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How are you doing today?",
+                                "i feel sad.",
+                                "Do you want to discuss it?",
+                                "yes, i want to discuss it. "
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium. In response, Garrett Fredley has made attempts to clar... [3094 chars]",
+                                    "description": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium.",
+                                    "image": "https://images.pushsquare.com/cfc77fca63e9f/1280x720.jpg",
+                                    "publishedAt": "2022-04-27T14:02:50Z",
+                                    "source": {
+                                        "name": "Push Square",
+                                        "url": "https://www.pushsquare.com"
+                                    },
+                                    "title": "Sony's Game Preservation Team May Not Be Quite as Exciting as It Sounds",
+                                    "url": "https://www.pushsquare.com/news/2022/04/sonys-game-preservation-team-may-not-be-quite-as-exciting-as-it-sounds"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "there are a lot of bugs needed to be fixed.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "there are a lot of bugs needed to be fixed",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "bugs"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.899695634841919
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9853649735450745
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.7326707243919373
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9985814094543457
+                            },
+                            "factoid_classification": {
+                                "is_factoid": 0.9999889135360718
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9999579191207886
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999920129776001
+                            }
+                        },
+                        "sentseg": {
+                            "punct_sent": "there are a lot of bugs needed to be fixed.",
+                            "segments": [
+                                "there are a lot of bugs needed to be fixed."
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.003314016852527857,
+                                "command": 0.006957055535167456,
+                                "comment": 0.03697879612445831,
+                                "complaint": 0.01866781711578369,
+                                "dev_command": 0.004210603889077902,
+                                "neg_answer": 0.0026633278466761112,
+                                "open_question_factual": 0.004305614158511162,
+                                "open_question_opinion": 0.001441271393559873,
+                                "opinion": 0.06233677268028259,
+                                "other_answers": 0.004574702121317387,
+                                "pos_answer": 0.0027607614174485207,
+                                "statement": 0.8489508628845215,
+                                "yes_no_question": 0.0028385010082274675
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "bugs"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        19,
+                                        23
+                                    ],
+                                    "text": "bugs"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "conceptnet": {
+                            "bugs": {
+                                "SymbolOf": [
+                                    "bacteria",
+                                    "insect",
+                                    "disease"
+                                ],
+                                "HasProperty": [
+                                    "alive",
+                                    "small",
+                                    "green"
+                                ],
+                                "Causes": [
+                                    "insect",
+                                    "itch",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "dig hole",
+                                    "clean house",
+                                    "dig"
+                                ]
+                            }
+                        },
+                        "entity_linking": [],
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "there are a lot of bugs needed to be fixed."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Do you want to discuss it?",
+                                "yes, i want to discuss it. ",
+                                "What happened?",
+                                "there are a lot of bugs needed to be fixed."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium. In response, Garrett Fredley has made attempts to clar... [3094 chars]",
+                                    "description": "Update (27/4/22): This story has of course done the rounds this week, with many PlayStation fans excited about the prospect of game preservation meaning more legacy games hitting PS Plus Premium.",
+                                    "image": "https://images.pushsquare.com/cfc77fca63e9f/1280x720.jpg",
+                                    "publishedAt": "2022-04-27T14:02:50Z",
+                                    "source": {
+                                        "name": "Push Square",
+                                        "url": "https://www.pushsquare.com"
+                                    },
+                                    "title": "Sony's Game Preservation Team May Not Be Quite as Exciting as It Sounds",
+                                    "url": "https://www.pushsquare.com/news/2022/04/sonys-game-preservation-team-may-not-be-quite-as-exciting-as-it-sounds"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "bugs",
+                                "news": {
+                                    "content": "A new Elden Ring patch has gone live today on PC and consoles, addressing some of the bugs that have been introduced by the previous major patch.\nPatch 1.04.1 addresses a bug that affected the duration of the Cerulean Hidden Tear, another that affect... [1051 chars]",
+                                    "description": "A new Elden Ring patch has gone live today on PC and consoles, addressing some of the bugs that have been introduced by the previous major patch.",
+                                    "image": "https://cdn.wccftech.com/wp-content/uploads/2021/06/eldenringHD-scaled.jpg",
+                                    "publishedAt": "2022-04-27T10:12:14Z",
+                                    "source": {
+                                        "name": "Wccftech",
+                                        "url": "https://wccftech.com"
+                                    },
+                                    "title": "Elden Ring Patch 1.04.1 Addresses Cerulean Hidden Tear and Malenia Bugs and More",
+                                    "url": "https://wccftech.com/elden-ring-patch-1-04-1/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "What happened?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "What happened?",
+                            "segments": [
+                                "What happened?"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "i feel sad.",
+                                "Do you want to discuss it?",
+                                "yes, i want to discuss it. ",
+                                "What happened?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_share_problems_skill"
+                }
+            ]
+        }
+    ],
+    "dff_share_problems_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "0054f7f2-f190-4588-bf9a-552935de41ff",
+                "labels": {
+                    "0": [
+                        "gain_assistance",
+                        "try2comfort"
+                    ],
+                    "1": [
+                        "gain_assistance",
+                        "clarify"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "i feel sad.",
+                    "1": "yes."
+                },
+                "responses": {
+                    "0": "Do you want to discuss it?",
+                    "1": "What happened?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "gain_assistance",
+                    "try2comfort"
+                ],
+                "2": [
+                    "gain_assistance",
+                    "clarify"
+                ]
+            },
+            "previous_human_utter_index": 2,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

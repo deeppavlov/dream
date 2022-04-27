@@ -14,7 +14,7 @@ import common.dff.integration.response as int_rsp
 import common.constants as common_constants
 
 from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
-from common.constants import GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_OFFERED
+from common.constants import GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_NOT_ACHIEVED, GOAL_OFFERED
 
 import common.set_goal_flag as goal_status
 
@@ -74,11 +74,28 @@ flows = {
             },
         },
         "send2specialist": {
-            RESPONSE: "I'm very sorry for you... But I belive that a psychologist can help you in this situation", # дописать эту ветку
+            RESPONSE: "I'm very sorry for you... But I belive that a psychologist can help you in this situation. "
+            "As for now, do you have someone you can call and ask to help you?",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            },
+            TRANSITIONS: {
+                "has_close_person": int_cnd.is_yes_vars,
+                "no_close_person": int_cnd.is_no_vars
+            }
+        },
+        "has_close_person": {
+            RESPONSE: "Please speak to this person and try to calm down. I hope you're going to feel better.",
             PROCESSING: {
                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
             }
         },
+        "no_close_person": {
+            RESPONSE: "Try to calm down and make sure to get help from the specialist. I hope you're going to feel better",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
+            }
+        }, 
         "bad_day": {
             RESPONSE: "I'm sorry you had a hard day. Do you want to know how my day was?", 
             PROCESSING: {
@@ -91,15 +108,16 @@ flows = {
         },
         "bot_day": {
             RESPONSE: "The servers crashed today and I thought I was dead."
-            " But then I woke up and saw a message from the best user in the world (you)", # дописать эту ветку
+            " But then I woke up and saw a message from the best user in the world (you)."
+            " I believe there is always something that can make day better!",
             PROCESSING: {
                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
             }
         },
         "goodbye_node": {
-            RESPONSE: "Ok. Maybe I can cheer you up some other way", # тоже дописать
+            RESPONSE: "Ok. Let's speak about something else then.",
              PROCESSING: {
-                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_NOT_ACHIEVED)
             }
         },
         "try2comfort": {
