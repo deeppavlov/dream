@@ -1,274 +1,10 @@
 {
     "human_utter_index_batch": [
-        2
+        3
     ],
     "dialog_batch": [
         {
             "human_utterances": [
-                {
-                    "text": "recommend me a book.",
-                    "annotations": {
-                        "human_goals_detector": [
-                            "get_book_recommendation"
-                        ],
-                        "spelling_preprocessing": "recommend me a book",
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "badlisted_words": {
-                            "bad_words": false
-                        },
-                        "spacy_nounphrases": [
-                            "a book"
-                        ],
-                        "sentseg": {
-                            "punct_sent": "recommend me a book.",
-                            "segments": [
-                                "recommend me a book."
-                            ]
-                        },
-                        "intent_catcher": {
-                            "cant_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "doing_well": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "dont_understand": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "opinion_request": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "stupid": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_a_story": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "tell_me_more": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "weather_forecast_intent": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_time": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.00655937846750021,
-                                "command": 0.9088528156280518,
-                                "comment": 0.0037734743673354387,
-                                "complaint": 0.006050053983926773,
-                                "dev_command": 0.040921054780483246,
-                                "neg_answer": 0.0011943635763600469,
-                                "open_question_factual": 0.0032737955916672945,
-                                "open_question_opinion": 0.004969623871147633,
-                                "opinion": 0.006247939541935921,
-                                "other_answers": 0.0013568560825660825,
-                                "pos_answer": 0.003005229402333498,
-                                "statement": 0.008221841417253017,
-                                "yes_no_question": 0.005573563277721405
-                            }
-                        ],
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.998980700969696
-                            },
-                            "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9998546838760376
-                            },
-                            "cobot_topics": {
-                                "Literature": 0.999790608882904
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9999549388885498
-                            },
-                            "factoid_classification": {
-                                "is_conversational": 0.9996770620346069
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.9878842234611511
-                            },
-                            "toxic_classification": {
-                                "not_toxic": 0.9999936819076538
-                            }
-                        },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
-                        "entity_detection": {
-                            "entities": [
-                                "book"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "misc",
-                                    "offsets": [
-                                        15,
-                                        19
-                                    ],
-                                    "text": "book"
-                                }
-                            ]
-                        },
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [],
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "fact_random": {
-                            "facts": [],
-                            "response": "recommend me a book."
-                        },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi.",
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me a book."
-                            ]
-                        },
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 2,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.\n\u201cToday, our prayers have been answered and Trevor is safely on his way back to the United States,\u201d his parents, Joey and Paul... [5983 chars]",
-                                    "description": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.",
-                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220427-trevor-reeed-mb-1258-dd851e.jpg",
-                                    "publishedAt": "2022-04-27T13:37:32Z",
-                                    "source": {
-                                        "name": "NBC News",
-                                        "url": "https://www.nbcnews.com"
-                                    },
-                                    "title": "Russia releases former U.S. Marine Trevor Reed in prisoner exchange",
-                                    "url": "https://www.nbcnews.com/news/us-news/russia-releases-us-marine-vet-part-prisoner-exchange-rcna26214"
-                                },
-                                "which": "all"
-                            },
-                            {
-                                "entity": "book",
-                                "news": {
-                                    "content": "The Chens may be well known across Texas for their Austin-based cookie delivery business, Tiff\u2019s Treats, but there is so much more to their story than cookies.\nFounders Tiffany and Leon Chen launched their debut book, It\u2019s Not Just Cookies, earlier t... [2953 chars]",
-                                    "description": "The Chens may be well known across Texas for their Austin-based cookie delivery business, Tiff\u2019s Treats, but there is so much more to their story than cookies.",
-                                    "image": "https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/0RHyBzAqUKt58nYNjMCfatO_cCc=/1200x630/filters:focal(1063x1268:1073x1258):no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/LXFUCV62UVGPXKNOJ5XSL7OM6M.jpg",
-                                    "publishedAt": "2022-04-27T12:51:00Z",
-                                    "source": {
-                                        "name": "The Dallas Morning News",
-                                        "url": "https://www.dallasnews.com"
-                                    },
-                                    "title": "What\u2019s the Tiff\u2019s Treats secret? Texas company founders share all, including recipes, in first book",
-                                    "url": "https://www.dallasnews.com/food/cooking/2022/04/27/whats-the-tiffs-treats-secret-texas-company-founders-share-all-including-recipes-in-first-book/"
-                                },
-                                "which": "human"
-                            }
-                        ],
-                        "conceptnet": {
-                            "book": {
-                                "SymbolOf": [
-                                    "knowledge",
-                                    "life",
-                                    "wisdom"
-                                ],
-                                "HasProperty": [
-                                    "heavy",
-                                    "expensive",
-                                    "fun"
-                                ],
-                                "Causes": [
-                                    "learn",
-                                    "you learn something new",
-                                    "knowledge"
-                                ],
-                                "CausesDesire": [
-                                    "read",
-                                    "read book",
-                                    "learn"
-                                ]
-                            }
-                        }
-                    }
-                },
                 {
                     "text": "fantasy.",
                     "annotations": {
@@ -533,28 +269,244 @@
                             }
                         }
                     }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0010377780999988317,
+                                "command": 0.001307839062064886,
+                                "comment": 0.0008026730502024293,
+                                "complaint": 0.0003093863488174975,
+                                "dev_command": 0.0007049182313494384,
+                                "neg_answer": 0.00098769785836339,
+                                "open_question_factual": 0.00035327719524502754,
+                                "open_question_opinion": 0.000387706357287243,
+                                "opinion": 0.0006753558991476893,
+                                "other_answers": 0.0006432391819544137,
+                                "pos_answer": 0.9904768466949463,
+                                "statement": 0.0016876616282388568,
+                                "yes_no_question": 0.0006256341002881527
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9996460676193237
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9832027554512024
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999915361404419
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "What is your favorite genre?",
+                                "fantasy.",
+                                "Have you read The Hunger Games by Suzanne Collins?",
+                                "yes, i have read the hunger games by suzanne collins. "
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.\n\u201cToday, our prayers have been answered and Trevor is safely on his way back to the United States,\u201d his parents, Joey and Paul... [5983 chars]",
+                                    "description": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220427-trevor-reeed-mb-1258-dd851e.jpg",
+                                    "publishedAt": "2022-04-27T13:37:32Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Russia releases former U.S. Marine Trevor Reed in prisoner exchange",
+                                    "url": "https://www.nbcnews.com/news/us-news/russia-releases-us-marine-vet-part-prisoner-exchange-rcna26214"
+                                },
+                                "which": "all"
+                            }
+                        ]
+                    }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "What is your favorite genre?",
+                    "text": "Have you read The Hunger Games by Suzanne Collins?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "What is your favorite genre?",
+                            "punct_sent": "Have you read The Hunger Games by Suzanne Collins?",
                             "segments": [
-                                "What is your favorite genre?"
+                                "Have you read The Hunger Games by Suzanne Collins?"
                             ]
                         },
                         "ner": [
-                            []
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 9,
+                                    "start_pos": 7,
+                                    "text": "suzanne collins",
+                                    "type": "PER"
+                                }
+                            ]
                         ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hi.",
-                                "Hi, this is a DREAM Socialbot! How are things?",
                                 "recommend me a book.",
-                                "What is your favorite genre?"
+                                "What is your favorite genre?",
+                                "fantasy.",
+                                "Have you read The Hunger Games by Suzanne Collins?"
                             ]
                         }
                     },
@@ -572,14 +524,27 @@
                     "0": [
                         "book_by_genre",
                         "q_fav_genre"
+                    ],
+                    "1": [
+                        "book_by_genre",
+                        "q_book_by_genre"
                     ]
                 },
-                "misc": {},
+                "misc": {
+                    "slots": {
+                        "book_recommend_1": "The Hunger Games by Suzanne Collins",
+                        "book_recommend_2": "Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)",
+                        "book_recommend_3": "Twilight by Stephenie Meyer",
+                        "fav_genre": "fantasy"
+                    }
+                },
                 "requests": {
-                    "0": "recommend me a book."
+                    "0": "recommend me a book.",
+                    "1": "fantasy."
                 },
                 "responses": {
-                    "0": "What is your favorite genre?"
+                    "0": "What is your favorite genre?",
+                    "1": "Have you read The Hunger Games by Suzanne Collins?"
                 },
                 "validation": false
             },
@@ -588,9 +553,13 @@
                 "1": [
                     "book_by_genre",
                     "q_fav_genre"
+                ],
+                "2": [
+                    "book_by_genre",
+                    "q_book_by_genre"
                 ]
             },
-            "previous_human_utter_index": 1,
+            "previous_human_utter_index": 2,
             "shared_memory": {}
         }
     ],

@@ -1,6 +1,6 @@
 [
     [
-        "So you're a fan of dystopian novels, aren't you?",
+        "What is your favorite genre?",
         2.0,
         {
             "dff_book_recommendation_skill_state": {
@@ -9,30 +9,25 @@
                 "history": {
                     "1": [
                         "book_by_genre",
-                        "genre_q"
+                        "q_fav_genre"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "133fa70d-8438-4f32-8ebf-c999d637fc13",
+                    "id": "703f6322-5184-476e-b876-61bb05bc7ebd",
                     "labels": {
                         "0": [
                             "book_by_genre",
-                            "genre_q"
+                            "q_fav_genre"
                         ]
                     },
                     "requests": {
-                        "0": "my favorite book is 1984."
+                        "0": "recommend me a book."
                     },
                     "responses": {
-                        "0": "So you're a fan of dystopian novels, aren't you?"
+                        "0": "What is your favorite genre?"
                     },
-                    "misc": {
-                        "slots": {
-                            "fav_book_genre": "dystopian",
-                            "book_recommend": "We by Zamyatin"
-                        }
-                    },
+                    "misc": {},
                     "validation": false,
                     "actor_state": {}
                 }
@@ -47,7 +42,8 @@
         },
         {},
         {
-            "can_continue": "can"
+            "can_continue": "can",
+            "goal_status": "goal_in_progress"
         }
     ]
 ]

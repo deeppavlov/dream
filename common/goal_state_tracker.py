@@ -94,7 +94,7 @@ class HumanGoalTracker(GoalTracker):
                     if goal in HumanGoalTracker.map_goal2skill.keys():
                         if active_skill == HumanGoalTracker.map_goal2skill[goal]:
                             if status == GOAL_IN_PROGRESS:
-                                if (prev_skill_goal_status == GOAL_IN_PROGRESS) or (prev_skill_goal_status == GOAL_ACHIEVED):
+                                if (prev_skill_goal_status == GOAL_IN_PROGRESS) or (prev_skill_goal_status == GOAL_ACHIEVED) or (prev_skill_goal_status == GOAL_NOT_ACHIEVED):
                                     new_bot_status = (goal, prev_skill_goal_status)
                                 elif (prev_skill_goal_status != GOAL_IN_PROGRESS) and (prev_skill_goal_status != GOAL_ACHIEVED):
                                         new_bot_status = (goal, GOAL_NOT_ACHIEVED)

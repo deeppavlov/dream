@@ -1,34 +1,26 @@
 {
     "human_utter_index_batch": [
-        2
+        4
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "recommend me any fantasy novel please.",
+                    "text": "yes.",
                     "annotations": {
-                        "human_goals_detector": [
-                            {
-                                "human_goals": [
-                                    "recommend_book_by_genre"
-                                ]
-                            }
-                        ],
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "yes",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "recommend me any fantasy novel please",
                         "badlisted_words": {
                             "bad_words": false
                         },
-                        "spacy_nounphrases": [
-                            "any fantasy novel"
-                        ],
+                        "spacy_nounphrases": [],
                         "sentseg": {
-                            "punct_sent": "recommend me any fantasy novel please.",
+                            "punct_sent": "yes.",
                             "segments": [
-                                "recommend me any fantasy novel please."
+                                "yes."
                             ]
                         },
                         "intent_catcher": {
@@ -117,158 +109,106 @@
                                 "detected": 0
                             },
                             "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
+                                "confidence": 1.0,
+                                "detected": 1
                             }
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.006660853512585163,
-                                "command": 0.8673305511474609,
-                                "comment": 0.0030296682380139828,
-                                "complaint": 0.005525552202016115,
-                                "dev_command": 0.049896787852048874,
-                                "neg_answer": 0.0017165547469630837,
-                                "open_question_factual": 0.005130940116941929,
-                                "open_question_opinion": 0.009486805647611618,
-                                "opinion": 0.017143985256552696,
-                                "other_answers": 0.0021787111181765795,
-                                "pos_answer": 0.0024466977920383215,
-                                "statement": 0.020532360300421715,
-                                "yes_no_question": 0.008920605294406414
+                                "appreciation": 0.0010377780999988317,
+                                "command": 0.001307839062064886,
+                                "comment": 0.0008026730502024293,
+                                "complaint": 0.0003093863488174975,
+                                "dev_command": 0.0007049182313494384,
+                                "neg_answer": 0.00098769785836339,
+                                "open_question_factual": 0.00035327719524502754,
+                                "open_question_opinion": 0.000387706357287243,
+                                "opinion": 0.0006753558991476893,
+                                "other_answers": 0.0006432391819544137,
+                                "pos_answer": 0.9904768466949463,
+                                "statement": 0.0016876616282388568,
+                                "yes_no_question": 0.0006256341002881527
                             }
                         ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_RequestIntent": 0.9999403953552246
+                                "Information_DeliveryIntent": 0.9996460676193237
                             },
                             "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9992194175720215
+                                "Entertainment_Books": 0.9832027554512024
                             },
                             "cobot_topics": {
-                                "Movies_TV": 0.9996316432952881
+                                "Phatic": 0.9999915361404419
                             },
                             "emotion_classification": {
-                                "neutral": 0.9999878406524658
+                                "neutral": 0.9887357354164124
                             },
                             "factoid_classification": {
-                                "is_conversational": 0.9999337196350098
+                                "is_conversational": 0.9994649291038513
                             },
                             "sentiment_classification": {
-                                "neutral": 0.646432101726532
+                                "positive": 0.9138855934143066
                             },
                             "toxic_classification": {
-                                "not_toxic": 0.9999936819076538
+                                "not_toxic": 0.9999291896820068
                             }
                         },
+                        "conceptnet": {},
+                        "entity_linking": [],
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "entity_detection": {
-                            "entities": [
-                                "fantasy novel"
-                            ],
-                            "labelled_entities": [
-                                {
-                                    "label": "genre",
-                                    "offsets": [
-                                        17,
-                                        30
-                                    ],
-                                    "text": "fantasy novel"
-                                }
-                            ]
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
                         },
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [],
                         "fact_random": {
                             "facts": [],
-                            "response": "recommend me any fantasy novel please."
+                            "response": "yes."
                         },
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hi.",
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me any fantasy novel please."
+                                "What is your favorite genre?",
+                                "fantasy.",
+                                "Have you read The Hunger Games by Suzanne Collins?",
+                                "yes, i have read the hunger games by suzanne collins. "
                             ]
                         },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
-                            "utt_num": 2,
+                            "utt_num": 4,
                             "wiki_skill_entities_info": {}
-                        },
-                        "conceptnet": {
-                            "fantasy novel": {
-                                "SymbolOf": [
-                                    "fantasy",
-                                    "imagination",
-                                    "evil"
-                                ],
-                                "HasProperty": [
-                                    "fun",
-                                    "entertain",
-                                    "good"
-                                ],
-                                "Causes": [
-                                    "writer cramp",
-                                    "you become famous",
-                                    "nightmare"
-                                ],
-                                "CausesDesire": [
-                                    "write novel",
-                                    "write book",
-                                    "read about alien life"
-                                ]
-                            }
                         },
                         "news_api_annotator": [
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
-                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
-                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
-                                    "publishedAt": "2022-04-07T07:35:54Z",
+                                    "content": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.\n\u201cToday, our prayers have been answered and Trevor is safely on his way back to the United States,\u201d his parents, Joey and Paul... [5983 chars]",
+                                    "description": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220427-trevor-reeed-mb-1258-dd851e.jpg",
+                                    "publishedAt": "2022-04-27T13:37:32Z",
                                     "source": {
-                                        "name": "The New York Times",
-                                        "url": "https://www.nytimes.com"
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
                                     },
-                                    "title": "Ukraine-Russia War: Live Updates",
-                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
+                                    "title": "Russia releases former U.S. Marine Trevor Reed in prisoner exchange",
+                                    "url": "https://www.nbcnews.com/news/us-news/russia-releases-us-marine-vet-part-prisoner-exchange-rcna26214"
                                 },
                                 "which": "all"
-                            },
-                            {
-                                "entity": "fantasy novel",
-                                "news": {
-                                    "content": "Fans of Heather Fawcett\u2019s YA and middle-grade books (including Even the Darkest Stars and The School Between Winter and Fairyland) won\u2019t be surprised to hear her adult debut, due out in January, keeps within that same fantastical vein\u2014though its char... [15416 chars]",
-                                    "description": "io9 has a first look at the adult debut from acclaimed YA and middle-grade fantasy author Heather Fawcett.",
-                                    "image": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/cc6880549199aadf02af35fc09f3811b.png",
-                                    "publishedAt": "2022-03-24T18:00:00Z",
-                                    "source": {
-                                        "name": "Gizmodo",
-                                        "url": "https://gizmodo.com"
-                                    },
-                                    "title": "Heather Fawcett Encyclopaedia of Faeries Fantasy Novel Reveal",
-                                    "url": "https://gizmodo.com/heather-fawcett-encyclopaedia-of-faeries-reveal-excerpt-1848673903"
-                                },
-                                "which": "human"
                             }
                         ]
                     }
@@ -276,15 +216,11 @@
                 {
                     "text": "no.",
                     "annotations": {
-                        "human_goals_detector": [
-                            {
-                                "human_goals": []
-                            }
-                        ],
-                        "spelling_preprocessing": "no",
+                        "human_goals_detector": [],
                         "asr": {
                             "asr_confidence": "undefined"
                         },
+                        "spelling_preprocessing": "no",
                         "badlisted_words": {
                             "bad_words": false
                         },
@@ -387,34 +323,43 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.00048039175453595817,
-                                "command": 0.0009305914863944054,
-                                "comment": 0.0006701317033730447,
-                                "complaint": 0.006486934144049883,
-                                "dev_command": 0.0011654896661639214,
-                                "neg_answer": 0.9781666994094849,
-                                "open_question_factual": 0.0012860584538429976,
-                                "open_question_opinion": 0.0008565900498069823,
-                                "opinion": 0.0014695296995341778,
-                                "other_answers": 0.0030419162940233946,
-                                "pos_answer": 0.0029163153376430273,
-                                "statement": 0.00103000458329916,
-                                "yes_no_question": 0.0014992189826443791
+                                "appreciation": 0.0005437621148303151,
+                                "command": 0.0008229290833696723,
+                                "comment": 0.0007377599249593914,
+                                "complaint": 0.00759610440582037,
+                                "dev_command": 0.0010448783868923783,
+                                "neg_answer": 0.9794129133224487,
+                                "open_question_factual": 0.0010353336110711098,
+                                "open_question_opinion": 0.000793616462033242,
+                                "opinion": 0.0011205145856365561,
+                                "other_answers": 0.002720894757658243,
+                                "pos_answer": 0.002425621496513486,
+                                "statement": 0.0006105888751335442,
+                                "yes_no_question": 0.001135102822445333
                             }
                         ],
                         "ner": [
                             []
                         ],
                         "entity_detection": {},
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Have you read The Hunger Games by Suzanne Collins?",
+                                "yes, i have read the hunger games by suzanne collins. ",
+                                "Ok! And what about Harry Potter and the Order of the Phoenix by J. K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?",
+                                "no, i haven't read it. "
+                            ]
+                        },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.9998713731765747
+                                "Information_DeliveryIntent": 0.9996089339256287
                             },
                             "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9989094734191895
+                                "Entertainment_Books": 0.6275158524513245
                             },
                             "cobot_topics": {
-                                "Phatic": 0.9999938011169434
+                                "Phatic": 0.9999920129776001
                             },
                             "emotion_classification": {
                                 "neutral": 0.9890186786651611
@@ -436,29 +381,6 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
-                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
-                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
-                                    "publishedAt": "2022-04-07T07:35:54Z",
-                                    "source": {
-                                        "name": "The New York Times",
-                                        "url": "https://www.nytimes.com"
-                                    },
-                                    "title": "Ukraine-Russia War: Live Updates",
-                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
-                                },
-                                "which": "all"
-                            }
-                        ],
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
@@ -467,53 +389,127 @@
                             "facts": [],
                             "response": "no."
                         },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
-                            "utt_num": 3,
+                            "utt_num": 5,
                             "wiki_skill_entities_info": {}
                         },
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me any fantasy novel please.",
-                                "Have you read The Lord of the Rings by Tolkien?",
-                                "no, i haven't read the lord of the rings by tolkien. "
-                            ]
-                        }
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.\n\u201cToday, our prayers have been answered and Trevor is safely on his way back to the United States,\u201d his parents, Joey and Paul... [5983 chars]",
+                                    "description": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220427-trevor-reeed-mb-1258-dd851e.jpg",
+                                    "publishedAt": "2022-04-27T13:37:32Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Russia releases former U.S. Marine Trevor Reed in prisoner exchange",
+                                    "url": "https://www.nbcnews.com/news/us-news/russia-releases-us-marine-vet-part-prisoner-exchange-rcna26214"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "harry potter",
+                                "news": {
+                                    "content": "If you\u2019re looking for a sweet new way to carry your cosmetics, check out the latest Loungefly release at Universal Orlando Resort, which features the magical treats of Honeydukes.\nLoungefly Honeydukes Cosmetic Bag Combo Set \u2014 $40.00\nThis combo set co... [1102 chars]",
+                                    "description": "If you\u2019re looking for a sweet new way to carry your cosmetics, check out the latest Loungefly release at Universal Orlando Resort, which features the magical treats of Honeydukes.",
+                                    "image": "https://media.wdwnt.com/2022/04/honeydukes-loungefly-cosmetic-bag-combo-4.jpg",
+                                    "publishedAt": "2022-04-26T14:34:28Z",
+                                    "source": {
+                                        "name": "wdwnt.com",
+                                        "url": "https://wdwnt.com"
+                                    },
+                                    "title": "New 'Harry Potter' Honeydukes Loungefly Cosmetic Bag Combo Set Sweetens Up Universal Orlando Resort",
+                                    "url": "https://wdwnt.com/2022/04/new-harry-potter-honeydukes-loungefly-cosmetic-bag-combo-set-sweetens-up-universal-orlando-resort/"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "rowling",
+                                "news": {
+                                    "content": "The third film in the \"Fantastic Beasts\" series, \"The Secrets of Dumbledore,\" premiered April 14.\nThe series began in 2016 with \"Fantastic Beasts and Where to Find Them.\"\nHere's the cast of the \"Fantastic Beasts\" series, including its latest film.\nTh... [881 chars]",
+                                    "description": "The third film in the \"Fantastic Beasts\" series, \"The Secrets of Dumbledore,\" premiered April 14. The series began in 2016 with \"Fantastic Beasts and Where to Find Them.\"",
+                                    "image": "https://i.insider.com/625dd955d2039d0019ba48b7?width=1200&format=jpeg",
+                                    "publishedAt": "2022-04-20T04:00:00Z",
+                                    "source": {
+                                        "name": "INSIDER",
+                                        "url": "https://www.insider.com"
+                                    },
+                                    "title": "the Secrets of Dumbledore'",
+                                    "url": "https://www.insider.com/fantastic-beasts-characters-photos-2018-11"
+                                },
+                                "which": "bot"
+                            },
+                            {
+                                "entity": "mary grandpr",
+                                "news": {},
+                                "which": "bot"
+                            }
+                        ]
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": "Have you read The Lord of the Rings by Tolkien ?",
+                    "text": "Ok! And what about Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Have you read The Lord of the Rings by Tolkien ?",
+                            "punct_sent": "Ok! And what about Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?",
                             "segments": [
-                                "Have you read The Lord of the Rings by Tolkien?"
+                                "Ok!",
+                                "And what about Harry Potter and the Order of the Phoenix by J.",
+                                "K.",
+                                "Rowling, Mary GrandPr\u00e9 (Illustrator)?",
+                                "Have you read it?"
                             ]
                         },
                         "ner": [
+                            [],
                             [
                                 {
                                     "confidence": 1,
-                                    "end_pos": 10,
-                                    "start_pos": 9,
-                                    "text": "tolkien",
+                                    "end_pos": 5,
+                                    "start_pos": 3,
+                                    "text": "harry potter",
                                     "type": "PER"
                                 }
-                            ]
+                            ],
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 1,
+                                    "start_pos": 0,
+                                    "text": "rowling",
+                                    "type": "PER"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 4,
+                                    "start_pos": 2,
+                                    "text": "mary grandpr\u00e9",
+                                    "type": "PER"
+                                }
+                            ],
+                            []
                         ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hi.",
-                                "Hi, this is a DREAM Socialbot! How are things?",
-                                "recommend me any fantasy novel please.",
-                                "Have you read The Lord of the Rings by Tolkien?"
+                                "fantasy.",
+                                "Have you read The Hunger Games by Suzanne Collins?",
+                                "yes, i have read the hunger games by suzanne collins. ",
+                                "Ok! And what about Harry Potter and the Order of the Phoenix by J. K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?"
                             ]
                         }
                     },
@@ -526,24 +522,32 @@
         {
             "context": {
                 "actor_state": {},
-                "id": "7aa6afc2-83b9-43ce-bf2c-45161824f3dd",
+                "id": "703f6322-5184-476e-b876-61bb05bc7ebd",
                 "labels": {
-                    "0": [
+                    "1": [
                         "book_by_genre",
                         "q_book_by_genre"
+                    ],
+                    "2": [
+                        "book_by_genre",
+                        "already_read"
                     ]
                 },
                 "misc": {
                     "slots": {
-                        "book_recommend": "The Lord of the Rings by Tolkien",
+                        "book_recommend_1": "The Hunger Games by Suzanne Collins",
+                        "book_recommend_2": "Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)",
+                        "book_recommend_3": "Twilight by Stephenie Meyer",
                         "fav_genre": "fantasy"
                     }
                 },
                 "requests": {
-                    "0": "recommend me any fantasy novel please."
+                    "1": "fantasy.",
+                    "2": "yes."
                 },
                 "responses": {
-                    "0": "Have you read The Lord of the Rings by Tolkien ?"
+                    "1": "Have you read The Hunger Games by Suzanne Collins?",
+                    "2": "Ok! And what about Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?"
                 },
                 "validation": false
             },
@@ -551,10 +555,18 @@
             "history": {
                 "1": [
                     "book_by_genre",
+                    "q_fav_genre"
+                ],
+                "2": [
+                    "book_by_genre",
                     "q_book_by_genre"
+                ],
+                "3": [
+                    "book_by_genre",
+                    "already_read"
                 ]
             },
-            "previous_human_utter_index": 1,
+            "previous_human_utter_index": 3,
             "shared_memory": {}
         }
     ],
@@ -565,7 +577,21 @@
         }
     ],
     "entities_batch": [
-        {}
+        {
+            "fantasy": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "fantasy",
+                        "human_utterance_index": 2,
+                        "previous_skill_name": "dff_book_recommendation_skill"
+                    }
+                ],
+                "name": "fantasy"
+            }
+        }
     ],
     "used_links_batch": [
         {}

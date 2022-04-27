@@ -8,15 +8,11 @@
                 {
                     "text": "hi.",
                     "annotations": {
-                        "human_goals_detector": [
-                            {
-                                "human_goals": []
-                            }
-                        ],
-                        "spelling_preprocessing": "hi",
+                        "human_goals_detector": [],
                         "asr": {
                             "asr_confidence": "undefined"
                         },
+                        "spelling_preprocessing": "hi",
                         "badlisted_words": {
                             "bad_words": false
                         },
@@ -146,6 +142,19 @@
                         "entity_detection": {},
                         "entity_linking": [],
                         "conceptnet": {},
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9993996620178223
@@ -169,75 +178,58 @@
                                 "not_toxic": 0.9999749660491943
                             }
                         },
-                        "fact_random": {
-                            "facts": [],
-                            "response": "hi."
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
-                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
-                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
-                                    "publishedAt": "2022-04-07T07:35:54Z",
-                                    "source": {
-                                        "name": "The New York Times",
-                                        "url": "https://www.nytimes.com"
-                                    },
-                                    "title": "Ukraine-Russia War: Live Updates",
-                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
-                                },
-                                "which": "all"
-                            }
-                        ],
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
                             "topic_skill_entities_info": {},
                             "utt_num": 1,
                             "wiki_skill_entities_info": {}
-                        }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.\n\u201cToday, our prayers have been answered and Trevor is safely on his way back to the United States,\u201d his parents, Joey and Paul... [5983 chars]",
+                                    "description": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220427-trevor-reeed-mb-1258-dd851e.jpg",
+                                    "publishedAt": "2022-04-27T13:37:32Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Russia releases former U.S. Marine Trevor Reed in prisoner exchange",
+                                    "url": "https://www.nbcnews.com/news/us-news/russia-releases-us-marine-vet-part-prisoner-exchange-rcna26214"
+                                },
+                                "which": "all"
+                            }
+                        ]
                     }
                 },
                 {
-                    "text": "my favorite book is 1984.",
+                    "text": "recommend me a book.",
                     "annotations": {
                         "human_goals_detector": [
-                            {
-                                "human_goals": [
-                                    "recommend_book_by_genre"
-                                ]
-                            }
+                            "get_book_recommendation"
                         ],
+                        "spelling_preprocessing": "recommend me a book",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "my favorite book is 1984",
                         "badlisted_words": {
                             "bad_words": false
                         },
                         "spacy_nounphrases": [
-                            "my favorite book"
+                            "a book"
                         ],
                         "sentseg": {
-                            "punct_sent": "my favorite book is 1984.",
+                            "punct_sent": "recommend me a book.",
                             "segments": [
-                                "my favorite book is 1984."
+                                "recommend me a book."
                             ]
                         },
                         "intent_catcher": {
@@ -332,42 +324,42 @@
                         },
                         "midas_classification": [
                             {
-                                "appreciation": 0.0009204045054502785,
-                                "command": 0.0025866522919386625,
-                                "comment": 0.0016277602408081293,
-                                "complaint": 0.0008673873380757868,
-                                "dev_command": 0.0011506186565384269,
-                                "neg_answer": 0.000800667388830334,
-                                "open_question_factual": 0.0017280286410823464,
-                                "open_question_opinion": 0.001375458319671452,
-                                "opinion": 0.9645191431045532,
-                                "other_answers": 0.0007058573537506163,
-                                "pos_answer": 0.0010682352585718036,
-                                "statement": 0.021831145510077477,
-                                "yes_no_question": 0.000818548898678273
+                                "appreciation": 0.00655937846750021,
+                                "command": 0.9088528156280518,
+                                "comment": 0.0037734743673354387,
+                                "complaint": 0.006050053983926773,
+                                "dev_command": 0.040921054780483246,
+                                "neg_answer": 0.0011943635763600469,
+                                "open_question_factual": 0.0032737955916672945,
+                                "open_question_opinion": 0.004969623871147633,
+                                "opinion": 0.006247939541935921,
+                                "other_answers": 0.0013568560825660825,
+                                "pos_answer": 0.003005229402333498,
+                                "statement": 0.008221841417253017,
+                                "yes_no_question": 0.005573563277721405
                             }
                         ],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "Information_DeliveryIntent": 0.9398437142372131
+                                "Information_RequestIntent": 0.998980700969696
                             },
                             "cobot_dialogact_topics": {
-                                "Entertainment_Books": 0.9998003840446472
+                                "Entertainment_Books": 0.9998546838760376
                             },
                             "cobot_topics": {
-                                "Literature": 0.9998675584793091
+                                "Literature": 0.999790608882904
                             },
                             "emotion_classification": {
-                                "joy": 0.9998528957366943
+                                "neutral": 0.9999549388885498
                             },
                             "factoid_classification": {
-                                "is_conversational": 0.9999942779541016
+                                "is_conversational": 0.9996770620346069
                             },
                             "sentiment_classification": {
-                                "positive": 0.9999960660934448
+                                "neutral": 0.9878842234611511
                             },
                             "toxic_classification": {
-                                "not_toxic": 0.9999946355819702
+                                "not_toxic": 0.9999936819076538
                             }
                         },
                         "topic_recommendation": [
@@ -375,105 +367,46 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "ner": [
-                            []
-                        ],
                         "entity_detection": {
                             "entities": [
-                                "book",
-                                "1984"
+                                "book"
                             ],
                             "labelled_entities": [
                                 {
                                     "label": "misc",
                                     "offsets": [
-                                        12,
-                                        16
+                                        15,
+                                        19
                                     ],
                                     "text": "book"
-                                },
-                                {
-                                    "label": "videoname",
-                                    "offsets": [
-                                        20,
-                                        24
-                                    ],
-                                    "text": "1984"
                                 }
                             ]
                         },
+                        "ner": [
+                            []
+                        ],
                         "entity_linking": [],
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
                         "fact_random": {
                             "facts": [],
-                            "response": "my favorite book is 1984."
+                            "response": "recommend me a book."
                         },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is a DREAM Socialbot! How are you doing today?",
-                                "my favorite book is 1984."
+                                "Hi, this is a DREAM Socialbot! How are things?",
+                                "recommend me a book."
                             ]
                         },
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.\nThe new sanctions... [2778 chars]",
-                                    "description": "President Volodymyr Zelensky of Ukraine harangued his allies to find the will to take harsher measures against Moscow, as the European Union prepared Thursday to discuss another round of sanctions and a possible ban on Russian coal.",
-                                    "image": "https://static01.nyt.com/images/2022/04/07/world/07UKRAINE-BLOG-PROMO-1am/07UKRAINE-BLOG-PROMO-1am-facebookJumbo.jpg",
-                                    "publishedAt": "2022-04-07T07:35:54Z",
-                                    "source": {
-                                        "name": "The New York Times",
-                                        "url": "https://www.nytimes.com"
-                                    },
-                                    "title": "Ukraine-Russia War: Live Updates",
-                                    "url": "https://www.nytimes.com/live/2022/04/07/world/ukraine-russia-war-news"
-                                },
-                                "which": "all"
-                            },
-                            {
-                                "entity": "book",
-                                "news": {
-                                    "content": "If you love the art and design aspects of theme parks, a new release you\u2019re bound to enjoy is coming on April 12. \u201cThe Art of Disneyland Paris\u201d is coming in celebration of the resort\u2019s 30th anniversary.\n\u201cThe Art of Disneyland Paris\u201d Book\nThe book was... [575 chars]",
-                                    "description": "If you love the art and design aspects of theme parks, a new release you\u2019re bound to enjoy is coming on April 12. \u201cThe Art of Disneyland Paris\u201d is coming in celebration of the resort\u2019s 30th anniversary.",
-                                    "image": "https://media.wdwnt.com/2022/04/DLP-The-Art-of-Disneyland-Paris-book.png",
-                                    "publishedAt": "2022-04-07T00:30:14Z",
-                                    "source": {
-                                        "name": "wdwnt.com",
-                                        "url": "https://wdwnt.com"
-                                    },
-                                    "title": "New 'The Art of Disneyland Paris' Book to Be Released in Celebration of 30th Anniversary",
-                                    "url": "https://wdwnt.com/2022/04/new-the-art-of-disneyland-paris-book-to-be-released-in-celebration-of-30th-anniversary/"
-                                },
-                                "which": "human"
-                            },
-                            {
-                                "entity": "1984",
-                                "news": {
-                                    "content": "Doublespeak traces its roots to two of George Orwell\u2019s coinages in the novel \u201c 1984 \u2033: \u201c doublethink \u201d (\u201cto be conscious of complete truthfulness while telling carefully constructed lies\u201d) and \u201c Newspeak \u201d (e.g., \u201cprolefeed\u201d for popular culture).\nIt ... [4045 chars]",
-                                    "description": "Doublespeak traces its roots to two of George Orwell\u2019s coinages in the novel \u201c 1984 \u2033: \u201c doublethink \u201d (\u201cto be conscious of complete truthfulness while telling carefully constructed lies\u201d) and \u201c Newspeak \u201d (e.g., \u201cprolefeed\u201d for popular culture).",
-                                    "image": "https://bostonglobe-prod.cdn.arcpublishing.com/resizer/1zgGBrcQ3BYwIjGYuksXOBV6tTw=/506x0/cloudfront-us-east-1.images.arcpublishing.com/bostonglobe/64QK5O4E4JAGVF4GDDTBTTHMYY.jpg",
-                                    "publishedAt": "2022-04-01T04:00:00Z",
-                                    "source": {
-                                        "name": "The Boston Globe",
-                                        "url": "https://www.bostonglobe.com"
-                                    },
-                                    "title": "The Doublespeak awards can\u2019t return soon enough",
-                                    "url": "https://www.bostonglobe.com/2022/04/01/opinion/doublespeak-awards-cant-return-soon-enough/"
-                                },
-                                "which": "human"
-                            }
-                        ],
                         "wiki_parser": {
                             "animals_skill_entities_info": {},
                             "entities_info": {},
@@ -481,6 +414,40 @@
                             "utt_num": 2,
                             "wiki_skill_entities_info": {}
                         },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.\n\u201cToday, our prayers have been answered and Trevor is safely on his way back to the United States,\u201d his parents, Joey and Paul... [5983 chars]",
+                                    "description": "Russia has released former Marine Trevor Reed in a prisoner exchange with the U.S., his family and officials said Wednesday.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220427-trevor-reeed-mb-1258-dd851e.jpg",
+                                    "publishedAt": "2022-04-27T13:37:32Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Russia releases former U.S. Marine Trevor Reed in prisoner exchange",
+                                    "url": "https://www.nbcnews.com/news/us-news/russia-releases-us-marine-vet-part-prisoner-exchange-rcna26214"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "book",
+                                "news": {
+                                    "content": "The Chens may be well known across Texas for their Austin-based cookie delivery business, Tiff\u2019s Treats, but there is so much more to their story than cookies.\nFounders Tiffany and Leon Chen launched their debut book, It\u2019s Not Just Cookies, earlier t... [2953 chars]",
+                                    "description": "The Chens may be well known across Texas for their Austin-based cookie delivery business, Tiff\u2019s Treats, but there is so much more to their story than cookies.",
+                                    "image": "https://dmn-dallas-news-prod.cdn.arcpublishing.com/resizer/0RHyBzAqUKt58nYNjMCfatO_cCc=/1200x630/filters:focal(1063x1268:1073x1258):no_upscale()/cloudfront-us-east-1.images.arcpublishing.com/dmn/LXFUCV62UVGPXKNOJ5XSL7OM6M.jpg",
+                                    "publishedAt": "2022-04-27T12:51:00Z",
+                                    "source": {
+                                        "name": "The Dallas Morning News",
+                                        "url": "https://www.dallasnews.com"
+                                    },
+                                    "title": "What\u2019s the Tiff\u2019s Treats secret? Texas company founders share all, including recipes, in first book",
+                                    "url": "https://www.dallasnews.com/food/cooking/2022/04/27/whats-the-tiffs-treats-secret-texas-company-founders-share-all-including-recipes-in-first-book/"
+                                },
+                                "which": "human"
+                            }
+                        ],
                         "conceptnet": {
                             "book": {
                                 "SymbolOf": [
@@ -503,28 +470,6 @@
                                     "read book",
                                     "learn"
                                 ]
-                            },
-                            "1984": {
-                                "SymbolOf": [
-                                    "mathematics",
-                                    "computer",
-                                    "university"
-                                ],
-                                "HasProperty": [
-                                    "1980s",
-                                    "1984",
-                                    "american"
-                                ],
-                                "Causes": [
-                                    "global thermonuclear war",
-                                    "death",
-                                    "depression"
-                                ],
-                                "CausesDesire": [
-                                    "celebrate",
-                                    "make friend",
-                                    "write novel"
-                                ]
                             }
                         }
                     }
@@ -532,13 +477,13 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "Hi, this is a DREAM Socialbot! How are you doing today?",
+                    "text": "Hi, this is a DREAM Socialbot! How are things?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you doing today?",
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How are things?",
                             "segments": [
                                 "Hi, this is a DREAM Socialbot!",
-                                "How are you doing today?"
+                                "How are things?"
                             ]
                         },
                         "ner": [
@@ -549,7 +494,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is a DREAM Socialbot! How are you doing today?"
+                                "Hi, this is a DREAM Socialbot! How are things?"
                             ]
                         }
                     },
@@ -568,21 +513,7 @@
         }
     ],
     "entities_batch": [
-        {
-            "my favorite book": {
-                "bot_attitude": null,
-                "bot_encounters": [],
-                "human_attitude": "like",
-                "human_encounters": [
-                    {
-                        "full_name": "my favorite book",
-                        "human_utterance_index": 1,
-                        "previous_skill_name": "dff_friendship_skill"
-                    }
-                ],
-                "name": "my favorite book"
-            }
-        }
+        {}
     ],
     "used_links_batch": [
         {}

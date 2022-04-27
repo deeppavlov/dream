@@ -1,11 +1,11 @@
 [
     [
-        "You should read it! This is an amazing book. The plot is breathtaking, and I really liked the characters!",
+        "Ok! And what about Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?",
         2.0,
         {
             "dff_book_recommendation_skill_state": {
                 "shared_memory": {},
-                "previous_human_utter_index": 4,
+                "previous_human_utter_index": 3,
                 "history": {
                     "1": [
                         "book_by_genre",
@@ -18,32 +18,28 @@
                     "3": [
                         "book_by_genre",
                         "already_read"
-                    ],
-                    "4": [
-                        "book_by_genre",
-                        "suggest2read"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
                     "id": "703f6322-5184-476e-b876-61bb05bc7ebd",
                     "labels": {
+                        "1": [
+                            "book_by_genre",
+                            "q_book_by_genre"
+                        ],
                         "2": [
                             "book_by_genre",
                             "already_read"
-                        ],
-                        "3": [
-                            "book_by_genre",
-                            "suggest2read"
                         ]
                     },
                     "requests": {
-                        "2": "yes.",
-                        "3": "no."
+                        "1": "fantasy.",
+                        "2": "yes."
                     },
                     "responses": {
-                        "2": "Ok! And what about Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?",
-                        "3": "You should read it! This is an amazing book. The plot is breathtaking, and I really liked the characters!"
+                        "1": "Have you read The Hunger Games by Suzanne Collins?",
+                        "2": "Ok! And what about Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)? Have you read it?"
                     },
                     "misc": {
                         "slots": {
@@ -70,7 +66,7 @@
         {},
         {
             "can_continue": "can",
-            "goal_status": "goal_achieved"
+            "goal_status": "goal_in_progress"
         }
     ]
 ]

@@ -14,7 +14,7 @@ import common.dff.integration.response as int_rsp
 import common.constants as common_constants
 
 from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN
-from common.constants import GOAL_DETECTED, GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_OFFERED
+from common.constants import GOAL_DETECTED, GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_NOT_ACHIEVED, GOAL_OFFERED
 
 import common.set_goal_flag as goal_status
 
@@ -92,12 +92,12 @@ flows = {
             }
         },
         "genre_q": {
-            RESPONSE: "So you're a fan of {fav_book_genre} novels, aren't you?",  
+            RESPONSE: "So you're a fan of {fav_book_genre} book genre, aren't you?",  
             PROCESSING: {
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
             },
-            TRANSITIONS: {"fan_of_genre": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars])},
+            TRANSITIONS: {"recommend_book_by_genre": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars])},
         },
         "fan_of_genre": {
             RESPONSE: "What {fav_book_genre} novels have you read?",
@@ -123,7 +123,7 @@ flows = {
             TRANSITIONS: {"recommend_book_by_genre": cnd.true()},
         },
         "q_book_by_genre": {
-            RESPONSE: "Have you read {book_recommend}?",
+            RESPONSE: "Have you read {book_recommend_1}?",
             PROCESSING:  {
                  "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                  "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
@@ -154,13 +154,35 @@ flows = {
             }
         },
         "already_read": {
-            RESPONSE: "Did you like it?",
+            RESPONSE: "Ok! And what about {book_recommend_2}? Have you read it?",
             PROCESSING: {
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            },
+             TRANSITIONS: {
+                "already_read_2": int_cnd.is_yes_vars,
+                "suggest2read": int_cnd.is_no_vars
+            }, 
+        },
+        "already_read_2": {
+            RESPONSE: "Hmmm... let's take a last chance! Have you read {book_recommend_3}?",
+            PROCESSING: {
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_IN_PROGRESS)
+            },
+             TRANSITIONS: {
+                "already_read_3": int_cnd.is_yes_vars,
+                "suggest2read": int_cnd.is_no_vars
+            }, 
+        },
+        "already_read_3": {
+            RESPONSE: "I really don't know what to recommend you then& But I'll learn!",
+            PROCESSING: {
+                "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_NOT_ACHIEVED)
             }
         },
         "suggest2read": {
-            RESPONSE: "You should read it! I really liked the plot and the characters!",
+            RESPONSE: "You should read it! This is an amazing book. The plot is breathtaking, and I really liked the characters!",
             PROCESSING: {
                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
             }

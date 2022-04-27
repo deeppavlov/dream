@@ -1,54 +1,48 @@
 [
     [
-        "Oh, then you should read We by Zamyatin",
+        "Have you read The Hunger Games by Suzanne Collins?",
         2.0,
         {
             "dff_book_recommendation_skill_state": {
                 "shared_memory": {},
-                "previous_human_utter_index": 5,
+                "previous_human_utter_index": 2,
                 "history": {
                     "1": [
                         "book_by_genre",
-                        "genre_q"
+                        "q_fav_genre"
                     ],
-                    "3": [
+                    "2": [
                         "book_by_genre",
-                        "genre_q"
-                    ],
-                    "4": [
-                        "book_by_genre",
-                        "fan_of_genre"
-                    ],
-                    "5": [
-                        "book_by_genre",
-                        "recommend_book_by_genre"
+                        "q_book_by_genre"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "133fa70d-8438-4f32-8ebf-c999d637fc13",
+                    "id": "703f6322-5184-476e-b876-61bb05bc7ebd",
                     "labels": {
-                        "2": [
+                        "0": [
                             "book_by_genre",
-                            "fan_of_genre"
+                            "q_fav_genre"
                         ],
-                        "3": [
+                        "1": [
                             "book_by_genre",
-                            "recommend_book_by_genre"
+                            "q_book_by_genre"
                         ]
                     },
                     "requests": {
-                        "2": "yes.",
-                        "3": "brave new world."
+                        "0": "recommend me a book.",
+                        "1": "fantasy."
                     },
                     "responses": {
-                        "2": "What dystopian novels have you read?",
-                        "3": "Oh, then you should read We by Zamyatin"
+                        "0": "What is your favorite genre?",
+                        "1": "Have you read The Hunger Games by Suzanne Collins?"
                     },
                     "misc": {
                         "slots": {
-                            "book_recommend": "We by Zamyatin",
-                            "fav_book_genre": "dystopian"
+                            "fav_genre": "fantasy",
+                            "book_recommend_1": "The Hunger Games by Suzanne Collins",
+                            "book_recommend_2": "Harry Potter and the Order of the Phoenix by J.K. Rowling, Mary GrandPr\u00e9 (Illustrator)",
+                            "book_recommend_3": "Twilight by Stephenie Meyer"
                         }
                     },
                     "validation": false,
@@ -61,11 +55,14 @@
             },
             "used_links": {},
             "age_group": "unknown",
-            "disliked_skills": []
+            "disliked_skills": [
+                "emotion_skill"
+            ]
         },
         {},
         {
-            "can_continue": "can"
+            "can_continue": "can",
+            "goal_status": "goal_in_progress"
         }
     ]
 ]

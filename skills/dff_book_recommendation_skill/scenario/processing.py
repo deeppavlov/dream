@@ -1,12 +1,18 @@
 import logging
 import re
+import json
+
 from df_engine.core import Node, Context, Actor
 
 
 logger = logging.getLogger(__name__)
 # ....
-book4genre = {"fantasy": "The Lord of the Rings by Tolkien", 
-"historical": "he Twelve Rooms of the Nile by Enid Shomer", "dystopian": "We by Zamyatin"}
+
+with open('common/genre2books.json', 'r') as f:
+    genre2books = json.load(f)
+
+with open('common/book2genre.json', 'r') as f:
+    book2genre = json.load(f)
 
 
 def extract_book_genre():
@@ -17,21 +23,15 @@ def extract_book_genre():
         **kwargs,
     ) -> Context:
         slots = ctx.misc.get("slots", {})
-        books = ['harry potter', 'war and peace', '1984']
-        books_re = "|".join(books)
-        extracted_book = re.findall(books_re, ctx.last_request, re.IGNORECASE)
-        if re.findall(r'harry potter', ctx.last_request, re.IGNORECASE) != []:
-            slots["fav_book_genre"] = "fantasy"
-            slots["book_recommend"] = book4genre["fantasy"]
-            ctx.misc["slots"] = slots
-        elif re.findall(r'war and peace', ctx.last_request, re.IGNORECASE) != []:
-            slots["fav_book_genre"] = "historical"
-            slots["book_recommend"] = book4genre["historical"]
-            ctx.misc["slots"] = slots
-        elif re.findall(r'1984', ctx.last_request, re.IGNORECASE) != []:
-            slots["fav_book_genre"] = "dystopian"
-            slots["book_recommend"] = book4genre["dystopian"]
-            ctx.misc["slots"] = slots
+        for book in book2genre.keys():
+            if book in ctx.last_request.lower():
+                slots["fav_book_genre"] = book2genre[book]
+                if book not in genre2books[book2genre[book]][0].lower():
+                    slots["book_recommend"] = genre2books[book2genre[book]][0]
+                else:
+                    slots["book_recommend"] = genre2books[book2genre[book]][1]
+                ctx.misc["slots"] = slots
+                break
 
         return ctx
 
@@ -46,11 +46,12 @@ def extract_fav_genre():
         **kwargs,
     ) -> Context:
         slots = ctx.misc.get("slots", {})
-        genres = ['fantasy', 'historical', 'dystopian']
-        for genre in genres:
+        for genre in genre2books.keys():
             if genre in ctx.last_request.lower():
                 slots["fav_genre"] = genre
-                slots["book_recommend"] = book4genre[genre]
+                slots["book_recommend_1"] = genre2books[genre][0]
+                slots["book_recommend_2"] = genre2books[genre][1]
+                slots["book_recommend_3"] = genre2books[genre][2]
                 ctx.misc["slots"] = slots
 
         return ctx
