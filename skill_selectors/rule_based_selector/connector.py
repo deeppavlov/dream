@@ -273,7 +273,6 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
 
-            # goals_tracker_state = dialog["human"]["attributes"].get("goals_tracker", [])
             skills_for_goal = []
             try:
                 goals_tracker_state = json.loads(dialog["human"]["attributes"]["goals_tracker"])

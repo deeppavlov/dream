@@ -1,74 +1,26 @@
 import requests
+import json
 
-test_config = [
-        {
-            "last_detected_goals": ["share_personal_problems"],
-            "goals_tracker_state": [[], []],
-            "skill_goal_status": None,
-            "last_active_skill": "dff_template_skill"
-        },
-        {
-            "last_detected_goals": ["get_book_recommendation"],
-            "goals_tracker_state": [
-                [],
-                [],
-                [],
-                [("share_personal_problems", "goal_detected")]
-                ],
-            "skill_goal_status": "goal_in_progress",
-            "last_active_skill": "dff_share_problems_skill"
-        },
-        {
-            "last_detected_goals": [],
-            "goals_tracker_state": [
-                [],
-                [],
-                [],
-                [("share_personal_problems", "goal_detected")],
-                [("share_personal_problems", "goal_in_progress")],
-                [("share_personal_problems", "goal_in_progress"), ("get_book_recommendation", "goal_detected")],
-                [("share_personal_problems", "goal_in_progress"), ("get_book_recommendation", "goal_ignored")],
-                [("share_personal_problems", "goal_in_progress")]
-                ],
-            "skill_goal_status": "goal_achieved",
-            "last_active_skill": "dff_share_problems_skill"
-        },
-    ]
+test_config = []
+for i in range(1, 5):
+    with open("test_tracker_" + str(i) + ".json", "r") as f:
+        data = json.load(f)
+        test_config.append(data)
+
 
 gold_result = [
-    [
-        [],
-        [],
-        [],
-        [["share_personal_problems","goal_detected"]]
-    ],
-    [
-        [],
-        [],
-        [],
-        [["share_personal_problems","goal_detected"]],
-        [["share_personal_problems","goal_in_progress"]],
-        [["get_book_recommendation","goal_detected"],["share_personal_problems","goal_in_progress"]]
-    ],
-    [
-        [],
-        [],
-        [],
-        [["share_personal_problems","goal_detected"]],
-        [["share_personal_problems","goal_in_progress"]],
-        [["share_personal_problems","goal_in_progress"],["get_book_recommendation","goal_detected"]],
-        [["share_personal_problems","goal_in_progress"],["get_book_recommendation","goal_ignored"]],
-        [["share_personal_problems","goal_in_progress"]],[["share_personal_problems","goal_achieved"]],
-        []
+    '{"state": [[], []]}',
+    '{"state": [[], [["get_book_recommendation", "goal_detected"]]]}',
+    '{"state": [[], [["get_book_recommendation", "goal_detected"]], [["get_book_recommendation", "goal_in_progress"]], []]}',
+    '{"state": [[], [["get_book_recommendation", "goal_detected"]], [["get_book_recommendation", "goal_in_progress"]], [], [["get_book_recommendation", "goal_achieved"]], []]}'
     ]
-]
 
 if __name__ == "__main__":
     url = "http://0.0.0.0:8125/respond"
     results = []
     count = 0
     for utt, gold_res in zip(test_config, gold_result):
-        result = requests.post(url, json=utt).json()
+        result = requests.post(url, json=utt[0]).json()
         results.append(result)
         if result[0]["human_attributes"]["goals_tracker"] == gold_res:
             count += 1
