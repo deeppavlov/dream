@@ -207,7 +207,8 @@ flows = {
             RESPONSE: "",
             PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
             TRANSITIONS: {
-                ("books_general", "book_start"): loc_cnd.start_condition, lbl.repeat(): loc_cnd.start_condition
+                ("books_general", "book_start"): loc_cnd.start_condition,
+                lbl.repeat(): loc_cnd.start_condition,
             },
         },
         "fallback": {
