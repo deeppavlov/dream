@@ -139,8 +139,3 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"captioning exec time: {total_time:.3f}s")
     return jsonify({"caption": result})
-
-
-
-
-

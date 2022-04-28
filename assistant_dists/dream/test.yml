@@ -126,5 +126,8 @@ services:
   midas-predictor:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  image-captioning:
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
   dff-template-skill:
 version: '3.7'
