@@ -205,10 +205,10 @@ flows = {
     "global_flow": {
         "start": {
             RESPONSE: "",
-            PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
+            PROCESSING: {"set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO)},
             TRANSITIONS: {
                 ("books_general", "book_start"): loc_cnd.start_condition,
-                lbl.repeat(): loc_cnd.start_condition,
+                lbl.repeat(): cnd.true(),
             },
         },
         "fallback": {
