@@ -1177,7 +1177,6 @@ services:
       args:
         SERVICE_PORT: 8123
         SERVICE_NAME: image_captioning
-        PRETRAINED_MODEL_PATH: /src/coco_weights.pt
       context: ./services/image_captioning/
     command: flask run -h 0.0.0.0 -p 8123
     environment:
