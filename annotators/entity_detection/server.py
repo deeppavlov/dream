@@ -17,6 +17,17 @@ app = Flask(__name__)
 
 config_name = os.getenv("CONFIG")
 lowercase = int(os.getenv("LOWERCASE", "1"))
+finegrained = int(os.getenv("FINEGRAINED", "0"))
+
+
+def replace_finegrained_tags(tag):
+    if tag in {"loc", "city", "country", "county", "river", "us_state", "road"}:
+        return "location"
+    elif tag in {"per", "musician", "writer", "athlete", "politician", "actor"}:
+        return "person"
+    else:
+        return tag
+
 
 try:
     entity_detection = build_model(config_name, download=True)
@@ -92,6 +103,8 @@ def get_result(request):
                         tag = finegrained_tag[0][1].lower()
                     else:
                         tag = "misc"
+                    if not finegrained:
+                        tag = replace_finegrained_tags(tag)
                     if "entities" in utt_entities:
                         utt_entities["entities"].append(entity)
                         utt_entities["labelled_entities"].append(

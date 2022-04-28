@@ -6,6 +6,7 @@ ARG COMMIT=0.13.0
 ARG SEQ_TAG_CONFIG
 ARG EL_TAG_CONFIG
 ARG CONFIG
+ARG FINEGRAINED
 ARG LOWERCASE
 ARG PORT
 ARG SRC_DIR
@@ -14,15 +15,13 @@ ARG SED_ARG=" | "
 ENV SEQ_TAG_CONFIG=$SEQ_TAG_CONFIG
 ENV EL_TAG_CONFIG=$EL_TAG_CONFIG
 ENV CONFIG=$CONFIG
+ENV FINEGRAINED=$FINEGRAINED
 ENV LOWERCASE=$LOWERCASE
 ENV PORT=$PORT
 
 COPY ./annotators/entity_detection/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
-
-RUN pip install pyopenssl==22.0.0
 RUN python -m spacy download en_core_web_sm
 
 COPY $SRC_DIR /src
