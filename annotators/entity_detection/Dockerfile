@@ -2,7 +2,6 @@ FROM deeppavlov/base-gpu:0.12.1
 
 RUN apt-get update && apt-get install git -y
 
-ARG COMMIT=0.13.0
 ARG SEQ_TAG_CONFIG
 ARG EL_TAG_CONFIG
 ARG CONFIG
