@@ -9,6 +9,7 @@ from os import getenv
 import random
 
 import df_engine.conditions as cnd
+import df_engine.labels as lbl
 from df_engine.core.keywords import (
     PROCESSING,
     TRANSITIONS,
@@ -205,7 +206,9 @@ flows = {
         "start": {
             RESPONSE: "",
             PROCESSING: {"set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)},
-            TRANSITIONS: {("books_general", "book_start"): loc_cnd.start_condition},
+            TRANSITIONS: {
+                ("books_general", "book_start"): loc_cnd.start_condition, lbl.repeat(): loc_cnd.start_condition
+            },
         },
         "fallback": {
             RESPONSE: loc_rsp.append_unused(
