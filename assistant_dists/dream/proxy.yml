@@ -585,7 +585,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8121
       - PORT=8121
   
- dialogpt:
+  dialogpt:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
