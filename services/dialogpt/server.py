@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
+ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
 
 try:
@@ -63,13 +64,19 @@ def respond():
         responses = []
         confidences = []
         for context in contexts:
-            responses += [generate_response(context)]
-            confidences += [DEFAULT_CONFIDENCE]
+            response = generate_response(context)
+            if len(response) > 3:
+                # drop too short responses
+                responses += [response]
+                confidences += [DEFAULT_CONFIDENCE]
+            else:
+                responses += [""]
+                confidences += [ZERO_CONFIDENCE]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         responses = [""] * len(contexts)
-        confidences = [0.0] * len(contexts)
+        confidences = [ZERO_CONFIDENCE] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"masked_lm exec time: {total_time:.3f}s")
