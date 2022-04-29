@@ -54,11 +54,11 @@ def get_result(request):
     for n, hist_utt in enumerate(last_utts):
         if len(hist_utt) > 0:
             last_utt = hist_utt[-1]
-            if last_utt[-1] not in {".", "!", "?"}:
+            if last_utt and last_utt[-1] not in {".", "!", "?"}:
                 last_utt = f"{last_utt}."
             if len(hist_utt) > 1:
                 prev_utt = hist_utt[-2]
-                if prev_utt[-1] not in {".", "!", "?"}:
+                if prev_utt and prev_utt[-1] not in {".", "!", "?"}:
                     prev_utt = f"{prev_utt}."
                 last_utt_starts.append(len(prev_utt) + 1)
                 concat_utt = f"{prev_utt} {last_utt}"
