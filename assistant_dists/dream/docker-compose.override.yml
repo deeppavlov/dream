@@ -550,7 +550,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 83fa40d7f600137910c663bda9a4d81fa425fe12
+        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
@@ -1041,7 +1041,7 @@ services:
         CONFIG: dialog_entity_detection.json
         PORT: 8103
         SRC_DIR: annotators/entity_detection/
-        COMMIT: 5d27dca3dfa0cf481324facd73f2e02f579f66b3
+        COMMIT: 10f6e39e71f0623ec4ad9fb27ae8739d8624be85
       context: ./
       dockerfile: annotators/entity_detection/Dockerfile_new
     command: flask run -h 0.0.0.0 -p 8103
