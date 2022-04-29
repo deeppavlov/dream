@@ -13,8 +13,14 @@ from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, GREETING_QUESTIONS_TEXTS
-from common.utils import high_priority_intents, low_priority_intents, get_topics, get_intents, get_named_locations, \
-    get_factoid
+from common.utils import (
+    high_priority_intents,
+    low_priority_intents,
+    get_topics,
+    get_intents,
+    get_named_locations,
+    get_factoid,
+)
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news, if_switch_test_skill
 from common.response_selection import UNPREDICTABLE_SKILLS
