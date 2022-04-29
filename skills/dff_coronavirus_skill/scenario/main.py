@@ -30,8 +30,6 @@ DEFAULT_CONFIDENCE = 0.95
 BIT_LOWER_CONFIDENCE = 0.90
 ZERO_CONFIDENCE = 0.0
 
-# Intention to know something about covid but not in specific subject
-CLARIFY_INTENTION_ABOUT_COVID_CONFIDENCE = 1
 # Intention to know covid incidence statistics in specific city/county/state/country
 CLARIFY_INTENTION_ABOUT_SUBJECT_CONFIDENCE = 0.99
 # Detected "fear" or "anger" emotion
@@ -152,7 +150,7 @@ flows = {
             "bluish lips or face. If you develop any of these signs, "
             "get a medical attention.",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
@@ -173,7 +171,7 @@ flows = {
             "give any recommendations about coronavirus. You can check the CDC "
             "website for more info.",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
@@ -182,7 +180,7 @@ flows = {
             RESPONSE: "Unfortunately, I am not allowed to give any recommendations "
             "about coronavirus. You can check the CDC website for more info.",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "offer_more": loc_prs.offer_more,
             },
             TRANSITIONS: loc_cnd.replied_to_offer,
@@ -211,7 +209,7 @@ flows = {
             # for more details about linking issue
             RESPONSE: loc_rsp.tell_age_risks,
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "detect_age": loc_prs.detect_age,
                 "execute_response": loc_prs.execute_response,
                 "set_flag": loc_prs.set_flag("asked_about_age", True),
@@ -250,7 +248,7 @@ flows = {
             RESPONSE: "According to the recent data, there are {0} confirmed cases of coronavirus. "
             "Shall I tell you more?",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "insert_global_confirmed": loc_prs.insert_global_confirmed,
                 "set_flag": loc_prs.set_flag("core_fact_1", True),
             },
@@ -263,7 +261,7 @@ flows = {
         "core_fact_2": {
             RESPONSE: "According to the recent data, there are {0} confirmed deaths from coronavirus.",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "insert_global_deaths": loc_prs.insert_global_deaths,
                 "offer_more": loc_prs.offer_more,
                 "set_flag": loc_prs.set_flag("core_fact_2", True),
@@ -294,7 +292,7 @@ flows = {
     "subject_undetected": {
         "clarify_intention": {
             RESPONSE: "I suppose you are asking about coronavirus. Is it right?",
-            PROCESSING: {"set_confidence": int_prs.set_confidence(CLARIFY_INTENTION_ABOUT_COVID_CONFIDENCE)},
+            PROCESSING: {"set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE)},
             TRANSITIONS: {
                 ("covid_fact", "core_fact_1"): cnd.all(
                     [
