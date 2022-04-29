@@ -1,7 +1,7 @@
 [
     [
         "Unfortunately, I am not allowed to give any recommendations about coronavirus. You can check the CDC website for more info. Would you want to learn more?",
-        1.0,
+        0.98,
         {
             "dff_coronavirus_skill_state": {
                 "shared_memory": {},
