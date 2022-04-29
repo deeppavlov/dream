@@ -137,6 +137,7 @@ def token_from_subtoken(units: torch.Tensor, mask: torch.Tensor) -> torch.Tensor
     full_range = torch.arange(batch_size * max_token_seq_len).to(torch.int64)
     # full_range -> [0, 1, 2, 3, 4, 5, 6, 7, 8]
     nonword_indices_flat = torch.masked_select(full_range, torch.logical_not(x_mask))
+
     # # y_idxs -> [5, 7, 8]
 
     # get a sequence of units corresponding to the start subtokens of the words
@@ -231,7 +232,6 @@ class TorchTransformersSequenceTagger(TorchModel):
         load_before_drop: bool = True,
         clip_norm: Optional[float] = None,
         min_learning_rate: float = 1e-07,
-        from_file: bool = False,
         **kwargs,
     ) -> None:
 
@@ -243,7 +243,6 @@ class TorchTransformersSequenceTagger(TorchModel):
 
         self.pretrained_bert = pretrained_bert
         self.bert_config_file = bert_config_file
-        self.from_file = from_file
 
         super().__init__(
             optimizer=optimizer,
@@ -288,7 +287,7 @@ class TorchTransformersSequenceTagger(TorchModel):
         b_labels = torch.from_numpy(np.array(subtoken_labels)).to(torch.int64).to(self.device)
         self.optimizer.zero_grad()
 
-        loss, logits = self.model(input_ids=b_input_ids, attention_mask=b_input_masks, labels=b_labels)
+        loss = self.model(input_ids=b_input_ids, attention_mask=b_input_masks, labels=b_labels).loss
         loss.backward()
         # Clip the norm of the gradients to 1.0.
         # This is to help prevent the "exploding gradients" problem.
@@ -334,25 +333,34 @@ class TorchTransformersSequenceTagger(TorchModel):
         logits = logits.detach().cpu().numpy()
         pred = np.argmax(logits, axis=-1)
         seq_lengths = np.sum(y_masks, axis=1)
-        pred = [p[:l] for l, p in zip(seq_lengths, pred)]
+        pred = [pred_elem[:seq_len] for seq_len, pred_elem in zip(seq_lengths, pred)]
 
         if self.return_probas:
             return pred, probas
         else:
             return pred
 
+        return pred
+
     @overrides
     def load(self, fname=None):
         if fname is not None:
             self.load_path = fname
 
-        if self.from_file:
-            self.pretrained_bert = str(expand_path(self.pretrained_bert))
+        self.pretrained_bert = str(expand_path(self.pretrained_bert))
         if self.pretrained_bert:
             config = AutoConfig.from_pretrained(
                 self.pretrained_bert, num_labels=self.n_classes, output_attentions=False, output_hidden_states=False
             )
             self.model = AutoModelForTokenClassification.from_pretrained(self.pretrained_bert, config=config)
+        elif self.bert_config_file and Path(self.bert_config_file).is_file():
+            self.bert_config = AutoConfig.from_json_file(str(expand_path(self.bert_config_file)))
+
+            if self.attention_probs_keep_prob is not None:
+                self.bert_config.attention_probs_dropout_prob = 1.0 - self.attention_probs_keep_prob
+            if self.hidden_keep_prob is not None:
+                self.bert_config.hidden_dropout_prob = 1.0 - self.hidden_keep_prob
+            self.model = AutoModelForTokenClassification(config=self.bert_config)
         else:
             raise ConfigError("No pre-trained BERT model is given.")
 
@@ -370,7 +378,7 @@ class TorchTransformersSequenceTagger(TorchModel):
                 raise ConfigError("Provided load path is incorrect!")
 
             weights_path = Path(self.load_path.resolve())
-            weights_path = weights_path.with_suffix(f".pth.tar")
+            weights_path = weights_path.with_suffix(".pth.tar")
             if weights_path.exists():
                 log.info(f"Load path {weights_path} exists.")
                 log.info(f"Initializing `{self.__class__.__name__}` from saved.")

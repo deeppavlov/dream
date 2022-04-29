@@ -21,17 +21,23 @@ downloads = defaultdict(list)
 repo = Repo("/pavlov/DeepPavlov")
 origin = repo.remotes.origin
 
+replace_paths = {
+    "entity-detection": ('"src/', '"annotators/entity_detection/src/'),
+    "kbqa": ('"/src/', '"annotators/kbqa/'),
+}
+
 for service_name, service_args in data["services"].items():
     if service_args.get("build", {}).get("args", {}).get("SRC_DIR") is not None:
         commit = service_args["build"]["args"].get("COMMIT", "master")
         repo.git.checkout(commit)
         config_path = Path(service_args["build"]["args"]["SRC_DIR"]) / service_args["build"]["args"]["CONFIG"]
         try:
-            if service_name == "kbqa":
+            if service_name in {"entity-detection", "kbqa"}:
                 with open(config_path) as fin:
                     lines = fin.readlines()
                 with open(config_path, "w") as fout:
-                    fout.writelines([line.replace('"/src/', '"annotators/kbqa/') for line in lines])
+                    old_path, new_path = replace_paths[service_name]
+                    fout.writelines([line.replace(old_path, new_path) for line in lines])
             config_downloads = dict(get_configs_downloads(config_path))
             for url, paths in config_downloads.items():
                 md5_url = path_set_md5(url)

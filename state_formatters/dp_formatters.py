@@ -203,6 +203,14 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
+    num_last_utterances = 2
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    return [{"sentences": context}]
+
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     last_human_utt = dialog["human_utterances"][-1]["annotations"].get(

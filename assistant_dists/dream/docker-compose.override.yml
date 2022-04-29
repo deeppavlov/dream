@@ -1038,16 +1038,19 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: dialog_entity_detection.json
+        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
+        EL_TAG_CONFIG: src/el_tags_infer.json
+        CONFIG: entity_detection_eng.json
+        LOWERCASE: 0
         PORT: 8103
         SRC_DIR: annotators/entity_detection/
-        COMMIT: 10f6e39e71f0623ec4ad9fb27ae8739d8624be85
+        FINEGRAINED: 0
       context: ./
-      dockerfile: annotators/entity_detection/Dockerfile_new
+      dockerfile: annotators/entity_detection/Dockerfile
     command: flask run -h 0.0.0.0 -p 8103
     environment:
-      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
