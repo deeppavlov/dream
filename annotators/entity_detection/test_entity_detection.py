@@ -15,7 +15,7 @@ def main():
                 "entities": ["capital", "russia"],
                 "labelled_entities": [
                     {"text": "capital", "offsets": [12, 19], "label": "misc"},
-                    {"text": "russia", "offsets": [23, 29], "label": "country"},
+                    {"text": "russia", "offsets": [23, 29], "label": "location"},
                 ],
             }
         ],
