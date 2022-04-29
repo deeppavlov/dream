@@ -34,7 +34,6 @@ templates_dict = json.load(open("templates_dict.json", "r"))
 
 fact_dict = json.load(open("fact_dict.json", "r"))
 use_random_facts = False
-decrease_coef = 0.95
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -365,7 +364,8 @@ def respond():
             response = ""
             confidence = 0.0
 
-        confidence = confidence * decrease_coef
+        if confidence == 1.0:
+            confidence = 0.99
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
