@@ -37,8 +37,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_response(context):
-    global model, tokenizer
+def generate_response(context, model, tokenizer):
     encoded_context = []
     for uttr in context[-MAX_HISTORY_DEPTH:]:
         encoded_context += [tokenizer.encode(uttr + tokenizer.eos_token, return_tensors="pt")]
@@ -64,7 +63,7 @@ def respond():
         responses = []
         confidences = []
         for context in contexts:
-            response = generate_response(context)
+            response = generate_response(context, model, tokenizer)
             if len(response) > 3:
                 # drop too short responses
                 responses += [response]
