@@ -43,10 +43,10 @@ DOUBLE_SPACES = re.compile(r"\s+")
 stopwords = set(stopwords.words("english"))
 
 
-def get_result(request):
+def get_result(request, what_to_annotate):
     st_time = time.time()
     last_utts = request.json.get("sentences", [])
-    logger.info(f"input (the last utterances): {last_utts}")
+    logger.info(f"annotating: {what_to_annotate}, input (the last utterances): {last_utts}")
 
     utts_list = []
     utts_nums = []
@@ -140,13 +140,13 @@ def get_result(request):
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    result = get_result(request)
+    result = get_result(request, "user_uttr")
     return jsonify(result)
 
 
 @app.route("/respond_batch", methods=["POST"])
 def respond_batch():
-    result = get_result(request)
+    result = get_result(request, "hypotheses")
     return jsonify([{"batch": result}])
 
 
