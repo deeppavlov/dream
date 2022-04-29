@@ -249,7 +249,6 @@ def respond():
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
         nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-        combined_clsf = uttr["annotations"].get("combined_classification", {})
         factoid_conf = get_factoid(uttr)
         is_factoid_cls = factoid_conf.get("is_factoid", 0.0) > 0.9
         is_factoid = is_factoid_cls and (names or nounphrases) and check_factoid(last_phrase)
