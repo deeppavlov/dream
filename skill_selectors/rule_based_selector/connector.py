@@ -192,6 +192,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
+                skills_for_uttr.append("dialogpt")
                 if len(dialog["utterances"]) < 20:
                     skills_for_uttr.append("dff_friendship_skill")
 
