@@ -52,6 +52,8 @@ def get_result(request):
     utts_nums = []
     last_utt_starts = []
     for n, hist_utt in enumerate(last_utts):
+        if isinstance(hist_utt, str):
+            hist_utt = [hist_utt]
         if len(hist_utt) > 0:
             last_utt = hist_utt[-1]
             if last_utt and last_utt[-1] not in {".", "!", "?"}:
