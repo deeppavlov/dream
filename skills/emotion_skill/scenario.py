@@ -263,8 +263,8 @@ class EmotionSkillScenario:
                     was_active = False
                     was_scripted = False
                 if (was_trigger or was_active or self.regexp_sad) and not was_scripted:
-                    attr["can_continue"] = MUST_CONTINUE
-                    confidence = 1
+                    attr["can_continue"] = CAN_CONTINUE_SCENARIO
+                    confidence = 0.99
                 elif not very_very_confident and not was_active:
                     confidence = min(confidence, 0.99)
                     attr["can_continue"] = CAN_CONTINUE_SCENARIO
