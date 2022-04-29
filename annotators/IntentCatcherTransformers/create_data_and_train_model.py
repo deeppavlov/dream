@@ -34,7 +34,8 @@ if TRANSFORMERS_MODEL_PATH is None:
     TRANSFORMERS_MODEL_PATH = "distilbert-base-uncased"
 BATCH_SIZE = int(os.environ.get("BATCH_SIZE", 8))
 MAX_LENGTH = int(os.environ.get("MAX_LENGTH", 64))
-MODEL_PATH = args.model_path
+MODEL_PATH = Path(f"data/").joinpath(args.model_path)
+MODEL_PATH.mkdir(exist_ok=True)
 
 tokenizer = AutoTokenizer.from_pretrained(TRANSFORMERS_MODEL_PATH)
 
@@ -69,11 +70,10 @@ with open(args.intent_phrases_path, "r") as fp:
     random_phrases = all_data["random_phrases"]
     random_phrases = generate_phrases(random_phrases["phrases"], random_phrases["punctuation"])
 
-Path(f"data/{MODEL_PATH}/").mkdir(exist_ok=True)
 
 intent_data = {}
 intents = sorted(list(intent_phrases.keys()))
-with open(f"data/{MODEL_PATH}/intents.txt", "w") as f:
+with open(MODEL_PATH.joinpath("intents.txt"), "w") as f:
     for intent in intents:
         f.write(intent + "\n")
 
@@ -105,13 +105,13 @@ dump_dataset(
     intent_data,
     random_phrases,
     intents,
-    train_path=f"data/{MODEL_PATH}/intent_train.csv",
-    valid_path=f"data/{MODEL_PATH}/intent_valid.csv",
+    train_path=MODEL_PATH.joinpath("intent_train.csv"),
+    valid_path=MODEL_PATH.joinpath("intent_valid.csv"),
 )
 print("Dumped csv datasets")
 
 encoded_dataset = load(
-    train_path=f"data/{MODEL_PATH}/intent_train.csv", valid_path=f"data/{MODEL_PATH}/intent_valid.csv"
+    train_path=MODEL_PATH.joinpath("intent_train.csv"), valid_path=MODEL_PATH.joinpath("intent_valid.csv")
 )
 print("Loaded encoded datasets")
 
@@ -142,5 +142,5 @@ trainer.train()
 print("Final evaluation")
 trainer.evaluate()
 
-print(f"Saving model to: `data/{MODEL_PATH}`")
-trainer.model.save_pretrained(f"data/{MODEL_PATH}")
+print(f"Saving model to: `{str(MODEL_PATH)}`")
+trainer.model.save_pretrained(str(MODEL_PATH))
