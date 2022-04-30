@@ -183,6 +183,10 @@ services:
     restart: unless-stopped
   midas-predictor:
     restart: unless-stopped
+  dialogpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'

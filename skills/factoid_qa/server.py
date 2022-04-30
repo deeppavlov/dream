@@ -14,7 +14,7 @@ from os import getenv
 
 from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_entities
+from common.utils import get_entities, get_factoid
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
@@ -34,7 +34,6 @@ templates_dict = json.load(open("templates_dict.json", "r"))
 
 fact_dict = json.load(open("fact_dict.json", "r"))
 use_random_facts = False
-decrease_coef = 0.95
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -250,8 +249,9 @@ def respond():
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
         nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-        is_factoid_class = uttr["annotations"].get("factoid_classification", {}).get("factoid", 0)
-        is_factoid = is_factoid_class and (names or nounphrases) and check_factoid(last_phrase)
+        factoid_conf = get_factoid(uttr)
+        is_factoid_cls = factoid_conf.get("is_factoid", 0.0) > 0.9
+        is_factoid = is_factoid_cls and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
 
@@ -289,9 +289,9 @@ def respond():
     text_qa_response_batch = [{"answer": "", "answer_sentence": "", "confidence": 0.0} for _ in dialogs_batch]
     resp = requests.post(TEXT_QA_URL, json={"question_raw": questions_batch, "top_facts": facts_batch}, timeout=0.5)
     if resp.status_code != 200:
-        logger.info(f"API Error: Text QA inaccessible")
+        logger.info("API Error: Text QA inaccessible")
     else:
-        logger.info(f"Query against Text QA succeeded")
+        logger.info("Query against Text QA succeeded")
         text_qa_resp = resp.json()
         text_qa_response_batch = []
         cnt_fnd = 0
@@ -325,6 +325,7 @@ def respond():
         else:
             curr_uttr_rewritten = curr_ann_uttr["text"]
         is_question = "?" in curr_uttr_rewritten
+        logger.info(f"is_factoid {is_factoid} tell_me_about {tell_me_about_intent} is_question {is_question}")
         if is_factoid and (tell_me_about_intent or is_question):
             logger.info("Question is classified as factoid. Querying KBQA and ODQA.")
             print("Question is classified as factoid. Querying KBQA and ODQA...", flush=True)
@@ -363,7 +364,8 @@ def respond():
             response = ""
             confidence = 0.0
 
-        confidence = confidence * decrease_coef
+        if confidence == 1.0:
+            confidence = 0.99
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
