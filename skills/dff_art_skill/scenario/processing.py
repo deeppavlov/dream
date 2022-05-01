@@ -54,10 +54,7 @@ def save_next_key(keys: Iterator, maindict: dict) -> Callable:
         return save_slots_to_ctx(maindict[random.choice(list(maindict.keys()))])
 
 
-def execute_response(
-        ctx: Context,
-        actor: Actor,
-) -> Context:
+def execute_response(ctx: Context, actor: Actor,) -> Context:
     """Execute the callable response preemptively,
     so that slots can be filled"""
     processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])

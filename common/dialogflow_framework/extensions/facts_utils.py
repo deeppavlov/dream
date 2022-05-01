@@ -23,7 +23,7 @@ from common.wiki_skill import (
 from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
 
-nltk.download('punkt')
+nltk.download("punkt")
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)

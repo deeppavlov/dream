@@ -98,7 +98,7 @@ def speech_functions(*args):
         speech_functions = set(annotations.get("speech_function_classifier", []))
         for elem in args:
             if (isinstance(elem, str) and elem in speech_functions) or (
-                    isinstance(elem, list) and set(elem).intersection(speech_functions)
+                isinstance(elem, list) and set(elem).intersection(speech_functions)
             ):
                 flag = True
         logger.info(f"check_speech_functions: {args}, {flag}")
