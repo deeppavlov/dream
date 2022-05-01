@@ -94,15 +94,27 @@ flows = {
     "facts": {
         "how_to_draw": {
             RESPONSE: "",
-            PROCESSING: {"wikihow": providers.fact_provider("wikiHow", "Improve-Your-Drawing-Skills"), },
+            PROCESSING: {
+                "wikihow": providers.fact_provider("wikiHow", "Improve-Your-Drawing-Skills"),
+            },
             TRANSITIONS: {lbl.forward(): intents.facts},
         }
     },
     "global_flow": {
-        "start": {RESPONSE: "", TRANSITIONS: {}, },
-        "fallback": {RESPONSE: "Anyway, let's talk about something else!", TRANSITIONS: {}, },
+        "start": {
+            RESPONSE: "",
+            TRANSITIONS: {},
+        },
+        "fallback": {
+            RESPONSE: "Anyway, let's talk about something else!",
+            TRANSITIONS: {},
+        },
     },
 }
 
-actor = Actor(flows, start_label=("global_flow", "start"), fallback_label=("global_flow", "fallback"),)
+actor = Actor(
+    flows,
+    start_label=("global_flow", "start"),
+    fallback_label=("global_flow", "fallback"),
+)
 logger.info("Actor created successfully")
