@@ -10,10 +10,7 @@ from df_engine.core.keywords import (
     GLOBAL,
     RESPONSE,
 )
-from common.dialogflow_framework.extensions import (
-    intents,
-    providers
-)
+from common.dialogflow_framework.extensions import intents, providers
 from df_engine.core import Actor
 
 import common.dff.integration.condition as int_cnd
@@ -36,17 +33,9 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("art", "drawing_q", 2): cnd.all(
-                [
-                    loc_cnd.art_skill_switch,
-                    cnd.neg(loc_cnd.check_flag("art_skill_active"))
-                ]
+                [loc_cnd.art_skill_switch, cnd.neg(loc_cnd.check_flag("art_skill_active"))]
             ),
-            ("art", "photo_q", 1): cnd.all(
-                [
-                    loc_cnd.art_skill_switch,
-                    cnd.neg(loc_cnd.check_flag("art_skill_active"))
-                ]
-            )
+            ("art", "photo_q", 1): cnd.all([loc_cnd.art_skill_switch, cnd.neg(loc_cnd.check_flag("art_skill_active"))]),
         }
     },
     "art": {
@@ -64,38 +53,33 @@ flows = {
             },
             PROCESSING: {
                 "set_flag": loc_prs.set_flag("art_skill_active"),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE)
-            }
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
         },
         "photo_q": {
             RESPONSE: ["Do you like taking photos?"],
             TRANSITIONS: {("photo", "what_photos"): cnd.any([int_cnd.is_yes_vars, cnd.regexp(templates.LIKE_PATTERN)])},
             PROCESSING: {
                 "set_flag": loc_prs.set_flag("art_skill_active"),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE)
-            }
-        }
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
+        },
     },
     "drawing": {
-        "what_painter": {
-            RESPONSE: "Pictures of what painters do you like?",
-            TRANSITIONS: {
-                lbl.forward(): cnd.true()}
-        },
+        "what_painter": {RESPONSE: "Pictures of what painters do you like?", TRANSITIONS: {lbl.forward(): cnd.true()}},
         "what_paintings": {
             RESPONSE: "I also like pictures of {user_fav_painter}. What kind of paintings do you like to draw: "
-                      "landscapes, portraits or something else?",
+            "landscapes, portraits or something else?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(user_fav_painter="wiki:Q1028181"),
-                "slot_filling": int_prs.fill_responses_by_slots()
+                "slot_filling": int_prs.fill_responses_by_slots(),
             },
-            TRANSITIONS: {
-                lbl.forward(): cnd.true()}
+            TRANSITIONS: {lbl.forward(): cnd.true()},
         },
         "how_to_draw": {
             RESPONSE: "Would you like to know how to improve your drawing skills?",
             TRANSITIONS: {("facts", "how_to_draw"): int_cnd.is_yes_vars},
-        }
+        },
     },
     "photo": {
         "what_photos": {
@@ -104,33 +88,21 @@ flows = {
         },
         "how_photo": {
             RESPONSE: "Do you take photos on an SLR camera or on your cell phone?",
-            TRANSITIONS: {("global_flow", "fallback"): cnd.true()}
-        }
+            TRANSITIONS: {("global_flow", "fallback"): cnd.true()},
+        },
     },
     "facts": {
         "how_to_draw": {
             RESPONSE: "",
-            PROCESSING: {
-                "wikihow": providers.fact_provider("wikiHow", "Improve-Your-Drawing-Skills"),
-            },
-            TRANSITIONS: {lbl.forward(): intents.facts}
+            PROCESSING: {"wikihow": providers.fact_provider("wikiHow", "Improve-Your-Drawing-Skills"), },
+            TRANSITIONS: {lbl.forward(): intents.facts},
         }
     },
     "global_flow": {
-        "start": {
-            RESPONSE: "",
-            TRANSITIONS: {},
-        },
-        "fallback": {
-            RESPONSE: "Anyway, let's talk about something else!",
-            TRANSITIONS: {},
-        }
-    }
+        "start": {RESPONSE: "", TRANSITIONS: {}, },
+        "fallback": {RESPONSE: "Anyway, let's talk about something else!", TRANSITIONS: {}, },
+    },
 }
 
-actor = Actor(
-    flows,
-    start_label=("global_flow", "start"),
-    fallback_label=("global_flow", "fallback"),
-)
+actor = Actor(flows, start_label=("global_flow", "start"), fallback_label=("global_flow", "fallback"),)
 logger.info("Actor created successfully")
