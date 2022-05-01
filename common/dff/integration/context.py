@@ -69,7 +69,10 @@ def set_cross_link(
     cur_human_index = get_human_utter_index(ctx, actor)
     if not ctx.validation:
         ctx.misc["agent"]["dff_shared_state"]["cross_links"][to_service_name] = {
-            cur_human_index: {"from_service": from_service_name, **cross_link_additional_data,}
+            cur_human_index: {
+                "from_service": from_service_name,
+                **cross_link_additional_data,
+            }
         }
 
 
@@ -217,12 +220,20 @@ def reset_can_continue(ctx: Context, actor: Actor):
 
 def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
-    entities = common_utils.get_entities(get_last_human_utterance(ctx, actor), only_named=True, with_labels=True,)
+    entities = common_utils.get_entities(
+        get_last_human_utterance(ctx, actor),
+        only_named=True,
+        with_labels=True,
+    )
     return entities
 
 
 def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
-    nps = common_utils.get_entities(get_last_human_utterance(ctx, actor), only_named=False, with_labels=False,)
+    nps = common_utils.get_entities(
+        get_last_human_utterance(ctx, actor),
+        only_named=False,
+        with_labels=False,
+    )
     return nps
 
 
