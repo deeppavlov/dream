@@ -16,5 +16,5 @@ def always_true(vars):
     return True
 
 
-def facts(vars):
-    return provide_facts_request(vars)
+def facts(ctx, actor):
+    return provide_facts_request(ctx, actor)
