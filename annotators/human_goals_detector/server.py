@@ -10,8 +10,8 @@ from flask import Flask, jsonify, request
 
 from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
 from common.get_book_recommendation import BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN, APPRECIATION_PATTERN, RECOMMEND_PATTERN, BOOKS_TOPIC_PATTERN
-from common.get_book_info import BOOK_INFO_PATTERN
 from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN
+from common.get_book_information import TELL_BOOK_DESCRIPTION_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_GENRE_PATTERN
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -28,6 +28,8 @@ recommend_book_by_genre_patterns = [
     BOOKS_TOPIC_PATTERN,
     RECOMMEND_BOOK_PATTERN
     ]
+
+get_book_information_patterns = [TELL_BOOK_DESCRIPTION_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_GENRE_PATTERN]
 
 
 def detect_goal(requested_data):
@@ -76,9 +78,10 @@ def detect_goal(requested_data):
             if flag_series:
                 human_goal["human_goals"].append('get_series_recommendation')
 
-            flag_book_info = bool(BOOK_INFO_PATTERN.search(utterance))
-            if flag_book_info:
-                human_goal["human_goals"].append('get_information_about_book')
+            for pattern in get_book_information_patterns:
+                flag_book_info = bool(pattern.search(utterance))
+                if flag_book_info:
+                    human_goal["human_goals"].append('get_book_information')
 
 
             results.append(list(set(human_goal["human_goals"])))

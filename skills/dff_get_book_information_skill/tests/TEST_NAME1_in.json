@@ -1,0 +1,580 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "tell me about gone with the wind.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "spelling_preprocessing": "tell me about gone with the wind",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "the wind"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "tell me about gone with the wind.",
+                            "segments": [
+                                "tell me about gone with the wind."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9999676942825317
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9976796507835388
+                            },
+                            "cobot_topics": {
+                                "Celebrities": 0.9993502497673035
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999688863754272
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999874830245972
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9037678837776184
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999945163726807
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.7888978719711304,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0017071054317057133,
+                                "command": 0.9726113080978394,
+                                "comment": 0.001090872217901051,
+                                "complaint": 0.0021407960448414087,
+                                "dev_command": 0.006938566919416189,
+                                "neg_answer": 0.0010251844068989158,
+                                "open_question_factual": 0.001626272452995181,
+                                "open_question_opinion": 0.002030517440289259,
+                                "opinion": 0.0024102404713630676,
+                                "other_answers": 0.0007193370256572962,
+                                "pos_answer": 0.002375680720433593,
+                                "statement": 0.0033725311513990164,
+                                "yes_no_question": 0.0019516460597515106
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "tell",
+                                "gone with the wind"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        4
+                                    ],
+                                    "text": "tell"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        14,
+                                        32
+                                    ],
+                                    "text": "gone with the wind"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "tell me about gone with the wind."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "tell me about gone with the wind."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "tell": {
+                                "SymbolOf": [
+                                    "religion",
+                                    "knowledge",
+                                    "power"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "false",
+                                    "truth"
+                                ],
+                                "Causes": [
+                                    "get result",
+                                    "confusion",
+                                    "you get result"
+                                ],
+                                "CausesDesire": [
+                                    "lie",
+                                    "find information",
+                                    "reason"
+                                ]
+                            },
+                            "gone with the wind": {
+                                "SymbolOf": [
+                                    "love",
+                                    "life",
+                                    "peace"
+                                ],
+                                "HasProperty": [
+                                    "beautiful",
+                                    "windy",
+                                    "fun"
+                                ],
+                                "Causes": [
+                                    "loss of life",
+                                    "death",
+                                    "rain"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "sail boat",
+                                    "ski"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "tell",
+                                "news": {
+                                    "content": "In his return as Chennai Super Kings skipper on Sunday (May 1), MS Dhoni drove the reigning champs to a close 13-run prevail upon their southern opponents Sunrisers Hyderabad. Yet again the former Indian World Cup-winning captain was approached to le... [1998 chars]",
+                                    "description": "In his return as Chennai Super Kings skipper on Sunday (May 1), MS Dhoni drove the reigning champs to a close 13-run prevail upon their southern opponents Sunrisers Hyderabad.",
+                                    "image": "https://cricketaddictor.com/wp-content/uploads/2022/05/MS-Dhoni-Ravindra-Jadeja-CSK.png",
+                                    "publishedAt": "2022-05-02T05:22:26Z",
+                                    "source": {
+                                        "name": "Cricket Addictor",
+                                        "url": "https://cricketaddictor.com"
+                                    },
+                                    "title": "IPL 2022: \u2018He Does Not Tell Beforehand What To Do\u2019: Former Indian Teammate Reveals MS Dhoni\u2019s Approach As Captain",
+                                    "url": "https://cricketaddictor.com/indian-premier-league-ipl-2022/ipl-2022-he-does-not-tell-beforehand-what-to-do-former-indian-teammate-reveals-ms-dhonis-approach-as-captain/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "gone with wind",
+                                "news": {},
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How are you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How are you?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_get_book_information_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "the wind": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "the wind",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "the wind"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

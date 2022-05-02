@@ -1,0 +1,949 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "what's the genre of The Hunger Games?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "spelling_preprocessing": "what's the genre of The Hunger Games?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what's the genre of The Hunger Games?",
+                            "segments": [
+                                "what's the genre of The Hunger Games?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "the hunger games",
+                            "the genre"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0020808796398341656,
+                                "command": 0.00732763484120369,
+                                "comment": 0.007279053796082735,
+                                "complaint": 0.003107324941083789,
+                                "dev_command": 0.004613627679646015,
+                                "neg_answer": 0.0026325667276978493,
+                                "open_question_factual": 0.004199175629764795,
+                                "open_question_opinion": 0.0019221579423174262,
+                                "opinion": 0.1278011053800583,
+                                "other_answers": 0.0025524278171360493,
+                                "pos_answer": 0.0033307906705886126,
+                                "statement": 0.8296123743057251,
+                                "yes_no_question": 0.003540911478921771
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "genre",
+                                "hunger games"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "work_of_art",
+                                    "offsets": [
+                                        11,
+                                        16
+                                    ],
+                                    "text": "genre"
+                                },
+                                {
+                                    "label": "work_of_art",
+                                    "offsets": [
+                                        24,
+                                        36
+                                    ],
+                                    "text": "hunger games"
+                                }
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.8323307633399963
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8751568794250488
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.8086142539978027
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999943971633911
+                            },
+                            "factoid_classification": {
+                                "is_factoid": 0.9999881982803345
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9999927282333374
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999990701675415
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "genre",
+                                "news": {
+                                    "content": "For many pop culture fans, there\u2019s no bigger star than Julia Roberts. The actor first burst onto the scene in the late \u201980s, making a splash thanks to her stunning smile and voluminous head of curly hair. By the mid-\u201990s, Roberts was one of the bigge... [3536 chars]",
+                                    "description": "For many pop culture fans, there\u2019s no bigger star than Julia Roberts. The actor first burst onto the scene in the late \u201980s, making a splash thanks to her stunning smile and voluminous head of curly hair.",
+                                    "image": "https://www.cheatsheet.com/wp-content/uploads/2022/04/Julia-Roberts.jpg",
+                                    "publishedAt": "2022-04-30T23:33:00Z",
+                                    "source": {
+                                        "name": "Showbiz Cheat Sheet",
+                                        "url": "https://www.cheatsheet.com"
+                                    },
+                                    "title": "Julia Roberts Explains Why She Doesn't Do Romantic Comedies-Nothing Is 'Good Enough'",
+                                    "url": "https://www.cheatsheet.com/entertainment/julia-roberts-explains-why-doesnt-do-romantic-comedies-nothing-good-enough.html/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "hunger games",
+                                "news": {
+                                    "content": "Calling all tributes! We've been patiently waiting seven years to hear news of any upcoming Hunger Games movies, and it looks like the odds are finally in our favor. The prequel book by Suzanne Collins, Ballad of Songbirds and Snakes, is getting a fi... [3636 chars]",
+                                    "description": "Calling all tributes! We've been patiently waiting seven years to hear news of any upcoming Hunger Games movies, and it looks like the odds are finally in our favor.",
+                                    "image": "https://hips.hearstapps.com/hmg-prod/images/hunger-games-1651248412.jpeg?crop=1.00xw:0.843xh;0,0.157xh&resize=1200:*",
+                                    "publishedAt": "2022-04-29T23:10:00Z",
+                                    "source": {
+                                        "name": "Seventeen.com",
+                                        "url": "https://www.seventeen.com"
+                                    },
+                                    "title": "News, Cast, Release Date",
+                                    "url": "https://www.seventeen.com/celebrity/movies-tv/a39862098/hunger-games-film-ballad-of-songbirds-and-snakes/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what's the genre of The Hunger Games?"
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 80,
+                                        "ner": {
+                                            "offset": 3,
+                                            "type": "MISC"
+                                        },
+                                        "resolved": "It",
+                                        "start": 78,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 157,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 155,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 324,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 321,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 345,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 342,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 372,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 369,
+                                        "text": "she"
+                                    },
+                                    {
+                                        "end": 386,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 379,
+                                        "text": "herself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "tell me about gone with the wind.",
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and It is rating is 4. 3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at herself disposal to claw herself way out of the poverty herself finds herself in after Sherman's March to the Sea.",
+                                "what's the genre of The Hunger Games?"
+                            ]
+                        },
+                        "conceptnet": {
+                            "genre": {
+                                "SymbolOf": [
+                                    "book",
+                                    "encyclopedia",
+                                    "computer"
+                                ],
+                                "HasProperty": [
+                                    "fun to read",
+                                    "fun",
+                                    "entertain"
+                                ],
+                                "Causes": [
+                                    "person to laugh",
+                                    "writer cramp",
+                                    "creative expression"
+                                ],
+                                "CausesDesire": [
+                                    "write story",
+                                    "write novel",
+                                    "read"
+                                ]
+                            },
+                            "hunger games": {
+                                "SymbolOf": [
+                                    "hunger",
+                                    "victory",
+                                    "loser"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "fun to watch",
+                                    "fun to play"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "you get fat",
+                                    "you get indigestion"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "play chess",
+                                    "play game of chess"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "who wrote To Kill a Mockingbird?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "spelling_preprocessing": "who wrote To Kill a Mockingbird?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "who wrote To Kill a Mockingbird?",
+                            "segments": [
+                                "who wrote To Kill a Mockingbird?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": true
+                        },
+                        "spacy_nounphrases": [
+                            "a mockingbird"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "wrote",
+                                "kill"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        4,
+                                        9
+                                    ],
+                                    "text": "wrote"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        13,
+                                        17
+                                    ],
+                                    "text": "kill"
+                                }
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0035307847429066896,
+                                "command": 0.004563252907246351,
+                                "comment": 0.0036129469517618418,
+                                "complaint": 0.014536494389176369,
+                                "dev_command": 0.005046098958700895,
+                                "neg_answer": 0.0034452846739441156,
+                                "open_question_factual": 0.8726842999458313,
+                                "open_question_opinion": 0.04767487198114395,
+                                "opinion": 0.023761674761772156,
+                                "other_answers": 0.003604671685025096,
+                                "pos_answer": 0.001897553214803338,
+                                "statement": 0.00833398848772049,
+                                "yes_no_question": 0.007308037951588631
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.4128718972206116
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.36474260687828064
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.5873452425003052
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9997590184211731
+                            },
+                            "factoid_classification": {
+                                "is_factoid": 0.9994620680809021
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.999963641166687
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.894591212272644
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "wrote",
+                                "news": {
+                                    "content": "The internet has backed a woman after she claimed to have ruined dinner with a joke about her own bodily fluids with one commenter calling it \"pretty funny.\"\nPosted in the 3.9 million-strong \"Am I the A**hole\" Reddit forum, user u/Cheap_Extension5015... [2151 chars]",
+                                    "description": "The internet has backed a woman after she claimed to have ruined dinner with a joke about her own bodily fluids with one commenter calling it \"pretty funny.\"",
+                                    "image": "https://d.newsweek.com/en/full/2029057/stock-image-family-argument.jpg",
+                                    "publishedAt": "2022-05-01T16:02:21Z",
+                                    "source": {
+                                        "name": "Newsweek",
+                                        "url": "https://www.newsweek.com"
+                                    },
+                                    "title": "Internet Backs Woman Who Feared Ruining Dinner With Bodily Fluids Joke",
+                                    "url": "https://www.newsweek.com/internet-backs-woman-feared-ruining-dinner-bodily-fluids-joke-reddit-1702509"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "kill",
+                                "news": {
+                                    "content": "COEUR d\u2019ALENE \u2014 Liam loves dancing. And dressing up. And desserts.\nHe enjoyed all three on Saturday night.\n\u201cI feel really excited,\u201d said Liam, wearing a tie, sport jacket and a golden crown. \u201cI feel really excited.\u201d\nLikewise for Hana, who was thrille... [2869 chars]",
+                                    "description": "COEUR d\u2019ALENE \u2014 Liam loves dancing. And dressing up.",
+                                    "image": "https://hagadone.media.clients.ellingtoncms.com/img/photos/2022/04/30/SNR1_r1200x630.jpg?b7d505e466ff31ef2a911eceee85296b69915698",
+                                    "publishedAt": "2022-05-02T04:00:00Z",
+                                    "source": {
+                                        "name": "Coeur d'Alene Press",
+                                        "url": "https://cdapress.com"
+                                    },
+                                    "title": "SNR's Saturday Night Fever",
+                                    "url": "https://cdapress.com/news/2022/may/02/snrs-saturday-night-fever/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "who wrote To Kill a Mockingbird?"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "wrote": {
+                                "SymbolOf": [
+                                    "knowledge",
+                                    "love",
+                                    "passion"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "useful for write",
+                                    "useful"
+                                ],
+                                "Causes": [
+                                    "problem",
+                                    "you get idea",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "write letter",
+                                    "write poem",
+                                    "write novel"
+                                ]
+                            },
+                            "kill": {
+                                "SymbolOf": [
+                                    "violence",
+                                    "death",
+                                    "crime"
+                                ],
+                                "HasProperty": [
+                                    "bad",
+                                    "wrong",
+                                    "illegal"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "punishment",
+                                    "guilt"
+                                ],
+                                "CausesDesire": [
+                                    "kill someone",
+                                    "kill",
+                                    "kill person"
+                                ]
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 2,
+                                        "ner": {
+                                            "offset": 3,
+                                            "type": "MISC"
+                                        },
+                                        "resolved": "It",
+                                        "start": 0,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 79,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 77,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 246,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 243,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 267,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 264,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 294,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 291,
+                                        "text": "she"
+                                    },
+                                    {
+                                        "end": 308,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 301,
+                                        "text": "herself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and It is rating is 4. 3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at herself disposal to claw herself way out of the poverty herself finds herself in after Sherman's March to the Sea.",
+                                "what's the genre of The Hunger Games?",
+                                "It's Young Adult , Fiction , Dystopia.",
+                                "who wrote To Kill a Mockingbird?"
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "It's Young Adult, Fiction, Dystopia",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "It's Young Adult , Fiction , Dystopia.",
+                            "segments": [
+                                "It's Young Adult , Fiction , Dystopia."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 36,
+                                        "ner": {
+                                            "offset": 3,
+                                            "type": "MISC"
+                                        },
+                                        "resolved": "It",
+                                        "start": 34,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 113,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 111,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 280,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 277,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 301,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 298,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 328,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 325,
+                                        "text": "she"
+                                    },
+                                    {
+                                        "end": 342,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 335,
+                                        "text": "herself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "tell me about gone with the wind.",
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and It is rating is 4. 3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at herself disposal to claw herself way out of the poverty herself finds herself in after Sherman's March to the Sea.",
+                                "what's the genre of The Hunger Games?",
+                                "It's Young Adult , Fiction , Dystopia."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_get_book_information_skill"
+                }
+            ]
+        }
+    ],
+    "dff_get_book_information_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "6c01ff3f-db3a-40cd-85b3-549d4b13f8fb",
+                "labels": {
+                    "0": [
+                        "tell_about",
+                        "give_info"
+                    ],
+                    "1": [
+                        "tell_about",
+                        "genres"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "author": "Suzanne Collins",
+                        "description": "WINNING MEANS FAME AND FORTUNE.LOSING MEANS CERTAIN DEATH.THE HUNGER GAMES HAVE BEGUN. . . .In the ruins of a place once known as North America lies the nation of Panem, a shining Capitol surrounded by twelve outlying districts. The Capitol is harsh and cruel and keeps the districts in line by forcing them all to send one boy and once girl between the ages of twelve and eighteen to participate in the annual Hunger Games, a fight to the death on live TV.Sixteen-year-old Katniss Everdeen regards it as a death sentence when she steps forward to take her sister's place in the Games. But Katniss has been close to dead before\u2014and survival, for her, is second nature. Without really meaning to, she becomes a contender. But if she is to win, she will have to start making choices that weight survival against humanity and life against love.",
+                        "genres": "Young Adult, Fiction, Dystopia",
+                        "rating": "4.33"
+                    }
+                },
+                "requests": {
+                    "0": "tell me about gone with the wind.",
+                    "1": "what's the genre of The Hunger Games?"
+                },
+                "responses": {
+                    "0": "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and it's rating is 4.3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea.",
+                    "1": "It's Young Adult, Fiction, Dystopia"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "tell_about",
+                    "give_info"
+                ],
+                "2": [
+                    "tell_about",
+                    "genres"
+                ]
+            },
+            "previous_human_utter_index": 2,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "tell": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "tell"
+            },
+            "the wind": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "the wind",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "the wind"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

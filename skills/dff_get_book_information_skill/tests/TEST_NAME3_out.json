@@ -1,0 +1,72 @@
+[
+    [
+        "The author of this book is Harper Lee",
+        1.0,
+        {
+            "dff_get_book_information_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 3,
+                "history": {
+                    "1": [
+                        "tell_about",
+                        "give_info"
+                    ],
+                    "2": [
+                        "tell_about",
+                        "genres"
+                    ],
+                    "3": [
+                        "tell_about",
+                        "author"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "6c01ff3f-db3a-40cd-85b3-549d4b13f8fb",
+                    "labels": {
+                        "1": [
+                            "tell_about",
+                            "genres"
+                        ],
+                        "2": [
+                            "tell_about",
+                            "author"
+                        ]
+                    },
+                    "requests": {
+                        "1": "what's the genre of The Hunger Games?",
+                        "2": "who wrote To Kill a Mockingbird?"
+                    },
+                    "responses": {
+                        "1": "It's Young Adult, Fiction, Dystopia",
+                        "2": "The author of this book is Harper Lee"
+                    },
+                    "misc": {
+                        "slots": {
+                            "author": "Harper Lee",
+                            "description": "The unforgettable novel of a childhood in a sleepy Southern town and the crisis of conscience that rocked it, To Kill A Mockingbird became both an instant bestseller and a critical success when it was first published in 1960. It went on to win the Pulitzer Prize in 1961 and was later made into an Academy Award-winning film, also a classic.Compassionate, dramatic, and deeply moving, To Kill A Mockingbird takes readers to the roots of human behavior - to innocence and experience, kindness and cruelty, love and hatred, humor and pathos. Now with over 18 million copies in print and translated into forty languages, this regional story by a young Alabama woman claims universal appeal. Harper Lee always considered her book to be a simple love story. Today it is regarded as a masterpiece of American literature.",
+                            "genres": "Classics, Fiction, Historical Fiction",
+                            "rating": "4.28"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

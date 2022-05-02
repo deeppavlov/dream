@@ -1,0 +1,76 @@
+[
+    [
+        "Here is the book's description: Alternate cover edition of ISBN 9780679783268Since its immediate success in 1813, Pride and Prejudice has remained one of the most popular novels in the English language. Jane Austen called this brilliant work \"her own darling child\" and its vivacious heroine, Elizabeth Bennet, \"as delightful a creature as ever appeared in print.\" The romantic clash between the opinionated Elizabeth and her proud beau, Mr. Darcy, is a splendid performance of civilized sparring. And Jane Austen's radiant wit sparkles as her characters dance a delicate quadrille of flirtation and intrigue, making this book the most superb comedy of manners of Regency England.",
+        1.0,
+        {
+            "dff_get_book_information_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 4,
+                "history": {
+                    "1": [
+                        "tell_about",
+                        "give_info"
+                    ],
+                    "2": [
+                        "tell_about",
+                        "genres"
+                    ],
+                    "3": [
+                        "tell_about",
+                        "author"
+                    ],
+                    "4": [
+                        "tell_about",
+                        "description"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "6c01ff3f-db3a-40cd-85b3-549d4b13f8fb",
+                    "labels": {
+                        "2": [
+                            "tell_about",
+                            "author"
+                        ],
+                        "3": [
+                            "tell_about",
+                            "description"
+                        ]
+                    },
+                    "requests": {
+                        "2": "who wrote To Kill a Mockingbird?",
+                        "3": "what Pride and Prejudice is about?"
+                    },
+                    "responses": {
+                        "2": "The author of this book is Harper Lee",
+                        "3": "Here is the book's description: Alternate cover edition of ISBN 9780679783268Since its immediate success in 1813, Pride and Prejudice has remained one of the most popular novels in the English language. Jane Austen called this brilliant work \"her own darling child\" and its vivacious heroine, Elizabeth Bennet, \"as delightful a creature as ever appeared in print.\" The romantic clash between the opinionated Elizabeth and her proud beau, Mr. Darcy, is a splendid performance of civilized sparring. And Jane Austen's radiant wit sparkles as her characters dance a delicate quadrille of flirtation and intrigue, making this book the most superb comedy of manners of Regency England."
+                    },
+                    "misc": {
+                        "slots": {
+                            "author": "Jane Austen, Anna Quindlen (Introduction)",
+                            "description": "Alternate cover edition of ISBN 9780679783268Since its immediate success in 1813, Pride and Prejudice has remained one of the most popular novels in the English language. Jane Austen called this brilliant work \"her own darling child\" and its vivacious heroine, Elizabeth Bennet, \"as delightful a creature as ever appeared in print.\" The romantic clash between the opinionated Elizabeth and her proud beau, Mr. Darcy, is a splendid performance of civilized sparring. And Jane Austen's radiant wit sparkles as her characters dance a delicate quadrille of flirtation and intrigue, making this book the most superb comedy of manners of Regency England.",
+                            "genres": "Classics, Fiction, Romance",
+                            "rating": "4.26"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

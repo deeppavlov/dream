@@ -1,0 +1,68 @@
+[
+    [
+        "It's Young Adult, Fiction, Dystopia",
+        1.0,
+        {
+            "dff_get_book_information_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 2,
+                "history": {
+                    "1": [
+                        "tell_about",
+                        "give_info"
+                    ],
+                    "2": [
+                        "tell_about",
+                        "genres"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "6c01ff3f-db3a-40cd-85b3-549d4b13f8fb",
+                    "labels": {
+                        "0": [
+                            "tell_about",
+                            "give_info"
+                        ],
+                        "1": [
+                            "tell_about",
+                            "genres"
+                        ]
+                    },
+                    "requests": {
+                        "0": "tell me about gone with the wind.",
+                        "1": "what's the genre of The Hunger Games?"
+                    },
+                    "responses": {
+                        "0": "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and it's rating is 4.3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea.",
+                        "1": "It's Young Adult, Fiction, Dystopia"
+                    },
+                    "misc": {
+                        "slots": {
+                            "author": "Suzanne Collins",
+                            "description": "WINNING MEANS FAME AND FORTUNE.LOSING MEANS CERTAIN DEATH.THE HUNGER GAMES HAVE BEGUN. . . .In the ruins of a place once known as North America lies the nation of Panem, a shining Capitol surrounded by twelve outlying districts. The Capitol is harsh and cruel and keeps the districts in line by forcing them all to send one boy and once girl between the ages of twelve and eighteen to participate in the annual Hunger Games, a fight to the death on live TV.Sixteen-year-old Katniss Everdeen regards it as a death sentence when she steps forward to take her sister's place in the Games. But Katniss has been close to dead before\u2014and survival, for her, is second nature. Without really meaning to, she becomes a contender. But if she is to win, she will have to start making choices that weight survival against humanity and life against love.",
+                            "genres": "Young Adult, Fiction, Dystopia",
+                            "rating": "4.33"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

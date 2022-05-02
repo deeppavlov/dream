@@ -1,0 +1,903 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "tell me about gone with the wind.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "spelling_preprocessing": "tell me about gone with the wind",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "the wind"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "tell me about gone with the wind.",
+                            "segments": [
+                                "tell me about gone with the wind."
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9999676942825317
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9976796507835388
+                            },
+                            "cobot_topics": {
+                                "Celebrities": 0.9993502497673035
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999688863754272
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999874830245972
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9037678837776184
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999945163726807
+                            }
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.7888978719711304,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0017071054317057133,
+                                "command": 0.9726113080978394,
+                                "comment": 0.001090872217901051,
+                                "complaint": 0.0021407960448414087,
+                                "dev_command": 0.006938566919416189,
+                                "neg_answer": 0.0010251844068989158,
+                                "open_question_factual": 0.001626272452995181,
+                                "open_question_opinion": 0.002030517440289259,
+                                "opinion": 0.0024102404713630676,
+                                "other_answers": 0.0007193370256572962,
+                                "pos_answer": 0.002375680720433593,
+                                "statement": 0.0033725311513990164,
+                                "yes_no_question": 0.0019516460597515106
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "tell",
+                                "gone with the wind"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        4
+                                    ],
+                                    "text": "tell"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        14,
+                                        32
+                                    ],
+                                    "text": "gone with the wind"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "tell me about gone with the wind."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "tell me about gone with the wind."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "tell": {
+                                "SymbolOf": [
+                                    "religion",
+                                    "knowledge",
+                                    "power"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "false",
+                                    "truth"
+                                ],
+                                "Causes": [
+                                    "get result",
+                                    "confusion",
+                                    "you get result"
+                                ],
+                                "CausesDesire": [
+                                    "lie",
+                                    "find information",
+                                    "reason"
+                                ]
+                            },
+                            "gone with the wind": {
+                                "SymbolOf": [
+                                    "love",
+                                    "life",
+                                    "peace"
+                                ],
+                                "HasProperty": [
+                                    "beautiful",
+                                    "windy",
+                                    "fun"
+                                ],
+                                "Causes": [
+                                    "loss of life",
+                                    "death",
+                                    "rain"
+                                ],
+                                "CausesDesire": [
+                                    "fly kite",
+                                    "sail boat",
+                                    "ski"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "tell",
+                                "news": {
+                                    "content": "In his return as Chennai Super Kings skipper on Sunday (May 1), MS Dhoni drove the reigning champs to a close 13-run prevail upon their southern opponents Sunrisers Hyderabad. Yet again the former Indian World Cup-winning captain was approached to le... [1998 chars]",
+                                    "description": "In his return as Chennai Super Kings skipper on Sunday (May 1), MS Dhoni drove the reigning champs to a close 13-run prevail upon their southern opponents Sunrisers Hyderabad.",
+                                    "image": "https://cricketaddictor.com/wp-content/uploads/2022/05/MS-Dhoni-Ravindra-Jadeja-CSK.png",
+                                    "publishedAt": "2022-05-02T05:22:26Z",
+                                    "source": {
+                                        "name": "Cricket Addictor",
+                                        "url": "https://cricketaddictor.com"
+                                    },
+                                    "title": "IPL 2022: \u2018He Does Not Tell Beforehand What To Do\u2019: Former Indian Teammate Reveals MS Dhoni\u2019s Approach As Captain",
+                                    "url": "https://cricketaddictor.com/indian-premier-league-ipl-2022/ipl-2022-he-does-not-tell-beforehand-what-to-do-former-indian-teammate-reveals-ms-dhonis-approach-as-captain/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "gone with wind",
+                                "news": {},
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "what's the genre of The Hunger Games?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "spelling_preprocessing": "what's the genre of The Hunger Games?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what's the genre of The Hunger Games?",
+                            "segments": [
+                                "what's the genre of The Hunger Games?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "the hunger games",
+                            "the genre"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0020808796398341656,
+                                "command": 0.00732763484120369,
+                                "comment": 0.007279053796082735,
+                                "complaint": 0.003107324941083789,
+                                "dev_command": 0.004613627679646015,
+                                "neg_answer": 0.0026325667276978493,
+                                "open_question_factual": 0.004199175629764795,
+                                "open_question_opinion": 0.0019221579423174262,
+                                "opinion": 0.1278011053800583,
+                                "other_answers": 0.0025524278171360493,
+                                "pos_answer": 0.0033307906705886126,
+                                "statement": 0.8296123743057251,
+                                "yes_no_question": 0.003540911478921771
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "genre",
+                                "hunger games"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "work_of_art",
+                                    "offsets": [
+                                        11,
+                                        16
+                                    ],
+                                    "text": "genre"
+                                },
+                                {
+                                    "label": "work_of_art",
+                                    "offsets": [
+                                        24,
+                                        36
+                                    ],
+                                    "text": "hunger games"
+                                }
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.8323307633399963
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8751568794250488
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.8086142539978027
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999943971633911
+                            },
+                            "factoid_classification": {
+                                "is_factoid": 0.9999881982803345
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9999927282333374
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999990701675415
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "genre",
+                                "news": {
+                                    "content": "For many pop culture fans, there\u2019s no bigger star than Julia Roberts. The actor first burst onto the scene in the late \u201980s, making a splash thanks to her stunning smile and voluminous head of curly hair. By the mid-\u201990s, Roberts was one of the bigge... [3536 chars]",
+                                    "description": "For many pop culture fans, there\u2019s no bigger star than Julia Roberts. The actor first burst onto the scene in the late \u201980s, making a splash thanks to her stunning smile and voluminous head of curly hair.",
+                                    "image": "https://www.cheatsheet.com/wp-content/uploads/2022/04/Julia-Roberts.jpg",
+                                    "publishedAt": "2022-04-30T23:33:00Z",
+                                    "source": {
+                                        "name": "Showbiz Cheat Sheet",
+                                        "url": "https://www.cheatsheet.com"
+                                    },
+                                    "title": "Julia Roberts Explains Why She Doesn't Do Romantic Comedies-Nothing Is 'Good Enough'",
+                                    "url": "https://www.cheatsheet.com/entertainment/julia-roberts-explains-why-doesnt-do-romantic-comedies-nothing-good-enough.html/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "hunger games",
+                                "news": {
+                                    "content": "Calling all tributes! We've been patiently waiting seven years to hear news of any upcoming Hunger Games movies, and it looks like the odds are finally in our favor. The prequel book by Suzanne Collins, Ballad of Songbirds and Snakes, is getting a fi... [3636 chars]",
+                                    "description": "Calling all tributes! We've been patiently waiting seven years to hear news of any upcoming Hunger Games movies, and it looks like the odds are finally in our favor.",
+                                    "image": "https://hips.hearstapps.com/hmg-prod/images/hunger-games-1651248412.jpeg?crop=1.00xw:0.843xh;0,0.157xh&resize=1200:*",
+                                    "publishedAt": "2022-04-29T23:10:00Z",
+                                    "source": {
+                                        "name": "Seventeen.com",
+                                        "url": "https://www.seventeen.com"
+                                    },
+                                    "title": "News, Cast, Release Date",
+                                    "url": "https://www.seventeen.com/celebrity/movies-tv/a39862098/hunger-games-film-ballad-of-songbirds-and-snakes/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what's the genre of The Hunger Games?"
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 80,
+                                        "ner": {
+                                            "offset": 3,
+                                            "type": "MISC"
+                                        },
+                                        "resolved": "It",
+                                        "start": 78,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 157,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 155,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 324,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 321,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 345,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 342,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 372,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 369,
+                                        "text": "she"
+                                    },
+                                    {
+                                        "end": 386,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 379,
+                                        "text": "herself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "tell me about gone with the wind.",
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and It is rating is 4. 3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at herself disposal to claw herself way out of the poverty herself finds herself in after Sherman's March to the Sea.",
+                                "what's the genre of The Hunger Games?"
+                            ]
+                        },
+                        "conceptnet": {
+                            "genre": {
+                                "SymbolOf": [
+                                    "book",
+                                    "encyclopedia",
+                                    "computer"
+                                ],
+                                "HasProperty": [
+                                    "fun to read",
+                                    "fun",
+                                    "entertain"
+                                ],
+                                "Causes": [
+                                    "person to laugh",
+                                    "writer cramp",
+                                    "creative expression"
+                                ],
+                                "CausesDesire": [
+                                    "write story",
+                                    "write novel",
+                                    "read"
+                                ]
+                            },
+                            "hunger games": {
+                                "SymbolOf": [
+                                    "hunger",
+                                    "victory",
+                                    "loser"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "fun to watch",
+                                    "fun to play"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "you get fat",
+                                    "you get indigestion"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "play chess",
+                                    "play game of chess"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and it's rating is 4.3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and it is rating is 4.3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea.",
+                            "segments": [
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and it is rating is 4.",
+                                "3.",
+                                "And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea."
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 3,
+                                    "start_pos": 2,
+                                    "text": "classics",
+                                    "type": "MISC"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 12,
+                                    "start_pos": 10,
+                                    "text": "margaret mitchell",
+                                    "type": "PER"
+                                }
+                            ],
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 8,
+                                    "start_pos": 6,
+                                    "text": "scarlett o'hara",
+                                    "type": "PER"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 18,
+                                    "start_pos": 17,
+                                    "text": "georgia",
+                                    "type": "LOC"
+                                },
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 42,
+                                    "start_pos": 41,
+                                    "text": "sherman",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 84,
+                                        "ner": {
+                                            "offset": 3,
+                                            "type": "MISC"
+                                        },
+                                        "resolved": "It",
+                                        "start": 82,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 161,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 159,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 328,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 325,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 349,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 346,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 376,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 373,
+                                        "text": "she"
+                                    },
+                                    {
+                                        "end": 390,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 383,
+                                        "text": "herself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "tell me about gone with the wind.",
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and It is rating is 4. 3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at herself disposal to claw herself way out of the poverty herself finds herself in after Sherman's March to the Sea."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_get_book_information_skill"
+                }
+            ]
+        }
+    ],
+    "dff_get_book_information_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "6c01ff3f-db3a-40cd-85b3-549d4b13f8fb",
+                "labels": {
+                    "0": [
+                        "tell_about",
+                        "give_info"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "author": "Margaret Mitchell",
+                        "description": "Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea.",
+                        "genres": "Classics, Historical Fiction, Fiction",
+                        "rating": "4.3"
+                    }
+                },
+                "requests": {
+                    "0": "tell me about gone with the wind."
+                },
+                "responses": {
+                    "0": "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and it's rating is 4.3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at her disposal to claw her way out of the poverty she finds herself in after Sherman's March to the Sea."
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "tell_about",
+                    "give_info"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "tell": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "tell"
+            },
+            "the wind": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "the wind",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "the wind"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

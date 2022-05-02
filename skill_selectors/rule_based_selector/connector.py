@@ -235,7 +235,8 @@ class RuleBasedSkillSelectorConnector:
                         "dff_short_story_skill",
                         "dff_share_problems_skill",
                         "dff_book_recommendation_skill",
-                        "dff_series_recommendation_skill"
+                        "dff_series_recommendation_skill",
+                        "dff_get_book_information_skill"
                     ],
                 )
 

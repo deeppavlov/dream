@@ -428,6 +428,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8126:8126
+  dff-get-book-information-skill:
+    volumes:
+      - "./skills/dff_get_book_information_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8127:8127
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

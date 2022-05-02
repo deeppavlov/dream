@@ -1,0 +1,828 @@
+{
+    "human_utter_index_batch": [
+        4
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "who wrote To Kill a Mockingbird?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "spelling_preprocessing": "who wrote To Kill a Mockingbird?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "who wrote To Kill a Mockingbird?",
+                            "segments": [
+                                "who wrote To Kill a Mockingbird?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": true
+                        },
+                        "spacy_nounphrases": [
+                            "a mockingbird"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "wrote",
+                                "kill"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        4,
+                                        9
+                                    ],
+                                    "text": "wrote"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        13,
+                                        17
+                                    ],
+                                    "text": "kill"
+                                }
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0035307847429066896,
+                                "command": 0.004563252907246351,
+                                "comment": 0.0036129469517618418,
+                                "complaint": 0.014536494389176369,
+                                "dev_command": 0.005046098958700895,
+                                "neg_answer": 0.0034452846739441156,
+                                "open_question_factual": 0.8726842999458313,
+                                "open_question_opinion": 0.04767487198114395,
+                                "opinion": 0.023761674761772156,
+                                "other_answers": 0.003604671685025096,
+                                "pos_answer": 0.001897553214803338,
+                                "statement": 0.00833398848772049,
+                                "yes_no_question": 0.007308037951588631
+                            }
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.4128718972206116
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.36474260687828064
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.5873452425003052
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9997590184211731
+                            },
+                            "factoid_classification": {
+                                "is_factoid": 0.9994620680809021
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.999963641166687
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.894591212272644
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "wrote",
+                                "news": {
+                                    "content": "The internet has backed a woman after she claimed to have ruined dinner with a joke about her own bodily fluids with one commenter calling it \"pretty funny.\"\nPosted in the 3.9 million-strong \"Am I the A**hole\" Reddit forum, user u/Cheap_Extension5015... [2151 chars]",
+                                    "description": "The internet has backed a woman after she claimed to have ruined dinner with a joke about her own bodily fluids with one commenter calling it \"pretty funny.\"",
+                                    "image": "https://d.newsweek.com/en/full/2029057/stock-image-family-argument.jpg",
+                                    "publishedAt": "2022-05-01T16:02:21Z",
+                                    "source": {
+                                        "name": "Newsweek",
+                                        "url": "https://www.newsweek.com"
+                                    },
+                                    "title": "Internet Backs Woman Who Feared Ruining Dinner With Bodily Fluids Joke",
+                                    "url": "https://www.newsweek.com/internet-backs-woman-feared-ruining-dinner-bodily-fluids-joke-reddit-1702509"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "kill",
+                                "news": {
+                                    "content": "COEUR d\u2019ALENE \u2014 Liam loves dancing. And dressing up. And desserts.\nHe enjoyed all three on Saturday night.\n\u201cI feel really excited,\u201d said Liam, wearing a tie, sport jacket and a golden crown. \u201cI feel really excited.\u201d\nLikewise for Hana, who was thrille... [2869 chars]",
+                                    "description": "COEUR d\u2019ALENE \u2014 Liam loves dancing. And dressing up.",
+                                    "image": "https://hagadone.media.clients.ellingtoncms.com/img/photos/2022/04/30/SNR1_r1200x630.jpg?b7d505e466ff31ef2a911eceee85296b69915698",
+                                    "publishedAt": "2022-05-02T04:00:00Z",
+                                    "source": {
+                                        "name": "Coeur d'Alene Press",
+                                        "url": "https://cdapress.com"
+                                    },
+                                    "title": "SNR's Saturday Night Fever",
+                                    "url": "https://cdapress.com/news/2022/may/02/snrs-saturday-night-fever/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "who wrote To Kill a Mockingbird?"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "wrote": {
+                                "SymbolOf": [
+                                    "knowledge",
+                                    "love",
+                                    "passion"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "useful for write",
+                                    "useful"
+                                ],
+                                "Causes": [
+                                    "problem",
+                                    "you get idea",
+                                    "death"
+                                ],
+                                "CausesDesire": [
+                                    "write letter",
+                                    "write poem",
+                                    "write novel"
+                                ]
+                            },
+                            "kill": {
+                                "SymbolOf": [
+                                    "violence",
+                                    "death",
+                                    "crime"
+                                ],
+                                "HasProperty": [
+                                    "bad",
+                                    "wrong",
+                                    "illegal"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "punishment",
+                                    "guilt"
+                                ],
+                                "CausesDesire": [
+                                    "kill someone",
+                                    "kill",
+                                    "kill person"
+                                ]
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 2,
+                                        "ner": {
+                                            "offset": 3,
+                                            "type": "MISC"
+                                        },
+                                        "resolved": "It",
+                                        "start": 0,
+                                        "text": "It"
+                                    },
+                                    {
+                                        "end": 79,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "It",
+                                        "start": 77,
+                                        "text": "it"
+                                    }
+                                ],
+                                [
+                                    {
+                                        "end": 246,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 243,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 267,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 264,
+                                        "text": "her"
+                                    },
+                                    {
+                                        "end": 294,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 291,
+                                        "text": "she"
+                                    },
+                                    {
+                                        "end": 308,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "herself",
+                                        "start": 301,
+                                        "text": "herself"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "It's Classics, Historical Fiction, Fiction written by Margaret Mitchell, and It is rating is 4. 3. And here is the description: Scarlett O'Hara, the beautiful, spoiled daughter of a well-to-do Georgia plantation owner, must use every means at herself disposal to claw herself way out of the poverty herself finds herself in after Sherman's March to the Sea.",
+                                "what's the genre of The Hunger Games?",
+                                "It's Young Adult , Fiction , Dystopia.",
+                                "who wrote To Kill a Mockingbird?"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "text": "what Pride and Prejudice is about?",
+                    "annotations": {
+                        "spelling_preprocessing": "what Pride and Prejudice is about?",
+                        "human_goals_detector": [
+                            "get_book_information"
+                        ],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what Pride and Prejudice is about?",
+                            "segments": [
+                                "what Pride and Prejudice is about?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.9999999403953552,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "pride",
+                                "prejudice"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        5,
+                                        10
+                                    ],
+                                    "text": "pride"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        15,
+                                        24
+                                    ],
+                                    "text": "prejudice"
+                                }
+                            ]
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.006619328632950783,
+                                "command": 0.015328395180404186,
+                                "comment": 0.00801712553948164,
+                                "complaint": 0.014423736371099949,
+                                "dev_command": 0.008555660024285316,
+                                "neg_answer": 0.005085086915642023,
+                                "open_question_factual": 0.4333934783935547,
+                                "open_question_opinion": 0.08967128396034241,
+                                "opinion": 0.3467450737953186,
+                                "other_answers": 0.0068520596250891685,
+                                "pos_answer": 0.0038725328631699085,
+                                "statement": 0.05050153285264969,
+                                "yes_no_question": 0.010934777557849884
+                            }
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.5287497639656067
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.9999582767486572
+                            },
+                            "cobot_topics": {
+                                "Literature": 0.999893069267273
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9997590184211731
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999985694885254
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.8665222525596619
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999974966049194
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what Pride and Prejudice is about?"
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "pride": {
+                                "SymbolOf": [
+                                    "masculinity",
+                                    "pride",
+                                    "power"
+                                ],
+                                "HasProperty": [
+                                    "important",
+                                    "hard to find",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "joy",
+                                    "happiness",
+                                    "pride"
+                                ],
+                                "CausesDesire": [
+                                    "make friend",
+                                    "give gift",
+                                    "compete"
+                                ]
+                            },
+                            "prejudice": {
+                                "SymbolOf": [
+                                    "violence",
+                                    "prejudice",
+                                    "selfishness"
+                                ],
+                                "HasProperty": [
+                                    "bad",
+                                    "wrong",
+                                    "harmful"
+                                ],
+                                "Causes": [
+                                    "war",
+                                    "hatred",
+                                    "violence"
+                                ],
+                                "CausesDesire": [
+                                    "make friend",
+                                    "change society",
+                                    "fight someone"
+                                ]
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "It's Young Adult , Fiction , Dystopia.",
+                                "who wrote To Kill a Mockingbird?",
+                                "The author of this book is Harper Lee.",
+                                "what Pride and Prejudice is about?"
+                            ]
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier. It's estimated hundreds of Ukrainian civilians -- dozens of whom are injured -- are still ... [2128 chars]",
+                                    "description": "The Azovstal steel plant in the besieged city of Mariupol came under fire after about 100 civilians were evacuated on Sunday, according to a Ukrainian soldier.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220501073739-02-mariupol-evacuees-050122-super-tease.jpg",
+                                    "publishedAt": "2022-05-02T10:54:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Ukrainian drone destroys Russian patrol ships off Snake Island, says defense ministry",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-02-22/h_a73ac98f2400af01f729e23a7e01ae88"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "pride",
+                                "news": {
+                                    "content": "New rainbow pride socks and a set of car stickers have joined the \u201clove\u201d collection at Universal Orlando Resort. These were in the Universal Studios Store at CityWalk.\nRainbow \u201cLove\u201d Socks \u2013 $17\nThis pair of socks is mostly grey, with dark stripes.\n\u201c... [967 chars]",
+                                    "description": "New rainbow pride socks and a set of car stickers have joined the \u201clove\u201d collection at Universal Orlando Resort. These were in the Universal Studios Store at CityWalk.",
+                                    "image": "https://media.wdwnt.com/2022/04/KxiHIVgW-universal-pride-merch.png",
+                                    "publishedAt": "2022-05-01T20:40:00Z",
+                                    "source": {
+                                        "name": "wdwnt.com",
+                                        "url": "https://wdwnt.com"
+                                    },
+                                    "title": "New Rainbow Pride Socks and Car Stickers at Universal Orlando Resort",
+                                    "url": "https://wdwnt.com/2022/05/new-rainbow-pride-socks-and-car-stickers-at-universal-orlando-resort/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "prejudice",
+                                "news": {
+                                    "content": "Hulu has released the first trailer for the new queer rom-com \u201cFire Island,\u201d starring Joel Kim Booster and \u201cSaturday Night Live\u201d star Bowen Yang.\nA modern take on the classic Jane Austen novel \u201cPride and Prejudice,\u201d \u201cFire Island\u201d focuses on two gay b... [2009 chars]",
+                                    "description": "Hulu has released the first trailer for the new queer rom-com \u201cFire Island,\u201d starring Joel Kim Booster and \u201cSaturday Night Live\u201d star Bowen Yang.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-04/220425-fire-island-al-1107-a2084a.jpg",
+                                    "publishedAt": "2022-04-25T15:18:56Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "'Fire Island' trailer: 'Pride and Prejudice' goes gay with Joel Kim Booster, Bowen Yang",
+                                    "url": "https://www.nbcnews.com/nbc-out/out-pop-culture/fire-island-trailer-pride-prejudice-goes-gay-joel-kim-booster-bowen-ya-rcna25849"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "The author of this book is Harper Lee",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "The author of this book is Harper Lee.",
+                            "segments": [
+                                "The author of this book is Harper Lee."
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 8,
+                                    "start_pos": 6,
+                                    "text": "harper lee",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "what's the genre of The Hunger Games?",
+                                "It's Young Adult , Fiction , Dystopia.",
+                                "who wrote To Kill a Mockingbird?",
+                                "The author of this book is Harper Lee."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_get_book_information_skill"
+                }
+            ]
+        }
+    ],
+    "dff_get_book_information_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "6c01ff3f-db3a-40cd-85b3-549d4b13f8fb",
+                "labels": {
+                    "1": [
+                        "tell_about",
+                        "genres"
+                    ],
+                    "2": [
+                        "tell_about",
+                        "author"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "author": "Harper Lee",
+                        "description": "The unforgettable novel of a childhood in a sleepy Southern town and the crisis of conscience that rocked it, To Kill A Mockingbird became both an instant bestseller and a critical success when it was first published in 1960. It went on to win the Pulitzer Prize in 1961 and was later made into an Academy Award-winning film, also a classic.Compassionate, dramatic, and deeply moving, To Kill A Mockingbird takes readers to the roots of human behavior - to innocence and experience, kindness and cruelty, love and hatred, humor and pathos. Now with over 18 million copies in print and translated into forty languages, this regional story by a young Alabama woman claims universal appeal. Harper Lee always considered her book to be a simple love story. Today it is regarded as a masterpiece of American literature.",
+                        "genres": "Classics, Fiction, Historical Fiction",
+                        "rating": "4.28"
+                    }
+                },
+                "requests": {
+                    "1": "what's the genre of The Hunger Games?",
+                    "2": "who wrote To Kill a Mockingbird?"
+                },
+                "responses": {
+                    "1": "It's Young Adult, Fiction, Dystopia",
+                    "2": "The author of this book is Harper Lee"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "tell_about",
+                    "give_info"
+                ],
+                "2": [
+                    "tell_about",
+                    "genres"
+                ],
+                "3": [
+                    "tell_about",
+                    "author"
+                ]
+            },
+            "previous_human_utter_index": 3,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "tell": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "tell"
+            },
+            "the wind": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "the wind",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "the wind"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
