@@ -1,14 +1,17 @@
 import re
 import json
 
+
 with open('common/series.json', 'r') as f:
     series = json.load(f)
     series_keys = list(series.keys())
     series = []
+    ignore_series = ['You', 'H', 'K']
     for key in series_keys:
         if '*' in key:
              key = key.replace('*', '\*')
-        series.append(key)
+        if key not in ignore_series:
+            series.append(key)
 
     
 

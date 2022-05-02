@@ -1,4 +1,5 @@
 import logging
+
 import json
 
 from df_engine.core import Node, Context, Actor
@@ -54,8 +55,9 @@ def extract_known_series():
         **kwargs,
     ) -> Context:
         slots = ctx.misc.get("slots", {})
+        ignore_series = ['You', 'H', 'K']
         for ser, value in series.items():
-            if ser.lower() in ctx.last_request.lower():
+            if (ser.lower() in ctx.last_request.lower()) and (ser not in ignore_series):
                 if (value['director'] in directors.keys()) and (len(directors[value['director']]) != 1):
                     for s in directors[value['director']]:
                         if s['title'].lower() != ser.lower():
