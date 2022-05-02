@@ -1,0 +1,64 @@
+[
+    [
+        "Oh, I know a lot of Netflix series! Have you watched Hoarders?",
+        1.0,
+        {
+            "dff_series_recommendation_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": [
+                        "recommend_series",
+                        "series_q"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "77b5fac5-d872-4169-ac0e-093425f8c68a",
+                    "labels": {
+                        "0": [
+                            "recommend_series",
+                            "series_q"
+                        ]
+                    },
+                    "requests": {
+                        "0": "recommend me a series."
+                    },
+                    "responses": {
+                        "0": "Oh, I know a lot of Netflix series! Have you watched Hoarders?"
+                    },
+                    "misc": {
+                        "slots": {
+                            "random_series2recommend": "Hoarders",
+                            "random_description": "This reality series enters the worlds of compulsive hoarders, whose addiction to acquisition overwhelms not just their homes but also their lives.",
+                            "random_duration": "1 Season",
+                            "random_release": "2020",
+                            "random_series2recommend_2": "Hotel Del Luna",
+                            "random_description_2": "When he's invited to manage a hotel for dead souls, an elite hotelier gets to know the establishment's ancient owner and her strange world.",
+                            "random_duration_2": "1 Season",
+                            "random_release_2": "2019",
+                            "random_series2recommend_3": "Sintonia",
+                            "random_description_3": "Three teens living in the same S\u00e3o Paulo favela pursue their dreams while maintaining their friendship, amid a world of music, drugs and religion.",
+                            "random_duration_3": "1 Season",
+                            "random_release_3": "2019"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_in_progress"
+        }
+    ]
+]

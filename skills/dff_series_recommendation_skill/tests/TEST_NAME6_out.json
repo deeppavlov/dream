@@ -1,0 +1,84 @@
+[
+    [
+        "Then I highly recommend it to you! It was released in 2021, it has 1 Season. And here is the desription: A career-driven 30-something must contend with a cutthroat workplace, a love triangle and her nagging mom.",
+        1.0,
+        {
+            "dff_series_recommendation_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 3,
+                "history": {
+                    "1": [
+                        "mentions_known_series",
+                        "suggest2recommend"
+                    ],
+                    "2": [
+                        "mentions_known_series",
+                        "recommend_series"
+                    ],
+                    "3": [
+                        "mentions_known_series",
+                        "not_watched_recommended"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "8c05718a-bc33-4cce-aded-64a8924e04b9",
+                    "labels": {
+                        "1": [
+                            "mentions_known_series",
+                            "recommend_series"
+                        ],
+                        "2": [
+                            "mentions_known_series",
+                            "not_watched_recommended"
+                        ]
+                    },
+                    "requests": {
+                        "1": "yes.",
+                        "2": "no."
+                    },
+                    "responses": {
+                        "1": "I higly recommend The Rational Life by the same director Hsu Fu-chun. Have you watched it?",
+                        "2": "Then I highly recommend it to you! It was released in 2021, it has 1 Season. And here is the desription: A career-driven 30-something must contend with a cutthroat workplace, a love triangle and her nagging mom."
+                    },
+                    "misc": {
+                        "slots": {
+                            "random_description": "This reality series enters the worlds of compulsive hoarders, whose addiction to acquisition overwhelms not just their homes but also their lives.",
+                            "random_description_2": "When he's invited to manage a hotel for dead souls, an elite hotelier gets to know the establishment's ancient owner and her strange world.",
+                            "random_description_3": "Three teens living in the same S\u00e3o Paulo favela pursue their dreams while maintaining their friendship, amid a world of music, drugs and religion.",
+                            "random_duration": "1 Season",
+                            "random_duration_2": "1 Season",
+                            "random_duration_3": "1 Season",
+                            "random_release": "2020",
+                            "random_release_2": "2019",
+                            "random_release_3": "2019",
+                            "random_series2recommend": "Hoarders",
+                            "random_series2recommend_2": "Hotel Del Luna",
+                            "random_series2recommend_3": "Sintonia",
+                            "recommend_description": "A career-driven 30-something must contend with a cutthroat workplace, a love triangle and her nagging mom.",
+                            "recommend_duration": "1 Season",
+                            "recommend_release": "2021",
+                            "recommend_series": "The Rational Life by the same director Hsu Fu-chun"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

@@ -1008,6 +1008,19 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
+            "dff_series_recommendation_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-series-recommendation-skill:8126/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_series_recommendation_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_template_skill": {
                 "connector": {
                     "protocol": "http",

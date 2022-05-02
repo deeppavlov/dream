@@ -5,15 +5,14 @@ import time
 import re
 
 
-# import sentry_sdk
 from healthcheck import HealthCheck
 from flask import Flask, jsonify, request
 
 from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
-from common.get_book_recommendation import BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN
+from common.get_book_recommendation import BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN, APPRECIATION_PATTERN, RECOMMEND_PATTERN, BOOKS_TOPIC_PATTERN
 from common.get_book_info import BOOK_INFO_PATTERN
+from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN
 
-# sentry_sdk.init(os.getenv("SENTRY_DSN")) эта штука всегда и везде не работает, потому что SENTRY_DSN не прописан
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,7 +21,13 @@ app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 
 share_problems_patterns = [DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN]
-recommend_book_by_genre_patterns = [BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN]
+recommend_book_by_genre_patterns = [
+    [BOOKS_PATTERN, APPRECIATION_PATTERN],
+    [GENRES_PATTERN, APPRECIATION_PATTERN],
+    [RECOMMEND_PATTERN, GENRES_PATTERN],
+    BOOKS_TOPIC_PATTERN,
+    RECOMMEND_BOOK_PATTERN
+    ]
 
 
 def detect_goal(requested_data):
@@ -56,9 +61,20 @@ def detect_goal(requested_data):
                     human_goal["human_goals"].append('share_personal_problems')
 
             for pattern in recommend_book_by_genre_patterns:
-                flag_rec_book = bool(pattern.search(utterance))
-                if flag_rec_book:
-                    human_goal["human_goals"].append('get_book_recommendation')
+                if type(pattern) == list:
+                    count_patterns = 0
+                    for i, pat in enumerate(pattern):
+                        if re.search(pat, utterance):
+                            count_patterns += 1
+                    if count_patterns == len(pattern):
+                        human_goal["human_goals"].append('get_book_recommendation')
+                else:
+                    if re.search(pattern, utterance):
+                        human_goal["human_goals"].append('get_book_recommendation')
+
+            flag_series = bool(RECOMMEND_SERIES_PATTERN.search(utterance))
+            if flag_series:
+                human_goal["human_goals"].append('get_series_recommendation')
 
             flag_book_info = bool(BOOK_INFO_PATTERN.search(utterance))
             if flag_book_info:

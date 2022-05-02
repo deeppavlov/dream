@@ -23,7 +23,8 @@ from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BE
 from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS_PATTERN
-from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN, RECOMMEND_BOOK_PATTERN
+from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN, RECOMMEND_BOOK_PATTERN, RECOMMEND_PATTERN
+from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN, MENTIONS_KNOWN_SERIES_PATTERN, MENTIONS_NETFLIX
 
 SKILL_TRIGGERS = {
     "dff_movie_skill": {
@@ -175,12 +176,19 @@ SKILL_TRIGGERS = {
         "intents": [],
     },
      "dff_book_recommendation_skill": {
-        "compiled_patterns": [BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN, RECOMMEND_BOOK_PATTERN],
+        "compiled_patterns": [[BOOKS_PATTERN, APPRECIATION_PATTERN], [GENRES_PATTERN, APPRECIATION_PATTERN], [RECOMMEND_PATTERN, GENRES_PATTERN], BOOKS_TOPIC_PATTERN, RECOMMEND_BOOK_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
         "intents": [],
     },
+    "dff_series_recommendation_skill": {
+        "compiled_patterns": [RECOMMEND_SERIES_PATTERN, MENTIONS_KNOWN_SERIES_PATTERN, MENTIONS_NETFLIX],
+        "previous_bot_patterns": [],
+        "cobot_dialogact_topics": [],
+        "cobot_topics": [],
+        "intents": [],
+    }
 }
 
 
@@ -205,8 +213,16 @@ def turn_on_skills(
     for skill_name in SKILL_TRIGGERS:
         if available_skills is None or (available_skills is not None and skill_name in available_skills):
             for pattern in SKILL_TRIGGERS[skill_name]["compiled_patterns"]:
-                if re.search(pattern, user_uttr_text):
-                    skills.append(skill_name)
+                if type(pattern) == list:
+                    count_patterns = 0
+                    for i, pat in enumerate(pattern):
+                        if re.search(pat, user_uttr_text):
+                            count_patterns += 1
+                    if count_patterns == len(pattern):
+                        skills.append(skill_name)
+                else:
+                    if re.search(pattern, user_uttr_text):
+                        skills.append(skill_name)
             for pattern in SKILL_TRIGGERS[skill_name]["previous_bot_patterns"]:
                 if re.search(pattern, prev_bot_uttr_text):
                     skills.append(skill_name)

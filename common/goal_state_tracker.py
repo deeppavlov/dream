@@ -44,7 +44,8 @@ class HumanGoalTracker(GoalTracker):
 
     map_goal2skill = {
             "share_personal_problems": "dff_share_problems_skill",
-            "get_book_recommendation": "dff_book_recommendation_skill"
+            "get_book_recommendation": "dff_book_recommendation_skill",
+            "get_series_recommendation": "dff_series_recommendation_skill"
         }
 
     def update_goals_after_interlocutor(self, dialog):

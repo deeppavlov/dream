@@ -1,0 +1,577 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.\nThen, last m... [7360 chars]",
+                                    "description": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.",
+                                    "image": "https://static01.nyt.com/images/2022/05/02/world/02ukraine-blog-header-01/02ukraine-blog-header-01-facebookJumbo.jpg",
+                                    "publishedAt": "2022-05-02T05:56:29Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Live Updates Russia-Ukraine News: Mariupol, Pelosi",
+                                    "url": "https://www.nytimes.com/live/2022/05/02/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "recommend me a series.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_series_recommendation"
+                        ],
+                        "spelling_preprocessing": "recommend me a series",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "a series"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "recommend me a series.",
+                            "segments": [
+                                "recommend me a series."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.004967817105352879,
+                                "command": 0.9237385988235474,
+                                "comment": 0.002927425317466259,
+                                "complaint": 0.00403203908354044,
+                                "dev_command": 0.030495397746562958,
+                                "neg_answer": 0.0010446900269016623,
+                                "open_question_factual": 0.003078721696510911,
+                                "open_question_opinion": 0.005209336988627911,
+                                "opinion": 0.008137047290802002,
+                                "other_answers": 0.001305874320678413,
+                                "pos_answer": 0.002366902306675911,
+                                "statement": 0.006641390733420849,
+                                "yes_no_question": 0.006054871715605259
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "recommend",
+                                "series"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        9
+                                    ],
+                                    "text": "recommend"
+                                },
+                                {
+                                    "label": "work_of_art",
+                                    "offsets": [
+                                        15,
+                                        21
+                                    ],
+                                    "text": "series"
+                                }
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_RequestIntent": 0.9910524487495422
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.49873682856559753
+                            },
+                            "cobot_topics": {
+                                "Literature": 0.99037766456604
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.999984860420227
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9996354579925537
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9995142221450806
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999812841415405
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.\nThen, last m... [7360 chars]",
+                                    "description": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.",
+                                    "image": "https://static01.nyt.com/images/2022/05/02/world/02ukraine-blog-header-01/02ukraine-blog-header-01-facebookJumbo.jpg",
+                                    "publishedAt": "2022-05-02T05:56:29Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Live Updates Russia-Ukraine News: Mariupol, Pelosi",
+                                    "url": "https://www.nytimes.com/live/2022/05/02/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "recommend",
+                                "news": {
+                                    "content": "Discover startups, services, products and more from our partner StackCommerce. New York Post may be compensated and/or receive an affiliate commission if you buy through our links.\nOur pets give us unconditional love, cuddles, and plenty of laughter,... [1736 chars]",
+                                    "description": "Discover startups, services, products and more from our partner StackCommerce. New York Post may be compensated and/or receive an affiliate commission if you buy through our links.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2022/04/1-39.png?w=1024",
+                                    "publishedAt": "2022-05-01T13:00:00Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "This 5-in-1 vacuum spin mop helps remove pet hair: $100 off",
+                                    "url": "https://nypost.com/2022/05/01/this-5-in-1-vacuum-spin-mop-helps-remove-pet-hair-100-off/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "series",
+                                "news": {
+                                    "content": "For days leading up to Sunday's game against the Milwaukee Bucks, the Boston Celtics prepared for a different challenge than the one they'd just completed. Unlike the Brooklyn Nets, the Bucks are an enormous, physical, defense-first team. While injur... [8199 chars]",
+                                    "description": "For days leading up to Sunday's game against the Milwaukee Bucks, the Boston Celtics prepared for a different challenge than the one they'd just completed. Unlike the Brooklyn Nets, the Bucks are an enormous, physical, defense-first team.",
+                                    "image": "https://sportshub.cbsistatic.com/i/r/2022/04/28/773b33c6-e014-4296-a77d-f11f6f7fc538/thumbnail/1200x675/b10e8493a5fc4b7ebed601fabe8f6e1d/warriors-win-2g.jpg",
+                                    "publishedAt": "2022-05-02T04:43:36Z",
+                                    "source": {
+                                        "name": "CBS Sports",
+                                        "url": "https://www.cbssports.com"
+                                    },
+                                    "title": "In series openers, Celtics threw Game 1 away and Warriors beat Grizzlies at their own game",
+                                    "url": "https://www.cbssports.com/nba/news/in-series-openers-celtics-threw-game-1-away-and-warriors-beat-grizzlies-at-their-own-game/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "recommend me a series."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you doing today?",
+                                "recommend me a series."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "recommend": {
+                                "SymbolOf": [
+                                    "danger",
+                                    "sleep",
+                                    "passion"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "good",
+                                    "entertain"
+                                ],
+                                "Causes": [
+                                    "you feel good",
+                                    "headache",
+                                    "you feel good about yourself"
+                                ],
+                                "CausesDesire": [
+                                    "hear testimony",
+                                    "hear testimony from witness",
+                                    "lie"
+                                ]
+                            },
+                            "series": {
+                                "SymbolOf": [
+                                    "language",
+                                    "word",
+                                    "alphabet"
+                                ],
+                                "HasProperty": [
+                                    "one type of book",
+                                    "very complex",
+                                    "number"
+                                ],
+                                "Causes": [
+                                    "result",
+                                    "error",
+                                    "problem"
+                                ],
+                                "CausesDesire": [
+                                    "write novel",
+                                    "memorize",
+                                    "learn"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How are you doing today?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you doing today?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How are you doing today?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you doing today?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_series_recommendation_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

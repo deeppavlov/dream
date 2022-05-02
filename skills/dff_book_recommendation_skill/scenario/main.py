@@ -13,7 +13,7 @@ import common.dff.integration.response as int_rsp
 
 import common.constants as common_constants
 
-from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN
+from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN, RECOMMEND_BOOK_PATTERN, RECOMMEND_PATTERN
 from common.constants import GOAL_DETECTED, GOAL_IN_PROGRESS, GOAL_ACHIEVED, GOAL_NOT_ACHIEVED, GOAL_OFFERED
 
 import common.set_goal_flag as goal_status
@@ -48,8 +48,8 @@ flows = {
         TRANSITIONS: {
             ("book_by_genre", "genre_q"): cnd.all([cnd.regexp(BOOKS_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
             ("book_by_genre", "fan_of_genre2"): cnd.all([cnd.regexp(GENRES_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
-            ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(GENRES_PATTERN)]),
-            ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)]), # не отрабатывает
+            ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(RECOMMEND_PATTERN), cnd.regexp(GENRES_PATTERN)]),
+            ("book_by_genre", "q_fav_genre"): cnd.regexp(RECOMMEND_BOOK_PATTERN), 
             ("book_by_genre", "offer_recommend_book"): cnd.regexp(BOOKS_TOPIC_PATTERN)
         },
     },
@@ -60,13 +60,17 @@ flows = {
                 # ("book_by_genre", "genre_q"): cnd.true()
                 ("book_by_genre", "genre_q"): cnd.all([cnd.regexp(BOOKS_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
                 ("book_by_genre", "fan_of_genre2"): cnd.all([cnd.regexp(GENRES_PATTERN), cnd.regexp(APPRECIATION_PATTERN)]),
-                ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(GENRES_PATTERN)]),
-                ("book_by_genre", "q_fav_genre"): cnd.all([cnd.regexp(r"recommend", re.IGNORECASE), cnd.regexp(r"book", re.IGNORECASE)]),
+                ("book_by_genre", "q_book_by_genre"): cnd.all([cnd.regexp(RECOMMEND_PATTERN), cnd.regexp(GENRES_PATTERN)]),
+                ("book_by_genre", "q_fav_genre"): cnd.regexp(RECOMMEND_BOOK_PATTERN),
                 ("book_by_genre", "offer_recommend_book"): cnd.regexp(BOOKS_TOPIC_PATTERN)
                 },
         },
         "fallback": {
             RESPONSE: "Ooops",
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(0.0),
+                "set_can_continue": int_prs.set_can_continue(common_constants.CAN_NOT_CONTINUE),
+            },
             TRANSITIONS: {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),

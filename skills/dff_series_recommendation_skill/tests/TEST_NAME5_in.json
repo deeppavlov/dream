@@ -1,0 +1,694 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "i love office girls series.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "i love office girls series",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "office girls series"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "i love office girls series.",
+                            "segments": [
+                                "i love office girls series."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0011422407114878297,
+                                "command": 0.0023941362742334604,
+                                "comment": 0.0023893064353615046,
+                                "complaint": 0.0007978958892636001,
+                                "dev_command": 0.000986641738563776,
+                                "neg_answer": 0.0009807555470615625,
+                                "open_question_factual": 0.0017392365261912346,
+                                "open_question_opinion": 0.0010997363133355975,
+                                "opinion": 0.9731738567352295,
+                                "other_answers": 0.0006630935822613537,
+                                "pos_answer": 0.0019157867645844817,
+                                "statement": 0.011639848351478577,
+                                "yes_no_question": 0.001077348948456347
+                            }
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9995054006576538
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.9741439819335938
+                            },
+                            "cobot_topics": {
+                                "Movies_TV": 0.9798113703727722
+                            },
+                            "emotion_classification": {
+                                "joy": 0.8567410111427307
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.995507001876831
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9999985694885254
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999829530715942
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "i love office girls",
+                                "series"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "film",
+                                    "offsets": [
+                                        0,
+                                        19
+                                    ],
+                                    "text": "i love office girls"
+                                },
+                                {
+                                    "label": "work_of_art",
+                                    "offsets": [
+                                        20,
+                                        26
+                                    ],
+                                    "text": "series"
+                                }
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "i love office girls series."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "i love office girls series."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "i love office girls": {
+                                "SymbolOf": [
+                                    "my love life",
+                                    "innocence",
+                                    "passion"
+                                ],
+                                "HasProperty": [
+                                    "cute",
+                                    "pretty",
+                                    "skinny"
+                                ],
+                                "Causes": [
+                                    "they make me laugh",
+                                    "they make me happy",
+                                    "me to get fat"
+                                ],
+                                "CausesDesire": [
+                                    "work in office",
+                                    "go to work",
+                                    "work"
+                                ]
+                            },
+                            "series": {
+                                "SymbolOf": [
+                                    "language",
+                                    "word",
+                                    "alphabet"
+                                ],
+                                "HasProperty": [
+                                    "one type of book",
+                                    "very complex",
+                                    "number"
+                                ],
+                                "Causes": [
+                                    "result",
+                                    "error",
+                                    "problem"
+                                ],
+                                "CausesDesire": [
+                                    "write novel",
+                                    "memorize",
+                                    "learn"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.\nThen, last m... [7360 chars]",
+                                    "description": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.",
+                                    "image": "https://static01.nyt.com/images/2022/05/02/world/02ukraine-blog-header-01/02ukraine-blog-header-01-facebookJumbo.jpg",
+                                    "publishedAt": "2022-05-02T05:56:29Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Live Updates Russia-Ukraine News: Mariupol, Pelosi",
+                                    "url": "https://www.nytimes.com/live/2022/05/02/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "i love office girls",
+                                "news": {},
+                                "which": "human"
+                            },
+                            {
+                                "entity": "series",
+                                "news": {
+                                    "content": "For days leading up to Sunday's game against the Milwaukee Bucks, the Boston Celtics prepared for a different challenge than the one they'd just completed. Unlike the Brooklyn Nets, the Bucks are an enormous, physical, defense-first team. While injur... [8199 chars]",
+                                    "description": "For days leading up to Sunday's game against the Milwaukee Bucks, the Boston Celtics prepared for a different challenge than the one they'd just completed. Unlike the Brooklyn Nets, the Bucks are an enormous, physical, defense-first team.",
+                                    "image": "https://sportshub.cbsistatic.com/i/r/2022/04/28/773b33c6-e014-4296-a77d-f11f6f7fc538/thumbnail/1200x675/b10e8493a5fc4b7ebed601fabe8f6e1d/warriors-win-2g.jpg",
+                                    "publishedAt": "2022-05-02T04:43:36Z",
+                                    "source": {
+                                        "name": "CBS Sports",
+                                        "url": "https://www.cbssports.com"
+                                    },
+                                    "title": "In series openers, Celtics threw Game 1 away and Warriors beat Grizzlies at their own game",
+                                    "url": "https://www.cbssports.com/nba/news/in-series-openers-celtics-threw-game-1-away-and-warriors-beat-grizzlies-at-their-own-game/"
+                                },
+                                "which": "human"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0010839945171028376,
+                                "command": 0.001133150071837008,
+                                "comment": 0.0008067567250691354,
+                                "complaint": 0.00029227836057543755,
+                                "dev_command": 0.0006466656341217458,
+                                "neg_answer": 0.0010081662330776453,
+                                "open_question_factual": 0.0003362778516020626,
+                                "open_question_opinion": 0.000431358435889706,
+                                "opinion": 0.000534965714905411,
+                                "other_answers": 0.000663065176922828,
+                                "pos_answer": 0.9914302229881287,
+                                "statement": 0.00101998052559793,
+                                "yes_no_question": 0.0006131611298769712
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "yes"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        3
+                                    ],
+                                    "text": "yes"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.973347008228302
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9887401461601257
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999936819076538
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.\nThen, last m... [7360 chars]",
+                                    "description": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.",
+                                    "image": "https://static01.nyt.com/images/2022/05/02/world/02ukraine-blog-header-01/02ukraine-blog-header-01-facebookJumbo.jpg",
+                                    "publishedAt": "2022-05-02T05:56:29Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Live Updates Russia-Ukraine News: Mariupol, Pelosi",
+                                    "url": "https://www.nytimes.com/live/2022/05/02/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "yes",
+                                "news": {
+                                    "content": "Parents across the country are fighting against critical race theory, gender ideology and generally inappropriate lesson plans all while the left denies any of this is being taught at all.\nA few weeks ago, parents at the Glendale Unified School Distr... [4255 chars]",
+                                    "description": "Parents across the country are fighting against critical race theory, gender ideology and generally inappropriate lesson plans all while the left denies any of this is being taught at all.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2022/05/randi-weingarten.jpg?quality=75&strip=all&w=1024",
+                                    "publishedAt": "2022-05-01T23:52:24Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Yes, Randi Weingarten, this is war - we parents are fighting for our kids",
+                                    "url": "https://nypost.com/2022/05/01/yes-randi-weingarten-this-is-war-we-parents-are-fighting-for-our-kids/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "i love office girls series.",
+                                "I love this series! And I can recommend you another one. Do you want me to?",
+                                "yes, i want you to. "
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "yes": {
+                                "SymbolOf": [
+                                    "purity",
+                                    "ignorance",
+                                    "innocence"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "correct",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "you feel good",
+                                    "headache",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "receive letter",
+                                    "get job",
+                                    "buy present"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I love this series! And I can recommend you another one. Do you want me to?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I love this series! And I can recommend you another one. Do you want me to?",
+                            "segments": [
+                                "I love this series!",
+                                "And I can recommend you another one.",
+                                "Do you want me to?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "i love office girls series.",
+                                "I love this series! And I can recommend you another one. Do you want me to?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_series_recommendation_skill"
+                }
+            ]
+        }
+    ],
+    "dff_series_recommendation_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "8c05718a-bc33-4cce-aded-64a8924e04b9",
+                "labels": {
+                    "0": [
+                        "mentions_known_series",
+                        "suggest2recommend"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "random_description": "This reality series enters the worlds of compulsive hoarders, whose addiction to acquisition overwhelms not just their homes but also their lives.",
+                        "random_description_2": "When he's invited to manage a hotel for dead souls, an elite hotelier gets to know the establishment's ancient owner and her strange world.",
+                        "random_description_3": "Three teens living in the same S\u00e3o Paulo favela pursue their dreams while maintaining their friendship, amid a world of music, drugs and religion.",
+                        "random_duration": "1 Season",
+                        "random_duration_2": "1 Season",
+                        "random_duration_3": "1 Season",
+                        "random_release": "2020",
+                        "random_release_2": "2019",
+                        "random_release_3": "2019",
+                        "random_series2recommend": "Hoarders",
+                        "random_series2recommend_2": "Hotel Del Luna",
+                        "random_series2recommend_3": "Sintonia",
+                        "recommend_description": "A career-driven 30-something must contend with a cutthroat workplace, a love triangle and her nagging mom.",
+                        "recommend_duration": "1 Season",
+                        "recommend_release": "2021",
+                        "recommend_series": "The Rational Life by the same director Hsu Fu-chun"
+                    }
+                },
+                "requests": {
+                    "0": "i love office girls series."
+                },
+                "responses": {
+                    "0": "I love this series! And I can recommend you another one. Do you want me to?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "mentions_known_series",
+                    "suggest2recommend"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {
+            "i love office girls": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [],
+                "name": "i love office girls"
+            },
+            "office girls series": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "office girls series",
+                        "human_utterance_index": 1,
+                        "previous_skill_name": "dff_friendship_skill"
+                    }
+                ],
+                "name": "office girls series"
+            }
+        }
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

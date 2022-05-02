@@ -1,0 +1,616 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.001124985865317285,
+                                "command": 0.0011239282321184874,
+                                "comment": 0.0008448869339190423,
+                                "complaint": 0.00029634201200678945,
+                                "dev_command": 0.0006522336043417454,
+                                "neg_answer": 0.0009822746505960822,
+                                "open_question_factual": 0.00034412750392220914,
+                                "open_question_opinion": 0.0004124799161218107,
+                                "opinion": 0.0005569073837250471,
+                                "other_answers": 0.000658742617815733,
+                                "pos_answer": 0.9911279678344727,
+                                "statement": 0.001291800057515502,
+                                "yes_no_question": 0.000583274697419256
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "yes"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        3
+                                    ],
+                                    "text": "yes"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.\nThen, last m... [7360 chars]",
+                                    "description": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.",
+                                    "image": "https://static01.nyt.com/images/2022/05/02/world/02ukraine-blog-header-01/02ukraine-blog-header-01-facebookJumbo.jpg",
+                                    "publishedAt": "2022-05-02T05:56:29Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Live Updates Russia-Ukraine News: Mariupol, Pelosi",
+                                    "url": "https://www.nytimes.com/live/2022/05/02/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "yes",
+                                "news": {
+                                    "content": "Parents across the country are fighting against critical race theory, gender ideology and generally inappropriate lesson plans all while the left denies any of this is being taught at all.\nA few weeks ago, parents at the Glendale Unified School Distr... [4255 chars]",
+                                    "description": "Parents across the country are fighting against critical race theory, gender ideology and generally inappropriate lesson plans all while the left denies any of this is being taught at all.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2022/05/randi-weingarten.jpg?quality=75&strip=all&w=1024",
+                                    "publishedAt": "2022-05-01T23:52:24Z",
+                                    "source": {
+                                        "name": "New York Post",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Yes, Randi Weingarten, this is war - we parents are fighting for our kids",
+                                    "url": "https://nypost.com/2022/05/01/yes-randi-weingarten-this-is-war-we-parents-are-fighting-for-our-kids/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "netflix",
+                                "news": {
+                                    "content": "Viewers are loving Netflix\u2019s Heartstopper, and it\u2019s easy to understand why. The streamer\u2019s adaptation of Alice Oseman\u2019s graphic novel series brings a charming teen romance to life, all while offering the positive LGBTQ representation audiences have b... [4462 chars]",
+                                    "description": "Viewers are loving Netflix\u2019s Heartstopper, and it\u2019s easy to understand why.",
+                                    "image": "https://www.cheatsheet.com/wp-content/uploads/2022/04/Heartstopper-Key-Art-1200x900.jpeg",
+                                    "publishedAt": "2022-05-02T03:28:00Z",
+                                    "source": {
+                                        "name": "Showbiz Cheat Sheet",
+                                        "url": "https://www.cheatsheet.com"
+                                    },
+                                    "title": "5 Shows to Watch If You Like Netflix's 'Heartstopper'",
+                                    "url": "https://www.cheatsheet.com/entertainment/5-shows-watch-like-netflixs-heartstopper.html/"
+                                },
+                                "which": "bot"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9997422099113464
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.999935507774353
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999920129776001
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How are you doing today?",
+                                "recommend me a series.",
+                                "Oh, I know a lot of Netflix series! Have you watched Hoarders?",
+                                "yes, i have watched hoarders. "
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "yes": {
+                                "SymbolOf": [
+                                    "purity",
+                                    "ignorance",
+                                    "innocence"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "correct",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "you feel good",
+                                    "headache",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "receive letter",
+                                    "get job",
+                                    "buy present"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "no.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "no",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "no.",
+                            "segments": [
+                                "no."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0005491622141562402,
+                                "command": 0.0008692244882695377,
+                                "comment": 0.0007466383394785225,
+                                "complaint": 0.011590434238314629,
+                                "dev_command": 0.0011374858440831304,
+                                "neg_answer": 0.9748802781105042,
+                                "open_question_factual": 0.0013000199105590582,
+                                "open_question_opinion": 0.0008746556704863906,
+                                "opinion": 0.0012239280622452497,
+                                "other_answers": 0.0030193899292498827,
+                                "pos_answer": 0.001752251759171486,
+                                "statement": 0.0007589783053845167,
+                                "yes_no_question": 0.0012975562131032348
+                            }
+                        ],
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "no."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9998202919960022
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Movies": 0.9861680865287781
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.999993085861206
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9890186786651611
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9981480836868286
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9439201354980469
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9998563528060913
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Oh, I know a lot of Netflix series! Have you watched Hoarders?",
+                                "yes, i have watched hoarders. ",
+                                "Ok! And have you watched Hotel Del Luna?",
+                                "no."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.\nThen, last m... [7360 chars]",
+                                    "description": "Oleg Y. Tinkov was worth more than $9 billion in November, renowned as one of Russia\u2019s few self-made business tycoons after building his fortune outside the energy and minerals industries that were the playgrounds of Russian kleptocracy.",
+                                    "image": "https://static01.nyt.com/images/2022/05/02/world/02ukraine-blog-header-01/02ukraine-blog-header-01-facebookJumbo.jpg",
+                                    "publishedAt": "2022-05-02T05:56:29Z",
+                                    "source": {
+                                        "name": "The New York Times",
+                                        "url": "https://www.nytimes.com"
+                                    },
+                                    "title": "Live Updates Russia-Ukraine News: Mariupol, Pelosi",
+                                    "url": "https://www.nytimes.com/live/2022/05/02/world/ukraine-russia-war-news"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "del luna",
+                                "news": {},
+                                "which": "bot"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Ok! And have you watched Hotel Del Luna?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Ok! And have you watched Hotel Del Luna?",
+                            "segments": [
+                                "Ok!",
+                                "And have you watched Hotel Del Luna?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 5,
+                                    "text": "del luna",
+                                    "type": "ORG"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "recommend me a series.",
+                                "Oh, I know a lot of Netflix series! Have you watched Hoarders?",
+                                "yes, i have watched hoarders. ",
+                                "Ok! And have you watched Hotel Del Luna?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_series_recommendation_skill"
+                }
+            ]
+        }
+    ],
+    "dff_series_recommendation_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "77b5fac5-d872-4169-ac0e-093425f8c68a",
+                "labels": {
+                    "0": [
+                        "recommend_series",
+                        "series_q"
+                    ],
+                    "1": [
+                        "recommend_series",
+                        "watched_recommended"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "random_description": "This reality series enters the worlds of compulsive hoarders, whose addiction to acquisition overwhelms not just their homes but also their lives.",
+                        "random_description_2": "When he's invited to manage a hotel for dead souls, an elite hotelier gets to know the establishment's ancient owner and her strange world.",
+                        "random_description_3": "Three teens living in the same S\u00e3o Paulo favela pursue their dreams while maintaining their friendship, amid a world of music, drugs and religion.",
+                        "random_duration": "1 Season",
+                        "random_duration_2": "1 Season",
+                        "random_duration_3": "1 Season",
+                        "random_release": "2020",
+                        "random_release_2": "2019",
+                        "random_release_3": "2019",
+                        "random_series2recommend": "Hoarders",
+                        "random_series2recommend_2": "Hotel Del Luna",
+                        "random_series2recommend_3": "Sintonia"
+                    }
+                },
+                "requests": {
+                    "0": "recommend me a series.",
+                    "1": "yes."
+                },
+                "responses": {
+                    "0": "Oh, I know a lot of Netflix series! Have you watched Hoarders?",
+                    "1": "Ok! And have you watched Hotel Del Luna?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "recommend_series",
+                    "series_q"
+                ],
+                "2": [
+                    "recommend_series",
+                    "watched_recommended"
+                ]
+            },
+            "previous_human_utter_index": 2,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
