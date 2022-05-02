@@ -1,0 +1,530 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Hide Transcript Show Transcript\nThanks. Okay. My mama loved you so much and she appreciated your love for her. And I'm sorry that she couldn't hang on until today. Your esteem for her and your regard for her really penetrated her heart. And it was yo... [4236 chars]",
+                                    "description": "Hide Transcript Show Transcript\nThanks. Okay.",
+                                    "image": "https://kubrick.htvapps.com/htv-prod-media.s3.amazonaws.com/images/hypatia-h-f456ffe96c4aa6f704a296851493d756-h-8939eaf09dd99fb0dae0c4437e80fca6-preview-1651467070823800950.JPG?crop=1xw:0.84459459459459463xh;center,top&resize=1200:*",
+                                    "publishedAt": "2022-05-02T16:33:00Z",
+                                    "source": {
+                                        "name": "WMTW Portland",
+                                        "url": "https://www.wmtw.com"
+                                    },
+                                    "title": "Naomi Judd remembered by daughters at Country Music Hall of Fame ceremony",
+                                    "url": "https://www.wmtw.com/article/naomi-judd-remembered-by-daughters-country-music-hall-of-fame-ceremony/39873395"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "fuck you.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "test_bot"
+                        ],
+                        "spelling_preprocessing": "fuck you",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": true
+                        },
+                        "spacy_nounphrases": [
+                            "fuck"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "fuck you.",
+                            "segments": [
+                                "fuck you."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.028474410995841026,
+                                "command": 0.007342510856688023,
+                                "comment": 0.17600774765014648,
+                                "complaint": 0.5883250832557678,
+                                "dev_command": 0.024921532720327377,
+                                "neg_answer": 0.011035541072487831,
+                                "open_question_factual": 0.02909979782998562,
+                                "open_question_opinion": 0.009853364899754524,
+                                "opinion": 0.023246431723237038,
+                                "other_answers": 0.022476565092802048,
+                                "pos_answer": 0.004143847152590752,
+                                "statement": 0.05951375886797905,
+                                "yes_no_question": 0.015559353865683079
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "fuck"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        4
+                                    ],
+                                    "text": "fuck"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "OtherIntent": 0.8350486159324646
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.7426508069038391
+                            },
+                            "cobot_topics": {
+                                "Sex_Profanity": 0.9999583959579468
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9695671796798706
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999982118606567
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9792942404747009
+                            },
+                            "toxic_classification": {
+                                "toxic": 1.0
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Hide Transcript Show Transcript\nThanks. Okay. My mama loved you so much and she appreciated your love for her. And I'm sorry that she couldn't hang on until today. Your esteem for her and your regard for her really penetrated her heart. And it was yo... [4236 chars]",
+                                    "description": "Hide Transcript Show Transcript\nThanks. Okay.",
+                                    "image": "https://kubrick.htvapps.com/htv-prod-media.s3.amazonaws.com/images/hypatia-h-f456ffe96c4aa6f704a296851493d756-h-8939eaf09dd99fb0dae0c4437e80fca6-preview-1651467070823800950.JPG?crop=1xw:0.84459459459459463xh;center,top&resize=1200:*",
+                                    "publishedAt": "2022-05-02T16:33:00Z",
+                                    "source": {
+                                        "name": "WMTW Portland",
+                                        "url": "https://www.wmtw.com"
+                                    },
+                                    "title": "Naomi Judd remembered by daughters at Country Music Hall of Fame ceremony",
+                                    "url": "https://www.wmtw.com/article/naomi-judd-remembered-by-daughters-country-music-hall-of-fame-ceremony/39873395"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "fuck",
+                                "news": {
+                                    "content": "Even if you\u2019re not the most avid birdwatcher, you could probably identify a woodpecker\u2014especially if you saw one on or in a tree. If nothing else, you\u2019d recognize their pointy, drill-like beak that they use to make holes of varying sizes in order to ... [2441 chars]",
+                                    "description": "Even if you\u2019re not the most avid birdwatcher, you could probably identify a woodpecker\u2014especially if you saw one on or in a tree.",
+                                    "image": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/a6ddc7e6dcb8607e15a348142366c7d4.jpg",
+                                    "publishedAt": "2022-05-01T15:00:00Z",
+                                    "source": {
+                                        "name": "Lifehacker",
+                                        "url": "https://lifehacker.com"
+                                    },
+                                    "title": "How to Get Woodpeckers to Fuck Off",
+                                    "url": "https://lifehacker.com/how-to-get-woodpeckers-to-fuck-off-1848847616"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "fuck you."
+                            ]
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "fuck you."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "fuck": {
+                                "SymbolOf": [
+                                    "passion",
+                                    "stupidity",
+                                    "violence"
+                                ],
+                                "HasProperty": [
+                                    "good",
+                                    "fun",
+                                    "great"
+                                ],
+                                "Causes": [
+                                    "get pregnant",
+                                    "you get pregnant",
+                                    "pregnancy"
+                                ],
+                                "CausesDesire": [
+                                    "have sex",
+                                    "fuck",
+                                    "have fun"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How are you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How are you?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_test_bot_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

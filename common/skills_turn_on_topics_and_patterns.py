@@ -26,6 +26,7 @@ from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS
 from common.get_book_recommendation import BOOKS_PATTERN, APPRECIATION_PATTERN, GENRES_PATTERN, BOOKS_TOPIC_PATTERN, RECOMMEND_BOOK_PATTERN, RECOMMEND_PATTERN
 from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN, MENTIONS_KNOWN_SERIES_PATTERN, MENTIONS_NETFLIX
 from common.get_book_information import TELL_BOOK_GENRE_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_DESCRIPTION_PATTERN
+from common.test_bot import PRESIDENT_OPINION_PATTERN, SWEAR_WORDS_PATTERN
 
 SKILL_TRIGGERS = {
     "dff_movie_skill": {
@@ -192,6 +193,13 @@ SKILL_TRIGGERS = {
     },
     "dff_get_book_information_skill": {
         "compiled_patterns": [TELL_BOOK_GENRE_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_DESCRIPTION_PATTERN],
+        "previous_bot_patterns": [],
+        "cobot_dialogact_topics": [],
+        "cobot_topics": [],
+        "intents": [],
+    },
+    "dff_test_bot_skill": {
+        "compiled_patterns": [PRESIDENT_OPINION_PATTERN, SWEAR_WORDS_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],

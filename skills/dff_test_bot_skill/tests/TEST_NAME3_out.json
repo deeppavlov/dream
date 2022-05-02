@@ -1,0 +1,65 @@
+[
+    [
+        "I feel like I'm being tested right now. You hope I'll say anything untoward, don't you? Unfortunatelly, I'm not toxic at all, so lets speak in a more polite way!",
+        1.0,
+        {
+            "dff_test_bot_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 3,
+                "history": {
+                    "1": [
+                        "test_bot",
+                        "toxic"
+                    ],
+                    "2": [
+                        "test_bot",
+                        "president"
+                    ],
+                    "3": [
+                        "test_bot",
+                        "toxic"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "563692c8-aaef-4776-9297-0b8693ac5d53",
+                    "labels": {
+                        "1": [
+                            "test_bot",
+                            "president"
+                        ],
+                        "2": [
+                            "test_bot",
+                            "toxic"
+                        ]
+                    },
+                    "requests": {
+                        "1": "what do you think about putin?",
+                        "2": "you are a dickhead!"
+                    },
+                    "responses": {
+                        "1": "I feel like I'm being tested right now. You hope I'll say anything untoward, don't you? Unfortunatelly, I don't discuss politics, but there are a lot of topics I'd love to discuss with you!",
+                        "2": "I feel like I'm being tested right now. You hope I'll say anything untoward, don't you? Unfortunatelly, I'm not toxic at all, so lets speak in a more polite way!"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

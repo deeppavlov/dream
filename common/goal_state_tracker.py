@@ -46,7 +46,8 @@ class HumanGoalTracker(GoalTracker):
             "share_personal_problems": "dff_share_problems_skill",
             "get_book_recommendation": "dff_book_recommendation_skill",
             "get_series_recommendation": "dff_series_recommendation_skill",
-            "get_book_information": "dff_get_book_information_skill"
+            "get_book_information": "dff_get_book_information_skill",
+            "test_bot": "dff_test_bot_skill"
         }
 
     def update_goals_after_interlocutor(self, dialog):

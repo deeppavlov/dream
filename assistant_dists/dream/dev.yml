@@ -434,6 +434,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8127:8127
+  dff-test-bot-skill:
+    volumes:
+      - "./skills/dff_test_bot_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8128:8128
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

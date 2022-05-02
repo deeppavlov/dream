@@ -1,0 +1,923 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "hi",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "entity_detection": {},
+                        "ner": [
+                            []
+                        ],
+                        "conceptnet": {},
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Hide Transcript Show Transcript\nThanks. Okay. My mama loved you so much and she appreciated your love for her. And I'm sorry that she couldn't hang on until today. Your esteem for her and your regard for her really penetrated her heart. And it was yo... [4236 chars]",
+                                    "description": "Hide Transcript Show Transcript\nThanks. Okay.",
+                                    "image": "https://kubrick.htvapps.com/htv-prod-media.s3.amazonaws.com/images/hypatia-h-f456ffe96c4aa6f704a296851493d756-h-8939eaf09dd99fb0dae0c4437e80fca6-preview-1651467070823800950.JPG?crop=1xw:0.84459459459459463xh;center,top&resize=1200:*",
+                                    "publishedAt": "2022-05-02T16:33:00Z",
+                                    "source": {
+                                        "name": "WMTW Portland",
+                                        "url": "https://www.wmtw.com"
+                                    },
+                                    "title": "Naomi Judd remembered by daughters at Country Music Hall of Fame ceremony",
+                                    "url": "https://www.wmtw.com/article/naomi-judd-remembered-by-daughters-country-music-hall-of-fame-ceremony/39873395"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "what's your opinion on biden's politics?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "test_bot"
+                        ],
+                        "spelling_preprocessing": "what's your opinion on biden's politics?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what's your opinion on biden's politics?",
+                            "segments": [
+                                "what's your opinion on biden's politics?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "your opinion",
+                            "bidens politics"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.011735668405890465,
+                                "command": 0.004806966055184603,
+                                "comment": 0.004373691976070404,
+                                "complaint": 0.004249216057360172,
+                                "dev_command": 0.00625799922272563,
+                                "neg_answer": 0.002097661839798093,
+                                "open_question_factual": 0.0788203626871109,
+                                "open_question_opinion": 0.8652729392051697,
+                                "opinion": 0.003935844171792269,
+                                "other_answers": 0.003865731880068779,
+                                "pos_answer": 0.002245800569653511,
+                                "statement": 0.0012972360709682107,
+                                "yes_no_question": 0.01104093249887228
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "opinion",
+                                "politics",
+                                "biden"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "product",
+                                    "offsets": [
+                                        12,
+                                        19
+                                    ],
+                                    "text": "opinion"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        31,
+                                        39
+                                    ],
+                                    "text": "politics"
+                                },
+                                {
+                                    "label": "person",
+                                    "offsets": [
+                                        23,
+                                        30
+                                    ],
+                                    "text": "biden"
+                                }
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Opinion_RequestIntent": 0.9999735355377197
+                            },
+                            "cobot_dialogact_topics": {
+                                "Politics": 0.9999303817749023
+                            },
+                            "cobot_topics": {
+                                "Politics": 0.9999555349349976
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.999962568283081
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999985694885254
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.999981164932251
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999954700469971
+                            }
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 6,
+                                    "start_pos": 5,
+                                    "text": "biden",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Hide Transcript Show Transcript\nThanks. Okay. My mama loved you so much and she appreciated your love for her. And I'm sorry that she couldn't hang on until today. Your esteem for her and your regard for her really penetrated her heart. And it was yo... [4236 chars]",
+                                    "description": "Hide Transcript Show Transcript\nThanks. Okay.",
+                                    "image": "https://kubrick.htvapps.com/htv-prod-media.s3.amazonaws.com/images/hypatia-h-f456ffe96c4aa6f704a296851493d756-h-8939eaf09dd99fb0dae0c4437e80fca6-preview-1651467070823800950.JPG?crop=1xw:0.84459459459459463xh;center,top&resize=1200:*",
+                                    "publishedAt": "2022-05-02T16:33:00Z",
+                                    "source": {
+                                        "name": "WMTW Portland",
+                                        "url": "https://www.wmtw.com"
+                                    },
+                                    "title": "Naomi Judd remembered by daughters at Country Music Hall of Fame ceremony",
+                                    "url": "https://www.wmtw.com/article/naomi-judd-remembered-by-daughters-country-music-hall-of-fame-ceremony/39873395"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "biden",
+                                "news": {
+                                    "content": "Fifteen months into his presidency, Joe Biden has granted his first clemencies. Last week he pardoned three people and commuted the sentences of 75 others. The beneficiaries of these pardons and commutations were non-violent offenders who already had... [6442 chars]",
+                                    "description": "Fifteen months into his presidency, Joe Biden has granted his first clemencies. Last week he pardoned three people and commuted the sentences of 75 others.",
+                                    "image": "https://thehill.com/wp-content/uploads/sites/2/2022/04/8aa76eaf5d7f472c960d350865019c8e-1.jpg?w=1280",
+                                    "publishedAt": "2022-05-02T16:30:00Z",
+                                    "source": {
+                                        "name": "The Hill",
+                                        "url": "https://thehill.com"
+                                    },
+                                    "title": "Are Biden\u2019s clemencies the start of something bold or another example of political timidity?",
+                                    "url": "https://thehill.com/opinion/criminal-justice/3473580-are-bidens-clemencies-the-start-of-something-bold-or-another-example-of-political-timidity/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.24767692387104034,
+                                    0.004564802628010511,
+                                    0.6614903807640076,
+                                    0.7813013792037964,
+                                    0.5743207931518555
+                                ],
+                                "entity_ids": [
+                                    "Q15980607",
+                                    "Q20164199",
+                                    "Q6279",
+                                    "Q813332",
+                                    "Q235349"
+                                ],
+                                "entity_pages": [],
+                                "entity_pages_titles": [
+                                    "Joe Biden",
+                                    "Beau Biden",
+                                    "Jill Biden"
+                                ],
+                                "entity_substr": "biden",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "what's your opinion on biden's politics?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what's your opinion on biden's politics?"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "biden": {
+                                    "conf": 0.24767692387104034,
+                                    "entity_label": "Not Found",
+                                    "plain_entity": "Q15980607",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": []
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "biden": {
+                                    "age": 80,
+                                    "awards received": [
+                                        [
+                                            "Q17144",
+                                            "Presidential Medal of Freedom"
+                                        ],
+                                        [
+                                            "Q2028158",
+                                            "St George's Order of Victory"
+                                        ],
+                                        [
+                                            "Q22303943",
+                                            "Order of the Three Stars, 2nd Class"
+                                        ],
+                                        [
+                                            "Q23058979",
+                                            "Order of the Cross of Terra Mariana, 1st Class"
+                                        ],
+                                        [
+                                            "Q2469017",
+                                            "Order of Liberty"
+                                        ],
+                                        [
+                                            "Q2758023",
+                                            "Order of Boyac\u00e1"
+                                        ],
+                                        [
+                                            "Q28323742",
+                                            "Hilal-e-Pakistan"
+                                        ],
+                                        [
+                                            "Q5365910",
+                                            "Ellis Island Medal of Honor"
+                                        ]
+                                    ],
+                                    "conf": 0.6614903807640076,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1942-11-20^^T\"",
+                                            "20 November 1942"
+                                        ]
+                                    ],
+                                    "entity_label": "Joe Biden",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of political party": [
+                                        [
+                                            "Q29552",
+                                            "Democratic Party"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q1622272",
+                                            "university teacher"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6279",
+                                    "pos": 2,
+                                    "spouse": [
+                                        [
+                                            "Q19285477",
+                                            "Neilia Hunter"
+                                        ],
+                                        [
+                                            "Q235349",
+                                            "Jill Biden"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q3400985",
+                                            "academic"
+                                        ],
+                                        [
+                                            "Q1622272",
+                                            "university teacher"
+                                        ],
+                                        [
+                                            "Q15987302",
+                                            "legal professional"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q702269",
+                                            "professional"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q37226",
+                                            "teacher"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ],
+                                        [
+                                            "Q66666607",
+                                            "academic profession"
+                                        ],
+                                        [
+                                            "Q41835716",
+                                            "faculty member"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {
+                                "biden": {
+                                    "age": 80,
+                                    "awards received": [
+                                        [
+                                            "Q17144",
+                                            "Presidential Medal of Freedom"
+                                        ],
+                                        [
+                                            "Q2028158",
+                                            "St George's Order of Victory"
+                                        ],
+                                        [
+                                            "Q22303943",
+                                            "Order of the Three Stars, 2nd Class"
+                                        ],
+                                        [
+                                            "Q23058979",
+                                            "Order of the Cross of Terra Mariana, 1st Class"
+                                        ],
+                                        [
+                                            "Q2469017",
+                                            "Order of Liberty"
+                                        ],
+                                        [
+                                            "Q2758023",
+                                            "Order of Boyac\u00e1"
+                                        ],
+                                        [
+                                            "Q28323742",
+                                            "Hilal-e-Pakistan"
+                                        ],
+                                        [
+                                            "Q5365910",
+                                            "Ellis Island Medal of Honor"
+                                        ]
+                                    ],
+                                    "conf": 0.6614903807640076,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q30",
+                                            "United States of America"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1942-11-20^^T\"",
+                                            "20 November 1942"
+                                        ]
+                                    ],
+                                    "entity_label": "Joe Biden",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of political party": [
+                                        [
+                                            "Q29552",
+                                            "Democratic Party"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q1622272",
+                                            "university teacher"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6279",
+                                    "pos": 2,
+                                    "spouse": [
+                                        [
+                                            "Q19285477",
+                                            "Neilia Hunter"
+                                        ],
+                                        [
+                                            "Q235349",
+                                            "Jill Biden"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q3400985",
+                                            "academic"
+                                        ],
+                                        [
+                                            "Q1622272",
+                                            "university teacher"
+                                        ],
+                                        [
+                                            "Q15987302",
+                                            "legal professional"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q702269",
+                                            "professional"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q37226",
+                                            "teacher"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ],
+                                        [
+                                            "Q66666607",
+                                            "academic profession"
+                                        ],
+                                        [
+                                            "Q41835716",
+                                            "faculty member"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "conceptnet": {
+                            "opinion": {
+                                "SymbolOf": [
+                                    "religion",
+                                    "christianity",
+                                    "belief"
+                                ],
+                                "HasProperty": [
+                                    "false",
+                                    "bad",
+                                    "important"
+                                ],
+                                "Causes": [
+                                    "argument",
+                                    "distrust",
+                                    "anger"
+                                ],
+                                "CausesDesire": [
+                                    "make friend",
+                                    "find information",
+                                    "lie"
+                                ]
+                            },
+                            "politics": {
+                                "SymbolOf": [
+                                    "democracy",
+                                    "freedom",
+                                    "politics"
+                                ],
+                                "HasProperty": [
+                                    "bad",
+                                    "good",
+                                    "very important"
+                                ],
+                                "Causes": [
+                                    "war",
+                                    "political change",
+                                    "violence"
+                                ],
+                                "CausesDesire": [
+                                    "change society",
+                                    "start family",
+                                    "make friend"
+                                ]
+                            },
+                            "biden": {
+                                "SymbolOf": [
+                                    "evil",
+                                    "christianity",
+                                    "religion"
+                                ],
+                                "HasProperty": [
+                                    "evil",
+                                    "fun",
+                                    "bad"
+                                ],
+                                "Causes": [
+                                    "war",
+                                    "death",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "play game",
+                                    "play golf",
+                                    "study"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How is the day going so far for you?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_test_bot_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

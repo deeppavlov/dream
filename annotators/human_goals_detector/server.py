@@ -12,6 +12,7 @@ from common.gain_assistance import DEPRESSION_PATTERN, BAD_DAY_PATTERN, PROBLEMS
 from common.get_book_recommendation import BOOKS_PATTERN, GENRES_PATTERN, RECOMMEND_BOOK_PATTERN, APPRECIATION_PATTERN, RECOMMEND_PATTERN, BOOKS_TOPIC_PATTERN
 from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN
 from common.get_book_information import TELL_BOOK_DESCRIPTION_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_GENRE_PATTERN
+from common.test_bot import PRESIDENT_OPINION_PATTERN, SWEAR_WORDS_PATTERN
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -30,6 +31,8 @@ recommend_book_by_genre_patterns = [
     ]
 
 get_book_information_patterns = [TELL_BOOK_DESCRIPTION_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_GENRE_PATTERN]
+
+test_bot_patterns = [PRESIDENT_OPINION_PATTERN, SWEAR_WORDS_PATTERN]
 
 
 def detect_goal(requested_data):
@@ -82,6 +85,11 @@ def detect_goal(requested_data):
                 flag_book_info = bool(pattern.search(utterance))
                 if flag_book_info:
                     human_goal["human_goals"].append('get_book_information')
+
+            for pattern in test_bot_patterns:
+                flag_test_bot = bool(pattern.search(utterance))
+                if flag_test_bot:
+                    human_goal["human_goals"].append('test_bot')
 
 
             results.append(list(set(human_goal["human_goals"])))

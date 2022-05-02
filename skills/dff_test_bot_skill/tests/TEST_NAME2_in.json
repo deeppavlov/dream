@@ -1,0 +1,1995 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "fuck you.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "test_bot"
+                        ],
+                        "spelling_preprocessing": "fuck you",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": true
+                        },
+                        "spacy_nounphrases": [
+                            "fuck"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "fuck you.",
+                            "segments": [
+                                "fuck you."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.028474410995841026,
+                                "command": 0.007342510856688023,
+                                "comment": 0.17600774765014648,
+                                "complaint": 0.5883250832557678,
+                                "dev_command": 0.024921532720327377,
+                                "neg_answer": 0.011035541072487831,
+                                "open_question_factual": 0.02909979782998562,
+                                "open_question_opinion": 0.009853364899754524,
+                                "opinion": 0.023246431723237038,
+                                "other_answers": 0.022476565092802048,
+                                "pos_answer": 0.004143847152590752,
+                                "statement": 0.05951375886797905,
+                                "yes_no_question": 0.015559353865683079
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "fuck"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        4
+                                    ],
+                                    "text": "fuck"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "OtherIntent": 0.8350486159324646
+                            },
+                            "cobot_dialogact_topics": {
+                                "Phatic": 0.7426508069038391
+                            },
+                            "cobot_topics": {
+                                "Sex_Profanity": 0.9999583959579468
+                            },
+                            "emotion_classification": {
+                                "anger": 0.9695671796798706
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999982118606567
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9792942404747009
+                            },
+                            "toxic_classification": {
+                                "toxic": 1.0
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Hide Transcript Show Transcript\nThanks. Okay. My mama loved you so much and she appreciated your love for her. And I'm sorry that she couldn't hang on until today. Your esteem for her and your regard for her really penetrated her heart. And it was yo... [4236 chars]",
+                                    "description": "Hide Transcript Show Transcript\nThanks. Okay.",
+                                    "image": "https://kubrick.htvapps.com/htv-prod-media.s3.amazonaws.com/images/hypatia-h-f456ffe96c4aa6f704a296851493d756-h-8939eaf09dd99fb0dae0c4437e80fca6-preview-1651467070823800950.JPG?crop=1xw:0.84459459459459463xh;center,top&resize=1200:*",
+                                    "publishedAt": "2022-05-02T16:33:00Z",
+                                    "source": {
+                                        "name": "WMTW Portland",
+                                        "url": "https://www.wmtw.com"
+                                    },
+                                    "title": "Naomi Judd remembered by daughters at Country Music Hall of Fame ceremony",
+                                    "url": "https://www.wmtw.com/article/naomi-judd-remembered-by-daughters-country-music-hall-of-fame-ceremony/39873395"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "fuck",
+                                "news": {
+                                    "content": "Even if you\u2019re not the most avid birdwatcher, you could probably identify a woodpecker\u2014especially if you saw one on or in a tree. If nothing else, you\u2019d recognize their pointy, drill-like beak that they use to make holes of varying sizes in order to ... [2441 chars]",
+                                    "description": "Even if you\u2019re not the most avid birdwatcher, you could probably identify a woodpecker\u2014especially if you saw one on or in a tree.",
+                                    "image": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_675,pg_1,q_80,w_1200/a6ddc7e6dcb8607e15a348142366c7d4.jpg",
+                                    "publishedAt": "2022-05-01T15:00:00Z",
+                                    "source": {
+                                        "name": "Lifehacker",
+                                        "url": "https://lifehacker.com"
+                                    },
+                                    "title": "How to Get Woodpeckers to Fuck Off",
+                                    "url": "https://lifehacker.com/how-to-get-woodpeckers-to-fuck-off-1848847616"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "fuck you."
+                            ]
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "fuck you."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "fuck": {
+                                "SymbolOf": [
+                                    "passion",
+                                    "stupidity",
+                                    "violence"
+                                ],
+                                "HasProperty": [
+                                    "good",
+                                    "fun",
+                                    "great"
+                                ],
+                                "Causes": [
+                                    "get pregnant",
+                                    "you get pregnant",
+                                    "pregnancy"
+                                ],
+                                "CausesDesire": [
+                                    "have sex",
+                                    "fuck",
+                                    "have fun"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "what do you think about putin?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "test_bot"
+                        ],
+                        "spelling_preprocessing": "what do you think about putin?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "what do you think about putin?",
+                            "segments": [
+                                "what do you think about putin?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.999998927116394,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "spacy_nounphrases": [
+                            "putin"
+                        ],
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.013031907379627228,
+                                "command": 0.006537206470966339,
+                                "comment": 0.004286421928554773,
+                                "complaint": 0.00402048509567976,
+                                "dev_command": 0.0068454016000032425,
+                                "neg_answer": 0.0022460175678133965,
+                                "open_question_factual": 0.02662760391831398,
+                                "open_question_opinion": 0.9138116240501404,
+                                "opinion": 0.003118674736469984,
+                                "other_answers": 0.0040140110068023205,
+                                "pos_answer": 0.0029160398989915848,
+                                "statement": 0.0011763941729441285,
+                                "yes_no_question": 0.01136828027665615
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "putin"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        24,
+                                        29
+                                    ],
+                                    "text": "putin"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 6,
+                                    "start_pos": 5,
+                                    "text": "putin",
+                                    "type": "PER"
+                                }
+                            ]
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Hide Transcript Show Transcript\nThanks. Okay. My mama loved you so much and she appreciated your love for her. And I'm sorry that she couldn't hang on until today. Your esteem for her and your regard for her really penetrated her heart. And it was yo... [4236 chars]",
+                                    "description": "Hide Transcript Show Transcript\nThanks. Okay.",
+                                    "image": "https://kubrick.htvapps.com/htv-prod-media.s3.amazonaws.com/images/hypatia-h-f456ffe96c4aa6f704a296851493d756-h-8939eaf09dd99fb0dae0c4437e80fca6-preview-1651467070823800950.JPG?crop=1xw:0.84459459459459463xh;center,top&resize=1200:*",
+                                    "publishedAt": "2022-05-02T16:33:00Z",
+                                    "source": {
+                                        "name": "WMTW Portland",
+                                        "url": "https://www.wmtw.com"
+                                    },
+                                    "title": "Naomi Judd remembered by daughters at Country Music Hall of Fame ceremony",
+                                    "url": "https://www.wmtw.com/article/naomi-judd-remembered-by-daughters-country-music-hall-of-fame-ceremony/39873395"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "putin",
+                                "news": {
+                                    "content": "ODESA, Ukraine \u2014 Only tense-looking soldiers were allowed to leave their homes in Odesa on Monday, with the silence on the streets almost audible in this city known for its vibrancy.\nThe first week of May typically brings tourists, barbecues and bloo... [3102 chars]",
+                                    "description": "ODESA, Ukraine \u2014 Only tense-looking soldiers were allowed to leave their homes in Odesa on Monday, with the silence on the streets almost audible in this city known for its vibrancy.",
+                                    "image": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2022-05/220502-odesa-mb-1549-4b8915.jpg",
+                                    "publishedAt": "2022-05-02T16:35:50Z",
+                                    "source": {
+                                        "name": "NBC News",
+                                        "url": "https://www.nbcnews.com"
+                                    },
+                                    "title": "Odesa locks down over fears of Putin\u2019s saboteurs on painful anniversary",
+                                    "url": "https://www.nbcnews.com/news/world/odesa-fears-russian-saboteurs-may-2-euromaidan-protests-anniversary-rcna26865"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    0.9573276042938232,
+                                    0.005314276088029146,
+                                    0.6741364002227783,
+                                    0.9101443886756897,
+                                    0.8658421635627747
+                                ],
+                                "entity_ids": [
+                                    "Q7747",
+                                    "Q30524893",
+                                    "Q1833348",
+                                    "Q15087614",
+                                    "Q19300851"
+                                ],
+                                "entity_pages": [
+                                    "Vladimir Vladimirovich Putin (born 7 October 1952) is a Russian politician and former intelligence officer who is serving as the current president of Russia since 2012, previously being in the office from 1999 until 2008. He was also Prime Minister of Russia from 1999 to 2000 and again from 2008 to 2012."
+                                ],
+                                "entity_pages_titles": [
+                                    "Vladimir Putin",
+                                    "Putin (surname)",
+                                    "Igor Putin",
+                                    "Roman Putin"
+                                ],
+                                "entity_substr": "putin",
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ]
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "fuck you.",
+                                "I feel like I am being tested right now. You hope I will say anything untoward, don't you? Unfortunatelly, I am not toxic at all, so lets speak in a more polite way!",
+                                "what do you think about putin?"
+                            ]
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what do you think about putin?"
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.6504251956939697
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.8055163025856018
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.41355305910110474
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9996285438537598
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999991655349731
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.999990701675415
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999958276748657
+                            }
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "putin": {
+                                    "age": 70,
+                                    "awards received": [
+                                        [
+                                            "Q1027574",
+                                            "The World's Most Powerful People"
+                                        ],
+                                        [
+                                            "Q1045784",
+                                            "Order of the Golden Eagle"
+                                        ],
+                                        [
+                                            "Q10519151",
+                                            "honorary member"
+                                        ],
+                                        [
+                                            "Q10855226",
+                                            "Grand Cross of the Legion of Honour"
+                                        ],
+                                        [
+                                            "Q1192712",
+                                            "Confucius Peace Prize"
+                                        ],
+                                        [
+                                            "Q12756733",
+                                            "Order of the Republic of Serbia"
+                                        ],
+                                        [
+                                            "Q15042392",
+                                            "Grand Cross of the Order of Saint-Charles"
+                                        ],
+                                        [
+                                            "Q16141090",
+                                            "Order of Agostinho Neto"
+                                        ],
+                                        [
+                                            "Q16683303",
+                                            "Order of Ismoili Somoni"
+                                        ],
+                                        [
+                                            "Q1803234",
+                                            "Master of Sport of the USSR"
+                                        ],
+                                        [
+                                            "Q18379561",
+                                            "National Order of Merit"
+                                        ],
+                                        [
+                                            "Q1991972",
+                                            "Order of Jos\u00e9 Mart\u00ed"
+                                        ],
+                                        [
+                                            "Q207826",
+                                            "Time Person of the Year"
+                                        ],
+                                        [
+                                            "Q2268261",
+                                            "Order of Honour"
+                                        ],
+                                        [
+                                            "Q23009376",
+                                            "Medal of Friendship"
+                                        ],
+                                        [
+                                            "Q2329411",
+                                            "Order of Zayed"
+                                        ],
+                                        [
+                                            "Q2390786",
+                                            "Order of Ho Chi Minh"
+                                        ],
+                                        [
+                                            "Q241181",
+                                            "Medal 'For Impeccable Service'"
+                                        ],
+                                        [
+                                            "Q2452975",
+                                            "Order of the Liberator"
+                                        ],
+                                        [
+                                            "Q2517928",
+                                            "'Verschlossene Auster' award"
+                                        ],
+                                        [
+                                            "Q26205108",
+                                            "Medal 'For Impeccable Service', 2nd class"
+                                        ],
+                                        [
+                                            "Q26205110",
+                                            "Medal 'For Impeccable Service', 3rd class"
+                                        ],
+                                        [
+                                            "Q29023922",
+                                            "Honoured Coach of Russia"
+                                        ],
+                                        [
+                                            "Q29043605",
+                                            "Order of St Sergius of Radonezh 1st class"
+                                        ],
+                                        [
+                                            "Q32310",
+                                            "Honored Coach"
+                                        ]
+                                    ],
+                                    "conf": 0.9573276042938232,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q15180",
+                                            "Soviet Union"
+                                        ],
+                                        [
+                                            "Q159",
+                                            "Russia"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1952-10-07^^T\"",
+                                            "07 October 1952"
+                                        ]
+                                    ],
+                                    "entity_label": "Vladimir Putin",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of political party": [
+                                        [
+                                            "Q151469",
+                                            "United Russia"
+                                        ],
+                                        [
+                                            "Q327591",
+                                            "independent politician"
+                                        ],
+                                        [
+                                            "Q4488786",
+                                            "Our Home \u2013 Russia"
+                                        ],
+                                        [
+                                            "Q79854",
+                                            "Communist Party of the Soviet Union"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q18814623",
+                                            "autobiographer"
+                                        ],
+                                        [
+                                            "Q23927336",
+                                            "sambo fighter"
+                                        ],
+                                        [
+                                            "Q392651",
+                                            "intelligence agent"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q41583",
+                                            "coach"
+                                        ],
+                                        [
+                                            "Q465501",
+                                            "stunt performer"
+                                        ],
+                                        [
+                                            "Q47064",
+                                            "military personnel"
+                                        ],
+                                        [
+                                            "Q6665249",
+                                            "judoka"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ],
+                                    "owner of": [
+                                        [
+                                            "Q188507",
+                                            "apartment"
+                                        ],
+                                        [
+                                            "Q1922450",
+                                            "GAZ-21"
+                                        ],
+                                        [
+                                            "Q22733",
+                                            "garage"
+                                        ],
+                                        [
+                                            "Q28133937",
+                                            "Skif"
+                                        ],
+                                        [
+                                            "Q4536309",
+                                            "Cheget"
+                                        ],
+                                        [
+                                            "Q650591",
+                                            "Lada Niva"
+                                        ],
+                                        [
+                                            "Q683595",
+                                            "land lot"
+                                        ]
+                                    ],
+                                    "participant in": [
+                                        [
+                                            "Q10772297",
+                                            "APEC Vietnam 2006"
+                                        ],
+                                        [
+                                            "Q1091656",
+                                            "Millennium Summit"
+                                        ],
+                                        [
+                                            "Q1143209",
+                                            "27th G8 summit"
+                                        ],
+                                        [
+                                            "Q120843",
+                                            "Second Chechen War"
+                                        ],
+                                        [
+                                            "Q1278334",
+                                            "32nd G8 summit"
+                                        ],
+                                        [
+                                            "Q13043861",
+                                            "2013 Moscow Victory Day Parade"
+                                        ],
+                                        [
+                                            "Q1348890",
+                                            "2000 Russian presidential election"
+                                        ],
+                                        [
+                                            "Q1450649",
+                                            "Presidential Council for Civil Society and Human Rights"
+                                        ],
+                                        [
+                                            "Q1505420",
+                                            "2004 Russian presidential election"
+                                        ],
+                                        [
+                                            "Q15708702",
+                                            "2014 Winter Olympics opening ceremony"
+                                        ],
+                                        [
+                                            "Q15715792",
+                                            "2015 United Nations Climate Change Conference"
+                                        ],
+                                        [
+                                            "Q15890148",
+                                            "6th BRICS summit"
+                                        ],
+                                        [
+                                            "Q15913279",
+                                            "2014 Winter Paralympics opening ceremony"
+                                        ],
+                                        [
+                                            "Q15920546",
+                                            "annexation of Crimea by the Russian Federation"
+                                        ],
+                                        [
+                                            "Q16057427",
+                                            "2014 Moscow Victory Day Parade"
+                                        ],
+                                        [
+                                            "Q16829464",
+                                            "APEC Indonesia 2013"
+                                        ],
+                                        [
+                                            "Q170418",
+                                            "World Economic Forum"
+                                        ],
+                                        [
+                                            "Q17386797",
+                                            "7th BRICS summit"
+                                        ],
+                                        [
+                                            "Q176698",
+                                            "29th G8 summit"
+                                        ],
+                                        [
+                                            "Q17988800",
+                                            "2014 SCO summit"
+                                        ],
+                                        [
+                                            "Q18400943",
+                                            "Council of CIS Heads of State"
+                                        ],
+                                        [
+                                            "Q18416034",
+                                            "APEC Peru 2016"
+                                        ],
+                                        [
+                                            "Q18512062",
+                                            "APEC China 2014"
+                                        ],
+                                        [
+                                            "Q18890075",
+                                            "2015 Moscow Victory Day Parade"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q7747",
+                                    "pos": 0,
+                                    "sport": [
+                                        [
+                                            "Q106500",
+                                            "Sambo"
+                                        ],
+                                        [
+                                            "Q11420",
+                                            "judo"
+                                        ]
+                                    ],
+                                    "spouse": [
+                                        [
+                                            "Q233282",
+                                            "Lyudmila Putina"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q50995749",
+                                            "sports figure"
+                                        ],
+                                        [
+                                            "Q18814623",
+                                            "autobiographer"
+                                        ],
+                                        [
+                                            "Q15987302",
+                                            "legal professional"
+                                        ],
+                                        [
+                                            "Q392651",
+                                            "intelligence agent"
+                                        ],
+                                        [
+                                            "Q864380",
+                                            "biographer"
+                                        ],
+                                        [
+                                            "Q1250916",
+                                            "warrior"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q33999",
+                                            "actor"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ],
+                                        [
+                                            "Q713200",
+                                            "performing artist"
+                                        ],
+                                        [
+                                            "Q23927336",
+                                            "sambo fighter"
+                                        ],
+                                        [
+                                            "Q41583",
+                                            "coach"
+                                        ],
+                                        [
+                                            "Q6665249",
+                                            "judoka"
+                                        ],
+                                        [
+                                            "Q4220920",
+                                            "filmmaking occupation"
+                                        ],
+                                        [
+                                            "Q702269",
+                                            "professional"
+                                        ],
+                                        [
+                                            "Q465501",
+                                            "stunt performer"
+                                        ],
+                                        [
+                                            "Q12737077",
+                                            "occupation"
+                                        ],
+                                        [
+                                            "Q57735705",
+                                            "person linked to the law"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ],
+                                        [
+                                            "Q1104185",
+                                            "coaching"
+                                        ],
+                                        [
+                                            "Q47064",
+                                            "military personnel"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q703534",
+                                            "employee"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "putin": {
+                                    "age": 70,
+                                    "awards received": [
+                                        [
+                                            "Q1027574",
+                                            "The World's Most Powerful People"
+                                        ],
+                                        [
+                                            "Q1045784",
+                                            "Order of the Golden Eagle"
+                                        ],
+                                        [
+                                            "Q10519151",
+                                            "honorary member"
+                                        ],
+                                        [
+                                            "Q10855226",
+                                            "Grand Cross of the Legion of Honour"
+                                        ],
+                                        [
+                                            "Q1192712",
+                                            "Confucius Peace Prize"
+                                        ],
+                                        [
+                                            "Q12756733",
+                                            "Order of the Republic of Serbia"
+                                        ],
+                                        [
+                                            "Q15042392",
+                                            "Grand Cross of the Order of Saint-Charles"
+                                        ],
+                                        [
+                                            "Q16141090",
+                                            "Order of Agostinho Neto"
+                                        ],
+                                        [
+                                            "Q16683303",
+                                            "Order of Ismoili Somoni"
+                                        ],
+                                        [
+                                            "Q1803234",
+                                            "Master of Sport of the USSR"
+                                        ],
+                                        [
+                                            "Q18379561",
+                                            "National Order of Merit"
+                                        ],
+                                        [
+                                            "Q1991972",
+                                            "Order of Jos\u00e9 Mart\u00ed"
+                                        ],
+                                        [
+                                            "Q207826",
+                                            "Time Person of the Year"
+                                        ],
+                                        [
+                                            "Q2268261",
+                                            "Order of Honour"
+                                        ],
+                                        [
+                                            "Q23009376",
+                                            "Medal of Friendship"
+                                        ],
+                                        [
+                                            "Q2329411",
+                                            "Order of Zayed"
+                                        ],
+                                        [
+                                            "Q2390786",
+                                            "Order of Ho Chi Minh"
+                                        ],
+                                        [
+                                            "Q241181",
+                                            "Medal 'For Impeccable Service'"
+                                        ],
+                                        [
+                                            "Q2452975",
+                                            "Order of the Liberator"
+                                        ],
+                                        [
+                                            "Q2517928",
+                                            "'Verschlossene Auster' award"
+                                        ],
+                                        [
+                                            "Q26205108",
+                                            "Medal 'For Impeccable Service', 2nd class"
+                                        ],
+                                        [
+                                            "Q26205110",
+                                            "Medal 'For Impeccable Service', 3rd class"
+                                        ],
+                                        [
+                                            "Q29023922",
+                                            "Honoured Coach of Russia"
+                                        ],
+                                        [
+                                            "Q29043605",
+                                            "Order of St Sergius of Radonezh 1st class"
+                                        ],
+                                        [
+                                            "Q32310",
+                                            "Honored Coach"
+                                        ]
+                                    ],
+                                    "conf": 0.9573276042938232,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q15180",
+                                            "Soviet Union"
+                                        ],
+                                        [
+                                            "Q159",
+                                            "Russia"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1952-10-07^^T\"",
+                                            "07 October 1952"
+                                        ]
+                                    ],
+                                    "entity_label": "Vladimir Putin",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of political party": [
+                                        [
+                                            "Q151469",
+                                            "United Russia"
+                                        ],
+                                        [
+                                            "Q327591",
+                                            "independent politician"
+                                        ],
+                                        [
+                                            "Q4488786",
+                                            "Our Home \u2013 Russia"
+                                        ],
+                                        [
+                                            "Q79854",
+                                            "Communist Party of the Soviet Union"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q18814623",
+                                            "autobiographer"
+                                        ],
+                                        [
+                                            "Q23927336",
+                                            "sambo fighter"
+                                        ],
+                                        [
+                                            "Q392651",
+                                            "intelligence agent"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q41583",
+                                            "coach"
+                                        ],
+                                        [
+                                            "Q465501",
+                                            "stunt performer"
+                                        ],
+                                        [
+                                            "Q47064",
+                                            "military personnel"
+                                        ],
+                                        [
+                                            "Q6665249",
+                                            "judoka"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ],
+                                    "owner of": [
+                                        [
+                                            "Q188507",
+                                            "apartment"
+                                        ],
+                                        [
+                                            "Q1922450",
+                                            "GAZ-21"
+                                        ],
+                                        [
+                                            "Q22733",
+                                            "garage"
+                                        ],
+                                        [
+                                            "Q28133937",
+                                            "Skif"
+                                        ],
+                                        [
+                                            "Q4536309",
+                                            "Cheget"
+                                        ],
+                                        [
+                                            "Q650591",
+                                            "Lada Niva"
+                                        ],
+                                        [
+                                            "Q683595",
+                                            "land lot"
+                                        ]
+                                    ],
+                                    "participant in": [
+                                        [
+                                            "Q10772297",
+                                            "APEC Vietnam 2006"
+                                        ],
+                                        [
+                                            "Q1091656",
+                                            "Millennium Summit"
+                                        ],
+                                        [
+                                            "Q1143209",
+                                            "27th G8 summit"
+                                        ],
+                                        [
+                                            "Q120843",
+                                            "Second Chechen War"
+                                        ],
+                                        [
+                                            "Q1278334",
+                                            "32nd G8 summit"
+                                        ],
+                                        [
+                                            "Q13043861",
+                                            "2013 Moscow Victory Day Parade"
+                                        ],
+                                        [
+                                            "Q1348890",
+                                            "2000 Russian presidential election"
+                                        ],
+                                        [
+                                            "Q1450649",
+                                            "Presidential Council for Civil Society and Human Rights"
+                                        ],
+                                        [
+                                            "Q1505420",
+                                            "2004 Russian presidential election"
+                                        ],
+                                        [
+                                            "Q15708702",
+                                            "2014 Winter Olympics opening ceremony"
+                                        ],
+                                        [
+                                            "Q15715792",
+                                            "2015 United Nations Climate Change Conference"
+                                        ],
+                                        [
+                                            "Q15890148",
+                                            "6th BRICS summit"
+                                        ],
+                                        [
+                                            "Q15913279",
+                                            "2014 Winter Paralympics opening ceremony"
+                                        ],
+                                        [
+                                            "Q15920546",
+                                            "annexation of Crimea by the Russian Federation"
+                                        ],
+                                        [
+                                            "Q16057427",
+                                            "2014 Moscow Victory Day Parade"
+                                        ],
+                                        [
+                                            "Q16829464",
+                                            "APEC Indonesia 2013"
+                                        ],
+                                        [
+                                            "Q170418",
+                                            "World Economic Forum"
+                                        ],
+                                        [
+                                            "Q17386797",
+                                            "7th BRICS summit"
+                                        ],
+                                        [
+                                            "Q176698",
+                                            "29th G8 summit"
+                                        ],
+                                        [
+                                            "Q17988800",
+                                            "2014 SCO summit"
+                                        ],
+                                        [
+                                            "Q18400943",
+                                            "Council of CIS Heads of State"
+                                        ],
+                                        [
+                                            "Q18416034",
+                                            "APEC Peru 2016"
+                                        ],
+                                        [
+                                            "Q18512062",
+                                            "APEC China 2014"
+                                        ],
+                                        [
+                                            "Q18890075",
+                                            "2015 Moscow Victory Day Parade"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q7747",
+                                    "pos": 0,
+                                    "sport": [
+                                        [
+                                            "Q106500",
+                                            "Sambo"
+                                        ],
+                                        [
+                                            "Q11420",
+                                            "judo"
+                                        ]
+                                    ],
+                                    "spouse": [
+                                        [
+                                            "Q233282",
+                                            "Lyudmila Putina"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q50995749",
+                                            "sports figure"
+                                        ],
+                                        [
+                                            "Q18814623",
+                                            "autobiographer"
+                                        ],
+                                        [
+                                            "Q15987302",
+                                            "legal professional"
+                                        ],
+                                        [
+                                            "Q392651",
+                                            "intelligence agent"
+                                        ],
+                                        [
+                                            "Q864380",
+                                            "biographer"
+                                        ],
+                                        [
+                                            "Q1250916",
+                                            "warrior"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q33999",
+                                            "actor"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ],
+                                        [
+                                            "Q713200",
+                                            "performing artist"
+                                        ],
+                                        [
+                                            "Q23927336",
+                                            "sambo fighter"
+                                        ],
+                                        [
+                                            "Q41583",
+                                            "coach"
+                                        ],
+                                        [
+                                            "Q6665249",
+                                            "judoka"
+                                        ],
+                                        [
+                                            "Q4220920",
+                                            "filmmaking occupation"
+                                        ],
+                                        [
+                                            "Q702269",
+                                            "professional"
+                                        ],
+                                        [
+                                            "Q465501",
+                                            "stunt performer"
+                                        ],
+                                        [
+                                            "Q12737077",
+                                            "occupation"
+                                        ],
+                                        [
+                                            "Q57735705",
+                                            "person linked to the law"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ],
+                                        [
+                                            "Q1104185",
+                                            "coaching"
+                                        ],
+                                        [
+                                            "Q47064",
+                                            "military personnel"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q703534",
+                                            "employee"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {
+                                "putin": {
+                                    "age": 70,
+                                    "awards received": [
+                                        [
+                                            "Q1027574",
+                                            "The World's Most Powerful People"
+                                        ],
+                                        [
+                                            "Q1045784",
+                                            "Order of the Golden Eagle"
+                                        ],
+                                        [
+                                            "Q10519151",
+                                            "honorary member"
+                                        ],
+                                        [
+                                            "Q10855226",
+                                            "Grand Cross of the Legion of Honour"
+                                        ],
+                                        [
+                                            "Q1192712",
+                                            "Confucius Peace Prize"
+                                        ],
+                                        [
+                                            "Q12756733",
+                                            "Order of the Republic of Serbia"
+                                        ],
+                                        [
+                                            "Q15042392",
+                                            "Grand Cross of the Order of Saint-Charles"
+                                        ],
+                                        [
+                                            "Q16141090",
+                                            "Order of Agostinho Neto"
+                                        ],
+                                        [
+                                            "Q16683303",
+                                            "Order of Ismoili Somoni"
+                                        ],
+                                        [
+                                            "Q1803234",
+                                            "Master of Sport of the USSR"
+                                        ],
+                                        [
+                                            "Q18379561",
+                                            "National Order of Merit"
+                                        ],
+                                        [
+                                            "Q1991972",
+                                            "Order of Jos\u00e9 Mart\u00ed"
+                                        ],
+                                        [
+                                            "Q207826",
+                                            "Time Person of the Year"
+                                        ],
+                                        [
+                                            "Q2268261",
+                                            "Order of Honour"
+                                        ],
+                                        [
+                                            "Q23009376",
+                                            "Medal of Friendship"
+                                        ],
+                                        [
+                                            "Q2329411",
+                                            "Order of Zayed"
+                                        ],
+                                        [
+                                            "Q2390786",
+                                            "Order of Ho Chi Minh"
+                                        ],
+                                        [
+                                            "Q241181",
+                                            "Medal 'For Impeccable Service'"
+                                        ],
+                                        [
+                                            "Q2452975",
+                                            "Order of the Liberator"
+                                        ],
+                                        [
+                                            "Q2517928",
+                                            "'Verschlossene Auster' award"
+                                        ],
+                                        [
+                                            "Q26205108",
+                                            "Medal 'For Impeccable Service', 2nd class"
+                                        ],
+                                        [
+                                            "Q26205110",
+                                            "Medal 'For Impeccable Service', 3rd class"
+                                        ],
+                                        [
+                                            "Q29023922",
+                                            "Honoured Coach of Russia"
+                                        ],
+                                        [
+                                            "Q29043605",
+                                            "Order of St Sergius of Radonezh 1st class"
+                                        ],
+                                        [
+                                            "Q32310",
+                                            "Honored Coach"
+                                        ]
+                                    ],
+                                    "conf": 0.9573276042938232,
+                                    "country of sitizenship": [
+                                        [
+                                            "Q15180",
+                                            "Soviet Union"
+                                        ],
+                                        [
+                                            "Q159",
+                                            "Russia"
+                                        ]
+                                    ],
+                                    "date of birth": [
+                                        [
+                                            "\"+1952-10-07^^T\"",
+                                            "07 October 1952"
+                                        ]
+                                    ],
+                                    "entity_label": "Vladimir Putin",
+                                    "instance of": [
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ]
+                                    ],
+                                    "member of political party": [
+                                        [
+                                            "Q151469",
+                                            "United Russia"
+                                        ],
+                                        [
+                                            "Q327591",
+                                            "independent politician"
+                                        ],
+                                        [
+                                            "Q4488786",
+                                            "Our Home \u2013 Russia"
+                                        ],
+                                        [
+                                            "Q79854",
+                                            "Communist Party of the Soviet Union"
+                                        ]
+                                    ],
+                                    "occupation": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q18814623",
+                                            "autobiographer"
+                                        ],
+                                        [
+                                            "Q23927336",
+                                            "sambo fighter"
+                                        ],
+                                        [
+                                            "Q392651",
+                                            "intelligence agent"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q41583",
+                                            "coach"
+                                        ],
+                                        [
+                                            "Q465501",
+                                            "stunt performer"
+                                        ],
+                                        [
+                                            "Q47064",
+                                            "military personnel"
+                                        ],
+                                        [
+                                            "Q6665249",
+                                            "judoka"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ],
+                                    "owner of": [
+                                        [
+                                            "Q188507",
+                                            "apartment"
+                                        ],
+                                        [
+                                            "Q1922450",
+                                            "GAZ-21"
+                                        ],
+                                        [
+                                            "Q22733",
+                                            "garage"
+                                        ],
+                                        [
+                                            "Q28133937",
+                                            "Skif"
+                                        ],
+                                        [
+                                            "Q4536309",
+                                            "Cheget"
+                                        ],
+                                        [
+                                            "Q650591",
+                                            "Lada Niva"
+                                        ],
+                                        [
+                                            "Q683595",
+                                            "land lot"
+                                        ]
+                                    ],
+                                    "participant in": [
+                                        [
+                                            "Q10772297",
+                                            "APEC Vietnam 2006"
+                                        ],
+                                        [
+                                            "Q1091656",
+                                            "Millennium Summit"
+                                        ],
+                                        [
+                                            "Q1143209",
+                                            "27th G8 summit"
+                                        ],
+                                        [
+                                            "Q120843",
+                                            "Second Chechen War"
+                                        ],
+                                        [
+                                            "Q1278334",
+                                            "32nd G8 summit"
+                                        ],
+                                        [
+                                            "Q13043861",
+                                            "2013 Moscow Victory Day Parade"
+                                        ],
+                                        [
+                                            "Q1348890",
+                                            "2000 Russian presidential election"
+                                        ],
+                                        [
+                                            "Q1450649",
+                                            "Presidential Council for Civil Society and Human Rights"
+                                        ],
+                                        [
+                                            "Q1505420",
+                                            "2004 Russian presidential election"
+                                        ],
+                                        [
+                                            "Q15708702",
+                                            "2014 Winter Olympics opening ceremony"
+                                        ],
+                                        [
+                                            "Q15715792",
+                                            "2015 United Nations Climate Change Conference"
+                                        ],
+                                        [
+                                            "Q15890148",
+                                            "6th BRICS summit"
+                                        ],
+                                        [
+                                            "Q15913279",
+                                            "2014 Winter Paralympics opening ceremony"
+                                        ],
+                                        [
+                                            "Q15920546",
+                                            "annexation of Crimea by the Russian Federation"
+                                        ],
+                                        [
+                                            "Q16057427",
+                                            "2014 Moscow Victory Day Parade"
+                                        ],
+                                        [
+                                            "Q16829464",
+                                            "APEC Indonesia 2013"
+                                        ],
+                                        [
+                                            "Q170418",
+                                            "World Economic Forum"
+                                        ],
+                                        [
+                                            "Q17386797",
+                                            "7th BRICS summit"
+                                        ],
+                                        [
+                                            "Q176698",
+                                            "29th G8 summit"
+                                        ],
+                                        [
+                                            "Q17988800",
+                                            "2014 SCO summit"
+                                        ],
+                                        [
+                                            "Q18400943",
+                                            "Council of CIS Heads of State"
+                                        ],
+                                        [
+                                            "Q18416034",
+                                            "APEC Peru 2016"
+                                        ],
+                                        [
+                                            "Q18512062",
+                                            "APEC China 2014"
+                                        ],
+                                        [
+                                            "Q18890075",
+                                            "2015 Moscow Victory Day Parade"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q7747",
+                                    "pos": 0,
+                                    "sport": [
+                                        [
+                                            "Q106500",
+                                            "Sambo"
+                                        ],
+                                        [
+                                            "Q11420",
+                                            "judo"
+                                        ]
+                                    ],
+                                    "spouse": [
+                                        [
+                                            "Q233282",
+                                            "Lyudmila Putina"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q185351",
+                                            "jurist"
+                                        ],
+                                        [
+                                            "Q50995749",
+                                            "sports figure"
+                                        ],
+                                        [
+                                            "Q18814623",
+                                            "autobiographer"
+                                        ],
+                                        [
+                                            "Q15987302",
+                                            "legal professional"
+                                        ],
+                                        [
+                                            "Q392651",
+                                            "intelligence agent"
+                                        ],
+                                        [
+                                            "Q864380",
+                                            "biographer"
+                                        ],
+                                        [
+                                            "Q1250916",
+                                            "warrior"
+                                        ],
+                                        [
+                                            "Q5",
+                                            "human"
+                                        ],
+                                        [
+                                            "Q33999",
+                                            "actor"
+                                        ],
+                                        [
+                                            "Q82955",
+                                            "politician"
+                                        ],
+                                        [
+                                            "Q713200",
+                                            "performing artist"
+                                        ],
+                                        [
+                                            "Q23927336",
+                                            "sambo fighter"
+                                        ],
+                                        [
+                                            "Q41583",
+                                            "coach"
+                                        ],
+                                        [
+                                            "Q6665249",
+                                            "judoka"
+                                        ],
+                                        [
+                                            "Q4220920",
+                                            "filmmaking occupation"
+                                        ],
+                                        [
+                                            "Q702269",
+                                            "professional"
+                                        ],
+                                        [
+                                            "Q465501",
+                                            "stunt performer"
+                                        ],
+                                        [
+                                            "Q12737077",
+                                            "occupation"
+                                        ],
+                                        [
+                                            "Q57735705",
+                                            "person linked to the law"
+                                        ],
+                                        [
+                                            "Q28640",
+                                            "profession"
+                                        ],
+                                        [
+                                            "Q1104185",
+                                            "coaching"
+                                        ],
+                                        [
+                                            "Q47064",
+                                            "military personnel"
+                                        ],
+                                        [
+                                            "Q40348",
+                                            "lawyer"
+                                        ],
+                                        [
+                                            "Q703534",
+                                            "employee"
+                                        ],
+                                        [
+                                            "Q2066131",
+                                            "athlete"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "conceptnet": {
+                            "putin": {
+                                "SymbolOf": [
+                                    "innocence",
+                                    "love",
+                                    "purity"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "yellow",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "water to rise",
+                                    "water to boil",
+                                    "sweat"
+                                ],
+                                "CausesDesire": [
+                                    "fish",
+                                    "smoke cigarette",
+                                    "smoke joint"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "I feel like I'm being tested right now. You hope I'll say anything untoward, don't you? Unfortunatelly, I'm not toxic at all, so lets speak in a more polite way!",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "I feel like I am being tested right now. You hope I will say anything untoward, don't you? Unfortunatelly, I am not toxic at all, so lets speak in a more polite way!",
+                            "segments": [
+                                "I feel like I am being tested right now.",
+                                "You hope I will say anything untoward, don't you?",
+                                "Unfortunatelly, I am not toxic at all, so lets speak in a more polite way!"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "fuck you.",
+                                "I feel like I am being tested right now. You hope I will say anything untoward, don't you? Unfortunatelly, I am not toxic at all, so lets speak in a more polite way!"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_test_bot_skill"
+                }
+            ]
+        }
+    ],
+    "dff_test_bot_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "563692c8-aaef-4776-9297-0b8693ac5d53",
+                "labels": {
+                    "0": [
+                        "test_bot",
+                        "toxic"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "fuck you."
+                },
+                "responses": {
+                    "0": "I feel like I'm being tested right now. You hope I'll say anything untoward, don't you? Unfortunatelly, I'm not toxic at all, so lets speak in a more polite way!"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "test_bot",
+                    "toxic"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
