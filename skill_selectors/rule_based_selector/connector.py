@@ -237,7 +237,8 @@ class RuleBasedSkillSelectorConnector:
                         "dff_book_recommendation_skill",
                         "dff_series_recommendation_skill",
                         "dff_get_book_information_skill",
-                        "dff_test_bot_skill"
+                        "dff_test_bot_skill",
+                        "dff_travel_recommendation_skill"
                     ],
                 )
 

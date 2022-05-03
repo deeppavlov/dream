@@ -1,0 +1,94 @@
+[
+    [
+        "Then I highly recommend it to you! You should go to Paris and see the Louvre. It is the home of some of the best-known works of art, including the Mona Lisa and the Venus de Milo. The climate in Paris is continental and therefore mild. For the warmest temperatures, October and April are the best times to visit Paris sans crowds.",
+        1.0,
+        {
+            "dff_travel_recommendation_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 5,
+                "history": {
+                    "1": [
+                        "travel",
+                        "country_0"
+                    ],
+                    "2": [
+                        "travel",
+                        "visited_country_0"
+                    ],
+                    "3": [
+                        "travel",
+                        "visited_capital_0"
+                    ],
+                    "4": [
+                        "travel",
+                        "country_1"
+                    ],
+                    "5": [
+                        "travel",
+                        "not_visited_country_1"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "bea7a53f-578b-46c6-8666-1b501d618cc4",
+                    "labels": {
+                        "3": [
+                            "travel",
+                            "country_1"
+                        ],
+                        "4": [
+                            "travel",
+                            "not_visited_country_1"
+                        ]
+                    },
+                    "requests": {
+                        "3": "it is great.",
+                        "4": "no."
+                    },
+                    "responses": {
+                        "3": "Have you been to France?",
+                        "4": "Then I highly recommend it to you! You should go to Paris and see the Louvre. It is the home of some of the best-known works of art, including the Mona Lisa and the Venus de Milo. The climate in Paris is continental and therefore mild. For the warmest temperatures, October and April are the best times to visit Paris sans crowds."
+                    },
+                    "misc": {
+                        "slots": {
+                            "best_time0": "The best times to visit Beijing are from March to May and from September to October.",
+                            "best_time1": "For the warmest temperatures, October and April are the best times to visit Paris sans crowds.",
+                            "best_time2": "June-September is the best time to visit Ankara.",
+                            "capital0": "Beijing",
+                            "capital1": "Paris",
+                            "capital2": "Ankara",
+                            "climate0": "In Beijing, there is a continental climate, with cold, sunny winters and hot, sultry, and rainy summers.",
+                            "climate1": "The climate in Paris is continental and therefore mild.",
+                            "climate2": "The climate is warm and temperate in Ankara.",
+                            "country0": "China",
+                            "country1": "France",
+                            "country2": "Turkey",
+                            "description0": "It's China's most significant attraction and can trace its origins back to the Yuan Dynasty of the 13th century.",
+                            "description1": "It is the home of some of the best-known works of art, including the Mona Lisa and the Venus de Milo.",
+                            "description2": "It's the only place in the country where you can grasp the full scope of Anatolia's pre-Classical-era human history.",
+                            "sight0": "The Palace Museum and the Forbidden City",
+                            "sight1": "the Louvre",
+                            "sight2": "Museum of Anatolian Civilizations"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]

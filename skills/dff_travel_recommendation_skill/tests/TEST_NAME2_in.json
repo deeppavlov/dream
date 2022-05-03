@@ -1,0 +1,645 @@
+{
+    "human_utter_index_batch": [
+        2
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "where should i spend my vacation?",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "get_travel_recommendation"
+                        ],
+                        "spelling_preprocessing": "where should i spend my vacation?",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "sentseg": {
+                            "punct_sent": "where should i spend my vacation?",
+                            "segments": [
+                                "where should i spend my vacation?"
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "my vacation"
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.009193151257932186,
+                                "command": 0.005023636389523745,
+                                "comment": 0.0023872002493590117,
+                                "complaint": 0.003967525437474251,
+                                "dev_command": 0.006432514637708664,
+                                "neg_answer": 0.002460028510540724,
+                                "open_question_factual": 0.09958004951477051,
+                                "open_question_opinion": 0.8400630354881287,
+                                "opinion": 0.01301729865372181,
+                                "other_answers": 0.004224861040711403,
+                                "pos_answer": 0.002503006486222148,
+                                "statement": 0.002553553320467472,
+                                "yes_no_question": 0.008594146929681301
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "vacation"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        24,
+                                        32
+                                    ],
+                                    "text": "vacation"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.963494062423706
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999709129333496
+                            },
+                            "cobot_topics": {
+                                "Travel_Geo": 0.9999767541885376
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9999938011169434
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999915361404419
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9999964237213135
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999967813491821
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.\nSo, the flow of high-profile Western visits to the Ukrainian capital city of Kyiv \u2013 most rece... [1177 chars]",
+                                    "description": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220502135329-01-ukraine-soldiers-kharkiv-0501-super-tease.jpg",
+                                    "publishedAt": "2022-05-03T04:27:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Russia's war in Ukraine",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-03-22/index.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "vacation",
+                                "news": {
+                                    "content": "LISBON, Portugal (AP) \u2014 The parents of Madeleine McCann, a British toddler who vanished from an apartment during her family\u2019s vacation in Portugal 15 years ago and captured global interest, say they remain hopeful that efforts by police in three coun... [1845 chars]",
+                                    "description": "The parents of Madeleine McCann, a British toddler who vanished from an apartment during her family\u2019s vacation in Portugal 15 years ago and captured global interest, say they remain hopeful that efforts by police in three countries to solve the mystery will eventually bring answers.",
+                                    "image": "https://fox8.com/wp-content/uploads/sites/12/2022/05/AP22123319998832.jpg?w=1280",
+                                    "publishedAt": "2022-05-03T10:26:42Z",
+                                    "source": {
+                                        "name": "WJW FOX 8 News Cleveland",
+                                        "url": "https://fox8.com"
+                                    },
+                                    "title": "What happened to Madeleine McCann?",
+                                    "url": "https://fox8.com/news/madeleine-mccann-still-missing-after-15-years/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "where should i spend my vacation?"
+                            ]
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "where should i spend my vacation?"
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "vacation": {
+                                "SymbolOf": [
+                                    "vacation",
+                                    "relaxation",
+                                    "life"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "very relax",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "you get to see world",
+                                    "fatigue",
+                                    "you get rest"
+                                ],
+                                "CausesDesire": [
+                                    "travel",
+                                    "go somewhere",
+                                    "go to movie"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "yes",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0009987930534407496,
+                                "command": 0.0011940427357330918,
+                                "comment": 0.0007502068183384836,
+                                "complaint": 0.0002894218487199396,
+                                "dev_command": 0.0006591033888980746,
+                                "neg_answer": 0.0010931628057733178,
+                                "open_question_factual": 0.00036176780122332275,
+                                "open_question_opinion": 0.0004155543865635991,
+                                "opinion": 0.0005449141026474535,
+                                "other_answers": 0.0006155013688839972,
+                                "pos_answer": 0.9912000298500061,
+                                "statement": 0.0012335946084931493,
+                                "yes_no_question": 0.000643814739305526
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "yes"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        3
+                                    ],
+                                    "text": "yes"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.\nSo, the flow of high-profile Western visits to the Ukrainian capital city of Kyiv \u2013 most rece... [1177 chars]",
+                                    "description": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220502135329-01-ukraine-soldiers-kharkiv-0501-super-tease.jpg",
+                                    "publishedAt": "2022-05-03T04:27:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Russia's war in Ukraine",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-03-22/index.html"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "yes",
+                                "news": {
+                                    "content": "just\nSomewhat confusingly branded Moto G82 to suggest a semblance of coherence alongside the likes of the G52 and G22 despite not being preceded by a G80 or G81, the decidedly stylish device leaked in all its glory by none other than Evan Blass today... [2328 chars]",
+                                    "description": "Hot on the heels of the Motorola Edge 30, a 5G-enabled Moto G82 handset with a decent set of specs is expected to break cover soon.",
+                                    "image": "https://m-cdn.phonearena.com/images/article/139950-wide-two_1200/Motorolas-next-high-mid-ranger-has-5G-a-premium-design-and-yes-a-headphone-jack.jpg",
+                                    "publishedAt": "2022-05-03T07:03:08Z",
+                                    "source": {
+                                        "name": "PhoneArena",
+                                        "url": "https://www.phonearena.com"
+                                    },
+                                    "title": "Motorola's next 'high-mid-ranger' has 5G, a premium design, and yes, a headphone jack",
+                                    "url": "https://www.phonearena.com/news/motorola-moto-g82-5g-leaked-images-specs-features_id139950"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "Information_DeliveryIntent": 0.9998714923858643
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999740123748779
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999923706054688
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "where should i spend my vacation?",
+                                "Have you been to China?",
+                                "yes, i have been to china. "
+                            ]
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "yes": {
+                                "SymbolOf": [
+                                    "purity",
+                                    "ignorance",
+                                    "innocence"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "correct",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "you feel good",
+                                    "headache",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "receive letter",
+                                    "get job",
+                                    "buy present"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Have you been to China?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Have you been to China?",
+                            "segments": [
+                                "Have you been to China?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "china",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "where should i spend my vacation?",
+                                "Have you been to China?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_travel_recommendation_skill"
+                }
+            ]
+        }
+    ],
+    "dff_travel_recommendation_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "bea7a53f-578b-46c6-8666-1b501d618cc4",
+                "labels": {
+                    "0": [
+                        "travel",
+                        "country_0"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "best_time0": "The best times to visit Beijing are from March to May and from September to October.",
+                        "best_time1": "For the warmest temperatures, October and April are the best times to visit Paris sans crowds.",
+                        "best_time2": "June-September is the best time to visit Ankara.",
+                        "capital0": "Beijing",
+                        "capital1": "Paris",
+                        "capital2": "Ankara",
+                        "climate0": "In Beijing, there is a continental climate, with cold, sunny winters and hot, sultry, and rainy summers.",
+                        "climate1": "The climate in Paris is continental and therefore mild.",
+                        "climate2": "The climate is warm and temperate in Ankara.",
+                        "country0": "China",
+                        "country1": "France",
+                        "country2": "Turkey",
+                        "description0": "It's China's most significant attraction and can trace its origins back to the Yuan Dynasty of the 13th century.",
+                        "description1": "It is the home of some of the best-known works of art, including the Mona Lisa and the Venus de Milo.",
+                        "description2": "It's the only place in the country where you can grasp the full scope of Anatolia's pre-Classical-era human history.",
+                        "sight0": "The Palace Museum and the Forbidden City",
+                        "sight1": "the Louvre",
+                        "sight2": "Museum of Anatolian Civilizations"
+                    }
+                },
+                "requests": {
+                    "0": "where should i spend my vacation?"
+                },
+                "responses": {
+                    "0": "Have you been to China?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "travel",
+                    "country_0"
+                ]
+            },
+            "previous_human_utter_index": 1,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

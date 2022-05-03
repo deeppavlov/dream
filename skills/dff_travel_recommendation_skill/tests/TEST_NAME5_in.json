@@ -1,0 +1,554 @@
+{
+    "human_utter_index_batch": [
+        5
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "it is great.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "it's great",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "it is great.",
+                            "segments": [
+                                "it is great."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {},
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.09781140089035034,
+                                "command": 0.0031787939369678497,
+                                "comment": 0.7989979386329651,
+                                "complaint": 0.009719960391521454,
+                                "dev_command": 0.006572575308382511,
+                                "neg_answer": 0.003055815352126956,
+                                "open_question_factual": 0.0033493894152343273,
+                                "open_question_opinion": 0.0025766510516405106,
+                                "opinion": 0.05247218534350395,
+                                "other_answers": 0.0028046739753335714,
+                                "pos_answer": 0.009964278899133205,
+                                "statement": 0.003467633156105876,
+                                "yes_no_question": 0.006028742995113134
+                            }
+                        ],
+                        "conceptnet": {},
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9518035054206848
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.999985933303833
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999936819076538
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9960804581642151
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999185800552368
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9999971389770508
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999408721923828
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.\nSo, the flow of high-profile Western visits to the Ukrainian capital city of Kyiv \u2013 most rece... [1177 chars]",
+                                    "description": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220502135329-01-ukraine-soldiers-kharkiv-0501-super-tease.jpg",
+                                    "publishedAt": "2022-05-03T04:27:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Russia's war in Ukraine",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-03-22/index.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "it is great."
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 5,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "And have you been in Beijing?",
+                                "yes.",
+                                "Did you like The Palace Museum and the Forbidden City?",
+                                "it is great."
+                            ]
+                        }
+                    }
+                },
+                {
+                    "text": "no.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "no",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "no.",
+                            "segments": [
+                                "no."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.00048657070146873593,
+                                "command": 0.0008667833753861487,
+                                "comment": 0.0006392644136212766,
+                                "complaint": 0.006933943368494511,
+                                "dev_command": 0.0010854810243472457,
+                                "neg_answer": 0.98002690076828,
+                                "open_question_factual": 0.0010861768387258053,
+                                "open_question_opinion": 0.0007952515734359622,
+                                "opinion": 0.0011347756953909993,
+                                "other_answers": 0.0026064380072057247,
+                                "pos_answer": 0.0023671083617955446,
+                                "statement": 0.0007200196268968284,
+                                "yes_no_question": 0.0012513926485553384
+                            }
+                        ],
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "ner": [
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.996529757976532
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999853372573853
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999918937683105
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9890186786651611
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9981480836868286
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9439201354980469
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9998563528060913
+                            }
+                        },
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.\nSo, the flow of high-profile Western visits to the Ukrainian capital city of Kyiv \u2013 most rece... [1177 chars]",
+                                    "description": "Russian President Vladimir Putin couldn\u2019t have been more clear that his aim in invading Ukraine was to end its right to exist as a free, independent nation.",
+                                    "image": "https://cdn.cnn.com/cnnnext/dam/assets/220502135329-01-ukraine-soldiers-kharkiv-0501-super-tease.jpg",
+                                    "publishedAt": "2022-05-03T04:27:00Z",
+                                    "source": {
+                                        "name": "CNN",
+                                        "url": "https://www.cnn.com"
+                                    },
+                                    "title": "Russia's war in Ukraine",
+                                    "url": "https://www.cnn.com/europe/live-news/russia-ukraine-war-news-05-03-22/index.html"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "no."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 6,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "Did you like The Palace Museum and the Forbidden City?",
+                                "it is great.",
+                                "Have you been to France?",
+                                "no, i haven't been to france. "
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Have you been to France?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Have you been to France?",
+                            "segments": [
+                                "Have you been to France?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 4,
+                                    "text": "france",
+                                    "type": "LOC"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "yes.",
+                                "Did you like The Palace Museum and the Forbidden City?",
+                                "it is great.",
+                                "Have you been to France?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_travel_recommendation_skill"
+                }
+            ]
+        }
+    ],
+    "dff_travel_recommendation_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "bea7a53f-578b-46c6-8666-1b501d618cc4",
+                "labels": {
+                    "2": [
+                        "travel",
+                        "visited_capital_0"
+                    ],
+                    "3": [
+                        "travel",
+                        "country_1"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "best_time0": "The best times to visit Beijing are from March to May and from September to October.",
+                        "best_time1": "For the warmest temperatures, October and April are the best times to visit Paris sans crowds.",
+                        "best_time2": "June-September is the best time to visit Ankara.",
+                        "capital0": "Beijing",
+                        "capital1": "Paris",
+                        "capital2": "Ankara",
+                        "climate0": "In Beijing, there is a continental climate, with cold, sunny winters and hot, sultry, and rainy summers.",
+                        "climate1": "The climate in Paris is continental and therefore mild.",
+                        "climate2": "The climate is warm and temperate in Ankara.",
+                        "country0": "China",
+                        "country1": "France",
+                        "country2": "Turkey",
+                        "description0": "It's China's most significant attraction and can trace its origins back to the Yuan Dynasty of the 13th century.",
+                        "description1": "It is the home of some of the best-known works of art, including the Mona Lisa and the Venus de Milo.",
+                        "description2": "It's the only place in the country where you can grasp the full scope of Anatolia's pre-Classical-era human history.",
+                        "sight0": "The Palace Museum and the Forbidden City",
+                        "sight1": "the Louvre",
+                        "sight2": "Museum of Anatolian Civilizations"
+                    }
+                },
+                "requests": {
+                    "2": "yes.",
+                    "3": "it is great."
+                },
+                "responses": {
+                    "2": "Did you like The Palace Museum and the Forbidden City?",
+                    "3": "Have you been to France?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "travel",
+                    "country_0"
+                ],
+                "2": [
+                    "travel",
+                    "visited_country_0"
+                ],
+                "3": [
+                    "travel",
+                    "visited_capital_0"
+                ],
+                "4": [
+                    "travel",
+                    "country_1"
+                ]
+            },
+            "previous_human_utter_index": 4,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

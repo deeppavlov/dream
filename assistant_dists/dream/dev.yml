@@ -440,6 +440,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8128:8128
+  dff-travel-recommendation-skill:
+    volumes:
+      - "./skills/dff_travel_recommendation_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8129:8129
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

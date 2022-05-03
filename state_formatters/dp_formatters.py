@@ -756,6 +756,10 @@ def dff_test_bot_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_test_bot_skill")
 
 
+def dff_travel_recommendation_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_travel_recommendation_skill")
+
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 

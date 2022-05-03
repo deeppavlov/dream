@@ -47,7 +47,8 @@ class HumanGoalTracker(GoalTracker):
             "get_book_recommendation": "dff_book_recommendation_skill",
             "get_series_recommendation": "dff_series_recommendation_skill",
             "get_book_information": "dff_get_book_information_skill",
-            "test_bot": "dff_test_bot_skill"
+            "test_bot": "dff_test_bot_skill",
+            "get_travel_recommendation": "dff_travel_recommendation_skill"
         }
 
     def update_goals_after_interlocutor(self, dialog):
