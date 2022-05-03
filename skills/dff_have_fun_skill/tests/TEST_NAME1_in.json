@@ -1,0 +1,577 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "spelling_preprocessing": "hi",
+                        "spacy_nounphrases": [],
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
+                        "entity_detection": {},
+                        "conceptnet": {},
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.\nEMBED >More News Videos A man who free climbed all the way up San Francisco... [1978 chars]",
+                                    "description": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.",
+                                    "image": "https://cdn.abcotvs.com/dip/images/11814634_050322-kgo-ov-sk7-salesforce-climb-img.jpg?w=1600",
+                                    "publishedAt": "2022-05-03T18:33:45Z",
+                                    "source": {
+                                        "name": "KGO-TV",
+                                        "url": "https://abc7news.com"
+                                    },
+                                    "title": "Man free climbs 1,070-foot Salesforce Tower in San Francisco, gets taken into custody",
+                                    "url": "https://abc7news.com/man-climbing-salesforce-tower-sf-person-scaling-building-san-francisco-news/11814580/"
+                                },
+                                "which": "all"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
+                    }
+                },
+                {
+                    "text": "tell me a joke.",
+                    "annotations": {
+                        "human_goals_detector": [
+                            "have_fun"
+                        ],
+                        "spelling_preprocessing": "tell me a joke",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "a joke"
+                        ],
+                        "sentseg": {
+                            "punct_sent": "tell me a joke.",
+                            "segments": [
+                                "tell me a joke."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0021035782992839813,
+                                "command": 0.9713592529296875,
+                                "comment": 0.001372121274471283,
+                                "complaint": 0.0027761049568653107,
+                                "dev_command": 0.007529935799539089,
+                                "neg_answer": 0.0012841097777709365,
+                                "open_question_factual": 0.001382604124955833,
+                                "open_question_opinion": 0.002075423952192068,
+                                "opinion": 0.0021165700163692236,
+                                "other_answers": 0.0008597217383794487,
+                                "pos_answer": 0.0028373808600008488,
+                                "statement": 0.0021097261924296618,
+                                "yes_no_question": 0.002193348715081811
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "tell",
+                                "joke"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        4
+                                    ],
+                                    "text": "tell"
+                                },
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        10,
+                                        14
+                                    ],
+                                    "text": "joke"
+                                }
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.999803364276886
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9997428059577942
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9999933242797852
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.6174112558364868
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9999871253967285
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.9999880790710449
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.999910831451416
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "tell me a joke."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.\nEMBED >More News Videos A man who free climbed all the way up San Francisco... [1978 chars]",
+                                    "description": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.",
+                                    "image": "https://cdn.abcotvs.com/dip/images/11814634_050322-kgo-ov-sk7-salesforce-climb-img.jpg?w=1600",
+                                    "publishedAt": "2022-05-03T18:33:45Z",
+                                    "source": {
+                                        "name": "KGO-TV",
+                                        "url": "https://abc7news.com"
+                                    },
+                                    "title": "Man free climbs 1,070-foot Salesforce Tower in San Francisco, gets taken into custody",
+                                    "url": "https://abc7news.com/man-climbing-salesforce-tower-sf-person-scaling-building-san-francisco-news/11814580/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "tell",
+                                "news": {
+                                    "content": "Fashion\u2019s biggest night out was also a big night for reflection.\nDwyane Wade and Gabrielle Union paid a touching tribute to their 14-year-old daughter Zaya at the Met Gala on Monday night, while also sharing powerful words of advice for other parents... [2789 chars]",
+                                    "description": "Fashion\u2019s biggest night out was also a big night for reflection.",
+                                    "image": "https://www.nydailynews.com/resizer/9BdPltXw-e3kOaMEM8p-tOkDaFw=/1200x630/filters:format(jpg):quality(70)/cloudfront-us-east-1.images.arcpublishing.com/tronc/5A32ZIZLYNDB5P6E3F6QS4BIGM.jpg",
+                                    "publishedAt": "2022-05-03T18:07:28Z",
+                                    "source": {
+                                        "name": "New York Daily News",
+                                        "url": "https://www.nydailynews.com"
+                                    },
+                                    "title": "Dwyane Wade, Gabrielle Union shine at Met Gala, share powerful advice for parents of trans kids",
+                                    "url": "https://www.nydailynews.com/snyde/ny-dwyane-wade-gabrielle-union-zaya-trans-kids-met-gala-advice-parentws-20220503-ht2kebov4vghdaq72jpnihe65y-story.html"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "joke",
+                                "news": {
+                                    "content": "They were marvelous long before there was a Mrs. Maisel.\nAnd yet, for years, some jokers insisted women were just too nice to do comedy.\nAdvertisement\n\u201cIt bothers me,\u201d Jerry Lewis once admitted about females doing standup. \u201cI cannot sit and watch a l... [7270 chars]",
+                                    "description": "They were marvelous long before there was a Mrs. Maisel. And yet, for years, some jokers insisted women were just too nice to do comedy.",
+                                    "image": "https://www.nydailynews.com/resizer/vwQ3VbohMK9DKhQFmtkDC-UcpcU=/1200x630/filters:format(jpg):quality(70)/cloudfront-us-east-1.images.arcpublishing.com/tronc/A6R4NAM6N5EDFED4WSQQC64UUQ.jpg",
+                                    "publishedAt": "2022-05-02T23:55:55Z",
+                                    "source": {
+                                        "name": "New York Daily News",
+                                        "url": "https://www.nydailynews.com"
+                                    },
+                                    "title": "Out of the home and onto the stage: the funny ladies who paved the way for today\u2019s women comics",
+                                    "url": "https://www.nydailynews.com/entertainment/ny-women-comics-book-20220430-oh732xohpza7hktw5hulbzfxum-story.html"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "tell me a joke."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "tell": {
+                                "SymbolOf": [
+                                    "religion",
+                                    "knowledge",
+                                    "power"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "false",
+                                    "truth"
+                                ],
+                                "Causes": [
+                                    "get result",
+                                    "confusion",
+                                    "you get result"
+                                ],
+                                "CausesDesire": [
+                                    "lie",
+                                    "find information",
+                                    "reason"
+                                ]
+                            },
+                            "joke": {
+                                "SymbolOf": [
+                                    "stupidity",
+                                    "laziness",
+                                    "ignorance"
+                                ],
+                                "HasProperty": [
+                                    "funny",
+                                    "bad",
+                                    "fun"
+                                ],
+                                "Causes": [
+                                    "laughter",
+                                    "you get hurt",
+                                    "get hurt"
+                                ],
+                                "CausesDesire": [
+                                    "laugh at joke",
+                                    "laugh",
+                                    "joke"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                            "segments": [
+                                "Hi, this is a DREAM Socialbot!",
+                                "How is the day going so far for you?"
+                            ]
+                        },
+                        "ner": [
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "hi.",
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_have_fun_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

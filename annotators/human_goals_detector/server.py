@@ -14,6 +14,7 @@ from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN
 from common.get_book_information import TELL_BOOK_DESCRIPTION_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_GENRE_PATTERN
 from common.test_bot import PRESIDENT_OPINION_PATTERN, SWEAR_WORDS_PATTERN
 from common.travel_recommendation import TRAVEL_RECOMMENDATION_PATTERN
+from common.have_fun import HAVE_FUN_PATTERN
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -95,6 +96,10 @@ def detect_goal(requested_data):
             flag_travel_recommendation = bool(TRAVEL_RECOMMENDATION_PATTERN.search(utterance))
             if flag_travel_recommendation:
                 human_goal["human_goals"].append('get_travel_recommendation')
+
+            flag_have_fun = bool(HAVE_FUN_PATTERN.search(utterance))
+            if flag_have_fun:
+                human_goal["human_goals"].append('have_fun')
 
 
             results.append(list(set(human_goal["human_goals"])))

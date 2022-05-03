@@ -28,6 +28,7 @@ from common.tv_series_recommendation import RECOMMEND_SERIES_PATTERN, MENTIONS_K
 from common.get_book_information import TELL_BOOK_GENRE_PATTERN, TELL_ABOUT_BOOK_PATTERN, TELL_BOOK_AUTHOR_PATTERN, TELL_BOOK_DESCRIPTION_PATTERN
 from common.test_bot import PRESIDENT_OPINION_PATTERN, SWEAR_WORDS_PATTERN
 from common.travel_recommendation import TRAVEL_RECOMMENDATION_PATTERN
+from common.have_fun import HAVE_FUN_PATTERN
 
 SKILL_TRIGGERS = {
     "dff_movie_skill": {
@@ -208,6 +209,13 @@ SKILL_TRIGGERS = {
     },
     "dff_travel_recommendation_skill": {
         "compiled_patterns": [TRAVEL_RECOMMENDATION_PATTERN],
+        "previous_bot_patterns": [],
+        "cobot_dialogact_topics": [],
+        "cobot_topics": [],
+        "intents": [],
+    },
+    "dff_have_fun_skill": {
+        "compiled_patterns": [HAVE_FUN_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],

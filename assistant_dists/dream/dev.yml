@@ -446,6 +446,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8129:8129
+  dff-have-fun-skill:
+    volumes:
+      - "./skills/dff_have_fun_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8130:8130
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

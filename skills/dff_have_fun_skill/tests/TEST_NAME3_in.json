@@ -1,0 +1,723 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "yes.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "yes",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "yes.",
+                            "segments": [
+                                "yes."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0012011919170618057,
+                                "command": 0.0013669135514646769,
+                                "comment": 0.0009812944335862994,
+                                "complaint": 0.0003096985456068069,
+                                "dev_command": 0.0007303217425942421,
+                                "neg_answer": 0.0009397472604177892,
+                                "open_question_factual": 0.0003411209618207067,
+                                "open_question_opinion": 0.00044241477735340595,
+                                "opinion": 0.0007295936229638755,
+                                "other_answers": 0.0007436292944476008,
+                                "pos_answer": 0.9903462529182434,
+                                "statement": 0.0012616332387551665,
+                                "yes_no_question": 0.000606331683229655
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "yes"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        3
+                                    ],
+                                    "text": "yes"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "yes."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.\nEMBED >More News Videos A man who free climbed all the way up San Francisco... [1978 chars]",
+                                    "description": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.",
+                                    "image": "https://cdn.abcotvs.com/dip/images/11814634_050322-kgo-ov-sk7-salesforce-climb-img.jpg?w=1600",
+                                    "publishedAt": "2022-05-03T18:33:45Z",
+                                    "source": {
+                                        "name": "KGO-TV",
+                                        "url": "https://abc7news.com"
+                                    },
+                                    "title": "Man free climbs 1,070-foot Salesforce Tower in San Francisco, gets taken into custody",
+                                    "url": "https://abc7news.com/man-climbing-salesforce-tower-sf-person-scaling-building-san-francisco-news/11814580/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "yes",
+                                "news": {
+                                    "content": "We independently selected these products and deals because we love them, and we think you might like them at these prices. E! has affiliate relationships, so we may get a commission if you purchase something through our links. Items are sold by the r... [1129 chars]",
+                                    "description": "We independently selected these products and deals because we love them, and we think you might like them at these prices. E!",
+                                    "image": "https://akns-images.eonline.com/eol_images/Entire_Site/202242/rs_1200x1200-220502154917-1200-LiveNation-Concert-Deals.jpg?fit=around%7C1080:566&output-quality=90&crop=1080:566;center,top",
+                                    "publishedAt": "2022-05-03T11:50:00Z",
+                                    "source": {
+                                        "name": "E! NEWS",
+                                        "url": "https://www.eonline.com"
+                                    },
+                                    "title": "Get Tickets to 3,700+ Concerts for $25: Luke Bryan, Halsey & More",
+                                    "url": "https://www.eonline.com/news/1329387/3-700-concerts-s25-luke-bryan-halsey-wiz-khalifa-shania-twain"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 106,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "some good jokes",
+                                        "start": 91,
+                                        "text": "some good jokes"
+                                    },
+                                    {
+                                        "end": 118,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "some good jokes",
+                                        "start": 114,
+                                        "text": "they"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "Hi, this is a DREAM Socialbot! How is the day going so far for you?",
+                                "tell me a joke.",
+                                "I know some good jokes, maybe some good jokes will make you smile! Want to try?",
+                                "yes."
+                            ]
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9995554089546204
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999842643737793
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.999994158744812
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9887357354164124
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9994649291038513
+                            },
+                            "sentiment_classification": {
+                                "positive": 0.9138855934143066
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999291896820068
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "conceptnet": {
+                            "yes": {
+                                "SymbolOf": [
+                                    "purity",
+                                    "ignorance",
+                                    "innocence"
+                                ],
+                                "HasProperty": [
+                                    "true",
+                                    "correct",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "you feel good",
+                                    "headache",
+                                    "depression"
+                                ],
+                                "CausesDesire": [
+                                    "receive letter",
+                                    "get job",
+                                    "buy present"
+                                ]
+                            }
+                        }
+                    }
+                },
+                {
+                    "text": "hit me.",
+                    "annotations": {
+                        "human_goals_detector": [],
+                        "spelling_preprocessing": "hit me",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [],
+                        "sentseg": {
+                            "punct_sent": "hit me.",
+                            "segments": [
+                                "hit me."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.017339125275611877,
+                                "command": 0.1607283651828766,
+                                "comment": 0.013368241488933563,
+                                "complaint": 0.030388228595256805,
+                                "dev_command": 0.17313291132450104,
+                                "neg_answer": 0.002996189519762993,
+                                "open_question_factual": 0.007227233611047268,
+                                "open_question_opinion": 0.0063140238635241985,
+                                "opinion": 0.040482327342033386,
+                                "other_answers": 0.007492759730666876,
+                                "pos_answer": 0.004265483934432268,
+                                "statement": 0.5285472869873047,
+                                "yes_no_question": 0.007717828266322613
+                            }
+                        ],
+                        "entity_detection": {
+                            "entities": [
+                                "hit"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "label": "misc",
+                                    "offsets": [
+                                        0,
+                                        3
+                                    ],
+                                    "text": "hit"
+                                }
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9992302656173706
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.9999294281005859
+                            },
+                            "cobot_topics": {
+                                "Literature": 0.9996155500411987
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.942866861820221
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.999593198299408
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9603680968284607
+                            },
+                            "toxic_classification": {
+                                "toxic": 1.0
+                            }
+                        },
+                        "entity_linking": [],
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.\nEMBED >More News Videos A man who free climbed all the way up San Francisco... [1978 chars]",
+                                    "description": "EMBED >More News Videos A man who free climbed all the way up San Francisco's Salesforce Tower has made it to the top, where he was met by authorities and taken into custody.",
+                                    "image": "https://cdn.abcotvs.com/dip/images/11814634_050322-kgo-ov-sk7-salesforce-climb-img.jpg?w=1600",
+                                    "publishedAt": "2022-05-03T18:33:45Z",
+                                    "source": {
+                                        "name": "KGO-TV",
+                                        "url": "https://abc7news.com"
+                                    },
+                                    "title": "Man free climbs 1,070-foot Salesforce Tower in San Francisco, gets taken into custody",
+                                    "url": "https://abc7news.com/man-climbing-salesforce-tower-sf-person-scaling-building-san-francisco-news/11814580/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "hit",
+                                "news": {
+                                    "content": "Energy giant BP lost more than $25 billion dollars in earnings after it pulled business out of Russia in February, following Moscow\u2019s invasion of Ukraine, the company reported in its 2022 first quarter results on Tuesday.\nThe company reported a first... [1267 chars]",
+                                    "description": "Energy giant BP lost more than $25 billion dollars in earnings after it pulled business out of Russia in February, following Moscow\u2019s invasion of Ukraine, the company reported in its 2022 first quarter results on Tuesday.",
+                                    "image": "https://thehill.com/wp-content/uploads/sites/2/2022/05/2b1bda6283124a729a6287323a184c33.jpg?w=1280",
+                                    "publishedAt": "2022-05-03T18:27:51Z",
+                                    "source": {
+                                        "name": "The Hill",
+                                        "url": "https://thehill.com"
+                                    },
+                                    "title": "BP takes $25.5B hit from Russia pullout",
+                                    "url": "https://thehill.com/business-a-lobbying/3475669-bp-takes-25-5b-hit-from-russia-pullout/"
+                                },
+                                "which": "human"
+                            }
+                        ],
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hit me."
+                        },
+                        "kbqa": {
+                            "answer": "",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "conceptnet": {
+                            "hit": {
+                                "SymbolOf": [
+                                    "violence",
+                                    "anger",
+                                    "pain"
+                                ],
+                                "HasProperty": [
+                                    "fun",
+                                    "bad",
+                                    "hard"
+                                ],
+                                "Causes": [
+                                    "injury",
+                                    "you feel pain",
+                                    "pain"
+                                ],
+                                "CausesDesire": [
+                                    "hit bottle",
+                                    "fly kite",
+                                    "play game"
+                                ]
+                            }
+                        },
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 22,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "some good jokes",
+                                        "start": 7,
+                                        "text": "some good jokes"
+                                    },
+                                    {
+                                        "end": 34,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "some good jokes",
+                                        "start": 30,
+                                        "text": "they"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "I know some good jokes, maybe some good jokes will make you smile! Want to try?",
+                                "yes.",
+                                "Which Star Trek character is a member of the magic circle?",
+                                "hit me."
+                            ]
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Which Star Trek character is a member of the magic circle?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Which Star Trek character is a member of the magic circle?",
+                            "segments": [
+                                "Which Star Trek character is a member of the magic circle?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 11,
+                                    "start_pos": 9,
+                                    "text": "magic circle",
+                                    "type": "ORG"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [
+                                [
+                                    {
+                                        "end": 38,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "some good jokes",
+                                        "start": 23,
+                                        "text": "some good jokes"
+                                    },
+                                    {
+                                        "end": 50,
+                                        "ner": {
+                                            "offset": 10000,
+                                            "type": "O"
+                                        },
+                                        "resolved": "some good jokes",
+                                        "start": 46,
+                                        "text": "they"
+                                    }
+                                ]
+                            ],
+                            "modified_sents": [
+                                "tell me a joke.",
+                                "I know some good jokes, maybe some good jokes will make you smile! Want to try?",
+                                "yes.",
+                                "Which Star Trek character is a member of the magic circle?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_have_fun_skill"
+                }
+            ]
+        }
+    ],
+    "dff_have_fun_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "8f5d2bca-e54d-4db2-92c8-7aa3a7feae9f",
+                "labels": {
+                    "0": [
+                        "jokes",
+                        "intro"
+                    ],
+                    "1": [
+                        "jokes",
+                        "Q0"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "A0": "Jean-Luc Pickacard",
+                        "A1": "Dimitree",
+                        "A2": "Because he was outstanding in his field",
+                        "A3": "Huge Jackman",
+                        "A4": "It took the bus.",
+                        "A5": "I drew drew",
+                        "A6": "A snailor",
+                        "A7": "An algo-rhythm",
+                        "A8": "Copypasta",
+                        "A9": "It's time consuming. ",
+                        "Q0": "Which Star Trek character is a member of the magic circle?",
+                        "Q1": "What do you call a russian tree?",
+                        "Q2": "Why did the scarecrow get a promotion?",
+                        "Q3": "Whats the name of a bodybuilder whose a fan of the X-Men?",
+                        "Q4": "How did a bit travel from the CPU to the HDD?",
+                        "Q5": "What did the painter say after finishing a portrait of his brother Andrew?",
+                        "Q6": "What do you call a snail on a sail boat?",
+                        "Q7": "What's a computer's favorite beat?",
+                        "Q8": "What's a redditor's favorite pasta?",
+                        "Q9": "Ever tried eating a clock?"
+                    }
+                },
+                "requests": {
+                    "0": "tell me a joke.",
+                    "1": "yes."
+                },
+                "responses": {
+                    "0": "I know some good jokes, maybe they will make you smile! Want to try?",
+                    "1": "Which Star Trek character is a member of the magic circle?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "jokes",
+                    "intro"
+                ],
+                "2": [
+                    "jokes",
+                    "Q0"
+                ]
+            },
+            "previous_human_utter_index": 2,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        [
+            "emotion_skill"
+        ]
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

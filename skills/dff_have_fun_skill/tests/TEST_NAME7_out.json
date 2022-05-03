@@ -1,0 +1,104 @@
+[
+    [
+        "That's great!",
+        1.0,
+        {
+            "dff_have_fun_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 7,
+                "history": {
+                    "1": [
+                        "jokes",
+                        "intro"
+                    ],
+                    "2": [
+                        "jokes",
+                        "Q0"
+                    ],
+                    "3": [
+                        "jokes",
+                        "A0"
+                    ],
+                    "4": [
+                        "jokes",
+                        "Q1"
+                    ],
+                    "5": [
+                        "jokes",
+                        "A1"
+                    ],
+                    "6": [
+                        "jokes",
+                        "ask_opinion"
+                    ],
+                    "7": [
+                        "jokes",
+                        "liked_jokes"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "8f5d2bca-e54d-4db2-92c8-7aa3a7feae9f",
+                    "labels": {
+                        "5": [
+                            "jokes",
+                            "ask_opinion"
+                        ],
+                        "6": [
+                            "jokes",
+                            "liked_jokes"
+                        ]
+                    },
+                    "requests": {
+                        "5": "no.",
+                        "6": "yes."
+                    },
+                    "responses": {
+                        "5": "Did you like my jokes?",
+                        "6": "That's great!"
+                    },
+                    "misc": {
+                        "slots": {
+                            "A0": "Jean-Luc Pickacard",
+                            "A1": "Dimitree",
+                            "A2": "Because he was outstanding in his field",
+                            "A3": "Huge Jackman",
+                            "A4": "It took the bus.",
+                            "A5": "I drew drew",
+                            "A6": "A snailor",
+                            "A7": "An algo-rhythm",
+                            "A8": "Copypasta",
+                            "A9": "It's time consuming. ",
+                            "Q0": "Which Star Trek character is a member of the magic circle?",
+                            "Q1": "What do you call a russian tree?",
+                            "Q2": "Why did the scarecrow get a promotion?",
+                            "Q3": "Whats the name of a bodybuilder whose a fan of the X-Men?",
+                            "Q4": "How did a bit travel from the CPU to the HDD?",
+                            "Q5": "What did the painter say after finishing a portrait of his brother Andrew?",
+                            "Q6": "What do you call a snail on a sail boat?",
+                            "Q7": "What's a computer's favorite beat?",
+                            "Q8": "What's a redditor's favorite pasta?",
+                            "Q9": "Ever tried eating a clock?"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": [
+                "emotion_skill"
+            ]
+        },
+        {},
+        {
+            "can_continue": "can",
+            "goal_status": "goal_achieved"
+        }
+    ]
+]
