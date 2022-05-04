@@ -12,7 +12,7 @@ ENV COMMIT=$COMMIT
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN apt-get update && apt-get install git -y
+RUN rm -r /etc/apt/sources.list.d && apt-get update && apt-get install git -y
 RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
 
 COPY . /src
