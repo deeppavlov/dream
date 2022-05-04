@@ -11,6 +11,7 @@ from df_engine.core.keywords import (
     RESPONSE,
 )
 from common.dialogflow_framework.extensions import intents, providers
+from common.dialogflow_framework.extensions.custom_functions import entities
 from df_engine.core import Actor
 
 import common.dff.integration.condition as int_cnd
@@ -70,7 +71,7 @@ flows = {
             RESPONSE: "I also like pictures of {user_fav_painter}. What kind of paintings do you like to draw: "
             "landscapes, portraits or something else?",
             PROCESSING: {
-                "entity_extraction": int_prs.entities(user_fav_painter="wiki:Q1028181"),
+                "entity_extraction": entities(user_fav_painter="wiki:Q1028181"),
                 "slot_filling": int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {lbl.forward(): cnd.true()},
