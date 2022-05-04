@@ -26,7 +26,6 @@ def drawing_request(vars):
 def extract_entity(ctx, entity_type):
     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
     annotations = user_uttr.get("annotations", {})
-    logger.info(f"annotations {annotations}")
     if entity_type.startswith("tags"):
         tag = entity_type.split("tags:")[1]
         nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
