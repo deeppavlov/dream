@@ -33,7 +33,7 @@
                         }
                     },
                     "validation": false,
-                    "framework_states": {}
+                    "actor_state": {}
                 }
             },
             "dff_shared_state": {
