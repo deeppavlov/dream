@@ -19,7 +19,7 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dff-template-skill:8120"
+          midas-predictor:8121, dialogpt:8125, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -555,7 +555,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 83fa40d7f600137910c663bda9a4d81fa425fe12
+        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
@@ -1043,16 +1043,19 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: dialog_entity_detection.json
+        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
+        EL_TAG_CONFIG: src/el_tags_infer.json
+        CONFIG: entity_detection_eng.json
+        LOWERCASE: 0
         PORT: 8103
         SRC_DIR: annotators/entity_detection/
-        COMMIT: 5d27dca3dfa0cf481324facd73f2e02f579f66b3
+        FINEGRAINED: 0
       context: ./
-      dockerfile: annotators/entity_detection/Dockerfile_new
+      dockerfile: annotators/entity_detection/Dockerfile
     command: flask run -h 0.0.0.0 -p 8103
     environment:
-      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -1141,6 +1144,25 @@ services:
           memory: 50M
         reservations:
           memory: 50M
+  
+  dialogpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8125
+        SERVICE_NAME: dialogpt
+        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-small
+      context: ./services/dialogpt/
+    command: flask run -h 0.0.0.0 -p 8125
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
   dff-template-skill:
     env_file: [.env]

@@ -46,3 +46,6 @@ services:
   intent-catcher:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  dialogpt:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
