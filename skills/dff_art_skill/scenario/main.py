@@ -46,7 +46,6 @@ flows = {
                     [
                         int_cnd.is_yes_vars,
                         cnd.regexp(templates.LIKE_PATTERN),
-                        int_cnd.speech_functions("Sustain.Continue.Prolong.Extend"),
                     ],
                 ),
                 lbl.forward(): cnd.true(),
