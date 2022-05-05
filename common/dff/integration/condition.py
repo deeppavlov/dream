@@ -11,7 +11,7 @@ import common.universal_templates as universal_templates
 import common.dff.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
-from common.facts_utils import provide_facts_request
+from .facts_utils import provide_facts_request
 
 logger = logging.getLogger(__name__)
 
