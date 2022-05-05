@@ -3,7 +3,7 @@ import logging
 from df_engine.core import Context, Actor
 import common.constants as common_constants
 from common.wiki_skill import extract_entity
-from common.facts_utils import provide_facts_response
+from facts_utils import provide_facts_response
 from . import context
 
 
