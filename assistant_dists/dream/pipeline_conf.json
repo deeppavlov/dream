@@ -446,7 +446,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://goals-tracker:8125/respond"
+                    "url": "http://goals-tracker:8131/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:goals_tracker_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
