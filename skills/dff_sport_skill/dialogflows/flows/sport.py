@@ -245,7 +245,7 @@ def entity_in_last_uttr_from_sport_area(vars):
 
 def get_dict_entity(entity_substr, entity_ids, type):
     try:
-        WIKIDATA_URL = "http://wiki-parser:8077/model"
+        WIKIDATA_URL = os.getenv("DP_WIKIDATA_URL")
         dict_result = requests.post(
             WIKIDATA_URL,
             json={
