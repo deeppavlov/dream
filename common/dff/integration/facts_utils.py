@@ -7,7 +7,7 @@ import nltk
 import requests
 import sentry_sdk
 import common.constants as common_constants
-import common.dialogflow_framework.utils.state as state_utils
+import common.dff.integration.context as context
 
 from common.wiki_skill import (
     find_page_title,
@@ -23,11 +23,13 @@ from common.wiki_skill import (
 from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
 
+nltk.download("punkt")
+
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 WIKI_FACTS_URL = os.getenv("WIKI_FACTS_URL")
 
-with open("/src/common/dialogflow_framework/extensions/wikihow_cache.json", "r") as fl:
+with open("/src/common/wikihow_cache.json", "r") as fl:
     wikihow_cache = json.load(fl)
 
 memory = {}
@@ -240,15 +242,15 @@ def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_c
     return page_content_list
 
 
-def provide_facts_request(vars):
+def provide_facts_request(ctx, actor):
     flag = False
-    shared_memory = state_utils.get_shared_memory(vars)
-    user_uttr = state_utils.get_last_human_utterance(vars)
+    wiki = ctx.misc.get("wiki", {})
+    user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
     isno = is_no(user_uttr)
-    cur_wiki_page = shared_memory.get("cur_wiki_page", "")
+    cur_wiki_page = wiki.get("cur_wiki_page", "")
     if cur_wiki_page:
         wiki_page_content_list = memory.get("wiki_page_content", [])
-        used_wiki_page_nums = shared_memory.get("used_wiki_page_nums", {}).get(cur_wiki_page, [])
+        used_wiki_page_nums = wiki.get("used_wiki_page_nums", {}).get(cur_wiki_page, [])
         logger.info(f"request, used_wiki_page_nums {used_wiki_page_nums}")
         logger.info(f"request, wiki_page_content_list {wiki_page_content_list[:3]}")
         if len(wiki_page_content_list) > 0 and len(used_wiki_page_nums) < len(wiki_page_content_list) and not isno:
@@ -256,15 +258,14 @@ def provide_facts_request(vars):
     return flag
 
 
-def provide_facts_response(vars, page_source, wiki_page):
-    shared_memory = state_utils.get_shared_memory(vars)
-    user_uttr = state_utils.get_last_human_utterance(vars)
+def provide_facts_response(ctx, actor, page_source, wiki_page):
+    wiki = ctx.misc.get("wiki", {})
+    user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
     isyes = is_yes(user_uttr) or re.findall(CONTINUE_PATTERN, user_uttr["text"])
     response = ""
-    cur_wiki_page = shared_memory.get("cur_wiki_page", "")
+    cur_wiki_page = wiki.get("cur_wiki_page", "")
     if not cur_wiki_page:
-        cur_wiki_page = wiki_page
-        state_utils.save_to_shared_memory(vars, cur_wiki_page=wiki_page)
+        wiki["cur_wiki_page"] = wiki_page
         if page_source == "wikiHow":
             page_content = get_wikihow_content(wiki_page, wikihow_cache)
             wiki_page_content_list = preprocess_wikihow_page(page_content)
@@ -275,7 +276,7 @@ def provide_facts_response(vars, page_source, wiki_page):
             memory["wiki_page_content"] = wiki_page_content_list
         logger.info(f"wiki_page {wiki_page}")
 
-    used_wiki_page_nums_dict = shared_memory.get("used_wiki_page_nums", {})
+    used_wiki_page_nums_dict = wiki.get("used_wiki_page_nums", {})
     used_wiki_page_nums = used_wiki_page_nums_dict.get(wiki_page, [])
     wiki_page_content_list = memory.get("wiki_page_content", [])
     logger.info(f"response, used_wiki_page_nums {used_wiki_page_nums}")
@@ -289,23 +290,30 @@ def provide_facts_response(vars, page_source, wiki_page):
                 response = f"{facts_str} {question}".strip().replace("  ", " ")
                 used_wiki_page_nums.append(num)
                 used_wiki_page_nums_dict[wiki_page] = used_wiki_page_nums
-                state_utils.save_to_shared_memory(vars, used_wiki_page_nums=used_wiki_page_nums_dict)
+                wiki["used_wiki_page_nums"] = used_wiki_page_nums_dict
                 break
 
         if len(wiki_page_content_list) == len(used_wiki_page_nums):
             if len(wiki_page_content_list) == len(used_wiki_page_nums):
-                state_utils.save_to_shared_memory(vars, wiki_page="")
+                wiki["wiki_page"] = ""
                 memory["wiki_page_content"] = []
-
+    logger.info(f"response, final {response}")
     if response:
         if isyes:
-            state_utils.set_confidence(vars, confidence=1.0)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+            context.set_confidence(ctx, actor, 1.0)
+            context.set_can_continue(ctx, actor, common_constants.MUST_CONTINUE)
         else:
-            state_utils.set_confidence(vars, confidence=0.99)
-            state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
+            context.set_confidence(ctx, actor, 0.99)
+            context.set_can_continue(ctx, actor, common_constants.CAN_CONTINUE_SCENARIO)
     else:
-        state_utils.set_confidence(vars, confidence=0.0)
-        state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_NOT_CONTINUE)
-    state_utils.add_acknowledgement_to_response_parts(vars)
-    return response
+        context.set_confidence(ctx, actor, 0.0)
+        context.set_can_continue(ctx, actor, common_constants.CAN_NOT_CONTINUE)
+    if hasattr(ctx, "a_s"):
+        processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
+        processed_node.response = response
+        ctx.a_s["processed_node"] = processed_node
+    else:
+        processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
+        processed_node.response = response
+        ctx.framework_states["actor"]["processed_node"] = processed_node
+    return ctx
