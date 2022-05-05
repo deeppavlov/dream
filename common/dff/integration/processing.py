@@ -25,6 +25,7 @@ def save_slots_to_ctx(slots: dict):
 
 def entities(**kwargs):
     slot_info = list(kwargs.items())
+
     def extract_entities(
         ctx: Context,
         actor: Actor,
@@ -42,6 +43,7 @@ def entities(**kwargs):
                     if extracted_entity:
                         ctx = save_slots_to_ctx({slot_name: extracted_entity})(ctx, actor)
         return ctx
+
     return extract_entities
 
 

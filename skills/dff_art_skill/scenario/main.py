@@ -10,7 +10,6 @@ from df_engine.core.keywords import (
     GLOBAL,
     RESPONSE,
 )
-from common.dialogflow_framework.extensions import intents
 from df_engine.core import Actor
 
 import common.dff.integration.condition as int_cnd
@@ -96,7 +95,7 @@ flows = {
             PROCESSING: {
                 "wikihow": int_prs.fact_provider("wikiHow", "Improve-Your-Drawing-Skills"),
             },
-            TRANSITIONS: {lbl.forward(): intents.facts},
+            TRANSITIONS: {lbl.forward(): int_cnd.facts},
         }
     },
     "global_flow": {

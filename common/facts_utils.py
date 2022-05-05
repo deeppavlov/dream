@@ -29,7 +29,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 WIKI_FACTS_URL = os.getenv("WIKI_FACTS_URL")
 
-with open("/src/common/dialogflow_framework/extensions/wikihow_cache.json", "r") as fl:
+with open("/src/common/wikihow_cache.json", "r") as fl:
     wikihow_cache = json.load(fl)
 
 memory = {}
@@ -311,7 +311,7 @@ def provide_facts_response(ctx, actor, page_source, wiki_page):
     if hasattr(ctx, "a_s"):
         processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
         processed_node.response = response
-        ctx["processed_node"] = processed_node
+        ctx.a_s["processed_node"] = processed_node
     else:
         processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
         processed_node.response = response
