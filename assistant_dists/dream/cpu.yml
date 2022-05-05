@@ -36,9 +36,6 @@ services:
   fact-retrieval:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  hypothesis-scorer:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   entity-detection:
     environment:
       CUDA_VISIBLE_DEVICES: ""
@@ -51,4 +48,7 @@ services:
       CUDA_VISIBLE_DEVICES: ""
   goals-tracker:
      environment:
+      CUDA_VISIBLE_DEVICES: ""
+  dialogpt:
+    environment:
       CUDA_VISIBLE_DEVICES: ""

@@ -43,6 +43,7 @@ SPECIAL_SKILLS = {
         "dff_travel_skill",
         "dff_wiki_skill",
         "game_cooperative_skill",
+        "dialogpt",
     ],
 }
 

@@ -203,6 +203,14 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
+    num_last_utterances = 2
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    return [{"sentences": context}]
+
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
@@ -557,16 +565,12 @@ def kbqa_formatter_dialog(dialog: Dict):
     entity_substr = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=False)
     nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
     entities = []
-    for n, entities_list in enumerate(entity_substr):
-        if entities_list:
-            entities.append([entities_list[0]])
-        elif nounphrases and len(nounphrases) > n:
-            entities.append(nounphrases[n])
-        else:
-            entities.append([])
-    if not entities:
-        entities = [[] for _ in sentences]
-    entities = entities[: len(sentences)]
+    if entity_substr:
+        entities = [entity_substr]
+    elif nounphrases:
+        entities = [nounphrases]
+    else:
+        entities = [[]]
 
     return [{"x_init": sentences, "entities": entities}]
 
@@ -932,9 +936,9 @@ def topic_recommendation_formatter(dialog: Dict):
 
 def midas_predictor_formatter(dialog: Dict):
     midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
-
-    return [{"last_midas_labels": max(midas_dist, key=midas_dist.get), "return_probas": 1}]
+    return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
 def goals_tracker_formatter(dialog: Dict):
     return [{"dialog": dialog}]
+

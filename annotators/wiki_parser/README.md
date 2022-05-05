@@ -10,6 +10,12 @@ To extract triplets for entities, the "query" argument should be the list of ent
 requests.post(wiki_parser_url, json = {"parser_info": ["find_triplets"], "query": ["Q159"]}).json()
 ```
 
+To find relation between two entities:
+
+```python
+requests.post("http://0.0.0.0:8077/model", json={"parser_info": ["find_entities_rels"], "query": [["Q649", "Q159"]]}).json()
+```
+
 To extract all relations of the entities, the "query" argument should be the list of entities ids and "parser_info" - list of "find\_rels" strings.
 
 ```python

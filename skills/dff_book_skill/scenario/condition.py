@@ -8,8 +8,9 @@ import functools
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
 
+import common.dff.integration.condition as int_cnd
+import common.dff.integration.context as int_ctx
 from common.books import about_book, BOOK_PATTERN, book_skill_was_proposed
-from common.dff.integration import condition as int_cnd
 from common.universal_templates import (
     NOT_LIKE_PATTERN,
     if_chat_about_particular_topic,
@@ -76,7 +77,7 @@ def annot_utt_adapter(func: Callable) -> Callable:
     def annot_wrapper(ctx: Context, actor: Actor) -> bool:
         if ctx.validation:
             return False
-        result = func(ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1])
+        result = func(int_ctx.get_last_human_utterance(ctx, actor))
         return bool(result)
 
     return annot_wrapper
@@ -99,8 +100,7 @@ def sentiment_detected(name: str = "positive", threshold: float = 0.6) -> Callab
     def sentiment_detected_handler(ctx: Context, actor: Actor) -> bool:
         if ctx.validation:
             return False
-        last_request = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
-        sentiment_probs = get_sentiment(last_request, probs=True)
+        sentiment_probs = get_sentiment(int_ctx.get_last_human_utterance(ctx, actor), probs=True)
         return sentiment_probs.get(name, 0) >= threshold
 
     return sentiment_detected_handler
@@ -154,14 +154,14 @@ def _(phrase: list) -> Callable:
 
 def start_condition(ctx: Context, actor: Actor) -> bool:
     return if_chat_about_particular_topic(
-        ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1],
-        ctx.misc.get("agent", {}).get("dialog", {}).get("bot_utterances", [{}])[-1],
+        int_ctx.get_last_human_utterance(ctx, actor),
+        int_ctx.get_last_bot_utterance(ctx, actor),
         compiled_pattern=BOOK_PATTERN,
     )
 
 
 def is_proposed_skill(ctx: Context, actor: Actor) -> bool:
-    return book_skill_was_proposed(ctx.misc.get("agent", {}).get("dialog", {}).get("bot_utterances", [{}])[-1])
+    return book_skill_was_proposed(int_ctx.get_last_bot_utterance(ctx, actor))
 
 
 def genrebook_request_detected(ctx: Context, actor: Actor) -> bool:
@@ -179,8 +179,7 @@ def is_side_or_stop(ctx: Context, actor: Actor) -> bool:
     """
     Check for side intents (including exit)
     """
-    last_request = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
-    intents = set(get_intents(last_request, which="intent_catcher", probs=False))
+    intents = set(get_intents(int_ctx.get_last_human_utterance(ctx, actor), which="intent_catcher", probs=False))
     side_intent_present = len(intents.intersection(SIDE_INTENTS)) > 0
     logger.debug("Side intent detected, exiting")
     return side_intent_present
@@ -190,8 +189,7 @@ def no_entities(ctx: Context, actor: Actor) -> bool:
     """
     Assert that no entities were recognized in the previous utterance
     """
-    last_request = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
-    return bool(last_request.get("annotations", {}).get("ner"))
+    return bool(int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("ner"))
 
 
 def user_favorite_factory(subject: str) -> str:

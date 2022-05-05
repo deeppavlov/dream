@@ -145,12 +145,14 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      dff-book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
                      dff-grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-random fact-retrieval hypothesis-scorer dff-intent-responder-skill badlisted-words \
+                     fact-random fact-retrieval dff-intent-responder-skill badlisted-words \
                      dff-gossip-skill dff-wiki-skill topic-recommendation dff-science-skill personal-info-skill \
                      user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill \
-                     meta-script-skill spelling-preprocessing dff-gaming-skill \
+                     meta-script-skill spelling-preprocessing dff-gaming-skill dialogpt \
                      dff-music-skill dff-bot-persona-skill entity-detection midas-predictor human-goals-detector \
-                     goals-tracker; do
+                     goals-tracker dff-book-recommendation-skill dff-get-book-information-skill dff-have-fun-skill \
+                     dff-series-recommendation-skill dff-share-problems-skill dff-test-bot-skill \
+                     dff-travel-recommendation-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

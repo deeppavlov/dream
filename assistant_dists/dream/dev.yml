@@ -14,6 +14,7 @@ services:
   spacy-nounphrases:
     volumes:
       - "./annotators/spacy_nounphrases:/src"
+      - "./common:/src/common"
     ports:
       - 8006:8006
   dff-program-y-skill:
@@ -322,11 +323,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8100:8100
-  hypothesis-scorer:
-    volumes:
-      - "./annotators/hypothesis_scorer:/src"
-    ports:
-      - 8110:8110
   dff-funfact-skill:
     volumes:
       - "./skills/dff_funfact_skill:/src"
@@ -452,6 +448,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8130:8130
+  dialogpt:
+    volumes:
+      - "./services/dialogpt:/src"
+    ports:
+      - 8125:8125
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

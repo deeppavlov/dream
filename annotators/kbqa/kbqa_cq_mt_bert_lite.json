@@ -38,7 +38,7 @@
       {
         "class_name": "rel_ranking_infer",
         "id": "rel_r_inf",
-        "ranker": {"config_path": "{CONFIGS_PATH}/classifiers/rel_ranking_bert_lite.json"},
+        "ranker": {"config_path": "/src/rel_ranking_bert_en.json"},
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "rel_q2name_filename": "wiki_dict_properties.pickle",
         "rels_to_leave": 40

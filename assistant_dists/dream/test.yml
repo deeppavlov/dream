@@ -101,9 +101,6 @@ services:
   dff-bot-persona-skill:
   dff-funfact-skill:
   dff-gossip-skill:
-  hypothesis-scorer:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-wiki-skill:
   topic-recommendation:
   user-persona-extractor:
@@ -126,7 +123,8 @@ services:
   midas-predictor:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  # human-goals-annotator:
-  # что тут писать и писать ли?
+  dialogpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   dff-template-skill:
 version: '3.7'

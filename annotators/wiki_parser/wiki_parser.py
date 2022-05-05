@@ -278,6 +278,21 @@ def find_rels(entity: str, direction: str, rel_type: str = "no_type", save: bool
     return rels
 
 
+def find_entities_rels(entity1: str, entity2: str) -> List[str]:
+    rels = []
+    query = [f"{prefixes['entity']}/{entity1}", "", ""]
+    triplets, c = document.search_triples(*query)
+    for triplet in triplets:
+        if triplet[2].split("/")[-1] == entity2:
+            rels.append(triplet[1].split("/")[-1])
+    query = [f"{prefixes['entity']}/{entity2}", "", ""]
+    triplets, c = document.search_triples(*query)
+    for triplet in triplets:
+        if triplet[2].split("/")[-1] == entity1:
+            rels.append(triplet[1].split("/")[-1])
+    return rels
+
+
 def find_object(entity: str, rel: str, direction: str) -> List[str]:
     objects = []
     if not direction:
@@ -747,6 +762,15 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
                 sentry_sdk.capture_exception(e)
                 log.exception(e)
             wiki_parser_output.append(top_people_list)
+        elif parser_info == "find_entities_rels":
+            rels = []
+            try:
+                rels = find_entities_rels(*query)
+            except Exception as e:
+                log.info("Wrong arguments are passed to wiki_parser")
+                sentry_sdk.capture_exception(e)
+                log.exception(e)
+            wiki_parser_output.append(rels)
         elif parser_info == "find_connection":
             conn_info = []
             try:

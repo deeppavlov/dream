@@ -431,16 +431,7 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8100
       - PORT=8100
-
-  hypothesis-scorer:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8110
-      - PORT=8110
-
+  
   dff-funfact-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -593,16 +584,15 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8121
       - PORT=8121
-
-  # human-goals-annotator:
-  #   command: [ "nginx", "-g", "daemon off;" ]
-  #   build:
-  #     context: dp/proxy/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - PROXY_PASS=dream.deeppavlov.ai:???? # какой-то порт
-  #     - PORT=????  # какой-то порт
-
+  
+  dialogpt:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8125
+  
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
