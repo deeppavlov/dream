@@ -1,2 +1,2 @@
-inflect==5.3.0
-spacy==3.0.6
+click==7.1.2
+nltk==3.5
