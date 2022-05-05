@@ -149,12 +149,11 @@ services:
       context: ./annotators/IntentCatcherTransformers/
       args:
         SERVICE_PORT: 8014
-        INTENT_PHRASES_PATH: intent_phrases.json
-        INTENTS_MODEL_PATH: intents_model_v0
-        TRANSFORMERS_MODEL_PATH: distilbert-base-uncased
+        CONFIG_NAME: intents_model_dp_config.json
     command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
