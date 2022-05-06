@@ -44,6 +44,7 @@ def extract_good_entities(preds, sentences):
 
         for ent in entities_for_sent:
             ent_text = ent["text"]
+            ent_text = " ".join([ent_word[0].capitalize() + ent_word[1:] for ent_word in ent_text.split()])
             # remove everything except of letters, digitals, spaces and -
             ent_text = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", ent_text)
             ent_text = DOUBLE_SPACES.sub(" ", ent_text).strip()
