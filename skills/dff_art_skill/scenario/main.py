@@ -69,7 +69,7 @@ flows = {
             RESPONSE: "I also like pictures of {user_fav_painter}. What kind of paintings do you like to draw: "
             "landscapes, portraits or something else?",
             PROCESSING: {
-                "entity_extraction": int_prs.entities(user_fav_painter="wiki:Q1028181"),
+                "entity_extraction": int_prs.entities(user_fav_painter=["wiki:Q1028181", "tag:person"]),
                 "slot_filling": int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {lbl.forward(): cnd.true()},
