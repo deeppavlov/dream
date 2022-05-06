@@ -620,7 +620,7 @@ def find_top_triplets(entity, entity_substr, pos=None, token_conf=None, conf=Non
             triplets["token_conf"] = token_conf
         if conf is not None:
             triplets["conf"] = conf
-        if entity_substr in entity_label.lower():
+        if entity_substr.lower() in entity_label.lower():
             entity_substr = entity_label
         triplets_info[entity_substr] = triplets
     return triplets_info
