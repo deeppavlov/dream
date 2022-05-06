@@ -14,6 +14,7 @@ COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 COPY . /src
+WORKDIR /src
 
 RUN python -m deeppavlov install ${CONFIG_NAME}
 RUN python -m deeppavlov download ${CONFIG_NAME}
