@@ -49,6 +49,7 @@ def get_result(request, what_to_annotate):
     logger.info(f"annotating: {what_to_annotate}, input (the last utterances): {last_utts}")
 
     utts_list = []
+    utts_list_init = []
     utts_nums = []
     last_utt_starts = []
     for n, hist_utt in enumerate(last_utts):
@@ -71,6 +72,7 @@ def get_result(request, what_to_annotate):
                 utts_list.append(concat_utt.lower())
             else:
                 utts_list.append(concat_utt)
+            utts_list_init.append(concat_utt)
             utts_nums.append(n)
 
     utt_entities_batch = [{} for _ in last_utts]
@@ -91,14 +93,23 @@ def get_result(request, what_to_annotate):
         ) = entity_detection(utts_list)
         logger.info(f"entity_substr_batch {entity_substr_batch} finegrained_tags_batch {finegrained_tags_batch}")
 
-        for entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list, last_utt_start, num in zip(
-            entity_substr_batch, tags_batch, finegrained_tags_batch, entity_offsets_batch, last_utt_starts, utts_nums
+        for entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list, last_utt_start, uttr, num in zip(
+            entity_substr_batch,
+            tags_batch,
+            finegrained_tags_batch,
+            entity_offsets_batch,
+            last_utt_starts,
+            utts_list_init,
+            utts_nums,
         ):
             utt_entities = {}
             for entity, tag, finegrained_tag, (start_offset, end_offset) in zip(
                 entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list
             ):
-                if entity not in stopwords and len(entity) > 2 and start_offset >= last_utt_start:
+                entity_init = uttr[start_offset:end_offset]
+                if entity_init.lower() == entity:
+                    entity = entity_init
+                if entity.lower() not in stopwords and len(entity) > 2 and start_offset >= last_utt_start:
                     entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                     entity = DOUBLE_SPACES.sub(" ", entity).strip()
                     if finegrained_tag[0][0] > 0.5:
