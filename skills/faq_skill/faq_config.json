@@ -17,8 +17,8 @@
       "valid"
     ],
     "split_proportions": [
-      0.9,
-      0.1
+      0.8,
+      0.2
     ]
   },
   "chainer": {
@@ -57,6 +57,7 @@
         ]
       },
       {
+        "id": "my_one_hotter",
         "in": [
           "y_ids"
         ],
@@ -71,6 +72,8 @@
         "class_name": "torch_transformers_classifier",
         "n_classes": "#classes_vocab.len",
         "return_probas": true,
+        "one_hot_labels": true,
+        "multilabel": true,
         "pretrained_bert": "{TRANSFORMER}",
         "save_path": "{MODEL_PATH}/model",
         "load_path": "{MODEL_PATH}/model",
@@ -98,7 +101,17 @@
           "y_pred_ids"
         ],
         "class_name": "proba2labels",
+        "max_proba": false,
         "confidence_threshold": 0.5
+      },
+      {
+        "ref": "my_one_hotter",
+        "in": [
+          "y_pred_ids"
+        ],
+        "out": [
+          "y_pred_onehot"
+        ]
       },
       {
         "in": [
@@ -122,15 +135,42 @@
       }
     ],
     "out": [
-      "y_pred_labels"
+      "y_pred_labels",
+      "y_pred_probas"
     ]
   },
   "train": {
     "epochs": 5,
     "batch_size": 64,
     "metrics": [
-      "accuracy",
-      "f1_macro"
+      {
+        "name": "accuracy",
+        "inputs": [
+          "y",
+          "y_pred_labels"
+        ]
+      },
+      {
+        "name": "f1_weighted",
+        "inputs": [
+          "y_onehot",
+          "y_pred_onehot"
+        ]
+      },
+      {
+          "name": "f1_macro",
+          "inputs": [
+            "y_onehot",
+            "y_pred_onehot"
+          ]
+      },
+      {
+        "name": "roc_auc",
+        "inputs": [
+          "y_onehot",
+          "y_pred_probas"
+        ]
+      }
     ],
     "validation_patience": 5,
     "val_every_n_epochs": 1,
