@@ -3,7 +3,6 @@ import os
 from typing import List
 
 import sentry_sdk
-import torch
 from deeppavlov import build_model
 from deeppavlov.core.commands.utils import parse_config, expand_path
 from flask import Flask, jsonify, request
