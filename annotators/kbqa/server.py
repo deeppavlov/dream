@@ -54,6 +54,7 @@ def respond():
             kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_types]
         else:
             kbqa_input = [sanitized_questions]
+    logger.info(f"kbqa_input: {kbqa_input}")
     default_resp = {"qa_system": "kbqa", "answer": "", "confidence": 0.0}
     out_res = [default_resp for _ in questions]
     try:
@@ -71,7 +72,7 @@ def respond():
                             answer, conf = res[cnt_fnd]
                             out_res.append({"qa_system": "kbqa", "answer": answer, "confidence": float(conf)})
                             cnt_fnd += 1
-        logger.info(f"kbqa exec time: {time.time() - st_time}")
+        logger.info(f"kbqa exec time: {time.time() - st_time} out_res {out_res}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
