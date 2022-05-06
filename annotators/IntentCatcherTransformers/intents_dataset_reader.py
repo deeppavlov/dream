@@ -4,7 +4,6 @@ from random import shuffle
 from typing import OrderedDict, Optional
 
 import json
-import pandas as pd
 from deeppavlov.core.data.dataset_reader import DatasetReader
 from xeger import Xeger
 
