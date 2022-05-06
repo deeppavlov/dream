@@ -11,6 +11,7 @@ import common.universal_templates as universal_templates
 import common.dff.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
+from .facts_utils import provide_facts_request
 
 logger = logging.getLogger(__name__)
 
@@ -280,3 +281,7 @@ def set_conf_and_can_cont_by_universal_policy(ctx: Context, actor: Actor):
 
     int_ctx.set_can_continue(ctx, actor, can_continue_flag)
     int_ctx.set_confidence(ctx, actor, confidence)
+
+
+def facts(ctx, actor):
+    return provide_facts_request(ctx, actor)

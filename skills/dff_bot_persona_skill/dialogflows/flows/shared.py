@@ -9,8 +9,8 @@ import sentry_sdk
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
 
-ENTITY_LINKING_URL = os.getenv("ENTITY_LINKING_URL")
-WIKIDATA_URL = os.getenv("WIKIDATA_URL")
+ENTITY_LINKING_URL = os.getenv("DP_ENTITY_LINKING_URL")
+WIKIDATA_URL = os.getenv("DP_WIKIDATA_URL")
 assert ENTITY_LINKING_URL, ENTITY_LINKING_URL
 assert WIKIDATA_URL, WIKIDATA_URL
 

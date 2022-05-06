@@ -1,9 +1,23 @@
+# Copyright 2017 Neural Networks and Deep Learning lab, MIPT
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import re
 import random
 from logging import getLogger
 from typing import Tuple, List, Union
 
-from bert_dp.tokenization import FullTokenizer
+from transformers import AutoTokenizer
 
 from deeppavlov.core.commands.utils import expand_path
 from deeppavlov.core.common.registry import register
@@ -14,9 +28,10 @@ from deeppavlov.models.preprocessors.mask import Mask
 log = getLogger(__name__)
 
 
-@register("bert_ner_preprocessor")
-class BertNerPreprocessor(Component):
-    """Takes tokens and splits them into bert subtokens, encodes subtokens with their indices.
+@register("torch_transformers_ner_preprocessor")
+class TorchTransformersNerPreprocessor(Component):
+    """
+    Takes tokens and splits them into bert subtokens, encodes subtokens with their indices.
     Creates a mask of subtokens (one for the first subtoken, zero for the others).
 
     If tags are provided, calculates tags for subtokens.
@@ -56,11 +71,10 @@ class BertNerPreprocessor(Component):
         self.max_subword_length = max_subword_length
         self.subword_mask_mode = subword_mask_mode
         vocab_file = str(expand_path(vocab_file))
-        self.tokenizer = FullTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
+        self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         self.token_masking_prob = token_masking_prob
 
     def __call__(self, tokens: Union[List[List[str]], List[str]], tags: List[List[str]] = None, **kwargs):
-
         tokens_offsets_batch = [[] for _ in tokens]
         if isinstance(tokens[0], str):
             tokens_batch = []
@@ -74,7 +88,6 @@ class BertNerPreprocessor(Component):
                 tokens_batch.append(tokens_list)
                 tokens_offsets_batch.append(tokens_offsets_list)
             tokens = tokens_batch
-
         subword_tokens, subword_tok_ids, startofword_markers, subword_tags = [], [], [], []
         for i in range(len(tokens)):
             toks = tokens[i]
@@ -103,6 +116,7 @@ class BertNerPreprocessor(Component):
                 f" token ids({len(subword_tok_ids[-1])}) and ys({len(ys)})"
                 f" for tokens = `{toks}` should match"
             )
+
         subword_tok_ids = zero_pad(subword_tok_ids, dtype=int, padding=0)
         startofword_markers = zero_pad(startofword_markers, dtype=int, padding=0)
         attention_mask = Mask()(subword_tokens)
@@ -126,7 +140,7 @@ class BertNerPreprocessor(Component):
     def _ner_bert_tokenize(
         tokens: List[str],
         tags: List[str],
-        tokenizer: FullTokenizer,
+        tokenizer: AutoTokenizer,
         max_subword_len: int = None,
         mode: str = None,
         subword_mask_mode: str = "first",
@@ -159,3 +173,102 @@ class BertNerPreprocessor(Component):
         startofword_markers.append(0)
         tags_subword.append("X")
         return tokens_subword, startofword_markers, tags_subword
+
+
+@register("torch_transformers_el_tags_preprocessor")
+class TorchTransformersElTagPreprocessor(Component):
+    def __init__(
+        self,
+        vocab_file: str,
+        do_lower_case: bool = False,
+        max_seq_length: int = 512,
+        max_subword_length: int = None,
+        token_masking_prob: float = 0.0,
+        return_offsets: bool = False,
+        **kwargs,
+    ):
+        self._re_tokenizer = re.compile(r"[\w']+|[^\w ]")
+
+        self.max_seq_length = max_seq_length
+        self.max_subword_length = max_subword_length
+        vocab_file = str(expand_path(vocab_file))
+        self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
+        self.token_masking_prob = token_masking_prob
+
+    def __call__(self, tokens_batch, entity_offsets_batch, mentions_batch=None, pages_batch=None):
+        token_ids_batch, attention_mask_batch, subw_tokens_batch, entity_subw_indices_batch = [], [], [], []
+        if mentions_batch is None:
+            mentions_batch = [[] for _ in tokens_batch]
+        if pages_batch is None:
+            pages_batch = [[] for _ in tokens_batch]
+
+        for tokens, entity_offsets_list, mentions_list, pages_list in zip(
+            tokens_batch, entity_offsets_batch, mentions_batch, pages_batch
+        ):
+            tokens_list = []
+            tokens_offsets_list = []
+            for elem in re.finditer(self._re_tokenizer, tokens):
+                tokens_list.append(elem[0])
+                tokens_offsets_list.append((elem.start(), elem.end()))
+
+            entity_indices_list = []
+            for start_offset, end_offset in entity_offsets_list:
+                entity_indices = []
+                for ind, (start_tok_offset, end_tok_offset) in enumerate(tokens_offsets_list):
+                    if start_tok_offset >= start_offset and end_tok_offset <= end_offset:
+                        entity_indices.append(ind)
+                if not entity_indices:
+                    for ind, (start_tok_offset, end_tok_offset) in enumerate(tokens_offsets_list):
+                        if start_tok_offset >= start_offset:
+                            entity_indices.append(ind)
+                            break
+                entity_indices_list.append(set(entity_indices))
+
+            ind = 0
+            subw_tokens_list = ["[CLS]"]
+            entity_subw_indices_list = [[] for _ in entity_indices_list]
+            for n, tok in enumerate(tokens_list):
+                subw_tok = self.tokenizer.tokenize(tok)
+                subw_tokens_list += subw_tok
+                for j in range(len(entity_indices_list)):
+                    if n in entity_indices_list[j]:
+                        for k in range(len(subw_tok)):
+                            entity_subw_indices_list[j].append(ind + k + 1)
+                ind += len(subw_tok)
+            subw_tokens_list.append("[SEP]")
+            subw_tokens_batch.append(subw_tokens_list)
+
+            for n in range(len(entity_subw_indices_list)):
+                entity_subw_indices_list[n] = sorted(entity_subw_indices_list[n])
+            entity_subw_indices_batch.append(entity_subw_indices_list)
+
+        token_ids_batch = [
+            self.tokenizer.convert_tokens_to_ids(subw_tokens_list) for subw_tokens_list in subw_tokens_batch
+        ]
+        token_ids_batch = zero_pad(token_ids_batch, dtype=int, padding=0)
+        attention_mask_batch = Mask()(subw_tokens_batch)
+
+        return token_ids_batch, attention_mask_batch, entity_subw_indices_batch
+
+
+@register("torch_transformers_el_tags_postprocessor")
+class TorchTransformersElTagPostprocessor(Component):
+    def __init__(self, tags_file, **kwargs):
+        tags_file = str(expand_path(tags_file))
+        self.tags_list = []
+        with open(tags_file, "r") as fl:
+            lines = fl.readlines()
+            for line in lines:
+                self.tags_list.append(line.strip().split()[0])
+
+    def __call__(self, entity_substr_batch, probas_batch):
+        ent_tag_proba_batch = []
+        for entity_substr_list, probas_list in zip(entity_substr_batch, probas_batch):
+            ent_tag_proba_list = []
+            if entity_substr_list:
+                for probas in probas_list:
+                    tags_with_probas = [(float(proba), self.tags_list[n]) for n, proba in enumerate(probas)]
+                    tags_with_probas = sorted(tags_with_probas, key=lambda x: x[0], reverse=True)
+                    ent_tag_proba_list.append(tags_with_probas[:3])
+            ent_tag_proba_batch.append(ent_tag_proba_list)
+        return ent_tag_proba_batch

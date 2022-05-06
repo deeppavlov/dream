@@ -101,9 +101,6 @@ services:
   dff-bot-persona-skill:
   dff-funfact-skill:
   dff-gossip-skill:
-  hypothesis-scorer:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-wiki-skill:
   topic-recommendation:
   user-persona-extractor:
@@ -124,6 +121,9 @@ services:
   dff-coronavirus-skill:
   dff-short-story-skill:
   midas-predictor:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   dff-template-skill:

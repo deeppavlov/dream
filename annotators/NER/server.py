@@ -43,7 +43,8 @@ def extract_good_entities(preds, sentences):
         good_entities_for_sent = []
 
         for ent in entities_for_sent:
-            ent_text = ent["text"].lower()
+            ent_text = ent["text"]
+            ent_text = " ".join([ent_word[0].capitalize() + ent_word[1:] for ent_word in ent_text.split()])
             # remove everything except of letters, digitals, spaces and -
             ent_text = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", ent_text)
             ent_text = DOUBLE_SPACES.sub(" ", ent_text).strip()
@@ -56,6 +57,7 @@ def extract_good_entities(preds, sentences):
             is_long_enough = len(ent_text) > 2
             is_not_banned = not re.match(BANNED_ENTITIES, ent_text)
             if is_not_stopword and is_not_banned and is_long_enough:
+                ent["text"] = ent_text
                 good_entities_for_sent.append(deepcopy(ent))
 
         good_preds.append(good_entities_for_sent)
@@ -64,7 +66,14 @@ def extract_good_entities(preds, sentences):
 
 def get_predictions_for_list_sentences(sentences):
     sents = [word_tokenize(sent.lower()) for sent in sentences]
+    sents_upper = [word_tokenize(sent) for sent in sentences]
     preds = ner.predict(sents)
+    for i in range(len(preds)):
+        sent_upper = sents_upper[i]
+        for j in range(len(preds[i])):
+            ent_upper = " ".join(sent_upper[preds[i][j]["start_pos"] : preds[i][j]["end_pos"]])
+            if ent_upper.lower() == preds[i][j]["text"]:
+                preds[i][j]["text"] = ent_upper
     # each sample is a list of sentences of current utterance
     # so, preds is a list of length = number of sents in utterances
     # each element of preds is a list of entities.

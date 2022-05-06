@@ -379,6 +379,7 @@ topic_config = {
                         "answer": "Drawing gives you a mean to self-reflect and externalize your emotions.",
                     }
                 ],
+                "conf": 0.99,
             },
             {
                 "utt": ["What kind of paintings do you like to draw: landscapes, portraits or something else?"],
