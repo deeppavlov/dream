@@ -45,6 +45,8 @@ services:
   sentrewrite:
   dff-intent-responder-skill:
   intent-catcher:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=6
   badlisted-words:

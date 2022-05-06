@@ -153,7 +153,7 @@ services:
     command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
