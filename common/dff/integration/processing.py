@@ -1,8 +1,9 @@
 import logging
 
 from df_engine.core import Context, Actor
-
 import common.constants as common_constants
+from common.wiki_skill import extract_entity
+from .facts_utils import provide_facts_response
 from . import context
 
 
@@ -20,6 +21,37 @@ def save_slots_to_ctx(slots: dict):
         return ctx
 
     return save_slots_to_ctx_processing
+
+
+def entities(**kwargs):
+    slot_info = list(kwargs.items())
+
+    def extract_entities(
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+    ) -> Context:
+        for slot_name, slot_types in slot_info:
+            if isinstance(slot_types, str):
+                extracted_entity = extract_entity(ctx, slot_types)
+                if extracted_entity:
+                    ctx = save_slots_to_ctx({slot_name: extracted_entity})(ctx, actor)
+            elif isinstance(slot_types, list):
+                for slot_type in slot_types:
+                    extracted_entity = extract_entity(ctx, slot_type)
+                    if extracted_entity:
+                        ctx = save_slots_to_ctx({slot_name: extracted_entity})(ctx, actor)
+        return ctx
+
+    return extract_entities
+
+
+def fact_provider(page_source, wiki_page):
+    def response(ctx: Context, actor: Actor, *args, **kwargs):
+        return provide_facts_response(ctx, actor, page_source, wiki_page)
+
+    return response
 
 
 def fill_responses_by_slots():

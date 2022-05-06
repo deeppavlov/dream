@@ -363,9 +363,6 @@ def respond():
             logger.info("Question is not classified as factoid.")
             response = ""
             confidence = 0.0
-
-        if confidence == 1.0:
-            confidence = 0.99
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
