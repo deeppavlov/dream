@@ -57,6 +57,7 @@ def extract_good_entities(preds, sentences):
             is_long_enough = len(ent_text) > 2
             is_not_banned = not re.match(BANNED_ENTITIES, ent_text)
             if is_not_stopword and is_not_banned and is_long_enough:
+                ent["text"] = ent_text
                 good_entities_for_sent.append(deepcopy(ent))
 
         good_preds.append(good_entities_for_sent)
