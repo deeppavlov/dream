@@ -7,8 +7,21 @@ ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-RUN sed '1d' /ofa/requirements.txt | xargs -I {} pip install {}
-RUN pip install --use-feature=in-tree-build /content/fairseq
+RUN python -m pip install --upgrade pip
+
+RUN apt update
+RUN apt install build-essential -y
+
+RUN conda remove PyYAML
+
+COPY ./ofa /src/ofa
+RUN sed '1d' /src/ofa/requirements.txt | xargs -I {} pip install {}
+
+COPY ./fairseq /src/fairseq
+RUN pip install --use-feature=in-tree-build /src/fairseq
+
+COPY ./requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
 
 COPY . /src
 

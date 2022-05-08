@@ -1,13 +1,14 @@
 import sys
 import os
-sys.path.append('/ofa')
+sys.path.append('/src/fairseq/fairseq')
+sys.path.append('/src/ofa')
 
 import torch
 from torchvision import transforms
 import numpy as np
-from fairseq import utils,tasks
+from fairseq import utils, tasks
 from fairseq import checkpoint_utils
-from utils.eval_utils import eval_step
+from ofa.utils.eval_utils import eval_step
 from tasks.mm_tasks.caption import CaptionTask
 from models.ofa import OFAModel
 from PIL import Image
@@ -19,7 +20,7 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 # Register caption task
-tasks.register_task('caption',CaptionTask)
+tasks.register_task('caption', CaptionTask)
 
 # turn on cuda if GPU is available
 use_cuda = torch.cuda.is_available()
@@ -80,7 +81,7 @@ def encode_text(text, length=None, append_bos=False, append_eos=False):
 
 
 # Construct input for caption task
-def construct_sample(image: Image):
+def construct_sample(image):
     patch_image = patch_resize_transform(image).unsqueeze(0)
     patch_mask = torch.tensor([True])
     src_text = encode_text(" what does the image describe?", append_bos=True, append_eos=True).unsqueeze(0)
