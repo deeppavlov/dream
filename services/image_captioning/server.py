@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append('/src/fairseq/fairseq')
+
 sys.path.append('/src/ofa')
 
 import torch
@@ -8,7 +8,8 @@ from torchvision import transforms
 import numpy as np
 from fairseq import utils, tasks
 from fairseq import checkpoint_utils
-from ofa.utils.eval_utils import eval_step
+
+from utils.eval_utils import eval_step
 from tasks.mm_tasks.caption import CaptionTask
 from models.ofa import OFAModel
 from PIL import Image
@@ -27,11 +28,9 @@ use_cuda = torch.cuda.is_available()
 # use fp16 only when GPU is available
 use_fp16 = False
 
-os.chdir('/ofa')
-
-overrides={"bpe_dir":"utils/BPE", "eval_cider":False, "beam":5, "max_len_b":16, "no_repeat_ngram_size":3, "seed":7}
+overrides={"bpe_dir":"/src/ofa/utils/BPE", "eval_cider":False, "beam":5, "max_len_b":16, "no_repeat_ngram_size":3, "seed":7}
 models, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-        utils.split_paths('checkpoints/caption.pt'),
+        utils.split_paths('/src/ofa/checkpoints/caption.pt'),
         arg_overrides=overrides
     )
 
