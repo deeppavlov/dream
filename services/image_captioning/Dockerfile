@@ -26,12 +26,13 @@ COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN apt-get install wget -y
+RUN pip install gdown
+
+RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models 
+RUN gdown 1WBQl0WlzvdctslJyLNgedYpRrWAZC69X -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
+#RUN wget https://ofa-silicon.oss-us-west-1.aliyuncs.com/checkpoints/caption_large_best_clean.pt -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
 
 COPY . /src
-
-RUN mkdir /src/ofa/checkpoints
-RUN wget https://ofa-silicon.oss-us-west-1.aliyuncs.com/checkpoints/caption_large_best_clean.pt -O /src/ofa/checkpoints/caption.pt
-
 
 HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 

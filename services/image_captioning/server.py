@@ -30,7 +30,7 @@ use_fp16 = False
 
 overrides={"bpe_dir":"/src/ofa/utils/BPE", "eval_cider":False, "beam":5, "max_len_b":16, "no_repeat_ngram_size":3, "seed":7}
 models, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-        utils.split_paths('/src/ofa/checkpoints/caption.pt'),
+        utils.split_paths('/opt/conda/lib/python3.7/site-packages/data/models/caption.pt'),
         arg_overrides=overrides
     )
 
@@ -121,7 +121,7 @@ def respond():
 
     img_path = request.json.get("text", [])
     try:
-        image = Image.open(img_path)
+        image = Image.open(img_path[0])
 
         # Construct input sample & preprocess for GPU if cuda available
         sample = construct_sample(image)
