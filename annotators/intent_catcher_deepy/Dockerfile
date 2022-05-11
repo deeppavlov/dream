@@ -1,5 +1,11 @@
 FROM tensorflow/tensorflow:1.15.2-gpu-py3
 
+RUN apt-key del 7fa2af80  && \
+    rm -f /etc/apt/sources.list.d/cuda*.list && \
+    curl https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb \
+    -o cuda-keyring_1.0-1_all.deb && \
+    dpkg -i cuda-keyring_1.0-1_all.deb \
+
 EXPOSE 3007:3007
 
 WORKDIR /
