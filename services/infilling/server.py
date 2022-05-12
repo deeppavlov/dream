@@ -61,11 +61,11 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def respond():
     st_time = time.time()
 
-    text = request.json.get("text", [])
-    logger.info(f"Text: {text}")
+    texts = request.json.get("text", [])
+    logger.info(f"Text: {texts}")
     try:
         output = []
-        for txt in text:
+        for txt in texts:
             inputs = tokenize_util.encode(txt, tokenizer)
             _blank_id = tokenize_util.encode(' _', tokenizer)[0]
             flag = 0
@@ -80,7 +80,7 @@ def respond():
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        output = [[]] * len(text)
+        output = [[]] * len(texts)
 
     total_time = time.time() - st_time
     logger.info(f"infilling exec time: {total_time:.3f}s")
