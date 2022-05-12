@@ -1168,7 +1168,9 @@ services:
       args:
         SERVICE_PORT: 8122
         SERVICE_NAME: human_goals_detector
-      context: ./annotators/human_goals_detector/
+        SRC_DIR: annotators/human_goals_detector
+      context: .
+      dockerfile: annotators/human_goals_detector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8122
     environment:
       - FLASK_APP=server
@@ -1185,7 +1187,9 @@ services:
       args:
         SERVICE_PORT: 8131
         SERVICE_NAME: goals_tracker
-      context: ./annotators/goals_tracker/
+        SRC_DIR: annotators/goals_tracker
+      context: .
+      dockerfile: annotators/goals_tracker/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
     environment:
       - FLASK_APP=server
