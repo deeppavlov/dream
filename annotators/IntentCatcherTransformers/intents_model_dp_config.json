@@ -103,14 +103,14 @@
           "confidence_threshold": 0.5
         },        
         {
-            "ref": "my_one_hotter",
-            "in": [
-              "y_pred_ids"
-            ],
-            "out": [
-              "y_pred_onehot"
-            ]
-          },
+          "ref": "my_one_hotter",
+          "in": [
+            "y_pred_ids"
+          ],
+          "out": [
+            "y_pred_onehot"
+          ]
+        },
         {
           "in": [
             "y_pred_ids"
