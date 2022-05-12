@@ -12,7 +12,7 @@
       {
         "class_name": "api_requester",
         "id": "linker_entities",
-        "url": "http://entity-linking:8075/model",
+        "url": "{ENTITY_LINKING_URL}",
         "out": ["entity_ids"],
         "param_names": ["entity_substr", "template_found"]
       },
@@ -90,7 +90,8 @@
       "MODELS_PATH": "{ROOT_PATH}/models",
       "BERT_PATH": "{DOWNLOADS_PATH}/bert_models_kbqa/cased_L-12_H-768_A-12",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
-      "MT_BERT_PATH": "{MODELS_PATH}/mt_bert_kbqa"
+      "MT_BERT_PATH": "{MODELS_PATH}/mt_bert_kbqa",
+      "ENTITY_LINKING_URL": "http://entity-linking:8075/model"
     },
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
