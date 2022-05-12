@@ -174,9 +174,7 @@ def turn_on_skills(detected_topics, catched_intents, user_uttr_text, prev_bot_ut
             for pattern in SKILL_TRIGGERS[skill_name]["previous_bot_patterns"]:
                 if re.search(pattern, prev_bot_uttr_text):
                     skills.append(skill_name)
-            if set(SKILL_TRIGGERS[skill_name]["cobot_dialogact_topics"]) & detected_topics:
-                skills.append(skill_name)
-            if set(SKILL_TRIGGERS[skill_name]["cobot_topics"]) & detected_topics:
+            if set(SKILL_TRIGGERS[skill_name]["detected_topics"]) & detected_topics:
                 skills.append(skill_name)
             if set(SKILL_TRIGGERS[skill_name]["intents"]) & catched_intents:
                 skills.append(skill_name)
