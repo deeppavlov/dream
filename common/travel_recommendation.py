@@ -11,4 +11,4 @@ with open('common/places2visit.json', 'r') as f:
 # where (i can/can i) vacation
 # where to vacation
 
-TRAVEL_RECOMMENDATION_PATTERN = re.compile(r"\b(where.*?(vacation|holiday|travel)|recommend.*?(country|vacation|holiday|travel))", re.IGNORECASE)
+TRAVEL_RECOMMENDATION_PATTERN = re.compile(r"\b(where.*?(vacation|holiday|travel|weekend)|(recommend|suggest).*?(country|vacation|holiday|travel|weekend|place to (go|visit)))", re.IGNORECASE)

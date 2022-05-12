@@ -16,7 +16,7 @@ with open('common/series.json', 'r') as f:
     
 
 
-RECOMMEND_SERIES_PATTERN = re.compile(r"\b(recommend .*? (series|serial)|what .*? (series|serial) would you suggest|what .*? (series|serial) should i|what .*? (series|serial) would you recommend)", re.IGNORECASE)
+RECOMMEND_SERIES_PATTERN = re.compile(r"\b((recommend|suggest).*? (series|serial)|what .*? (series|serial) would you (suggest|recommend)|what .*? (series|serial) should i)", re.IGNORECASE)
 
 MENTIONS_KNOWN_SERIES_PATTERN = re.compile(r"\b(" + ("|".join(series) + ")"), re.IGNORECASE)
 
