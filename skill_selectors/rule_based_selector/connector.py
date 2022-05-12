@@ -7,9 +7,11 @@ from typing import Dict, Callable
 
 import sentry_sdk
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT
 from common.emotion import if_turn_on_emotion
-from common.link import get_all_linked_to_skills, get_linked_to_dff_skills
+from common.gossip import check_is_celebrity_mentioned
+from common.link import get_linked_to_skills, get_previously_active_skill
+from common.movies import extract_movies_names_from_annotations
+from common.response_selection import UNPREDICTABLE_SKILLS
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, GREETING_QUESTIONS_TEXTS
@@ -23,43 +25,11 @@ from common.utils import (
 )
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news, if_switch_test_skill
-from common.response_selection import UNPREDICTABLE_SKILLS
-from common.movies import extract_movies_names_from_annotations
 
-from common.gossip import check_is_celebrity_mentioned
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
-
-def get_linked_to_skills(dialog, linked_to_skill_names, prev_active_skill):
-    # turn on skills linked to in the previous bot utterance (of course, it's the only one skill)
-    result = []
-    for skill_name in linked_to_skill_names:
-        result.append(skill_name)
-    result.extend(
-        get_linked_to_dff_skills(
-            dialog["human"]["attributes"].get("dff_shared_state", {}),
-            len(dialog["human_utterances"]),
-            prev_active_skill,
-        )
-    )
-    return result
-
-
-def get_previously_active_skill(prev_user_uttr_hyp, prev_active_skill):
-    # turn on prev active skill if it returned not `CAN_NOT_CONTINUE`
-    result = []
-    for hyp in prev_user_uttr_hyp:
-        if hyp.get("can_continue", CAN_NOT_CONTINUE) in {
-            CAN_CONTINUE_SCENARIO,
-            MUST_CONTINUE,
-            CAN_CONTINUE_PROMPT,
-        }:
-            if hyp["skill_name"] == prev_active_skill:
-                result.append(hyp["skill_name"])
-    return result
 
 
 class RuleBasedSkillSelectorConnector:
@@ -87,13 +57,8 @@ class RuleBasedSkillSelectorConnector:
             is_factoid = get_factoid(user_uttr).get("is_factoid", 0.0) > 0.96
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
-            prev_user_uttr_hyp = (
-                dialog["human_utterances"][-2]["hypotheses"] if len(dialog["human_utterances"]) > 1 else []
-            )
-
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
             if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
-            linked_to_skill_names = get_all_linked_to_skills(bot_uttr)
 
             dialog_len = len(dialog["human_utterances"])
 
@@ -128,6 +93,8 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif is_sensitive_topic_and_request(user_uttr):
                 # process user utterance with sensitive content, "safe mode"
+
+                # adding open-domain skills without opinion expression
                 skills_for_uttr.append("dff_program_y_dangerous_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("personal_info_skill")
@@ -136,6 +103,14 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("small_talk_skill")
 
+                if if_lets_chat_about_particular_topic_detected:
+                    skills_for_uttr.append("news_api_skill")
+                if if_special_weather_turn_on(user_uttr, bot_uttr):
+                    skills_for_uttr.append("dff_weather_skill")
+                if is_celebrity_mentioned:
+                    skills_for_uttr.append("dff_gossip_skill")
+
+                # adding closed-domain skills
                 skills_for_uttr += turn_on_skills(
                     detected_topics,
                     intent_catcher_intents,
@@ -149,36 +124,27 @@ class RuleBasedSkillSelectorConnector:
                         "dff_short_story_skill",
                     ],
                 )
-
-                if if_lets_chat_about_particular_topic_detected:
-                    skills_for_uttr.append("news_api_skill")
-
-                if if_special_weather_turn_on(user_uttr, bot_uttr):
-                    skills_for_uttr.append("dff_weather_skill")
-
-                if is_celebrity_mentioned:
-                    skills_for_uttr.append("dff_gossip_skill")
-
-                skills_for_uttr.extend(get_linked_to_skills(dialog, linked_to_skill_names, prev_active_skill))
-                skills_for_uttr.extend(get_previously_active_skill(prev_user_uttr_hyp, prev_active_skill))
+                # adding linked-to skills
+                skills_for_uttr.extend(get_linked_to_skills(dialog))
+                skills_for_uttr.extend(get_previously_active_skill(dialog))
             else:
-                skills_for_uttr.extend(get_linked_to_skills(dialog, linked_to_skill_names, prev_active_skill))
-                skills_for_uttr.extend(get_previously_active_skill(prev_user_uttr_hyp, prev_active_skill))
-
+                # general case
                 if low_priority_intent_detected:
                     skills_for_uttr.append("dff_intent_responder_skill")
-                switch_wiki_skill, _ = if_switch_wiki_skill(user_uttr, bot_uttr)
-                if switch_wiki_skill or switch_wiki_skill_on_news(user_uttr, bot_uttr):
-                    skills_for_uttr.append("dff_wiki_skill")
-                if if_switch_test_skill(user_uttr, bot_uttr):
-                    skills_for_uttr.append("dff_art_skill")
+                # adding open-domain skills
                 skills_for_uttr.append("dff_grounding_skill")
                 skills_for_uttr.append("dff_program_y_skill")
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
-                skills_for_uttr.append("dialogpt")
+                skills_for_uttr.append("dialogpt")  # generative skill
                 skills_for_uttr.append("small_talk_skill")
+                skills_for_uttr.append("knowledge_grounding_skill")
+                skills_for_uttr.append("convert_reddit")
+                skills_for_uttr.append("comet_dialog_skill")
+                skills_for_uttr.append("dff_program_y_wide_skill")
+
+                # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
                     skills_for_uttr.append("dff_friendship_skill")
 
@@ -186,19 +152,33 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("news_api_skill")
 
-                if len(dialog["utterances"]) > 3:
-                    skills_for_uttr.append("knowledge_grounding_skill")
-                    skills_for_uttr.append("convert_reddit")
-                    skills_for_uttr.append("comet_dialog_skill")
-                    skills_for_uttr.append("dff_program_y_wide_skill")
+                switch_wiki_skill, _ = if_switch_wiki_skill(user_uttr, bot_uttr)
+                if switch_wiki_skill or switch_wiki_skill_on_news(user_uttr, bot_uttr):
+                    skills_for_uttr.append("dff_wiki_skill")
+                if if_switch_test_skill(user_uttr, bot_uttr):
+                    skills_for_uttr.append("dff_art_skill")
 
+                # adding factoidQA Skill if user utterance is factoid question
                 if is_factoid:
                     skills_for_uttr.append("factoid_qa")
 
                 if "dummy_skill" in prev_active_skill and len(dialog["utterances"]) > 4:
                     skills_for_uttr.append("dummy_skill_dialog")
 
-                # turn on topical skills based on current detected_topics & pattern matching
+                # if user mentions
+                if is_celebrity_mentioned:
+                    skills_for_uttr.append("dff_gossip_skill")
+                # some special cases
+                if if_special_weather_turn_on(user_uttr, bot_uttr):
+                    skills_for_uttr.append("dff_weather_skill")
+                if if_turn_on_emotion(user_uttr, bot_uttr):
+                    skills_for_uttr.append("emotion_skill")
+                if get_named_locations(user_uttr):
+                    skills_for_uttr.append("dff_travel_skill")
+                if extract_movies_names_from_annotations(user_uttr):
+                    skills_for_uttr.append("dff_movie_skill")
+
+                # adding closed-domain skills
                 skills_for_uttr += turn_on_skills(
                     detected_topics,
                     intent_catcher_intents,
@@ -224,31 +204,18 @@ class RuleBasedSkillSelectorConnector:
                         "dff_short_story_skill",
                     ],
                 )
-
-                # if user mentions
-                if is_celebrity_mentioned:
-                    skills_for_uttr.append("dff_gossip_skill")
-
-                # some special cases
-                if if_special_weather_turn_on(user_uttr, bot_uttr):
-                    skills_for_uttr.append("dff_weather_skill")
-
-                if if_turn_on_emotion(user_uttr, bot_uttr):
-                    skills_for_uttr.append("emotion_skill")
-
-                if get_named_locations(user_uttr):
-                    skills_for_uttr.append("dff_travel_skill")
-
-                if extract_movies_names_from_annotations(user_uttr):
-                    skills_for_uttr.append("dff_movie_skill")
+                # adding linked-to skills
+                skills_for_uttr.extend(get_linked_to_skills(dialog))
+                skills_for_uttr.extend(get_previously_active_skill(dialog))
 
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
-            #  no convert when about coronavirus
-            if "dff_coronavirus_skill" in skills_for_uttr and "convert_reddit" in skills_for_uttr:
-                skills_for_uttr.remove("convert_reddit")
-            if "dff_coronavirus_skill" in skills_for_uttr and "comet_dialog_skill" in skills_for_uttr:
-                skills_for_uttr.remove("comet_dialog_skill")
+            if "dff_coronavirus_skill" in skills_for_uttr:
+                #  no convert & comet when about coronavirus
+                if "convert_reddit" in skills_for_uttr:
+                    skills_for_uttr.remove("convert_reddit")
+                if "comet_dialog_skill" in skills_for_uttr:
+                    skills_for_uttr.remove("comet_dialog_skill")
 
             if len(dialog["utterances"]) > 1:
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
@@ -256,6 +223,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr = ["misheard_asr"]
 
             if "/alexa_" in user_uttr_text:
+                # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
             logger.info(f"Selected skills: {skills_for_uttr}")
