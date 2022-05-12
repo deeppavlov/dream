@@ -558,7 +558,7 @@ def find_entity_by_types(annotations, types_to_find, relations=None):
                 inters = set(type_ids).intersection(types_to_find)
                 conf = triplets["conf"]
                 pos = triplets.get("pos", 5)
-                if inters and conf > 0.6 and pos < 2:
+                if inters and conf > 0.45 and pos < 2:
                     found_entity_wp = entity
                     found_types = list(inters)
                     entity_triplets = {}
