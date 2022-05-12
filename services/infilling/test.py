@@ -24,7 +24,8 @@ def test_respond():
     digits = 2
     result = round_struct(result, digits)
     print(result)
-    assert result['predicted_tokens'][0].startswith('Chris was bad at'), f"Got\n{result}\n, but expected:\n{gold_result}"
+    assert result['predicted_tokens'][0].startswith('Chris was bad at'), f"Got\n{result}\n, but had to be starting with 'Chris was bad at math'"
+    assert result['predicted_tokens'][1].startswith('Chris was') and result['predicted_tokens'][1].endswith('so he could not come.')
     print("Success")
 
 
