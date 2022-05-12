@@ -62,9 +62,8 @@ class RuleBasedSkillSelectorConnector:
 
             dialog_len = len(dialog["human_utterances"])
 
-            exit_cond = (
-                "exit" in intent_catcher_intents and (
-                    dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3))
+            exit_cond = "exit" in intent_catcher_intents and (
+                dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
             )
             repeat_cond = (
                 "repeat" in intent_catcher_intents

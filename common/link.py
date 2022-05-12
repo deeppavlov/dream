@@ -364,9 +364,7 @@ def get_linked_to_skills(dialog):
 def get_previously_active_skill(dialog):
     # return prev active skill if it returned not `CAN_NOT_CONTINUE`
 
-    prev_user_uttr_hyp = (
-        dialog["human_utterances"][-2]["hypotheses"] if len(dialog["human_utterances"]) > 1 else []
-    )
+    prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(dialog["human_utterances"]) > 1 else []
     bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
     prev_active_skill = bot_uttr.get("active_skill", "")
 

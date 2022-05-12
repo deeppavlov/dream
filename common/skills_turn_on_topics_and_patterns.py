@@ -152,9 +152,7 @@ SKILL_TRIGGERS = {
 }
 
 
-def turn_on_skills(
-    detected_topics, catched_intents, user_uttr_text, prev_bot_uttr_text, available_skills=None
-):
+def turn_on_skills(detected_topics, catched_intents, user_uttr_text, prev_bot_uttr_text, available_skills=None):
     """
     Function to turn on skills from SKILL_TRIGGERS based on
         - detected_topics, list of corresponding topics is in SKILL_TRIGGERS[skill_name][detected_topics],
