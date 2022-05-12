@@ -15,17 +15,16 @@ def round_struct(struct, digits):
 def test_respond():
     url = "http://0.0.0.0:8122/respond"
 
-    text = "Chris was bad at _."
+    text = ["Chris was bad at _.", "Chris was _ so he could not come."]
 
     request_data = {"text": text}
 
     result = requests.post(url, json=request_data).json()
 
-    gold_result = {'predicted_tokens' : 'Chris was bad at Math.' }
     digits = 2
     result = round_struct(result, digits)
-    gold_result = round_struct(gold_result, digits)
-    assert result['predicted_tokens'].startswith('Chris was bad at'), f"Got\n{result}\n, but expected:\n{gold_result}"
+    print(result)
+    assert result['predicted_tokens'][0].startswith('Chris was bad at'), f"Got\n{result}\n, but expected:\n{gold_result}"
     print("Success")
 
 

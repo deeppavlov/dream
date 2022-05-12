@@ -64,17 +64,19 @@ def respond():
     text = request.json.get("text", [])
     logger.info(f"Text: {text}")
     try:
-        inputs = tokenize_util.encode(text, tokenizer)
-        _blank_id = tokenize_util.encode(' _', tokenizer)[0]
-        flag = 0
-        while not flag:  # надо исправить костыль
-            try:
-                inputs[inputs.index(_blank_id)] = additional_tokens_to_ids['<|infill_ngram|>']
-            except Exception:
-                flag = 1
-        inputs = {k: v.cuda() for k, v in inputs.items()} if cuda else inputs
-        generated = infill_with_ilm(model, additional_tokens_to_ids, inputs, num_infills=1)
-        output = tokenize_util.decode(generated[0], tokenizer)
+        output = []
+        for txt in text:
+            inputs = tokenize_util.encode(txt, tokenizer)
+            _blank_id = tokenize_util.encode(' _', tokenizer)[0]
+            flag = 0
+            while not flag:  # надо исправить костыль
+                try:
+                    inputs[inputs.index(_blank_id)] = additional_tokens_to_ids['<|infill_ngram|>']
+                except Exception:
+                    flag = 1
+            inputs = {k: v.cuda() for k, v in inputs.items()} if cuda else inputs
+            generated = infill_with_ilm(model, additional_tokens_to_ids, inputs, num_infills=1)
+            output.append(tokenize_util.decode(generated[0], tokenizer))
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -82,4 +84,4 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"infilling exec time: {total_time:.3f}s")
-    return jsonify({"predicted_tokens": output})  # возвращает предложение, поэтому логичнее убрать словарь
+    return jsonify({"predicted_tokens": output})
