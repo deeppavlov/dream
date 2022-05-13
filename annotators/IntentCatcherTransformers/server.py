@@ -33,7 +33,7 @@ except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
     raise e
-    
+
 parsed = parse_config(CONFIG_NAME)
 with open(expand_path(parsed["metadata"]["variables"]["MODEL_PATH"]).joinpath("classes.dict"), "r") as f:
     intents = f.read().strip().splitlines()
