@@ -1,13 +1,15 @@
 import logging
 import os
+from itertools import chain
 from typing import List
 
+import numpy as np
 import sentry_sdk
 from deeppavlov import build_model
 from deeppavlov.core.commands.utils import parse_config, expand_path
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
-from utils import get_regexp
+from utils import get_regexp, unite_responses
 
 # logging here because it conflicts with tf
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -24,7 +26,7 @@ if CONFIG_NAME is None:
 parsed = parse_config(CONFIG_NAME)
 with open(expand_path(parsed["metadata"]["variables"]["MODEL_PATH"]).joinpath("classes.dict"), "r") as f:
     intents = f.read().strip().splitlines()
-intents = [el.strip() for el in intents]
+intents = [el.strip().split("\t")[0] for el in intents]
 logger.info(f"Considered intents: {intents}")
 
 try:
@@ -38,38 +40,63 @@ except Exception as e:
     raise e
 
 
-def predict_intents(batch_texts: List[str], intents, regexp):
-    result = []
-    # classify with intent catcher neural model
-    pred_labels, pred_probas = intents_model(batch_texts)
-
+def get_classifier_predictions(batch_texts: List[List[str]], intents, intents_model, thresholds):
+    if thresholds is None:
+        # if we do not given thresholds, use 0.5 as default
+        thresholds = [0.5] * len(intents)
+    thresholds = np.array(thresholds)
+    # make a 1d-list of texts for classifier
+    sentences = list(chain.from_iterable(batch_texts))
+    sentences_text_ids = []
     for text_id, text in enumerate(batch_texts):
-        resp = {intent: {"detected": 0, "confidence": 0.0} for intent in intents}
-        for intent, regs in regexp.items():
-            for i, utt in enumerate(text):
-                for reg in regs:
-                    if reg.fullmatch(utt):
-                        resp[intent]["detected"] = 1
-                        resp[intent]["confidence"] = 1.0
-                        break
-        resp = {
-            intent: resp[intent]
-            if resp[intent]["detected"]
-            else {"detected": int(float(proba) > 0.5), "confidence": float(proba)}
-            for intent, proba in zip(intents, pred_probas[text_id])
-        }
-        result += resp
+        sentences_text_ids += [text_id] * len(text)
+    sentences_text_ids = np.array(sentences_text_ids)
 
+    result = []
+    # classify with intent catcher classifier
+    if len(sentences) > 0:
+        _, pred_probas = intents_model(sentences)
+        for text_id, text in enumerate(batch_texts):
+            maximized_probas = np.max(pred_probas[sentences_text_ids == text_id], axis=0)
+            resp = {
+                intent: {"detected": int(float(proba) > thresh), "confidence": round(float(proba), 3)}
+                for intent, thresh, proba in zip(intents, thresholds, maximized_probas)
+            }
+            result += [resp]
     return result
+
+
+def predict_intents(batch_texts: List[List[str]], intents, regexp, intents_model, thresholds=None):
+    responds = []
+    not_detected_utterances = []
+    for text_id, text in enumerate(batch_texts):
+
+        resp = {intent: {"detected": 0, "confidence": 0.0} for intent in intents}
+        not_detected_utterance = text.copy()
+        for intent, reg in regexp.items():
+            for i, utt in enumerate(text):
+                if reg.fullmatch(utt):
+                    logger.info(f"Full match of `{utt}` with `{reg}`.")
+                    resp[intent]["detected"] = 1
+                    resp[intent]["confidence"] = 1.0
+                    not_detected_utterance[i] = None
+        not_detected_utterance = [utt for utt in not_detected_utterance if utt]
+        not_detected_utterances.append(not_detected_utterance)
+        responds.append(resp)
+
+    if len(not_detected_utterances) > 0 and len(not_detected_utterances[0]) > 0:
+        classifier_result = get_classifier_predictions(not_detected_utterances, intents, intents_model, thresholds)
+        return unite_responses(classifier_result, responds)
+    else:
+        return responds
 
 
 @app.route("/detect", methods=["POST"])
 def detect():
     utterances = request.json["sentences"]
-    utterances = [" ".join(uttr) if isinstance(uttr, list) else uttr for uttr in utterances]
-    logger.info(f"Input to classify: `{utterances}`.")
-    results = predict_intents(utterances, intents, regexp)
-
+    logger.info(f"Input: `{utterances}`.")
+    results = predict_intents(utterances, intents, regexp, intents_model)
+    logger.info(f"Output: `{results}`.")
     return jsonify(results)
 
 
