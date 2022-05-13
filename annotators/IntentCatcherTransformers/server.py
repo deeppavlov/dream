@@ -23,11 +23,6 @@ INTENT_PHRASES_PATH = os.environ.get("INTENT_PHRASES_PATH", "intent_phrases.json
 CONFIG_NAME = os.environ.get("CONFIG_NAME", None)
 if CONFIG_NAME is None:
     raise NotImplementedError("No config file name is given.")
-parsed = parse_config(CONFIG_NAME)
-with open(expand_path(parsed["metadata"]["variables"]["MODEL_PATH"]).joinpath("classes.dict"), "r") as f:
-    intents = f.read().strip().splitlines()
-intents = [el.strip().split("\t")[0] for el in intents]
-logger.info(f"Considered intents: {intents}")
 
 try:
     intents_model = build_model(CONFIG_NAME, download=True)
@@ -38,6 +33,12 @@ except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
     raise e
+    
+parsed = parse_config(CONFIG_NAME)
+with open(expand_path(parsed["metadata"]["variables"]["MODEL_PATH"]).joinpath("classes.dict"), "r") as f:
+    intents = f.read().strip().splitlines()
+intents = [el.strip().split("\t")[0] for el in intents]
+logger.info(f"Considered intents: {intents}")
 
 
 def get_classifier_predictions(batch_texts: List[List[str]], intents, intents_model, thresholds):
