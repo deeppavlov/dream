@@ -119,23 +119,27 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def respond():
     st_time = time.time()
 
-    img_path = request.json.get("text", [])
+    img_paths = request.json.get("text", [])
+    captions = []
     try:
-        image = Image.open(img_path[0])
+        for img_path in img_paths:
+            image = Image.open(img_path)
 
-        # Construct input sample & preprocess for GPU if cuda available
-        sample = construct_sample(image)
-        sample = utils.move_to_cuda(sample) if use_cuda else sample
-        sample = utils.apply_to_sample(apply_half, sample) if use_fp16 else sample
+            # Construct input sample & preprocess for GPU if cuda available
+            sample = construct_sample(image)
+            sample = utils.move_to_cuda(sample) if use_cuda else sample
+            sample = utils.apply_to_sample(apply_half, sample) if use_fp16 else sample
 
-        with torch.no_grad():
-            result, scores = eval_step(task, generator, models, sample)
+            with torch.no_grad():
+                caption, scores = eval_step(task, generator, models, sample)
+            
+            captions.append(caption)
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = ''
+        caption = ''
 
     total_time = time.time() - st_time
     logger.info(f"captioning exec time: {total_time:.3f}s")
-    return jsonify({"caption": result})
+    return jsonify({"caption": captions})
