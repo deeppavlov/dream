@@ -14,7 +14,7 @@ ENV CONFIG_NAME ${CONFIG_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-COPY ./requirements.txt /src/requirements.txt
+COPY annotators/IntentCatcherTransformers/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 COPY ./common/ ./common/
