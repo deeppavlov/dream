@@ -14,11 +14,11 @@ ENV CONFIG_NAME ${CONFIG_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-COPY . /src
+COPY ./common/ ./common/
+COPY annotators/IntentCatcherTransformers/ /src
 WORKDIR /src
 
 RUN python -m deeppavlov install ${CONFIG_NAME}

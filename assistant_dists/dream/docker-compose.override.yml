@@ -146,7 +146,8 @@ services:
   intent-catcher:
     env_file: [.env]
     build:
-      context: ./annotators/IntentCatcherTransformers/
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
       args:
         SERVICE_PORT: 8014
         CONFIG_NAME: intents_model_dp_config.json
