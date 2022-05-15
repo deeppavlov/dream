@@ -125,6 +125,10 @@ def respond():
         for img_path in img_paths:
             image = Image.open(img_path)
 
+            max_size = (256, 256)
+
+            image.thumbnail(max_size)
+
             # Construct input sample & preprocess for GPU if cuda available
             sample = construct_sample(image)
             sample = utils.move_to_cuda(sample) if use_cuda else sample
