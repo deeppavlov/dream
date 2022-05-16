@@ -446,6 +446,17 @@
             }
         },
         "skills": {
+            "image_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://image-skill:8122"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:image_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skill_selectors"],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_sport_skill": {
                 "connector": {
                     "protocol": "http",

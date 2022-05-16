@@ -70,6 +70,8 @@ class RuleBasedSkillSelectorConnector:
             linked_to_skill_names = get_all_linked_to_skills(bot_uttr)
 
             dialog_len = len(dialog["human_utterances"])
+            if user_uttr["attributes"].get("image") is not None:
+                skills_for_uttr.append("image_skill")
             if "exit" in intent_catcher_intents and (
                 dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
             ):
