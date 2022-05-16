@@ -261,3 +261,54 @@ docker-compose -f docker-compose.yml -f dev.yml exec -T -u $(id -u) agent python
       --cache tests/dream/output/test_questions_output_$(date --iso-8601=seconds).json
 ```
 Make sure all services are deployed. `--input` - `xlsx` file with certification questions, `--output` - `xlsx` file with bot responses, `--cache` - `json`, that contains a detailed markup and is used for a cache.
+
+
+## Images
+
+Pay attention: if you use proxy, response selector should be launched locally.
+By default, images stored at ``~/.deeppavlov/file_server``. To change location, edit assistant_dists/dream/dev.yml
+files.volumes value.
+
+### Telegram
+
+To run agent with telegram channel change agent command at assistant_dists/dream/docker-compose.override.yml to
+```commandline
+sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=<put here token> agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
+```
+Don't forget to set correct token. In this channel images are saved to ``files`` service automatically.
+
+1. you send image
+2. agent saves image to ``files`` service. Link `http://files:3000/file?file=<saved_image_id>.jpg` is saved to human utterance attributes as ``image`` key value.
+3. if human utterance has ``image`` attribute, skill selector adds ``image-skill`` to active skills list.
+4. service ``image-skill`` gets image, makes it black and white and saves new image to ``files`` service. Link to response
+image returned in service response: `{'text': '', 'image': <link to new image>}`.
+5. if any service hypothesis has ``image`` field, this field is saved to the bot utterance ``attributes``.
+6. At first agent sends response ``text``, then, if bot utterance attributes has ``image`` field, this image is sent to the telegram. 
+
+### HTTP
+
+At first, save image to the files service:
+```commandline
+curl -F file=@fname.jpg http://localhost:3000
+```
+or
+```python
+resp = requests.post('http://localhost:3000', files={'file': (fname, file_object, 'image/jpg')})
+```
+Use uuid4().hex or something similar as file name to prevent overwriting existing image.
+
+As response you will receive following response:
+
+```json
+{"downloadLink":"http://localhost:3000/file?file=fname.jpg","curl":"curl http://localhost:3000/file?file=fname.jpg > fname.jpg"}
+```
+
+Change hostaname from `localhost` to `files` (agent could reach saved file only as `http://files:3000/file?file=fname.jpg`)
+
+To send image, add ``'image': 'http://files:3000/file?file=fname.jpg'`` to payload:
+
+```commandline
+curl -X POST http://0.0.0.0:4242 --header "Content-Type: application/json" -d {"user_id": "someid", "payload": "some text", "image": "http://files:3000/file?file=fname.jpg"}
+```
+
+Response image, if it exists, will be at ``attributes.image``.
