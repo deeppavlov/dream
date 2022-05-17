@@ -1,7 +1,7 @@
 image: docker/compose:1.29.2
 
 stages:
-  - pre-build
+  # - pre-build
   - build
   # - test
 
