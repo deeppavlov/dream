@@ -1176,6 +1176,22 @@ services:
 #        reservations:
 #          memory: 2G
 
+  dff-minecraft-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8122
+        SERVICE_NAME: dff_minecraft_skill
+      context: .
+      dockerfile: ./skills/dff_minecraft_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8122 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
   dff-template-skill:
     env_file: [.env]
     build:

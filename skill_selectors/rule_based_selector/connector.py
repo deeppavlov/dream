@@ -126,6 +126,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_funfact_skill",
                         "dff_weather_skill",
                         "dff_short_story_skill",
+                        # "dff_food_skill"
                     ],
                 )
 
@@ -279,10 +280,10 @@ class RuleBasedSkillSelectorConnector:
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=['dff_minecraft_skill']))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_program_y_skill", "dummy_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=['dff_minecraft_skill']))
