@@ -1159,6 +1159,25 @@ services:
         reservations:
           memory: 2G
 
+  image-captioning:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8126
+        SERVICE_NAME: image_captioning
+        PRETRAINED_MODEL_PATH: /src/coco_weights.pt
+      context: ./services/image_captioning/
+    command: flask run -h 0.0.0.0 -p 8126
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
   dff-template-skill:
     env_file: [.env]
     build:
