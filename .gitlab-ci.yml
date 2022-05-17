@@ -1,0 +1,41 @@
+image: docker/compose:1.29.2
+
+stages:
+  # - pre-build
+  - build
+  # - test
+
+# install requirenments:
+#     stage: pre-build
+
+#     script:
+#       - python -m pip install pytest
+#       - python -m pip install pycocotools
+#       - python -m pip install ignite
+
+#     image: python:3.6
+
+build:
+  stage: build
+
+  tags:
+    - build_and_test
+
+  script:
+    - AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/test.yml up --build image-captioning #$ server_pid=$!
+    # - python3 services/image_captioning/ping.py
+
+  only:
+    - feat/image_captioning
+
+# test:
+#   stage: test
+
+#   tags:
+#     - test
+
+#   script:
+#     - ./services/image_captioning/test.sh
+
+#   only:
+#     - feat/image_captioning
