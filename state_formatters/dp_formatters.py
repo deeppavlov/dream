@@ -802,6 +802,8 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
 def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
+def dff_minecraft_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_minecraft_skill")
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown

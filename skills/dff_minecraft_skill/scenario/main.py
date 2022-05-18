@@ -5,6 +5,7 @@ from df_engine.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GL
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
+from .processing import GO_TO_COMPILED_PATTERN
 
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
@@ -38,30 +39,13 @@ logger = logging.getLogger(__name__)
 #      - the node to which the agent will perform the transition
 #      - the condition under which to make the transition
 
-def add_prefix(prefix):
-    def add_prefix_processing(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
-        processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
-        processed_node.response = f"{prefix}: {processed_node.response}"
-        ctx.framework_states["actor"]["processed_node"] = processed_node
-        return ctx
-    return add_prefix_processing
-
 flows = {
-   # GLOBAL: {
-        # TRANSITIONS: {
-        #     ("commands", "goto"): cnd.regexp(r"(?:(?:go to)|(?:move to)|(?:come to)) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE),
-        # },
-   # },
-    GLOBAL: {
-        TRANSITIONS: {
-            ("commands", "start"): cnd.regexp(r"\bhi\b", re.IGNORECASE),
-        },
-    },
+    GLOBAL: {PROCESSING: {1: loc_prs.add_prefix("l1_global"), 2: loc_prs.add_prefix("l2_global")}},
     "service": {
         "start": {
             RESPONSE: "",
             TRANSITIONS: {
-                ("commands", "start"): cnd.regexp(r"\bhi", re.IGNORECASE)
+                ("commands", "start"): cnd.true()
                 },
         },
         "fallback": {
@@ -73,41 +57,27 @@ flows = {
         },
     },
     "commands": {
-        LOCAL: {
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
-                "set_can_continue": int_prs.set_can_continue(),
-                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-            },
-        },
         "start": {
+            PROCESSING: {
+                1: loc_prs.add_prefix("l1_start"),
+                #"get_dest": loc_prs.get_destination(),
+            },
             RESPONSE: "Type your command please", 
-            # PROCESSING: {
-            #     #1: add_prefix("l1_step_1")
-            #     #"save_slots_to_ctx": int_prs.save_slots_to_ctx({"dest1": loc_prs.get_destination()
-            #     # "encoded_command": serializer.encode_actions({"action": "goto", 
-            #     # "args": [loc_prs.get_destination()[0], loc_prs.get_destination()[1], loc_prs.get_destination()[2]],
-            #     # "kwargs": {"range_goal": 1}})
-            #     #})
-            # },
             TRANSITIONS: {
-                #"goto": cnd.regexp(r"(?:(?:go to)|(?:move to)|(?:come to)) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE)
-                ("commands", "goto", 1): cnd.true(),
-                "test": cnd.regexp(r"\bok\b", re.IGNORECASE),
+                "goto": cnd.regexp(r"(go to)|(move to)|(come to) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE),
             },
         },
         "goto": {
-            RESPONSE: "Okay, I'll go",
-            # PROCESSING: {
-            #     #"fill_responses_by_slots": int_prs.fill_responses_by_slots()
-            #     },
+            PROCESSING: {
+                1: loc_prs.add_prefix("l1_go_to"),
+                #"get_dest": loc_prs.get_destination(),
+                #"fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                },
+            RESPONSE: "Okay, I'll go to {dest1}",
             TRANSITIONS: {},
         },
         "test": {
             RESPONSE: "ttt",
-            # PROCESSING: {
-            #     #"fill_responses_by_slots": int_prs.fill_responses_by_slots()
-            #     },
             TRANSITIONS: {},
         }
     },

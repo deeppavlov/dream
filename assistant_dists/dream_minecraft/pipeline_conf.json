@@ -983,7 +983,7 @@
                     "timeout": 2,
                     "url": "http://dff-minecraft-skill:8122/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_minecraft_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
