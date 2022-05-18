@@ -60,7 +60,6 @@ flows = {
         "start": {
             PROCESSING: {
                 1: loc_prs.add_prefix("l1_start"),
-                #"get_dest": loc_prs.get_destination(),
             },
             RESPONSE: "Type your command please", 
             TRANSITIONS: {
@@ -70,8 +69,8 @@ flows = {
         "goto": {
             PROCESSING: {
                 1: loc_prs.add_prefix("l1_go_to"),
-                #"get_dest": loc_prs.get_destination(),
-                #"fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                "get_dest": loc_prs.get_destination(), # заполняем слоты нужными значениями
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots() # вставляем слоты в ответ
                 },
             RESPONSE: "Okay, I'll go to {dest1}",
             TRANSITIONS: {},
