@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 #      - the condition under which to make the transition
 
 flows = {
-    GLOBAL: {PROCESSING: {1: loc_prs.add_prefix("l1_global"), 2: loc_prs.add_prefix("l2_global")}},
+    GLOBAL: {TRANSITIONS: {("commands", "goto"): cnd.regexp(r"(go to)|(move to)|(come to) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE)}},
     "service": {
         "start": {
             RESPONSE: "",
@@ -49,7 +49,7 @@ flows = {
                 },
         },
         "fallback": {
-            RESPONSE: "Ooops",
+            RESPONSE: "Sorry, I don't know this command yet. You can ask me to 'go to X, Y, Z'!",
             TRANSITIONS: {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),
@@ -59,24 +59,17 @@ flows = {
     "commands": {
         "start": {
             PROCESSING: {
-                1: loc_prs.add_prefix("l1_start"),
             },
-            RESPONSE: "Type your command please", 
+            RESPONSE: "What can I do for you? Tell me to go somewhere!", 
             TRANSITIONS: {
                 "goto": cnd.regexp(r"(go to)|(move to)|(come to) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE),
             },
         },
         "goto": {
             PROCESSING: {
-                1: loc_prs.add_prefix("l1_go_to"),
-                "get_dest": loc_prs.get_destination(), # заполняем слоты нужными значениями
-                "fill_responses_by_slots": int_prs.fill_responses_by_slots() # вставляем слоты в ответ
+                1: loc_prs.add_encoding("goto")
                 },
-            RESPONSE: "Okay, I'll go to {dest1}",
-            TRANSITIONS: {},
-        },
-        "test": {
-            RESPONSE: "ttt",
+            RESPONSE: "On my way!",
             TRANSITIONS: {},
         }
     },

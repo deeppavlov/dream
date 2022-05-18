@@ -23,6 +23,10 @@ from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BE
 from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
+MINECRAFT_COMPILED_PATTERN = re.compile(r'\bminecraft\b',
+    re.IGNORECASE
+)
+
 SKILL_TRIGGERS = {
     "dff_movie_skill": {
         "compiled_patterns": [MOVIE_COMPILED_PATTERN],
@@ -53,7 +57,8 @@ SKILL_TRIGGERS = {
     },
     "dff_food_skill": {
         "compiled_patterns": [FOOD_COMPILED_PATTERN],
-        "previous_bot_patterns": [FOOD_SKILL_TRANSFER_PHRASES_RE, FOOD_COMPILED_PATTERN],
+        "previous_bot_patterns": [],
+        #[FOOD_SKILL_TRANSFER_PHRASES_RE, FOOD_COMPILED_PATTERN],
         "cobot_dialogact_topics": [],
         "cobot_topics": ["Food_Drink"],
         "intents": [],
@@ -160,6 +165,13 @@ SKILL_TRIGGERS = {
     },
     "dff_short_story_skill": {
         "compiled_patterns": [],
+        "previous_bot_patterns": [],
+        "cobot_dialogact_topics": [],
+        "cobot_topics": [],
+        "intents": ["tell_me_a_story"],
+    },
+    "dff_minecraft_skill": {
+        "compiled_patterns": [MINECRAFT_COMPILED_PATTERN],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],
