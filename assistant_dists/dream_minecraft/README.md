@@ -5,5 +5,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream_minecraft/docker-c
 
 ## Rerun the minecraft connector
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_minecraft/docker-compose.override.yml -f assistant_dists/dream_minecraft/dev.yml -f assistant_dists/dream_minecraft/proxy.yml up --build minecraft minecraft-skill
+docker-compose -f docker-compose.yml -f assistant_dists/dream_minecraft/docker-compose.override.yml -f assistant_dists/dream_minecraft/dev.yml -f assistant_dists/dream_minecraft/proxy.yml up --build minecraft dff-minecraft-skill
 ```
+
+## Say hi to the bot!

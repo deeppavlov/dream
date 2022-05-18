@@ -5,6 +5,8 @@ from botconfig import BotSettings
 from core.serializer import encode_actions, decode_actions
 from core import actions
 
+
+USERS = {}
 ACTION_MAP = {"goto": actions.goto}
 
 bot_settings = BotSettings()
@@ -39,8 +41,18 @@ def on_chat(event, user, message, *args):
     if user == bot.username:
         return
 
+    if message.startswith("!name"):
+        try:
+            command, new_user_name = message.split(" ")
+            USERS[user] = new_user_name
+            bot.chat(f"Got it! {user} is now known as {new_user_name}")
+        except ValueError:
+            bot.chat(f"Say '!name NewName' to change your DREAM username")
+        return
+
     try:
-        response = requests.post(bot_settings.agent_url, json={"user_id": user, "payload": message})
+        user_id = USERS.get(user, user)
+        response = requests.post(bot_settings.agent_url, json={"user_id": user_id, "payload": message})
         data = response.json()
 
         # mock agent response
