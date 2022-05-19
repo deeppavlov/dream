@@ -3,7 +3,7 @@
 2. Follow instructions below to make sure the skill and response selector are running locally on your machine:
 
 ```bash
-python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector -d d assistant_dists/YOUR_DIST_NAME_HERE
+python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector -d assistant_dists/YOUR_DIST_NAME_HERE
 
 docker-compose -f docker-compose.yml -f local.yml up -d --build
 
