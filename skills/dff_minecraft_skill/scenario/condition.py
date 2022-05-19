@@ -17,12 +17,25 @@ logger = logging.getLogger(__name__)
 #     return example_lets_talk_about_handler
 
 
-def is_intent(intent_name="look_at_user"):
+def is_intent(target_intent_name="look_at_user"):
     def is_known_intent_handler(ctx: Context, actor: Actor, *args, **kwargs):
         if ctx.validation:
             return False
+        
+        detected_intents = common_utils.get_intents(
+            int_ctx.get_last_human_utterance(ctx, actor),
+            probs=False,
+            which="minecraft_bot",
+        )
 
-        if intent_name in get_response_funcs():
+        logger.debug(f"Checking for detected intents: {str(detected_intents)}")
+
+        if len(detected_intents)==0:
+            return False
+        
+        detected_intent = detected_intents[0]
+
+        if detected_intent == target_intent_name:
             return True
         return False
     

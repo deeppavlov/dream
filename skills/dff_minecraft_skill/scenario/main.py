@@ -95,7 +95,7 @@ flows = {
         },
         "stop": {
             PROCESSING: {
-                1: loc_prs.add_encoding("stop")
+                1: loc_prs.add_encoding_for_stop()
                 },
             RESPONSE: loc_rsp.response_for_intent("stop"),
             TRANSITIONS: {},
@@ -123,7 +123,7 @@ flows = {
         },
         "look_at_user": {
             PROCESSING: {
-                1: loc_prs.add_encoding("look_at_user")
+                1: loc_prs.add_encoding_for_look_at_user()
                 },
             RESPONSE: loc_rsp.response_for_intent("look_at_user"),
             TRANSITIONS: {},

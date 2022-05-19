@@ -24,6 +24,30 @@ def add_encoding_for_goto():
     return add_encoding_processing
 
 
+def add_encoding_for_look_at_user():
+    def add_encoding_processing(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
+        processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
+        utt = ctx.misc["agent"]["dialog"]['human_utterances'][-1]['text']
+        actions_list = [{"action": "look_at_user", "args": [], "kwargs": {}}]
+        processed_node.response = f"{processed_node.response} #+# {serializer.encode_actions(actions_list)}"
+        ctx.framework_states["actor"]["processed_node"] = processed_node
+        return ctx
+
+    return add_encoding_processing
+
+
+def add_encoding_for_stop():
+    def add_encoding_processing(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
+        processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
+        utt = ctx.misc["agent"]["dialog"]['human_utterances'][-1]['text']
+        actions_list = [{"action": "stop", "args": [], "kwargs": {}}]
+        processed_node.response = f"{processed_node.response} #+# {serializer.encode_actions(actions_list)}"
+        ctx.framework_states["actor"]["processed_node"] = processed_node
+        return ctx
+
+    return add_encoding_processing
+
+
 def add_encoding(action_name: str, should_follow: bool = False):
     def add_encoding_processing(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
         processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
