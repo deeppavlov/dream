@@ -20,6 +20,7 @@ ACTION_MAP = {
     "stop": actions.stop,
     "destroy_block": actions.destroy_block,
     "place_block": actions.place_block,
+    "look_at_user": actions.look_at_user
 }
 
 bot_settings = BotSettings()

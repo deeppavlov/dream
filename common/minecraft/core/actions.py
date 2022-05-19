@@ -59,6 +59,21 @@ def chat(
     bot.chat(text)
 
 
+def look_at_user(bot, pathfinder, invoker_username, *args):
+    """Looks at user's coordinates
+
+    Args:
+        bot: bot instance
+        pathfinder: pathfinder module instance
+        invoker_username: minecraft user who invoked this action
+
+    Returns:
+
+    """
+    user_entity = bot.players[invoker_username].entity
+    bot.lookAt(user_entity.position.offset(0, 1.6, 0))
+
+
 def goto(
     bot, pathfinder, invoker_username, x: int, y: int, z: int, range_goal: int = 1
 ):
