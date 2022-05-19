@@ -1,10 +1,9 @@
 # Pre-Requisites
-1. Create new distribution in ```/assistant_dists/``` by copying an existing one if you didn't do that yet.
-2. Go to its directory in your console/terminal app.
-3. Follow instructions below to make sure the skill and response selector are running locally on your machine:
+1. Create new distribution in ```/assistant_dists/``` by copying an existing one if you didn't do that yet into ```YOUR_DIST_NAME_HERE``` subdirectory.
+2. Follow instructions below to make sure the skill and response selector are running locally on your machine:
 
 ```bash
-python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector -s agent
+python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector -d d assistant_dists/YOUR_DIST_NAME_HERE
 
 docker-compose -f docker-compose.yml -f local.yml up -d --build
 
