@@ -1,10 +1,10 @@
-# DialogFlow Framework Template
-Changes should only be made in the `dialogflows` directory.
-
-Template includes two dialog flows: one based on programy (`repeating`), and one based on vanilla python DSL (`greeting`).
+# Pre-Requisites
+1. Create new distribution in ```/assistant_dists/``` by copying an existing one if you didn't do that yet.
+2. Go to its directory in your console/terminal app.
+3. Follow instructions below to make sure the skill and response selector are running locally on your machine:
 
 ```bash
-python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector 
+python utils/create_local_yml.py -s dff-template-skill -s convers-evaluation-selector -s agent
 
 docker-compose -f docker-compose.yml -f local.yml up -d --build
 
@@ -13,6 +13,11 @@ docker-compose -f docker-compose.yml -f local.yml logs -f dff-template-skill
 docker-compose -f docker-compose.yml -f local.yml exec dff-template-skill bash test.sh
 ```
 
+
+# DialogFlow Framework Template
+Changes should only be made in the `dialogflows` directory.
+
+Template includes two dialog flows: one based on programy (`repeating`), and one based on vanilla python DSL (`greeting`).
 
 # Important changes in configuration files of the Dream Distribution
 docker-compose.yml
