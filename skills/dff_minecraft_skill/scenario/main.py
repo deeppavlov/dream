@@ -39,15 +39,30 @@ logger = logging.getLogger(__name__)
 #      - the node to which the agent will perform the transition
 #      - the condition under which to make the transition
 
+# "goto": default_response,
+#         "goto_user": default_response,
+#         "stop": default_response,
+#         "destroy_block": default_response,
+#         "place_block": default_response,
+#         "destroy_and_grab_block": default_response,
+#         "look_at_user": default_response
+
 flows = {
-    GLOBAL: {TRANSITIONS: {("commands", "goto"): cnd.regexp(r"(go to)|(move to)|(come to) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE)}},
+    GLOBAL: 
+    {
+        TRANSITIONS: {
+                ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
+                ("commands", "goto"): loc_cnd.is_intent("goto"),
+                ("commands", "follow_me"): loc_cnd.is_intent("follow_me"),
+                ("commands", "stop"): loc_cnd.is_intent("stop"),
+                ("commands", "destroy_block"): loc_cnd.is_intent("destroy_block"),
+                ("commands", "place_block"): loc_cnd.is_intent("place_block"),
+                ("commands", "destroy_and_grab_block"): loc_cnd.is_intent("destroy_and_grab_block"),
+                ("commands", "look_at_user"): loc_cnd.is_intent("look_at_user"),
+        }
+    },
     "service": {
-        "start": {
-            RESPONSE: "",
-            TRANSITIONS: {
-                ("commands", "start"): cnd.true()
-                },
-        },
+         "start": {RESPONSE: ""},
         "fallback": {
             RESPONSE: "Sorry, I don't know this command yet. You can ask me to 'go to X, Y, Z'!",
             TRANSITIONS: {
@@ -57,23 +72,98 @@ flows = {
         },
     },
     "commands": {
-        "start": {
-            PROCESSING: {
-            },
-            RESPONSE: "What can I do for you? Tell me to go somewhere!", 
-            TRANSITIONS: {
-                "goto": cnd.regexp(r"(go to)|(move to)|(come to) (\d+)\,*\s*(\d+)\,*\s*(\d+)", re.IGNORECASE),
-            },
-        },
         "goto": {
             PROCESSING: {
-                1: loc_prs.add_encoding("goto")
+                1: loc_prs.add_encoding_for_goto()
                 },
-            RESPONSE: "On my way!",
+            RESPONSE: loc_rsp.response_for_intent("goto"),
             TRANSITIONS: {},
-        }
+        },
+        "goto_user": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("goto_user")
+                },
+            RESPONSE: loc_rsp.response_for_intent("goto_user"),
+            TRANSITIONS: {},
+        },
+        "follow_me": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("goto_user", should_follow = True)
+                },
+            RESPONSE: loc_rsp.response_for_intent("follow_me"),
+            TRANSITIONS: {},
+        },
+        "stop": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("stop")
+                },
+            RESPONSE: loc_rsp.response_for_intent("stop"),
+            TRANSITIONS: {},
+        },
+        "destroy_block": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("destroy_block")
+                },
+            RESPONSE: loc_rsp.response_for_intent("destroy_block"),
+            TRANSITIONS: {},
+        },
+        "place_block": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("place_block")
+                },
+            RESPONSE: loc_rsp.response_for_intent("place_block"),
+            TRANSITIONS: {},
+        },
+        "destroy_and_grab_block": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("destroy_and_grab_block")
+                },
+            RESPONSE: loc_rsp.response_for_intent("destroy_and_grab_block"),
+            TRANSITIONS: {},
+        },
+        "look_at_user": {
+            PROCESSING: {
+                1: loc_prs.add_encoding("look_at_user")
+                },
+            RESPONSE: loc_rsp.response_for_intent("look_at_user"),
+            TRANSITIONS: {},
+        },
     },
 }
 
 
 actor = Actor(flows, start_label=("service", "start"), fallback_label=("service", "fallback"))
+
+
+# ZERO_CONFIDENCE = 0.0
+
+# flows = {
+#     "service": {
+#         "start": {RESPONSE: ""},
+#         "fallback": {RESPONSE: "", PROCESSING: {"set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE)}},
+#     },
+#     GLOBAL: {
+#         TRANSITIONS: {
+#             ("context_driven_response", "minecraft_intents"): loc_cnd.minecraft_intent_exists_condition,
+#             ("simple", "default"): cnd.true(),
+#         },
+#     },
+#     "context_driven_response": {
+#         "minecraft_intents": {
+#             RESPONSE: loc_rsp.minecraft_intents_response,
+#             PROCESSING: {"set_confidence": loc_rsp.set_confidence_from_input},
+#         },
+#     },
+#     "simple": {
+#         "default": {
+#             RESPONSE: loc_rsp.default_response,
+#             PROCESSING: {
+#                 1: loc_prs.add_encoding_for_goto("goto"),
+#                 2: loc_prs.add_encoding("goto_user", True), # follow me continuously
+#                 "set_confidence" : int_prs.set_confidence(ZERO_CONFIDENCE),
+#                 },
+#         },
+#     },
+# }
+
+# actor = Actor(flows, start_label=("service", "start"), fallback_label=("service", "fallback"))

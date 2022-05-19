@@ -1,0 +1,26 @@
+{
+  "goto" : [
+    "On my way!"
+  ],
+  "goto_user" : [
+    "Coming!"
+  ],
+  "stop" : [
+    "Gotcha!"
+  ],
+  "destroy_block": [
+    "Affirmative"
+  ],
+  "place_block": [
+    "Here we go!"
+  ],
+  "destroy_and_grab_block": [
+    "Hmm, lemme try"
+  ],
+  "look_at_user": [ 
+    "Yes?"
+  ],
+  "follow_me" : [
+    "Roger that!"
+  ]
+}

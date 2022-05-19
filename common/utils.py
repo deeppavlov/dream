@@ -7,6 +7,8 @@ from random import choice
 from common.custom_requests import request_triples_wikidata
 import sentry_sdk
 
+from common.minecraft.bot_intents import detect_minecraft_bot_intents
+
 logger = logging.getLogger(__name__)
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -32,6 +34,7 @@ scenario_skills = {
     "small_talk_skill",
     "news_api_skill",
     "game_cooperative_skill",
+    "dff_minecraft_skill"
 }
 retrieve_skills = {
     "dff_program_y_skill",
@@ -860,10 +863,12 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
         answer_probs, answer_labels = cobot_da_intent_probs, cobot_da_intent_labels
     elif which == "midas":
         answer_probs, answer_labels = midas_intent_probs, midas_intent_labels
+    elif which == "minecraft_bot":
+        answer_probs, answer_labels = detect_minecraft_bot_intents(annotated_utterance["text"])
     else:
         logger.warning(f"Unknown type in get_intents {which}")
         answer_probs, answer_labels = default_probs, default_labels
-    if which not in ["intent_catcher", "midas"]:
+    if which not in ["intent_catcher", "midas", "minecraft_bot"]:
         try:
             assert answer_labels, annotations
         except Exception:

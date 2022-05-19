@@ -52,6 +52,9 @@ class RuleBasedSkillSelectorConnector:
             )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
 
+            # adding support for Minecraft Bot Intents
+            minecraft_bot_intents = get_intents(user_uttr, probs=False, which="minecraft_bot")
+
             cobot_dialogact_topics = set(get_topics(user_uttr, which="cobot_dialogact_topics"))
             cobot_topics = set(get_topics(user_uttr, which="cobot_topics"))
 
@@ -276,14 +279,17 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 skills_for_uttr = ["alexa_handler"]
 
+            if len(minecraft_bot_intents) > 0:
+                skills_for_uttr = ["dff_minecraft_skill"]
+
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=['dff_minecraft_skill']))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=['dff_minecraft_skill']))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
