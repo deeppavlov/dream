@@ -1,0 +1,10 @@
+{
+  "name": "dream-minecraft",
+  "version": "0.0.1",
+  "description": "DREAM to Minecraft connector",
+  "author": "",
+  "dependencies": {
+    "mineflayer": "4.3.0",
+    "mineflayer-pathfinder": "2.1.1"
+  }
+}
