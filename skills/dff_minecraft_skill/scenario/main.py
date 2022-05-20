@@ -48,21 +48,22 @@ logger = logging.getLogger(__name__)
 #         "look_at_user": default_response
 
 flows = {
-    GLOBAL: 
-    {
+    GLOBAL: {
         TRANSITIONS: {
-                ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
-                ("commands", "goto"): loc_cnd.is_intent("goto"),
-                ("commands", "follow_me"): loc_cnd.is_intent("follow_me"),
-                ("commands", "stop"): loc_cnd.is_intent("stop"),
-                ("commands", "destroy_block"): loc_cnd.is_intent("destroy_block"),
-                ("commands", "place_block"): loc_cnd.is_intent("place_block"),
-                ("commands", "destroy_and_grab_block"): loc_cnd.is_intent("destroy_and_grab_block"),
-                ("commands", "look_at_user"): loc_cnd.is_intent("look_at_user"),
+            ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
+            ("commands", "goto"): loc_cnd.is_intent("goto"),
+            ("commands", "follow_me"): loc_cnd.is_intent("follow_me"),
+            ("commands", "stop"): loc_cnd.is_intent("stop"),
+            ("commands", "destroy_block"): loc_cnd.is_intent("destroy_block"),
+            ("commands", "place_block"): loc_cnd.is_intent("place_block"),
+            ("commands", "destroy_and_grab_block"): loc_cnd.is_intent(
+                "destroy_and_grab_block"
+            ),
+            ("commands", "look_at_user"): loc_cnd.is_intent("look_at_user"),
         }
     },
     "service": {
-         "start": {RESPONSE: ""},
+        "start": {RESPONSE: ""},
         "fallback": {
             RESPONSE: "Sorry, I don't know this command yet. You can ask me to 'go to X, Y, Z'!",
             TRANSITIONS: {
@@ -73,58 +74,42 @@ flows = {
     },
     "commands": {
         "goto": {
-            PROCESSING: {
-                1: loc_prs.add_encoding_for_goto()
-                },
+            PROCESSING: {1: loc_prs.add_encoding_for_goto()},
             RESPONSE: loc_rsp.response_for_intent("goto"),
             TRANSITIONS: {},
         },
         "goto_user": {
-            PROCESSING: {
-                1: loc_prs.add_encoding("goto_user")
-                },
+            PROCESSING: {1: loc_prs.add_encoding("goto_user")},
             RESPONSE: loc_rsp.response_for_intent("goto_user"),
             TRANSITIONS: {},
         },
         "follow_me": {
-            PROCESSING: {
-                1: loc_prs.add_encoding("goto_user", should_follow = True)
-                },
+            PROCESSING: {1: loc_prs.add_encoding("goto_user", should_follow=True)},
             RESPONSE: loc_rsp.response_for_intent("follow_me"),
             TRANSITIONS: {},
         },
         "stop": {
-            PROCESSING: {
-                1: loc_prs.add_encoding_for_stop()
-                },
+            PROCESSING: {1: loc_prs.add_encoding_for_stop()},
             RESPONSE: loc_rsp.response_for_intent("stop"),
             TRANSITIONS: {},
         },
         "destroy_block": {
-            PROCESSING: {
-                1: loc_prs.add_encoding_no_range("destroy_block")
-                },
+            PROCESSING: {1: loc_prs.add_encoding_no_range("destroy_block")},
             RESPONSE: loc_rsp.response_for_intent("destroy_block"),
             TRANSITIONS: {},
         },
         "place_block": {
-            PROCESSING: {
-                1: loc_prs.add_encoding_no_range("place_block")
-                },
+            PROCESSING: {1: loc_prs.add_encoding_no_range("place_block")},
             RESPONSE: loc_rsp.response_for_intent("place_block"),
             TRANSITIONS: {},
         },
         "destroy_and_grab_block": {
-            PROCESSING: {
-                1: loc_prs.add_encoding_no_range("destroy_and_grab_block")
-                },
+            PROCESSING: {1: loc_prs.add_encoding_no_range("destroy_and_grab_block")},
             RESPONSE: loc_rsp.response_for_intent("destroy_and_grab_block"),
             TRANSITIONS: {},
         },
         "look_at_user": {
-            PROCESSING: {
-                1: loc_prs.add_encoding_for_look_at_user()
-                },
+            PROCESSING: {1: loc_prs.add_encoding_for_look_at_user()},
             RESPONSE: loc_rsp.response_for_intent("look_at_user"),
             TRANSITIONS: {},
         },
@@ -132,7 +117,9 @@ flows = {
 }
 
 
-actor = Actor(flows, start_label=("service", "start"), fallback_label=("service", "fallback"))
+actor = Actor(
+    flows, start_label=("service", "start"), fallback_label=("service", "fallback")
+)
 
 
 # ZERO_CONFIDENCE = 0.0
