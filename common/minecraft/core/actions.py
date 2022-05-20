@@ -94,6 +94,23 @@ def goto(
     bot.pathfinder.setGoal(pathfinder.goals.GoalNear(x, y, z, range_goal))
 
 
+def goto_cursor(bot, pathfinder, invoker_username):
+    """Sends bot to the coordinates where the player is looking at
+
+    Args:
+        bot: bot instance
+        pathfinder: pathfinder module instance
+        invoker_username: minecraft user who invoked this action
+
+    Returns:
+
+    """
+    user_entity = bot.players[invoker_username].entity
+    target_block = bot.blockAtEntityCursor(user_entity)
+
+    goto(bot, pathfinder, invoker_username, *target_block.position.offset(0, 1, 0), range_goal=0)
+
+
 def goto_user(
     bot, pathfinder, invoker_username, range_goal: int = 3, follow: bool = False
 ):
@@ -134,14 +151,14 @@ def stop(bot, pathfinder, invoker_username, force: bool = True):
         bot.pathfinder.stop()
 
 
-def destroy_block(bot, pathfinder, invoker_username, tool=None):
+def destroy_block(bot, pathfinder, invoker_username, force_pick_up: bool = False):
     """Destroys the block which is targeted by the player
 
     Args:
         bot: bot instance
         pathfinder: pathfinder module instance
         invoker_username: minecraft user who invoked this action
-        tool: which tool to use
+        force_pick_up: if True, go and pick up the block when finished digging
 
     Returns:
 
@@ -153,12 +170,23 @@ def destroy_block(bot, pathfinder, invoker_username, tool=None):
         bot.chat(f"{invoker_username} is not looking at any block")
         return
 
-    logger.debug(f"User: {user_entity}")
-    logger.debug(f"Target block: {target_block}")
+    # logger.debug(f"User: {user_entity}")
+    # logger.debug(f"Target block: {target_block}")
 
     bot.pathfinder.setGoal(
         pathfinder.goals.GoalLookAtBlock(target_block.position, bot.world)
     )
+
+    if force_pick_up:
+        @Once(bot, "diggingCompleted")
+        def try_pick_up(digging_event, block):
+            logger.debug(f"Picking up {block}")
+
+            @AsyncTask(start=True)
+            def goto_block(task):
+                bot.pathfinder.setGoal(pathfinder.goals.GoalNearXZ(*block.position))
+                logger.debug(f"I arrived at {block.position}")
+            # goto(bot, pathfinder, invoker_username, *target_block.position.offset(0, 1, 0), range_goal=0)
 
     @Once(bot, "goal_reached")
     def start_digging(event, state_goal):
@@ -173,11 +201,28 @@ def destroy_block(bot, pathfinder, invoker_username, tool=None):
                     bot.dig(target_block)
 
                 bot.chat("Started digging!")
+
             except Exception as e:
-                bot.chat(f"Couldn't finish digging because {e}")
+                bot.chat(f"Couldn't finish digging because {type(e)}")
                 logger.warning(f"Couldn't finish digging because {e}")
         else:
             bot.chat(f"Can't break '{target_block.name}' at {target_block.position}!")
+
+
+def destroy_and_grab_block(bot, pathfinder, invoker_username, *args):
+    user_entity = bot.players[invoker_username].entity
+    target_block = bot.blockAtEntityCursor(user_entity)
+
+    try:
+        @AsyncTask(start=True)
+        def collect_block(task):
+            bot.collectBlock.collect(target_block)
+
+        bot.chat(f"Collecting {target_block.position}")
+
+    except Exception as e:
+        bot.chat(f"Couldn't finish collecting because {type(e)}")
+        logger.warning(f"Couldn't finish collecting because {e}")
 
 
 def place_block(
@@ -208,6 +253,9 @@ def place_block(
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
         return
+
+    # sometimes it is None. Why?
+    logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
 
     # change to GoalPlaceBlock later
     bot.pathfinder.setGoal(

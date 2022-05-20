@@ -15,17 +15,21 @@ logger = logging.getLogger(__name__)
 USERS = {}
 ACTION_MAP = {
     "chat": actions.chat,
+    "look_at_user": actions.look_at_user,
     "goto": actions.goto,
+    "goto_cursor": actions.goto_cursor,
     "goto_user": actions.goto_user,
     "stop": actions.stop,
     "destroy_block": actions.destroy_block,
+    "destroy_and_grab_block": actions.destroy_and_grab_block,
     "place_block": actions.place_block,
-    "look_at_user": actions.look_at_user
 }
 
 bot_settings = BotSettings()
 mineflayer = require("mineflayer")
 pathfinder = require("mineflayer-pathfinder")
+collectblock = require("mineflayer-collectblock")
+
 
 bot = mineflayer.createBot(
     {
@@ -40,6 +44,7 @@ bot = mineflayer.createBot(
 once(bot, "login")
 bot.chat(f"I spawned at {bot.entity.position}")
 bot.loadPlugin(pathfinder.pathfinder)
+bot.loadPlugin(collectblock.plugin)
 mc_data = require("minecraft-data")(bot.version)
 movements = pathfinder.Movements(bot, mc_data)
 bot.pathfinder.setMovements(movements)
