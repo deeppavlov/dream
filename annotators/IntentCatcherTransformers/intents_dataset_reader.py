@@ -1,7 +1,8 @@
+from collections import OrderedDict
 from itertools import chain
 from pathlib import Path
 from random import shuffle
-from typing import OrderedDict, Optional
+from typing import Optional
 
 import json
 from deeppavlov.core.data.dataset_reader import DatasetReader
