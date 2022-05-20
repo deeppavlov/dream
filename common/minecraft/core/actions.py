@@ -7,7 +7,7 @@ and other ``args``/``kwargs`` as needed
 import logging
 from math import pi
 
-from javascript import AsyncTask, Once, require
+from javascript import AsyncTask, On, Once, require
 
 
 logging.basicConfig(
@@ -91,16 +91,21 @@ def goto(
     Returns:
 
     """
-    bot.pathfinder.setGoal(pathfinder.goals.GoalNear(x, y, z, range_goal))
+    try:
+        bot.pathfinder.setGoal(pathfinder.goals.GoalNear(x, y, z, range_goal))
+    except Exception as e:
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
+        logger.warning(f"{type(e)}:{e}")
 
 
-def goto_cursor(bot, pathfinder, invoker_username):
+def goto_cursor(bot, pathfinder, invoker_username, range_goal: int = 3):
     """Sends bot to the coordinates where the player is looking at
 
     Args:
         bot: bot instance
         pathfinder: pathfinder module instance
         invoker_username: minecraft user who invoked this action
+        range_goal: assume target is reached when the bot is this many blocks close to it
 
     Returns:
 
@@ -108,7 +113,17 @@ def goto_cursor(bot, pathfinder, invoker_username):
     user_entity = bot.players[invoker_username].entity
     target_block = bot.blockAtEntityCursor(user_entity)
 
-    goto(bot, pathfinder, invoker_username, *target_block.position.offset(0, 1, 0), range_goal=0)
+    try:
+        goal = pathfinder.goals.GoalNear(
+            target_block.position.x,
+            target_block.position.y,
+            target_block.position.z,
+            range_goal,
+        )
+        bot.pathfinder.setGoal(goal)
+    except Exception as e:
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
+        logger.warning(f"{type(e)}:{e}")
 
 
 def goto_user(
@@ -129,7 +144,14 @@ def goto_user(
 
     """
     user_entity = bot.players[invoker_username].entity
-    bot.pathfinder.setGoal(pathfinder.goals.GoalFollow(user_entity, range_goal), follow)
+
+    try:
+        bot.pathfinder.setGoal(
+            pathfinder.goals.GoalFollow(user_entity, range_goal), follow
+        )
+    except Exception as e:
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
+        logger.warning(f"{type(e)}:{e}")
 
 
 def stop(bot, pathfinder, invoker_username, force: bool = True):
@@ -151,14 +173,13 @@ def stop(bot, pathfinder, invoker_username, force: bool = True):
         bot.pathfinder.stop()
 
 
-def destroy_block(bot, pathfinder, invoker_username, force_pick_up: bool = False):
+def destroy_block(bot, pathfinder, invoker_username, *args):
     """Destroys the block which is targeted by the player
 
     Args:
         bot: bot instance
         pathfinder: pathfinder module instance
         invoker_username: minecraft user who invoked this action
-        force_pick_up: if True, go and pick up the block when finished digging
 
     Returns:
 
@@ -177,17 +198,6 @@ def destroy_block(bot, pathfinder, invoker_username, force_pick_up: bool = False
         pathfinder.goals.GoalLookAtBlock(target_block.position, bot.world)
     )
 
-    if force_pick_up:
-        @Once(bot, "diggingCompleted")
-        def try_pick_up(digging_event, block):
-            logger.debug(f"Picking up {block}")
-
-            @AsyncTask(start=True)
-            def goto_block(task):
-                bot.pathfinder.setGoal(pathfinder.goals.GoalNearXZ(*block.position))
-                logger.debug(f"I arrived at {block.position}")
-            # goto(bot, pathfinder, invoker_username, *target_block.position.offset(0, 1, 0), range_goal=0)
-
     @Once(bot, "goal_reached")
     def start_digging(event, state_goal):
         if bot.canDigBlock(target_block):
@@ -196,6 +206,7 @@ def destroy_block(bot, pathfinder, invoker_username, force_pick_up: bool = False
                 f"will take around {bot.digTime(target_block) // 1000} seconds"
             )
             try:
+
                 @AsyncTask(start=True)
                 def break_block(task):
                     bot.dig(target_block)
@@ -204,7 +215,7 @@ def destroy_block(bot, pathfinder, invoker_username, force_pick_up: bool = False
 
             except Exception as e:
                 bot.chat(f"Couldn't finish digging because {type(e)}")
-                logger.warning(f"Couldn't finish digging because {e}")
+                logger.warning(f"Couldn't finish digging because {type(e)}:{e}")
         else:
             bot.chat(f"Can't break '{target_block.name}' at {target_block.position}!")
 
@@ -214,6 +225,7 @@ def destroy_and_grab_block(bot, pathfinder, invoker_username, *args):
     target_block = bot.blockAtEntityCursor(user_entity)
 
     try:
+
         @AsyncTask(start=True)
         def collect_block(task):
             bot.collectBlock.collect(target_block)
@@ -255,20 +267,24 @@ def place_block(
         return
 
     # sometimes it is None. Why?
-    logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
+    # logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
 
-    # change to GoalPlaceBlock later
-    bot.pathfinder.setGoal(
-        pathfinder.goals.GoalLookAtBlock(
-            target_block.position, bot.world, {"range": max_range_goal}
+    try:
+        # change to GoalPlaceBlock later
+        bot.pathfinder.setGoal(
+            pathfinder.goals.GoalLookAtBlock(
+                target_block.position, bot.world, {"range": max_range_goal}
+            )
         )
-    )
+    except Exception as e:
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
+        logger.warning(f"{type(e)}:{e}")
 
     @Once(bot, "goal_reached")
     def try_placing(event, state_goal):
         try:
             bot.chat(f"Placing a block near {target_block.position}")
             bot.placeBlock(target_block, vec3(*face_vector))
-        except Exception as e:
-            bot.chat(f"Couldn't place the block because {e}")
-            logger.warning(f"Couldn't place the block because {e}")
+        except Exception as placing_e:
+            bot.chat(f"Couldn't place the block there")
+            logger.warning(f"Couldn't place the block because {type(placing_e)} {placing_e}")
