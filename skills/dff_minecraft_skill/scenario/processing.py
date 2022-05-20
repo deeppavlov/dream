@@ -48,6 +48,25 @@ def add_encoding_for_stop():
     return add_encoding_processing
 
 
+def add_encoding_no_range(action_name: str, should_follow: bool = False):
+    def add_encoding_processing(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
+        processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
+
+        # For Response Selector; for good UX 2 loops are good though
+        # actions_list = [{"action": "chat", "args": [], "kwargs": {"range_goal": 1, "nod_head" : True, "animation_loops" : 2}}]
+        # actions_list = [{"action": "chat", "args": [], "kwargs": {"range_goal": 1, "shake_head" : True, "animation_loops" : 2}}]
+
+        # loops - for debugging
+        # actions_list = [{"action": "chat", "args": [], "kwargs": {"range_goal": 1, "shake_head" : True, "animation_loops" : 1}}]
+
+        actions_list = [{"action": action_name, "args": [], "kwargs": {}}]
+        processed_node.response = f"{processed_node.response} #+# {serializer.encode_actions(actions_list)}"
+        ctx.framework_states["actor"]["processed_node"] = processed_node
+        return ctx
+
+    return add_encoding_processing
+
+
 def add_encoding(action_name: str, should_follow: bool = False):
     def add_encoding_processing(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
         processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])

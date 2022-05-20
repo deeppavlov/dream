@@ -102,21 +102,21 @@ flows = {
         },
         "destroy_block": {
             PROCESSING: {
-                1: loc_prs.add_encoding("destroy_block")
+                1: loc_prs.add_encoding_no_range("destroy_block")
                 },
             RESPONSE: loc_rsp.response_for_intent("destroy_block"),
             TRANSITIONS: {},
         },
         "place_block": {
             PROCESSING: {
-                1: loc_prs.add_encoding("place_block")
+                1: loc_prs.add_encoding_no_range("place_block")
                 },
             RESPONSE: loc_rsp.response_for_intent("place_block"),
             TRANSITIONS: {},
         },
         "destroy_and_grab_block": {
             PROCESSING: {
-                1: loc_prs.add_encoding("destroy_and_grab_block")
+                1: loc_prs.add_encoding_no_range("destroy_and_grab_block")
                 },
             RESPONSE: loc_rsp.response_for_intent("destroy_and_grab_block"),
             TRANSITIONS: {},
