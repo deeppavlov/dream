@@ -388,10 +388,6 @@
         "intent": null
     },
     {
-        "sentence": "stop did you wanna chat",
-        "intent": null
-    },
-    {
         "sentence": "enable conversation mode",
         "intent": null
     },
@@ -537,10 +533,6 @@
     },
     {
         "sentence": "can you sing?",
-        "intent": "cant_do"
-    },
-    {
-        "sentence": "will you please turn off the lights",
         "intent": "cant_do"
     },
     {
