@@ -24,13 +24,16 @@ def detect_minecraft_bot_intents(utterance):
     REMOVE_BLOCK_PATTERN = re.search(r"((remove)|(delete)|(destroy)) ((the)|(this))* block", utterance, re.IGNORECASE)
     PLACE_BLOCK_PATTERN = re.search(r"((place)|(put)|(make))( a)* block", utterance, re.IGNORECASE)
     GRAB_BLOCK_PATTERN = re.search(r"((grab)|(get))( a)* block", utterance, re.IGNORECASE)
-    COME_HERE_PATTERN = re.search(r"((come here)|(come to me))|((go here)|(go to me))", utterance, re.IGNORECASE)
-
+    COME_TO_ME_PATTERN = re.search(r"(come to me)|(go to me)", utterance, re.IGNORECASE)
+    COME_HERE_PATTERN = re.search(r"((come here)|(go here))|((come there)|(go there))", utterance, re.IGNORECASE)
     
     
-    if COME_HERE_PATTERN:
+    if COME_TO_ME_PATTERN:
         answer_probs["goto_user"] = (1.0)
         answer_labels.append("goto_user")
+    elif COME_HERE_PATTERN:
+        answer_probs["goto_cursor"] = (1.0)
+        answer_labels.append("goto_cursor")
     elif GO_TO_PATTERN:
         answer_probs["goto"] = (1.0)
         answer_labels.append("goto")

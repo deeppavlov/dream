@@ -5,6 +5,9 @@
   "goto_user" : [
     "Coming!"
   ],
+  "goto_cursor" : [
+    "Aha!"
+  ],
   "stop" : [
     "Gotcha!"
   ],

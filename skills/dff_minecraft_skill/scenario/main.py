@@ -52,6 +52,7 @@ flows = {
         TRANSITIONS: {
             ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
             ("commands", "goto"): loc_cnd.is_intent("goto"),
+            ("commands", "goto_cursor"): loc_cnd.is_intent("goto_cursor"),
             ("commands", "follow_me"): loc_cnd.is_intent("follow_me"),
             ("commands", "stop"): loc_cnd.is_intent("stop"),
             ("commands", "destroy_block"): loc_cnd.is_intent("destroy_block"),
@@ -76,6 +77,11 @@ flows = {
         "goto": {
             PROCESSING: {1: loc_prs.add_encoding_for_goto()},
             RESPONSE: loc_rsp.response_for_intent("goto"),
+            TRANSITIONS: {},
+        },
+        "goto_cursor": {
+            PROCESSING: {1: loc_prs.add_encoding_no_range("goto_cursor")},
+            RESPONSE: loc_rsp.response_for_intent("goto_cursor"),
             TRANSITIONS: {},
         },
         "goto_user": {
