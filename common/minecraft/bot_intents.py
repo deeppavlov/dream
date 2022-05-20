@@ -21,7 +21,7 @@ def detect_minecraft_bot_intents(utterance):
     STOP_PATTERN = re.search(r"sto+p", utterance, re.IGNORECASE)
     LOOK_AT_ME_PATTERN = re.search(r"look (at me)|(here)", utterance, re.IGNORECASE)
     FOLLOW_ME_PATTERN = re.search(r"follow me", utterance, re.IGNORECASE)
-    REMOVE_BLOCK_PATTERN = re.search(r"((remove)|(delete)|(destroy)) ((the)|(this))* block", utterance, re.IGNORECASE)
+    REMOVE_BLOCK_PATTERN = re.search(r"((remove)|(delete)|(destroy)|(get rid of))(( the)|( this))* block", utterance, re.IGNORECASE)
     PLACE_BLOCK_PATTERN = re.search(r"((place)|(put)|(make))( a)* block", utterance, re.IGNORECASE)
     GRAB_BLOCK_PATTERN = re.search(r"((grab)|(get))( a)* block", utterance, re.IGNORECASE)
     COME_TO_ME_PATTERN = re.search(r"((come to me)|(go to me))|((come here)|(go here))", utterance, re.IGNORECASE)
