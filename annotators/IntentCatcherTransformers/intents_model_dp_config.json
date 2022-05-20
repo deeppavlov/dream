@@ -178,11 +178,11 @@
         "ROOT_PATH": "~/.deeppavlov",
         "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
         "MODELS_PATH": "{ROOT_PATH}/models",
-        "MODEL_PATH": "{MODELS_PATH}/classifiers/intents_model_v2"
+        "MODEL_PATH": "{MODELS_PATH}/classifiers/intents_model_v1"
       },
       "download": [
         {
-          "url": "http://files.deeppavlov.ai/deeppavlov_data/intents_model_v2.tar.gz",
+          "url": "http://files.deeppavlov.ai/deeppavlov_data/intents_model_v1.tar.gz",
           "subdir": "{MODELS_PATH}/classifiers"
         }
       ]
