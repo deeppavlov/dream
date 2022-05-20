@@ -8,7 +8,9 @@ from core.serializer import encode_actions, decode_actions
 from core import actions
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
+)
 logger = logging.getLogger(__name__)
 
 
@@ -88,7 +90,9 @@ def on_chat(event, user, message, *args):
 
     try:
         user_id = USERS.get(user, user)
-        response = requests.post(bot_settings.agent_url, json={"user_id": user_id, "payload": message})
+        response = requests.post(
+            bot_settings.agent_url, json={"user_id": user_id, "payload": message}
+        )
         data = response.json()
         response_message = data["response"]
 
@@ -107,6 +111,12 @@ def on_chat(event, user, message, *args):
             response_actions = decode_actions(response_parts[1])
             for action_data in response_actions:
                 action_f = ACTION_MAP[action_data["action"]]
-                action_f(bot, pathfinder, user, *action_data.get("args", []), **action_data.get("kwargs", {}))
+                action_f(
+                    bot,
+                    pathfinder,
+                    user,
+                    *action_data.get("args", []),
+                    **action_data.get("kwargs", {}),
+                )
 
     bot.chat(response_text)

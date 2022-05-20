@@ -287,4 +287,6 @@ def place_block(
             bot.placeBlock(target_block, vec3(*face_vector))
         except Exception as placing_e:
             bot.chat(f"Couldn't place the block there")
-            logger.warning(f"Couldn't place the block because {type(placing_e)} {placing_e}")
+            logger.warning(
+                f"Couldn't place the block because {type(placing_e)} {placing_e}"
+            )
