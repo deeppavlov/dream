@@ -78,5 +78,6 @@ services:
       dockerfile: Dockerfile
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8125
+      - PORT=8125
 
 version: '3.7'
