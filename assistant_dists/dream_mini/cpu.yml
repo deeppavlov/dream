@@ -45,4 +45,5 @@ services:
       CUDA_VISIBLE_DEVICES: ""
   dialogpt:
     environment:
+      DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
