@@ -17,16 +17,11 @@ import common.dff.integration.processing as int_prs
 import scenario.condition as loc_cnd
 import scenario.processing as loc_prs
 import common.universal_templates as templates
+from common.art import SUPER_CONFIDENCE, HIGH_CONFIDENCE
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
 logger = logging.getLogger(__name__)
-
-SUPER_CONFIDENCE = 1.0
-HIGH_CONFIDENCE = 0.98
-DEFAULT_CONFIDENCE = 0.95
-BIT_LOWER_CONFIDENCE = 0.90
-ZERO_CONFIDENCE = 0.0
 
 flows = {
     GLOBAL: {
@@ -51,7 +46,7 @@ flows = {
             },
             PROCESSING: {
                 "set_flag": loc_prs.set_flag("art_skill_active"),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": loc_prs.set_start_confidence,
             },
         },
         "photo_q": {
@@ -64,12 +59,18 @@ flows = {
         },
     },
     "drawing": {
-        "what_painter": {RESPONSE: "Pictures of what painters do you like?", TRANSITIONS: {lbl.forward(): cnd.true()}},
+        "what_painter": {
+            RESPONSE: "Pictures of what painters do you like?",
+            TRANSITIONS: {lbl.forward(): cnd.true()},
+            PROCESSING: {"set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE)},
+        },
         "what_paintings": {
             RESPONSE: "I also like pictures of {user_fav_painter}. What kind of paintings do you like to draw: "
             "landscapes, portraits or something else?",
             PROCESSING: {
-                "entity_extraction": int_prs.entities(user_fav_painter=["wiki:Q1028181", "tag:person"]),
+                "entity_extraction": int_prs.entities(
+                    user_fav_painter=["wiki:Q1028181", "tag:person", "default:your favourite painter"]
+                ),
                 "slot_filling": int_prs.fill_responses_by_slots(),
             },
             TRANSITIONS: {lbl.forward(): cnd.true()},
