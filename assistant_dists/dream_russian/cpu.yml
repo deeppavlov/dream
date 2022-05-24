@@ -16,3 +16,6 @@ services:
   toxic-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
