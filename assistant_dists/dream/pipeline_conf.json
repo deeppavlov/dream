@@ -267,7 +267,7 @@
                     "timeout": 1,
                     "url": "http://entity-detection:8103/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
@@ -951,6 +951,19 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
+            "dialogpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dialogpt:8125/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_template_skill": {
                 "connector": {
                     "protocol": "http",
@@ -1036,19 +1049,6 @@
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "hypothesis_scorer": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://hypothesis-scorer:8110/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_scorer_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"

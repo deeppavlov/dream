@@ -323,11 +323,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8100:8100
-  hypothesis-scorer:
-    volumes:
-      - "./annotators/hypothesis_scorer:/src"
-    ports:
-      - 8110:8110
   dff-funfact-skill:
     volumes:
       - "./skills/dff_funfact_skill:/src"
@@ -399,6 +394,11 @@ services:
       - "./annotators/midas_predictor:/src"
     ports:
       - 8121:8121
+  dialogpt:
+    volumes:
+      - "./services/dialogpt:/src"
+    ports:
+      - 8125:8125
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

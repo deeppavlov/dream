@@ -14,9 +14,10 @@ RUN curl $MIDAS_DATA_URL --output /tmp/midas.tar.gz && tar -zvxf /tmp/midas.tar.
 RUN curl $CONVERT_DATA_URL --output /tmp/convert.tar.gz && tar -zvxf /tmp/convert.tar.gz -C /convert && rm -f /tmp/convert.tar.gz
 
 COPY ./requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 RUN pip uninstall -y protobuf tensorflow tensorflow-gpu && \
-    pip install --upgrade --force-reinstall tensorflow-gpu==1.14.0
+    pip install --upgrade --force-reinstall tensorflow-gpu==1.14.0 && \
+    pip install Werkzeug==2.0.3
 
 COPY . /src/
 
