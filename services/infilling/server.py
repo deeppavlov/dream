@@ -34,9 +34,9 @@ try:
 
     # init model
     tokenizer = tokenize_util.Tokenizer.GPT2
-    with open('additional_ids_to_tokens.pkl', 'rb') as f:
+    with open(MODEL_DIR + 'additional_ids_to_tokens.pkl', 'rb') as f:
         additional_ids_to_tokens = pickle.load(f)
-    additional_tokens_to_ids = {v:k for k, v in additional_ids_to_tokens.items()}
+    additional_tokens_to_ids = {v: k for k, v in additional_ids_to_tokens.items()}
     try:
         tokenize_util.update_tokenizer(additional_ids_to_tokens, tokenizer)
     except ValueError:

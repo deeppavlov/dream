@@ -19,6 +19,7 @@ COPY . /src
 
 RUN mkdir /data/
 RUN mkdir /data/infilling
+RUN ls
 RUN python download_model.py model sto ilm | bash
 
 
