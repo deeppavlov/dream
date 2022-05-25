@@ -30,9 +30,6 @@ services:
   masked-lm:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  infilling:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   text-qa:
     environment:
       CUDA_VISIBLE_DEVICES: ""
@@ -50,5 +47,8 @@ services:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   dialogpt:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  infilling:
     environment:
       CUDA_VISIBLE_DEVICES: ""

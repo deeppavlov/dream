@@ -125,10 +125,6 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  infilling:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
   dff-friendship-skill:
     restart: unless-stopped
   entity-storer:
@@ -193,6 +189,10 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  infilling:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'

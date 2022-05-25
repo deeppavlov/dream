@@ -250,11 +250,6 @@ services:
       - "./services/masked_lm:/src"
     ports:
       - 8088:8088
-  infilling:
-    volumes:
-      - "./services/infilling:/src"
-    ports:
-      - 8122:8122
   entity-storer:
     volumes:
       - "./common:/src/common"
@@ -404,6 +399,11 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
+  infilling:
+    volumes:
+      - "./services/infilling:/src"
+    ports:
+      - 8122:8122
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
