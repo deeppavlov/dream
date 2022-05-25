@@ -18,7 +18,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-MODEL_DIR = '/data/infilling/'
+MODEL_DIR = "/data/infilling/"
 logging.info(f"MODEL_DIR = {MODEL_DIR}")
 # MASK_ID = 103
 
@@ -34,13 +34,13 @@ try:
 
     # init model
     tokenizer = tokenize_util.Tokenizer.GPT2
-    with open(MODEL_DIR + 'additional_ids_to_tokens.pkl', 'rb') as f:
+    with open(MODEL_DIR + "additional_ids_to_tokens.pkl", "rb") as f:
         additional_ids_to_tokens = pickle.load(f)
     additional_tokens_to_ids = {v: k for k, v in additional_ids_to_tokens.items()}
     try:
         tokenize_util.update_tokenizer(additional_ids_to_tokens, tokenizer)
     except ValueError:
-        logger.info('Tokenizer already updated')
+        logger.info("Tokenizer already updated")
     logger.info(additional_tokens_to_ids)
     model = GPT2LMHeadModel.from_pretrained(MODEL_DIR)
     model.eval()
@@ -67,11 +67,11 @@ def respond():
         output = []
         for txt in texts:
             inputs = tokenize_util.encode(txt, tokenizer)
-            _blank_id = tokenize_util.encode(' _', tokenizer)[0]
+            _blank_id = tokenize_util.encode(" _", tokenizer)[0]
             flag = 0
             while not flag:  # надо исправить костыль
                 try:
-                    inputs[inputs.index(_blank_id)] = additional_tokens_to_ids['<|infill_ngram|>']
+                    inputs[inputs.index(_blank_id)] = additional_tokens_to_ids["<|infill_ngram|>"]
                 except Exception:
                     flag = 1
             inputs = {k: v.cuda() for k, v in inputs.items()} if cuda else inputs
