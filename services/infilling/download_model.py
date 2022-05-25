@@ -87,7 +87,6 @@ if __name__ == "__main__":
     import sys
     from pathlib import Path
 
-
     MODEL_DIR = Path(os.environ.get("MODEL_DIR", "/data/"))
 
     if sys.argv[1] == "model":
@@ -117,4 +116,3 @@ if __name__ == "__main__":
         print(
             _DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1], local_path=str(MODEL_DIR.joinpath(local_fn)))
         )
-    
