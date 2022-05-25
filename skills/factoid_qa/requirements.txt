@@ -1,7 +1,8 @@
+pyopenssl==22.0.0
 flask==1.1.1
 itsdangerous==2.0.1
 gunicorn==19.9.0
-requests==2.22.0
+requests==2.27.1
 numpy==1.17.2
 sentry-sdk==0.14.2
 spacy==2.2.3

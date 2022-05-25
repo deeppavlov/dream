@@ -8,8 +8,8 @@ import sentry_sdk
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)
 
-WIKIDATA_URL = getenv("WIKIDATA_URL")
-ENTITY_LINKING_URL = getenv("ENTITY_LINKING_URL")
+WIKIDATA_URL = getenv("DP_WIKIDATA_URL")
+ENTITY_LINKING_URL = getenv("DP_ENTITY_LINKING_URL")
 assert WIKIDATA_URL and ENTITY_LINKING_URL
 
 
