@@ -52,7 +52,7 @@ services:
       - 8012:8012
   intent-catcher:
     volumes:
-      - "./annotators/IntentCatcher/src:/src"
+      - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
     ports:
       - 8014:8014

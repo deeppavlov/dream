@@ -1,12 +1,26 @@
 import functools
 import logging
 import random
+import re
 from typing import Any, Callable, Optional, Iterator
 
+import common.dff.integration.context as int_ctx
+from common.art import ART_PATTERN, SUPER_CONFIDENCE, HIGH_CONFIDENCE
 from common.dff.integration.processing import save_slots_to_ctx
+from common.universal_templates import if_chat_about_particular_topic
 from df_engine.core import Context, Actor
 
 logger = logging.getLogger(__name__)
+
+
+def set_start_confidence(ctx: Context, actor: Actor) -> Context:
+    user_uttr = int_ctx.get_last_human_utterance(ctx, actor)
+    bot_uttr = int_ctx.get_last_bot_utterance(ctx, actor)
+    if if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=ART_PATTERN):
+        int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    elif re.findall(ART_PATTERN, user_uttr["text"]):
+        int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
+    return ctx
 
 
 @functools.singledispatch
