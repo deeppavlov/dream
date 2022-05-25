@@ -1170,7 +1170,6 @@ services:
       context: ./services/infilling/
       args:
         SERVICE_PORT: 8122
-        PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased" # change it!
     command: flask run -h 0.0.0.0 -p 8122
     environment:
       - CUDA_VISIBLE_DEVICES=0

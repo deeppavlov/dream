@@ -3,22 +3,23 @@ import time
 import os
 import pickle
 
-
+import sentry_sdk
+import tokenize_util
 import torch
 from flask import Flask, request, jsonify
-import sentry_sdk
-from sentry_sdk.integrations.flask import FlaskIntegration
-import tokenize_util
-from transformers import GPT2LMHeadModel
 from infer import infill_with_ilm
+from sentry_sdk.integrations.flask import FlaskIntegration
+from transformers import GPT2LMHeadModel
+
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-MODEL_DIR = "/data/infilling/"
+MODEL_DIR = os.environ.get("MODEL_DIR", None)
+if MODEL_DIR is None:
+    MODEL_DIR = "/data/infilling/"
 logging.info(f"MODEL_DIR = {MODEL_DIR}")
 # MASK_ID = 103
 
@@ -54,15 +55,14 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
 
-    texts = request.json.get("text", [])
-    logger.info(f"Text: {texts}")
+    texts = request.json.get("texts", [])
+    logger.info(f"Input: {texts}")
     try:
         output = []
         for txt in texts:
@@ -84,4 +84,4 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"infilling exec time: {total_time:.3f}s")
-    return jsonify({"predicted_tokens": output})
+    return jsonify({"infilled_text": output})
