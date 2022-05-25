@@ -78,7 +78,13 @@ PAPER_TASK_TO_INTERNAL = {
 }
 
 _DOWNLOAD_TEMPLATE = """
-wget -nc --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id={gdrive_id}' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\\1\\n/p')&id={gdrive_id}" -O {local_path} && rm -rf /tmp/cookies.txt
+wget -nc --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget \
+    --quiet --save-cookies /tmp/cookies.txt \
+    --keep-session-cookies \
+    --no-check-certificate \
+    'https://docs.google.com/uc?export=download&id={gdrive_id}' \
+    -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\\1\\n/p')&id={gdrive_id}" \
+    -O {local_path} && rm -rf /tmp/cookies.txt
 """.strip()
 
 
