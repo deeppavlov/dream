@@ -18,15 +18,15 @@ COPY . /src
 
 RUN mkdir /data/
 RUN mkdir /data/infilling
-
 WORKDIR /data/infilling
-RUN python download_model.py /data/infilling/ model sto ilm | bash
 RUN wget http://files.deeppavlov.ai/dream/infilling/additional_ids_to_tokens.pkl
 RUN wget http://files.deeppavlov.ai/dream/infilling/vocab.bpe
 RUN wget http://files.deeppavlov.ai/dream/infilling/encoder.json
 RUN wget http://files.deeppavlov.ai/dream/infilling/config.json
 
 WORKDIR /src
+
+RUN python download_model.py model sto ilm | bash
 
 HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 

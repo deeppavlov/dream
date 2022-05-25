@@ -99,18 +99,18 @@ if __name__ == "__main__":
     import os
     import sys
 
-    if sys.argv[2] == "model":
-        data_tag, model_type = sys.argv[3:]
+    if sys.argv[1] == "model":
+        data_tag, model_type = sys.argv[2:]
         model_tag = "{}_{}".format(data_tag[:3], model_type)
         gdrive_urls = [PRETRAINED_MODELS[model_tag], PRETRAINED_MODEL_CONFIG_JSON, PRETRAINED_SPECIAL_VOCAB_PKL]
         local_fns = ["pytorch_model.bin", "config.json", "additional_ids_to_tokens.pkl"]
-    elif sys.argv[2] == "data_train":
-        data_tag = sys.argv[3][:3]
+    elif sys.argv[1] == "data_train":
+        data_tag = sys.argv[2][:3]
         out_dir = os.path.join(MODEL_DIR, "data")
         gdrive_urls = [PREMASKED_DATA[s]["{}_mixture".format(data_tag)] for s in ["train", "valid"]]
         local_fns = ["{}_mixture_{}.pkl".format(data_tag, s) for s in ["train", "valid"]]
-    elif sys.argv[2] == "data_eval":
-        data_tag = sys.argv[3][:3]
+    elif sys.argv[1] == "data_eval":
+        data_tag = sys.argv[2][:3]
         out_dir = os.path.join(MODEL_DIR, "data")
         gdrive_urls = [
             PREMASKED_DATA["test"]["{}_{}".format(data_tag, g)]
@@ -123,5 +123,7 @@ if __name__ == "__main__":
 
     print("mkdir -p {}".format(MODEL_DIR))
     for gdrive_url, local_fn in zip(gdrive_urls, local_fns):
-        print(_DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1],
-                                        local_path=os.path.join(MODEL_DIR, local_fn)))
+        print(
+            _DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1], local_path=os.path.join(MODEL_DIR, local_fn))
+        )
+    print("Success!")
