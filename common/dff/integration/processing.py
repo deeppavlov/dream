@@ -38,10 +38,20 @@ def entities(**kwargs):
                 if extracted_entity:
                     ctx = save_slots_to_ctx({slot_name: extracted_entity})(ctx, actor)
             elif isinstance(slot_types, list):
+                found = False
                 for slot_type in slot_types:
-                    extracted_entity = extract_entity(ctx, slot_type)
-                    if extracted_entity:
-                        ctx = save_slots_to_ctx({slot_name: extracted_entity})(ctx, actor)
+                    if not slot_type.startswith("default:"):
+                        extracted_entity = extract_entity(ctx, slot_type)
+                        if extracted_entity:
+                            ctx = save_slots_to_ctx({slot_name: extracted_entity})(ctx, actor)
+                            found = True
+                if not found:
+                    default_value = ""
+                    for slot_type in slot_types:
+                        if slot_type.startswith("default:"):
+                            default_value = slot_type.split("default:")[1]
+                    if default_value:
+                        ctx = save_slots_to_ctx({slot_name: default_value})(ctx, actor)
         return ctx
 
     return extract_entities

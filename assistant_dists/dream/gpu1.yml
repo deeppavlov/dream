@@ -63,6 +63,8 @@ services:
     restart: unless-stopped
   intent-catcher:
     restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   badlisted-words:
     restart: unless-stopped
   dff-program-y-dangerous-skill:

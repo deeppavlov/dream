@@ -7,25 +7,20 @@ import pathlib
 from copy import deepcopy
 from random import choice, choices
 
-import common.news as news
-import common.books as books
-import common.movies as movies
-import common.emotion as emotion
-
-# import common.weather as weather
-import common.personal_info as personal_info
-import common.game_cooperative_skill as game_cooperative_skill
-import common.travel as dff_travel_skill
-
-# import common.celebrities as dff_celebrity_skill
-import common.gaming as dff_gaming_skill
-
-# import common.gossip as dff_gossip_skill
-import common.sport as dff_sport_skill
 import common.animals as dff_animals_skill
+import common.books as books
+import common.emotion as emotion
 import common.food as dff_food_skill
-import common.science as dff_science_skill
+import common.game_cooperative_skill as game_cooperative_skill
+import common.gaming as dff_gaming_skill
+import common.movies as movies
 import common.music as dff_music_skill
+import common.news as news
+import common.personal_info as personal_info
+import common.science as dff_science_skill
+import common.sport as dff_sport_skill
+import common.travel as dff_travel_skill
+from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, CAN_CONTINUE_PROMPT, MUST_CONTINUE
 from common.utils import get_not_used_template
 from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, CHANGE_TOPIC_SUBJECT, BY_THE_WAY
 
@@ -344,3 +339,42 @@ def get_linked_to_dff_skills(dff_shared_state, current_turn, prev_active_skill):
             to_skills.append(to_skill)
 
     return to_skills
+
+
+def get_linked_to_skills(dialog):
+    # return skills linked to in the previous bot utterance (of course, it's the only one skill)
+
+    bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+    linked_to_skill_names = get_all_linked_to_skills(bot_uttr)
+    prev_active_skill = bot_uttr.get("active_skill", "")
+
+    result = []
+    for skill_name in linked_to_skill_names:
+        result.append(skill_name)
+    result.extend(
+        get_linked_to_dff_skills(
+            dialog["human"]["attributes"].get("dff_shared_state", {}),
+            len(dialog["human_utterances"]),
+            prev_active_skill,
+        )
+    )
+    return result
+
+
+def get_previously_active_skill(dialog):
+    # return prev active skill if it returned not `CAN_NOT_CONTINUE`
+
+    prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(dialog["human_utterances"]) > 1 else []
+    bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+    prev_active_skill = bot_uttr.get("active_skill", "")
+
+    result = []
+    for hyp in prev_user_uttr_hyp:
+        if hyp.get("can_continue", CAN_NOT_CONTINUE) in {
+            CAN_CONTINUE_SCENARIO,
+            MUST_CONTINUE,
+            CAN_CONTINUE_PROMPT,
+        }:
+            if hyp["skill_name"] == prev_active_skill:
+                result.append(hyp["skill_name"])
+    return result
