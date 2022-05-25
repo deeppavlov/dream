@@ -9,9 +9,7 @@ from pathlib import Path
 from encoder import Encoder as OfficialEncoder
 
 
-MODEL_DIR = os.environ.get("MODEL_DIR", None)
-if MODEL_DIR is None:
-    MODEL_DIR = "/data/infilling/"
+MODEL_DIR = os.environ.get("MODEL_DIR", "/data/")
 
 
 class Tokenizer(Enum):

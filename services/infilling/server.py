@@ -18,9 +18,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-MODEL_DIR = os.environ.get("MODEL_DIR", None)
-if MODEL_DIR is None:
-    MODEL_DIR = "/data/infilling/"
+MODEL_DIR = os.environ.get("MODEL_DIR", "/data/")
 logging.info(f"MODEL_DIR = {MODEL_DIR}")
 # MASK_ID = 103
 

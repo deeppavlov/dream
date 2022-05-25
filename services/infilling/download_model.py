@@ -1,10 +1,3 @@
-import os
-
-
-MODEL_DIR = os.environ.get("MODEL_DIR", None)
-if MODEL_DIR is None:
-    MODEL_DIR = "/data/infilling/"
-
 PREMASKED_DATA = {
     "train": {
         "sto_mixture": "https://drive.google.com/open?id=1LxlyPqz3OvAZsYRRC8yRdSoaCKGB0Ucg",
@@ -85,19 +78,17 @@ PAPER_TASK_TO_INTERNAL = {
 }
 
 _DOWNLOAD_TEMPLATE = """
-wget -nc --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget \
-    --quiet --save-cookies /tmp/cookies.txt \
-    --keep-session-cookies \
-    --no-check-certificate \
-    'https://docs.google.com/uc?export=download&id={gdrive_id}' \
-    -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\\1\\n/p')&id={gdrive_id}" \
-    -O {local_path} && rm -rf /tmp/cookies.txt
+wget -nc --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id={gdrive_id}' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\\1\\n/p')&id={gdrive_id}" -O {local_path} && rm -rf /tmp/cookies.txt
 """.strip()
 
 
 if __name__ == "__main__":
     import os
     import sys
+    from pathlib import Path
+
+
+    MODEL_DIR = Path(os.environ.get("MODEL_DIR", "/data/"))
 
     if sys.argv[1] == "model":
         data_tag, model_type = sys.argv[2:]
@@ -106,12 +97,12 @@ if __name__ == "__main__":
         local_fns = ["pytorch_model.bin", "config.json", "additional_ids_to_tokens.pkl"]
     elif sys.argv[1] == "data_train":
         data_tag = sys.argv[2][:3]
-        out_dir = os.path.join(MODEL_DIR, "data")
+        out_dir = MODEL_DIR.joinpath("data")
         gdrive_urls = [PREMASKED_DATA[s]["{}_mixture".format(data_tag)] for s in ["train", "valid"]]
         local_fns = ["{}_mixture_{}.pkl".format(data_tag, s) for s in ["train", "valid"]]
     elif sys.argv[1] == "data_eval":
         data_tag = sys.argv[2][:3]
-        out_dir = os.path.join(MODEL_DIR, "data")
+        out_dir = MODEL_DIR.joinpath("data")
         gdrive_urls = [
             PREMASKED_DATA["test"]["{}_{}".format(data_tag, g)]
             for g in ["mixture", "document", "paragraph", "sentence", "ngram", "word"]
@@ -121,9 +112,9 @@ if __name__ == "__main__":
             for g in ["mixture", "document", "paragraph", "sentence", "ngram", "word"]
         ]
 
-    print("mkdir -p {}".format(MODEL_DIR))
+    print("mkdir -p {}".format(str(MODEL_DIR)))
     for gdrive_url, local_fn in zip(gdrive_urls, local_fns):
         print(
-            _DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1], local_path=os.path.join(MODEL_DIR, local_fn))
+            _DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1], local_path=str(MODEL_DIR.joinpath(local_fn)))
         )
-    print("Success!")
+    

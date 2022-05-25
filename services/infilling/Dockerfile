@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated wget
 
 WORKDIR /src
 
-ARG MODEL_DIR
+ARG MODEL_DIR=/data/
 ENV MODEL_DIR ${MODEL_DIR}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
@@ -17,16 +17,16 @@ RUN pip install -r /src/requirements.txt
 COPY . /src
 
 RUN mkdir /data/
-RUN mkdir /data/infilling
-WORKDIR /data/infilling
+RUN ls
+RUN python download_model.py model sto ilm | bash
+WORKDIR /data/
+
 RUN wget http://files.deeppavlov.ai/dream/infilling/additional_ids_to_tokens.pkl
 RUN wget http://files.deeppavlov.ai/dream/infilling/vocab.bpe
 RUN wget http://files.deeppavlov.ai/dream/infilling/encoder.json
 RUN wget http://files.deeppavlov.ai/dream/infilling/config.json
 
 WORKDIR /src
-
-RUN python download_model.py model sto ilm | bash
 
 HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 
