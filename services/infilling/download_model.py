@@ -1,3 +1,10 @@
+import os
+
+
+MODEL_DIR = os.environ.get("MODEL_DIR", None)
+if MODEL_DIR is None:
+    MODEL_DIR = "/data/infilling/"
+
 PREMASKED_DATA = {
     "train": {
         "sto_mixture": "https://drive.google.com/open?id=1LxlyPqz3OvAZsYRRC8yRdSoaCKGB0Ucg",
@@ -92,8 +99,6 @@ if __name__ == "__main__":
     import os
     import sys
 
-    out_dir = sys.argv[1]
-
     if sys.argv[2] == "model":
         data_tag, model_type = sys.argv[3:]
         model_tag = "{}_{}".format(data_tag[:3], model_type)
@@ -101,12 +106,12 @@ if __name__ == "__main__":
         local_fns = ["pytorch_model.bin", "config.json", "additional_ids_to_tokens.pkl"]
     elif sys.argv[2] == "data_train":
         data_tag = sys.argv[3][:3]
-        out_dir = os.path.join(out_dir, "data")
+        out_dir = os.path.join(MODEL_DIR, "data")
         gdrive_urls = [PREMASKED_DATA[s]["{}_mixture".format(data_tag)] for s in ["train", "valid"]]
         local_fns = ["{}_mixture_{}.pkl".format(data_tag, s) for s in ["train", "valid"]]
     elif sys.argv[2] == "data_eval":
         data_tag = sys.argv[3][:3]
-        out_dir = os.path.join(out_dir, "data")
+        out_dir = os.path.join(MODEL_DIR, "data")
         gdrive_urls = [
             PREMASKED_DATA["test"]["{}_{}".format(data_tag, g)]
             for g in ["mixture", "document", "paragraph", "sentence", "ngram", "word"]
@@ -116,6 +121,7 @@ if __name__ == "__main__":
             for g in ["mixture", "document", "paragraph", "sentence", "ngram", "word"]
         ]
 
-    print("mkdir -p {}".format(out_dir))
+    print("mkdir -p {}".format(MODEL_DIR))
     for gdrive_url, local_fn in zip(gdrive_urls, local_fns):
-        print(_DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1], local_path=os.path.join(out_dir, local_fn)))
+        print(_DOWNLOAD_TEMPLATE.format(gdrive_id=gdrive_url.split("=")[1],
+                                        local_path=os.path.join(MODEL_DIR, local_fn)))

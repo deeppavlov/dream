@@ -1,10 +1,17 @@
 import json
+import os
 import regex as re
 import warnings
 from enum import Enum
 from functools import lru_cache
+from pathlib import Path
 
 from encoder import Encoder as OfficialEncoder
+
+
+MODEL_DIR = os.environ.get("MODEL_DIR", None)
+if MODEL_DIR is None:
+    MODEL_DIR = "/data/infilling/"
 
 
 class Tokenizer(Enum):
@@ -13,8 +20,6 @@ class Tokenizer(Enum):
 
 
 DEFAULT_TOKENIZER = Tokenizer.GPT2
-
-
 _CUSTOM_ID_TO_TOKEN = None
 
 
@@ -39,9 +44,9 @@ def _get_tokenizer_state(tokenizer):
 
     if tokenizer not in _TOKENIZER_TO_STATE:
         if tokenizer == Tokenizer.GPT2:
-            with open("encoder.json", "r") as f:
+            with open(Path(MODEL_DIR).joinpath("encoder.json"), "r") as f:
                 encoder_json = json.load(f)
-            with open("vocab.bpe", "r", encoding="utf-8") as f:
+            with open(Path(MODEL_DIR).joinpath("vocab.bpe"), "r", encoding="utf-8") as f:
                 bpe_data = f.read()
             bpe_merges = [tuple(merge_str.split()) for merge_str in bpe_data.split("\n")[1:-1]]
             official_encoder = OfficialEncoder(encoder=encoder_json, bpe_merges=bpe_merges)

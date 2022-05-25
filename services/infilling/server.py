@@ -2,6 +2,7 @@ import logging
 import time
 import os
 import pickle
+from pathlib import Path
 
 import sentry_sdk
 import tokenize_util
@@ -35,7 +36,7 @@ try:
 
     # init model
     tokenizer = tokenize_util.Tokenizer.GPT2
-    with open(MODEL_DIR + "additional_ids_to_tokens.pkl", "rb") as f:
+    with open(Path(MODEL_DIR).joinpath("additional_ids_to_tokens.pkl"), "rb") as f:
         additional_ids_to_tokens = pickle.load(f)
     additional_tokens_to_ids = {v: k for k, v in additional_ids_to_tokens.items()}
     try:

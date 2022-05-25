@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated wget
 
 WORKDIR /src
 
+ARG MODEL_DIR
+ENV MODEL_DIR ${MODEL_DIR}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
@@ -21,6 +23,8 @@ WORKDIR /data/infilling
 RUN python download_model.py /data/infilling/ model sto ilm | bash
 RUN wget http://files.deeppavlov.ai/dream/additional_ids_to_tokens.pkl
 RUN wget http://files.deeppavlov.ai/dream/vocab.bpe
+RUN wget http://files.deeppavlov.ai/dream/encoder.json
+RUN wget http://files.deeppavlov.ai/dream/config.json
 
 WORKDIR /src
 

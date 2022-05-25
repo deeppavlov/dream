@@ -1169,6 +1169,7 @@ services:
     build:
       context: ./services/infilling/
       args:
+        MODEL_DIR: /data/infilling/
         SERVICE_PORT: 8122
     command: flask run -h 0.0.0.0 -p 8122
     environment:

@@ -1,7 +1,5 @@
 """Byte pair encoding utilities"""
 
-import os
-import json
 import regex as re
 from functools import lru_cache
 
@@ -106,15 +104,3 @@ class Encoder:
         text = "".join([self.decoder[token] for token in tokens])
         text = bytearray([self.byte_decoder[c] for c in text]).decode("utf-8", errors=self.errors)
         return text
-
-
-def get_encoder(model_name, models_dir):
-    with open(os.path.join(models_dir, model_name, "encoder.json"), "r") as f:
-        encoder = json.load(f)
-    with open(os.path.join(models_dir, model_name, "vocab.bpe"), "r", encoding="utf-8") as f:
-        bpe_data = f.read()
-    bpe_merges = [tuple(merge_str.split()) for merge_str in bpe_data.split("\n")[1:-1]]
-    return Encoder(
-        encoder=encoder,
-        bpe_merges=bpe_merges,
-    )
