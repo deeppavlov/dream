@@ -399,6 +399,11 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
+  infilling:
+    volumes:
+      - "./services/infilling:/src"
+    ports:
+      - 8122:8122
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
