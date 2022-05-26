@@ -23,9 +23,7 @@ logging.info(f"MODEL_DIR = {MODEL_DIR}")
 # MASK_ID = 103
 
 try:
-    cuda = torch.cuda.is_available()
-    if cuda:
-        torch.cuda.set_device(0)  # singe gpu
+    if torch.cuda.is_available():
         device = torch.device("cuda")
     else:
         device = torch.device("cpu")
@@ -44,8 +42,11 @@ try:
     logger.info(additional_tokens_to_ids)
     model = GPT2LMHeadModel.from_pretrained(MODEL_DIR)
     model.eval()
-    if cuda:
-        model.cuda()
+    if torch.cuda.is_available():
+        additional_tokens_to_ids = {
+            k: torch.tensor(v, dtype=torch.int).cuda() for k, v in additional_tokens_to_ids.items()
+        }
+        model.to(device)
 
     logger.info("infilling model is ready")
 except Exception as e:
@@ -73,14 +74,14 @@ def respond():
                     inputs[inputs.index(_blank_id)] = additional_tokens_to_ids["<|infill_ngram|>"]
                 except Exception:
                     flag = 1
-            inputs = {k: v.cuda() for k, v in inputs.items()} if cuda else inputs
             generated = infill_with_ilm(model, additional_tokens_to_ids, inputs, num_infills=1)
             output.append(tokenize_util.decode(generated[0], tokenizer))
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        output = [[]] * len(texts)
+        output = [""] * len(texts)
 
+    logger.info(f"Output: {output}")
     total_time = time.time() - st_time
     logger.info(f"infilling exec time: {total_time:.3f}s")
     return jsonify({"infilled_text": output})

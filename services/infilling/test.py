@@ -10,12 +10,12 @@ def test_respond():
 
     result = requests.post(url, json=request_data).json()
 
-    assert result["infilled_text"][0].startswith(
-        "Chris was bad at"
-    ), f"Got\n{result}\n, but had to be starting with 'Chris was bad at math'"
+    assert result["infilled_text"][0].startswith("Chris was bad at"), print(
+        f"Got\n{result}\n, but had to be starting with 'Chris was bad at math'"
+    )
     assert result["infilled_text"][1].startswith("Chris was") and result["infilled_text"][1].endswith(
         "so he could not come."
-    )
+    ), print(f"Got\n{result}\n, but had to be ending with 'so he could not come.'")
     print("Success")
 
 
