@@ -4,7 +4,7 @@ from ignite.metrics.nlp import Bleu
 import random
 
 def test_simple():
-    url = "http://0.0.0.0:8126/respond"
+    url = "http://0.0.0.0:8123/respond"
 
     path = ["example.jpg"]
     request_data = {"text": path}
@@ -16,9 +16,9 @@ def test_simple():
     print("Simple test passed")
 
 def test_quality():
-    url = "http://0.0.0.0:8126/respond"
+    url = "http://0.0.0.0:8123/respond"
 
-    annFile = 'annotations/captions_val2017.json'
+    annFile = 'services/image_captioning/annotations/captions_val2017.json'
     coco_caps=COCO(annFile)
     imgIds = random.choices(coco_caps.getImgIds(), k=10)
     imgIdsStr = [str(imgId) for imgId in imgIds]
@@ -40,4 +40,4 @@ def test_quality():
 
 if __name__ == "__main__":
     test_simple()
-    test_quality()
+    #test_quality()

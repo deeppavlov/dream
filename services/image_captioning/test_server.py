@@ -1,7 +1,7 @@
 import requests
 
 def test_respond():
-    url = "http://0.0.0.0:8126/respond"
+    url = "http://0.0.0.0:8123/respond"
 
     path = ["example.jpg"]
     request_data = {"text": path}
@@ -10,7 +10,7 @@ def test_respond():
     print("Test respond passed")
 
 def test_incorrect_respond():
-    url = "http://0.0.0.0:8126/respond"
+    url = "http://0.0.0.0:8123/respond"
 
     path = ["this_image_does_not_exist.jpg"]
     request_data = {"text": path}

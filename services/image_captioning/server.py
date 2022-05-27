@@ -21,11 +21,6 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
  
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.info('!!!!!!!!!!!!!!!!!' + str(torch.__version__))
-dirs = os.listdir('/opt/conda/lib/python3.7/site-packages/data/models/')
-for dir in dirs:
-    logger.info('?????????' + dir)
-#logger.info('????????????????????' + Path(__file__).absolute())
  
 D = torch.device
 CPU = torch.device('cpu')
@@ -41,7 +36,6 @@ def get_device(device_id: int) -> D:
 CUDA = get_device
  
 PRETRAINED_MODEL_PATH = os.environ.get("PRETRAINED_MODEL_PATH")
-logger.info('!!!!!!!!!!!!!!!!!!!!!!!!' + PRETRAINED_MODEL_PATH)
 
  
 try:
@@ -99,7 +93,5 @@ def respond():
         generated_text_prefix = ""
  
    total_time = time.time() - st_time
-#    logger.info(generated_text_prefixes[0])
-#    logger.info(str(len(generated_text_prefixes)))
    logger.info(f"image_captioning exec time: {total_time:.3f}s")
    return jsonify({"captions": generated_text_prefixes})
