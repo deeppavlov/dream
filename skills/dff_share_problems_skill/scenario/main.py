@@ -59,7 +59,11 @@ flows = {
             },
         },
         "fallback": {
-            RESPONSE: "Ooops",
+            RESPONSE: "Sorry, but I don't understand what you've just said :(",
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(0.0),
+                "set_can_continue": int_prs.set_can_continue(common_constants.CAN_NOT_CONTINUE),
+            },
             TRANSITIONS: {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),
@@ -137,7 +141,7 @@ flows = {
             RESPONSE: "I'm sorry to hear that. Thank you for sharing this with me.",
             PROCESSING: {
                 "set_goal_status_flag": goal_status.set_goal_status_flag(GOAL_ACHIEVED)
-            }
+            },
         },
         "clarify": {
             RESPONSE: "What happened?",

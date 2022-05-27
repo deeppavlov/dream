@@ -15,7 +15,7 @@ APPRECIATION_PATTERN = re.compile(r"\b(my favorite|my fav|my favourite|i love|i 
 
 GENRES_PATTERN = re.compile(r"\b(" + ("|".join(genres) + ")"), re.IGNORECASE)
 
-RECOMMEND_BOOK_PATTERN = re.compile(r"\b((recommend|suggest).*? (book|read)|what book would you (suggest|recommend)|what book should i read|(recommend|suggest).*? read)", re.IGNORECASE)
+RECOMMEND_BOOK_PATTERN = re.compile(r"\b((recommend|suggest).*? (book|read)|what book would you (suggest|recommend)|what book should i read|(recommend|suggest).*? read|(book|read).*?recommendations?)", re.IGNORECASE)
 
 BOOKS_TOPIC_PATTERN = re.compile(r"\b(discuss books|speak about books)", re.IGNORECASE)
 
