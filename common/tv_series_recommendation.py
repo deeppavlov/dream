@@ -6,7 +6,7 @@ with open('common/series.json', 'r') as f:
     series = json.load(f)
     series_keys = list(series.keys())
     series = []
-    ignore_series = ['You', 'H', 'K']
+    ignore_series = ['You', 'H', 'K', 'She', 'What If?']
     for key in series_keys:
         if '*' in key:
              key = key.replace('*', '\*')
