@@ -26,9 +26,7 @@
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
     },
     "requirements": [
-      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
-      "{DEEPPAVLOV_PATH}/requirements/pytorch.txt",
-      "{DEEPPAVLOV_PATH}/requirements/transformers.txt"
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt"
     ]
   }
 }
