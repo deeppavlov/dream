@@ -12,6 +12,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 config_name = os.getenv("CONFIG")
 
+
 try:
     qa = build_model(config_name, download=True)
     test_res = qa(["What is the capital of Russia?"], [["Moscow is the capital of Russia."]])

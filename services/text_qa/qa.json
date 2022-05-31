@@ -9,15 +9,14 @@
       {
         "class_name": "logit_ranker",
         "string_multiplier": "#str_mult",
-        "batch_size": 32,
-        "squad_model": {"config_path": "{CONFIGS_PATH}/squad/multi_squad_noans_infer.json"},
+        "batch_size": 64,
+        "squad_model": {"config_path": "./qa_squad2_bert.json"},
         "sort_noans": true,
-        "return_answer_sentence": true,
         "in": ["question_raw", "top_facts"],
-        "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_context"]
+        "out": ["answer", "answer_score", "answer_place"]
       }
     ],
-    "out": ["answer", "answer_score", "answer_place", "answer_sentence"]
+    "out":  ["answer", "answer_score", "answer_place"]
   },
   "metadata": {
     "variables": {
@@ -28,8 +27,8 @@
     },
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
-      "{DEEPPAVLOV_PATH}/requirements/spacy.txt",
-      "{DEEPPAVLOV_PATH}/requirements/en_core_web_sm.txt"
+      "{DEEPPAVLOV_PATH}/requirements/pytorch.txt",
+      "{DEEPPAVLOV_PATH}/requirements/transformers.txt"
     ]
   }
 }
