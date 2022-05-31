@@ -26,6 +26,7 @@ from common.utils import (
     get_entities,
     get_common_tokens_in_lists_of_strings,
     is_no,
+    get_dialog_breakdown_annotations,
 )
 from utils import (
     calculate_single_convers_evaluator_score,
@@ -48,6 +49,10 @@ from common.response_selection import (
 )
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+PRIORITIZE_WITH_SAME_TOPIC_ENTITY = getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", True)
+PRIORITIZE_NO_DIALOG_BREAKDOWN = getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", False)
+PRIORITIZE_WITH_REQUIRED_ACT = getenv("PRIORITIZE_WITH_REQUIRED_ACT", False)
+IGNORE_DISLIKED_SKILLS = getenv("IGNORE_DISLIKED_SKILLS", False)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -389,7 +394,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             cand_uttr
         )
         skill_name = cand_uttr["skill_name"]
-        _is_dialog_abandon = False  # "abandon" in all_cand_intents
+        _is_dialog_abandon = get_dialog_breakdown_annotations(cand_uttr) and PRIORITIZE_NO_DIALOG_BREAKDOWN
         _is_just_prompt = (
             cand_uttr["skill_name"] == "dummy_skill"
             and any(
@@ -400,7 +405,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             )
         ) or cand_uttr.get("response_parts", []) == ["prompt"]
         if cand_uttr["confidence"] == 1.0:
+            # for those hypotheses where developer forgot to set tag to MUST_CONTINUE
             cand_uttr["can_continue"] = MUST_CONTINUE
+        _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
 
         _user_wants_to_chat_about_topic = (
             if_chat_about_particular_topic(annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
@@ -412,16 +419,13 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
 
+        # identifies if candidate contains named entities from last human utterance
         _same_named_entities = (
             len(get_common_tokens_in_lists_of_strings(all_cand_named_entities, all_user_named_entities)) > 0
         )
+        # identifies if candidate contains all (not only named) entities from last human utterance
         _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases, all_user_nounphrases)) > 0
-        _same_topic_entity = False
-
-        # if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
-        #         len(cand_uttr["text"].split()) > 6:
-        #     cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
-        _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
+        _same_topic_entity = (_same_named_entities or _same_nounphrases) and PRIORITIZE_WITH_SAME_TOPIC_ENTITY
 
         _is_active_skill = (
             _prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get("can_continue", "") == MUST_CONTINUE
@@ -468,14 +472,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             CASE = "Switch topic intent."
             if len(all_user_named_entities) > 0 or len(all_user_nounphrases) > 0:
                 # -----user defines new topic/entity-----
-
-                _same_named_entities = (
-                    len(get_common_tokens_in_lists_of_strings(all_cand_named_entities, all_user_named_entities)) > 0
-                )
-                _same_nounphrases = (
-                    len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases, all_user_nounphrases)) > 0
-                )
-                _same_topic_entity = _same_named_entities or _same_nounphrases
+                # _same_topic_entity does not depend on hyperparameter in these case
+                _same_topic_entity = (_same_named_entities or _same_nounphrases)
 
                 categorized_hyps, categorized_prompts = categorize_candidate(
                     cand_id,
@@ -491,7 +489,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 )
             else:
                 # -----user want socialbot to define new topic/entity-----
-
                 categorized_hyps, categorized_prompts = categorize_candidate(
                     cand_id,
                     skill_name,
@@ -512,13 +509,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # in this case we do not give priority to previously active skill (but give to must continue skill!)
             # because now user wants to talk about something particular
             _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE
-            _same_named_entities = (
-                len(get_common_tokens_in_lists_of_strings(all_cand_named_entities, all_user_named_entities)) > 0
-            )
-            _same_nounphrases = (
-                len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases, all_user_nounphrases)) > 0
-            )
-            _same_topic_entity = _same_named_entities or _same_nounphrases
+            # _same_topic_entity does not depend on hyperparameter in these case
+            _same_topic_entity = (_same_named_entities or _same_nounphrases)
 
             categorized_hyps, categorized_prompts = categorize_candidate(
                 cand_id,
@@ -533,7 +525,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 _is_required_da=False,
             )
 
-        elif _is_require_action_intent:
+        elif _is_require_action_intent and PRIORITIZE_WITH_REQUIRED_ACT:
             # =====user intent requires particular action=====
 
             CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
@@ -635,28 +627,29 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     curr_single_scores = compute_curr_single_scores(candidates, scores, confidences)
 
     # remove disliked skills from hypotheses
-    for category in categorized_hyps:
-        new_ids = []
-        for cand_id in categorized_hyps[category]:
-            if (
-                candidates[cand_id]["skill_name"] in disliked_skills
-                and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
-            ):
-                disliked_skills.remove(candidates[cand_id]["skill_name"])
-            if candidates[cand_id]["skill_name"] not in disliked_skills:
-                new_ids.append(cand_id)
-        categorized_hyps[category] = deepcopy(new_ids)
-    for category in categorized_prompts:
-        new_ids = []
-        for cand_id in categorized_prompts[category]:
-            if (
-                candidates[cand_id]["skill_name"] in disliked_skills
-                and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
-            ):
-                disliked_skills.remove(candidates[cand_id]["skill_name"])
-            if candidates[cand_id]["skill_name"] not in disliked_skills:
-                new_ids.append(cand_id)
-        categorized_prompts[category] = deepcopy(new_ids)
+    if IGNORE_DISLIKED_SKILLS:
+        for category in categorized_hyps:
+            new_ids = []
+            for cand_id in categorized_hyps[category]:
+                if (
+                    candidates[cand_id]["skill_name"] in disliked_skills
+                    and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
+                ):
+                    disliked_skills.remove(candidates[cand_id]["skill_name"])
+                if candidates[cand_id]["skill_name"] not in disliked_skills:
+                    new_ids.append(cand_id)
+            categorized_hyps[category] = deepcopy(new_ids)
+        for category in categorized_prompts:
+            new_ids = []
+            for cand_id in categorized_prompts[category]:
+                if (
+                    candidates[cand_id]["skill_name"] in disliked_skills
+                    and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
+                ):
+                    disliked_skills.remove(candidates[cand_id]["skill_name"])
+                if candidates[cand_id]["skill_name"] not in disliked_skills:
+                    new_ids.append(cand_id)
+            categorized_prompts[category] = deepcopy(new_ids)
 
     best_cand_id = pickup_best_id(categorized_hyps, candidates, curr_single_scores, bot_utterances)
     best_candidate = candidates[best_cand_id]

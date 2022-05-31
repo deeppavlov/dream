@@ -3,6 +3,7 @@ import logging
 from os import getenv
 from copy import deepcopy
 from random import choice
+from unittest import result
 
 from common.custom_requests import request_triples_wikidata
 import sentry_sdk
@@ -1206,3 +1207,20 @@ FACTS_EXTRA_WORDS = re.compile(
     r"|here's a fact about [a-zA-Z0-9\- \,]+\.)",
     re.IGNORECASE,
 )
+
+
+def get_conv_eval_annotations(annotated_utterance):
+    default_conv_eval = {
+        "isResponseOnTopic": 0.0,
+        "isResponseInteresting": 0.0,
+        "responseEngagesUser": 0.0,
+        "isResponseComprehensible": 0.0,
+        "isResponseErroneous": 0.0,
+    }
+    result = [annotated_utterance.get("annotations", {}).get("convers_evaluator_annotator", default_conv_eval)]
+    return result
+
+
+def get_dialog_breakdown_annotations(annotated_utterance):
+    breakdown = annotated_utterance.get("annotations", {}).get("dialog_breakdown", {}).get("breakdown", 0.) > 0.5
+    return breakdown

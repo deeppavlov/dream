@@ -101,6 +101,13 @@ services:
   convers-evaluation-selector:
     env_file: [.env]
     build:
+      args:
+        TAG_BASED_SELECTION: true
+        CALL_BY_NAME_PROBABILITY: 0.5
+        PRIORITIZE_WITH_REQUIRED_ACT: true
+        PRIORITIZE_NO_DIALOG_BREAKDOWN: false
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: true
+        IGNORE_DISLIKED_SKILLS: false
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
