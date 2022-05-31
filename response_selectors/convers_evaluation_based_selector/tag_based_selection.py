@@ -35,9 +35,7 @@ from utils import (
     how_are_you_spec,
     what_i_can_do_spec,
     misheard_with_spec1,
-    psycho_help_spec,
     misheard_with_spec2,
-    alexa_abilities_spec,
     join_used_links_in_attributes,
     get_updated_disliked_skills,
 )
@@ -53,6 +51,8 @@ PRIORITIZE_WITH_SAME_TOPIC_ENTITY = getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 
 PRIORITIZE_NO_DIALOG_BREAKDOWN = getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", False)
 PRIORITIZE_WITH_REQUIRED_ACT = getenv("PRIORITIZE_WITH_REQUIRED_ACT", False)
 IGNORE_DISLIKED_SKILLS = getenv("IGNORE_DISLIKED_SKILLS", False)
+GREETING_FIRST = getenv("GREETING_FIRST", True)
+RESTRICTION_FOR_SENSITIVE_CASE = getenv("RESTRICTION_FOR_SENSITIVE_CASE", True)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -315,6 +315,42 @@ def if_acknowledgement_in_previous_bot_utterance(dialog):
             if ackn in prev_bot_uttr_text:
                 return True
     return False
+
+
+def rule_based_prioritization(cand_uttr, dialog):
+    flag = False
+
+    if (
+            len(dialog["human_utterances"]) == 1
+            and cand_uttr["skill_name"] == "dff_friendship_skill"
+            and greeting_spec in cand_uttr["text"]
+            and GREETING_FIRST
+    ):
+        # prioritize greeting phrase in the beginning of the dialog
+        flag = True
+    # TODO: seems like we do not need this condition
+    # if (
+    #         cand_uttr["skill_name"] == "dff_friendship_skill"
+    #         and (how_are_you_spec in cand_uttr["text"] or what_i_can_do_spec in cand_uttr["text"])
+    #         and len(dialog["utterances"]) < 16
+    # ):
+    #     flag = True
+    if (
+            cand_uttr["skill_name"] == "small_talk_skill"
+            and is_sensitive_situation(dialog["human_utterances"][-1])
+            and RESTRICTION_FOR_SENSITIVE_CASE
+    ):
+        # small talk skill (if hypothesis is available) priority for sensitive situations when required
+        flag = True
+    if (
+            cand_uttr["skill_name"] == "misheard_asr"
+            and any([x in cand_uttr["text"] for x in [misheard_with_spec1, misheard_with_spec2]])
+    ):
+        # prioritize misheard_asr response when low ASR conf
+        flag = True
+    if cand_uttr["confidence"] >= 1.0:
+        flag = True
+    return flag
 
 
 def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills=None):
@@ -582,12 +618,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             )
 
         # a bit of rule based help
-        is_misheard = misheard_with_spec1 in cand_uttr["text"] or misheard_with_spec2 in cand_uttr["text"]
-        intent_name = get_intent_name(cand_uttr["text"])
-        is_intent_candidate = intent_name and cand_uttr["skill_name"] in [
-            "dff_intent_responder_skill",
-            "dff_program_y_skill",
-        ]
+
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"
@@ -608,10 +639,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif cand_uttr["skill_name"] == "misheard_asr" and is_misheard:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif is_intent_candidate:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == "dff_friendship_skill" and alexa_abilities_spec in cand_uttr["text"]:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif "program_y" in cand_uttr["skill_name"] and psycho_help_spec in cand_uttr["text"]:
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["confidence"] >= 1.0:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------

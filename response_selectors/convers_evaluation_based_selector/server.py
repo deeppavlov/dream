@@ -27,10 +27,8 @@ from utils import (
     CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
-    psycho_help_spec,
     misheard_with_spec1,
     misheard_with_spec2,
-    alexa_abilities_spec,
 )
 
 
@@ -242,8 +240,6 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             and len(dialog["utterances"]) < 16
         ):
             curr_score = very_big_score
-        elif skill_names[i] == "program_y_dangerous" and psycho_help_spec in candidates[i]["text"]:
-            curr_score = very_big_score
         elif skill_names[i] == "dff_friendship_skill" and greeting_spec in candidates[i]["text"]:
             if len(dialog["utterances"]) < 2:
                 curr_score = very_big_score
@@ -264,8 +260,6 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         elif skill_names[i] == "misheard_asr" and is_misheard:
             curr_score = very_big_score
         elif is_intent_candidate:
-            curr_score = very_big_score
-        elif skill_names[i] == "program_y" and alexa_abilities_spec in candidates[i]["text"]:
             curr_score = very_big_score
         elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval", "program_y"]:
             if "question" in candidates[i].get("type", "") or "?" in candidates[i]["text"]:
