@@ -225,7 +225,7 @@ class TorchTransformersSquad(TorchModel):
                 
                 start_probs = torch.nn.functional.softmax(logits_st, dim=-1)
                 end_probs = torch.nn.functional.softmax(logits_end, dim=-1)
-                scores = torch.tensor(1) - start_probs[:, 0] * end_probs[:, 0]  # ok
+                scores = logits_rank.squeeze(1)
                 outer = torch.matmul(start_probs.view(*start_probs.size(), 1),
                                      end_probs.view(end_probs.size()[0], 1, end_probs.size()[1]))
                 outer_logits = torch.exp(logits_st.view(*logits_st.size(), 1) + logits_end.view(
