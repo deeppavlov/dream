@@ -1,4 +1,5 @@
 FROM python:3.9.1
+RUN apt update && apt install git g++ -y
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -15,6 +16,7 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
+#RUN pip install deeppavlov
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
