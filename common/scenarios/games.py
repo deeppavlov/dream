@@ -95,5 +95,5 @@ def extraction_game_mentions(human_text):
 
     except requests.exceptions.RequestException as e:
         logger.info("dff_games.extraction_game_mentions: Requests failure.")
-        logger.info("dff_games.extraction_game_mentions: Exception: " + e.strerror)
+        logger.info(f"dff_games.extraction_game_mentions: Exception: {e}")
         return default_results

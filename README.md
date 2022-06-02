@@ -96,20 +96,23 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 **Please note, that DeepPavlov Dream components require a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml up --build
 ```
 We've also included a config with GPU allocations for multi-GPU environments.
 
 ```
-AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml up
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/test.yml up
 ```
-
+When you need to restart particular docker container without re-building (make sure mapping in `assistant_dists/dream/dev.yml` is correct):
+```
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
+```
 
 ### Let's chat
 In a separate terminal tab run:
 
 ```
-docker-compose exec agent python -m deeppavlov_agent.run
+docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream/pipeline_conf.json
 ```
 
 Enter your username and have a chat with Dream!
@@ -184,6 +187,12 @@ Dream Architecture is presented in the following image:
 | User Persona Extractor      | 40 MiB RAM               | determines which age category the user belongs to based on some key words                                                                                                                                                      |
 | Wiki parser                 | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                                                       |
 
+## Services
+| Name                      | Requirements            | Description                                                                                                                                                                                                        |
+|---------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DialoGPT                  | 1.3 GiB RAM, 1 GiB GPU  | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU)   |
+| Infilling                 | 1.7 GiB RAM, 1 GiB GPU  | generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens                          |
+
 ## Skills
 | Name                      | Requirements            | Description                                                                                                                                                                                                        |
 |---------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -229,7 +238,7 @@ Dream Architecture is presented in the following image:
 | DFF Sports Skill          | 100 MiB RAM             | DFF-based skill to discuss sports                                                                                                                                                                                  |
 | DFF Travel skill          | 90 MiB RAM              | DFF-based skill to discuss travel                                                                                                                                                                                  |
 | DFF Weather skill         | 1.4 GiB RAM             | **[New DFF version]** uses the OpenWeatherMap service to get the forecast for the user's location                                                                                                                  |
-| DFF Wiki skill            | 160 MiB RAM             | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgments                                                                                                      |
+| DFF Wiki skill            | 160 MiB RAM             | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                                                                                                      |
 
 # Papers
 ### Alexa Prize 3
@@ -243,7 +252,7 @@ Dream Architecture is presented in the following image:
 
 DeepPavlov Dream is licensed under Apache 2.0.
 
-Program-y (see `dream/skills/dff_program_y`, `dream/skills/dff_program_y_wide`, `dream/skills/dff_program_y_dangerous`) 
+Program-y (see `dream/skills/dff_program_y_skill`, `dream/skills/dff_program_y_wide_skill`, `dream/skills/dff_program_y_dangerous_skill`) 
 is licensed under Apache 2.0.
 Eliza (see `dream/skills/eliza`) is licensed under MIT License.
 

@@ -1,4 +1,2 @@
 click==7.1.2
-nltk==3.6.2
-numpy
-sortedcontainers
+nltk==3.5

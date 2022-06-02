@@ -6,68 +6,21 @@
         {
             "human_utterances": [
                 {
-                    "text": "hello?",
+                    "text": "hi.",
                     "annotations": {
-                        "spelling_preprocessing": "hello",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
+                        "spelling_preprocessing": "hi",
                         "badlisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
-                        },
-                        "factoid_classification": {
-                            "factoid": 0.010960372164845467,
-                            "conversational": 0.9890396595001221
-                        },
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9930895566940308
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.9236491918563843,
-                                "Phatic": 0.5847170948982239
-                            },
-                            "cobot_topics": {
-                                "Phatic": 0.9965721964836121
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9990860223770142
-                            },
-                            "sentiment_classification": {
-                                "neutral": 0.7184911966323853
-                            },
-                            "toxic_classification": {
-                                "toxic": 0.0027484893798828125
-                            }
+                            "bad_words": false
                         },
                         "spacy_nounphrases": [],
-                        "cobot_entities": {
-                            "entities": [],
-                            "labelled_entities": []
-                        },
                         "sentseg": {
-                            "punct_sent": "hello?",
+                            "punct_sent": "hi.",
                             "segments": [
-                                "hello?"
+                                "hi."
                             ]
-                        },
-                        "conceptnet": {},
-                        "midas_classification": {
-                            "appreciation": 0.010693230666220188,
-                            "command": 0.36356985569000244,
-                            "comment": 0.01394089125096798,
-                            "complaint": 0.31689751148223877,
-                            "dev_command": 0.07088878005743027,
-                            "neg_answer": 0.007631364744156599,
-                            "open_question_factual": 0.06049879267811775,
-                            "open_question_opinion": 0.012528421357274055,
-                            "opinion": 0.011402624659240246,
-                            "other_answers": 0.007560706231743097,
-                            "pos_answer": 0.012580689042806625,
-                            "statement": 0.04247451201081276,
-                            "yes_no_question": 0.06933265179395676
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -159,66 +112,108 @@
                                 "detected": 0
                             }
                         },
-                        "cobot_dialogact": {
-                            "intents": [
-                                "General_ChatIntent"
-                            ],
-                            "topics": [
-                                "Phatic"
-                            ]
-                        },
+                        "midas_classification": [
+                            {
+                                "appreciation": 0.0037371967919170856,
+                                "command": 0.014534023590385914,
+                                "comment": 0.007815568707883358,
+                                "complaint": 0.013871942646801472,
+                                "dev_command": 0.011961258016526699,
+                                "neg_answer": 0.0012791282497346401,
+                                "open_question_factual": 0.00706735672429204,
+                                "open_question_opinion": 0.0020942040719091892,
+                                "opinion": 0.028205107897520065,
+                                "other_answers": 0.0029170422349125147,
+                                "pos_answer": 0.003618006594479084,
+                                "statement": 0.8965855836868286,
+                                "yes_no_question": 0.006313641089946032
+                            }
+                        ],
                         "ner": [
                             []
-                        ],
-                        "entity_linking": [
-                            {
-                                "confidences": [
-                                    1.0
-                                ],
-                                "entity_ids": [
-                                    ""
-                                ],
-                                "entity_substr": ""
-                            }
                         ],
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hello?"
+                                "hi."
                             ]
                         },
-                        "fact_retrieval": [],
+                        "entity_detection": {},
+                        "entity_linking": [],
+                        "conceptnet": {},
+                        "fact_retrieval": {
+                            "facts": [],
+                            "topic_facts": []
+                        },
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
                             "qa_system": "kbqa"
                         },
-                        "wiki_parser": {
-                            "entities_info": {},
-                            "topic_skill_entities_info": {}
+                        "fact_random": {
+                            "facts": [],
+                            "response": "hi."
                         },
                         "news_api_annotator": [
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "A health worker wearing personal protective equipment (PPE) carries a patient suffering from the coronavirus disease (COVID-19) outside the casualty ward at Guru Teg Bahadur hospital, in New Delhi, India, April 24, 2021.\nIndia has reported a record n... [806 chars]",
-                                    "description": "India has reported a record number of coronavirus cases for the fifth day in a row, with a second wave pushing its health-care system to the brink.",
-                                    "image": "https://image.cnbcfm.com/api/v1/image/106873719-16194436602021-04-26t131908z_1656574882_rc2p3n9ssdiw_rtrmadp_0_health-coronavirus-india.jpeg?v=1619443711",
-                                    "publishedAt": "2021-04-26T14:08:41Z",
+                                    "content": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"\nKuleba's comments come after Russia's foreign minister earlier denied tha... [1518 chars]",
+                                    "description": "Ukraine Foreign Minister Dmytro Kuleba hit back at claims made Thursday by Russia's Foreign Minister Sergey Lavrov, saying the leadership in Moscow \"live in their own reality.\"",
+                                    "image": "https://image.cnbcfm.com/api/v1/image/107020827-1645799231530-gettyimages-1238738593-Lev_Radin_022422.jpeg?v=1646899141",
+                                    "publishedAt": "2022-03-10T11:41:32Z",
                                     "source": {
                                         "name": "CNBC",
                                         "url": "https://www.cnbc.com"
                                     },
-                                    "title": "Photos show the deadly toll as infections top 17 million",
-                                    "url": "https://www.cnbc.com/2021/04/26/photos-show-the-deadly-toll-of-covid-in-india-as-coronavirus-cases-top-17-million.html"
+                                    "title": "Ukraine foreign minister says Russian officials 'live in their own reality'",
+                                    "url": "https://www.cnbc.com/2022/03/10/ukraine-foreign-minister-says-russian-officials-live-in-their-own-reality.html"
                                 },
                                 "which": "all"
                             }
                         ],
-                        "fact_random": {
-                            "facts": [],
-                            "response": ""
-                        }
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "General_ChatIntent": 0.9993996620178223
+                            },
+                            "cobot_dialogact_topics": {
+                                "Other": 0.852918803691864
+                            },
+                            "cobot_topics": {
+                                "Phatic": 0.9994450211524963
+                            },
+                            "emotion_classification": {
+                                "neutral": 0.9995929598808289
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.9019225835800171
+                            },
+                            "sentiment_classification": {
+                                "neutral": 0.9970402121543884
+                            },
+                            "toxic_classification": {
+                                "not_toxic": 0.9999749660491943
+                            }
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 1,
+                            "wiki_skill_entities_info": {}
+                        },
+                        "midas_predictor": {
+                            "comment": 0.1578786216398964,
+                            "opinion": 0.30365002615363024,
+                            "pos_answer": 0.10622201242616383,
+                            "statement": 0.35850886033961443,
+                            "yes_no_question": 0.07374047944069505
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ]
                     }
                 }
             ],
@@ -228,13 +223,25 @@
     "dff_friendship_skill_state_batch": [
         {}
     ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
     "entities_batch": [
         {}
     ],
     "used_links_batch": [
         {}
     ],
+    "age_group_batch": [
+        "unknown"
+    ],
     "disliked_skills_batch": [
         []
+    ],
+    "clarification_request_flag_batch": [
+        false
     ]
 }

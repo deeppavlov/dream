@@ -87,6 +87,7 @@ def respond():
     entity_substr_batch = inp.get("entity_substr", [[""]])
     template_batch = inp.get("template", [""])
     context_batch = inp.get("context", [[""]])
+    logger.info(f"entity linking, input {entity_substr_batch}")
     long_context_batch = []
     short_context_batch = []
     for entity_substr_list, context_list in zip(entity_substr_batch, context_batch):

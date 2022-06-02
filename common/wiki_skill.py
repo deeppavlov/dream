@@ -558,7 +558,7 @@ def find_entity_by_types(annotations, types_to_find, relations=None):
                 inters = set(type_ids).intersection(types_to_find)
                 conf = triplets["conf"]
                 pos = triplets.get("pos", 5)
-                if inters and conf > 0.6 and pos < 2:
+                if inters and conf > 0.45 and pos < 2:
                     found_entity_wp = entity
                     found_types = list(inters)
                     entity_triplets = {}
@@ -615,6 +615,35 @@ def check_nounphr(annotations, nounphr_to_find):
         nounphr_label = nounphr.get("label", "")
         if nounphr_text in nounphr_to_find and nounphr_label != "number":
             return nounphr_text
+    return ""
+
+
+def extract_entity(ctx, entity_type):
+    user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
+    annotations = user_uttr.get("annotations", {})
+    logger.info(f"annotations {annotations}")
+    if entity_type.startswith("tags"):
+        tag = entity_type.split("tags:")[1]
+        nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
+        for nounphr in nounphrases:
+            nounphr_text = nounphr.get("text", "")
+            nounphr_label = nounphr.get("label", "")
+            if nounphr_label == tag:
+                found_entity = nounphr_text
+                return found_entity
+    elif entity_type.startswith("wiki"):
+        wp_type = entity_type.split("wiki:")[1]
+        found_entity, *_ = find_entity_by_types(annotations, [wp_type])
+        if found_entity:
+            return found_entity
+    elif entity_type == "any_entity":
+        entities = annotations.get("entity_detection", {}).get("entities", [])
+        if entities:
+            return entities[0]
+    else:
+        res = re.findall(entity_type, user_uttr["text"])
+        if res:
+            return res[0]
     return ""
 
 

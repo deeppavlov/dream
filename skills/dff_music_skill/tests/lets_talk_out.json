@@ -29,7 +29,11 @@
         },
         {},
         {
-            "can_continue": "must"
+            "can_continue": "must",
+            "response_parts": [
+                "acknowledgement",
+                "body"
+            ]
         }
     ]
 ]

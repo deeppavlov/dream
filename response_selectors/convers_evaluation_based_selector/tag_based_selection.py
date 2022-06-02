@@ -177,10 +177,8 @@ def choose_best_with_scores(curr_cands_ids, curr_single_scores, candidates, bot_
 def get_main_info_annotations(annotated_utterance):
     intents = get_intents(annotated_utterance, which="all")
     topics = get_topics(annotated_utterance, which="all")
-    named_entities = [ent[0]["text"] for ent in annotated_utterance.get("annotations", {}).get("ner", []) if ent]
-    nounphrases = [
-        nounph for nounph in annotated_utterance.get("annotations", {}).get("spacy_nounphrases", []) if nounph
-    ]
+    named_entities = get_entities(annotated_utterance, only_named=True, with_labels=False)
+    nounphrases = get_entities(annotated_utterance, only_named=False, with_labels=False)
     return intents, topics, named_entities, nounphrases
 
 
@@ -304,11 +302,11 @@ def if_acknowledgement_in_previous_bot_utterance(dialog):
     if len(dialog["bot_utterances"]) > 0 and len(dialog["human_utterances"]) > 1:
         prev_bot_uttr_text = dialog["bot_utterances"][-1]["text"].lower()
         prev_human_uttr = dialog["human_utterances"][-2]
-        acknowledgments = []
+        acknowledgements = []
         for hyp in prev_human_uttr["hypotheses"]:
-            if hyp.get("response_parts", []) == ["acknowledgment"]:
-                acknowledgments += [hyp["text"].lower()]
-        for ackn in acknowledgments:
+            if hyp.get("response_parts", []) == ["acknowledgement"]:
+                acknowledgements += [hyp["text"].lower()]
+        for ackn in acknowledgements:
             if ackn in prev_bot_uttr_text:
                 return True
     return False
@@ -594,7 +592,10 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         # a bit of rule based help
         is_misheard = misheard_with_spec1 in cand_uttr["text"] or misheard_with_spec2 in cand_uttr["text"]
         intent_name = get_intent_name(cand_uttr["text"])
-        is_intent_candidate = intent_name and cand_uttr["skill_name"] in ["intent_responder", "program_y"]
+        is_intent_candidate = intent_name and cand_uttr["skill_name"] in [
+            "dff_intent_responder_skill",
+            "dff_program_y_skill",
+        ]
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"
@@ -624,7 +625,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
 
-        if cand_uttr["skill_name"] == "dff_grounding_skill" and "acknowledgement" in cand_uttr.get(
+        if cand_uttr["skill_name"] == "dff_grounding_skill" and ["acknowledgement"] == cand_uttr.get(
             "response_parts", []
         ):
             acknowledgement_hypothesis = deepcopy(cand_uttr)

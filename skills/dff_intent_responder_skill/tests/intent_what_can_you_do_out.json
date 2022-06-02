@@ -1,0 +1,86 @@
+[
+    [
+        "I'm a socialbot, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie? #+#what_can_you_do",
+        1.0,
+        {
+            "dff_intent_responder_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 13,
+                "history": {
+                    "10": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "3": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "4": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "5": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "6": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "7": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "8": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "9": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ],
+                    "13": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
+                    "labels": {
+                        "7": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ],
+                        "8": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "requests": {
+                        "7": "what do you do?",
+                        "8": "what are your skills?"
+                    },
+                    "responses": {
+                        "7": "I'm a socialbot, and I'm all about chatting with people like you. What do you do? #+#what_is_your_job",
+                        "8": "I'm a socialbot, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie? #+#what_can_you_do"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

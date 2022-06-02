@@ -127,7 +127,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
     dockercompose_cmd exec -T agent sh -c 'cd /pavlov/DeepPavlov && git fetch --all --tags --prune && git checkout 0.14.1 && cd /dp-agent/ && python utils/analyze_downloads.py --compose_file assistant_dists/dream/docker-compose.override.yml'
 
     echo "Testing docker-compose files"
-    dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py
+    dockercompose_cmd exec -T -u $(id -u) agent python utils/verify_compose.py -d assistant_dists/dream
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
@@ -137,17 +137,19 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in dff-movie-skill asr dff-weather-skill dff-program-y \
-                     dff-program-y-dangerous eliza dff-program-y-wide spacy-nounphrases \
+    for container in dff-movie-skill asr dff-weather-skill dff-program-y-skill sentseg sentrewrite \
+                     dff-program-y-dangerous-skill eliza dff-program-y-wide-skill spacy-nounphrases \
                      dummy-skill-dialog intent-catcher dff-short-story-skill comet-atomic \
                      comet-conceptnet convers-evaluation-selector emotion-skill game-cooperative-skill \
                      entity-linking kbqa text-qa wiki-parser convert-reddit convers-evaluator-annotator \
                      dff-book-skill combined-classification knowledge-grounding knowledge-grounding-skill \
                      dff-grounding-skill dff-coronavirus-skill dff-friendship-skill masked-lm entity-storer \
                      dff-travel-skill dff-animals-skill dff-food-skill dff-sport-skill midas-classification \
-                     fact-random fact-retrieval hypothesis-scorer \
-                     dff-gossip-skill dff-wiki-skill topic-recommendation dff-science-skill\
-                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill; do
+                     fact-random fact-retrieval dff-intent-responder-skill badlisted-words \
+                     dff-gossip-skill dff-wiki-skill topic-recommendation dff-science-skill personal-info-skill \
+                     user-persona-extractor small-talk-skill wiki-facts dff-art-skill dff-funfact-skill \
+                     meta-script-skill spelling-preprocessing dff-gaming-skill dialogpt \
+                     dff-music-skill dff-bot-persona-skill entity-detection midas-predictor infilling; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
