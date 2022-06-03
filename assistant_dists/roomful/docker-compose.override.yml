@@ -423,14 +423,14 @@ services:
         reservations:
           memory: 256M
 
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8064
-        SERVICE_NAME: dff_program_y_wide
+        SERVICE_NAME: dff_program_y_wide_skill
       context: .
-      dockerfile: ./skills/dff_program_y_wide/Dockerfile
+      dockerfile: ./skills/dff_program_y_wide_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8064 --reload
     deploy:
       resources:
@@ -555,7 +555,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 83fa40d7f600137910c663bda9a4d81fa425fe12
+        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
@@ -911,24 +911,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-        reservations:
-          memory: 4G
-
-  hypothesis-scorer:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8110
-        SERVICE_NAME: hypothesis_scorer # has to be the same with skill dir name
-      context: ./annotators/hypothesis_scorer
-    command: flask run -h 0.0.0.0 -p 8110
-    environment:
-      - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
