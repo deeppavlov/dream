@@ -245,7 +245,7 @@ def entity_in_last_uttr_from_sport_area(vars):
 
 def get_dict_entity(entity_substr, entity_ids, type):
     try:
-        WIKIDATA_URL = "http://wiki-parser:8077/model"
+        WIKIDATA_URL = os.getenv("DP_WIKIDATA_URL")
         dict_result = requests.post(
             WIKIDATA_URL,
             json={
@@ -352,8 +352,8 @@ def user_ask_about_sport_request(ngrams, vars):
 def lets_chat_about_sport_response(vars):
     # USR_ASK_ABOUT_SPORT
     responses = [
-        f"I have no physical embodiment. Sport is interesting and useful. Tell me what sport do you enjoy?",
-        f"I live on a cloud, so i can't do sport , but I'm really curious about what sport are you fond of?",
+        "I have no physical embodiment. Sport is interesting and useful. Tell me what sport do you enjoy?",
+        "I live on a cloud, so i can't do sport , but I'm really curious about what sport are you fond of?",
     ]
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
@@ -398,7 +398,7 @@ def user_ask_about_athletes_response(vars):
     try:
         state_utils.set_confidence(vars, confidence=SUPER_CONFIDENCE)
         state_utils.set_can_continue(vars, continue_flag=MUST_CONTINUE)
-        return f"I know all the athletes on this planet. Which athlete do you like the most?"
+        return "I know all the athletes on this planet. Which athlete do you like the most?"
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -922,7 +922,7 @@ def last_chance_response(vars):
 
 def error_response(vars):
     state_utils.set_confidence(vars, ZERO_CONFIDENCE)
-    return f""
+    return ""
 
 
 ##################################################################################################################

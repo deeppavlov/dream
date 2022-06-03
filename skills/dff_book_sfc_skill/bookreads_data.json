@@ -1,0 +1,114 @@
+[
+    {
+        "fiction": [{
+            "author": "Susan Hinton",
+            "title": "The Outsiders",
+            "description": "The Outsiders is about two weeks in the life of a 14-year-old boy. The novel tells the story of Ponyboy Curtis and his struggles with right and wrong in a society in which he believes that he is an outsider."
+        },
+            {
+            "author": "Rick Riordan",
+            "title": "The Tyrant's Tomb",
+            "description": "For nine years and counting, Rick Riordan has swept the Goodreads Choice Awards Middle Grade category with his tales of high adventure inspired by the various realms of Greco-Roman mythology. The Tyrant's Tomb is book four in a five-part series centered on the character of Apollo, who's sentenced by Zeus to a mortal life on Earth. Parents! What can you do? Look for the concluding book in fall 2020."
+        },
+        {
+            "author": "Nadine Brandes",
+            "title": "Romanov",
+            "description": "Anastasia “Nastya” Romanov was given a single mission: to smuggle an ancient spell into her suitcase on her way to exile in Siberia. It might be her family’s only salvation. But the leader of the Bolshevik army is after them, and he’s hunted Romanov before."
+        }],
+        "mystery thriller": [{
+            "author": "Alex Michaelides",
+            "title": "The Silent Patient",
+            "description": "Alex Michaelides' critically acclaimed novel earns the win in the Mystery and Thriller category, thanks in part to its irresistible puzzle-box premise. World-famous painter Alicia Berenson is being held at a secure location in London following a gruesome murder. She refuses to speak. Criminal psychotherapist Theo Faber is determined to unravel the mystery behind the silent patient. Then things get really weird."
+        }],
+        "historical fiction": [{
+            "author": "Taylor Jenkins Reid",
+            "title": "Daisy Jones: The Six",
+            "description": "Winner of last year's Goodreads Choice Award for Historical Fiction, Daisy Jones: the Six rewinds the clock to the '60s and '70s, then zeroes in on the wild world of American rock and roll music. Author Taylor Jenkins Reid conjures vivid imagery by using the oral history format to provide a collage effect with multiple overlapping viewpoints. As another veteran of the era once observed, rock and roll never forgets."
+        }],
+        "fantasy": [{
+            "author": "Leigh Bardugo",
+            "title": "Ninth House",
+            "description": "YA author Leigh Bardugo's debut into mainstream fantasy,a massive critical and commercial success,has clearly won the hearts of Goodreads voters, too. Ivy League freshman Galaxy Alex Stern has been tasked with investigating Yale University's infamous secret societies. What will she find? Oh, it's a trip, man. Remember Joseph Heller's warning: Just because you're paranoid doesn't mean they aren't after you."
+        }],
+        "romance": [{
+            "author": "Casey McQuiston",
+            "title": "Red, White and Royal Blue",
+            "description": "Author Casey McQuiston puts a delightful new spin on genre conventions with her debut novel, this year's winner in the Romance category. Alex Claremont-Diaz,First Son and unofficial White House ambassador,has a problem. That problem is Prince Henry, an uptight British royal and Alex's counterpart from across the pond. The trouble is that Alex doesn't like the prince. Until he does. And then he really does. Uh-oh."
+        }],
+        "science fiction": [{
+            "author": "Blake Crouch",
+            "title": "Recursion",
+            "description": "Screenwriter and novelist Blake Crouch gets his first Goodreads Choice Award with this inventive and ambitious story on technology, time travel, and the essential nature of memory. The book's decidedly weird science is actually grounded in recent laboratory research, which lends an eerie temporal echo to the proceedings. Also, Crouch suggests an oddly compelling explanation for that phenomenon we call d\u00e9j\u00e0 vu."
+        }],
+        "horror": [{
+            "author": "Stephen King",
+            "title": "The Institute",
+            "description": "Perennial contender and scary story all-star Stephen King collects his ninth Goodreads Choice Award with The Institute . Conjuring the spirit of stone-cold classics like Firestarter and It , King's new saga follows the fate of six supernaturally gifted kids locked into a harrowing facility known only as, yes, the Institute. This King fellow shows a lot of promise. He should have a bright future."
+        }],
+        "humour": [{
+            "author": "Ali Wong",
+            "title": "Dear Girls: Intimate Tales, Untold Secrets, &amp; Advice for Living Your Best Life",
+            "description": "It's generally acknowledged in showbiz circles that Ali Wong is among the funniest people on the planet. The prolific comic can now add a Goodreads Choice Award to her list of bona fides. Dear Girls is a different kind of humor book: Wong presents a series of letters to her daughters, with insights that bounce from funny to filthy to profound. There's also a bit on drinking snake blood. Heads up on that."
+        }],
+        "non-fiction": [{
+            "author": "Rachel Hollis",
+            "title": "Girl, Stop Apologizing: A Shame-Free Plan for Embracing and Achieving Your Goals",
+            "description": "Author Rachel Hollis wins her first Goodreads Choice Award with this powerful collection of writings for women navigating the complexities of the 21st century. The book has generated its own momentum, and readers continue to praise its clear-eyed approach to improvement and empowerment. I believe we can change the world, Hollis says. But first, we've got to stop living in fear of being judged for who we are."
+        }],
+        "memoir autobiography": [{
+            "author": "Jonathan Van Ness",
+            "title": "Over the Top: A Raw Journey to Self-Love",
+            "description": "As the breakout star of Netflix's Queer Eye , Jonathan Van Ness has an army of fans from the show. As an author, he now has another devoted following,and a Goodreads Choice Award. Van Ness chronicles his childhood in a small Midwestern town where he endured years of ridicule and trauma, only to emerge as one of pop culture's most genuinely inspiring figures. You'll laugh. You'll cry. Then you'll laugh again."
+        }],
+        "history biography": [{
+            "author": "Hallie Rubenhold",
+            "title": "The Five: The Untold Lives of the Women Killed by Jack the Ripper",
+            "description": "In what may be the most overdue book of the past 100 years, historian Hallie Rubenhold steals back the narrative of Jack the Ripper and tells the stories that really matter. The Five reviews the lives of those murdered, rather than the story of the killer, and reveals the inaccuracies and prejudices that have been repeated over the years. Rubenhold's book is a triumph of historical investigation."
+        }],
+        "science technology": [{
+            "author": "Caitlin Doughty",
+            "title": "Will My Cat Eat My Eyeballs? Big Questions from Tiny Mortals About Death",
+            "description": "Official winner of this year's Goodreads Choice Award for Science &amp; Technology, Will My Cat Eat My Eyeballs? is also the unofficial winner of this year's Most Alarming Book Title award. Author and mortician Caitlin Doughty answers all those questions that we're generally afraid to ask about death, decay, decomposition, and other depressing developments. With illustrations!"
+        }],
+        "food cook": [{
+            "author": "Antoni Porowski",
+            "title": "Antoni in the Kitchen",
+            "description": "In another win for the Queer Eye team, food and wine guru Antoni Porowski takes the cookbook prize with a collection of recipes that focuses on healthiness and simplicity. Many of the dishes have five ingredients or fewer and can be carried off even by total beginners. Among the offerings: Bastardized Easy Ramen; Malaysian Chili Shrimp; Roasted Carrots with Carrot-Top Pesto; and Salty Lemon Squares."
+        }],
+        "graphic novels comics": [{
+            "author": "Rainbow Rowell",
+            "title": "Pumpkinheads",
+            "description": "This year's Goodreads Choice Award for Graphic Novels &amp; Comics goes to celebrated author Rainbow Rowell and Eisner Award\u2013winning illustrator Faith Erin Hicks for their lovely collaboration, Pumpkinheads . The world's best pumpkin patch, it turns out, is located in Omaha, Nebraska. High school pals Deja and Josiah are planning their last season together. Autumn arrives! Besties unite! Adventure ensues!"
+        }],
+        "poetry": [{
+            "author": "Laurie Halse Anderson",
+            "title": "SHOUT",
+            "description": "The Goodreads Choice Award for Poetry came down to the wire and was probably the single most competitive category this year. Author Laurie Halse Anderson receives the honors for her powerful poetry memoir collection SHOUT . Anderson's work, which includes the groundbreaking 1999 novel Speak , is often about and for survivors of sexual assault. SHOUT is also a National Book Award nominee for Young People's Literature."
+        }],
+        "debut novel ": [{
+            "author": "Casey McQuiston",
+            "title": "Red, White and Royal Blue",
+            "description": "Author Casey McQuiston is a two-time winner in this year's Goodreads Choice Awards: Red, White and Royal Blue also took the prize in the Romance category. It's that kind of book. McQuiston's writing defies traditional categorization by mixing together elements of romantic comedy with sly insights, LGBTQ romance, a splash of political satire, and everyone's favorite spectator sport: scandal!"
+        }],
+        "picture": [{
+            "author": "Fred Rogers",
+            "title": "A Beautiful Day in the Neighborhood: The Poetry of Mister Rogers",
+            "description": "Fred Rogers is having a moment. The beloved children's TV icon was the subject of a 2018 documentary film and a 2019 feature film starring Tom Hanks. Now comes A Beautiful Day in the Neighborhood , an illustrated treasury of all the classic songs from the TV show, reimagined as poems for the shorter set. Funny, sweet, silly, and sincere, these poems and songs have an essential decency that will outlast us all."
+        }],
+        "childrens": [{
+            "author": "Rick Riordan",
+            "title": "The Tyrant's Tomb",
+            "description": "For nine years and counting, Rick Riordan has swept the Goodreads Choice Awards Middle Grade category with his tales of high adventure inspired by the various realms of Greco-Roman mythology. The Tyrant's Tomb is book four in a five-part series centered on the character of Apollo, who's sentenced by Zeus to a mortal life on Earth."
+        }],
+        "young adult fantasy": [{
+            "author": "Holly Black",
+            "title": "The Wicked King",
+            "description": "The coveted YA Fantasy award takes a turn this year, going to the second installment of the faerie realm series The Folk of the Air . From the maker of The Spiderwick Chronicles , Holly Black, The Wicked King continues the saga of Jude, a mortal in the treacherous High Court of Faerie. For those looking to continue reading, the series' third chapter, The Queen of Nothing , was released in November."
+        }],
+        "young adult fiction": [{
+            "author": "Rachael Lippincott",
+            "title": "Five Feet Apart",
+            "description": "Winner of this year's award for Young Adult Fiction, Five Feet Apart poses a heartbreaking question: Can you love someone you can never touch? Stella Grant and Will Newman are discovering teenage love,the most potent kind of love,but due to hospital protocol, they're prevented from getting within five feet of each other. The only way to stay alive is to stay apart. But there's got to be a way, right?"
+        }]
+    }
+]

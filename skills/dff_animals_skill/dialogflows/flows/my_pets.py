@@ -49,8 +49,8 @@ def answer_users_question(vars):
         my_pet_breed = my_pets_info[my_pet]["breed"]
 
     answer = ""
-    conf = CONF_1
-    continue_flag = common_constants.MUST_CONTINUE
+    conf = CONF_2
+    continue_flag = common_constants.CAN_CONTINUE_SCENARIO
     logger.info(f"answer_users_question {user_text} {my_pet_name}")
     if "?" in user_text and ("your" in user_text or (my_pet_name and my_pet_name in user_text)):
         if "name" in user_text and my_pet and my_pet_name:
@@ -88,7 +88,7 @@ def answer_users_question(vars):
         elif re.findall(r"you have (a )?(tablet|pc)", user_text) or re.findall(r"about (your )?(tablet|pc)", user_text):
             answer = "I have a Samsung tablet PC."
         else:
-            conf = 0.99
+            conf = CONF_2
             continue_flag = common_constants.CAN_CONTINUE_SCENARIO
             found_num = -1
             found_fallback = ""
@@ -234,8 +234,8 @@ def scenario_end_request(ngrams, vars):
 
 def scenario_end_response(vars):
     response = "I was very happy to tell you about my pets! You are a wonderful person!"
-    state_utils.set_confidence(vars, confidence=CONF_1)
-    state_utils.set_can_continue(vars, continue_flag=common_constants.MUST_CONTINUE)
+    state_utils.set_confidence(vars, confidence=CONF_2)
+    state_utils.set_can_continue(vars, continue_flag=common_constants.CAN_CONTINUE_SCENARIO)
     return response
 
 
@@ -315,8 +315,8 @@ def my_pet_response(vars):
     my_pet = shared_memory.get("my_pet", "")
     make_my_pets_info(vars)
     response = ""
-    continue_flag = common_constants.MUST_CONTINUE
-    conf = CONF_1
+    continue_flag = common_constants.CAN_CONTINUE_SCENARIO
+    conf = CONF_2
     if my_pet:
         fact_dict = find_fact(vars, MY_PET_FACTS, my_pet)
         fact = fact_dict.get("statement", "")

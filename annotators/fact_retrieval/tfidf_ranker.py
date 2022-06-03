@@ -24,7 +24,8 @@ from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.estimator import Component
 from deeppavlov.core.common.file import read_json
 from deeppavlov.core.commands.utils import expand_path
-from remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
+
+from common.ignore_lists import FALSE_POS_NPS_LIST, BAD_NPS_LIST
 
 logger = getLogger(__name__)
 
@@ -50,10 +51,10 @@ class ParTfidfRanker(Component):
             freq_unigrams = f.read().splitlines()[:1000]
 
         self.np_ignore_expr = re.compile(
-            "(" + "|".join([r"\b%s\b" % word for word in NP_IGNORE_LIST + freq_unigrams]) + ")", re.IGNORECASE
+            "(" + "|".join([r"\b%s\b" % word for word in BAD_NPS_LIST + freq_unigrams]) + ")", re.IGNORECASE
         )
         self.np_remove_expr = re.compile(
-            "(" + "|".join([r"\b%s\b" % word for word in NP_REMOVE_LIST]) + ")", re.IGNORECASE
+            "(" + "|".join([r"\b%s\b" % word for word in FALSE_POS_NPS_LIST]) + ")", re.IGNORECASE
         )
         self.rm_spaces_expr = re.compile(r"\s\s+")
 

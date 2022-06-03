@@ -96,14 +96,17 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 **Please note, that DeepPavlov Dream components require a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml up --build
 ```
 We've also included a config with GPU allocations for multi-GPU environments.
 
 ```
-AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/test.yml up
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/test.yml up
 ```
-
+When you need to restart particular docker container without re-building (make sure mapping in `assistant_dists/dream/dev.yml` is correct):
+```
+AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
+```
 
 ### Let's chat
 In a separate terminal tab run:
@@ -183,6 +186,12 @@ Dream Architecture is presented in the following image:
 | Topic recommendation        | 40 MiB RAM               | offers a topic for further conversation using the information about the discussed topics and user's preferences. Current version is based on Reddit personalities (see Dream Report for Alexa Prize 4).                        |
 | User Persona Extractor      | 40 MiB RAM               | determines which age category the user belongs to based on some key words                                                                                                                                                      |
 | Wiki parser                 | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                                                       |
+
+## Services
+| Name                      | Requirements            | Description                                                                                                                                                                                                        |
+|---------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DialoGPT                  | 1.3 GiB RAM, 1 GiB GPU  | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU)   |
+| Infilling                 | 1.7 GiB RAM, 1 GiB GPU  | generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens                          |
 
 ## Skills
 | Name                      | Requirements            | Description                                                                                                                                                                                                        |

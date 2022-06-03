@@ -45,6 +45,10 @@ services:
   sentrewrite:
   dff-intent-responder-skill:
   intent-catcher:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   badlisted-words:
   dff-program-y-dangerous-skill:
   dff-movie-skill:
@@ -101,9 +105,6 @@ services:
   dff-bot-persona-skill:
   dff-funfact-skill:
   dff-gossip-skill:
-  hypothesis-scorer:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-wiki-skill:
   topic-recommendation:
   user-persona-extractor:
@@ -123,5 +124,14 @@ services:
       - CUDA_VISIBLE_DEVICES=8
   dff-coronavirus-skill:
   dff-short-story-skill:
+  midas-predictor:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  dialogpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  infilling:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   dff-template-skill:
 version: '3.7'

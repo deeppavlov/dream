@@ -8,6 +8,7 @@ import common.dialogflow_framework.utils.state as state_utils
 from common.gaming import (
     GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN,
     VIDEO_GAME_WORDS_COMPILED_PATTERN,
+    VIDEO_GAME_QUESTION_COMPILED_PATTERN,
     find_games_in_text,
 )
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
@@ -57,7 +58,7 @@ def switch_to_particular_game_discussion(vars):
 
 
 def is_question_about_games(text):
-    return bool(VIDEO_GAME_WORDS_COMPILED_PATTERN.search(text.lower())) and "?" in text
+    return bool(VIDEO_GAME_QUESTION_COMPILED_PATTERN.search(text.lower())) and "?" in text
 
 
 def switch_to_general_gaming_discussion(vars):

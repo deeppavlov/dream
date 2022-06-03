@@ -63,6 +63,8 @@ services:
     restart: unless-stopped
   intent-catcher:
     restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   badlisted-words:
     restart: unless-stopped
   dff-program-y-dangerous-skill:
@@ -153,10 +155,6 @@ services:
     restart: unless-stopped
   dff-gossip-skill:
     restart: unless-stopped
-  hypothesis-scorer:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   dff-wiki-skill:
     restart: unless-stopped
   topic-recommendation:
@@ -185,6 +183,16 @@ services:
     restart: unless-stopped
   dff-weather-skill:
     restart: unless-stopped
+  midas-predictor:
+    restart: unless-stopped
+  dialogpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  infilling:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'

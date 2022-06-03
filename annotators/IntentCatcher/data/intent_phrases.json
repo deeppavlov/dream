@@ -559,7 +559,7 @@
         },
         "what_can_you_do": {
             "phrases": [
-                "((so )){0,1}(tell me ){0,1}what can you do",
+                "((so )){0,1}(tell me ){0,1}what (else ){0,1}can you do",
                 "(tell me ){0,1}what are you able to do",
                 "(tell me ){0,1}what you can do",
                 "what are your ((skills)|(abilities)|(features))",

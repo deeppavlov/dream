@@ -15,7 +15,7 @@
               "end": "1",
               "endOffset": 39,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "0",
               "startOffset": 0,
@@ -399,7 +399,7 @@
               "end": "18",
               "endOffset": 21,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "18",
               "startOffset": 0,
@@ -431,7 +431,7 @@
               "end": "21",
               "endOffset": 13,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "20",
               "startOffset": 1,
@@ -1199,7 +1199,7 @@
               "end": "62",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "61",
               "startOffset": 1,
@@ -2927,7 +2927,7 @@
               "end": "143",
               "endOffset": 14,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "143",
               "startOffset": 1,
@@ -2991,7 +2991,7 @@
               "end": "147",
               "endOffset": 8,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "146",
               "startOffset": 0,
@@ -3023,7 +3023,7 @@
               "end": "149",
               "endOffset": 45,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "148",
               "startOffset": 1,
@@ -3247,7 +3247,7 @@
               "end": "159",
               "endOffset": 25,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "159",
               "startOffset": 1,
@@ -5039,7 +5039,7 @@
               "end": "234",
               "endOffset": 34,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "233",
               "startOffset": 1,
@@ -6143,7 +6143,7 @@
               "end": "283",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "281",
               "startOffset": 0,
@@ -6175,7 +6175,7 @@
               "end": "284",
               "endOffset": 45,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "284",
               "startOffset": 0,
@@ -6479,7 +6479,7 @@
               "end": "296",
               "endOffset": 40,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "296",
               "startOffset": 0,
@@ -6493,7 +6493,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Opinion"
+                "Demand.Opinion"
               ],
               "end": "296",
               "endOffset": 40,
@@ -6543,7 +6543,7 @@
               "end": "300",
               "endOffset": 21,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "298",
               "startOffset": 1,
@@ -6575,7 +6575,7 @@
               "end": "302",
               "endOffset": 36,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "302",
               "startOffset": 0,
@@ -6831,7 +6831,7 @@
               "end": "311",
               "endOffset": 73,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "311",
               "startOffset": 1,
@@ -7823,7 +7823,7 @@
               "end": "356",
               "endOffset": 11,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "355",
               "startOffset": 1,
@@ -7853,7 +7853,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "356",
               "endOffset": 11,
@@ -8255,7 +8255,7 @@
               "end": "372",
               "endOffset": 31,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "372",
               "startOffset": 1,
@@ -8269,7 +8269,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "372",
               "endOffset": 31,
@@ -8351,7 +8351,7 @@
               "end": "376",
               "endOffset": 40,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "375",
               "startOffset": 0,
@@ -10591,7 +10591,7 @@
               "end": "491",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "489",
               "startOffset": 1,
@@ -12831,7 +12831,7 @@
               "end": "615",
               "endOffset": 46,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "612",
               "startOffset": 1,
@@ -18347,7 +18347,7 @@
               "end": "60",
               "endOffset": 19,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "59",
               "startOffset": 1,
@@ -18491,7 +18491,7 @@
               "end": "0",
               "endOffset": 31,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "0",
               "startOffset": 0,
@@ -18505,7 +18505,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Opinion"
+                "Demand.Opinion"
               ],
               "end": "0",
               "endOffset": 31,
@@ -19275,7 +19275,7 @@
               "end": "37",
               "endOffset": 28,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "36",
               "startOffset": 0,
@@ -19289,7 +19289,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "37",
               "endOffset": 28,
@@ -19371,7 +19371,7 @@
               "end": "43",
               "endOffset": 27,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "43",
               "startOffset": 0,
@@ -19547,7 +19547,7 @@
               "end": "58",
               "endOffset": 34,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "56",
               "startOffset": 0,
@@ -19611,7 +19611,7 @@
               "end": "67",
               "endOffset": 26,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "65",
               "startOffset": 1,
@@ -22603,7 +22603,7 @@
               "end": "211",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "211",
               "startOffset": 0,
@@ -22633,7 +22633,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "211",
               "endOffset": 18,
@@ -23915,7 +23915,7 @@
               "end": "269",
               "endOffset": 17,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "268",
               "startOffset": 0,
@@ -25051,7 +25051,7 @@
               "end": "326",
               "endOffset": 16,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "326",
               "startOffset": 1,
@@ -25065,7 +25065,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "326",
               "endOffset": 16,
@@ -25147,7 +25147,7 @@
               "end": "329",
               "endOffset": 39,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "329",
               "startOffset": 1,
@@ -25276,7 +25276,7 @@
               "end": "338",
               "endOffset": 35,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "337",
               "startOffset": 1,
@@ -25308,7 +25308,7 @@
               "end": "344",
               "endOffset": 7,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "339",
               "startOffset": 0,
@@ -28204,7 +28204,7 @@
               "end": "483",
               "endOffset": 7,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "483",
               "startOffset": 1,
@@ -28252,7 +28252,7 @@
               "end": "485",
               "endOffset": 20,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "485",
               "startOffset": 0,
@@ -31148,7 +31148,7 @@
               "end": "615",
               "endOffset": 26,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "615",
               "startOffset": 0,
@@ -31178,7 +31178,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "615",
               "endOffset": 26,
@@ -31308,7 +31308,7 @@
               "end": "625",
               "endOffset": 56,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "625",
               "startOffset": 1,
@@ -32300,7 +32300,7 @@
               "end": "681",
               "endOffset": 42,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "681",
               "startOffset": 1,
@@ -32380,7 +32380,7 @@
               "end": "686",
               "endOffset": 36,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "686",
               "startOffset": 0,
@@ -32394,7 +32394,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "686",
               "endOffset": 36,
@@ -32636,7 +32636,7 @@
               "end": "699",
               "endOffset": 19,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "696",
               "startOffset": 0,
@@ -36160,7 +36160,7 @@
               "end": "1",
               "endOffset": 39,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "0",
               "startOffset": 0,
@@ -36480,7 +36480,7 @@
               "end": "18",
               "endOffset": 21,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "18",
               "startOffset": 0,
@@ -36512,7 +36512,7 @@
               "end": "21",
               "endOffset": 13,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "20",
               "startOffset": 1,
@@ -37280,7 +37280,7 @@
               "end": "62",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "61",
               "startOffset": 1,
@@ -38816,7 +38816,7 @@
               "end": "143",
               "endOffset": 14,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "143",
               "startOffset": 1,
@@ -38880,7 +38880,7 @@
               "end": "147",
               "endOffset": 8,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "146",
               "startOffset": 0,
@@ -38912,7 +38912,7 @@
               "end": "149",
               "endOffset": 45,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "148",
               "startOffset": 1,
@@ -39136,7 +39136,7 @@
               "end": "159",
               "endOffset": 25,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "159",
               "startOffset": 1,
@@ -40912,7 +40912,7 @@
               "end": "234",
               "endOffset": 34,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "233",
               "startOffset": 1,
@@ -42016,7 +42016,7 @@
               "end": "283",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "281",
               "startOffset": 0,
@@ -42048,7 +42048,7 @@
               "end": "284",
               "endOffset": 45,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "284",
               "startOffset": 0,
@@ -42352,7 +42352,7 @@
               "end": "296",
               "endOffset": 40,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "296",
               "startOffset": 0,
@@ -42366,7 +42366,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Opinion"
+                "Demand.Opinion"
               ],
               "end": "296",
               "endOffset": 40,
@@ -42416,7 +42416,7 @@
               "end": "300",
               "endOffset": 21,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "298",
               "startOffset": 1,
@@ -42448,7 +42448,7 @@
               "end": "302",
               "endOffset": 36,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "302",
               "startOffset": 0,
@@ -42704,7 +42704,7 @@
               "end": "311",
               "endOffset": 73,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "311",
               "startOffset": 1,
@@ -43696,7 +43696,7 @@
               "end": "356",
               "endOffset": 11,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "355",
               "startOffset": 1,
@@ -43726,7 +43726,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "356",
               "endOffset": 11,
@@ -44128,7 +44128,7 @@
               "end": "372",
               "endOffset": 31,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "372",
               "startOffset": 1,
@@ -44142,7 +44142,7 @@
             "type": "choices",
             "value": {
               "choices": [
-                "Demand.Open.Fact"
+                "Demand.Fact"
               ],
               "end": "372",
               "endOffset": 31,
@@ -44224,7 +44224,7 @@
               "end": "376",
               "endOffset": 40,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "375",
               "startOffset": 0,
@@ -46400,7 +46400,7 @@
               "end": "491",
               "endOffset": 18,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "489",
               "startOffset": 1,
@@ -48432,7 +48432,7 @@
               "end": "615",
               "endOffset": 46,
               "paragraphlabels": [
-                "Open.Initiate"
+                "Open"
               ],
               "start": "612",
               "startOffset": 1,
