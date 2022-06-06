@@ -12,11 +12,12 @@
         "batch_size": 64,
         "squad_model": {"config_path": "./qa_squad2_bert.json"},
         "sort_noans": true,
+        "return_answer_sentence": true,
         "in": ["question_raw", "top_facts"],
-        "out": ["answer", "answer_score", "answer_place"]
+        "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_context"]
       }
     ],
-    "out":  ["answer", "answer_score", "answer_place"]
+    "out":  ["answer", "answer_score", "answer_place", "answer_sentence"] 
   },
   "metadata": {
     "variables": {
