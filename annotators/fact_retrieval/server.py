@@ -208,7 +208,7 @@ def respond():
     try:
         facts_batch = find_facts(entity_substr, entity_ids, entity_pages_titles)
         if f_utt:
-            fact_res = fact_retrieval(f_utt, f_dh, f_nounphr_list, f_entity_pages)
+            fact_res = fact_retrieval(f_utt) if len(f_utt[0].split()) > 3 else fact_retrieval(f_dh)
             out_res = []
             cnt_fnd = 0
             for i in range(len(cur_utt)):
