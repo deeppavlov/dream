@@ -15,6 +15,17 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+vec3 = require("vec3").Vec3
+
+FACE_VECTOR_MAP = {
+    0: vec3(0, -1, 0),
+    1: vec3(0, 1, 0),
+    2: vec3(0, 0, -1),
+    3: vec3(0, 0, 1),
+    4: vec3(-1, 0, 0),
+    5: vec3(1, 0, 0),
+}
+
 
 def chat(
     bot,
@@ -242,7 +253,6 @@ def place_block(
     pathfinder,
     invoker_username,
     max_range_goal: int = 4,
-    face_vector: tuple = (0, 1, 0),
 ):
     """Places a block adjacent to the block which is targeted by the player
 
@@ -251,20 +261,18 @@ def place_block(
         pathfinder: pathfinder module instance
         invoker_username: minecraft user who invoked this action
         max_range_goal: max number of blocks away from the goal
-        face_vector: (x, y, z) coordinates of the placed block relative to the reference block,
-            e.g. the user targets (10, 10, 10), the face vector is (0, 1, 0),
-            then the new block will be placed at (10, 11, 10)
 
     Returns:
 
     """
-    vec3 = require("vec3").Vec3
     user_entity = bot.players[invoker_username].entity
     target_block = bot.blockAtEntityCursor(user_entity)
 
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
         return
+
+    # TODO if not bot_has_block
 
     # sometimes it is None. Why?
     # logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
@@ -284,7 +292,7 @@ def place_block(
     def try_placing(event, state_goal):
         try:
             bot.chat(f"Placing a block near {target_block.position}")
-            bot.placeBlock(target_block, vec3(*face_vector))
+            bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
         except Exception as placing_e:
             bot.chat(f"Couldn't place the block there")
             logger.warning(
