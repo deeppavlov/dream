@@ -3,7 +3,6 @@ import logging
 from os import getenv
 from copy import deepcopy
 from random import choice
-from unittest import result
 
 from common.custom_requests import request_triples_wikidata
 import sentry_sdk
