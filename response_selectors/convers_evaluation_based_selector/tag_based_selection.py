@@ -54,6 +54,8 @@ GREETING_FIRST = getenv("GREETING_FIRST", True)
 RESTRICTION_FOR_SENSITIVE_CASE = getenv("RESTRICTION_FOR_SENSITIVE_CASE", True)
 PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS = getenv("PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS", True)
 ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", True)
+PROMPT_PROBA = getenv("PROMPT_PROBA", 0.3)
+ACKNOWLEDGEMENT_PROBA = getenv("ACKNOWLEDGEMENT_PROBA", 0.5)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -66,9 +68,6 @@ LETS_CHAT_ABOUT_PARTICULAR_TOPICS = json.load(open(lets_chat_about_triggers_fnam
 
 require_action_intents_fname = "require_action_intents.json"
 REQUIRE_ACTION_INTENTS = json.load(open(require_action_intents_fname))
-
-PROMPT_PROBA = 0.3
-ACKNOWLEDGEMENT_PROBA = 0.5
 
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
