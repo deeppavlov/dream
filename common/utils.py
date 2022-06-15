@@ -1217,10 +1217,10 @@ def get_conv_eval_annotations(annotated_utterance):
         "isResponseComprehensible": 0.0,
         "isResponseErroneous": 0.0,
     }
-    
+
     return annotated_utterance.get("annotations", {}).get("convers_evaluator_annotator", default_conv_eval)
 
 
 def get_dialog_breakdown_annotations(annotated_utterance):
-    breakdown = annotated_utterance.get("annotations", {}).get("dialog_breakdown", {}).get("breakdown", 0.) > 0.5
+    breakdown = annotated_utterance.get("annotations", {}).get("dialog_breakdown", {}).get("breakdown", 0.0) > 0.5
     return breakdown

@@ -321,24 +321,23 @@ def rule_based_prioritization(cand_uttr, dialog):
     flag = False
 
     if (
-            len(dialog["human_utterances"]) == 1
-            and cand_uttr["skill_name"] == "dff_friendship_skill"
-            and greeting_spec in cand_uttr["text"]
-            and GREETING_FIRST
+        len(dialog["human_utterances"]) == 1
+        and cand_uttr["skill_name"] == "dff_friendship_skill"
+        and greeting_spec in cand_uttr["text"]
+        and GREETING_FIRST
     ):
         # prioritize greeting phrase in the beginning of the dialog
         flag = True
 
     if (
-            cand_uttr["skill_name"] == "small_talk_skill"
-            and is_sensitive_situation(dialog["human_utterances"][-1])
-            and RESTRICTION_FOR_SENSITIVE_CASE
+        cand_uttr["skill_name"] == "small_talk_skill"
+        and is_sensitive_situation(dialog["human_utterances"][-1])
+        and RESTRICTION_FOR_SENSITIVE_CASE
     ):
         # small talk skill (if hypothesis is available) priority for sensitive situations when required
         flag = True
-    if (
-            cand_uttr["skill_name"] == "misheard_asr"
-            and any([x in cand_uttr["text"] for x in [misheard_with_spec1, misheard_with_spec2]])
+    if cand_uttr["skill_name"] == "misheard_asr" and any(
+        [x in cand_uttr["text"] for x in [misheard_with_spec1, misheard_with_spec2]]
     ):
         # prioritize misheard_asr response when low ASR conf
         flag = True
@@ -503,7 +502,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             if len(all_user_named_entities) > 0 or len(all_user_nounphrases) > 0:
                 # -----user defines new topic/entity-----
                 # _same_topic_entity does not depend on hyperparameter in these case
-                _same_topic_entity = (_same_named_entities or _same_nounphrases)
+                _same_topic_entity = _same_named_entities or _same_nounphrases
 
                 categorized_hyps, categorized_prompts = categorize_candidate(
                     cand_id,
@@ -540,7 +539,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # because now user wants to talk about something particular
             _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE
             # _same_topic_entity does not depend on hyperparameter in these case
-            _same_topic_entity = (_same_named_entities or _same_nounphrases)
+            _same_topic_entity = _same_named_entities or _same_nounphrases
 
             categorized_hyps, categorized_prompts = categorize_candidate(
                 cand_id,
@@ -688,7 +687,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _is_short_or_question_by_not_script = _is_best_not_script and (
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4
     )
-    _no_questions_for_3_steps = not any([is_any_question_sentence_in_utterance(uttr) for uttr in dialog["bot_utterances"][-3:]])
+    _no_questions_for_3_steps = not any(
+        [is_any_question_sentence_in_utterance(uttr) for uttr in dialog["bot_utterances"][-3:]]
+    )
 
     if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
         if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
@@ -718,9 +719,10 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         # it has a status can-not-continue
         # - if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and last 2 bot uttr are not from scripted skill,
         # and current best uttr is also from not-scripted skill
-        if (prompt_decision() and not _contains_entities and _no_questions_for_3_steps) or (
-                _add_prompt_forcibly and PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS) or (
-                PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and _no_script_two_times_in_a_row and _is_best_not_script
+        if (
+            (prompt_decision() and not _contains_entities and _no_questions_for_3_steps)
+            or (_add_prompt_forcibly and PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS)
+            or (PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and _no_script_two_times_in_a_row and _is_best_not_script)
         ):
             logger.info("Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)

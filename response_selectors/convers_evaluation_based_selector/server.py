@@ -15,7 +15,13 @@ from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
-from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, is_toxic_or_badlisted_utterance, get_conv_eval_annotations
+from common.utils import (
+    get_intent_name,
+    low_priority_intents,
+    substitute_nonwords,
+    is_toxic_or_badlisted_utterance,
+    get_conv_eval_annotations,
+)
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
