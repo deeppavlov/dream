@@ -54,8 +54,8 @@ GREETING_FIRST = getenv("GREETING_FIRST", True)
 RESTRICTION_FOR_SENSITIVE_CASE = getenv("RESTRICTION_FOR_SENSITIVE_CASE", True)
 PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS = getenv("PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS", True)
 ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", True)
-PROMPT_PROBA = getenv("PROMPT_PROBA", 0.3)
-ACKNOWLEDGEMENT_PROBA = getenv("ACKNOWLEDGEMENT_PROBA", 0.5)
+PROMPT_PROBA = float(getenv("PROMPT_PROBA", 0.3))
+ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -688,7 +688,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _is_short_or_question_by_not_script = _is_best_not_script and (
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4
     )
-    _no_questions_for_3_steps = not any([is_any_question_sentence_in_utterance(uttr) for uttr in bot_utterances[-3:]])
+    _no_questions_for_3_steps = not any([is_any_question_sentence_in_utterance(uttr) for uttr in dialog["bot_utterances"][-3:]])
 
     if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
         if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
