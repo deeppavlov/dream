@@ -75,10 +75,10 @@ def respond():
                 else:
                     curr_responses += [""]
                     curr_confidences += [ZERO_CONFIDENCE]
-            
+
             responses += [curr_responses]
             confidences += [curr_confidences]
-            
+
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
