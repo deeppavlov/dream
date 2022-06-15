@@ -49,10 +49,13 @@ def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
     intent, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
-    int_ctx.set_confidence(ctx, actor, confidence)
+    logger.info(f"Intent name: {intent}")
     if intent in high_priority_intents["dff_intent_responder_skill"]:
         int_ctx.set_confidence(ctx, actor, 1.0)
-
+        logger.info(f"Set confidence super")
+    else:
+        int_ctx.set_confidence(ctx, actor, confidence)
+        logger.info(f"Intent confidence: {confidence}")
     return ctx
 
 
