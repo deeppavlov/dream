@@ -149,7 +149,7 @@ def downscore_toxic_badlisted_responses(scores, confidences, is_toxics):
     }
     confidences[ids] = 0.0
 
-    return sum(ids), scores, confidences
+    return len(ids), scores, confidences
 
 
 def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=None):
