@@ -20,7 +20,6 @@ from common.universal_templates import (
     if_choose_topic,
 )
 from common.utils import (
-    get_intent_name,
     get_intents,
     get_topics,
     get_entities,
@@ -53,6 +52,8 @@ PRIORITIZE_WITH_REQUIRED_ACT = getenv("PRIORITIZE_WITH_REQUIRED_ACT", False)
 IGNORE_DISLIKED_SKILLS = getenv("IGNORE_DISLIKED_SKILLS", False)
 GREETING_FIRST = getenv("GREETING_FIRST", True)
 RESTRICTION_FOR_SENSITIVE_CASE = getenv("RESTRICTION_FOR_SENSITIVE_CASE", True)
+PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS = getenv("PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS", True)
+ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", True)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -328,13 +329,7 @@ def rule_based_prioritization(cand_uttr, dialog):
     ):
         # prioritize greeting phrase in the beginning of the dialog
         flag = True
-    # TODO: seems like we do not need this condition
-    # if (
-    #         cand_uttr["skill_name"] == "dff_friendship_skill"
-    #         and (how_are_you_spec in cand_uttr["text"] or what_i_can_do_spec in cand_uttr["text"])
-    #         and len(dialog["utterances"]) < 16
-    # ):
-    #     flag = True
+
     if (
             cand_uttr["skill_name"] == "small_talk_skill"
             and is_sensitive_situation(dialog["human_utterances"][-1])
@@ -636,10 +631,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif cand_uttr["skill_name"] == "small_talk_skill" and is_sensitive_situation(dialog["human_utterances"][-1]):
             # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == "misheard_asr" and is_misheard:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif is_intent_candidate:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["confidence"] >= 1.0:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
@@ -698,15 +689,17 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _is_short_or_question_by_not_script = _is_best_not_script and (
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4
     )
+    _no_questions_for_3_steps = not any([is_any_question_sentence_in_utterance(uttr) for uttr in bot_utterances[-3:]])
 
-    if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
-        _no_to_first_linkto and _is_best_not_script
-    ):
-        # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
-        # and user utterance does not contain "?", replace utterance with dummy!
-        best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
-        best_candidate = deepcopy(candidates[best_prompt_id])
-        best_cand_id = best_prompt_id
+    if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
+        if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
+            _no_to_first_linkto and _is_best_not_script
+        ):
+            # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
+            # and user utterance does not contain "?", replace utterance with dummy!
+            best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
+            best_candidate = deepcopy(candidates[best_prompt_id])
+            best_cand_id = best_prompt_id
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
@@ -719,14 +712,23 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         _add_prompt_forcibly = best_candidate["skill_name"] == _prev_active_skill and _is_active_skill_can_not_continue
         _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
 
-        if _add_prompt_forcibly or prompt_decision() or (_no_script_two_times_in_a_row and _is_best_not_script):
+        # prompts are added:
+        # - in 1 out of 10 cases, if current human utterance does not contain entities,
+        # and no prompt for several last bot utterances
+        # - if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and current utterance is from active on prev step scripted skill and
+        # it has a status can-not-continue
+        # - if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and last 2 bot uttr are not from scripted skill,
+        # and current best uttr is also from not-scripted skill
+        if (prompt_decision() and not _contains_entities and _no_questions_for_3_steps) or (
+                _add_prompt_forcibly and PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS) or (
+                PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and _no_script_two_times_in_a_row and _is_best_not_script
+        ):
             logger.info("Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
             best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
-            # TODO: how to correctly reassign human-/bot-/hyp- attributes??? how to deal with skill name?
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
 
@@ -742,7 +744,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     best_resp_cont_ackn = "acknowledgement" in best_candidate.get("response_parts", [])
 
     if (
-        acknowledgement_hypothesis
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE
+        and acknowledgement_hypothesis
         and acknowledgement_decision(all_user_intents)
         and n_sents_without_prompt == 1
         and not was_ackn
