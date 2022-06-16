@@ -40,9 +40,6 @@ with open("%s" % DATA_SENTENCES, "rb") as fl:
 
 try:
     fact_retrieval = build_model(CONFIG, download=True)
-    for i in range(50):
-        utt = random.choice(test_sentences)
-        test_res = fact_retrieval([utt], [utt], [["moscow"]], [[["Moscow"]]])
 
     with open("/root/.deeppavlov/downloads/wikidata/entity_types_sets.pickle", "rb") as fl:
         entity_types_sets = pickle.load(fl)
@@ -207,8 +204,11 @@ def respond():
     out_res = [{"facts": [], "topic_facts": []} for _ in cur_utt]
     try:
         facts_batch = find_facts(entity_substr, entity_ids, entity_pages_titles)
+        logger.info(f"f_utt {f_utt}")
         if f_utt:
             fact_res = fact_retrieval(f_utt) if len(f_utt[0].split()) > 3 else fact_retrieval(f_dh)
+            fact_res = [[[fact.replace('""', '"') for fact in facts] for facts in facts_list] for facts_list in fact_res]
+
             out_res = []
             cnt_fnd = 0
             for i in range(len(cur_utt)):
