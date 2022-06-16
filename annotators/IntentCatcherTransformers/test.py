@@ -22,7 +22,7 @@ def main_test():
             assert (
                 data.get(test["intent"], {"detected": 0}).get("detected", 0) == 1
                 and sum([v.get("detected", 0) for v in data.values()]) == 1
-            ), print(f"TEST FAILED!\nTest: {test}\nResult:{data}")
+            ), print(f"TEST FAILED!\nTest: {test}\nResult:{json.dumps(data, indent=2)}")
         else:
             assert all([intent["detected"] == 0 for intent in data.values()]), f"test: {test}\nprediction: {data}"
     print("Success")
