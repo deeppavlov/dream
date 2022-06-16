@@ -114,6 +114,7 @@ services:
         RESTRICTION_FOR_SENSITIVE_CASE: 1
         PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+        PRIORITIZE_SCRIPTED_SKILLS: 1
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
