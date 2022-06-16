@@ -49,3 +49,6 @@ services:
   dialogpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  infilling:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

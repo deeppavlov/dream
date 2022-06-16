@@ -187,6 +187,12 @@ Dream Architecture is presented in the following image:
 | User Persona Extractor      | 40 MiB RAM               | determines which age category the user belongs to based on some key words                                                                                                                                                      |
 | Wiki parser                 | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                                                       |
 
+## Services
+| Name                      | Requirements            | Description                                                                                                                                                                                                        |
+|---------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DialoGPT                  | 1.3 GiB RAM, 1 GiB GPU  | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU)   |
+| Infilling                 | 1.7 GiB RAM, 1 GiB GPU  | generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens                          |
+
 ## Skills
 | Name                      | Requirements            | Description                                                                                                                                                                                                        |
 |---------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

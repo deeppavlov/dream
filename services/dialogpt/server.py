@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
+N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
 
@@ -63,20 +64,27 @@ def respond():
         responses = []
         confidences = []
         for context in contexts:
-            response = generate_response(context, model, tokenizer)
-            if len(response) > 3:
-                # drop too short responses
-                responses += [response]
-                confidences += [DEFAULT_CONFIDENCE]
-            else:
-                responses += [""]
-                confidences += [ZERO_CONFIDENCE]
+            curr_responses = []
+            curr_confidences = []
+            for i in range(N_HYPOTHESES_TO_GENERATE):
+                response = generate_response(context, model, tokenizer)
+                if len(response) > 3:
+                    # drop too short responses
+                    curr_responses += [response]
+                    curr_confidences += [DEFAULT_CONFIDENCE]
+                else:
+                    curr_responses += [""]
+                    curr_confidences += [ZERO_CONFIDENCE]
+
+            responses += [curr_responses]
+            confidences += [curr_confidences]
+
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        responses = [""] * len(contexts)
-        confidences = [ZERO_CONFIDENCE] * len(contexts)
+        responses = [[""]] * len(contexts)
+        confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"masked_lm exec time: {total_time:.3f}s")
+    logger.info(f"dialogpt exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))

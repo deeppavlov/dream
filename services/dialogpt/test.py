@@ -1,4 +1,8 @@
+import os
 import requests
+
+
+N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 
 
 def test_respond():
@@ -8,7 +12,8 @@ def test_respond():
     gold_result = [["I'm good, how are you?", 0.9], ["I like the new one.", 0.9]]
     result = requests.post(url, json={"utterances_histories": contexts}).json()
     assert [
-        len(sample[0]) > 0 and sample[1] > 0.0 for sample in result
+        len(sample[0]) > 0 and all([len(text) > 0 for text in sample[0]]) and all([conf > 0.0 for conf in sample[1]])
+        for sample in result
     ], f"Got\n{result}\n, but expected:\n{gold_result}"
     print("Success")
 
