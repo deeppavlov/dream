@@ -130,5 +130,8 @@ services:
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  infilling:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   dff-template-skill:
 version: '3.7'
