@@ -46,16 +46,17 @@ from common.response_selection import (
 )
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-PRIORITIZE_WITH_SAME_TOPIC_ENTITY = getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", True)
-PRIORITIZE_NO_DIALOG_BREAKDOWN = getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", False)
-PRIORITIZE_WITH_REQUIRED_ACT = getenv("PRIORITIZE_WITH_REQUIRED_ACT", False)
-IGNORE_DISLIKED_SKILLS = getenv("IGNORE_DISLIKED_SKILLS", False)
-GREETING_FIRST = getenv("GREETING_FIRST", True)
-RESTRICTION_FOR_SENSITIVE_CASE = getenv("RESTRICTION_FOR_SENSITIVE_CASE", True)
-PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS = getenv("PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS", True)
-ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", True)
+PRIORITIZE_WITH_SAME_TOPIC_ENTITY = int(getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 1))
+PRIORITIZE_NO_DIALOG_BREAKDOWN = int(getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", 0))
+PRIORITIZE_WITH_REQUIRED_ACT = int(getenv("PRIORITIZE_WITH_REQUIRED_ACT", 0))
+IGNORE_DISLIKED_SKILLS = int(getenv("IGNORE_DISLIKED_SKILLS", 0))
+GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
+RESTRICTION_FOR_SENSITIVE_CASE = int(getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1))
+PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS = int(getenv("PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS", 1))
+ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = int(getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", 1))
 PROMPT_PROBA = float(getenv("PROMPT_PROBA", 0.3))
 ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
+PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -464,6 +465,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             _can_continue in [MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE]
             or (_can_continue == CAN_CONTINUE_PROMPT and all_prev_active_skills.get(skill_name, []) < 10)
         )
+        _is_active_skill = _is_active_skill and PRIORITIZE_SCRIPTED_SKILLS
         if _is_active_skill:
             # we will forcibly add prompt if current scripted skill finishes scenario,
             # and has no opportunity to continue at all.
