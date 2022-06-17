@@ -20,12 +20,12 @@ from common.universal_templates import (
     if_choose_topic,
 )
 from common.utils import (
-    get_intent_name,
     get_intents,
     get_topics,
     get_entities,
     get_common_tokens_in_lists_of_strings,
     is_no,
+    get_dialog_breakdown_annotations,
 )
 from utils import (
     calculate_single_convers_evaluator_score,
@@ -34,9 +34,7 @@ from utils import (
     how_are_you_spec,
     what_i_can_do_spec,
     misheard_with_spec1,
-    psycho_help_spec,
     misheard_with_spec2,
-    alexa_abilities_spec,
     join_used_links_in_attributes,
     get_updated_disliked_skills,
 )
@@ -48,6 +46,17 @@ from common.response_selection import (
 )
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+PRIORITIZE_WITH_SAME_TOPIC_ENTITY = int(getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 1))
+PRIORITIZE_NO_DIALOG_BREAKDOWN = int(getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", 0))
+PRIORITIZE_WITH_REQUIRED_ACT = int(getenv("PRIORITIZE_WITH_REQUIRED_ACT", 0))
+IGNORE_DISLIKED_SKILLS = int(getenv("IGNORE_DISLIKED_SKILLS", 0))
+GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
+RESTRICTION_FOR_SENSITIVE_CASE = int(getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1))
+PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS = int(getenv("PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS", 1))
+ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = int(getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", 1))
+PROMPT_PROBA = float(getenv("PROMPT_PROBA", 0.3))
+ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
+PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -60,9 +69,6 @@ LETS_CHAT_ABOUT_PARTICULAR_TOPICS = json.load(open(lets_chat_about_triggers_fnam
 
 require_action_intents_fname = "require_action_intents.json"
 REQUIRE_ACTION_INTENTS = json.load(open(require_action_intents_fname))
-
-PROMPT_PROBA = 0.3
-ACKNOWLEDGEMENT_PROBA = 0.5
 
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
@@ -312,6 +318,35 @@ def if_acknowledgement_in_previous_bot_utterance(dialog):
     return False
 
 
+def rule_based_prioritization(cand_uttr, dialog):
+    flag = False
+
+    if (
+        len(dialog["human_utterances"]) == 1
+        and cand_uttr["skill_name"] == "dff_friendship_skill"
+        and greeting_spec in cand_uttr["text"]
+        and GREETING_FIRST
+    ):
+        # prioritize greeting phrase in the beginning of the dialog
+        flag = True
+
+    if (
+        cand_uttr["skill_name"] == "small_talk_skill"
+        and is_sensitive_situation(dialog["human_utterances"][-1])
+        and RESTRICTION_FOR_SENSITIVE_CASE
+    ):
+        # small talk skill (if hypothesis is available) priority for sensitive situations when required
+        flag = True
+    if cand_uttr["skill_name"] == "misheard_asr" and any(
+        [x in cand_uttr["text"] for x in [misheard_with_spec1, misheard_with_spec2]]
+    ):
+        # prioritize misheard_asr response when low ASR conf
+        flag = True
+    if cand_uttr["confidence"] >= 1.0:
+        flag = True
+    return flag
+
+
 def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills=None):
     all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
     all_prev_active_skills = Counter(all_prev_active_skills)
@@ -389,7 +424,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             cand_uttr
         )
         skill_name = cand_uttr["skill_name"]
-        _is_dialog_abandon = False  # "abandon" in all_cand_intents
+        _is_dialog_abandon = get_dialog_breakdown_annotations(cand_uttr) and PRIORITIZE_NO_DIALOG_BREAKDOWN
         _is_just_prompt = (
             cand_uttr["skill_name"] == "dummy_skill"
             and any(
@@ -400,7 +435,9 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             )
         ) or cand_uttr.get("response_parts", []) == ["prompt"]
         if cand_uttr["confidence"] == 1.0:
+            # for those hypotheses where developer forgot to set tag to MUST_CONTINUE
             cand_uttr["can_continue"] = MUST_CONTINUE
+        _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
 
         _user_wants_to_chat_about_topic = (
             if_chat_about_particular_topic(annotated_uttr) and "about it" not in annotated_uttr["text"].lower()
@@ -412,16 +449,13 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # add `prompt` to response_parts if any linkto phrase in hypothesis
             cand_uttr["response_parts"] = cand_uttr.get("response_parts", []) + ["prompt"]
 
+        # identifies if candidate contains named entities from last human utterance
         _same_named_entities = (
             len(get_common_tokens_in_lists_of_strings(all_cand_named_entities, all_user_named_entities)) > 0
         )
+        # identifies if candidate contains all (not only named) entities from last human utterance
         _same_nounphrases = len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases, all_user_nounphrases)) > 0
-        _same_topic_entity = False
-
-        # if cand_uttr["skill_name"] == 'program_y' and cand_uttr['confidence'] == 0.98 and \
-        #         len(cand_uttr["text"].split()) > 6:
-        #     cand_uttr["can_continue"] = CAN_CONTINUE_SCENARIO
-        _can_continue = cand_uttr.get("can_continue", CAN_NOT_CONTINUE)
+        _same_topic_entity = (_same_named_entities or _same_nounphrases) and PRIORITIZE_WITH_SAME_TOPIC_ENTITY
 
         _is_active_skill = (
             _prev_active_skill == cand_uttr["skill_name"] or cand_uttr.get("can_continue", "") == MUST_CONTINUE
@@ -431,6 +465,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             _can_continue in [MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE]
             or (_can_continue == CAN_CONTINUE_PROMPT and all_prev_active_skills.get(skill_name, []) < 10)
         )
+        _is_active_skill = _is_active_skill and PRIORITIZE_SCRIPTED_SKILLS
         if _is_active_skill:
             # we will forcibly add prompt if current scripted skill finishes scenario,
             # and has no opportunity to continue at all.
@@ -468,13 +503,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             CASE = "Switch topic intent."
             if len(all_user_named_entities) > 0 or len(all_user_nounphrases) > 0:
                 # -----user defines new topic/entity-----
-
-                _same_named_entities = (
-                    len(get_common_tokens_in_lists_of_strings(all_cand_named_entities, all_user_named_entities)) > 0
-                )
-                _same_nounphrases = (
-                    len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases, all_user_nounphrases)) > 0
-                )
+                # _same_topic_entity does not depend on hyperparameter in these case
                 _same_topic_entity = _same_named_entities or _same_nounphrases
 
                 categorized_hyps, categorized_prompts = categorize_candidate(
@@ -491,7 +520,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 )
             else:
                 # -----user want socialbot to define new topic/entity-----
-
                 categorized_hyps, categorized_prompts = categorize_candidate(
                     cand_id,
                     skill_name,
@@ -512,12 +540,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # in this case we do not give priority to previously active skill (but give to must continue skill!)
             # because now user wants to talk about something particular
             _is_active_skill = cand_uttr.get("can_continue", "") == MUST_CONTINUE
-            _same_named_entities = (
-                len(get_common_tokens_in_lists_of_strings(all_cand_named_entities, all_user_named_entities)) > 0
-            )
-            _same_nounphrases = (
-                len(get_common_tokens_in_lists_of_strings(all_cand_nounphrases, all_user_nounphrases)) > 0
-            )
+            # _same_topic_entity does not depend on hyperparameter in these case
             _same_topic_entity = _same_named_entities or _same_nounphrases
 
             categorized_hyps, categorized_prompts = categorize_candidate(
@@ -533,7 +556,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
                 _is_required_da=False,
             )
 
-        elif _is_require_action_intent:
+        elif _is_require_action_intent and PRIORITIZE_WITH_REQUIRED_ACT:
             # =====user intent requires particular action=====
 
             CASE = "User intent requires action. USER UTTERANCE CONTAINS QUESTION."
@@ -590,12 +613,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             )
 
         # a bit of rule based help
-        is_misheard = misheard_with_spec1 in cand_uttr["text"] or misheard_with_spec2 in cand_uttr["text"]
-        intent_name = get_intent_name(cand_uttr["text"])
-        is_intent_candidate = intent_name and cand_uttr["skill_name"] in [
-            "dff_intent_responder_skill",
-            "dff_program_y_skill",
-        ]
+
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"
@@ -613,14 +631,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         elif cand_uttr["skill_name"] == "small_talk_skill" and is_sensitive_situation(dialog["human_utterances"][-1]):
             # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == "misheard_asr" and is_misheard:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif is_intent_candidate:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["skill_name"] == "dff_friendship_skill" and alexa_abilities_spec in cand_uttr["text"]:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif "program_y" in cand_uttr["skill_name"] and psycho_help_spec in cand_uttr["text"]:
-            categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif cand_uttr["confidence"] >= 1.0:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
@@ -635,28 +645,29 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     curr_single_scores = compute_curr_single_scores(candidates, scores, confidences)
 
     # remove disliked skills from hypotheses
-    for category in categorized_hyps:
-        new_ids = []
-        for cand_id in categorized_hyps[category]:
-            if (
-                candidates[cand_id]["skill_name"] in disliked_skills
-                and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
-            ):
-                disliked_skills.remove(candidates[cand_id]["skill_name"])
-            if candidates[cand_id]["skill_name"] not in disliked_skills:
-                new_ids.append(cand_id)
-        categorized_hyps[category] = deepcopy(new_ids)
-    for category in categorized_prompts:
-        new_ids = []
-        for cand_id in categorized_prompts[category]:
-            if (
-                candidates[cand_id]["skill_name"] in disliked_skills
-                and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
-            ):
-                disliked_skills.remove(candidates[cand_id]["skill_name"])
-            if candidates[cand_id]["skill_name"] not in disliked_skills:
-                new_ids.append(cand_id)
-        categorized_prompts[category] = deepcopy(new_ids)
+    if IGNORE_DISLIKED_SKILLS:
+        for category in categorized_hyps:
+            new_ids = []
+            for cand_id in categorized_hyps[category]:
+                if (
+                    candidates[cand_id]["skill_name"] in disliked_skills
+                    and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
+                ):
+                    disliked_skills.remove(candidates[cand_id]["skill_name"])
+                if candidates[cand_id]["skill_name"] not in disliked_skills:
+                    new_ids.append(cand_id)
+            categorized_hyps[category] = deepcopy(new_ids)
+        for category in categorized_prompts:
+            new_ids = []
+            for cand_id in categorized_prompts[category]:
+                if (
+                    candidates[cand_id]["skill_name"] in disliked_skills
+                    and candidates[cand_id].get("can_continue", CAN_NOT_CONTINUE) == MUST_CONTINUE
+                ):
+                    disliked_skills.remove(candidates[cand_id]["skill_name"])
+                if candidates[cand_id]["skill_name"] not in disliked_skills:
+                    new_ids.append(cand_id)
+            categorized_prompts[category] = deepcopy(new_ids)
 
     best_cand_id = pickup_best_id(categorized_hyps, candidates, curr_single_scores, bot_utterances)
     best_candidate = candidates[best_cand_id]
@@ -678,15 +689,19 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     _is_short_or_question_by_not_script = _is_best_not_script and (
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4
     )
+    _no_questions_for_3_steps = not any(
+        [is_any_question_sentence_in_utterance(uttr) for uttr in dialog["bot_utterances"][-3:]]
+    )
 
-    if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
-        _no_to_first_linkto and _is_best_not_script
-    ):
-        # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
-        # and user utterance does not contain "?", replace utterance with dummy!
-        best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
-        best_candidate = deepcopy(candidates[best_prompt_id])
-        best_cand_id = best_prompt_id
+    if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
+        if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
+            _no_to_first_linkto and _is_best_not_script
+        ):
+            # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
+            # and user utterance does not contain "?", replace utterance with dummy!
+            best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
+            best_candidate = deepcopy(candidates[best_prompt_id])
+            best_cand_id = best_prompt_id
 
     if does_not_require_prompt(candidates, best_cand_id):
         # the candidate already contains a prompt or a question or of a length more than 200 symbols
@@ -699,14 +714,24 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         _add_prompt_forcibly = best_candidate["skill_name"] == _prev_active_skill and _is_active_skill_can_not_continue
         _add_prompt_forcibly = _add_prompt_forcibly and not _contains_entities
 
-        if _add_prompt_forcibly or prompt_decision() or (_no_script_two_times_in_a_row and _is_best_not_script):
+        # prompts are added:
+        # - in 1 out of 10 cases, if current human utterance does not contain entities,
+        # and no prompt for several last bot utterances
+        # - if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and current utterance is from active on prev step scripted skill and
+        # it has a status can-not-continue
+        # - if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and last 2 bot uttr are not from scripted skill,
+        # and current best uttr is also from not-scripted skill
+        if (
+            (prompt_decision() and not _contains_entities and _no_questions_for_3_steps)
+            or (_add_prompt_forcibly and PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS)
+            or (PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and _no_script_two_times_in_a_row and _is_best_not_script)
+        ):
             logger.info("Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
             best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
-            # TODO: how to correctly reassign human-/bot-/hyp- attributes??? how to deal with skill name?
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
 
@@ -722,7 +747,8 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
     best_resp_cont_ackn = "acknowledgement" in best_candidate.get("response_parts", [])
 
     if (
-        acknowledgement_hypothesis
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE
+        and acknowledgement_hypothesis
         and acknowledgement_decision(all_user_intents)
         and n_sents_without_prompt == 1
         and not was_ackn
