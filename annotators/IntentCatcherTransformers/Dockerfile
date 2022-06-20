@@ -13,6 +13,8 @@ ARG CONFIG_NAME
 ENV CONFIG_NAME ${CONFIG_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
+ARG INTENT_PHRASES_PATH
+ENV INTENT_PHRASES_PATH ${INTENT_PHRASES_PATH}
 
 COPY annotators/IntentCatcherTransformers/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
