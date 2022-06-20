@@ -127,7 +127,7 @@ def softmax(x, t):
 
 
 def exponential_decay(init_value, factor, num_steps):
-    return init_value * factor ** num_steps
+    return init_value * factor**num_steps
 
 
 def sample_candidates(candidates, choice_num=1, replace=False, softmax_temperature=1):
