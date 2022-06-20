@@ -15,7 +15,13 @@ from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, DUMMY_DONTKNOW_RESPONSES
-from common.utils import get_intent_name, low_priority_intents, substitute_nonwords, is_toxic_or_badlisted_utterance
+from common.utils import (
+    get_intent_name,
+    low_priority_intents,
+    substitute_nonwords,
+    is_toxic_or_badlisted_utterance,
+    get_conv_eval_annotations,
+)
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
@@ -27,10 +33,8 @@ from utils import (
     CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
-    psycho_help_spec,
     misheard_with_spec1,
     misheard_with_spec2,
-    alexa_abilities_spec,
 )
 
 
@@ -41,11 +45,15 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-CALL_BY_NAME_PROBABILITY = 0.5  # if name is already known
-SHOW_DIALOG_ID = False
-TAG_BASED_SELECTION = True
-
+CALL_BY_NAME_PROBABILITY = float(getenv("CALL_BY_NAME_PROBABILITY", 0.5))  # if name is already known
+TAG_BASED_SELECTION = getenv("TAG_BASED_SELECTION", False)
+MOST_DUMMY_RESPONSES = [
+    "I really do not know what to answer.",
+    "Sorry, probably, I didn't get what you mean.",
+    "I didn't get it. Sorry",
+]
 LANGUAGE = getenv("LANGUAGE", "EN")
+SHOW_DIALOG_ID = False
 
 
 @app.route("/respond", methods=["POST"])
@@ -78,7 +86,6 @@ def respond():
                     assert len(dialog["bot_utterances"]) > 0
 
                 curr_confidences += [skill_data["confidence"]]
-                annotation = skill_data.get("annotations", {})
                 if skill_data["text"] and skill_data["confidence"]:
                     if not skill_data.get("annotations"):
                         logger.warning(f"Valid skill data without annotations: {skill_data}")
@@ -98,14 +105,7 @@ def respond():
                         )
                         logger.info(msg)
 
-                default_conv_eval = {
-                    "isResponseOnTopic": 0.0,
-                    "isResponseInteresting": 0.0,
-                    "responseEngagesUser": 0.0,
-                    "isResponseComprehensible": 0.0,
-                    "isResponseErroneous": 0.0,
-                }
-                curr_scores += [annotation.get("convers_evaluator_annotator", default_conv_eval)]
+                curr_scores += [get_conv_eval_annotations(skill_data)]
 
             curr_is_toxics = np.array(curr_is_toxics)
             curr_scores = np.array(curr_scores)
@@ -123,8 +123,10 @@ def respond():
             logger.exception(e)
             sentry_sdk.capture_exception(e)
             if dialog["human_utterances"][-1].get("hypotheses", []):
+                logger.info("Response Selector Error: randomly choosing final response among hypotheses.")
                 best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
             else:
+                logger.info("Response Selector Error: randomly choosing response among dummy responses.")
                 best_cand = {
                     "text": random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]),
                     "confidence": 0.1,
@@ -246,8 +248,6 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             and len(dialog["utterances"]) < 16
         ):
             curr_score = very_big_score
-        elif skill_names[i] == "program_y_dangerous" and psycho_help_spec in candidates[i]["text"]:
-            curr_score = very_big_score
         elif skill_names[i] == "dff_friendship_skill" and greeting_spec[LANGUAGE] in candidates[i]["text"]:
             if len(dialog["utterances"]) < 2:
                 curr_score = very_big_score
@@ -268,8 +268,6 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         elif skill_names[i] == "misheard_asr" and is_misheard:
             curr_score = very_big_score
         elif is_intent_candidate:
-            curr_score = very_big_score
-        elif skill_names[i] == "program_y" and alexa_abilities_spec in candidates[i]["text"]:
             curr_score = very_big_score
         elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval", "program_y"]:
             if "question" in candidates[i].get("type", "") or "?" in candidates[i]["text"]:
@@ -365,6 +363,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
             dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills
         )
     else:
+        logger.info("Confidence & ConvEvaluationAnnotator Scores based selection")
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
             dialog, candidates, scores, confidences, is_toxics, bot_utterances
         )

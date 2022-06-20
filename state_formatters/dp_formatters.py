@@ -563,16 +563,6 @@ def wp_formatter_dialog(dialog: Dict):
     return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
 
 
-def entity_detection_formatter_dialog(dialog: Dict):
-    # Used by: entity_linking annotator
-    num_last_utterances = 2
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-
-    return [{"last_utterances": context}]
-
-
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2

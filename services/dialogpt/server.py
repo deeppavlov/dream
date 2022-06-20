@@ -48,7 +48,12 @@ def generate_response(context, model, tokenizer):
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
-            bot_input_ids, do_sample=True, max_length=50, top_k=3, pad_token_id=tokenizer.eos_token_id
+            bot_input_ids,
+            do_sample=True,
+            max_length=100,
+            temperature=0.6,
+            repetition_penalty=1.3,
+            pad_token_id=tokenizer.eos_token_id,
         )
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
