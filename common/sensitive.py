@@ -1,6 +1,7 @@
 from common.utils import get_topics, get_intents
 
 
+psycho_help_spec = "you can call the National Suicide Prevention Lifeline"
 sensitive_topics = {"Politics", "Religion", "Sex_Profanity"}
 sensitive_dialogact_topics = {"Politics", "Inappropriate_Content"}
 sensitive_all_intents = {
