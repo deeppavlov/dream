@@ -3,7 +3,6 @@ import logging
 import nltk
 import os
 import pickle
-import random
 import re
 import time
 
@@ -190,7 +189,9 @@ def respond():
     entity_ids = request.json.get("entity_ids", [])
     if not entity_ids:
         entity_ids = [[] for _ in cur_utt]
-    logger.info(f"cur_utt {cur_utt} dialog_history {dialog_history} nounphr_list {nounphr_list} entity_pages {entity_pages}")
+    logger.info(
+        f"cur_utt {cur_utt} dialog_history {dialog_history} nounphr_list {nounphr_list} entity_pages {entity_pages}"
+    )
 
     nf_numbers, f_utt, f_dh, f_nounphr_list, f_entity_pages = [], [], [], [], []
     for n, (utt, dh, nounphrases, input_pages) in enumerate(zip(cur_utt, dialog_history, nounphr_list, entity_pages)):

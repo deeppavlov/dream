@@ -23,7 +23,7 @@ from deeppavlov.core.models.component import Component
 logger = getLogger(__name__)
 
 
-@register('squad_bert_mapping')
+@register("squad_bert_mapping")
 class SquadBertMappingPreprocessor(Component):
     """Create mapping from BERT subtokens to their characters positions and vice versa.
         Args:
@@ -37,18 +37,19 @@ class SquadBertMappingPreprocessor(Component):
         subtok2chars_batch: List[List[Dict[int, int]]] = []
         char2subtoks_batch: List[List[Dict[int, int]]] = []
 
-        for batch_counter, (context_list, features_list, subtokens_list) in \
-                enumerate(zip(contexts_batch, bert_features_batch, subtokens_batch)):
+        for batch_counter, (context_list, features_list, subtokens_list) in enumerate(
+            zip(contexts_batch, bert_features_batch, subtokens_batch)
+        ):
             subtok2chars_list, char2subtoks_list = [], []
             for context, features, subtokens in zip(context_list, features_list, subtokens_list):
                 if self.do_lower_case:
                     context = context.lower()
-                context_start = subtokens.index('[SEP]') + 1
+                context_start = subtokens.index("[SEP]") + 1
                 idx = 0
                 subtok2char: Dict[int, int] = {}
                 char2subtok: Dict[int, int] = {}
                 for i, subtok in list(enumerate(subtokens))[context_start:-1]:
-                    subtok = subtok[2:] if subtok.startswith('##') else subtok
+                    subtok = subtok[2:] if subtok.startswith("##") else subtok
                     subtok_pos = context[idx:].find(subtok)
                     if subtok_pos == -1:
                         # it could be UNK
@@ -67,7 +68,7 @@ class SquadBertMappingPreprocessor(Component):
         return subtok2chars_batch, char2subtoks_batch
 
 
-@register('squad_bert_ans_preprocessor')
+@register("squad_bert_ans_preprocessor")
 class SquadBertAnsPreprocessor(Component):
     """Create answer start and end positions in subtokens.
         Args:
@@ -93,43 +94,52 @@ class SquadBertAnsPreprocessor(Component):
                 except ValueError:
                     # 0 - CLS token
                     st, end = 0, 0
-                    ans = ''
+                    ans = ""
                 starts[-1] += [st]
                 ends[-1] += [end]
                 answers[-1] += [ans]
         return answers, starts, ends
 
 
-@register('squad_bert_ans_postprocessor')
+@register("squad_bert_ans_postprocessor")
 class SquadBertAnsPostprocessor(Component):
     """Extract answer and create answer start and end positions in characters from subtoken positions."""
 
     def __init__(self, *args, **kwargs):
         pass
 
-    def __call__(self, answers_start_batch, answers_end_batch, contexts_batch,
-                 subtok2chars_batch, subtokens_batch, ind_batch, *args, **kwargs):
+    def __call__(
+        self,
+        answers_start_batch,
+        answers_end_batch,
+        contexts_batch,
+        subtok2chars_batch,
+        subtokens_batch,
+        ind_batch,
+        *args,
+        **kwargs
+    ):
         answers = []
         starts = []
         ends = []
-        
-        for answer_st, answer_end, context_list, sub2c_list, subtokens_list, ind in \
-                zip(answers_start_batch, answers_end_batch, contexts_batch, subtok2chars_batch, subtokens_batch,
-                    ind_batch):
+
+        for answer_st, answer_end, context_list, sub2c_list, subtokens_list, ind in zip(
+            answers_start_batch, answers_end_batch, contexts_batch, subtok2chars_batch, subtokens_batch, ind_batch
+        ):
             sub2c = sub2c_list[ind]
             subtok = subtokens_list[ind][answer_end]
             context = context_list[ind]
             # CLS token is no_answer token
             if answer_st == 0 or answer_end == 0:
-                answers += ['']
+                answers += [""]
                 starts += [-1]
                 ends += [-1]
             else:
                 st = self.get_char_position(sub2c, answer_st)
                 end = self.get_char_position(sub2c, answer_end)
-                
-                subtok = subtok[2:] if subtok.startswith('##') else subtok
-                answer = context[st:end + len(subtok)]
+
+                subtok = subtok[2:] if subtok.startswith("##") else subtok
+                answer = context[st : end + len(subtok)]
                 answers += [answer]
                 starts += [st]
                 ends += [ends]

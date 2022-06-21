@@ -63,25 +63,36 @@ class Retriever(object):
         return scores_list, ids_list
 
 
-@register('bpr')
+@register("bpr")
 class BPR(Component, Serializable):
-    def __init__(self, pretrained_model, load_path, bpr_index, query_encoder_file, top_n=100, nprobe = 10, device: str="gpu", *args, **kwargs):
+    def __init__(
+        self,
+        pretrained_model,
+        load_path,
+        bpr_index,
+        query_encoder_file,
+        top_n=100,
+        nprobe=10,
+        device: str = "gpu",
+        *args,
+        **kwargs,
+    ):
         super().__init__(save_path=None, load_path=load_path)
         self.device = torch.device("cuda" if torch.cuda.is_available() and device == "gpu" else "cpu")
         self.bpr_index = bpr_index
         self.top_n = top_n
         self.nprobe = nprobe
-        self.hparams = {"base_pretrained_model": pretrained_model,
-                        "load_path": f"{self.load_path}/{query_encoder_file}",
-                        "max_query_length": 256,
-                        "num_hard_negatives": 1,
-                        "num_other_negatives": 0
-                        }
+        self.hparams = {
+            "base_pretrained_model": pretrained_model,
+            "load_path": f"{self.load_path}/{query_encoder_file}",
+            "max_query_length": 256,
+            "num_hard_negatives": 1,
+            "num_other_negatives": 0,
+        }
         self.load()
         self.index = FaissBinaryIndex(self.base_index)
         self.retriever = Retriever(self.index, self.biencoder)
 
-    
     def load(self):
         self.biencoder = BiEncoder(self.hparams)
         checkpoint = torch.load(self.hparams["load_path"], map_location=self.device)
@@ -90,7 +101,7 @@ class BPR(Component, Serializable):
         self.biencoder.freeze()
         self.base_index = faiss.read_index_binary(str(self.load_path / self.bpr_index))
         self.base_index.nprobe = self.nprobe
-        
+
     def save(self) -> None:
         pass
 
@@ -103,5 +114,5 @@ class BPR(Component, Serializable):
         tm2 = time.time()
         logger.info(f"time of ranking {tm2 - tm1}")
         ids_batch = ids_batch.tolist()
-        
+
         return [ids_batch]

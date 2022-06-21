@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
 from logging import getLogger
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict
@@ -37,7 +36,7 @@ def softmax_mask(val, mask):
     return -inf * (1 - mask.to(torch.float32)) + val
 
 
-@register('torch_transformers_squad')
+@register("torch_transformers_squad")
 class TorchTransformersSquad(TorchModel):
     """Bert-based on PyTorch model for SQuAD-like problem setting:
     It predicts start and end position of answer for given question and context.
@@ -62,27 +61,26 @@ class TorchTransformersSquad(TorchModel):
         batch_size: batch size for inference of squad model
     """
 
-    def __init__(self,
-                 pretrained_bert: str,
-                 checkpoint: str,
-                 attention_probs_keep_prob: Optional[float] = None,
-                 hidden_keep_prob: Optional[float] = None,
-                 optimizer: str = "AdamW",
-                 optimizer_parameters: Optional[dict] = None,
-                 bert_config_file: Optional[str] = None,
-                 learning_rate_drop_patience: int = 20,
-                 learning_rate_drop_div: float = 2.0,
-                 load_before_drop: bool = True,
-                 clip_norm: Optional[float] = None,
-                 min_learning_rate: float = 1e-06,
-                 batch_size: int = 10,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        pretrained_bert: str,
+        checkpoint: str,
+        attention_probs_keep_prob: Optional[float] = None,
+        hidden_keep_prob: Optional[float] = None,
+        optimizer: str = "AdamW",
+        optimizer_parameters: Optional[dict] = None,
+        bert_config_file: Optional[str] = None,
+        learning_rate_drop_patience: int = 20,
+        learning_rate_drop_div: float = 2.0,
+        load_before_drop: bool = True,
+        clip_norm: Optional[float] = None,
+        min_learning_rate: float = 1e-06,
+        batch_size: int = 10,
+        **kwargs,
+    ) -> None:
 
         if not optimizer_parameters:
-            optimizer_parameters = {"lr": 0.01,
-                                    "weight_decay": 0.01,
-                                    "betas": (0.9, 0.999),
-                                    "eps": 1e-6}
+            optimizer_parameters = {"lr": 0.01, "weight_decay": 0.01, "betas": (0.9, 0.999), "eps": 1e-6}
 
         self.attention_probs_keep_prob = attention_probs_keep_prob
         self.hidden_keep_prob = hidden_keep_prob
@@ -93,16 +91,19 @@ class TorchTransformersSquad(TorchModel):
         self.batch_size = batch_size
         self.checkpoint = torch.load(checkpoint)
 
-        super().__init__(optimizer=optimizer,
-                         optimizer_parameters=optimizer_parameters,
-                         learning_rate_drop_patience=learning_rate_drop_patience,
-                         learning_rate_drop_div=learning_rate_drop_div,
-                         load_before_drop=load_before_drop,
-                         min_learning_rate=min_learning_rate,
-                         **kwargs)
+        super().__init__(
+            optimizer=optimizer,
+            optimizer_parameters=optimizer_parameters,
+            learning_rate_drop_patience=learning_rate_drop_patience,
+            learning_rate_drop_div=learning_rate_drop_div,
+            load_before_drop=load_before_drop,
+            min_learning_rate=min_learning_rate,
+            **kwargs,
+        )
 
-    def train_on_batch(self, features: List[List[InputFeatures]],
-                       y_st: List[List[int]], y_end: List[List[int]]) -> Dict:
+    def train_on_batch(
+        self, features: List[List[InputFeatures]], y_st: List[List[int]], y_end: List[List[int]]
+    ) -> Dict:
         """Train model on given batch.
         This method calls train_op using features and labels from y_st and y_end
         Args:
@@ -126,12 +127,12 @@ class TorchTransformersSquad(TorchModel):
         b_y_end = torch.from_numpy(np.array(y_end)).to(self.device)
 
         input_ = {
-            'input_ids': b_input_ids,
-            'attention_mask': b_input_masks,
-            'token_type_ids': b_input_type_ids,
-            'start_positions': b_y_st,
-            'end_positions': b_y_end,
-            'return_dict': True
+            "input_ids": b_input_ids,
+            "attention_mask": b_input_masks,
+            "token_type_ids": b_input_type_ids,
+            "start_positions": b_y_st,
+            "end_positions": b_y_end,
+            "return_dict": True,
         }
 
         self.optimizer.zero_grad()
@@ -149,7 +150,7 @@ class TorchTransformersSquad(TorchModel):
         if self.lr_scheduler is not None:
             self.lr_scheduler.step()
 
-        return {'loss': loss.item()}
+        return {"loss": loss.item()}
 
     @property
     def accepted_keys(self) -> Tuple[str]:
@@ -158,13 +159,14 @@ class TorchTransformersSquad(TorchModel):
         else:
             accepted_keys = self.model.forward.__code__.co_varnames
         return accepted_keys
-    
+
     @property
     def is_data_parallel(self) -> bool:
         return isinstance(self.model, torch.nn.DataParallel)
 
-    def __call__(self, features_batch: List[List[InputFeatures]]) -> Tuple[
-            List[List[int]], List[List[int]], List[List[float]], List[List[float]], List[int]]:
+    def __call__(
+        self, features_batch: List[List[InputFeatures]]
+    ) -> Tuple[List[List[int]], List[List[int]], List[List[float]], List[List[float]], List[int]]:
         """get predictions using features as input
         Args:
             features_batch: batch of InputFeatures instances
@@ -186,62 +188,73 @@ class TorchTransformersSquad(TorchModel):
                 indices.append(n)
 
         num_batches = len(indices) // self.batch_size + int(len(indices) % self.batch_size > 0)
-        
+
         for i in range(num_batches):
-            b_input_ids = torch.cat(input_ids[i * self.batch_size:(i + 1) * self.batch_size], dim=0).to(self.device)
-            b_input_masks = torch.cat(input_masks[i * self.batch_size:(i + 1) * self.batch_size], dim=0).to(self.device)
-            b_input_type_ids = torch.cat(input_type_ids[i * self.batch_size:(i + 1) * self.batch_size],
-                                         dim=0).to(self.device)
+            b_input_ids = torch.cat(input_ids[i * self.batch_size : (i + 1) * self.batch_size], dim=0).to(self.device)
+            b_input_masks = torch.cat(input_masks[i * self.batch_size : (i + 1) * self.batch_size], dim=0).to(
+                self.device
+            )
+            b_input_type_ids = torch.cat(input_type_ids[i * self.batch_size : (i + 1) * self.batch_size], dim=0).to(
+                self.device
+            )
             input_ = {
-                'input_ids': b_input_ids,
-                'attention_mask': b_input_masks,
-                'token_type_ids': b_input_type_ids,
-                'return_dict': True
+                "input_ids": b_input_ids,
+                "attention_mask": b_input_masks,
+                "token_type_ids": b_input_type_ids,
+                "return_dict": True,
             }
-            
+
             with torch.no_grad():
-                input_ = {arg_name: arg_value for arg_name, arg_value in input_.items()
-                          if arg_name in self.accepted_keys}
-                
+                input_ = {
+                    arg_name: arg_value for arg_name, arg_value in input_.items() if arg_name in self.accepted_keys
+                }
+
                 logits_rank, logits_st, logits_end = self.model(**input_)
 
                 bs = b_input_ids.size()[0]
                 seq_len = b_input_ids.size()[-1]
-                
-                mask = torch.cat([torch.ones(bs, 1, dtype=torch.int32),
-                                  torch.zeros(bs, seq_len - 1, dtype=torch.int32)], dim=-1).to(self.device)
+
+                mask = torch.cat(
+                    [torch.ones(bs, 1, dtype=torch.int32), torch.zeros(bs, seq_len - 1, dtype=torch.int32)], dim=-1
+                ).to(self.device)
                 logit_mask = b_input_type_ids + mask
                 logits_st = softmax_mask(logits_st, logit_mask)
                 logits_end = softmax_mask(logits_end, logit_mask)
-                
+
                 start_probs = torch.nn.functional.softmax(logits_st, dim=-1)
                 end_probs = torch.nn.functional.softmax(logits_end, dim=-1)
                 scores = logits_rank.squeeze(1)
-                outer = torch.matmul(start_probs.view(*start_probs.size(), 1),
-                                     end_probs.view(end_probs.size()[0], 1, end_probs.size()[1]))
-                outer_logits = torch.exp(logits_st.view(*logits_st.size(), 1) + logits_end.view(
-                    logits_end.size()[0], 1, logits_end.size()[1]))
-                
+                outer = torch.matmul(
+                    start_probs.view(*start_probs.size(), 1),
+                    end_probs.view(end_probs.size()[0], 1, end_probs.size()[1]),
+                )
+                outer_logits = torch.exp(
+                    logits_st.view(*logits_st.size(), 1)
+                    + logits_end.view(logits_end.size()[0], 1, logits_end.size()[1])
+                )
+
                 context_max_len = torch.max(torch.sum(b_input_type_ids, dim=1)).to(torch.int64)
-                
+
                 max_ans_length = torch.min(torch.tensor(20).to(self.device), context_max_len).to(torch.int64).item()
 
                 outer = torch.triu(outer, diagonal=0) - torch.triu(outer, diagonal=outer.size()[1] - max_ans_length)
                 outer_logits = torch.triu(outer_logits, diagonal=0) - torch.triu(
-                    outer_logits, diagonal=outer_logits.size()[1] - max_ans_length)
+                    outer_logits, diagonal=outer_logits.size()[1] - max_ans_length
+                )
 
                 start_pred = torch.argmax(torch.max(outer, dim=2)[0], dim=1)
                 end_pred = torch.argmax(torch.max(outer, dim=1)[0], dim=1)
                 logits = torch.max(torch.max(outer_logits, dim=2)[0], dim=1)[0]
-            
+
             # Move logits and labels to CPU and to numpy arrays
             start_pred = start_pred.detach().cpu().numpy()
             end_pred = end_pred.detach().cpu().numpy()
             logits = logits.detach().cpu().numpy().tolist()
             scores = scores.detach().cpu().numpy().tolist()
-            
-            for j, (start_pred_elem, end_pred_elem, logits_elem, scores_elem) in \
-                    enumerate(zip(start_pred, end_pred, logits, scores)):
+
+            for j, (start_pred_elem, end_pred_elem, logits_elem, scores_elem) in enumerate(
+                zip(start_pred, end_pred, logits, scores)
+            ):
                 ind = indices[i * self.batch_size + j]
                 if ind in predictions:
                     predictions[ind] += [(start_pred_elem, end_pred_elem, logits_elem, scores_elem)]
@@ -266,9 +279,9 @@ class TorchTransformersSquad(TorchModel):
 
         if self.pretrained_bert:
             logger.info(f"From pretrained {self.pretrained_bert}.")
-            config = AutoConfig.from_pretrained(self.pretrained_bert, 
-                                                output_attentions=False,
-                                                output_hidden_states=False)
+            config = AutoConfig.from_pretrained(
+                self.pretrained_bert, output_attentions=False, output_hidden_states=False
+            )
 
             class ReaderDPR(nn.Module):
                 def __init__(self):
@@ -276,14 +289,17 @@ class TorchTransformersSquad(TorchModel):
                     self.encoder = AutoModel.from_config(config=config)
                     self.qa_outputs = nn.Linear(config.hidden_size, 2)
                     self.qa_classifier = nn.Linear(config.hidden_size, 1)
+
                 def forward(self, input_ids, attention_mask, token_type_ids):
-                    out = self.encoder(input_ids=input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+                    out = self.encoder(
+                        input_ids=input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask
+                    )
                     logits = self.qa_outputs(out[0])
                     start_logits, end_logits = logits.split(1, dim=-1)
                     start_logits = start_logits.squeeze(-1)
                     end_logits = end_logits.squeeze(-1)
                     rank_logits = self.qa_classifier(out[0][:, 0, :])
-                    return rank_logits, start_logits, end_logits                                                
+                    return rank_logits, start_logits, end_logits
 
             self.model = ReaderDPR()
             self.model.load_state_dict(self.checkpoint["model_dict"], strict=False)
@@ -303,8 +319,8 @@ class TorchTransformersSquad(TorchModel):
             self.model = torch.nn.DataParallel(self.model)
 
         self.model.to(self.device)
-        self.optimizer = getattr(torch.optim, self.optimizer_name)(
-            self.model.parameters(), **self.optimizer_parameters)
+        self.optimizer = getattr(torch.optim, self.optimizer_name)(self.model.parameters(), **self.optimizer_parameters)
         if self.lr_scheduler_name is not None:
             self.lr_scheduler = getattr(torch.optim.lr_scheduler, self.lr_scheduler_name)(
-                self.optimizer, **self.lr_scheduler_parameters)
+                self.optimizer, **self.lr_scheduler_parameters
+            )

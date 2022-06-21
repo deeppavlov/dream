@@ -49,7 +49,7 @@ class FaissIndex:
             self.index = faiss.index_cpu_to_all_gpus(self.index, co=cloner_options)
 
         return self.index
-        
+
 
 class FaissBinaryIndex(FaissIndex):
     def __init__(self, index: faiss.Index, passage_ids: List[int] = None, passage_embeddings: np.ndarray = None):
@@ -66,7 +66,7 @@ class FaissBinaryIndex(FaissIndex):
         start_time = time.time()
         num_queries = query_embeddings.shape[0]
         bin_query_embeddings = np.packbits(np.where(query_embeddings > 0, 1, 0)).reshape(num_queries, -1)
-        
+
         if not rerank:
             scores_arr, ids_arr = self.index.search(bin_query_embeddings, k)
             if self._passage_ids is not None:
@@ -93,7 +93,7 @@ class FaissBinaryIndex(FaissIndex):
         passage_embeddings = passage_embeddings * 2 - 1
         scores_arr = np.einsum("ijk,ik->ij", passage_embeddings, query_embeddings)
         sorted_indices = np.argsort(-scores_arr, axis=1)
-      
+
         ids_arr = ids_arr[np.arange(num_queries)[:, None], sorted_indices]
         if self._passage_ids is not None:
             ids_arr = self._passage_ids[ids_arr.reshape(-1)].reshape(num_queries, -1)
