@@ -82,7 +82,10 @@ class TorchTransformersMultiplechoicePreprocessor(Component):
                 examples.append(tokenized_input)
 
         padded_examples = self.tokenizer.pad(
-            examples, padding=True, max_length=self.max_seq_length, return_tensors="pt",
+            examples,
+            padding=True,
+            max_length=self.max_seq_length,
+            return_tensors="pt",
         )
 
         padded_examples = {k: v.view(batch_size, num_choices, -1) for k, v in padded_examples.items()}
@@ -546,8 +549,7 @@ class TorchRecordPostprocessor:
         return self.record_example_accumulator.return_examples()
 
     def reset_accumulator(self):
-        """Reinitialize the underlying accumulator from scratch
-        """
+        """Reinitialize the underlying accumulator from scratch"""
         self.record_example_accumulator = RecordExampleAccumulator()
 
 

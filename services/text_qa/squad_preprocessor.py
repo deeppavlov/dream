@@ -26,8 +26,8 @@ logger = getLogger(__name__)
 @register("squad_bert_mapping")
 class SquadBertMappingPreprocessor(Component):
     """Create mapping from BERT subtokens to their characters positions and vice versa.
-        Args:
-            do_lower_case: set True if lowercasing is needed
+    Args:
+        do_lower_case: set True if lowercasing is needed
     """
 
     def __init__(self, do_lower_case: bool = True, *args, **kwargs):
@@ -71,8 +71,8 @@ class SquadBertMappingPreprocessor(Component):
 @register("squad_bert_ans_preprocessor")
 class SquadBertAnsPreprocessor(Component):
     """Create answer start and end positions in subtokens.
-        Args:
-            do_lower_case: set True if lowercasing is needed
+    Args:
+        do_lower_case: set True if lowercasing is needed
     """
 
     def __init__(self, do_lower_case: bool = True, *args, **kwargs):

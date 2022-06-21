@@ -45,18 +45,18 @@ def find_answer_sentence(answer_pos: int, context: str) -> str:
 @register("logit_ranker")
 class LogitRanker(Component):
     """Select best answer using squad model logits. Make several batches for a single batch, send each batch
-     to the squad model separately and get a single best answer for each batch.
+    to the squad model separately and get a single best answer for each batch.
 
-     Args:
-        squad_model: a loaded squad model
-        batch_size: batch size to use with squad model
-        sort_noans: whether to downgrade noans tokens in the most possible answers
-        top_n: number of answers to return
+    Args:
+       squad_model: a loaded squad model
+       batch_size: batch size to use with squad model
+       sort_noans: whether to downgrade noans tokens in the most possible answers
+       top_n: number of answers to return
 
-     Attributes:
-        squad_model: a loaded squad model
-        batch_size: batch size to use with squad model
-        top_n: number of answers to return
+    Attributes:
+       squad_model: a loaded squad model
+       batch_size: batch size to use with squad model
+       top_n: number of answers to return
 
     """
 
