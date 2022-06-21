@@ -6,9 +6,10 @@
         "class_name": "bpr:BPR",
         "load_path": "{MODEL_PATH}",
         "query_encoder_file": "query_encoder_en.pth.tar",
-        "bpr_index": "bpr_ivf_index_nq.idx",
+        "bpr_index": "ivf_nq_pruned.idx",
         "pretrained_model": "bert-base-uncased",
-        "top_n": 100,
+        "top_n": 70,
+        "nprobe": 8,
         "in": ["utterance"],
         "out": ["par_ids"]
       },
@@ -46,7 +47,7 @@
         "subdir": "{MODEL_PATH}"
       },
       {
-        "url": "http://files.deeppavlov.ai/deeppavlov_data/bpr/bpr_ivf_index_nq.idx",
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/bpr/bpr_lite_eng.tar.gz",
         "subdir": "{MODEL_PATH}"
       }
     ]
