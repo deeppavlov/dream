@@ -3,6 +3,7 @@ import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
 
 from df_engine.core import Actor, Context
+from common.utils import high_priority_intents
 
 
 logger = logging.getLogger(__name__)
@@ -47,8 +48,11 @@ def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
-    _, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
-    int_ctx.set_confidence(ctx, actor, confidence)
+    intent, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
+    if intent in high_priority_intents["dff_intent_responder_skill"]:
+        int_ctx.set_confidence(ctx, actor, 1.0)
+    else:
+        int_ctx.set_confidence(ctx, actor, confidence)
     return ctx
 
 

@@ -31,10 +31,8 @@ CONFIDENCE_STRENGTH = 2
 CONV_EVAL_STRENGTH = 0.4
 how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
 what_i_can_do_spec = "socialbot running inside"
-psycho_help_spec = "you can call the National Suicide Prevention Lifeline"
 misheard_with_spec1 = "I misheard you"
 misheard_with_spec2 = "like to chat about"
-alexa_abilities_spec = "If you want to use the requested feature say"
 
 LET_ME_ASK_YOU_PHRASES = [
     "Let me ask you something.",
@@ -151,7 +149,7 @@ def downscore_toxic_badlisted_responses(scores, confidences, is_toxics):
     }
     confidences[ids] = 0.0
 
-    return sum(ids), scores, confidences
+    return len(ids), scores, confidences
 
 
 def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=None):
