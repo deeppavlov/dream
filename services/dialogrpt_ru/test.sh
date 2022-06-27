@@ -1,4 +1,4 @@
 #!/bin/bash
 
-python test.py
 
+python test.py

@@ -28,7 +28,7 @@
         "intent": "what_is_your_name"
     },
     {
-        "sentence": "расскажи откуда ты родом.",
+        "sentence": "откуда ты родом",
         "intent": "where_are_you_from"
     },
     {
