@@ -51,6 +51,18 @@ Deepy GoBot Base содержит аннотатор исправления оп
 (участие в Alexa Prize Challenge). Демо-версия бота для общения представлена на [нашем сайте](https://demo.deeppavlov.ai).
 
 
+### Dream Mini
+Мини-версия DeepPavlov Dream Socialbot.
+Данная версия основана на нейросетевой генерации с использованием [English DialoGPT модели](https://huggingface.co/microsoft/DialoGPT-medium). 
+Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
+[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_mini)
+
+### Dream Russian
+Русскоязычная версия  DeepPavlov Dream Socialbot. Данная версия основана на нейросетевой генерации с использованием
+[Russian DialoGPT модели](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2). 
+Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
+[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_russian)
+
 # Quick Start
 
 ### Склонируйте репозиторий
