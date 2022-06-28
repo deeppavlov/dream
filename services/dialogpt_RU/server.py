@@ -92,7 +92,7 @@ class RussianDialogGPT:
         inputs_text += f"|1|{params_['length_generate']}|"
 
         inputs_token_ids = self.tokenizer.encode(inputs_text, return_tensors="pt")
-        inputs_token_ids = inputs_token_ids.cuda() if cuda else inputs
+        inputs_token_ids = inputs_token_ids.cuda() if cuda else inputs_token_ids
 
         try:
             outputs_token_ids = self.model.generate(
@@ -150,6 +150,7 @@ def respond():
             # context is a list of dicts, each dict contains text and speaker label
             # context = [{"text": "utterance text", "speaker": "human"}, ...]
             inputs = [{"text": uttr["text"], "speaker": 1 if uttr["speaker"] == "bot" else 0} for uttr in context][-3:]
+            logger.info(f"dialogpt inputs: {inputs}")
             hypotheses = model.get_responses(inputs, params={"num_return_sequences": num_return_sequences})
             logger.info(f"dialogpt hypotheses: {hypotheses}")
             batch_generated_responses.append(hypotheses)
