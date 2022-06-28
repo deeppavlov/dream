@@ -2,18 +2,6 @@ FROM tensorflow/tensorflow:1.14.0-py3
 
 EXPOSE 8014:8014
 
-ARG INTENT_MODEL_FNAME
-ENV INTENT_MODEL_PATH='/data/models/'$INTENT_MODEL_FNAME
-ARG USE_MODEL_PATH
-ENV USE_MODEL_PATH=$USE_MODEL_PATH
-ARG INTENT_DATA_FNAME
-ENV INTENT_DATA_PATH='/data/'$INTENT_DATA_FNAME
-ARG INTENT_PHRASES_FNAME
-ENV INTENT_PHRASES_PATH='/data/'$INTENT_PHRASES_FNAME
-
-ARG LANGUAGE=EN
-ENV LANGUAGE ${LANGUAGE}
-
 WORKDIR /src
 RUN mkdir /data
 
@@ -28,10 +16,14 @@ RUN pip install --upgrade pip && \
 # COPY ./tfhub_model/ /root/tfhub_cache/
 
 ENV TFHUB_CACHE_DIR='/root/tfhub_cache'
+ENV USE_MODEL_PATH='https://tfhub.dev/google/universal-sentence-encoder/1'
+ENV INTENT_DATA_PATH='/data/intent_data_h3.json'
+ENV INTENT_PHRASES_PATH='/data/intent_phrases.json'
 
-RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/$INTENT_MODEL_FNAME -q -P /data/models
+RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/linear_classifier_h3.h5 -q -P /data/models
+ENV INTENT_MODEL_PATH='/data/models/linear_classifier_h3.h5'
 
-RUN python -c "import tensorflow_hub as hub; import tf_sentencepiece; import tensorflow as tf; config = tf.ConfigProto(); config.graph_options.rewrite_options.shape_optimization = 2; session = tf.Session(config=config); model=hub.Module('$USE_MODEL_PATH')"
+RUN python -c "import tensorflow_hub as hub; model=hub.Module('$USE_MODEL_PATH')"
 
 COPY ./src/ ./
 COPY ./data/ /data
