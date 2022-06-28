@@ -37,7 +37,7 @@ from utils import (
     misheard_with_spec2,
     join_used_links_in_attributes,
     get_updated_disliked_skills,
-    LET_ME_ASK_YOU_PHRASES
+    LET_ME_ASK_YOU_PHRASES,
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
