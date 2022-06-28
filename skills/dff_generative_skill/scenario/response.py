@@ -63,7 +63,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
 
     if len(curr_responses) == 0:
-        return "", 0.01, {}, {}, {}
+        return ""
 
     return int_rsp.multi_response(
         replies=curr_responses,
