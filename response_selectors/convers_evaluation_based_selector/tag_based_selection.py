@@ -735,7 +735,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
-            best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
 
             if "prelinkto_connections" in best_prompt.get("human_attributes", {}):
                 # prelinkto connection phrase is already in the prompt (added in dummy skill)
