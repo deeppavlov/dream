@@ -25,13 +25,11 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=8
   personal-info-skill:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -44,7 +42,7 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=7
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=7
