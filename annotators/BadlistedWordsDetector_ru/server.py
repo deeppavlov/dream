@@ -36,7 +36,11 @@ def tokenize_sentence(sentence):
 
 
 def lemmatize_token(token):
-    return lemmatizer.parse(token)[0].normal_form
+    parsed = lemmatizer.parse(token)
+    if parsed and len(parsed):
+        return parsed[0].normal_form
+    else:
+        return ""
 
 
 class Badlist:

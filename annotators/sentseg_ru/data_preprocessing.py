@@ -39,7 +39,8 @@ def preprocess(raw_text):
 
 
 def convert_russian_subtitles():
-    lines = open(file="data/russian_subtitles_unique_utterances.txt", mode="r").readlines()
+    with open(file="data/russian_subtitles_unique_utterances.txt", mode="r") as f:
+        lines = f.readlines()
     X, Y = [], []
 
     for line in lines:
@@ -49,18 +50,16 @@ def convert_russian_subtitles():
             X.append(x)
             Y.append(y)
 
-    fo = open(file="./data/ru_sentseg.txt", mode="w", encoding="utf-8")
-    for x, y in zip(X, Y):
-        for word, label in zip(x, y):
-            fo.write("{}\t{}\n".format(word, label))
-        fo.write("\n")
-    fo.close()
+    with open(file="./data/sentseg.txt", mode="w", encoding="utf-8") as fo:
+        for x, y in zip(X, Y):
+            for word, label in zip(x, y):
+                fo.write("{}\t{}\n".format(word, label))
+            fo.write("\n")
 
 
 def convert_cornellmoviequotes():
-    lines = open(
-        file="../datasets/cornellmoviequotes/moviequotes.scripts.txt", mode="r", encoding="latin-1"
-    ).readlines()
+    with open(file="../datasets/cornellmoviequotes/moviequotes.scripts.txt", mode="r", encoding="latin-1") as f:
+        lines = f.readlines()
     X, Y = [], []
 
     for line in lines:
@@ -76,17 +75,17 @@ def convert_cornellmoviequotes():
             X.append(x)
             Y.append(y)
 
-    fo = open(file="../datasets/cornqellmoviequotes.txt", mode="w", encoding="utf-8")
-    for x, y in zip(X, Y):
-        for word, label in zip(x, y):
-            fo.write("{}\t{}\n".format(word, label))
-        fo.write("\n")
-    fo.close()
+    with open(file="../datasets/cornqellmoviequotes.txt", mode="w", encoding="utf-8") as fo:
+        for x, y in zip(X, Y):
+            for word, label in zip(x, y):
+                fo.write("{}\t{}\n".format(word, label))
+            fo.write("\n")
 
 
 def convert_dailydialog():
     X, Y = [], []
-    lines = open(file="../datasets/dailydialog.txt", mode="r", encoding="utf-8").readlines()
+    with open(file="../datasets/dailydialog.txt", mode="r", encoding="utf-8") as f:
+        lines = f.readlines()
     # print(lines[:10])
     # print(len(lines))
     for line in lines:
@@ -104,12 +103,11 @@ def convert_dailydialog():
             X.append(x)
             Y.append(y)
 
-    fo = open(file="../datasets/dailydialog_sentseg.txt", mode="w", encoding="utf-8")
-    for x, y in zip(X, Y):
-        for word, label in zip(x, y):
-            fo.write("{}\t{}\n".format(word, label))
-        fo.write("\n")
-    fo.close()
+    with open(file="../datasets/dailydialog_sentseg.txt", mode="w", encoding="utf-8") as fo:
+        for x, y in zip(X, Y):
+            for word, label in zip(x, y):
+                fo.write("{}\t{}\n".format(word, label))
+            fo.write("\n")
 
 
 def data_split(x, y, dev_size, test_size):
@@ -126,15 +124,16 @@ def split_dataset(dataset_name="cornellmoviequotes"):
     X, Y = [], []
     x, y = [], []
 
-    for line in open(file=f"data/{dataset_name}.txt", mode="r", encoding="utf-8").readlines():
-        if line.strip() == "":
-            X.append(x)
-            Y.append(y)
-            x, y = [], []
-        else:
-            items = line.split()
-            x.append(items[0])
-            y.append(items[1])
+    with open(file=f"data/{dataset_name}.txt", mode="r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip() == "":
+                X.append(x)
+                Y.append(y)
+                x, y = [], []
+            else:
+                items = line.split()
+                x.append(items[0])
+                y.append(items[1])
 
     xtrain, ytrain, xdev, ydev, xtest, ytest = data_split(X, Y, 0.1, 0.1)
     # print(xtrain[:10])
@@ -142,12 +141,11 @@ def split_dataset(dataset_name="cornellmoviequotes"):
     # print(len(xtrain), len(ytrain), len(xdev), len(ydev), len(xtest), len(ytest))
 
     def write2file(sents, labels, filename):
-        fo = open(file=filename, mode="w", encoding="utf-8")
-        for s, l in zip(sents, labels):
-            for word, tag in zip(s, l):
-                fo.write("{}\t{}\n".format(word, tag))
-            fo.write("\n")
-        fo.close()
+        with open(file=filename, mode="w", encoding="utf-8") as fo:
+            for s, l in zip(sents, labels):
+                for word, tag in zip(s, l):
+                    fo.write("{}\t{}\n".format(word, tag))
+                fo.write("\n")
 
     write2file(xtrain, ytrain, f"data/{dataset_name}_train.txt")
     write2file(xdev, ydev, f"data/{dataset_name}_dev.txt")
@@ -157,13 +155,14 @@ def split_dataset(dataset_name="cornellmoviequotes"):
 def create_dicts(inp_file, out_file):
     word_counts = {}
 
-    for line in open(file=inp_file, mode="r", encoding="utf-8").readlines():
-        words = line.strip().split()
-        if len(words) > 0:
-            if words[0] not in word_counts:
-                word_counts[words[0]] = 1
-            else:
-                word_counts[words[0]] += 1
+    with open(file=inp_file, mode="r", encoding="utf-8") as f:
+        for line in f:
+            words = line.strip().split()
+            if len(words) > 0:
+                if words[0] not in word_counts:
+                    word_counts[words[0]] = 1
+                else:
+                    word_counts[words[0]] += 1
 
     listofTuples = sorted(word_counts.items(), key=lambda x: x[1])
 
@@ -193,28 +192,30 @@ def create_dicts(inp_file, out_file):
 
     import pickle
 
-    pickle.dump(
-        {
-            "word2id": word2id,
-            "id2word": id2word,
-            "char2id": char2id,
-            "id2char": id2char,
-            "tag2id": tag2id,
-            "id2tag": id2tag,
-        },
-        open(out_file, "wb"),
-    )
+    with open(out_file, "wb") as f:
+        pickle.dump(
+            {
+                "word2id": word2id,
+                "id2word": id2word,
+                "char2id": char2id,
+                "id2char": id2char,
+                "tag2id": tag2id,
+                "id2tag": id2tag,
+            },
+            f,
+        )
 
 
 def data_statistic(file):
     stat = {"samples": 0, "total_words": 0, "B-S": 0, "B-Q": 0, "O": 0}
-    for line in open(file=file, mode="r").readlines():
-        if len(line.strip()) > 0:
-            word, tag = line.strip().split("\t")
-            stat[tag] += 1
-            stat["total_words"] += 1
-        else:
-            stat["samples"] += 1
+    with open(file=file, mode="r") as f:
+        for line in f:
+            if len(line.strip()) > 0:
+                word, tag = line.strip().split("\t")
+                stat[tag] += 1
+                stat["total_words"] += 1
+            else:
+                stat["samples"] += 1
 
     print(stat)
 
@@ -254,11 +255,12 @@ def create_dailydialog_for_deeppavlov():
 
 
 def split_dailydialog_for_deeppavlov():
-    samples = open(
+    with open(
         file="../datasets/ijcnlp_dailydialog/dailydialog_for_deeppavlov/dailydialog_deeppavlov2.txt",
         mode="r",
         encoding="utf-8",
-    ).readlines()
+    ) as f:
+        samples = f.readlines()
     n = len(samples)
     train = samples[: (int)(n * 0.8)]
     val = samples[len(train) : (int)(n * 0.9)]
