@@ -1,0 +1,53 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "КТО ТЕБЯ СОЗДАЛ",
+                    "annotations": {
+                        "spelling_preprocessing": "КТО ТЕБЯ СОЗДАЛ",
+                        "sentseg": {
+                            "punct_sent": "КТО ТЕБЯ СОЗДАЛ?",
+                            "segments": [
+                                "КТО ТЕБЯ СОЗДАЛ?"
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "entity_detection": {}
+                    }
+                }
+            ],
+            "bot_utterances": []
+        }
+    ],
+    "dff_program_y_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

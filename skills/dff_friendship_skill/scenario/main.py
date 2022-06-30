@@ -10,8 +10,6 @@ from df_engine.core.keywords import PROCESSING, TRANSITIONS, RESPONSE
 from df_engine.core import Actor
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-
 logger = logging.getLogger(__name__)
 ZERO_CONFIDENCE = 0.0
 

@@ -39,7 +39,11 @@ prefixes = {
     "statement": "http://ws",
 }
 max_comb_num = 1e6
-lang = "@en"
+
+if os.getenv("LANGUAGE", "EN") == "RU":
+    lang = "@ru"
+else:
+    lang = "@en"
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata_lite.hdt"
 document = HDTDocument(wiki_filename)
 USE_CACHE = True
@@ -363,7 +367,7 @@ def find_objects_info(objects, num_objects=25):
         obj_label = find_label(obj, "")
         if obj_label and obj_label not in {"Not Found", "anonymous"}:
             objects_info.append((obj, obj_label))
-    return objects_info
+    return sorted(objects_info)
 
 
 def find_intersection(entity1, entity2, rel, direction):

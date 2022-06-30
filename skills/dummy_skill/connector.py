@@ -15,7 +15,6 @@ from typing import Callable, Dict
 
 import sentry_sdk
 
-from common.ignore_lists import FALSE_POS_NPS_LIST, BAD_NPS_LIST
 from common.link import (
     LIST_OF_SCRIPTED_TOPICS,
     SKILLS_TO_BE_LINKED_EXCEPT_LOW_RATED,
@@ -23,8 +22,14 @@ from common.link import (
     skills_phrases_map,
     compose_linkto_with_connection_phrase,
 )
+from common.remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import opinion_request_question, is_switch_topic, if_choose_topic
+from common.universal_templates import (
+    opinion_request_question,
+    is_switch_topic,
+    if_choose_topic,
+    DUMMY_DONTKNOW_RESPONSES,
+)
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
 
@@ -42,20 +47,14 @@ with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
 
 np_ignore_expr = re.compile(
-    "(" + "|".join([r"\b%s\b" % word for word in BAD_NPS_LIST + TOP_FREQUENT_UNIGRAMS]) + ")", re.IGNORECASE
+    "(" + "|".join([r"\b%s\b" % word for word in NP_IGNORE_LIST + TOP_FREQUENT_UNIGRAMS]) + ")", re.IGNORECASE
 )
-np_remove_expr = re.compile("(" + "|".join([r"\b%s\b" % word for word in FALSE_POS_NPS_LIST]) + ")", re.IGNORECASE)
+np_remove_expr = re.compile("(" + "|".join([r"\b%s\b" % word for word in NP_REMOVE_LIST]) + ")", re.IGNORECASE)
 rm_spaces_expr = re.compile(r"\s\s+")
 ASK_ME_QUESTION_PATTERN = re.compile(
     r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE
 )
 
-donotknow_answers = [
-    "What do you want to talk about?",
-    "I am a bit confused. What would you like to chat about?",
-    "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
-    "Sorry, I didn't catch that. What would you like to chat about?",
-]
 
 with open("skills/dummy_skill/questions_map.json", "r") as f:
     QUESTIONS_MAP = json.load(f)
@@ -68,6 +67,11 @@ with open("skills/dummy_skill/facts_map.json", "r") as f:
 
 with open("skills/dummy_skill/nounphrases_facts_map.json", "r") as f:
     NP_FACTS = json.load(f)
+
+with open("skills/dummy_skill/russian_random_questions.txt", "r") as f:
+    RUSSIAN_RANDOM_QUESTIONS = f.readlines()
+
+RUSSIAN_RANDOM_QUESTIONS = [q.strip() for q in RUSSIAN_RANDOM_QUESTIONS]
 
 
 class RandomTopicResponder:
@@ -195,14 +199,20 @@ class DummySkillConnector:
             human_attrs = []
             bot_attrs = []
             attrs = []
-
-            cands += [choice(donotknow_answers)]
+            prev_human_uttr_text = dialog["human_utterances"][-2]["text"] if len(dialog["human_utterances"]) > 1 else ""
+            is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"]) or re.search(
+                r"[а-яА-Я]+", prev_human_uttr_text
+            )
+            if is_russian:
+                cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
+            else:
+                cands += [choice(DUMMY_DONTKNOW_RESPONSES["EN"])]
             confs += [0.5]
             attrs += [{"type": "dummy"}]
             human_attrs += [{}]
             bot_attrs += [{}]
 
-            if len(dialog["utterances"]) > 14 and not is_sensitive_case:
+            if len(dialog["utterances"]) > 14 and not is_sensitive_case and not is_russian:
                 questions_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for q_id in NP_QUESTIONS.get(nphrase, []):
@@ -217,7 +227,7 @@ class DummySkillConnector:
                     bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
-            if link_to_question:
+            if link_to_question and not is_russian:
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
                 _prev_active_skill = (
@@ -260,16 +270,26 @@ class DummySkillConnector:
                 attrs += [{"type": "link_to_for_response_selector"}]
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
+            elif is_russian:
+                cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
+                confs += [0.8]
+                attrs += [{"type": "link_to_for_response_selector"}]
+                human_attrs += [{}]
+                bot_attrs += [{}]
 
-            facts_same_nps = []
-            for i, nphrase in enumerate(curr_nounphrases):
-                for fact_id in NP_FACTS.get(nphrase, []):
-                    facts_same_nps += [
-                        f"Well, now that you've mentioned {nphrase}, I've remembered this. {FACTS_MAP[str(fact_id)]}. "
-                        f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
-                    ]
+            if not is_russian:
+                facts_same_nps = []
+                for i, nphrase in enumerate(curr_nounphrases):
+                    for fact_id in NP_FACTS.get(nphrase, []):
+                        facts_same_nps += [
+                            f"Well, now that you've mentioned {nphrase}, I've remembered this. "
+                            f"{FACTS_MAP[str(fact_id)]}. "
+                            f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
+                        ]
+            else:
+                facts_same_nps = []
 
-            if len(facts_same_nps) > 0 and not is_sensitive_case:
+            if len(facts_same_nps) > 0 and not is_sensitive_case and not is_russian:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
                 confs += [0.5]

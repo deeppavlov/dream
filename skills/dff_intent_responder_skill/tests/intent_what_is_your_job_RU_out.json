@@ -1,0 +1,48 @@
+[
+    [
+        "\u042f \u0447\u0430\u0442-\u0431\u043e\u0442, \u0438 \u043c\u043e\u044f \u0440\u0430\u0431\u043e\u0442\u0430 \u0441\u043e\u0441\u0442\u043e\u0438\u0442 \u0432 \u0442\u043e\u043c, \u0447\u0442\u043e\u0431\u044b \u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c \u0441 \u043b\u044e\u0434\u044c\u043c\u0438. \u0410 \u0443 \u0442\u0435\u0431\u044f \u0435\u0441\u0442\u044c \u043a\u0430\u043a\u043e\u0435-\u0442\u043e \u0437\u0430\u043d\u044f\u0442\u0438\u0435? #+#what_is_your_job",
+        1.0,
+        {
+            "dff_intent_responder_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "fccef377-cdac-4a7e-8e79-35320b9d18df",
+                    "labels": {
+                        "0": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "requests": {
+                        "0": "\u043a\u0435\u043c \u0442\u044b \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0448\u044c?"
+                    },
+                    "responses": {
+                        "0": "\u042f \u0447\u0430\u0442-\u0431\u043e\u0442, \u0438 \u043c\u043e\u044f \u0440\u0430\u0431\u043e\u0442\u0430 \u0441\u043e\u0441\u0442\u043e\u0438\u0442 \u0432 \u0442\u043e\u043c, \u0447\u0442\u043e\u0431\u044b \u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c \u0441 \u043b\u044e\u0434\u044c\u043c\u0438. \u0410 \u0443 \u0442\u0435\u0431\u044f \u0435\u0441\u0442\u044c \u043a\u0430\u043a\u043e\u0435-\u0442\u043e \u0437\u0430\u043d\u044f\u0442\u0438\u0435? #+#what_is_your_job"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
