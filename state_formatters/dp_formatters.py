@@ -179,7 +179,7 @@ def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: asr_formatter
     return [
         {
-            "speeches": [dialog["utterances"][-1].get("attributes", {}).get("speech", {})],
+            "speeches": [dialog["human_utterances"][-1].get("attributes", {}).get("speech", {})],
             "human_utterances": [dialog["human_utterances"][-3:]],
         }
     ]
@@ -187,7 +187,7 @@ def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def last_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification
-    return [{"sentences": [dialog["utterances"][-1]["text"]]}]
+    return [{"sentences": [dialog["human_utterances"][-1]["text"]]}]
 
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
@@ -246,6 +246,26 @@ def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
+    # Used by: sentseg over human uttrs
+    tokens = dialog["human_utterances"][-1]["annotations"].get("spacy_annotator", [])
+    tokens = [token["text"] for token in tokens]
+    result = [
+        {
+            "sentences": [
+                dialog["human_utterances"][-1]["annotations"].get(
+                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                )
+            ]
+        }
+    ]
+
+    if len(tokens):
+        result[0]["tokenized_sentences"] = [tokens]
+
+    return result
+
+
 def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
     if len(dialog["bot_utterances"]):
         return [{"sentences": [dialog["bot_utterances"][-1]["text"]]}]
@@ -276,6 +296,18 @@ def hypotheses_segmented_list(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [[h["text"]] for h in hypotheses]
     return [{"sentences": hypots}]
+
+
+def tokenized_hypotheses_list(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    tokens = [h.get("annotations", {}).get("spacy_annotator", []) for h in hypotheses]
+    tokens = [[token["text"] for token in h] for h in tokens]
+    hypots = [h["text"] for h in hypotheses]
+    if len(tokens):
+        result = [{"sentences": hypots, "tokenized_sentences": tokens}]
+    else:
+        result = [{"sentences": hypots}]
+    return result
 
 
 def ner_hypotheses_segmented_list(dialog: Dict):
@@ -321,7 +353,7 @@ def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     conv = dict()
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     conv["hypotheses"] = [h["text"] for h in hypotheses]
-    conv["currentUtterance"] = dialog["utterances"][-1]["text"]
+    conv["currentUtterance"] = dialog["human_utterances"][-1]["text"]
     # cobot recommends to take 2 last utt for conversation evaluation service
     conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
     conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
@@ -480,10 +512,10 @@ def skill_with_attributes_formatter_service(payload: List):
 
 def last_utt_sentseg_segments_dialog(dialog: Dict):
     # Used by: intent_catcher_formatter
-    if "sentseg" in dialog["utterances"][-1]["annotations"]:
-        return [{"sentences": [dialog["utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+    if "sentseg" in dialog["human_utterances"][-1]["annotations"]:
+        return [{"sentences": [dialog["human_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
     else:
-        segments = [dialog["utterances"][-1]["text"]]
+        segments = [dialog["human_utterances"][-1]["text"]]
         return [{"sentences": [segments]}]
 
 
@@ -737,12 +769,16 @@ def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_short_story_skill")
 
 
+def dff_generative_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_generative_skill")
+
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
 def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
-    intents = list(dialog["utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
+    intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
     called_intents = {intent: False for intent in intents}
     for utt in dialog["human_utterances"][-5:-1]:
         called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
@@ -908,3 +944,12 @@ def midas_predictor_formatter(dialog: Dict):
     midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
 
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
+
+
+def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+
+    contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
+
+    return [{"dialog_contexts": contexts, "hypotheses": hypots}]

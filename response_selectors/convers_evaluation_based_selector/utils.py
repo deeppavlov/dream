@@ -21,6 +21,7 @@ from common.utils import (
 )
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -34,12 +35,20 @@ what_i_can_do_spec = "socialbot running inside"
 misheard_with_spec1 = "I misheard you"
 misheard_with_spec2 = "like to chat about"
 
-LET_ME_ASK_YOU_PHRASES = [
-    "Let me ask you something.",
-    "I would like to ask you a question.",
-    "Hey, I have a quesiton to you.",
-    "May I ask you one interesting thing.",
-]
+LET_ME_ASK_YOU_PHRASES = {
+    "EN": [
+        "Let me ask you something.",
+        "I would like to ask you a question.",
+        "Hey, I have a quesiton to you.",
+        "May I ask you one interesting thing.",
+    ],
+    "RU": [
+        "Я бы хотела кое-что спросить.",
+        "О, у меня как раз есть вопрос для обсуждения.",
+        "Я хочу спросить тебя кое-о-чем интересном.",
+        "У меня есть кое-что интересное для обсуждения.",
+    ],
+}
 
 
 def join_used_links_in_attributes(main_attrs, add_attrs):
@@ -61,6 +70,7 @@ def add_question_to_statement(
     link_to_question,
     link_to_human_attrs,
     not_sure_factoid,
+    prev_skill_names,
 ):
 
     if not_sure_factoid and "factoid_qa" in best_skill_name:
@@ -68,7 +78,7 @@ def add_question_to_statement(
     if best_candidate["text"].strip() in okay_statements:
         if dummy_question != "" and random.random() < ASK_DUMMY_QUESTION_PROB:
             logger.info(f"adding {dummy_question} to response.")
-            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES)} {dummy_question}"
+            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])} {dummy_question}"
             # if this is not a link-to question, bot attributes will be still empty
             best_candidate["human_attributes"] = join_used_links_in_attributes(
                 best_candidate.get("human_attributes", {}), dummy_question_human_attr
@@ -80,6 +90,10 @@ def add_question_to_statement(
             best_candidate["human_attributes"] = join_used_links_in_attributes(
                 best_candidate.get("human_attributes", {}), link_to_human_attrs
             )
+    elif LANGUAGE == "RU" and best_skill_name == "dff_generative_skill":
+        if prev_skill_names[-3:] == 3 * ["dff_generative_skill"] and random.random() < ASK_DUMMY_QUESTION_PROB:
+            logger.info(f"adding russian {dummy_question} to dff-generative-skill response.")
+            best_candidate["text"] += f"{np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])} {dummy_question}"
 
     return best_candidate
 

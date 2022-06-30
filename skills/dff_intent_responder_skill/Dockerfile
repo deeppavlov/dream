@@ -9,8 +9,14 @@ RUN pip install -r requirements.txt
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
+
+ARG INTENT_RESPONSE_PHRASES_FNAME
+ENV INTENT_RESPONSE_PHRASES_FNAME ${INTENT_RESPONSE_PHRASES_FNAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt

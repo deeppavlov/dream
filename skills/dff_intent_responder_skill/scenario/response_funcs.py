@@ -1,53 +1,26 @@
 #!/usr/bin/env python
-
+import logging
 import json
 import random
-import common.dff.integration.context as int_ctx
 from datetime import datetime
+from os import getenv
+
+import common.dff.integration.context as int_ctx
 from df_engine.core import Actor, Context
 
-INTENT_RESPONSES_PATH = "scenario/data/intent_response_phrases.json"
 
+INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
+LANGUAGE = getenv("LANGUAGE", "EN")
+logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FNAME}")
 
-with open(INTENT_RESPONSES_PATH, "r") as fp:
+with open(f"scenario/data/{INTENT_RESPONSE_PHRASES_FNAME}", "r") as fp:
     RESPONSES = json.load(fp)
 
-
-def exit_respond(ctx: Context, actor: Actor, intention: str):
-    response_phrases = RESPONSES[intention]
-    apology_bye_phrases = [
-        "Sorry, have a great day!",
-        "Sorry to bother you, see you next time!",
-        "My bad. Have a great time!",
-        "Didn't mean to be rude. Talk to you next time.",
-        "Sorry for interrupting you. Talk to you soon.",
-        "Terribly sorry. Have a great day!",
-        "Thought you wanted to chat. My bad. See you soon!",
-        "Oh, sorry. Have a great day!",
-    ]
-    utts = get_human_utterances(ctx, actor)
-    response = random.choice(response_phrases).strip()  # Neutral response
-    annotations = utts[-1]["annotations"]
-
-    sentiment = int_ctx.get_human_sentiment(ctx, actor)
-    offensiveness, is_badlisted = "", False
-    try:
-        offensiveness = annotations["cobot_offensiveness"]["text"]
-    except KeyError:
-        offensiveness = "non-toxic"
-    try:
-        is_badlisted = annotations["cobot_offensiveness"]["is_badlisted"] == "badlist"
-    except KeyError:
-        is_badlisted = False
-
-    if len(utts) < 4:
-        response = random.choice(apology_bye_phrases)
-    elif sentiment == "positive":
-        positive = ["I'm glad to help you! ", "Thanks for the chat! ", "Cool! "]
-        response = random.choice(positive) + response
-    elif offensiveness == "toxic" or is_badlisted or sentiment == "negative":
-        response = random.choice(apology_bye_phrases)
-    return response
+WHERE_ARE_YOU_FROM = {"EN": "Where are you from?", "RU": "Откуда ты родом?"}
+WHERE_ARE_YOU_NOW = {"EN": "What is your location?", "RU": "А где ты сейчас живешь?"}
+DIDNOT_SAY_ANYTHING = {"EN": "I did not say anything!", "RU": "А я ничего и не говорила."}
 
 
 def repeat_respond(ctx: Context, actor: Actor, intention: str):
@@ -67,7 +40,7 @@ def repeat_respond(ctx: Context, actor: Actor, intention: str):
             bot_utt = utterances_human[-2]["text"]
     else:
         bot_utt = ""
-    return bot_utt if len(bot_utt) > 0 else "I did not say anything!"
+    return bot_utt if len(bot_utt) > 0 else DIDNOT_SAY_ANYTHING[LANGUAGE]
 
 
 def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
@@ -79,11 +52,11 @@ def where_are_you_from_respond(ctx: Context, actor: Actor, intention: str):
     if human_profile_exists:
         already_known_user_property = dialog["human"]["profile"].get("homeland", None)
     if already_known_user_property is None:
-        response = random.choice(response_phrases).strip() + " Where are you from?"
+        response = f"{random.choice(response_phrases).strip()} {WHERE_ARE_YOU_FROM[LANGUAGE]}"
     else:
         already_known_user_property = dialog["human"]["profile"].get("location", None)
         if already_known_user_property is None:
-            response = random.choice(response_phrases).strip() + " What is your location?"
+            response = f"{random.choice(response_phrases).strip()} {WHERE_ARE_YOU_NOW[LANGUAGE]}"
         else:
             response = random.choice(response_phrases).strip()
     return response
@@ -135,7 +108,7 @@ def what_is_current_dialog_id_respond(ctx: Context, actor: Actor, intention: str
 
 def get_respond_funcs():
     return {
-        "exit": exit_respond,
+        "exit": random_respond,
         "repeat": repeat_respond,
         "where_are_you_from": where_are_you_from_respond,
         "get_dialog_id": what_is_current_dialog_id_respond,
@@ -145,7 +118,6 @@ def get_respond_funcs():
         "what_can_you_do": random_respond,
         "what_time": what_time_respond,
         "dont_understand": random_respond,
-        # "stupid": random_respond,
         "choose_topic": random_respond,
         "cant_do": random_respond,
         "tell_me_a_story": random_respond,

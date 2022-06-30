@@ -1,6 +1,6 @@
 [
     [
-        "Sorry, have a great day! #+#exit",
+        "I'm inspired by you. Bye-bye! #+#exit",
         1.0,
         {
             "dff_intent_responder_skill_state": {
@@ -25,7 +25,7 @@
                         "0": "stop this bot."
                     },
                     "responses": {
-                        "0": "Sorry, have a great day! #+#exit"
+                        "0": "I'm inspired by you. Bye-bye! #+#exit"
                     },
                     "misc": {},
                     "validation": false,

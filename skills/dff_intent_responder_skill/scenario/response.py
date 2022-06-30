@@ -14,7 +14,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     intention, confidence = get_detected_intents(annotated_utterance)
 
     response = ""
-    if intention is not None and confidence > 0:
+    if intention is not None and confidence > 0 and intention in response_funcs.get_respond_funcs():
         logger.debug(f"Intent is defined as {intention}")
         dialog = int_ctx.get_dialog(ctx, actor)
         dialog["seen"] = dialog["called_intents"][intention]
@@ -65,7 +65,7 @@ def get_detected_intents(annotated_utterance):
     intents = get_intents(annotated_utterance)
     intent, confidence = None, 0.0
     for key, value in intents.items():
-        if value.get("detected", 0) == 1:
+        if value.get("detected", 0) == 1 and key in response_funcs.get_respond_funcs():
             confidence_current = value.get("confidence", 0.0)
             if confidence_current > confidence:
                 intent, confidence = key, confidence_current

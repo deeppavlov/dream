@@ -106,7 +106,7 @@ high_priority_intents = {
     "dff_grounding_skill": {"what_are_you_talking_about"},
 }
 
-low_priority_intents = {"dont_understand", "what_time"}
+low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
 combined_classes = {
     "factoid_classification": ["is_factoid", "is_conversational"],
@@ -1117,7 +1117,7 @@ def get_common_tokens_in_lists_of_strings(list_of_strings_0, list_of_strings_1):
     return common_substrings
 
 
-SYMBOLS_EXCEPT_LETTERS_AND_DIGITS = re.compile(r"[^a-zA-Z0-9\-_ ]")
+SYMBOLS_EXCEPT_LETTERS_AND_DIGITS = re.compile(r"[^a-zA-Zа-яА-ЯёЁ0-9\-_ ]")
 DOUBLE_SPACES = re.compile(r"\s+")
 
 
