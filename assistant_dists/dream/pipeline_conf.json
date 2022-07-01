@@ -169,6 +169,19 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
+            "rake_keywords": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://rake-keywords:8007/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
             "conceptnet": {
                 "connector": {
                     "protocol": "http",
@@ -655,7 +668,7 @@
             "dff_short_story_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 300,
                     "url": "http://dff-short-story-skill:8057/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
@@ -956,6 +969,32 @@
                     "protocol": "http",
                     "timeout": 2,
                     "url": "http://dialogpt:8125/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "storygpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 300,
+                    "url": "http://storygpt:8126/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "prompt_storygpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 300,
+                    "url": "http://prompt-storygpt:8127/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

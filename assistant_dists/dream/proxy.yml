@@ -558,15 +558,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8061
       - PORT=8061
 
-  dff-short-story-skill:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8057
-      - PORT=8057
-
   dff-weather-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -584,7 +575,7 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8121
       - PORT=8121
-  
+
   dialogpt:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
