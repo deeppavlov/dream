@@ -1,9 +1,7 @@
 import re
-
 from common.greeting import HOW_ARE_YOU_RESPONSES
 from common.utils import get_emotions
 from common.universal_templates import if_chat_about_particular_topic
-
 
 POSITIVE_EMOTIONS = set(
     [
@@ -119,7 +117,7 @@ LONELINESS_TEMPLATE = re.compile(rf"{ALONE_PATTERN}", re.IGNORECASE)
 NOT_LONELINESS_TEMPLATE = re.compile(rf"{NOT_PATTERN} {ALONE_PATTERN}", re.IGNORECASE)
 SAD_TEMPLATE = re.compile(rf"({SAD_PATTERN}|{POOR_ASR_PATTERN})", re.IGNORECASE)
 NOT_SAD_TEMPLATE = re.compile(rf"{NOT_PATTERN} {SAD_PATTERN}", re.IGNORECASE)
-BORING_TEMPLATE = re.compile(r"(boring|bored)", re.IGNORECASE)
+BORING_TEMPLATE = re.compile(rf"(boring|bored)", re.IGNORECASE)
 NOT_BORING_TEMPLATE = re.compile(rf"{NOT_PATTERN} (boring|bored)", re.IGNORECASE)
 JOKE_REQUEST_TEMPLATE = re.compile(rf"{JOKE_PATTERN}", re.IGNORECASE)
 NOT_JOKE_REQUEST_TEMPLATE = re.compile(rf"{NOT_PATTERN} {JOKE_PATTERN}", re.IGNORECASE)
@@ -181,7 +179,7 @@ def emo_advice_requested(uttr):
 
 
 def skill_trigger_phrases():
-    return [HOW_DO_YOU_FEEL] + sum([HOW_ARE_YOU_RESPONSES[lang] for lang in ["RU", "EN"]], [])
+    return [HOW_DO_YOU_FEEL] + HOW_ARE_YOU_RESPONSES
 
 
 def emotion_from_feel_answer(prev_bot_uttr, user_uttr):
@@ -209,7 +207,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
     how_are_you = any(
         [
             how_are_you_response.lower() in bot_uttr.get("text", "").lower()
-            for how_are_you_response in sum([HOW_ARE_YOU_RESPONSES[lang] for lang in ["RU", "EN"]], [])
+            for how_are_you_response in HOW_ARE_YOU_RESPONSES
         ]
     )
     joke_request_detected = is_joke_requested(user_utt)

@@ -1,5 +1,4 @@
 import re
-from os import getenv
 
 from df_engine.core import Actor, Context
 
@@ -11,9 +10,7 @@ import common.utils as common_utils
 from common.scenarios.games import was_game_mentioned
 
 
-LANGUAGE = getenv("LANGUAGE", "EN")
-
-GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
+GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
 link_to_skill2key_words = {
     skill_name: common_link.link_to_skill2key_words[skill_name]
     for skill_name in common_link.link_to_skill2key_words

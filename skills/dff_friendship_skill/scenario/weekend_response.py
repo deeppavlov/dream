@@ -13,9 +13,8 @@ from df_engine.core import Actor, Context
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-LANGUAGE = getenv("LANGUAGE", "EN")
 
 REPLY_TYPE = Tuple[str, float, dict, dict, dict]
 DIALOG_BEGINNING_START_CONFIDENCE = 0.98
@@ -25,12 +24,12 @@ MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
 MIDDLE_CONFIDENCE = 0.95
-GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
+GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS)
 
 
 def std_weekend_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.WEEKEND_QUESTIONS)
@@ -45,7 +44,7 @@ def std_weekend_response(ctx: Context, actor: Actor) -> str:
 
 def sys_cleaned_up_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.CLEANED_UP_STATEMENTS)
@@ -60,7 +59,7 @@ def sys_cleaned_up_response(ctx: Context, actor: Actor) -> str:
 
 def sys_slept_in_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.SLEPT_IN_QUESTIONS)
@@ -75,7 +74,7 @@ def sys_slept_in_response(ctx: Context, actor: Actor) -> str:
 
 def sys_feel_great_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.WHAT_PLANS_FOR_TODAY)
@@ -90,7 +89,7 @@ def sys_feel_great_response(ctx: Context, actor: Actor) -> str:
 
 def sys_need_more_time_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.WISH_MORE_TIME)
@@ -105,7 +104,7 @@ def sys_need_more_time_response(ctx: Context, actor: Actor) -> str:
 
 def sys_watched_film_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.MOVIE_NAME_QUESTION)
@@ -120,7 +119,7 @@ def sys_watched_film_response(ctx: Context, actor: Actor) -> str:
 
 def sys_read_book_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.BOOK_NAME_QUESTION)
@@ -135,7 +134,7 @@ def sys_read_book_response(ctx: Context, actor: Actor) -> str:
 
 def sys_played_computer_game_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.COMPUTER_GAME_NAME_QUESTION)
@@ -150,7 +149,7 @@ def sys_played_computer_game_response(ctx: Context, actor: Actor) -> str:
 
 def sys_play_on_weekends_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.GAME_EMOTIONS_QUESTION)
@@ -165,7 +164,7 @@ def sys_play_on_weekends_response(ctx: Context, actor: Actor) -> str:
 
 def sys_play_regularly_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.REGULAR_PLAYER_QUESTION)
@@ -180,7 +179,7 @@ def sys_play_regularly_response(ctx: Context, actor: Actor) -> str:
 
 def sys_play_once_response(ctx: Context, actor: Actor) -> str:
     # get ack, body
-    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor, lang=LANGUAGE)
+    ack = int_cnd.get_not_used_and_save_sentiment_acknowledgement(ctx, actor)
 
     # obtaining random response from weekend questions
     body = random.choice(common_weekend.OCCASIONAL_PLAYER_QUESTION)

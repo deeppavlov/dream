@@ -88,7 +88,6 @@ class RuleBasedSkillSelectorConnector:
             elif user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
             elif high_priority_intent_detected:
-                skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif is_sensitive_topic_and_request(user_uttr):
@@ -100,8 +99,6 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("dff_grounding_skill")
-                # we have only russian version of dff_generative_skill
-                skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("small_talk_skill")
 
@@ -145,8 +142,6 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("convert_reddit")
                 skills_for_uttr.append("comet_dialog_skill")
                 skills_for_uttr.append("dff_program_y_wide_skill")
-                # we have only russian version of dff_generative_skill
-                skills_for_uttr.append("dff_generative_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -231,10 +226,19 @@ class RuleBasedSkillSelectorConnector:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
-            logger.info(f"Selected skills: {skills_for_uttr}")
+            if dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["tell_me_a_story"]["detected"] == 1:
+                skills_for_uttr.append("dff_short_story_skill")
+
+            if len(dialog["human_utterances"]) > 1:
+                nouns = dialog["human_utterances"][-1]["annotations"].get('rake_keywords', [])
+                nouns.extend(dialog["human_utterances"][-2]["annotations"].get('rake_keywords', []))
+                if prev_active_skill != 'dff_short_story_skill':
+                    if len(nouns) >= 5:
+                        skills_for_uttr.append("dff_short_story_skill")
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
+            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
             asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
         except Exception as e:
             total_time = time.time() - st_time

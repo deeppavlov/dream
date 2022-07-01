@@ -130,6 +130,9 @@ services:
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  storygpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   infilling:
     environment:
       - CUDA_VISIBLE_DEVICES=8

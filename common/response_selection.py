@@ -31,7 +31,10 @@ ACTIVE_SKILLS = [
     "dff_wiki_skill",
     "dff_art_skill",
 ]
-ALMOST_ACTIVE_SKILLS = ["friendship_skill", "dff_friendship_skill", "dff_generative_skill"]
+ALMOST_ACTIVE_SKILLS = [
+    "friendship_skill",
+    "dff_friendship_skill",
+]
 UNPREDICTABLE_SKILLS = [
     "convert_reddit",
     "knowledge_grounding_skill",
