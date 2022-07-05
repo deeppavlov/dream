@@ -22,7 +22,7 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/NER_ru/requirements.txt /src/requirements.txt
+COPY ./annotators/NER_deeppavlov/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
