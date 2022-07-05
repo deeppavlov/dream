@@ -1,0 +1,559 @@
+PS D:\programming\AI\sirius\dream> docker-compose -f docker-compose.yml -f assistant_dists/dream_mini/docker-compose.override.yml -f assistant_dists/dream_mini/proxy.yml up --build
+Building dialogpt
+[+] Building 2.9s (8/8) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 2.7s
+=> [auth] library/nginx:pull token for registry-1.docker.io 0.0s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_dialogpt 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building sentseg
+[+] Building 0.8s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.6s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_sentseg 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building badlisted-words
+[+] Building 0.7s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.5s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_badlisted-words 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building dff-intent-responder-skill
+[+] Building 0.6s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.4s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_dff-intent-responder-skill 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building intent-catcher
+[+] Building 1.0s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.8s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_intent-catcher 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building agent
+[+] Building 4.8s (16/16) FINISHED
+=> [internal] load build definition from dockerfile_agent 0.0s
+=> => transferring dockerfile: 38B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 35B 0.0s
+=> [internal] load metadata for docker.io/library/python:3.7-slim-stretch 2.7s
+=> [auth] library/python:pull token for registry-1.docker.io 0.0s
+=> [ 1/10] FROM docker.io/library/python:3.7-slim-stretch@sha256:649b13bc3e6a70f7722d5eba4d78afbf4e9cec63193a29148271124840013286 0.0s
+=> [internal] load build context 0.4s
+=> => transferring context: 176.93kB 0.4s
+=> CACHED [ 2/10] RUN apt-get update -y --fix-missing && apt-get install -y -q build-essential openssl git l 0.0s
+=> CACHED [ 3/10] RUN mkdir dp-agent 0.0s
+=> CACHED [ 4/10] WORKDIR /dp-agent 0.0s
+=> CACHED [ 5/10] RUN mkdir /pavlov && cd /pavlov && git clone https://github.com/deepmipt/DeepPavlov && cd DeepPavlov && pip in 0.0s
+=> CACHED [ 6/10] RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pyaml openpyxl==3.0.0 xlrd==1.2.0 0.0s
+=> CACHED [ 7/10] RUN pip install jinja2==3.0.3 Werkzeug==2.0.3 0.0s
+=> CACHED [ 8/10] RUN pip install https://codeload.github.com/deepmipt/dp-agent/tar.gz/35960a8fb0ac8df8ecf75215c895a64c225c1490 0.0s
+=> [ 9/10] COPY . /dp-agent/. 0.6s
+=> [10/10] COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py 0.0s
+=> exporting to image 0.8s
+=> => exporting layers 0.7s
+=> => writing image sha256:96facd5183dad4920d28d7129e06ee885eeab6d99631055dbe4eb8dd730f3c79 0.0s
+=> => naming to docker.io/library/dream_agent 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building convers-evaluator-annotator
+[+] Building 1.7s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 1.5s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_convers-evaluator-annotator 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building spelling-preprocessing
+[+] Building 0.7s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.5s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_spelling-preprocessing 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building convers-evaluation-selector
+[+] Building 0.6s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.4s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_convers-evaluation-selector 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Building dff-program-y-skill
+[+] Building 0.7s (7/7) FINISHED
+=> [internal] load build definition from Dockerfile 0.0s
+=> => transferring dockerfile: 32B 0.0s
+=> [internal] load .dockerignore 0.0s
+=> => transferring context: 2B 0.0s
+=> [internal] load metadata for docker.io/library/nginx:latest 0.5s
+=> [internal] load build context 0.0s
+=> => transferring context: 42B 0.0s
+=> [1/2] FROM docker.io/library/nginx:latest@sha256:10f14ffa93f8dedf1057897b745e5ac72ac5655c299dade0aa434c71557697ea 0.0s
+=> CACHED [2/2] COPY default.conf.template /etc/nginx/templates/ 0.0s
+=> exporting to image 0.0s
+=> => exporting layers 0.0s
+=> => writing image sha256:77975667102f0e58812665733265f16c8b15d3d9c5cb92ce18812cd7b6d2d489 0.0s
+=> => naming to docker.io/library/dream_dff-program-y-skill 0.0s
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+Recreating dream_agent_1 ... done
+Starting dream_spelling-preprocessing_1 ... done
+Starting dream_convers-evaluator-annotator_1 ... done
+Starting dream_dff-program-y-skill_1 ... done
+Starting dream_convers-evaluation-selector_1 ... done
+Starting dream_sentseg_1 ... done
+Starting dream_badlisted-words_1 ... done
+Starting dream_mongo_1 ... done
+Starting dream_dff-intent-responder-skill_1 ... done
+Starting dream_intent-catcher_1 ... done
+Starting dream_dialogpt_1 ... done
+Attaching to dream_dff-program-y-skill_1, dream_spelling-preprocessing_1, dream_convers-evaluator-annotator_1, dream_dialogpt_1, dream_convers-evaluation-selector_1, dream_intent-catcher_1, dream_mongo_1, dream_sentseg_1, dream_dff-intent-responder-skill_1, dream_badlisted-words_1, dream_agent_1  
+agent_1 | --------------------------------------------------------
+agent_1 | docker-compose-wait - starting with configuration:
+agent_1 | - Hosts to be waiting for: [convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018, spelling-preprocessing:8074, dialogpt:8125]
+agent_1 | - Timeout before failure: 480 seconds
+agent_1 | - Sleeping time before checking for hosts availability: 0 seconds
+agent_1 | - Sleeping time once all hosts are available: 0 seconds
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of convers-evaluator-annotator:8004
+agent_1 | Host convers-evaluator-annotator:8004 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of dff-program-y-skill:8008
+agent_1 | Host dff-program-y-skill:8008 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of sentseg:8011
+badlisted-words_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+badlisted-words_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+badlisted-words_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+badlisted-words_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+badlisted-words_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+badlisted-words_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+badlisted-words_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+agent_1 | Host sentseg:8011 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of convers-evaluation-selector:8009
+agent_1 | Host convers-evaluation-selector:8009 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of dff-intent-responder-skill:8012
+badlisted-words_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+badlisted-words_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+agent_1 | Host dff-intent-responder-skill:8012 not yet available...
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: using the "epoll" event method
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: nginx/1.23.0
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker processes
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 36
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 37
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 38
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 39
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 40
+convers-evaluator-annotator_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+convers-evaluator-annotator_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+convers-evaluator-annotator_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+convers-evaluation-selector_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+convers-evaluation-selector_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+convers-evaluation-selector_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+convers-evaluation-selector_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+convers-evaluation-selector_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+convers-evaluator-annotator_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+convers-evaluator-annotator_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+convers-evaluator-annotator_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+convers-evaluator-annotator_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+convers-evaluator-annotator_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+convers-evaluation-selector_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+convers-evaluator-annotator_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: using the "epoll" event method
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: nginx/1.23.0
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker processes
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 36
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 37
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 38
+dff-intent-responder-skill_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+dff-intent-responder-skill_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+dff-intent-responder-skill_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 39
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 40
+dff-intent-responder-skill_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+dff-intent-responder-skill_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 41
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 42
+dff-intent-responder-skill_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+dff-intent-responder-skill_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 43
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 44
+dff-intent-responder-skill_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+dff-intent-responder-skill_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 45
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 41
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 42
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: using the "epoll" event method
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: nginx/1.23.0
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker processes
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 43
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 44
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 35
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 36
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 37
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 46
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 47
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 38
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 45
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 48
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 49
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 50
+convers-evaluation-selector_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+convers-evaluation-selector_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+convers-evaluator-annotator_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 51
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 46
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 47
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 48
+convers-evaluation-selector_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 39
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 40
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 41
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: using the "epoll" event method
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: nginx/1.23.0
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 42
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 43
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 44
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker processes
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 36
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 37
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 38
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 39
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 40
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 41
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 42
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 43
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 44
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 45
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 46
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 47
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 48
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 49
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 50
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 45
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 49
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 50
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 46
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 47
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 48
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 49
+dff-program-y-skill_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+dff-program-y-skill_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+convers-evaluation-selector_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 51
+badlisted-words_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 51
+dff-intent-responder-skill_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 50
+dialogpt_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+dialogpt_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+intent-catcher_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+intent-catcher_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+intent-catcher_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+mongo_1 | 2022-07-05T08:35:58.417+0000 I CONTROL [main] Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] MongoDB starting : pid=1 port=27017 dbpath=/data/db 64-bit host=28e44b75478f
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] db version v4.0.0
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] git version: 3b07af3d4f471ae89e8186d33bbb1d5259597d51
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] OpenSSL version: OpenSSL 1.0.2g 1 Mar 2016
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] allocator: tcmalloc
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] modules: none
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] build environment:
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] distmod: ubuntu1604
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] distarch: x86_64
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] target_arch: x86_64
+mongo_1 | 2022-07-05T08:35:58.426+0000 I CONTROL [initandlisten] options: { net: { bindIpAll: true } }
+mongo_1 | 2022-07-05T08:35:58.427+0000 I STORAGE [initandlisten] Detected data files in /data/db created by the 'wiredTiger' storage engine, so setting the active storage engine to 'wiredTiger'.
+mongo_1 | 2022-07-05T08:35:58.427+0000 I STORAGE [initandlisten]
+mongo_1 | 2022-07-05T08:35:58.427+0000 I STORAGE [initandlisten] ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
+mongo_1 | 2022-07-05T08:35:58.427+0000 I STORAGE [initandlisten] ** See http://dochub.mongodb.org/core/prodnotes-filesystem
+mongo_1 | 2022-07-05T08:35:58.427+0000 I STORAGE [initandlisten] wiredtiger_open config: create,cache_size=5013M,session_max=20000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),file_manager=(close_idle_time=100000),statistics_log=(wait=0),verbose=(recovery_progress),
+dialogpt_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+dialogpt_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+dialogpt_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+dialogpt_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+dff-program-y-skill_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+dff-program-y-skill_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+dff-program-y-skill_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+intent-catcher_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+intent-catcher_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+dialogpt_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+dialogpt_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+dialogpt_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+dff-program-y-skill_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+dff-program-y-skill_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+dff-program-y-skill_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+intent-catcher_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+intent-catcher_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+dff-program-y-skill_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: using the "epoll" event method
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: nginx/1.23.0
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker processes
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 36
+intent-catcher_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+intent-catcher_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 37
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 38
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 39
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: using the "epoll" event method
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: nginx/1.23.0
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker processes
+sentseg_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+sentseg_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+sentseg_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 40
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 36
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 37
+spelling-preprocessing_1 | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+spelling-preprocessing_1 | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 38
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 39
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 40
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 41
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 41
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 42
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 43
+sentseg_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+sentseg_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 42
+spelling-preprocessing_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+spelling-preprocessing_1 | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 43
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 44
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 45
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 46
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 47
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 48
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: using the "epoll" event method
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: nginx/1.23.0
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker processes
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 35
+spelling-preprocessing_1 | 10-listen-on-ipv6-by-default.sh: info: /etc/nginx/conf.d/default.conf differs from the packaged version
+spelling-preprocessing_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+spelling-preprocessing_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 36
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 37
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 38
+spelling-preprocessing_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+spelling-preprocessing_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: using the "epoll" event method
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: nginx/1.23.0
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker processes
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 39
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 40
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 49
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 50
+intent-catcher_1 | 2022/07/05 08:35:57 [notice] 1#1: start worker process 51
+sentseg_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 36
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 37
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 44
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 45
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 38
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 39
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 46
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 47
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 41
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 42
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 40
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 41
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 48
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 49
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 50
+sentseg_1 | 20-envsubst-on-templates.sh: Running envsubst on /etc/nginx/templates/default.conf.template to /etc/nginx/conf.d/default.conf
+sentseg_1 | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 42
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 43
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 43
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 44
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 45
+sentseg_1 | /docker-entrypoint.sh: Configuration complete; ready for start up
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: using the "epoll" event method
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: nginx/1.23.0
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: built by gcc 10.2.1 20210110 (Debian 10.2.1-6)
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: OS: Linux 5.10.16.3-microsoft-standard-WSL2
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker processes
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 44
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 45
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 46
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 47
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 48
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 36
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 37
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 49
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 50
+spelling-preprocessing_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 51
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 46
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 47
+dff-program-y-skill_1 | 2022/07/05 08:35:54 [notice] 1#1: start worker process 51
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 38
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 39
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 48
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 49
+dialogpt_1 | 2022/07/05 08:35:56 [notice] 1#1: start worker process 50
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 40
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 41
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 42
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 43
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 44
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 45
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 46
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 47
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 48
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 49
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 50
+sentseg_1 | 2022/07/05 08:35:58 [notice] 1#1: start worker process 51
+mongo_1 | 2022-07-05T08:35:58.959+0000 I STORAGE [initandlisten] WiredTiger message [1657010158:959688][1:0x7fe16f08aa00], txn-recover: Main recovery loop: starting at 3/25344
+mongo_1 | 2022-07-05T08:35:59.077+0000 I STORAGE [initandlisten] WiredTiger message [1657010159:77368][1:0x7fe16f08aa00], txn-recover: Recovering log 3 through 4
+mongo_1 | 2022-07-05T08:35:59.139+0000 I STORAGE [initandlisten] WiredTiger message [1657010159:139391][1:0x7fe16f08aa00], txn-recover: Recovering log 4 through 4
+mongo_1 | 2022-07-05T08:35:59.187+0000 I STORAGE [initandlisten] WiredTiger message [1657010159:187613][1:0x7fe16f08aa00], txn-recover: Set global recovery timestamp: 0
+mongo_1 | 2022-07-05T08:35:59.217+0000 I RECOVERY [initandlisten] WiredTiger recoveryTimestamp. Ts: Timestamp(0, 0)
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten]
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten] ** WARNING: Access control is not enabled for the database.  
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten] ** Read and write access to data and configuration is
+unrestricted.
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten]
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten]
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten] ** WARNING: /sys/kernel/mm/transparent_hugepage/enabled is 'always'.
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten] ** We suggest setting it to 'never'
+mongo_1 | 2022-07-05T08:35:59.254+0000 I CONTROL [initandlisten]
+mongo_1 | 2022-07-05T08:35:59.339+0000 I FTDC [initandlisten] Initializing full-time diagnostic data capture with directory '/data/db/diagnostic.data'
+mongo_1 | 2022-07-05T08:35:59.341+0000 I NETWORK [initandlisten] waiting for connections on port 27017
+agent_1 | Host dff-intent-responder-skill:8012 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of intent-catcher:8014
+agent_1 | Host intent-catcher:8014 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of badlisted-words:8018
+agent_1 | Host badlisted-words:8018 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of spelling-preprocessing:8074
+agent_1 | Host spelling-preprocessing:8074 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | Checking availability of dialogpt:8125
+agent_1 | Host dialogpt:8125 is now available!
+agent_1 | --------------------------------------------------------
+agent_1 | docker-compose-wait - Everything's fine, the application can now start!
+agent_1 | --------------------------------------------------------
+mongo_1 | 2022-07-05T08:36:01.095+0000 I NETWORK [listener] connection accepted from 172.18.0.12:49826 #1 (1 connection now open)) : "PyMongo|Motor", version: "3.1
+mongo_1 | 2022-07-05T08:36:01.096+0000 I NETWORK [conn1] received client metadata from 172.18.0.12:49826 conn1: { driver: { namel.0" }: "PyMongo|Motor", version: "3.10.1|2.0.0" }, os: { type: "Linux", name: "Linux", architecture: "x86_64", version: "5.10.16.3-microsoft-standard-WSL2" }n), platform: "CPython 3.7.11.final.0" } : "PyMongo|Motor", version: "3.1
+mongo_1 | 2022-07-05T08:36:01.098+0000 I NETWORK [listener] connection accepted from 172.18.0.12:49828 #2 (2 connections now opel.0" }n) n)
+mongo_1 | 2022-07-05T08:36:01.099+0000 I NETWORK [conn2] received client metadata from 172.18.0.12:49828 conn2: { driver: { name: "PyMongo|Motor", version: "3.1: "PyMongo|Motor", version: "3.10.1|2.0.0" }, os: { type: "Linux", name: "Linux", architecture: "x86_64", version: "5.10.16.3-microsoft-standard-WSL2" }l.0" }, platform: "CPython 3.7.11.final.0" } n)
+mongo_1 | 2022-07-05T08:36:36.573+0000 I NETWORK [listener] connection accepted from 172.18.0.12:49830 #3 (3 connections now ope: "PyMongo|Motor", version: "3.1n) l.0" }
+mongo_1 | 2022-07-05T08:36:36.574+0000 I NETWORK [conn3] received client metadata from 172.18.0.12:49830 conn3: { driver: { name: "PyMongo|Motor", version: "3.10.1|2.0.0" }, os: { type: "Linux", name: "Linux", architecture: "x86_64", version: "5.10.16.3-microsoft-standard-WSL2" }, platform: "CPython 3.7.11.final.0" }
+mongo_1 | 2022-07-05T08:36:36.576+0000 I NETWORK [listener] connection accepted from 172.18.0.12:49832 #4 (4 connections now open)
+mongo_1 | 2022-07-05T08:36:36.577+0000 I NETWORK [conn4] received client metadata from 172.18.0.12:49832 conn4: { driver: { name: "PyMongo|Motor", version: "3.10.1|2.0.0" }, os: { type: "Linux", name: "Linux", architecture: "x86_64", version: "5.10.16.3-microsoft-standard-WSL2" }, platform: "CPython 3.7.11.final.0" }
+spelling-preprocessing_1 | 172.18.0.12 - - [05/Jul/2022:08:36:42 +0000] "POST /response HTTP/1.1" 499 0 "-" "Python/3.7 aiohttp/3.6.1" "-"  
+mongo_1 | 2022-07-05T08:37:50.380+0000 I NETWORK [conn4] end connection 172.18.0.12:49832 (3 connections now open)
+mongo_1 | 2022-07-05T08:37:50.380+0000 I NETWORK [conn3] end connection 172.18.0.12:49830 (2 connections now open)
+mongo_1 | 2022-07-05T08:38:26.663+0000 I NETWORK [listener] connection accepted from 172.18.0.12:49838 #5 (3 connections now open)
+mongo_1 | 2022-07-05T08:38:26.663+0000 I NETWORK [conn5] received client metadata from 172.18.0.12:49838 conn5: { driver: { name: "PyMongo|Motor", version: "3.10.1|2.0.0" }, os: { type: "Linux", name: "Linux", architecture: "x86_64", version: "5.10.16.3-microsoft-standard-WSL2" }, platform: "CPython 3.7.11.final.0" }
+mongo_1 | 2022-07-05T08:38:26.666+0000 I NETWORK [listener] connection accepted from 172.18.0.12:49840 #6 (4 connections now open)
+mongo_1 | 2022-07-05T08:38:26.666+0000 I NETWORK [conn6] received client metadata from 172.18.0.12:49840 conn6: { driver: { name: "PyMongo|Motor", version: "3.10.1|2.0.0" }, os: { type: "Linux", name: "Linux", architecture: "x86_64", version: "5.10.16.3-microsoft-standard-WSL2" }, platform: "CPython 3.7.11.final.0" }
+spelling-preprocessing_1 | 172.18.0.12 - - [05/Jul/2022:08:38:32 +0000] "POST /response HTTP/1.1" 499 0 "-" "Python/3.7 aiohttp/3.6.1" "-"  
+spelling-preprocessing_1 | 172.18.0.12 - - [05/Jul/2022:08:52:22 +0000] "POST /response HTTP/1.1" 499 0 "-" "Python/3.7 aiohttp/3.6.1" "-"
