@@ -170,6 +170,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     logger.info(f'Utterance: {utt}')
     if utt:
         full_ctx = ctx.misc.get('agent', {}).get('dialog', {}).get('human_utterances', [])
+        logger.info(f'Full ctx: {full_ctx}')
         last_utt = full_ctx[-1]['text']
         nouns = full_ctx[-1].get('annotations', {}).get('spacy_nounphrases', [])
         logger.info(f'Nouns: {nouns}')
