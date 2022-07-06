@@ -65,7 +65,7 @@ def generate_part(texts, max_len, temp, num_sents, first):
         if text[-1] not in ',.!?;':
             text += '.'
         if first:
-            text += " In the end,"
+            text += " At the end,"
         texts.append(text)
     return texts
 

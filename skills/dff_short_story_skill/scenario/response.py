@@ -128,7 +128,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     reply = ''
     utt = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     if utt:
-        full_ctx = ctx.misc.get('agent', {}).get('dialog', {}).get('human_utterances', [])
+        full_ctx = int_ctx.get_human_utterances(ctx, actor)
         nouns = full_ctx[-1]['annotations']['rake_keywords']
         logger.info(f"Nouns: {full_ctx[-1]['annotations']['spacy_nounphrases']}")
         if len(full_ctx) > 1:
@@ -169,7 +169,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     logger.info(f'Utterance: {utt}')
     if utt:
-        full_ctx = ctx.misc.get('agent', {}).get('dialog', {}).get('human_utterances', [])
+        full_ctx = int_ctx.get_human_utterances(ctx, actor)
         last_utt = full_ctx[-1]['text']
         nouns = full_ctx[-1].get('annotations', {}).get('spacy_nounphrases', [])
         logger.info(f'Nouns: {nouns}')

@@ -1115,8 +1115,6 @@ services:
         SERVICE_PORT: 8057
         SERVICE_NAME: dff_short_story_skill
         STORY_TYPE: generated
-        STORYGPT_SERVICE_URL: http://storygpt:8126/respond
-        STORYGPT_KEYWORDS_SERVICE_URL: http://prompt-storygpt:8127/respond
       context: .
       dockerfile: ./skills/dff_short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload
