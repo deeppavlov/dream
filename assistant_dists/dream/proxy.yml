@@ -593,7 +593,7 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8122
       - PORT=8122
-      -
+
   dff-short-story-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:

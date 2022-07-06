@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE")
-pattern = re.compile("(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)")
+pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)")
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:
