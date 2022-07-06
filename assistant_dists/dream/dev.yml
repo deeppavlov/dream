@@ -20,7 +20,6 @@ services:
   rake-keywords:
     volumes:
       - "./annotators/rake_keywords:/src"
-      - "./common:/src/common"
     ports:
       - 8007:8007
   dff-program-y-skill:

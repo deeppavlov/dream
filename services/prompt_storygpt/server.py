@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-device = 'cpu'
+pattern = re.compile(r'\(.*?\)')
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained('/data/finetuned2')
@@ -58,7 +58,7 @@ def generate_part(texts, max_len, temp, num_sents, first):
 
     texts = []
     for text in generated_texts:
-        text = re.sub(r'\(.*?\)', '', text)  # delete everything in ()
+        text = pattern.sub("", text)  # delete everything in ()
         text = text.replace(' .', '.').replace('..', '.').replace('..', '.')
         sents = sent_tokenize(text)
         text = text[:len(' '.join(sents[:num_sents]))]
@@ -116,5 +116,5 @@ def respond():
         confidences = [ZERO_CONFIDENCE] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"masked_lm exec time: {total_time:.3f}s")
+    logger.info(f"Prompt storyGPT exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))

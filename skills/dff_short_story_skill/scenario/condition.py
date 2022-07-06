@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE")
+pattern = re.compile("(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)")
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:
@@ -60,10 +61,12 @@ def prev_is_story(ctx: Context, actor: Actor) -> bool:
 
 def asks_more(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    more_phrases = ['more', 'tell me more', 'continue', 'more stories', 'tell me more stories', 'one more story']
     if utt["text"]:
-        if utt["text"].lower().strip() in more_phrases:
-            return True
+        text = utt["text"].lower().strip()
+        s = pattern.search(text)
+        if s:
+            if s.group(0) == text:
+                return True
     return False
 
 

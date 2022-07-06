@@ -16,10 +16,10 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-logger.info("I am ready to respond")
-
 stop_words = stopwords.words('english')
 rake = RAKE.Rake(stop_words)
+
+logger.info("Model is ready")
 
 
 def get_keywords(sent):

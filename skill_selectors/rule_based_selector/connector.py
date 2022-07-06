@@ -226,7 +226,7 @@ class RuleBasedSkillSelectorConnector:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
-            if dialog["human_utterances"][-1]["annotations"]["intent_catcher"]["tell_me_a_story"]["detected"] == 1:
+            if "tell_me_a_story" in intent_catcher_intents:
                 skills_for_uttr.append("dff_short_story_skill")
 
             if len(dialog["human_utterances"]) > 1:
@@ -238,7 +238,6 @@ class RuleBasedSkillSelectorConnector:
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
             asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
         except Exception as e:
             total_time = time.time() - st_time

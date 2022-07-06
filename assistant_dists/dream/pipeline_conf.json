@@ -668,7 +668,7 @@
             "dff_short_story_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 300,
+                    "timeout": 2,
                     "url": "http://dff-short-story-skill:8057/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
@@ -980,7 +980,7 @@
             "storygpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 300,
+                    "timeout": 2,
                     "url": "http://storygpt:8126/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -993,7 +993,7 @@
             "prompt_storygpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 300,
+                    "timeout": 2,
                     "url": "http://prompt-storygpt:8127/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",

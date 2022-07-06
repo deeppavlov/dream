@@ -111,5 +111,5 @@ def respond():
         confidences = [ZERO_CONFIDENCE] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"masked_lm exec time: {total_time:.3f}s")
+    logger.info(f"Keywords storyGPT exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))

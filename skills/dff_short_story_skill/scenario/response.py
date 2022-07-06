@@ -3,6 +3,7 @@ import json
 import re
 import random
 import requests
+import os
 
 from df_engine.core import Context, Actor
 
@@ -22,8 +23,8 @@ with open(
 ) as phrases_json:
     phrases = json.load(phrases_json)
 
-STORYGPT_KEYWORDS_SERVICE_URL = "http://storygpt:8126/respond"
-STORYGPT_SERVICE_URL = "http://prompt-storygpt:8127/respond"
+STORYGPT_SERVICE_URL = os.getenv("STORYGPT_SERVICE_URL")
+STORYGPT_KEYWORDS_SERVICE_URL = os.getenv("STORYGPT_KEYWORDS_SERVICE_URL")
 
 
 def get_previous_node(ctx: Context) -> str:
@@ -138,7 +139,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         ctx_texts = [c['text'] for c in full_ctx]
         logger.info(f"Contexts sent to StoryGPT service: {ctx_texts}")
         try:
-            resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=300)
+            resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=1.8)
             raw_responses = resp.json()
         except Exception:
             return ''
@@ -183,7 +184,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info(f'Final noun: {final_noun}')
 
         try:
-            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=300)
+            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=1.8)
             raw_responses = resp.json()
         except Exception:
             return ''

@@ -132,7 +132,7 @@ services:
       - CUDA_VISIBLE_DEVICES=6
   storygpt:
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=7
   infilling:
     environment:
       - CUDA_VISIBLE_DEVICES=8
