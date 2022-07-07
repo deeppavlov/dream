@@ -1,0 +1,48 @@
+[
+    [
+        "\u0422\u044b \u043c\u0435\u043d\u044f \u0432\u0434\u043e\u0445\u043d\u043e\u0432\u043b\u044f\u0435\u0448\u044c! \u041f\u043e\u043a\u0430-\u043f\u043e\u043a\u0430! #+#exit",
+        1.0,
+        {
+            "dff_intent_responder_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "3ca6c03a-c352-4074-92f1-6e18d70baca9",
+                    "labels": {
+                        "0": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "requests": {
+                        "0": "\u043f\u043e\u043a\u0430!"
+                    },
+                    "responses": {
+                        "0": "\u0422\u044b \u043c\u0435\u043d\u044f \u0432\u0434\u043e\u0445\u043d\u043e\u0432\u043b\u044f\u0435\u0448\u044c! \u041f\u043e\u043a\u0430-\u043f\u043e\u043a\u0430! #+#exit"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

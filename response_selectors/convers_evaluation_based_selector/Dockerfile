@@ -33,6 +33,9 @@ COPY ./response_selectors/convers_evaluation_based_selector/requirements.txt req
 RUN pip install -r requirements.txt
 RUN python -c "import nltk; nltk.download('punkt')"
 
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
 COPY ./response_selectors/convers_evaluation_based_selector/ ./
 COPY ./common/ ./common/
 

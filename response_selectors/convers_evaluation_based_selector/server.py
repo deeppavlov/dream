@@ -13,8 +13,8 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
-from common.greeting import greeting_spec
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
+from common.greeting import greeting_spec, HI_THIS_IS_DREAM
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, DUMMY_DONTKNOW_RESPONSES
 from common.utils import (
     get_intent_name,
     low_priority_intents,
@@ -52,6 +52,7 @@ MOST_DUMMY_RESPONSES = [
     "Sorry, probably, I didn't get what you mean.",
     "I didn't get it. Sorry",
 ]
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 
 @app.route("/respond", methods=["POST"])
@@ -126,7 +127,7 @@ def respond():
             else:
                 logger.info("Response Selector Error: randomly choosing response among dummy responses.")
                 best_cand = {
-                    "text": random.choice(MOST_DUMMY_RESPONSES),
+                    "text": random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]),
                     "confidence": 0.1,
                     "human_attributes": {},
                     "bot_attributes": {},
@@ -198,7 +199,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         is_intent_candidate = is_intent_candidate and intent_name not in low_priority_intents
         # print("is intent candidate? " + str(is_intent_candidate), flush=True)
 
-        if len(dialog["human_utterances"]) == 1 and greeting_spec not in candidates[i]["text"]:
+        if len(dialog["human_utterances"]) == 1 and greeting_spec[LANGUAGE] not in candidates[i]["text"]:
             logger.info("Dialog Beginning detected.")
             if (
                 if_chat_about_particular_topic(dialog["utterances"][0])
@@ -210,34 +211,34 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
                     logger.info("Particular topic. Facts + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
                     resp = candidates[i]["text"].replace("I don't have an opinion on that but I know some facts.", "")
-                    candidates[i]["text"] = "Hi, " + greeting_spec + "! " + resp
+                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {resp}"
                     curr_score = very_big_score
                 elif skill_names[i] == "meta_script_skill" and len(candidates[i]["text"]) > 0 and confidences[i] > 0.98:
                     logger.info("Particular topic. meta_script_skill + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
                     resp = candidates[i]["text"]
-                    candidates[i]["text"] = "Hi, " + greeting_spec + "! " + resp
+                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {resp}"
                     curr_score = very_big_score
                 elif skill_names[i] == "small_talk_skill":
                     logger.info("Particular topic. Small-talk + Greeting NOT to very big score.")
                     # for now do not give small talk a very big score here
-                    candidates[i]["text"] = "Hi, " + greeting_spec + "! " + candidates[i]["text"]
+                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
                     # curr_score = very_big_score
             elif if_choose_topic(dialog["utterances"][0]) and "about it" not in dialog["utterances"][0]["text"].lower():
                 logger.info("User wants bot to choose the topic")
                 # if user says `let's chat about something`
                 if skill_names[i] == "small_talk_skill":
                     logger.info("No topic. Small-talk + Greeting to very big score.")
-                    candidates[i]["text"] = "Hi, " + greeting_spec + "! " + candidates[i]["text"]
+                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
                     curr_score = very_big_score
                 elif skill_names[i] == "meta_script_skill" and len(candidates[i]["text"]) > 0:
                     logger.info("No topic. Meta-script + Greeting to very big score.")
-                    candidates[i]["text"] = "Hi, " + greeting_spec + "! " + candidates[i]["text"]
+                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
                     curr_score = very_big_score
             else:
                 logger.info("User just wants to talk.")
                 # if user says something else
-                if skill_names[i] == "program_y" and greeting_spec in candidates[i]["text"]:
+                if skill_names[i] == "program_y" and greeting_spec[LANGUAGE] in candidates[i]["text"]:
                     logger.info("Just chat. Program-y to very big score.")
                     curr_score = very_big_score
         elif (
@@ -246,7 +247,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             and len(dialog["utterances"]) < 16
         ):
             curr_score = very_big_score
-        elif skill_names[i] == "dff_friendship_skill" and greeting_spec in candidates[i]["text"]:
+        elif skill_names[i] == "dff_friendship_skill" and greeting_spec[LANGUAGE] in candidates[i]["text"]:
             if len(dialog["utterances"]) < 2:
                 curr_score = very_big_score
             else:
@@ -324,6 +325,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
     best_id = np.argmax(curr_single_scores)
     best_candidate = candidates[best_id]
     best_skill_name = skill_names[int(best_id)]
+    prev_skill_names = [uttr["skill_name"] for uttr in dialog["bot_utterances"][-5:]]
 
     best_candidate = add_question_to_statement(
         best_candidate,
@@ -333,6 +335,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
         link_to_question,
         link_to_human_attrs,
         not_sure_factoid,
+        prev_skill_names,
     )
 
     return best_candidate, best_id, curr_single_scores
@@ -343,7 +346,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(scores, confidences, is_toxics)
     if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
-        return None, np.random.choice(MOST_DUMMY_RESPONSES), 1.0, {}, {}
+        return None, np.random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]), 1.0, {}, {}
 
     # REPEAT checks
     bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
@@ -371,9 +374,9 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
-    if len(dialog["bot_utterances"]) == 0 and greeting_spec not in best_text:
+    if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text:
         # add greeting to the first bot uttr, if it's not already included
-        best_text = "Hi, " + greeting_spec + "! " + best_text
+        best_text = f"{HI_THIS_IS_DREAM[LANGUAGE]} {best_text}"
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.0:
         curr_single_scores[int(best_id)] = 0.0

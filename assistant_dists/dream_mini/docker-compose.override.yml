@@ -32,6 +32,7 @@ services:
       args:
         SERVICE_PORT: 8008
         SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: EN
       context: .
       dockerfile: ./skills/dff_program_y_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
@@ -92,6 +93,7 @@ services:
       args:
         SERVICE_PORT: 8012
         SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
       context: .
       dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
@@ -105,10 +107,16 @@ services:
   intent-catcher:
     env_file: [.env]
     build:
-      context: ./annotators/IntentCatcher/
-    command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+      args:
+        SERVICE_PORT: 8014
+        CONFIG_NAME: intents_model_dp_config.json
+        INTENT_PHRASES_PATH: intent_phrases.json
+    command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:

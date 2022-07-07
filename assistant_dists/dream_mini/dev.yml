@@ -36,8 +36,9 @@ services:
       - 8012:8012
   intent-catcher:
     volumes:
-      - "./annotators/IntentCatcher/src:/src"
+      - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8014:8014
   badlisted-words:

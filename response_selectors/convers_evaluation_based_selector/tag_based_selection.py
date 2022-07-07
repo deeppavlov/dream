@@ -37,6 +37,7 @@ from utils import (
     misheard_with_spec2,
     join_used_links_in_attributes,
     get_updated_disliked_skills,
+    LET_ME_ASK_YOU_PHRASES,
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
@@ -57,6 +58,7 @@ ADD_ACKNOWLEDGMENTS_IF_POSSIBLE = int(getenv("ADD_ACKNOWLEDGMENTS_IF_POSSIBLE", 
 PROMPT_PROBA = float(getenv("PROMPT_PROBA", 0.3))
 ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
 PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -259,14 +261,13 @@ def compute_curr_single_scores(candidates, scores, confidences):
             cand_scores = scores[i]
             confidence = confidences[i]
             skill_name = candidates[i]["skill_name"]
-            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
+            if all(["dialogrpt" in cand["annotations"] for cand in candidates]):
+                score_conv_eval = candidates[i]["annotations"]["dialogrpt"]
+            else:
+                score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
-            toxicity = max(candidates[i].get("annotations", {}).get("toxic_classification", {"toxic": 0.0}).values())
 
-            logger.info(
-                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. "
-                f"Toxicity: {toxicity}. Cand scores: {cand_scores}"
-            )
+            logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
             curr_single_scores.append(score)
 
     return curr_single_scores
@@ -290,7 +291,10 @@ def does_not_require_prompt(candidates, best_cand_id):
     _is_not_add_prompt_skill = candidates[best_cand_id]["skill_name"] in NOT_ADD_PROMPT_SKILLS
 
     _is_any_question = is_any_question_sentence_in_utterance(candidates[best_cand_id])
-    _can_continue = candidates[best_cand_id].get("can_continue", CAN_NOT_CONTINUE) != CAN_NOT_CONTINUE
+    _can_continue = (
+        candidates[best_cand_id].get("can_continue", CAN_NOT_CONTINUE) != CAN_NOT_CONTINUE
+        and candidates[best_cand_id]["skill_name"] in ACTIVE_SKILLS
+    )
     if (
         _is_already_prompt
         or _is_question
@@ -617,7 +621,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if (
             len(dialog["human_utterances"]) == 1
             and cand_uttr["skill_name"] == "dff_friendship_skill"
-            and greeting_spec in cand_uttr["text"]
+            and any([g in cand_uttr["text"] for g in greeting_spec.values()])
         ):
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         elif (
@@ -731,7 +735,14 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
             # as we have only one active skill, let's consider active skill as that one providing prompt
             # but we also need to reassign all the attributes
             best_prompt = candidates[best_prompt_id]
-            best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
+
+            if "prelinkto_connections" in best_prompt.get("human_attributes", {}):
+                # prelinkto connection phrase is already in the prompt (added in dummy skill)
+                best_candidate["text"] = f'{best_candidate["text"]} {best_prompt["text"]}'
+            else:
+                prelinkto = np.random.choice(LET_ME_ASK_YOU_PHRASES[LANGUAGE])
+                best_candidate["text"] = f'{best_candidate["text"]} {prelinkto} {best_prompt["text"]}'
+
             best_candidate["attributes"] = best_candidate.get("attributes", {})
             best_candidate["attributes"]["prompt_skill"] = best_prompt
 

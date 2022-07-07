@@ -88,6 +88,7 @@ class RuleBasedSkillSelectorConnector:
             elif user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
             elif high_priority_intent_detected:
+                skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif is_sensitive_topic_and_request(user_uttr):
@@ -99,6 +100,8 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personal_info_skill")
                 skills_for_uttr.append("factoid_qa")
                 skills_for_uttr.append("dff_grounding_skill")
+                # we have only russian version of dff_generative_skill
+                skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("small_talk_skill")
 
@@ -142,6 +145,8 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("convert_reddit")
                 skills_for_uttr.append("comet_dialog_skill")
                 skills_for_uttr.append("dff_program_y_wide_skill")
+                # we have only russian version of dff_generative_skill
+                skills_for_uttr.append("dff_generative_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
