@@ -39,4 +39,4 @@ RUN python -c "from transformers import BartTokenizer; BartTokenizer.from_pretra
 
 COPY . /src
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=3

@@ -139,7 +139,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         ctx_texts = [c['text'] for c in full_ctx]
         logger.info(f"Contexts sent to StoryGPT service: {ctx_texts}")
         try:
-            resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=1.8)
+            resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
             raw_responses = resp.json()
         except Exception:
             return ''
@@ -184,7 +184,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info(f'Final noun: {final_noun}')
 
         try:
-            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=1.9)
+            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
             raw_responses = resp.json()
         except Exception:
             return ''
