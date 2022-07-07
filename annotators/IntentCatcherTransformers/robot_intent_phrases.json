@@ -1,0 +1,32 @@
+{
+    "intent_phrases": {
+        "what_are_you_talking_about": {
+            "phrases": [
+                "(alexa ){0,1}what are ((you)|(we)) ((talking about)|(discussing))",
+                "(alexa ){0,1}what ((you)|(we)) are (even ){0,1}((talking about)|(discussing))",
+                "(alexa ){0,1}what does it mean",
+                "(alexa ){0,1}pass that by me again",
+                "(alexa ){0,1}i ((don't)|(didn't)|(do not)|(did not)) get it",
+                "(alexa ){0,1}what it is about",
+                "(alexa ){0,1}what is it about",
+                "i lost common ground",
+                "(alexa ){0,1}what (even ){0,1}is that",
+                "(i ((did not get)|(don't understand)|(don't get)) ){0,1}what do you mean( alexa){0,1}",
+                "(sorry, ){0,1}i ((don't)|(do not)|(didn't)|(did not)) ((understand)|(get))( ((what you mean)|(what are you talking about)))( alexa){0,1}",
+                "((what you mean)|(what are you talking about))( alexa){0,1}",
+                "i don't know what you just said"
+            ],
+            "reg_phrases": [
+                "(alexa ){0,1}are we having a communication problem",
+                "(alexa ){0,1}i don't think you understand",
+                "what",
+                "I did not get what do you mean"
+            ],
+            "min_precision": 0.94,
+            "punctuation": [
+                ".",
+                "?"
+            ]
+        }
+}
+}
