@@ -11,6 +11,7 @@ def test_respond():
     contexts = [["hi", "hi. how are you?"], ["let's chat about movies", "cool. what movies do you like?"]]
     gold_result = [["I'm good, how are you?", 0.9], ["I like the new one.", 0.9]]
     result = requests.post(url, json={"utterances_histories": contexts}).json()
+    print(result)
     assert [
         len(sample[0]) > 0 and all([len(text) > 0 for text in sample[0]]) and all([conf > 0.0 for conf in sample[1]])
         for sample in result

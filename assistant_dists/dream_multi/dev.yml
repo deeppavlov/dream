@@ -52,7 +52,7 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
-  dialogpt:
+  dialogpt-multi:
     volumes:
       - "./services/dialogpt_multi:/src"
     ports:

@@ -7,6 +7,7 @@ import torch
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
+from itertools import cycle
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -19,7 +20,7 @@ logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 1
+MAX_HISTORY_DEPTH = 3
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -40,8 +41,9 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 def generate_response(context, model, tokenizer):
     encoded_context = []
-    for uttr in context[-MAX_HISTORY_DEPTH:]:
-        encoded_context += [tokenizer.encode(uttr + tokenizer.eos_token, return_tensors="pt")]
+    text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle('AB'), context[-MAX_HISTORY_DEPTH:] + [""]))))
+
+    encoded_context = [tokenizer.encode(text + tokenizer.eos_token, return_tensors="pt")]
     bot_input_ids = torch.cat(encoded_context, dim=-1)
 
     with torch.no_grad():
@@ -49,17 +51,17 @@ def generate_response(context, model, tokenizer):
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
             bot_input_ids,
-            min_length=100,
+            min_length=10,
             max_length=100,
             eos_token_id=5,
             pad_token=1,
             do_sample=True,
-            top_k=0,
-            top_p=0.9,
-            no_repeat_ngram_size=4)
+            top_k=25,
+            top_p=0.7,
+            no_repeat_ngram_size=3)
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
-    return tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1] :][0], skip_special_tokens=True)
+    return tokenizer.decode(chat_history_ids[0], skip_special_tokens=True)[:len(text)].lstrip()
 
 
 @app.route("/respond", methods=["POST"])

@@ -15,8 +15,8 @@ ENV N_HYPOTHESES_TO_GENERATE ${N_HYPOTHESES_TO_GENERATE}
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
-RUN python -c "from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
+RUN python -c "from transformers import GPT2Tokenizer; GPT2Tokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
+RUN python -c "from transformers import GPT2LMHeadModel; GPT2LMHeadModel.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
 COPY . /src
 
