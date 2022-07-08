@@ -12,6 +12,13 @@ RUN python -m pip install --upgrade --force pip
 
 RUN pip3 install deeppavlov==0.17.2
 
+RUN pip3 install torch==1.6.0 \
+					torchvision==0.7.0
+
+RUN pip3 install transformers \
+	sentencepiece 
+
+RUN pip3 install xeger 
 #### ADD USER WITH DEFAULT PW
 ARG USER=docker_current
 ARG UID=1000
