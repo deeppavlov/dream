@@ -6,7 +6,7 @@ import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, AutoConfig
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -16,16 +16,19 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+columns = ["Negative", "Neutral", "Positive"]
 
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    config = AutoConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModelForSequenceClassification.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model.save_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("dialogpt is set to run on cuda")
 
-    logger.info("dialogpt is ready")
+    logger.info("MultiSentimentClassification model is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -37,18 +40,14 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 def classify_sentences(sentences):
     try:
-        batch_tokens = []
-        for sent in sentences:
-            batch_tokens += [tokenizer.encode(sent, padding="max_length", max_length=64, return_tensors="pt")]
+        inputs = tokenizer(sentences, return_tensors="pt", truncation=True, padding=True)
+        outputs = model(**inputs)[0]
+        model_output = torch.nn.functional.softmax(outputs, dim=-1)
+        results = []
 
-        model_input = torch.cat(batch_tokens, dim=0)
-        model_input = model_input.cuda() if cuda else model_input
-        result = []
-        with torch.no_grad():
-            outputs = model(model_input)
-            probas = torch.nn.functional.softmax(outputs.logits, dim=-1)
-            for sent, prob_dist in zip(sentences, probas):
-                result += [{"toxic": float(prob_dist[1])}]
+        for i, cla in zip(sentences, model_output):
+            results += [{columns[id_column]: float(cla[id_column]) for id_column in range(len(columns))}]
+
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)

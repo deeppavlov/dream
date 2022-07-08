@@ -54,7 +54,7 @@ services:
       - 8074:8074
   dialogpt:
     volumes:
-      - "./services/dialogpt:/src"
+      - "./services/dialogpt_multi:/src"
     ports:
       - 8125:8125
 version: "3.7"

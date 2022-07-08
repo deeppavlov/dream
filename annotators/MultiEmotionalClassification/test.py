@@ -4,9 +4,10 @@ import requests
 def test_respond():
     url = "http://0.0.0.0:8126/respond"
 
-    sentences = ['Hola! Como estas?', 'örnek metin', 'Болван несчастный']
-    gold = [{'Negative': 0.0274, 'Neutral': 0.706, 'Positive': 0.2666}, {'Negative': 0.29077, 'Neutral': 0.33038, 'Positive': 0.37885},
-            {'Negative': 0.94606, 'Neutral': 0.03936, 'Positive': 0.01458}]
+    sentences = ['Sei una testa di cazzo!!', 'пример текста']
+    gold = [{'anger': 0.99177, 'fear': 0.00091, 'joy': 0.00504, 'sadness': 0.00229},
+            {'anger': 0.00115, 'fear': 0.99664, 'joy': 0.00081, 'sadness': 0.0014}]
+
     request_data = {"sentences": sentences}
     result = requests.post(url, json=request_data).json()
     assert [{i: round(j[i], 5) for i in j} for j in result] == gold, f"Got\n{result}"

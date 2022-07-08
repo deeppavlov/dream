@@ -4,7 +4,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  dialogpt:
+  dialogpt-multi:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
