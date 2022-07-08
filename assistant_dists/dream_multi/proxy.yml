@@ -71,7 +71,7 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8009
       - PORT=8009
 
-  dialogpt:
+  dialogpt-multi:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/

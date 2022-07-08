@@ -160,7 +160,7 @@ services:
         SERVICE_NAME: dialogpt-multi
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 5
-      context: ./services/dialogpt-multi/
+      context: ./services/dialogpt_multi/
     command: flask run -h 0.0.0.0 -p 8125
     environment:
       - CUDA_VISIBLE_DEVICES=0
