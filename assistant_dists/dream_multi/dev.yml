@@ -52,9 +52,24 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
-  dialogpt-multi:
+  mgpt:
     volumes:
-      - "./services/dialogpt_multi:/src"
+      - "./services/mgpt:/src"
     ports:
       - 8125:8125
+  multi-toxic-classification:
+    volumes:
+      - "./annotators/MultiToxicClassification:/src"
+    ports:
+      - 3613:3613
+  multi-emotional-classification:
+    volumes:
+      - "./annotators/MultiEmotionalClassification:/src"
+    ports:
+      - 3665:3665
+  multi-sentiment-classification:
+    volumes:
+      - "./annotators/MultiSentimentClassification:/src"
+    ports:
+      - 3668:3668
 version: "3.7"

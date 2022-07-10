@@ -4,11 +4,23 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  dialogpt-multi:
+  mgpt:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
   intent-catcher:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  multi-emotional-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  multi-toxic-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  multi-sentiment-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

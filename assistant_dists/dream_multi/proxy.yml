@@ -71,7 +71,16 @@ services:
       - PROXY_PASS=lnsigo.mipt.ru:8009
       - PORT=8009
 
-  dialogpt-multi:
+  mgpt:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=lnsigo.mipt.ru:8125
+      - PORT=8125
+
+  multiemotionalclassication:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/

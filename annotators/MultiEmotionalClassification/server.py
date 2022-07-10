@@ -24,8 +24,8 @@ columns = ["anger", "fear", "joy", "sadness"]
 
 
 try:
-    tokenizer = AutoTokenizer.from_pretrained("MilaNLProc/xlm-emo-t")
-    model = AutoModelForSequenceClassification.from_pretrained("MilaNLProc/xlm-emo-t")
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModelForSequenceClassification.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
 
     if torch.cuda.is_available():
         model.to("cuda")
@@ -45,11 +45,11 @@ def classify_sentences(sentences):
     try:
         inputs = tokenizer(sentences, return_tensors="pt", truncation=True, padding=True)
         outputs = model(**inputs)[0]
-        model_output = torch.nn.functional.softmax(outputs, dim=-1)
-        results = []
-
+        model_output = torch.nn.functional.softmax(outputs, dim=-1).detach().numpy()
+        result = []
+        logging.info(outputs)
         for i, cla in zip(sentences, model_output):
-            results += [{columns[id_column]: float(cla[id_column]) for id_column in range(len(columns))}]
+            result += [{columns[id_column]: float(cla[id_column]) for id_column in range(len(columns))}]
 
     except Exception as exc:
         logger.exception(exc)

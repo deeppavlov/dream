@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:8126/respond"
+    url = "http://0.0.0.0:3668/respond"
 
     sentences = ['Hola! Como estas?', 'örnek metin', 'Болван несчастный']
     gold = [{'Negative': 0.0274, 'Neutral': 0.706, 'Positive': 0.2666}, {'Negative': 0.29077, 'Neutral': 0.33038, 'Positive': 0.37885},

@@ -1,18 +1,18 @@
-FROM python:3.7.4
+FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 
- RUN mkdir /src
+WORKDIR /src
 
- COPY ./requirements.txt /src/requirements.txt
- RUN pip install -r /src/requirements.txt
+ARG PRETRAINED_MODEL_NAME_OR_PATH
+ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
+ARG SERVICE_PORT
+ENV SERVICE_PORT ${SERVICE_PORT}
 
- COPY . /src/
- WORKDIR /src
+COPY ./requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
 
- ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/reddit_embeddings.pickle
+#RUN python -c "import torch; torch.hub.load_state_dict_from_url('${PRETRAINED_MODEL_NAME_OR_PATH}')"
+#RUN python -c "from transformers import AutoModelForSequenceClassification; AutoModelForSequenceClassification.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
- RUN mkdir /data
- RUN curl -L $DATA_URL --output /data/reddit_embeddings.pickle
+COPY . /src
 
- ENV DATABASE_PATH /data/reddit_embeddings.pickle
-
- CMD gunicorn --workers=2 server:app
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
