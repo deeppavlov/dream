@@ -71,7 +71,7 @@ extensions = [
         "fairseq.libbleu",
         sources=[
             "fairseq/clib/libbleu/libbleu.cpp",
-            "fairseq/clib/libbleu/module.cpp",
+            "fairseq/clib/libbleu/modules.cpp",
         ],
         extra_compile_args=extra_compile_args,
     ),
@@ -218,10 +218,10 @@ def do_setup(package_data):
             'numpy; python_version>="3.7"',
             "regex",
             "sacrebleu>=1.4.12",
-            "torch",
+            # "torch",
             "tqdm",
             "bitarray",
-            "torchaudio>=0.8.0",
+            # "torchaudio>=0.8.0",
         ],
         dependency_links=dependency_links,
         packages=find_packages(
@@ -271,12 +271,11 @@ if __name__ == "__main__":
         # symlink examples into fairseq package so package_data accepts them
         fairseq_examples = os.path.join("fairseq", "examples")
         if "build_ext" not in sys.argv[1:] and not os.path.exists(fairseq_examples):
-            os.symlink(os.path.join("..", "examples"), fairseq_examples)
+            os.symlink(os.path.join("../ofa", "examples"), fairseq_examples)
 
         package_data = {
             "fairseq": (
-                get_files(fairseq_examples)
-                + get_files(os.path.join("fairseq", "config"))
+                get_files(fairseq_examples) + get_files(os.path.join("fairseq", "config"))
             )
         }
         do_setup(package_data)

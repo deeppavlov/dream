@@ -4,7 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 """
-A modified version of the legacy DistributedDataParallel module that uses c10d
+A modified version of the legacy DistributedDataParallel modules that uses c10d
 communication primitives. This version is simpler than the latest PyTorch
 version and is useful for debugging. Notably it does not overlap gradient
 communication with the backward pass, which makes it slower but more robust
@@ -24,21 +24,21 @@ from fairseq.distributed import utils
 
 
 class LegacyDistributedDataParallel(nn.Module):
-    """Implements distributed data parallelism at the module level.
+    """Implements distributed data parallelism at the modules level.
 
     A simplified version of :class:`torch.nn.parallel.DistributedDataParallel`.
     This version uses a c10d process group for communication and does not
     broadcast buffers.
 
     Args:
-        module (~torch.nn.Module): module to be parallelized
+        module (~torch.nn.Module): modules to be parallelized
         process_group: the c10d process group to be used for distributed data
             parallel all-reduction.
         buffer_size (int, optional): number of elements to buffer before
             performing all-reduce (default: 256M).
     """
 
-    def __init__(self, module, process_group, buffer_size=2**28):
+    def __init__(self, module, process_group, buffer_size=2 ** 28):
         super().__init__()
 
         self.module = module
@@ -137,7 +137,7 @@ class LegacyDistributedDataParallel(nn.Module):
                     if param.grad is None:
                         param.grad = torch.zeros_like(param)
 
-                    if hasattr(param, "expert"):
+                    if hasattr(param, 'expert'):
                         # Skip gradient sync for unshared parameters
                         continue
 

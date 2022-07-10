@@ -21,19 +21,18 @@ class DistributedTimeoutWrapper(nn.Module):
 
     Usage::
 
-        module = DistributedTimeoutWrapper(module, timeout=30)
-        x = module(input)
+        modules = DistributedTimeoutWrapper(modules, timeout=30)
+        x = modules(input)
         time.sleep(20)  # safe
-        x = module(input)
+        x = modules(input)
         time.sleep(45)  # job will be killed before this returns
 
     Args:
-        module (nn.Module): module to wrap
+        module (nn.Module): modules to wrap
         timeout (int): number of seconds before killing the process
             (set to a value <= 0 to disable the timeout)
         signal (Optional): signal to send once timeout is triggered
     """
-
     def __init__(self, module: nn.Module, timeout: int, signal=signal.SIGINT):
         super().__init__()
         self.module = module
@@ -57,7 +56,7 @@ class DistributedTimeoutWrapper(nn.Module):
         self.stop_timeout()
 
     def __getattr__(self, name):
-        """Forward missing attributes to wrapped module."""
+        """Forward missing attributes to wrapped modules."""
         try:
             return super().__getattr__(name)  # defer to nn.Module's logic
         except AttributeError:
@@ -87,11 +86,9 @@ class DistributedTimeoutWrapper(nn.Module):
             if self._terminated:
                 break
             elif not success:
-                logger.error(
-                    (
-                        "Killing job for not making progress in {} seconds. "
-                        "Set --heartbeat-timeout=-1 to disable this timeout."
-                    ).format(int(self.timeout))
-                )
+                logger.error((
+                    "Killing job for not making progress in {} seconds. "
+                    "Set --heartbeat-timeout=-1 to disable this timeout."
+                ).format(int(self.timeout)))
                 os.kill(parent_pid, self.signal)
                 return

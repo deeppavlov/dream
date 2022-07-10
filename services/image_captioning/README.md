@@ -4,7 +4,7 @@
 
 One picture is processed ~30 sec (on average).
 
-GPU RAM ~4Gb 
+GPU RAM ~5Gb 
 
 ## Running server
 

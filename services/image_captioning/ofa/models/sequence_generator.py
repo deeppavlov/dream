@@ -113,7 +113,7 @@ class SequenceGenerator(nn.Module):
             search.BeamSearch(tgt_dict) if search_strategy is None else search_strategy
         )
         # We only need to set src_lengths in LengthConstrainedBeamSearch.
-        # As a module attribute, setting it would break in multithread
+        # As a modules attribute, setting it would break in multithread
         # settings when the model is shared.
         self.should_set_src_lengths = (
             hasattr(self.search, "needs_src_lengths") and self.search.needs_src_lengths

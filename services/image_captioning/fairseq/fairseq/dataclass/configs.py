@@ -8,7 +8,6 @@ from dataclasses import _MISSING_TYPE, dataclass, field
 from typing import Any, List, Optional
 
 import torch
-from omegaconf import II, MISSING
 
 from fairseq.dataclass.constants import (
     DATASET_IMPL_CHOICES,
@@ -21,6 +20,8 @@ from fairseq.dataclass.constants import (
     PRINT_ALIGNMENT_CHOICES,
     ZERO_SHARDING_CHOICES,
 )
+
+from omegaconf import II, MISSING
 
 
 @dataclass
@@ -94,6 +95,7 @@ class FairseqDataclass:
             return config
 
 
+
 @dataclass
 class CommonConfig(FairseqDataclass):
     # This is the core dataclass including common parameters shared by all different jobs. Please append your params to other dataclasses if they were
@@ -113,17 +115,6 @@ class CommonConfig(FairseqDataclass):
     log_file: Optional[str] = field(
         default=None, metadata={"help": "log file to copy metrics to."}
     )
-    aim_repo: Optional[str] = field(
-        default=None,
-        metadata={"help": "path to Aim repository"},
-    )
-    aim_run_hash: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": "Aim run hash. If skipped, creates or continues run "
-            "based on save_dir"
-        },
-    )
     tensorboard_logdir: Optional[str] = field(
         default=None,
         metadata={
@@ -136,8 +127,7 @@ class CommonConfig(FairseqDataclass):
         metadata={"help": "Weights and Biases project name to use for logging"},
     )
     azureml_logging: Optional[bool] = field(
-        default=False,
-        metadata={"help": "Log scalars to AzureML context"},
+        default=False, metadata={"help": "Log scalars to AzureML context"},
     )
     seed: int = field(
         default=1, metadata={"help": "pseudo random number generator seed"}
@@ -162,7 +152,7 @@ class CommonConfig(FairseqDataclass):
         default=False, metadata={"help": "don't flatten FP16 grads tensor"}
     )
     fp16_init_scale: int = field(
-        default=2**7, metadata={"help": "default FP16 loss scale"}
+        default=2 ** 7, metadata={"help": "default FP16 loss scale"}
     )
     fp16_scale_window: Optional[int] = field(
         default=None,
@@ -179,13 +169,11 @@ class CommonConfig(FairseqDataclass):
         metadata={
             "help": "if set, the floating point conversion to fp16/bf16 runs on CPU. "
             "This reduces bus transfer time and GPU memory usage."
-        },
+        }
     )
     min_loss_scale: float = field(
         default=1e-4,
-        metadata={
-            "help": "minimum FP16/AMP loss scale, after which training is stopped"
-        },
+        metadata={"help": "minimum FP16/AMP loss scale, after which training is stopped"},
     )
     threshold_loss_scale: Optional[float] = field(
         default=None, metadata={"help": "threshold FP16 loss scale from below"}
@@ -193,12 +181,10 @@ class CommonConfig(FairseqDataclass):
     amp: bool = field(default=False, metadata={"help": "use automatic mixed precision"})
     amp_batch_retries: int = field(
         default=2,
-        metadata={
-            "help": "number of retries of same batch after reducing loss scale with AMP"
-        },
+        metadata={"help": "number of retries of same batch after reducing loss scale with AMP"},
     )
     amp_init_scale: int = field(
-        default=2**7, metadata={"help": "default AMP loss scale"}
+        default=2 ** 7, metadata={"help": "default AMP loss scale"}
     )
     amp_scale_window: Optional[int] = field(
         default=None,
@@ -207,7 +193,7 @@ class CommonConfig(FairseqDataclass):
     user_dir: Optional[str] = field(
         default=None,
         metadata={
-            "help": "path to a python module containing custom extensions (tasks and/or architectures)"
+            "help": "path to a python modules containing custom extensions (tasks and/or architectures)"
         },
     )
     empty_cache_freq: int = field(
@@ -237,7 +223,7 @@ class CommonConfig(FairseqDataclass):
         default=False,
         metadata={
             "help": "suppress crashes when training with the hydra_train entry point so that the "
-            "main method can return a value (useful for sweeps)"
+                    "main method can return a value (useful for sweeps)"
         },
     )
     use_plasma_view: bool = field(
@@ -352,14 +338,8 @@ class DistributedTrainingConfig(FairseqDataclass):
             "0.2 for 32 GPUs; 0.5 for 64 GPUs, 0.6 for > 64 GPUs"
         },
     )
-    slowmo_base_algorithm: str = field(
-        default="localsgd",
-        metadata={
-            "help": "Base algorithm. Either 'localsgd' or 'sgp'. Please refer "
-            "to the documentation of 'slowmo_base_algorithm' parameter in "
-            "https://fairscale.readthedocs.io/en/latest/api/experimental/nn/slowmo_ddp.html "
-            "for more details"
-        },
+    slowmo_algorithm: str = field(
+        default="LocalSGD", metadata={"help": "whether to use LocalSGD or SGP"}
     )
     localsgd_frequency: int = field(
         default=3, metadata={"help": "Local SGD allreduce frequency"}
@@ -439,23 +419,16 @@ class DistributedTrainingConfig(FairseqDataclass):
     tpu: bool = II("common.tpu")
     # configuration for --ddp-backend=fully_sharded
     no_reshard_after_forward: bool = field(
-        default=False,
-        metadata={"help": "don't reshard parameters after forward pass"},
+        default=False, metadata={"help": "don't reshard parameters after forward pass"},
     )
     fp32_reduce_scatter: bool = field(
-        default=False,
-        metadata={"help": "reduce-scatter grads in FP32"},
+        default=False, metadata={"help": "reduce-scatter grads in FP32"},
     )
     cpu_offload: bool = field(
         default=False, metadata={"help": "offload FP32 params to CPU"}
     )
     use_sharded_state: bool = field(
-        default=False,
-        metadata={"help": "use sharded checkpoint files"},
-    )
-    not_fsdp_flatten_parameters: bool = field(
-        default=False,
-        metadata={"help": "not flatten parameter param for fsdp"},
+        default=False, metadata={"help": "use sharded checkpoint files"},
     )
 
 
@@ -508,7 +481,7 @@ class DatasetConfig(FairseqDataclass):
         default=None,
         metadata={
             "help": "comma separated list of data subsets to use for validation"
-            " (e.g. train, valid, test)",
+                    " (e.g. train, valid, test)",
             "argparse_alias": "--combine-val",
         },
     )
@@ -546,10 +519,8 @@ class DatasetConfig(FairseqDataclass):
             "argparse_alias": "--max-sentences-valid",
         },
     )
-    max_valid_steps: Optional[int] = field(
-        default=None,
-        metadata={"help": "How many batches to evaluate", "argparse_alias": "--nval"},
-    )
+    max_valid_steps: Optional[int] = field(default=None, metadata={'help': 'How many batches to evaluate',
+                                                                   "argparse_alias": "--nval"})
     curriculum: int = field(
         default=0, metadata={"help": "don't shuffle batches for first N epochs"}
     )
@@ -562,24 +533,6 @@ class DatasetConfig(FairseqDataclass):
     )
     shard_id: int = field(
         default=0, metadata={"help": "id of the shard to generate (id < num_shards)"}
-    )
-    grouped_shuffling: bool = field(
-        default=False,
-        metadata={
-            "help": "shuffle batches in groups of num_shards to enable similar sequence lengths on each GPU worker when batches are sorted by length",
-        },
-    )
-    update_epoch_batch_itr: bool = field(
-        default=II("dataset.grouped_shuffling"),
-        metadata={
-            "help": "if true then prevents the reuse the epoch batch iterator by setting can_reuse_epoch_itr to false, defaults to --grouped-shuffling )",
-        },
-    )
-    update_ordered_indices_seed: bool = field(
-        default=False,
-        metadata={
-            "help": "if true then increment seed with epoch for getting batch iterators, defautls to False.",
-        },
     )
 
 
@@ -628,13 +581,6 @@ class OptimizationConfig(FairseqDataclass):
             "help": "specify global optimizer for syncing models on different GPUs/shards"
         },
     )
-    skip_remainder_batch: Optional[bool] = field(
-        default=False,
-        metadata={
-            "help": "if set, include the last (partial) batch of each epoch in training"
-            " (default is to skip it)."
-        },
-    )
 
 
 @dataclass
@@ -647,12 +593,6 @@ class CheckpointConfig(FairseqDataclass):
         metadata={
             "help": "filename from which to load checkpoint "
             "(default: <save-dir>/checkpoint_last.pt"
-        },
-    )
-    continue_once: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": "continues from this checkpoint, unless a checkpoint indicated in 'restore_file' option is present"
         },
     )
     finetune_from_model: Optional[str] = field(
@@ -703,8 +643,8 @@ class CheckpointConfig(FairseqDataclass):
         default=-1,
         metadata={
             "help": "when used with --keep-interval-updates, skips deleting "
-            "any checkpoints with update X where "
-            "X %% keep_interval_updates_pattern == 0"
+                    "any checkpoints with update X where "
+                    "X %% keep_interval_updates_pattern == 0"
         },
     )
     keep_last_epochs: int = field(
@@ -775,6 +715,20 @@ class CheckpointConfig(FairseqDataclass):
         },
     )
     model_parallel_size: int = II("common.model_parallel_size")
+    use_ema_weights_to_init_param: bool = field(
+        default=False,
+        metadata={
+            "help": "if the checkpoint has ema weights, then use it to init the model param"
+            "(default: false, use noema weights to init the model param)"
+        },
+    )
+    use_latest_weights_to_init_ema: bool = field(
+        default=False,
+        metadata={
+            "help": "if the model has ema params, then force to use the latest weights in the ckpt to init the ema param, even ema weights exist in the ckpt"
+            "(default: false, use ema weights (if exist) to init the ema param)"
+        },
+    )
 
 
 @dataclass
@@ -807,12 +761,10 @@ class FairseqBMUFConfig(FairseqDataclass):
 @dataclass
 class GenerationConfig(FairseqDataclass):
     beam: int = field(
-        default=5,
-        metadata={"help": "beam size"},
+        default=5, metadata={"help": "beam size"},
     )
     nbest: int = field(
-        default=1,
-        metadata={"help": "number of hypotheses to output"},
+        default=1, metadata={"help": "number of hypotheses to output"},
     )
     max_len_a: float = field(
         default=0,
@@ -827,24 +779,19 @@ class GenerationConfig(FairseqDataclass):
         },
     )
     min_len: int = field(
-        default=1,
-        metadata={"help": "minimum generation length"},
+        default=1, metadata={"help": "minimum generation length"},
     )
     match_source_len: bool = field(
-        default=False,
-        metadata={"help": "generations should match the source length"},
+        default=False, metadata={"help": "generations should match the source length"},
     )
     unnormalized: bool = field(
-        default=False,
-        metadata={"help": "compare unnormalized hypothesis scores"},
+        default=False, metadata={"help": "compare unnormalized hypothesis scores"},
     )
     no_early_stop: bool = field(
-        default=False,
-        metadata={"help": "deprecated"},
+        default=False, metadata={"help": "deprecated"},
     )
     no_beamable_mm: bool = field(
-        default=False,
-        metadata={"help": "don't use BeamableMM in attention layers"},
+        default=False, metadata={"help": "don't use BeamableMM in attention layers"},
     )
     lenpen: float = field(
         default=1,
@@ -866,12 +813,10 @@ class GenerationConfig(FairseqDataclass):
         },
     )
     sacrebleu: bool = field(
-        default=False,
-        metadata={"help": "score with sacrebleu"},
+        default=False, metadata={"help": "score with sacrebleu"},
     )
     score_reference: bool = field(
-        default=False,
-        metadata={"help": "just score the reference translation"},
+        default=False, metadata={"help": "just score the reference translation"},
     )
     prefix_size: int = field(
         default=0,
@@ -905,12 +850,10 @@ class GenerationConfig(FairseqDataclass):
         },
     )
     temperature: float = field(
-        default=1.0,
-        metadata={"help": "temperature for generation"},
+        default=1.0, metadata={"help": "temperature for generation"},
     )
     diverse_beam_groups: int = field(
-        default=-1,
-        metadata={"help": "number of groups for Diverse Beam Search"},
+        default=-1, metadata={"help": "number of groups for Diverse Beam Search"},
     )
     diverse_beam_strength: float = field(
         default=0.5,
@@ -929,16 +872,13 @@ class GenerationConfig(FairseqDataclass):
         },
     )
     print_step: bool = field(
-        default=False,
-        metadata={"help": "print steps"},
+        default=False, metadata={"help": "print steps"},
     )
     lm_path: Optional[str] = field(
-        default=None,
-        metadata={"help": "path to lm checkpoint for lm fusion"},
+        default=None, metadata={"help": "path to lm checkpoint for lm fusion"},
     )
     lm_weight: float = field(
-        default=0.0,
-        metadata={"help": "weight for lm probs for lm fusion"},
+        default=0.0, metadata={"help": "weight for lm probs for lm fusion"},
     )
 
     # arguments for iterative refinement generator
@@ -947,8 +887,7 @@ class GenerationConfig(FairseqDataclass):
         metadata={"help": "if > 0.0, it penalized early-stopping in decoding."},
     )
     iter_decode_max_iter: int = field(
-        default=10,
-        metadata={"help": "maximum iterations for iterative refinement."},
+        default=10, metadata={"help": "maximum iterations for iterative refinement."},
     )
     iter_decode_force_max_iter: bool = field(
         default=False,
@@ -975,8 +914,7 @@ class GenerationConfig(FairseqDataclass):
         },
     )
     retain_dropout: bool = field(
-        default=False,
-        metadata={"help": "Use dropout at inference time"},
+        default=False, metadata={"help": "Use dropout at inference time"},
     )
     # temporarily set to Any until https://github.com/facebookresearch/hydra/issues/1117 is fixed
     # retain_dropout_modules: Optional[List[str]] = field(
@@ -1001,8 +939,7 @@ class GenerationConfig(FairseqDataclass):
 @dataclass
 class CommonEvalConfig(FairseqDataclass):
     path: Optional[str] = field(
-        default=None,
-        metadata={"help": "path(s) to model file(s), colon separated"},
+        default=None, metadata={"help": "path(s) to model file(s), colon separated"},
     )
     post_process: Optional[str] = field(
         default=None,
@@ -1064,30 +1001,32 @@ class InteractiveConfig(FairseqDataclass):
         },
     )
     input: str = field(
-        default="-",
-        metadata={"help": "file to read from; use - for stdin"},
+        default="-", metadata={"help": "file to read from; use - for stdin"},
     )
 
 
 @dataclass
 class EMAConfig(FairseqDataclass):
     store_ema: bool = field(
-        default=False, metadata={help: "store exponential moving average shadow model"}
+        default=False, metadata={
+            help: "store exponential moving average shadow model"
+        }
     )
     ema_decay: float = field(
-        default=0.9999, metadata={"help": "decay for exponential moving average model"}
+        default=0.9999, metadata={
+            "help": 'decay for exponential moving average model'
+        }
     )
-    ema_start_update: int = field(
+    ema_start_update : int = field(
         default=0, metadata={"help": "start EMA update after this many model updates"}
     )
-    ema_seed_model: Optional[str] = field(
-        default=None,
-        metadata={
+    ema_seed_model : Optional[str] = field(
+        default=None, metadata={
             "help": "Seed to load EMA model from. "
             "Used to load EMA model separately from the actual model."
-        },
+        }
     )
-    ema_update_freq: int = field(
+    ema_update_freq : int = field(
         default=1, metadata={"help": "Do EMA update every this many model updates"}
     )
     ema_fp32: bool = field(

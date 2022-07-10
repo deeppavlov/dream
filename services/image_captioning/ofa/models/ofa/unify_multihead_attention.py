@@ -168,7 +168,7 @@ class MultiheadAttention(nn.Module):
             and incremental_state is None
             and not static_kv
             # A workaround for quantization to work. Otherwise JIT compilation
-            # treats bias in linear module as method.
+            # treats bias in linear modules as method.
             and not torch.jit.is_scripting()
             and self_attn_mask is None
             and attn_bias is None

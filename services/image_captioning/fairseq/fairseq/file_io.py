@@ -26,7 +26,7 @@ try:
         logging.warning("S3PathHandler already registered.")
     except ImportError:
         logging.debug(
-            "S3PathHandler couldn't be imported. Either missing fb-only files, or boto3 module."
+            "S3PathHandler couldn't be imported. Either missing fb-only files, or boto3 modules."
         )
 
 except ImportError:
@@ -152,7 +152,6 @@ class PathManager:
     """
     ioPath async PathManager methods:
     """
-
     @staticmethod
     def opena(
         path: str,
@@ -170,7 +169,6 @@ class PathManager:
             logging.info("ioPath is initializing PathManager.")
             try:
                 from iopath.common.file_io import PathManager
-
                 IOPathManager = PathManager()
             except Exception:
                 logging.exception("Failed to initialize ioPath PathManager object.")

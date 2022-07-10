@@ -16,6 +16,8 @@ from argparse import Namespace
 from collections import OrderedDict
 from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional
+import sys
+import time
 
 import torch
 import torch.distributed as dist
@@ -201,7 +203,9 @@ def _pipeline_parallel_post_init(
         # distributed_world_size to be based on the total number of GPUs, so
         # we need to correct them to be based on the number of pipelines.
         assert cfg.distributed_world_size % num_pipeline_devices == 0
-        cfg.distributed_world_size = cfg.distributed_world_size // num_pipeline_devices
+        cfg.distributed_world_size = (
+            cfg.distributed_world_size // num_pipeline_devices
+        )
         # In the case of 4-way MP on nodes with 8 GPUs, we want
         # distributed_rank to be the starting GPU index for each pipeline
         # i.e., 0, 2, ...
@@ -254,19 +258,37 @@ def distributed_init(cfg: FairseqConfig):
                     cfg.distributed_training.distributed_init_method,
                 )
             )
-            dist.init_process_group(
-                backend=cfg.distributed_training.distributed_backend,
-                init_method=cfg.distributed_training.distributed_init_method,
-                world_size=cfg.distributed_training.distributed_world_size,
-                rank=cfg.distributed_training.distributed_rank,
-            )
-            logger.info(
-                "initialized host {} as rank {}".format(
-                    socket.gethostname(),
-                    cfg.distributed_training.distributed_rank,
-                )
-            )
-
+            logger.info('Start init')
+            max_time_wait = 600
+            for i in range(max_time_wait):
+                try:
+                    dist.init_process_group(
+                        backend=cfg.distributed_training.distributed_backend,
+                        init_method=cfg.distributed_training.distributed_init_method,
+                        world_size=cfg.distributed_training.distributed_world_size,
+                        rank=cfg.distributed_training.distributed_rank,
+                    )
+                    logger.info(
+                        "initialized host {} as rank {}".format(
+                            socket.gethostname(),
+                            cfg.distributed_training.distributed_rank,
+                        )
+                    )
+                    if torch.distributed.is_initialized():
+                        print("single-machine distributed training is initialized.")
+                        break
+                except ValueError:
+                    # This is caused by TCPStore failure.
+                    print('Retry: {}, with value error {}'.format(
+                        i + 1, sys.exc_info()[0]))
+                    time.sleep(5)
+                    if i == max_time_wait - 1:
+                        print('k8s resource wait too long time')
+                        exit(-1)
+                except Exception:
+                    print('Retry: {}, with value error {}'.format(
+                        i + 1, sys.exc_info()[0]))
+                    exit(-1)
             # perform a dummy all-reduce to initialize the NCCL communicator
             if torch.cuda.is_available():
                 dist.all_reduce(torch.zeros(1).cuda())
@@ -304,10 +326,8 @@ def distributed_init(cfg: FairseqConfig):
         model_part_number = get_model_parallel_rank()
         cfg.checkpoint.checkpoint_suffix += "-model_part-{0}".format(model_part_number)
 
-    if hasattr(cfg, "model") and getattr(cfg.model, "base_layers", 0) > 0:
-        cfg.checkpoint.checkpoint_suffix = (
-            f"-rank-{cfg.distributed_training.distributed_rank}"
-        )
+    if hasattr(cfg,  "model") and getattr(cfg.model, "base_layers", 0) > 0:
+        cfg.checkpoint.checkpoint_suffix = f"-rank-{cfg.distributed_training.distributed_rank}"
 
     return cfg.distributed_training.distributed_rank
 
@@ -574,6 +594,7 @@ def all_gather_list(data, group=None, max_size=16384):
 
     if group is None:
         group = get_global_group()
+    torch.distributed.barrier(group=group)
     rank = get_rank(group=group)
     world_size = get_world_size(group=group)
 
@@ -662,7 +683,7 @@ def all_reduce_dict(data: Mapping[str, Any], device, group) -> Dict[str, Any]:
             return data
         buf = torch.cat([t.view(-1) for t in data.values()]).to(device=device)
         all_reduce(buf, group=group)
-        split_buf = torch.split(buf.clone(), [t.numel() for t in data.values()])
+        split_buf = torch.split(buf, [t.numel() for t in data.values()])
         reduced_data = [t.view_as(orig) for t, orig in zip(split_buf, data.values())]
         return OrderedDict(zip(data.keys(), reduced_data))
 
@@ -696,7 +717,7 @@ def broadcast_tensors(
             dist_device = torch.device("cpu")
 
     # share metadata first to simplify transfer
-    is_src_rank = get_rank(group) == src_rank
+    is_src_rank = (get_rank(group) == src_rank)
     if is_src_rank:
         metadata = [
             {"size": t.size(), "dtype": t.dtype, "device": t.device} for t in tensors
@@ -747,10 +768,7 @@ def broadcast_object(
 
 
 def _broadcast_object_slow(
-    obj: Any,
-    src_rank: int,
-    group: object,
-    dist_device: torch.device,
+    obj: Any, src_rank: int, group: object, dist_device: torch.device,
 ) -> Any:
     if get_rank(group) == src_rank:
         # Emit data
