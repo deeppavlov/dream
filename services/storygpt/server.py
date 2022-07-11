@@ -24,10 +24,10 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("storygpt is set to run on cuda")
-    tokenizer.add_tokens(['<EOT>', '<EOL>'], special_tokens=True)
-    tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    tokenizer.add_tokens(["<EOT>", "<EOL>"], special_tokens=True)
+    tokenizer.add_special_tokens({"pad_token": "[PAD]"})
     model.resize_token_embeddings(len(tokenizer))
-    model.load_state_dict(torch.load('/data/filtered_ROCStories_gpt_medium.pt', map_location=torch.device('cpu')))
+    model.load_state_dict(torch.load("/data/filtered_ROCStories_gpt_medium.pt", map_location=torch.device("cpu")))
     # model.load_state_dict(torch.load('filtered_ROCStories_gpt_medium.pt', map_location=torch.device('cpu')))
 
     logger.info("storygpt is ready")
@@ -53,9 +53,9 @@ def glue_keywords(keywords):
             tmp = []
             c = 0
     batches.append(tmp)
-    leftovers = [[k] for k in keywords[dif + 1:]]
+    leftovers = [[k] for k in keywords[dif + 1 :]]
     batches.extend(leftovers)
-    return [' '.join(keys) for keys in batches]
+    return [" ".join(keys) for keys in batches]
 
 
 def generate_response(context, model, tokenizer):
@@ -65,8 +65,8 @@ def generate_response(context, model, tokenizer):
         keywords = glue_keywords(keywords)
     logger.info(f"Keywords: {keywords}")
 
-    format_line = '{} <EOT> i {} <EOL>'
-    input_line = format_line.format(keywords[0], ' # '.join(keywords))
+    format_line = "{} <EOT> i {} <EOL>"
+    input_line = format_line.format(keywords[0], " # ".join(keywords))
     logger.info(f"Formatted storyline: {input_line}")
 
     tmp_prompt = input_line
@@ -76,14 +76,20 @@ def generate_response(context, model, tokenizer):
         if torch.cuda.is_available():
             input_ids = input_ids.to("cuda")
         chat_history_ids = model.generate(
-            input_ids, do_sample=True, max_length=150, temperature=0.8, top_k=20, top_p=0.9,
-            pad_token_id=tokenizer.eos_token_id, no_repeat_ngram_size=3
+            input_ids,
+            do_sample=True,
+            max_length=150,
+            temperature=0.8,
+            top_k=20,
+            top_p=0.9,
+            pad_token_id=tokenizer.eos_token_id,
+            no_repeat_ngram_size=3,
         )
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
-    result = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0])
+    result = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1] :][0])
     logger.info(f"Generated from storyline: {result}")
-    reply = result.split('<EOL>')[-1].replace('<|endoftext|>', '')
+    reply = result.split("<EOL>")[-1].replace("<|endoftext|>", "")
     return reply
 
 

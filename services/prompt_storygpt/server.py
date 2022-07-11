@@ -14,9 +14,9 @@ from nltk.corpus import stopwords
 import re
 from nltk.tokenize import sent_tokenize
 
-nltk.download('stopwords')
-nltk.download('punkt')
-stop_words = stopwords.words('english')
+nltk.download("stopwords")
+nltk.download("punkt")
+stop_words = stopwords.words("english")
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -25,13 +25,13 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-pattern = re.compile(r'\(.*?\)')
+pattern = re.compile(r"\(.*?\)")
 
 try:
-    tokenizer = GPT2Tokenizer.from_pretrained('/data/finetuned2')
+    tokenizer = GPT2Tokenizer.from_pretrained("/data/finetuned2")
     tokenizer.padding_side = "left"
     tokenizer.pad_token = tokenizer.eos_token
-    model = GPT2LMHeadModel.from_pretrained('/data/finetuned2')
+    model = GPT2LMHeadModel.from_pretrained("/data/finetuned2")
     bart_model = BartForConditionalGeneration.from_pretrained("facebook/bart-large", forced_bos_token_id=0)
     bart_tok = BartTokenizer.from_pretrained("facebook/bart-large")
     if torch.cuda.is_available():
@@ -49,21 +49,21 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 def generate_part(texts, max_len, temp, num_sents, first):
-    encoding = tokenizer(texts, padding=True, return_tensors='pt').to(device)
+    encoding = tokenizer(texts, padding=True, return_tensors="pt").to(device)
     with torch.no_grad():
-        generated_ids = model.generate(**encoding, max_length=max_len, length_penalty=-100.0,
-                                       temperature=temp, do_sample=True)
-    generated_texts = tokenizer.batch_decode(
-        generated_ids, skip_special_tokens=True)
+        generated_ids = model.generate(
+            **encoding, max_length=max_len, length_penalty=-100.0, temperature=temp, do_sample=True
+        )
+    generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
     texts = []
     for text in generated_texts:
         text = pattern.sub("", text)  # delete everything in ()
-        text = text.replace(' .', '.').replace('..', '.').replace('..', '.')
+        text = text.replace(" .", ".").replace("..", ".").replace("..", ".")
         sents = sent_tokenize(text)
-        text = text[:len(' '.join(sents[:num_sents]))]
-        if text[-1] not in ',.!?;':
-            text += '.'
+        text = text[: len(" ".join(sents[:num_sents]))]
+        if text[-1] not in ",.!?;":
+            text += "."
         if first:
             text += " At the end,"
         texts.append(text)
@@ -71,10 +71,10 @@ def generate_part(texts, max_len, temp, num_sents, first):
 
 
 def fill_mask(masked_phrase):
-    batch = bart_tok(masked_phrase, return_tensors='pt')
-    generated_ids = bart_model.generate(batch['input_ids'])
+    batch = bart_tok(masked_phrase, return_tensors="pt")
+    generated_ids = bart_model.generate(batch["input_ids"])
     filled = bart_tok.batch_decode(generated_ids, skip_special_tokens=True)
-    logger.info(f'Filled mask: {filled}')
+    logger.info(f"Filled mask: {filled}")
     return filled[0]
 
 

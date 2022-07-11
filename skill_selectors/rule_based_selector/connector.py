@@ -235,9 +235,9 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_short_story_skill")
 
             if len(dialog["human_utterances"]) > 1:
-                nouns = dialog["human_utterances"][-1]["annotations"].get('rake_keywords', [])
-                nouns.extend(dialog["human_utterances"][-2]["annotations"].get('rake_keywords', []))
-                if prev_active_skill != 'dff_short_story_skill':
+                nouns = dialog["human_utterances"][-1]["annotations"].get("rake_keywords", [])
+                nouns.extend(dialog["human_utterances"][-2]["annotations"].get("rake_keywords", []))
+                if prev_active_skill != "dff_short_story_skill":
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 

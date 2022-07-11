@@ -125,26 +125,26 @@ def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_confidence(ctx, actor, 0.9)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-    reply = ''
+    reply = ""
     utt = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     if utt:
         full_ctx = int_ctx.get_human_utterances(ctx, actor)
-        nouns = full_ctx[-1]['annotations']['rake_keywords']
+        nouns = full_ctx[-1]["annotations"]["rake_keywords"]
         logger.info(f"Nouns: {full_ctx[-1]['annotations']['spacy_nounphrases']}")
         if len(full_ctx) > 1:
-            nouns_tmp = full_ctx[-2]['annotations']['rake_keywords']
+            nouns_tmp = full_ctx[-2]["annotations"]["rake_keywords"]
             nouns_tmp.extend(nouns)
             nouns = nouns_tmp
         logger.info(f"Keywords from annotator: {nouns}")
-        ctx_texts = [c['text'] for c in full_ctx]
+        ctx_texts = [c["text"] for c in full_ctx]
         logger.info(f"Contexts sent to StoryGPT service: {ctx_texts}")
         try:
             resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
             raw_responses = resp.json()
         except Exception:
-            return ''
+            return ""
         reply = raw_responses[0][0]
-        reply = 'Oh, that reminded me of a story! ' + reply
+        reply = "Oh, that reminded me of a story! " + reply
     else:
         logger.info("No context")
     return reply
@@ -152,9 +152,9 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def choose_noun(nouns):
     for noun in nouns:
-        if 'story' not in noun:
+        if "story" not in noun:
             return noun
-    return ''
+    return ""
 
 
 def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -167,30 +167,29 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_confidence(ctx, actor, 1.0)
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     utt = int_ctx.get_last_human_utterance(ctx, actor)["text"]
-    logger.info(f'Utterance: {utt}')
+    logger.info(f"Utterance: {utt}")
     if utt:
         full_ctx = int_ctx.get_human_utterances(ctx, actor)
-        last_utt = full_ctx[-1]['text']
-        nouns = full_ctx[-1].get('annotations', {}).get('spacy_nounphrases', [])
-        logger.info(f'Nouns: {nouns}')
+        last_utt = full_ctx[-1]["text"]
+        nouns = full_ctx[-1].get("annotations", {}).get("spacy_nounphrases", [])
+        logger.info(f"Nouns: {nouns}")
 
         final_noun = choose_noun(nouns)
-        if "don't know" in last_utt or "not know" in last_utt \
-                or "don't care" in last_utt or "not care" in last_utt:
-            final_noun = 'cat'
+        if "don't know" in last_utt or "not know" in last_utt or "don't care" in last_utt or "not care" in last_utt:
+            final_noun = "cat"
         if not final_noun:
-            final_noun = 'cat'
-        final_noun = final_noun.split(' ')[-1].lower()
-        logger.info(f'Final noun: {final_noun}')
+            final_noun = "cat"
+        final_noun = final_noun.split(" ")[-1].lower()
+        logger.info(f"Final noun: {final_noun}")
 
         try:
             resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
             raw_responses = resp.json()
         except Exception:
-            return ''
+            return ""
         logger.info(f"Skill receives from service: {raw_responses}")
         reply = raw_responses[0][0]
-        reply = 'Ok,  ' + reply
+        reply = "Ok,  " + reply
     else:
-        reply = ''
+        reply = ""
     return reply
