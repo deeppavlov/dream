@@ -18,7 +18,7 @@ desktop_start() {
         --privileged \
         --name deeppavlov \
         -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-        -v $workspace_dir/../:/home/docker_current/dream:rw \
+        -v $workspace_dir/../../:/home/docker_current:rw \
         ${ARCH}/deeppavlov:latest
     xhost -
 }

@@ -57,4 +57,10 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
+  entity-detection:
+    volumes:
+      - "./annotators/entity_detection:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8103:8103
 version: "3.7"
