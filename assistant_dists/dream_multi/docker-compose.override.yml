@@ -7,15 +7,15 @@ services:
           spelling-preprocessing:8074, dialogpt-multi:8125, multi-emotional-classification 3665:3665,
           multi-toxic-classification 3613:3613, multi-sentimemt-classification 3668:3668"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-  convers-evaluator-annotator:
+  multilingual-convers-evaluator-annotator:
     env_file: [.env]
     build:
       args:
         CONFIG: conveval.json
-        PORT: 8004
+        PORT: 8003
         DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
       context: .
-      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
+      dockerfile: ./annotators/MultilingualConversationEvaluator/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
