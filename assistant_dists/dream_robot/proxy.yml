@@ -80,4 +80,13 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8125
       - PORT=8125
 
+  entity-detection:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8103
+      - PORT=8103
+
 version: '3.7'
