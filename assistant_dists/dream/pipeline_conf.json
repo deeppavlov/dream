@@ -964,11 +964,11 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "image_captioning": {
+            "image_captioning_large": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://image_captioning:8123/respond"
+                    "url": "http://image_captioning_large:8123/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cobot_classifiers_formatter_service",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

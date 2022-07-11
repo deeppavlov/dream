@@ -18,7 +18,7 @@ def test_simple():
 def test_quality():
     url = "http://0.0.0.0:8123/respond"
 
-    annFile = 'services/image_captioning/annotations/captions_val2017.json'
+    annFile = 'services/image_captioning_large/annotations/captions_val2017.json'
     coco_caps=COCO(annFile)
     imgIds = random.choices(coco_caps.getImgIds(), k=10)
     imgIdsStr = [str(imgId) for imgId in imgIds]
@@ -40,4 +40,4 @@ def test_quality():
 
 if __name__ == "__main__":
     test_simple()
-    #test_quality()
+    test_quality()

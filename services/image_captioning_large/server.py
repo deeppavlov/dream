@@ -71,9 +71,12 @@ def respond():
    image_paths = request.json.get("text", [])
    try:
         images = None
+        generated_text_prefixes = ''
         for image_path in image_paths:
             image = io.imread(image_path)
             pil_image = PIL.Image.fromarray(image)
+            max_size = (256, 256)
+            pil_image.thumbnail(max_size)
             image = preprocess(pil_image).unsqueeze(0).to(device)
             if images is None:
                 images = image
@@ -93,5 +96,5 @@ def respond():
         generated_text_prefix = ""
  
    total_time = time.time() - st_time
-   logger.info(f"image_captioning exec time: {total_time:.3f}s")
+   logger.info(f"image_captioning_large exec time: {total_time:.3f}s")
    return jsonify({"captions": generated_text_prefixes})

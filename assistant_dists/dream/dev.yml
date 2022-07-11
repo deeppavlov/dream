@@ -399,9 +399,9 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
-  image-captioning:
+  image-captioning-large:
     volumes:
-      - "./services/image_captioning:/src"
+      - "./services/image_captioning_large:/src"
     ports:
       - 8123:8123
   dff-template-skill:

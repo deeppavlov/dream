@@ -15,6 +15,9 @@ RUN  ["sh", "/src/setup.sh"]
 
 
 COPY ./requirements.txt /src/requirements.txt
+RUN apt-get update && apt-get install -y gcc
+RUN pip install --upgrade pip
+RUN pip install pycocotools
 RUN pip install -r /src/requirements.txt
  
 RUN python -c 'from transformers import GPT2Tokenizer; GPT2Tokenizer.from_pretrained("gpt2");'

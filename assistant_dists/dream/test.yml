@@ -126,7 +126,7 @@ services:
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  image-captioning:
+  image-captioning-large:
     environment:
       - CUDA_VISIBLE_DEVICES=0
   dff-template-skill:
