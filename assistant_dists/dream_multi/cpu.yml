@@ -12,15 +12,15 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  multi-emotional-classification:
+  multilingual-emotional-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  multi-toxic-classification:
+  multilingual-toxic-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  multi-sentiment-classification:
+  multilingual-sentiment-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

@@ -29,9 +29,9 @@ try:
 
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("MultiEmotionalClassification is set to run on cuda")
+        logger.info("MultilingualEmotionalClassification is set to run on cuda")
 
-    logger.info("MultiEmotionalClassification is ready")
+    logger.info("MultilingualEmotionalClassification is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -64,7 +64,7 @@ def respond():
     sentences = request.json.get("sentences", [])
     result = classify_sentences(sentences)
     total_time = time.time() - st_time
-    logger.info(f"MultiToxicClassification exec time: {total_time:.3f}s")
+    logger.info(f"MultilingualEmotionalClassification exec time: {total_time:.3f}s")
 
     return jsonify(result)
 
@@ -75,6 +75,6 @@ def respond_batch():
     sentences = request.json.get("sentences", [])
     result = classify_sentences(sentences)
     total_time = time.time() - st_time
-    logger.info(f"MultiToxicClassification exec time: {total_time:.3f}s")
+    logger.info(f"MultilingualEmotionalClassification exec time: {total_time:.3f}s")
 
     return jsonify([{"batch": result}])

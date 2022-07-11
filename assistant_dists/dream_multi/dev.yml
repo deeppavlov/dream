@@ -57,19 +57,19 @@ services:
       - "./services/mgpt:/src"
     ports:
       - 8125:8125
-  multi-toxic-classification:
+  multilingual-toxic-classification:
     volumes:
-      - "./annotators/MultiToxicClassification:/src"
+      - "./annotators/MultilingualToxicClassification:/src"
     ports:
       - 3613:3613
-  multi-emotional-classification:
+  multilingual-emotional-classification:
     volumes:
-      - "./annotators/MultiEmotionalClassification:/src"
+      - "./annotators/MultilingualEmotionalClassification:/src"
     ports:
       - 3665:3665
-  multi-sentiment-classification:
+  multilingual-sentiment-classification:
     volumes:
-      - "./annotators/MultiSentimentClassification:/src"
+      - "./annotators/MultilingualSentimentClassification:/src"
     ports:
       - 3668:3668
 version: "3.7"

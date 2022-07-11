@@ -47,9 +47,9 @@ try:
 
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("MultiToxicClassification is set to run on cuda")
+        logger.info("MultilingualToxicClassification is set to run on cuda")
 
-    logger.info("MultiToxicClassification is ready")
+    logger.info("MultilingualToxicClassification is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -83,7 +83,7 @@ def respond():
     sentences = request.json.get("sentences", [])
     result = classify_sentences(sentences)
     total_time = time.time() - st_time
-    logger.info(f"MultiToxicClassification exec time: {total_time:.3f}s")
+    logger.info(f"MultilingualToxicClassification exec time: {total_time:.3f}s")
 
     return jsonify(result)
 
@@ -94,6 +94,6 @@ def respond_batch():
     sentences = request.json.get("sentences", [])
     result = classify_sentences(sentences)
     total_time = time.time() - st_time
-    logger.info(f"MultiToxicClassification exec time: {total_time:.3f}s")
+    logger.info(f"MultilingualToxicClassification exec time: {total_time:.3f}s")
 
     return jsonify([{"batch": result}])
