@@ -64,15 +64,16 @@ def classify_sentences(sentences):
         inputs = tokenizer(sentences, return_tensors="pt", truncation=True, padding=True)
         outputs = model(**inputs)[0]
         model_output = torch.sigmoid(outputs).cpu().detach().numpy()
-        results = []
+        result = []
 
         for i, cla in zip(sentences, model_output):
-            results += [{class_names[id_column]: float(cla[id_column]) for id_column in range(len(class_names))}]
+            result += [{class_names[id_column]: float(cla[id_column]) for id_column in range(len(class_names))}]
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         result = [{column: 0.0 for column in class_names}] * len(sentences)
+    logger.info(result)
     return result
 
 
