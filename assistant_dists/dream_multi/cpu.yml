@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  multilingual-convers-evaluator-annotator:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  mgpt:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  multilingual-emotional-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  multilingual-toxic-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  multilingual-sentiment-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
