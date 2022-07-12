@@ -47,7 +47,7 @@ def classify_sentences(sentences):
         outputs = model(**inputs)[0]
         model_output = torch.nn.functional.softmax(outputs, dim=-1).detach().numpy()
         result = []
-        logging.info(outputs)
+
         for i, cla in zip(sentences, model_output):
             result += [{columns[id_column]: float(cla[id_column]) for id_column in range(len(columns))}]
 

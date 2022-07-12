@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  convers-evaluator-annotator:
+  multilingual-convers-evaluator-annotator:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

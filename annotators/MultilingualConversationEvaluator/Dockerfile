@@ -1,23 +1,19 @@
-FROM deeppavlov/base-gpu:0.12.0
+FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 
-ARG CONFIG
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
-ARG PORT
-ENV CONFIG=$CONFIG
-ENV PORT=$PORT
-
-ADD $DATA_URL /tmp
-
-RUN tar -xvzf /tmp/*.tar.gz -C /tmp/
+ARG SERVICE_PORT
+ENV SERVICE_PORT=$SERVICE_PORT
+ARG PRETRAINED_MODEL_NAME_OR_PATH
+ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 
 WORKDIR /src
 RUN mkdir common
 
-COPY annotators/ConversationEvaluator/requirements.txt .
+COPY annotators/MultilingualConversationEvaluator/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY annotators/ConversationEvaluator/ ./
-COPY common/ common/
+RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
+RUN python -c "from transformers import AutoModel; AutoModel.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
-RUN python -m deeppavlov install $CONFIG
-CMD gunicorn --workers=1 --bind 0.0.0.0:8004 --timeout=300 server:app
+COPY . /src
+
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300

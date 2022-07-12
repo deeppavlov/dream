@@ -5,10 +5,9 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  convers-evaluator-annotator:
+  multilingual-convers-evaluator-annotator:
     volumes:
-      - "./annotators/ConversationEvaluator:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/MultilingualConversationEvaluator:/src"
     ports:
       - 8004:8004
   dff-program-y-skill:

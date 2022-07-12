@@ -1,7 +1,7 @@
 import logging
 import time
 import os
-
+import json
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
@@ -41,25 +41,24 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 def generate_response(context, model, tokenizer):
     encoded_context = []
-    text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle('AB'), context[-MAX_HISTORY_DEPTH:] + [""]))))
-    logger.info(text)
+    text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle(['Alex', 'Bob']), context[-MAX_HISTORY_DEPTH:] + [""]))))
     bot_input_ids = tokenizer.encode(text, return_tensors="pt")
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
+
+        CONFIG = os.environ.get("CONFIG")
+        conf = json.load(open(f"{CONFIG}", 'r'))
+
         chat_history_ids = model.generate(
             bot_input_ids,
-            min_length=100,
-            max_length=100,
-            eos_token_id=5,
-            pad_token=1,
-            top_k=10,
-            top_p=0.0,
-            no_repeat_ngram_size=5,
-            pad_token_id=tokenizer.eos_token_id)
+            pad_token_id=tokenizer.eos_token_id,
+            **conf
+        )
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
-    return tokenizer.decode(chat_history_ids[0], skip_special_tokens=True)[len(text):].lstrip()
+
+    return tokenizer.decode(chat_history_ids[0], skip_special_tokens=True)[len(text):].lstrip().split('\n')[0]
 
 
 @app.route("/respond", methods=["POST"])
@@ -94,4 +93,6 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"mgpt exec time: {total_time:.3f}s")
+    logger.info(responses)
+    logger.info(confidences)
     return jsonify(list(zip(responses, confidences)))

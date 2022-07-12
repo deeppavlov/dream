@@ -13,35 +13,15 @@ def main():
         "pastResponses": [" no. let's chat about animals. "],
         "pastUtterances": ["let's chat about jesus"],
     }
-    gold_results = [
-        {
-            "isResponseComprehensible": 0.4768095314502716,
-            "isResponseErroneous": 0.8192705512046814,
-            "isResponseInteresting": 0.4681839048862457,
-            "isResponseOnTopic": 0.14677414298057556,
-            "responseEngagesUser": 0.7539744973182678,
-        },
-        {
-            "isResponseComprehensible": 0.1574035882949829,
-            "isResponseErroneous": 0.7897688150405884,
-            "isResponseInteresting": 0.4750882089138031,
-            "isResponseOnTopic": 0.013721293769776821,
-            "responseEngagesUser": 0.14935889840126038,
-        },
-        {
-            "isResponseComprehensible": 0.313213586807251,
-            "isResponseErroneous": 0.7770318388938904,
-            "isResponseInteresting": 0.5124449133872986,
-            "isResponseOnTopic": 0.0315839946269989,
-            "responseEngagesUser": 0.49631378054618835,
-        },
-    ]
+    gold_results = [{'batch': [{"score": 0.6278616}, {"score": 0.19288766}, {"score": 0.5522217}]}]
 
     results = requests.post(url, json=request_data).json()[0]["batch"]
-    for result, gold_result in zip(results, gold_results):
-        for key in result.keys():
-            difference = result[key] - gold_result[key]
+    print(results)
+
+    for result, gold_result in zip(results, gold_results[0]["batch"]):
+        difference = result["score"] - gold_result["score"]
         assert round(difference, 3) == 0, f"Got\n{result}\n, but expected:\n{gold_result}"
+
     print("Success")
 
 

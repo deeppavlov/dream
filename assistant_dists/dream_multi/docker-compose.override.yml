@@ -2,18 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_mini/pipeline_conf.json --cors'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+      WAIT_HOSTS: "multilingual-convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           spelling-preprocessing:8074, mgpt:8125, multilingual-emotional-classification 3665:3665,
           multilingual-toxic-classification 3613:3613, multilingual-sentimemt-classification 3668:3668"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-  convers-evaluator-annotator:
+  multilingual-convers-evaluator-annotator:
     env_file: [.env]
     build:
       args:
-        CONFIG: conveval.json
-        PORT: 8003
-        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
+        SERVICE_PORT: 8004
+        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
       context: .
       dockerfile: ./annotators/MultilingualConversationEvaluator/Dockerfile
     environment:
@@ -159,6 +158,7 @@ services:
       args:
         SERVICE_PORT: 8125
         SERVICE_NAME: mgpt
+        CONFIG: mgpt.json
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 5
       context: ./services/mgpt/

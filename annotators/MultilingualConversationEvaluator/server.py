@@ -4,55 +4,79 @@ import time
 
 from flask import Flask, request, jsonify
 import sentry_sdk
-
+import torch
+from torch.nn import functional as F
 from sentry_sdk.integrations.flask import FlaskIntegration
-from deeppavlov import build_model
+from transformers import AutoTokenizer, AutoModel
 
-logger = logging.getLogger(__name__)
+
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-def transform(data):
-    dialogs = []
-    utterances = []
-    for past_uttr, past_response in zip(data["pastUtterances"], data["pastResponses"]):
-        utterances.append(past_uttr)
-        utterances.append(past_response)
-    utterances.append(data["currentUtterance"])
-    for hyp in data["hypotheses"]:
-        dialogs.append(" [SEP]".join(utterances + [hyp]))
-    return dialogs
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
+logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+
+app = Flask(__name__)
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 try:
-    model = build_model("conveval.json", download=False)
-    test_res = model(["a"])
-    logger.info("model loaded, test query processed")
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModel.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+
+    if torch.cuda.is_available():
+        model.to("cuda")
+        logger.info("MultilingualConversationEvaluator is set to run on cuda")
+
+    logger.info("MultilingualConversationEvaluator is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
     raise e
 
-app = Flask(__name__)
+
+def transform(data):
+    utterances = []
+    for past_uttr, past_response in zip(data["pastUtterances"], data["pastResponses"]):
+        utterances.append(past_uttr)
+        utterances.append(past_response)
+    utterances.append(data["currentUtterance"])
+    return " ".join(utterances)
 
 
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
     t = time.time()
-    data = transform(request.json)
-    conv_eval_results = model(data)
-    key_annotations = [
-        "isResponseComprehensible",
-        "isResponseErroneous",
-        "isResponseInteresting",
-        "isResponseOnTopic",
-        "responseEngagesUser",
-    ]
-    result = []
-    for scores in conv_eval_results:
-        result.append({annotation: float(score) for annotation, score in zip(key_annotations, scores)})
-    logger.info(f"Conv eval exec time {round(time.time()-t, 2)} sec")
-    return jsonify([{"batch": result}])
+    data = request.json
+    sentence = transform(request.json)
+    inputs = tokenizer.batch_encode_plus([sentence] + data["hypotheses"],
+                                         return_tensors='pt',
+                                         padding=True)
+
+    input_ids = inputs['input_ids']
+    attention_mask = inputs['attention_mask']
+
+    if torch.cuda.is_available():
+        input_ids = input_ids.cuda()
+        attention_mask = attention_mask.cuda()
+
+    output = model(input_ids, attention_mask=attention_mask)[0]
+    sentence_rep = output[:1].mean(dim=1)
+    label_reps = output[1:].mean(dim=1)
+
+    result = F.cosine_similarity(sentence_rep, label_reps)
+
+    if torch.cuda.is_available():
+        result = result.cpu()
+
+    result = result.detach().numpy()
+    result = [i for i in result]
+
+    logger.info(f"MultiConversationEvaluation exec time {round(time.time()-t, 2)} sec")
+    return jsonify([{"batch": [{"score": float(str(i))} for i in result]}])
 
 
 if __name__ == "__main__":
