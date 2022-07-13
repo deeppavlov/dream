@@ -27,8 +27,8 @@
         },
         "turn_around": {
             "phrases": [
-                "(please ){0,1}turn ((right)|(left)) ((10)|(ten)|(100)|(one hundred)))( degrees){0,1}.",
-                "turn ((20)|(twenty)|(5)|(five)))( degrees){0,1} ((clockwise)|(counterclockwise)).",
+                "(please ){0,1}turn ((right)|(left)) ((10)|(ten)|(100)|(one hundred))( degrees){0,1}.",
+                "turn ((20)|(twenty)|(5)|(five))( degrees){0,1} ((clockwise)|(counterclockwise)).",
                 "may you turn ((right)|(left)|(clockwise)|(counterclockwise))",
                 "left turn"
             ],
