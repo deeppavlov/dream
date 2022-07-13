@@ -8,6 +8,10 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  dialogpt-persona:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
   intent-catcher:
     environment:
       DEVICE: cpu

@@ -57,4 +57,10 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
+
+  dialogpt-persona:
+    volumes:
+      - "./services/dialogpt_persona:/src"
+    ports:
+      - 1337:1337
 version: "3.7"

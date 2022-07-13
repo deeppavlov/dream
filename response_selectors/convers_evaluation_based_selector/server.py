@@ -23,7 +23,7 @@ from common.utils import (
     get_conv_eval_annotations,
 )
 from tag_based_selection import tag_based_response_selection
-from utils import (
+from .utils import (
     add_question_to_statement,
     lower_duplicates_score,
     lower_retrieve_skills_confidence_if_scenario_exist,
