@@ -1,0 +1,132 @@
+{
+    "services": {
+        "annotators": {
+            "multi-emotional-classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multi-emotional-classification:3665/responde"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "multi-toxic-classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multi-toxic-classification:3613/responde"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "multi-sentiment-classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multi-sentiment-classification:3668/responde"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ]
+            }
+        },
+        "skills": {
+            "mgpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://mgpt:8125/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            }
+        },
+        "post_skill_selector_annotators": {
+            "multilingual_convers_evaluator_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multilingual-convers-evaluator-annotator:8004/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "multi-emotional-classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multi-emotional-classification:3665/responde_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "multi-toxic-classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multi-toxic-classification:3613/responde_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_annotation"
+            },
+            "multi-sentiment-classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://multi-sentiment-classification:3668/responde_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            }
+        },
+        "response_selectors": {
+            "convers_evaluation_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://convers-evaluation-selector:8009/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "post_skill_selector_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance"
+            }
+        }
+    }
+}

@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-columns = ["Negative", "Neutral", "Positive"]
+columns = ["negative", "neutral", "positive"]
 
 
 try:
