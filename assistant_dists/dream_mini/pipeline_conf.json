@@ -75,7 +75,7 @@
       "sentence_ranker": {
         "connector": {
           "protocol": "http",
-          "timeout": 100,
+          "timeout": 400,
           "url": "http://sentence-ranker:7331/response"
         },
         "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",

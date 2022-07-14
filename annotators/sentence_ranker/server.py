@@ -71,22 +71,27 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
-logging.getLogger("werkzeug").setLevel("INFO")
 
-@app.route("/respond", methods=["POST"])
+@app.route("/response", methods=["POST"])
 def respond():
     try:
-        logger.info(request.json)
+        logger.info(f"AAAAAAAAAAAAAAAAAAA {request.json}")
         utterances_histories = request.json.get("utterances_histories", [])
-        # context = context[0]
+        
         process_result = []
         for utterance in utterances_histories:
             context_str = " ".join(utterance[-3:])
             max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences([context_str], k=5)
-            process_result.append([
+            # process_result.append([
+            #     max_likelihood_sentences, 
+            #     max_sentence_similarity
+            # ])
+            process_result.append({
+                "batch": [
                 max_likelihood_sentences, 
                 max_sentence_similarity
-            ])
+            ]
+            })
 
     except Exception as exc:
         logger.exception(exc)
