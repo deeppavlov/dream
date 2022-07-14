@@ -13,12 +13,10 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 
 
 COPY ./requirements.txt /src/requirements.txt
-COPY ./persona_sentences.txt /src/persona_sentences.txt
 RUN pip install -r /src/requirements.txt
 
 RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 RUN python -c "from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
-RUN python -c "from sentence_transformers import SentenceTransformer;SentenceTransformer('nli-distilroberta-base-v2')"
 
 COPY . /src
 

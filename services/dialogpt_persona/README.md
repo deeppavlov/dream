@@ -6,3 +6,5 @@ sudo docker-compose -f docker-compose.yml -f assistant_dists/dream_mini/docker-c
 
 sudo docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream_mini/pipeline_conf.json
 curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:8126/respond/
+
+sudo docker stop $(sudo docker ps --filter "name=dream" -a -q) && sudo docker rm $(sudo docker ps --filter "status=exited" -a -q) && sudo docker image prune && sudo docker volume prune && sudo docker system prune -y

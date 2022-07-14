@@ -63,4 +63,11 @@ services:
       - "./services/dialogpt_persona:/src"
     ports:
       - 1337:1337
+  
+  sentence-ranker:
+    volumes:
+      - "./annotators/sentence_ranker:/src"
+    ports:
+      - 7331:7331
+  
 version: "3.7"
