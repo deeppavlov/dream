@@ -63,7 +63,6 @@
                 "(please ){0,1}move backward ((2)|(two)|(16)|(sixteen))( meters){0,1}",
                 "go back ((1)|(one))( meters){0,1}( if you can){0,1}",
                 "(you need ){0,1}step backward ((6)|(six))( meters){0,1}",
-                "(husky ){0,1} move on twenty one meters",
                 "I would be glad if you drove backward nine meters"
             ],
             "reg_phrases": [
