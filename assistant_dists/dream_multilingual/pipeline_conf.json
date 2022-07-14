@@ -1,31 +1,31 @@
 {
     "services": {
         "annotators": {
-            "multi-emotional-classification": {
+            "emotional-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multi-emotional-classification:3665/responde"
+                    "timeout": 3,
+                    "url": "http://emotional-classification:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             },
-            "multi-toxic-classification": {
+            "toxic-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multi-toxic-classification:3613/responde"
+                    "timeout": 3,
+                    "url": "http://toxic-classification:8127/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             },
-            "multi-sentiment-classification": {
+            "sentiment-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multi-sentiment-classification:3668/responde"
+                    "timeout": 3,
+                    "url": "http://sentiment-classification:8129/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -52,8 +52,8 @@
             "mgpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://mgpt:8125/respond"
+                    "timeout": 3,
+                    "url": "http://mgpt:8126/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -64,22 +64,22 @@
             }
         },
         "post_skill_selector_annotators": {
-            "multilingual_convers_evaluator_annotator": {
+            "sentence-ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multilingual-convers-evaluator-annotator:8004/batch_model"
+                    "timeout": 3,
+                    "url": "http://sentence-ranker:8130/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "multi-emotional-classification": {
+            "emotional-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multi-emotional-classification:3665/responde_batch"
+                    "timeout": 3,
+                    "url": "http://emotional-classification:8128/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -88,22 +88,22 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "multi-toxic-classification": {
+            "toxic-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multi-toxic-classification:3613/responde_batch"
+                    "timeout": 3,
+                    "url": "http://toxic-classification:8127/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": ["skills"],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "multi-sentiment-classification": {
+            "sentiment-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://multi-sentiment-classification:3668/responde_batch"
+                    "timeout": 3,
+                    "url": "http://sentiment-classification:8129/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -117,7 +117,7 @@
             "convers_evaluation_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 3,
                     "url": "http://convers-evaluation-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",

@@ -2,18 +2,18 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_multilingual/pipeline_conf.json --cors'
     environment:
-      WAIT_HOSTS: "multilingual-convers-evaluator-annotator:8004, convers-evaluation-selector:8009, 
-          mgpt:8125, multilingual-emotional-classification 3665:3665,
-          multilingual-toxic-classification 3613:3613, multilingual-sentimemt-classification 3668:3668"
+      WAIT_HOSTS: "sentence-ranker:8130, convers-evaluation-selector:8009, 
+          mgpt:8125, emotional-classification 3665:3665, toxic-classification 3613:3613,
+          sentimemt-classification 3668:3668"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-  multilingual-convers-evaluator-annotator:
+  sentence-ranker:
     env_file: [.env]
     build:
       args:
-        SERVICE_PORT: 8124
+        SERVICE_PORT: 8130
         PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
       context: .
-      dockerfile: ./annotators/MultilingualConversationEvaluator/Dockerfile
+      dockerfile: ./annotators/sentence_ranker/Dockerfile
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
@@ -58,32 +58,32 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8125
+        SERVICE_PORT: 8126
         SERVICE_NAME: mgpt
         CONFIG: mgpt.json
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 5
       context: ./services/mgpt/
-    command: flask run -h 0.0.0.0 -p 8125
+    command: flask run -h 0.0.0.0 -p 8126
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 4G
         reservations:
-          memory: 2G
+          memory: 4G
 
-  multilingual-emotional-classification:
+  emotional-classification:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 3665
-        SERVICE_NAME:   multilingual-emotional-classification
+        SERVICE_PORT: 8128
+        SERVICE_NAME:   emotional-classification
         PRETRAINED_MODEL_NAME_OR_PATH: MilaNLProc/xlm-emo-t
       context: ./annotators/MultilingualEmotionalClassification/
-    command: flask run -h 0.0.0.0 -p 3665
+    command: flask run -h 0.0.0.0 -p 8128
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -94,15 +94,15 @@ services:
         reservations:
           memory: 2G
 
-  multilingual-toxic-classification:
+  toxic-classification:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 3613
-        SERVICE_NAME: multilingual-toxic-classification
+        SERVICE_PORT: 8127
+        SERVICE_NAME: toxic-classification
         PRETRAINED_MODEL_NAME_OR_PATH: https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt
       context: ./annotators/MultilingualToxicClassification/
-    command: flask run -h 0.0.0.0 -p 3613
+    command: flask run -h 0.0.0.0 -p 8127
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -113,15 +113,15 @@ services:
         reservations:
           memory: 2G
 
-  multilingual-sentiment-classification:
+  sentiment-classification:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 3668
-        SERVICE_NAME: multilingual-sentiment-classification
+        SERVICE_PORT: 8129
+        SERVICE_NAME: sentiment-classification
         PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
       context: ./annotators/MultilingualSentimentClassification/
-    command: flask run -h 0.0.0.0 -p 3668
+    command: flask run -h 0.0.0.0 -p 8129
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -131,7 +131,4 @@ services:
           memory: 2G
         reservations:
           memory: 2G
-
-
-
 version: '3.7'

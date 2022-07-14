@@ -1,12 +1,12 @@
 services:
-  multilingual-convers-evaluator-annotator:
+  sentence-ranker:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8004
-      - PORT=8004
+      - PROXY_PASS=dream.deeppavlov.ai:8130
+      - PORT=8130
 
   convers-evaluation-selector:
     command: [ "nginx", "-g", "daemon off;" ]
@@ -14,7 +14,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8009
+      - PROXY_PASS=dream.deeppavlov.ai:8009
       - PORT=8009
 
   mgpt:
@@ -23,16 +23,33 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8125
-      - PORT=8125
+      - PROXY_PASS=dream.deeppavlov.ai:8126
+      - PORT=8126
 
-  multi-emotional-classication:
+  emotional-classication:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=lnsigo.mipt.ru:8125
-      - PORT=8125
+      - PROXY_PASS=dream.deeppavlov.ai:8128
+      - PORT=8128
 
+  toxic-classication:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8127
+      - PORT=8127
+
+  sentiment-classication:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8129
+      - PORT=8129
 version: '3.7'

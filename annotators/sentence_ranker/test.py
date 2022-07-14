@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8004/batch_model"
+    url = "http://0.0.0.0:8124/batch_model"
     request_data = {
         "hypotheses": [
             "that a great name for a cat",

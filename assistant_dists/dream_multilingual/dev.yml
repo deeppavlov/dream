@@ -1,10 +1,10 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
-  multilingual-convers-evaluator-annotator:
+  sentence-ranker:
     volumes:
-      - "./annotators/MultilingualConversationEvaluator:/src"
+      - "./annotators/sentence_ranker:/src"
     ports:
-      - 8124:8124
+      - 8130:8130
   convers-evaluation-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
@@ -15,20 +15,20 @@ services:
     volumes:
       - "./services/mgpt:/src"
     ports:
-      - 8125:8125
-  multilingual-toxic-classification:
+      - 8126:8126
+  toxic-classification:
     volumes:
       - "./annotators/MultilingualToxicClassification:/src"
     ports:
-      - 3613:3613
-  multilingual-emotional-classification:
+      - 8127:8127
+  emotional-classification:
     volumes:
       - "./annotators/MultilingualEmotionalClassification:/src"
     ports:
-      - 3665:3665
-  multilingual-sentiment-classification:
+      - 8128:8128
+  sentiment-classification:
     volumes:
       - "./annotators/MultilingualSentimentClassification:/src"
     ports:
-      - 3668:3668
+      - 8129:8129
 version: "3.7"

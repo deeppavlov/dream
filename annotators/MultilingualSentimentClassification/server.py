@@ -49,7 +49,7 @@ def classify_sentences(sentences):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = [{"toxic": 0.0}] * len(sentences)
+        result = [{column: 0.0 for column in columns}] * len(sentences)
     return result
 
 

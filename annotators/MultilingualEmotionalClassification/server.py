@@ -27,6 +27,8 @@ try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model = AutoModelForSequenceClassification.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
 
+    logger.info(torch.cuda.is_available())
+
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("MultilingualEmotionalClassification is set to run on cuda")

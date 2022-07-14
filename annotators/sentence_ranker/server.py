@@ -27,11 +27,12 @@ try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model = AutoModel.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
 
+
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("MultilingualConversationEvaluator is set to run on cuda")
+        logger.info("sentence_ranker is set to run on cuda")
 
-    logger.info("MultilingualConversationEvaluator is ready")
+    logger.info("sentence_ranker is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -75,8 +76,8 @@ def batch_respond():
     result = result.detach().numpy()
     result = [i for i in result]
 
-    logger.info(f"MultiConversationEvaluation exec time {round(time.time()-t, 2)} sec")
-    return jsonify([{"batch": [{"score": float(str(i))} for i in result]}])
+    logger.info(f"sentense_ranker exec time {round(time.time()-t, 2)} sec")
+    return jsonify([{"batch": [float(str(i)) for i in result]}])
 
 
 if __name__ == "__main__":

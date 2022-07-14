@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  multilingual-convers-evaluator-annotator:
+  sentence-ranker:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
@@ -8,15 +8,11 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  multilingual-emotional-classification:
+  toxic-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  multilingual-toxic-classification:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
-  multilingual-sentiment-classification:
+  sentiment-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

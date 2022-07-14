@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:3665/respond"
+    url = "http://0.0.0.0:8128/respond"
 
     sentences = ['Sei una testa di cazzo!!', 'Я боюсь тебя']
     gold = [{'anger': 0.99177, 'fear': 0.00091, 'joy': 0.00504, 'sadness': 0.00229},
