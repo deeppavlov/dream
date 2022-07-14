@@ -78,10 +78,15 @@
           "timeout": 400,
           "url": "http://sentence-ranker:7331/response"
         },
-        "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+        "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
         "state_manager_method": "add_annotation",
-        "previous_services": ["annotators.spelling_preprocessing"]
+        "previous_services": [
+          "annotators.spelling_preprocessing", 
+          "annotators.sentseg", 
+          "annotators.intent_catcher",
+          "annotators.badlisted_words"
+        ]
       },
       "sentseg": {
         "connector": "connectors.sentseg",
@@ -98,7 +103,7 @@
         },
         "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-        "previous_services": ["annotators.spelling_preprocessing"],
+        "previous_services": ["annotators.spelling_preprocessing", "annotators.sentseg"],
         "state_manager_method": "add_annotation"
       },
       "intent_catcher": {
@@ -169,7 +174,7 @@
         },
         "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-        "previous_services": ["skill_selectors"],
+        "previous_services": ["annotators","skill_selectors"],
         "state_manager_method": "add_hypothesis"
       },
       "dialogpt_persona": {
@@ -178,9 +183,10 @@
           "timeout": 300,
           "url": "http://dialogpt-persona:1337/respond"
         },
-        "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
+        "dialog_formatter": "state_formatters.dp_formatters:persona_bot_formatter",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-        "previous_services": ["annotators.sentence_ranker","skill_selectors"],
+        
+        "previous_services": ["skill_selectors"],
         "state_manager_method": "add_hypothesis"
       }
     },

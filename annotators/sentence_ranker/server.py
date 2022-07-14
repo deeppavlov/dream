@@ -31,7 +31,7 @@ class SentenceRanker:
         )
         
         top_indices = torch.argsort(cos_sim_ranks, descending=True)
-        max_similarity = cos_sim_ranks[top_indices][0]
+        max_similarity = float(cos_sim_ranks[top_indices][0])
         top_indices = list(top_indices[:k].cpu().numpy())
         similar_sentences = [self.persona_sentences[idx] for idx in top_indices]
         self.ranked_sentences[key] = similar_sentences 
@@ -75,28 +75,28 @@ app = Flask(__name__)
 @app.route("/response", methods=["POST"])
 def respond():
     try:
-        logger.info(f"AAAAAAAAAAAAAAAAAAA {request.json}")
-        utterances_histories = request.json.get("utterances_histories", [])
-        
+        # logger.info(f"AAAAAAAAAAAAAAAAAAA {request.json} ")
+        sentences = request.json.get("sentences", [])
+        dialogs = request.json.get("dialogs", [])
+        logger.info(f"DIALOGS {dialogs}")
+        # dialogs = ["human_utterances"][-1]["annotations"]['sentseg']['punct_sent']
         process_result = []
-        for utterance in utterances_histories:
-            context_str = " ".join(utterance[-3:])
-            max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences([context_str], k=5)
-            # process_result.append([
-            #     max_likelihood_sentences, 
-            #     max_sentence_similarity
-            # ])
-            process_result.append({
-                "batch": [
-                max_likelihood_sentences, 
-                max_sentence_similarity
-            ]
-            })
+        context_str = dialogs[0]["human_utterances"][-1]["annotations"]['sentseg']['punct_sent']
+        logger.info(f"TEST {context_str}")
+        max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences([context_str], k=5)
+        # process_result.append([
+        #     max_likelihood_sentences, 
+        #     max_sentence_similarity
+        # ])
+        process_result.append([
+            max_likelihood_sentences, 
+            max_sentence_similarity
+        ])
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-    
+    logger.info(f"RANKER RESULT {process_result}")
     return jsonify(
         process_result
     )

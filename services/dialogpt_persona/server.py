@@ -41,7 +41,13 @@ logging.getLogger("werkzeug").setLevel("INFO")
 def last_index(array, elem):
     return len(array) - 1 - array[::-1].index(elem)
 
-def generate_response(context, model, tokenizer):
+def generate_response(
+    persona=None, 
+    model=None, 
+    tokenizer=None, 
+    utterances_histories=None
+    ):
+    
     SPECIAL_TOKENS = { 
         "<sp_1>": "<sp_1>",
         "</sp_1>": "</sp_1>",
@@ -52,26 +58,21 @@ def generate_response(context, model, tokenizer):
     }
     VOCAB_TOKENS = tokenizer.get_added_vocab()
     threshhold = 0.3
-    context = context[0]
-    user_input = context[-1]
     
-    ###
-    # ТУТ НАДО КАК-ТО ПОЛУЧИТЬ ПРЕДЛОЖЕНИЯ 
-    ###
-    max_likelihood_sentences, max_sentence_similarity = None, None
+    max_likelihood_sentences, max_sentence_similarity = persona
+    max_likelihood_sentences = max_likelihood_sentences[:3]
     max_likelihood_sentences = " ".join(max_likelihood_sentences)
     max_likelihood_sentences = f"{SPECIAL_TOKENS['<persona>']}{max_likelihood_sentences}{SPECIAL_TOKENS['</persona>']}"
 
     persona_ids = tokenizer.encode(max_likelihood_sentences, return_tensors='pt')
     persona_ids = persona_ids.to(device)
     
-    print(f"User: {user_input}")
+    # print(f"User: {user_input}")
 
-    
-    history_chat = "".join(list(reversed([f"<sp_{(i)%2+1}>{item}</sp_{(i)%2+1}>" for i, item in enumerate(reversed(context[-5:]))])))
+    utterances_histories = utterances_histories[0]
+    history_chat = "".join(list(reversed([f"<sp_{(i)%2+1}>{item}</sp_{(i)%2+1}>" for i, item in enumerate(reversed(utterances_histories[-1:]))])))
     history_chat += "<sp_2>"
-    logger.info(history_chat)
-
+    logger.info(f"AAAAAAAAAAAAAAAAAAAAA {max_likelihood_sentences}{history_chat}")
     history_ids = tokenizer.encode(history_chat, return_tensors='pt')
     history_ids = history_ids.to(device)
     
@@ -113,12 +114,20 @@ def generate_response(context, model, tokenizer):
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    logger.info(request.json.get("sentence_ranker", []))
-    logger.info(request.json)
-    contexts = request.json.get("utterances_histories", [])
+    # logger.info(request.json.get("sentence_ranker", []))
+    # logger.info(request.json())
+    # logger.info(f"BBBBBBBBBB{request.json['dialogs']}")
+    contexts = request.json['dialogs'][0]['human_utterances'][-1]['annotations']['sentence_ranker']
+    utterances_histories = request.json['utterances_histories']
+    logger.info(f"PERSONA GPT JSON{contexts }")
     # print(contexts)
     try:
-        responses = generate_response(model=model, tokenizer=tokenizer, context=contexts)
+        responses = generate_response(
+            model=model, 
+            tokenizer=tokenizer, 
+            persona=contexts, 
+            utterances_histories=utterances_histories
+        )
 
     except Exception as exc:
         logger.exception(exc)
@@ -126,7 +135,7 @@ def respond():
     
     # responses = [[responses]] 
     # confidences = [[0.95]] 
-    responses = [['AAAAAAAAAAAAAAAAAAAA test']] 
+    responses = [[responses]] 
     confidences = [[0.95]] 
 
     return jsonify(list(zip(responses, confidences)))

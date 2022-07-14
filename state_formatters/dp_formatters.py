@@ -341,10 +341,12 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    logger.info(f"FORMATTER {dialog}")
     sent = dialog["human_utterances"][-1]["annotations"].get(
         "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
     return [{"sentences": [sent], "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]]}]
+
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
@@ -427,6 +429,14 @@ def utt_non_punct_dialog(dialog: Dict):
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     return [{"dialogs": [dialog]}]
+
+def persona_bot_formatter(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    distill_dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+
+    return [{"dialogs": [dialog], "utterances_histories": [[utt["text"] for utt in distill_dialog["utterances"]]]}]
+
 
 
 def full_history_dialog(dialog: Dict):
