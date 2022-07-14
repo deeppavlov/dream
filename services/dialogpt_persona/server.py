@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 # logging.info(f'PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}')
-DEFAULT_CONFIDENCE = 10
+DEFAULT_CONFIDENCE = 0.95
 N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
@@ -57,10 +57,10 @@ def generate_response(
         "</persona>": "</persona>",
     }
     VOCAB_TOKENS = tokenizer.get_added_vocab()
-    threshhold = 0.3
+    threshhold = 0.2
     
     max_likelihood_sentences, max_sentence_similarity = persona
-    max_likelihood_sentences = max_likelihood_sentences[:3]
+    max_likelihood_sentences = max_likelihood_sentences[:2]
     max_likelihood_sentences = " ".join(max_likelihood_sentences)
     max_likelihood_sentences = f"{SPECIAL_TOKENS['<persona>']}{max_likelihood_sentences}{SPECIAL_TOKENS['</persona>']}"
 
@@ -94,16 +94,18 @@ def generate_response(
             max_length=250,
             pad_token_id=tokenizer.eos_token_id,  
             do_sample=True, 
-            # num_beams=3, 
             temperature = 0.95,
             top_k=100, 
             top_p=0.95,
         )
 
+
     model_response = model_response.to(device)
     model_response_list = list(model_response[0])
 
-    end_speaker_index = last_index(model_response_list, VOCAB_TOKENS['</sp_2>'])
+    logger.info(tokenizer.decode(model_response[0], skip_special_tokens=False))
+    # end_speaker_index = last_index(model_response_list, VOCAB_TOKENS['</sp_2>'])
+    end_speaker_index = model_response_list.index(VOCAB_TOKENS['</sp_2>'])
     model_response = model_response[:, :end_speaker_index+1]
 
     chat_history_ids = model_response
@@ -114,9 +116,6 @@ def generate_response(
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # logger.info(request.json.get("sentence_ranker", []))
-    # logger.info(request.json())
-    # logger.info(f"BBBBBBBBBB{request.json['dialogs']}")
     contexts = request.json['dialogs'][0]['human_utterances'][-1]['annotations']['sentence_ranker']
     utterances_histories = request.json['utterances_histories']
     logger.info(f"PERSONA GPT JSON{contexts }")
@@ -128,14 +127,12 @@ def respond():
             persona=contexts, 
             utterances_histories=utterances_histories
         )
+        
+        responses = [[responses]] 
+        confidences = [[DEFAULT_CONFIDENCE]] 
+
+        return jsonify(list(zip(responses, confidences)))
 
     except Exception as exc:
         logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
-    
-    # responses = [[responses]] 
-    # confidences = [[0.95]] 
-    responses = [[responses]] 
-    confidences = [[0.95]] 
-
-    return jsonify(list(zip(responses, confidences)))
+        sentry_sdk.capture_exception(exc) 

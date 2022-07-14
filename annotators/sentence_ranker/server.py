@@ -34,7 +34,7 @@ class SentenceRanker:
         max_similarity = float(cos_sim_ranks[top_indices][0])
         top_indices = list(top_indices[:k].cpu().numpy())
         similar_sentences = [self.persona_sentences[idx] for idx in top_indices]
-        self.ranked_sentences[key] = similar_sentences 
+        self.ranked_sentences[key] = similar_sentences, max_similarity 
         return similar_sentences, max_similarity
     
     def cos_sim(self, a, b):
