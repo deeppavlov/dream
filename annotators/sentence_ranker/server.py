@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from sentence_transformers import SentenceTransformer
 import logging
 import time
@@ -10,19 +11,39 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 class SentenceRanker:
-    def __init__(self, persona_sentences=None, sentence_model=None):
+    def __init__(self, 
+        persona_sentences: List[str]=None, 
+        sentence_model: SentenceTransformer=None
+    ):
+        """_summary_
+
+        Args:
+            persona_sentences (List[str]): список предложений составляющие полную персону. Defaults to None.
+            sentence_model (SentenceTransformer): модель для перевода предложения в вектор. Defaults to None.
+        """
         self.persona_sentences = persona_sentences
         self.sentence_model = sentence_model
         self.sentence_embeddings = self.sentence_model.encode(
             persona_sentences, 
             convert_to_tensor=True
         )
+        # для кеширования похожих запросов
         self.ranked_sentences = {}
     
-    def rank_sentences(self, query, k=5):
+    def rank_sentences(self, query: str, k: int=5) -> List[List[str], float]:
+        """возвращает топ k предложений которые похожи на query
+
+        Args:
+            query (str): предложение, на основе которого ищем похожие
+            k (int): количество возвращаемых предложений. Defaults to 5.
+
+        Returns:
+            List[List[str], float]: отранжированные предложения и максимальное косинусное расстояние среди всех 
+        """
         key = f"{query}_{k}"
         if self.ranked_sentences.get(key, False):
             return self.ranked_sentences[key]
+
         user_sentence_embeddings = self.sentence_model.encode(query, convert_to_tensor=True)
 
         cos_sim_ranks = self.cos_sim(
@@ -35,15 +56,26 @@ class SentenceRanker:
         top_indices = list(top_indices[:k].cpu().numpy())
         similar_sentences = [self.persona_sentences[idx] for idx in top_indices]
         self.ranked_sentences[key] = similar_sentences, max_similarity 
-        return similar_sentences, max_similarity
+        return [similar_sentences, max_similarity]
     
-    def cos_sim(self, a, b):
+    def cos_sim(self, a: torch.FloatTensor, b: torch.FloatTensor) -> torch.FloatTensor:
+        """возвращает косинусное расстояние 
+        
+        K - количество предложений для сравнения
+        N - размерность возвращаемого вектора
+        Args:
+            a (torch.FloatTensor): shape (1, N)
+            b (torch.FloatTensor): shape (K, N)
+
+        Returns:
+            torch.FloatTensor: shape (1, K) тензор с косинусными расстояниями
+        """
         a_norm = torch.nn.functional.normalize(a, p=2, dim=1)
         b_norm = torch.nn.functional.normalize(b, p=2, dim=1)
         return torch.sum(a_norm * b_norm, dim=1)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-logging.getLogger("werkzeug").setLevel("INFO")
+# logging.getLogger("werkzeug").setLevel("INFO")
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
@@ -52,6 +84,7 @@ DEFAULT_CONFIDENCE = 10
 N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
+TOP_SIMILAR_SENTENCES = 5
 
 try:
     sentence_model = SentenceTransformer(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -75,19 +108,15 @@ app = Flask(__name__)
 @app.route("/response", methods=["POST"])
 def respond():
     try:
-        # logger.info(f"AAAAAAAAAAAAAAAAAAA {request.json} ")
-        sentences = request.json.get("sentences", [])
         dialogs = request.json.get("dialogs", [])
-        logger.info(f"DIALOGS {dialogs}")
-        # dialogs = ["human_utterances"][-1]["annotations"]['sentseg']['punct_sent']
         process_result = []
+        # берем последнюю реплику, затем забираем у нее результат работы аннотатора sentseg
         context_str = dialogs[0]["human_utterances"][-1]["annotations"]['sentseg']['punct_sent']
-        logger.info(f"TEST {context_str}")
-        max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences([context_str], k=5)
-        # process_result.append([
-        #     max_likelihood_sentences, 
-        #     max_sentence_similarity
-        # ])
+        max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences(
+            [context_str], 
+            k=TOP_SIMILAR_SENTENCES
+        )
+        
         process_result.append([
             max_likelihood_sentences, 
             max_sentence_similarity
@@ -96,7 +125,7 @@ def respond():
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-    logger.info(f"RANKER RESULT {process_result}")
+
     return jsonify(
         process_result
     )
