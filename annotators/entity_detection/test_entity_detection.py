@@ -11,8 +11,8 @@ def main():
 
     request_data = [
         {"sentences": [["you must track red car and people"]]},
-        {"sentences": [["turn twenty degrees clockwise"]]},
-        {"sentences": [["turn twenty degrees counterclockwise"]]},
+        {"sentences": [["turn 12 degrees clockwise"]]},
+        {"sentences": [["turn 12 degrees counterclockwise"]]},
         {"sentences": [["move forward ten metres"]]},
         {"sentences": [["drive backward nine meters"]]},
     ]
