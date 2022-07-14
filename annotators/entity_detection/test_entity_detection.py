@@ -10,7 +10,7 @@ def main():
     # ]
 
     request_data = [
-        {"sentences": [["you must track red car"]]},
+        {"sentences": [["you must track red car and people"]]},
         {"sentences": [["turn twenty degrees clockwise"]]},
         {"sentences": [["turn twenty degrees counterclockwise"]]},
         {"sentences": [["move forward ten metres"]]},
