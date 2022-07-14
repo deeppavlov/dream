@@ -97,7 +97,7 @@ The easiest way to try out Dream is to deploy it via proxy.
 All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
 See [proxy usage](#proxy-usage) for details.
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/proxy.yml up --build
 ```
 
 #### **Dream (locally)**
@@ -156,7 +156,7 @@ convers-evaluator-annotator:
 and include this config in your deployment command:
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/proxy.yml up --build
 ```
 
 By default, `proxy.yml` contains all available proxy definitions.
