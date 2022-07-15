@@ -22,14 +22,15 @@ try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
-        model.to("cuda")
-        logger.info("storygpt is set to run on cuda")
+        device = "cuda"
+    else:
+        device = "cpu"
+    model.to(device)
+    logger.info(f"storygpt is set to run on {device}")
     tokenizer.add_tokens(["<EOT>", "<EOL>"], special_tokens=True)
     tokenizer.add_special_tokens({"pad_token": "[PAD]"})
     model.resize_token_embeddings(len(tokenizer))
     model.load_state_dict(torch.load("/data/filtered_ROCStories_gpt_medium.pt", map_location=torch.device("cpu")))
-    # model.load_state_dict(torch.load('filtered_ROCStories_gpt_medium.pt', map_location=torch.device('cpu')))
-
     logger.info("storygpt is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -73,8 +74,7 @@ def generate_response(context, model, tokenizer):
     input_ids = tokenizer.encode(tmp_prompt, return_tensors="pt")
 
     with torch.no_grad():
-        if torch.cuda.is_available():
-            input_ids = input_ids.to("cuda")
+        input_ids = input_ids.to(device)
         chat_history_ids = model.generate(
             input_ids,
             do_sample=True,
@@ -85,7 +85,7 @@ def generate_response(context, model, tokenizer):
             pad_token_id=tokenizer.eos_token_id,
             no_repeat_ngram_size=3,
         )
-        if torch.cuda.is_available():
+        if device != 'cpu':
             chat_history_ids = chat_history_ids.cpu()
     result = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1] :][0])
     logger.info(f"Generated from storyline: {result}")

@@ -35,9 +35,11 @@ try:
     bart_model = BartForConditionalGeneration.from_pretrained("facebook/bart-large", forced_bos_token_id=0)
     bart_tok = BartTokenizer.from_pretrained("facebook/bart-large")
     if torch.cuda.is_available():
-        model.to("cuda")
         device = "cuda"
-        logger.info("prompt_storygpt is set to run on cuda")
+    else:
+        device = "cpu"
+    model.to(device)
+    logger.info(f"prompt_storygpt is set to run on {device}")
     logger.info("prompt_storygpt is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
