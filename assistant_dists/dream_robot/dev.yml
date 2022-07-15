@@ -63,4 +63,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
+  ner:
+    volumes:
+      - './annotators/NER:/src'
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8021:8021
 version: "3.7"

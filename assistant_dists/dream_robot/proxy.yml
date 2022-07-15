@@ -44,6 +44,15 @@ services:
   #     - PROXY_PASS=dream.deeppavlov.ai:8014
   #     - PORT=8014
 
+  ner:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8021
+      - PORT=8021
+
   badlisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:

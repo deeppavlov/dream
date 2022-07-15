@@ -4,6 +4,11 @@
             "protocol": "http",
             "timeout": 1.5,
             "url": "http://sentseg:8011/sentseg"
+        },
+        "ner": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://ner:8021/ner"
         }
     },
     "services": {
@@ -125,6 +130,16 @@
                     "url": "http://entity-detection:8103/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
+            },
+            "ner": {
+                "connector": "connectors.ner",
+                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
