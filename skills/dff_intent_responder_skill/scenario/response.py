@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
     intention, confidence = get_detected_intents(annotated_utterance)
+    logger.info(f"Detected intents: {intention}")
 
     response = ""
     if intention is not None and confidence > 0 and intention in response_funcs.get_respond_funcs():

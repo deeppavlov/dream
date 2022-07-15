@@ -2,10 +2,12 @@
 import logging
 import json
 import random
+import re
 from datetime import datetime
 from os import getenv
 
 import common.dff.integration.context as int_ctx
+from common.utils import get_entities
 from df_engine.core import Actor, Context
 
 
@@ -134,22 +136,37 @@ def get_human_utterances(ctx: Context, actor: Actor) -> list:
 ################# CUSTOM FOR ROBOT
 
 def track_object_respond(ctx: Context, actor: Actor, intention: str):
-    # utt = int_ctx.get_last_human_utterance(ctx, actor)['annotations']
-    #Запильнуть сюда entities, чтоб они в строку писались из entity_detection-entities
-    # print(utt)
-
-    # response = f"track_object_{utt}"
-    response = f"track_object_people"
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    entities = get_entities(utt, only_named=False, with_labels=False)
+    if len(entities) == 1:
+        response = f"track_object_{entities[0]}"
+    else:
+        response = "track_object_unknown"
     return response
 
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
-    response = f"turn_clockwise"
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    if re.search(r"clock-?wise", utt["text"]):
+        response = "turn_clockwise"
+    else:
+        response = "turn_counterclockwise"
     return response
 
 def move_forward_respond(ctx: Context, actor: Actor, intention: str):
-    response = f"move_forward"
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    dist = re.findall(r"[0-9]+", utt["text"])
+    if len(dist) == 1:
+        response = f"move_forward_{dist[0]}"
+    else:
+        response = f"move_forward"
+        
     return response
 
 def move_backward_respond(ctx: Context, actor: Actor, intention: str):
-    response = f"move_backward"
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    dist = re.findall(r"[0-9]+", utt["text"])
+    if len(dist) == 1:
+        response = f"move_backward_{dist[0]}"
+    else:
+        response = f"move_backward"
     return response
