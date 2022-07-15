@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103"
+          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -195,5 +195,20 @@ services:
           memory: 2.5G
         reservations:
           memory: 2.5G
+
+  ner:
+    env_file: [.env]
+    build:
+      context: ./annotators/NER/
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      - FLASK_APP=server
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 1512M
+        reservations:
+          memory: 1512M
 
 version: '3.7'

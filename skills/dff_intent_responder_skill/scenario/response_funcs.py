@@ -121,8 +121,35 @@ def get_respond_funcs():
         "choose_topic": random_respond,
         "cant_do": random_respond,
         "tell_me_a_story": random_respond,
+        "track_object": track_object_respond,
+        "turn_around": turn_around_respond,
+        "move_forward": move_forward_respond,
+        "move_backward": move_backward_respond,   
     }
 
 
 def get_human_utterances(ctx: Context, actor: Actor) -> list:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
+
+################# CUSTOM FOR ROBOT
+
+def track_object_respond(ctx: Context, actor: Actor, intention: str):
+    # utt = int_ctx.get_last_human_utterance(ctx, actor)['annotations']
+    #Запильнуть сюда entities, чтоб они в строку писались из entity_detection-entities
+    # print(utt)
+
+    # response = f"track_object_{utt}"
+    response = f"track_object_people"
+    return response
+
+def turn_around_respond(ctx: Context, actor: Actor, intention: str):
+    response = f"turn_clockwise"
+    return response
+
+def move_forward_respond(ctx: Context, actor: Actor, intention: str):
+    response = f"move_forward"
+    return response
+
+def move_backward_respond(ctx: Context, actor: Actor, intention: str):
+    response = f"move_backward"
+    return response

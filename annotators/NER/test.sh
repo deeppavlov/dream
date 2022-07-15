@@ -1,3 +1,4 @@
  curl -H "Content-Type: application/json" -XPOST \
- -d '{"last_utterances":[["john peterson is my brother.", "he lives in New York."], ["my laptop was broken.", "could you show me the nearest store in Moscow where i can fix it."]]}' \
+ -d '{"last_utterances":[["turn 10 degrees clockwise in Moscow.", "move forward ten metres."],
+     ["you must track red car and people.", "drive backward nine meters."]]}' \
   http://0.0.0.0:8021/ner
