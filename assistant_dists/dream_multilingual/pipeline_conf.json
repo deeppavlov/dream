@@ -52,7 +52,7 @@
             "mgpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 5,
                     "url": "http://mgpt:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
