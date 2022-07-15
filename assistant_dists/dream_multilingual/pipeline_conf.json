@@ -1,11 +1,11 @@
 {
     "services": {
         "annotators": {
-            "emotional-classification": {
+            "emotion-classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 3,
-                    "url": "http://emotional-classification:8128/respond"
+                    "url": "http://emotion-classification:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -75,11 +75,11 @@
                 "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "emotional-classification": {
+            "emotion-classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 3,
-                    "url": "http://emotional-classification:8128/respond_batch"
+                    "url": "http://emotion-classification:8128/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

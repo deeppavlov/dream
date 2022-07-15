@@ -26,7 +26,7 @@ services:
       - "./annotators/MultilingualToxicClassification:/src"
     ports:
       - 8127:8127
-  emotional-classification:
+  emotion-classification:
     volumes:
       - "./annotators/MultilingualEmotionalClassification:/src"
     ports:

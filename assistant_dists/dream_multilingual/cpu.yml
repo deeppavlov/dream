@@ -16,7 +16,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  emotional-classification:
+  emotion-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

@@ -26,7 +26,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8132
       - PORT=8126
 
-  emotional-classication:
+  emotion-classication:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
