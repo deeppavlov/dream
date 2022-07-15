@@ -21,7 +21,9 @@ def run_test(handler):
         if "RU" in INTENT_RESPONSE_PHRASES_FNAME and "RU" not in test_name:
             # if russian language, skip english tests
             continue
-        elif "RU" not in INTENT_RESPONSE_PHRASES_FNAME and "RU" in test_name:
+        elif "robot" in INTENT_RESPONSE_PHRASES_FNAME and "robot" not in test_name:
+            continue
+        elif any([t not in INTENT_RESPONSE_PHRASES_FNAME and t in test_name for t in ["RU", "robot"]]):
             continue
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
