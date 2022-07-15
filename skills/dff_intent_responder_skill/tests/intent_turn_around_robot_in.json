@@ -1,0 +1,77 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "turn around yourself clockwise",
+                    "annotations": {
+                        "spelling_preprocessing": "turn around yourself clockwise",
+                        "sentseg": {
+                            "punct_sent": "turn around yourself clockwise",
+                            "segments": [
+                                "turn around yourself clockwise"
+                            ]
+                        },
+                        "intent_catcher": {
+                            "track_object": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "turn_around": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "move_forward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_backward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {}
+                    }
+                }
+            ],
+            "bot_utterances": [],
+            "called_intents": {
+                "track_object": false,
+                "turn_around": false,
+                "move_forward": false,
+                "move_backward": false
+            },
+            "dialog_id": "975b14b61e51db2a30eb5aca2e3e7fee"
+        }
+    ],
+    "dff_intent_responder_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        "unknown"
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}
