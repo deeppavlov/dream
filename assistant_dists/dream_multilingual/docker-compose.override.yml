@@ -71,9 +71,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4G
+          memory: 10G
         reservations:
-          memory: 4G
+          memory: 10G
 
   emotion-classification:
     env_file: [ .env ]
