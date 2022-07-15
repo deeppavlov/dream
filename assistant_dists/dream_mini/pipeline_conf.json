@@ -75,8 +75,8 @@
       "sentence_ranker": {
         "connector": {
           "protocol": "http",
-          "timeout": 400,
-          "url": "http://sentence-ranker:7331/response"
+          "timeout": 300,
+          "url": "http://sentence-ranker:8130/response"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -180,8 +180,8 @@
       "dialogpt_persona": {
         "connector": {
           "protocol": "http",
-          "timeout": 300,
-          "url": "http://dialogpt-persona:1337/respond"
+          "timeout": 100,
+          "url": "http://dialogpt-persona:8131/respond"
         },
         "dialog_formatter": "state_formatters.dp_formatters:persona_bot_formatter",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

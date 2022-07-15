@@ -36,17 +36,17 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
-# logging.getLogger("werkzeug").setLevel("INFO")
+logging.getLogger("werkzeug").setLevel("INFO")
 
 def last_index(array, elem):
     return len(array) - 1 - array[::-1].index(elem)
 
 def generate_response(
-        persona: List[List[str], float]=None,  
-        model: AutoModelForCausalLM =None, 
-        tokenizer: AutoTokenizer=None, 
-        utterances_histories: List[List[str]]=None
-    ) -> str:
+        persona=None,  
+        model=None, 
+        tokenizer=None, 
+        utterances_histories=None
+    ):
     """генерирует следующую реплику бота на основе короткой персоны состоящей из нескольких предложений.
 
     Args:
@@ -74,12 +74,11 @@ def generate_response(
     max_likelihood_sentences = max_likelihood_sentences[:MAX_PERSONA_SENTENCES]
     max_likelihood_sentences = " ".join(max_likelihood_sentences)
     max_likelihood_sentences = f"{SPECIAL_TOKENS['<persona>']}{max_likelihood_sentences}{SPECIAL_TOKENS['</persona>']}"
-
     persona_ids = tokenizer.encode(max_likelihood_sentences, return_tensors='pt')
     persona_ids = persona_ids.to(device)
     
     utterances_histories = utterances_histories[0]
-    history_chat = "".join(list(reversed([f"<sp_{(i)%2+1}>{item}</sp_{(i)%2+1}>" for i, item in enumerate(reversed(utterances_histories[-5:]))])))
+    history_chat = "".join(list(reversed([f"<sp_{(i)%2+1}>{item}</sp_{(i)%2+1}>" for i, item in enumerate(reversed(utterances_histories[-1:]))])))
     history_chat += "<sp_2>"
 
     history_ids = tokenizer.encode(history_chat, return_tensors='pt')

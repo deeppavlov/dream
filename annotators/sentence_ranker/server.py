@@ -12,8 +12,8 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 class SentenceRanker:
     def __init__(self, 
-        persona_sentences: List[str]=None, 
-        sentence_model: SentenceTransformer=None
+        persona_sentences=None, 
+        sentence_model=None
     ):
         """_summary_
 
@@ -30,7 +30,7 @@ class SentenceRanker:
         # для кеширования похожих запросов
         self.ranked_sentences = {}
     
-    def rank_sentences(self, query: str, k: int=5) -> List[List[str], float]:
+    def rank_sentences(self, query, k):
         """возвращает топ k предложений которые похожи на query
 
         Args:
@@ -58,7 +58,7 @@ class SentenceRanker:
         self.ranked_sentences[key] = similar_sentences, max_similarity 
         return [similar_sentences, max_similarity]
     
-    def cos_sim(self, a: torch.FloatTensor, b: torch.FloatTensor) -> torch.FloatTensor:
+    def cos_sim(self, a, b):
         """возвращает косинусное расстояние 
         
         K - количество предложений для сравнения
