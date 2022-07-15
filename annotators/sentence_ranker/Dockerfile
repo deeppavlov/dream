@@ -8,7 +8,7 @@ ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 WORKDIR /src
 RUN mkdir common
 
-COPY annotators/MultilingualConversationEvaluator/requirements.txt .
+COPY annotators/sentence_ranker/requirements.txt .
 RUN pip install -r requirements.txt
 
 RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"

@@ -3,8 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_multilingual/pipeline_conf.json --cors'
     environment:
       WAIT_HOSTS: "sentence-ranker:8130, convers-evaluation-selector:8009, 
-          mgpt:8125, emotional-classification 3665:3665, toxic-classification 3613:3613,
-          sentimemt-classification 3668:3668"
+          mgpt:8132, emotional-classification 8128:8128, toxic-classification 8127:8127,
+          sentimemt-classification 8129:8129"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   sentence-ranker:
     env_file: [.env]
@@ -58,13 +58,13 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8126
+        SERVICE_PORT: 8132
         SERVICE_NAME: mgpt
         CONFIG: mgpt.json
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 5
       context: ./services/mgpt/
-    command: flask run -h 0.0.0.0 -p 8126
+    command: flask run -h 0.0.0.0 -p 8132
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server

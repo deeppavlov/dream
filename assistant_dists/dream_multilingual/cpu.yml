@@ -2,17 +2,21 @@ version: '3.7'
 services:
   sentence-ranker:
     environment:
-      DEVICE: cpu
+      DEVICE: cuda
       CUDA_VISIBLE_DEVICES: ""
   mgpt:
     environment:
-      DEVICE: cpu
+      DEVICE: cuda
       CUDA_VISIBLE_DEVICES: ""
   toxic-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
   sentiment-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  emotional-classification:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

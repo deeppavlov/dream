@@ -1,5 +1,10 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
 services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
   sentence-ranker:
     volumes:
       - "./annotators/sentence_ranker:/src"
@@ -15,7 +20,7 @@ services:
     volumes:
       - "./services/mgpt:/src"
     ports:
-      - 8126:8126
+      - 8132:8132
   toxic-classification:
     volumes:
       - "./annotators/MultilingualToxicClassification:/src"

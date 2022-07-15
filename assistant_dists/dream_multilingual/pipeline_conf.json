@@ -53,7 +53,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 3,
-                    "url": "http://mgpt:8126/respond"
+                    "url": "http://mgpt:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
