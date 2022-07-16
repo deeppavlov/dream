@@ -91,9 +91,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 2.5G
         reservations:
-          memory: 2G
+          memory: 2.5G
 
   toxic-classification:
     env_file: [ .env ]
@@ -110,9 +110,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 2.5G
         reservations:
-          memory: 2G
+          memory: 2.5G
 
   sentiment-classification:
     env_file: [ .env ]
@@ -129,7 +129,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 2.5G
         reservations:
-          memory: 2G
+          memory: 2.5G
 version: '3.7'

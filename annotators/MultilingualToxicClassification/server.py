@@ -25,7 +25,6 @@ logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 
 try:
     loaded = torch.hub.load_state_dict_from_url(PRETRAINED_MODEL_NAME_OR_PATH)
-    logging.info(loaded)
     class_names = loaded["config"]["dataset"]["args"]["classes"]
     model_type = loaded["config"]["arch"]["args"]["model_type"]
     model_name = loaded["config"]["arch"]["args"]["model_name"]
