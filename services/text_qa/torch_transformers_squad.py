@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import math
 from logging import getLogger
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict
@@ -250,7 +251,9 @@ class TorchTransformersSquad(TorchModel):
             start_pred = start_pred.detach().cpu().numpy()
             end_pred = end_pred.detach().cpu().numpy()
             logits = logits.detach().cpu().numpy().tolist()
-            scores = scores.detach().cpu().numpy().tolist()
+            scores = scores.detach().cpu().numpy()
+            scores = 1 / (1 + np.exp(-scores))
+            scores = scores.tolist()
 
             for j, (start_pred_elem, end_pred_elem, logits_elem, scores_elem) in enumerate(
                 zip(start_pred, end_pred, logits, scores)

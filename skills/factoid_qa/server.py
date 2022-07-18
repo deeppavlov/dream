@@ -297,16 +297,11 @@ def respond():
         cnt_fnd = 0
         for i in range(len(dialogs_batch)):
             if i in question_nums and cnt_fnd < len(text_qa_resp):
-                confidence = text_qa_resp[cnt_fnd][1]
-                if confidence > 5.0:
-                    confidence = 0.99
-                else:
-                    confidence = confidence / 12.0
                 text_qa_response_batch.append(
                     {
                         "answer": text_qa_resp[cnt_fnd][0],
                         "answer_sentence": text_qa_resp[cnt_fnd][3],
-                        "confidence": confidence,
+                        "confidence": text_qa_resp[cnt_fnd][1],
                     }
                 )
             else:
