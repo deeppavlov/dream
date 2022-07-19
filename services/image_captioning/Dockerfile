@@ -11,26 +11,30 @@ RUN python -m pip install --upgrade pip
 
 RUN apt update
 RUN apt install build-essential -y
-RUN apt-get update
+RUN apt-get update && apt-get install git -y
 RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 RUN conda remove PyYAML
 
-COPY ./ofa /src/ofa
-RUN sed '1d' /src/ofa/requirements.txt | xargs -I {} pip install {}
-
-COPY ./fairseq /src/fairseq
-RUN pip install --use-feature=in-tree-build /src/fairseq
-
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+
+RUN git clone https://github.com/OFA-Sys/OFA.git /src/ofa && \
+    cd /src/ofa && \
+    git checkout c8313b9e8e4cf4f4df693e96848d337ed74ab68d && \
+    pip install -r requirements.txt
+
+#RUN git clone https://github.com/facebookresearch/fairseq.git /src/fairseq && \
+#    cd /src/fairseq && \
+#    git checkout cba35cdbca8385fe00045796ea731c0296f5434b && \
+#    pip install /src/fairseq
 
 RUN apt-get install wget -y
 RUN pip install gdown
 
-RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models 
+RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
+
 RUN gdown 1WBQl0WlzvdctslJyLNgedYpRrWAZC69X -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
-#RUN wget https://ofa-silicon.oss-us-west-1.aliyuncs.com/checkpoints/caption_large_best_clean.pt -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
 
 COPY . /src
 
