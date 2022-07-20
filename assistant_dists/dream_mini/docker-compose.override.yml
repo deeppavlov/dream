@@ -2,7 +2,18 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_mini/pipeline_conf.json --cors'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018, spelling-preprocessing:8074, dialogpt:8125, dialogpt-persona:8131, sentence-ranker:8130"
+      WAIT_HOSTS: "
+        convers-evaluator-annotator:8004, 
+        dff-program-y-skill:8008, 
+        sentseg:8011, 
+        convers-evaluation-selector:8009, 
+        dff-intent-responder-skill:8012, 
+        intent-catcher:8014, 
+        badlisted-words:8018, 
+        spelling-preprocessing:8074, 
+        dialogpt:8125, 
+        dialogpt-persona:8131, 
+        sentence-ranker:8130 "
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [ .env ]
@@ -59,19 +70,19 @@ services:
     env_file: [ .env ]
     build:
       args:
-        TAG_BASED_SELECTION: 0
+        TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0
+        PROMPT_PROBA: 0.3
         ACKNOWLEDGEMENT_PROBA: 0.3
         PRIORITIZE_WITH_REQUIRED_ACT: 1
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
         IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 0
+        GREETING_FIRST: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 0
+        PRIORITIZE_SCRIPTED_SKILLS: 1
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -194,7 +205,7 @@ services:
       args:
         SERVICE_PORT: 8130
         SERVICE_NAME: sentence_ranker
-        PRETRAINED_MODEL_NAME_OR_PATH: 'sentence-transformers/nli-distilroberta-base-v2'
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/nli-distilroberta-base-v2
       context: ./annotators/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8130
     environment:

@@ -114,7 +114,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 #### Dream mini up
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_mini/docker-compose.override.yml -f assistant_dists/dream_mini/proxy.yml up --build
+sudo docker-compose -f docker-compose.yml -f assistant_dists/dream_mini/docker-compose.override.yml -f assistant_dists/dream_mini/dev.yml -f assistant_dists/dream_mini/proxy.yml up --build
 ```
 
 #### Dream mini console chat

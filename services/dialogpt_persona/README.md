@@ -1,5 +1,5 @@
 GPU RAM = 1Gb
-cpu time = 0.15 sec 
+cpu time = 70 sec 
 gpu time = 0.05 sec 
 
 sudo docker-compose -f docker-compose.yml -f assistant_dists/dream_mini/docker-compose.override.yml -f assistant_dists/dream_mini/dev.yml -f assistant_dists/dream_mini/proxy.yml up --build
@@ -8,3 +8,6 @@ sudo docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dist
 curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:8126/respond/
 
 sudo docker stop $(sudo docker ps --filter "name=dream" -a -q) && sudo docker rm $(sudo docker ps --filter "status=exited" -a -q) && sudo docker image prune && sudo docker volume prune && sudo docker system prune
+
+### Remove all images
+sudo docker rmi $(docker images -a -q)

@@ -13,12 +13,11 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+logging.getLogger("werkzeug").setLevel("INFO")
+
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-DEFAULT_CONFIDENCE = 0.95
-N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
-ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 3
-MAX_PERSONA_SENTENCES = 3
+DEFAULT_CONFIDENCE = 1.0
+
 
 try:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -37,7 +36,7 @@ except Exception as e:
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("INFO")
-
+MAX_PERSONA_SENTENCES = 3
 def last_index(array, elem):
     return len(array) - 1 - array[::-1].index(elem)
 
@@ -92,7 +91,7 @@ def generate_response(
             pad_token_id=tokenizer.eos_token_id,  
             do_sample=True, 
             num_beams=2, 
-            temperature = 0.95,
+            temperature=0.95,
             top_k=100, 
             top_p=0.95,
         )
@@ -122,22 +121,26 @@ def generate_response(
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    
-    persona = request.json['dialogs'][0]['human_utterances'][-1]['annotations']['sentence_ranker']
-    utterances_histories = request.json['utterances_histories']
     try:
+        start_time = time.time()
+        persona = request.json['persona'][0]
+        utterances_histories = request.json['utterances_histories']
+        
         response = generate_response(
             model=model, 
             tokenizer=tokenizer, 
             persona=persona, 
             utterances_histories=utterances_histories
         )
-        
+
         response = [[response]] 
         confidences = [[DEFAULT_CONFIDENCE]] 
-
-        return jsonify(list(zip(response, confidences)))
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc) 
+
+    total_time = time.time() - start_time
+    logger.info(f"dialog_persona exec time: {total_time:.3f}s")
+    
+    return jsonify(list(zip(response, confidences)))
