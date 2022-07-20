@@ -20,7 +20,7 @@ try:
     ner_model = build_model(config_name, download=True)
     r = "я видела ивана в москве"
     logger.info(f"Original: {r}. NER: {ner_model([r])}")
-    logger.info("ner ru model is loaded.")
+    logger.info("NER model is loaded.")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
