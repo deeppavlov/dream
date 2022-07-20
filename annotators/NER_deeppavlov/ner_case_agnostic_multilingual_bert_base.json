@@ -89,8 +89,7 @@
           "y_ind"
         ],
         "out": [
-          "y_pred_ind",
-          "proba"
+          "y_pred_ind", "proba"
         ]
       },
       {
