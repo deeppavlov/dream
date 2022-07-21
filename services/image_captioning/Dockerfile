@@ -19,15 +19,10 @@ RUN conda remove PyYAML
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN git clone https://github.com/OFA-Sys/OFA.git /src/ofa && \
-    cd /src/ofa && \
+RUN git clone https://github.com/OFA-Sys/OFA && \
+    cd OFA && \
     git checkout c8313b9e8e4cf4f4df693e96848d337ed74ab68d && \
     pip install -r requirements.txt
-
-#RUN git clone https://github.com/facebookresearch/fairseq.git /src/fairseq && \
-#    cd /src/fairseq && \
-#    git checkout cba35cdbca8385fe00045796ea731c0296f5434b && \
-#    pip install /src/fairseq
 
 RUN apt-get install wget -y
 RUN pip install gdown
