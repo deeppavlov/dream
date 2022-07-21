@@ -1,7 +1,0 @@
--e ./fairseq/
-opencv-python
-tensorboardX==2.4.1
-pycocoevalcap==1.2
-pytorch_lightning
-datasets
-rouge_score
