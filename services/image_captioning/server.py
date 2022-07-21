@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append('/src/ofa')
+sys.path.append('/src')
 
 import torch
 from torchvision import transforms
