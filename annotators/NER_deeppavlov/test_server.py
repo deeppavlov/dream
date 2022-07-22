@@ -8,8 +8,8 @@ def main():
         "last_utterances": [
             ["я видела ивана в москве"],
             ["Я видела Ивана в Москве"],
-            ["i have heard about justin. he is in sahara dessert"],
-            ["I have heard about Justin. He is in Sahara Dessert"],
+            ["i have heard about justin. he is in sahara desert"],
+            ["I have heard about Justin. He is in Sahara Desert"],
         ]
     }
 
@@ -36,7 +36,7 @@ def main():
             [
                 {"confidence": 1, "end_pos": 25, "start_pos": 19, "text": "Justin", "type": "PER"},
                 {"confidence": 1, "end_pos": 42, "start_pos": 36, "text": "Sahara", "type": "ORG"},
-                {"confidence": 1, "end_pos": 50, "start_pos": 43, "text": "Dessert", "type": "ORG"},
+                {"confidence": 1, "end_pos": 50, "start_pos": 43, "text": "Desert", "type": "ORG"},
             ]
         ],
     ]
