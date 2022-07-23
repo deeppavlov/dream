@@ -361,18 +361,29 @@ class EntityLinker(Component, Serializable):
 
         scores_list = self.entity_ranker(contexts, cand_ent_list, cand_ent_descr_list)
 
-        for entity_substr, candidate_entities, substr_len, entities_scores, scores in \
-                zip(entity_substr_list, cand_ent_list, substr_lens, entities_scores_list, scores_list):
+        for entity_substr, context, candidate_entities, substr_len, entities_scores, scores in \
+                zip(entity_substr_list, contexts, cand_ent_list, substr_lens, entities_scores_list, scores_list):
             log.info(f"len candidate entities {len(candidate_entities)}")
-            entities_with_scores = [
-                (
-                    entity,
-                    round(entities_scores.get(entity, (0.0, 0))[0], 2),
-                    entities_scores.get(entity, (0.0, 0))[1],
-                    round(score, 2),
-                )
-                for entity, score in scores
-            ]
+            if len(context.split()) < 4:
+                entities_with_scores = [
+                    (
+                        entity,
+                        round(entities_scores.get(entity, (0.0, 0))[0], 2),
+                        entities_scores.get(entity, (0.0, 0))[1],
+                        0.95,
+                    )
+                    for entity, score in scores
+                ]
+            else:
+                entities_with_scores = [
+                    (
+                        entity,
+                        round(entities_scores.get(entity, (0.0, 0))[0], 2),
+                        entities_scores.get(entity, (0.0, 0))[1],
+                        round(score, 2),
+                    )
+                    for entity, score in scores
+                ]
             log.info(f"len entities with scores {len(entities_with_scores)}")
             entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[3], x[2]), reverse=True)
             log.info(f"--- entities_with_scores {entities_with_scores}")

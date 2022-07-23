@@ -72,6 +72,7 @@ class TorchTransformersEntityRankerInfer:
             special_token_id: int = 30522,
             do_lower_case: bool = True,
             batch_size: int = 5,
+            descr_batch_size: int = 30,
             device: str = "cpu",
             **kwargs,
     ):
@@ -96,6 +97,7 @@ class TorchTransformersEntityRankerInfer:
         self.descr_encoder.to(self.device)
         self.special_token_id = special_token_id
         self.batch_size = batch_size
+        self.descr_batch_size = descr_batch_size
 
     def __call__(
             self,
@@ -129,24 +131,31 @@ class TorchTransformersEntityRankerInfer:
 
         scores_batch = []
         for entity_emb, candidate_entities_list, candidate_entities_descr_list in zip(
-                entity_embs, candidate_entities_batch, candidate_entities_descr_batch
+            entity_embs, candidate_entities_batch, candidate_entities_descr_batch
         ):
             if candidate_entities_list:
-                entity_emb = [entity_emb for _ in candidate_entities_list]
-                entity_emb = torch.Tensor(entity_emb).to(self.device)
-                descr_features = self.preprocessor(candidate_entities_descr_list)
-                descr_input_ids = descr_features["input_ids"].to(self.device)
-                descr_attention_mask = descr_features["attention_mask"].to(self.device)
-                descr_encoder_output = self.descr_encoder(input_ids=descr_input_ids,
-                                                          attention_mask=descr_attention_mask)
-                descr_cls_emb = descr_encoder_output.last_hidden_state[:, :1, :].squeeze(1)
+                num_batches = len(candidate_entities_descr_list) // self.descr_batch_size + \
+                    int(len(candidate_entities_descr_list) % self.descr_batch_size > 0)
+                scores_list = []
+                for jj in range(num_batches):
+                    cur_descr_list = candidate_entities_descr_list[jj * self.descr_batch_size : (jj + 1) * self.descr_batch_size]
+                    entity_emb_list = [entity_emb for _ in cur_descr_list]
+                    entity_emb_t = torch.Tensor(entity_emb_list).to(self.device)
+                    descr_features = self.preprocessor(cur_descr_list)
+                    descr_input_ids = descr_features["input_ids"].to(self.device)
+                    descr_attention_mask = descr_features["attention_mask"].to(self.device)
+                    descr_encoder_output = self.descr_encoder(input_ids=descr_input_ids, attention_mask=descr_attention_mask)
+                    descr_cls_emb = descr_encoder_output.last_hidden_state[:, :1, :].squeeze(1)
+                    
+                    bs, emb_dim = entity_emb_t.size()
+                    entity_emb_t = entity_emb_t.reshape(bs, 1, emb_dim)
+                    descr_cls_emb = descr_cls_emb.reshape(bs, emb_dim, 1)
+                    dot_products = torch.matmul(entity_emb_t, descr_cls_emb).squeeze(1).squeeze(1)
+                    cur_scores_list = dot_products.detach().cpu().numpy().tolist()
+                    scores_list += cur_scores_list
 
-                bs, emb_dim = entity_emb.size()
-                entity_emb = entity_emb.reshape(bs, 1, emb_dim)
-                descr_cls_emb = descr_cls_emb.reshape(bs, emb_dim, 1)
-                dot_products = torch.matmul(entity_emb, descr_cls_emb).squeeze(1).squeeze(1)
-                scores_list = dot_products.detach().cpu().numpy()
-                entities_with_scores = [(entity, score) for entity, score in zip(candidate_entities_list, scores_list)]
+                entities_with_scores = [(entity, round(min(max(score - 114.0, 0.0), 28.0) / 28.0, 3))
+                                        for entity, score in zip(candidate_entities_list, scores_list)]
                 entities_with_scores = sorted(entities_with_scores, key=lambda x: x[1], reverse=True)
                 scores_batch.append(entities_with_scores)
             else:
