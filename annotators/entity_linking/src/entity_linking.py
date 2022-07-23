@@ -83,7 +83,11 @@ class EntityLinker(Component, Serializable):
         self.use_tags = use_tags
         self.full_paragraph = full_paragraph
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
-
+        self.not_found_str = "not in wiki"
+        self.related_tags = {"loc": ["gpe"], "gpe": ["loc"], "work_of_art": ["product", "law"],
+                             "product": ["work_of_art"], "law": ["work_of_art"], "org": ["fac", "business"],
+                             "business": ["org"], "actor": ["per"], "athlete": ["per"], "musician": ["per"],
+                             "politician": ["per"], "writer": ["per"]}
         self.load()
 
     def load(self) -> None:
@@ -165,15 +169,37 @@ class EntityLinker(Component, Serializable):
         if entity_substr_list:
             entities_scores_list = []
             cand_ent_scores_list = []
-            entity_substr_split_list = [
-                [word for word in entity_substr.split(" ") if word not in self.stopwords and len(word) > 0]
-                for entity_substr in entity_substr_list
-            ]
-            for entity_substr, entity_substr_split, tags in \
-                    zip(entity_substr_list, entity_substr_split_list, entity_tags_list):
-                cand_ent_init = self.find_exact_match(entity_substr, tags)
-                if not cand_ent_init:
-                    cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
+            for entity_substr, tags in zip(entity_substr_list, entity_tags_list):
+                for symb_old, symb_new in [("'", "''"), ("-", " "), ("@", ""), (".", ""), ("  ", " ")]:
+                    entity_substr = entity_substr.replace(symb_old, symb_new)
+                cand_ent_init = defaultdict(set)
+                if len(entity_substr) > 1:
+                    cand_ent_init = self.find_exact_match(entity_substr, tags)
+                    all_low_conf = True
+                    for entity_id in cand_ent_init:
+                        entity_info_set = cand_ent_init[entity_id]
+                        for entity_info in entity_info_set:
+                            if entity_info[0] == 1.0:
+                                all_low_conf = False
+                                break
+                        if not all_low_conf:
+                            break
+                    clean_tags = [tag for tag, conf in tags]
+                    corr_tags = []
+                    for tag, conf in tags:
+                        if tag in self.related_tags:
+                            corr_tag_list = self.related_tags[tag]
+                            for corr_tag in corr_tag_list:
+                                if corr_tag not in clean_tags and corr_tag not in corr_tags:
+                                    corr_tags.append([corr_tag, conf])
+
+                    if (not cand_ent_init or all_low_conf) and corr_tags:
+                        corr_cand_ent_init = self.find_exact_match(entity_substr, corr_tags)
+                        cand_ent_init = {**cand_ent_init, **corr_cand_ent_init}
+                    entity_substr_split = [word for word in entity_substr.split(" ")
+                                           if word not in self.stopwords and len(word) > 0]
+                    if not cand_ent_init and entity_substr_split:
+                        cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
 
                 cand_ent_scores = []
                 for entity in cand_ent_init:
@@ -222,8 +248,8 @@ class EntityLinker(Component, Serializable):
                 res = self.cursors[tag.lower()].execute(query)
                 entities_and_ids = res.fetchall()
                 if entities_and_ids:
-                    cand_ent_init = self.process_cand_ent(cand_ent_init, entities_and_ids, entity_substr_split, tag,
-                                                          tag_conf)
+                    cand_ent_init = self.process_cand_ent(cand_ent_init, entities_and_ids, entity_substr_split,
+                                                          tag, tag_conf)
         return cand_ent_init
 
     def find_fuzzy_match(self, entity_substr_split, tags):
@@ -231,7 +257,8 @@ class EntityLinker(Component, Serializable):
         for tag, tag_conf in tags:
             if tag.lower() in self.cursors:
                 for word in entity_substr_split:
-                    res = self.cur.execute("SELECT * FROM inverted_index WHERE title MATCH '{}';".format(word))
+                    query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(word)
+                    res = self.cursors[tag.lower()].execute(query)
                     part_entities_and_ids = res.fetchall()
                     cand_ent_init = self.process_cand_ent(cand_ent_init, part_entities_and_ids, entity_substr_split,
                                                           tag, tag_conf)

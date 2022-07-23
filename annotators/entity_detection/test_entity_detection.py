@@ -25,6 +25,7 @@ def main():
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
+        print(result)
         if result == gold_result:
             count += 1
 
