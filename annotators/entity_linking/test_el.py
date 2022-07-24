@@ -19,7 +19,7 @@ def main():
         },
     ]
 
-    gold_results = [["Q134773"], ["Q151269"]]
+    gold_results = [["Q134773"], ["Q151269", "Q215925"]]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

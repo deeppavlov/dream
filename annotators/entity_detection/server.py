@@ -119,11 +119,11 @@ def get_result(request, what_to_annotate):
                     if finegrained_tags[0][0] > 0.5:
                         tag = finegrained_tags[0][1].lower()
                         conf, finegrained_tag = finegrained_tags[0]
-                        filtered_finegrained_tags.append((finegrained_tag.lower(), conf))
+                        filtered_finegrained_tags.append((finegrained_tag.lower(), round(conf, 3)))
                         for finegrained_elem in finegrained_tags[1:]:
                             conf, finegrained_tag = finegrained_elem
                             if conf > 0.2:
-                                filtered_finegrained_tags.append((finegrained_tag.lower(), conf))
+                                filtered_finegrained_tags.append((finegrained_tag.lower(), round(conf, 3)))
                     else:
                         tag = "misc"
                         filtered_finegrained_tags.append(("misc", 1.0))
