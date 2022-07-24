@@ -17,6 +17,8 @@
         "out": ["entity_ids", "entity_conf", "entity_pages"],
         "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream",
         "tags_filename": "{MODELS_PATH}/el_tags_distilbert/tag.dict",
+        "words_dict_filename": "{DOWNLOADS_PATH}/entity_linking_eng/words_dict.pickle",
+        "ngrams_matrix_filename": "{DOWNLOADS_PATH}/entity_linking_eng/ngrams_matrix.npz",
         "entity_ranker": "#entity_descr_ranking",
         "rank_in_runtime": true,
         "num_entities_for_bert_ranking": 20,
@@ -53,6 +55,10 @@
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/el_eng_tags.tar.gz",
         "subdir": "{MODELS_PATH}/el_tags_distilbert"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/word_spelling.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
       }
     ]
   }

@@ -26,6 +26,7 @@ from deeppavlov.core.common.registry import register
 from deeppavlov.core.models.component import Component
 from deeppavlov.core.models.serializable import Serializable
 from deeppavlov.core.commands.utils import expand_path
+from src.find_word import WordSearcher
 
 log = getLogger(__name__)
 nltk.download("stopwords")
@@ -41,6 +42,8 @@ class EntityLinker(Component, Serializable):
             self,
             load_path: str,
             tags_filename: str,
+            words_dict_filename: str = None,
+            ngrams_matrix_filename: str = None,
             entity_ranker=None,
             num_entities_for_bert_ranking: int = 50,
             num_entities_to_return: int = 10,
@@ -69,6 +72,8 @@ class EntityLinker(Component, Serializable):
         super().__init__(save_path=None, load_path=load_path)
         self.lemmatize = lemmatize
         self.tags_filename = tags_filename
+        self.words_dict_filename = words_dict_filename
+        self.ngrams_matrix_filename = ngrams_matrix_filename
         self.num_entities_for_bert_ranking = num_entities_for_bert_ranking
         self.entity_ranker = entity_ranker
         self.num_entities_to_return = num_entities_to_return
@@ -88,6 +93,9 @@ class EntityLinker(Component, Serializable):
                              "product": ["work_of_art"], "law": ["work_of_art"], "org": ["fac", "business"],
                              "business": ["org"], "actor": ["per"], "athlete": ["per"], "musician": ["per"],
                              "politician": ["per"], "writer": ["per"]}
+        self.word_searcher = None
+        if self.words_dict_filename:
+            self.word_searcher = WordSearcher(self.words_dict_filename, self.ngrams_matrix_filename)
         self.load()
 
     def load(self) -> None:
@@ -185,20 +193,25 @@ class EntityLinker(Component, Serializable):
                         if not all_low_conf:
                             break
                     clean_tags = [tag for tag, conf in tags]
-                    corr_tags = []
+                    corr_tags, corr_clean_tags = [], []
                     for tag, conf in tags:
                         if tag in self.related_tags:
                             corr_tag_list = self.related_tags[tag]
                             for corr_tag in corr_tag_list:
-                                if corr_tag not in clean_tags and corr_tag not in corr_tags:
+                                if corr_tag not in clean_tags and corr_tag not in corr_clean_tags:
                                     corr_tags.append([corr_tag, conf])
+                                    corr_clean_tags.append(corr_tag)
 
                     if (not cand_ent_init or all_low_conf) and corr_tags:
                         corr_cand_ent_init = self.find_exact_match(entity_substr, corr_tags)
                         cand_ent_init = {**cand_ent_init, **corr_cand_ent_init}
                     entity_substr_split = [word for word in entity_substr.split(" ")
                                            if word not in self.stopwords and len(word) > 0]
-                    if not cand_ent_init and entity_substr_split:
+                    if not cand_ent_init and len(entity_substr_split) == 1 and self.word_searcher:
+                        corr_words = self.word_searcher(entity_substr_split[0], set(clean_tags + corr_clean_tags))
+                        if corr_words:
+                            cand_ent_init = self.find_exact_match(corr_words[0], tags + corr_tags)
+                    if not cand_ent_init and len(entity_substr_split) > 1:
                         cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
 
                 cand_ent_scores = []
