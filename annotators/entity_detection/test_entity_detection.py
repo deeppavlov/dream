@@ -14,15 +14,24 @@ def main():
             {
                 "entities": ["capital", "russia"],
                 "labelled_entities": [
-                    {"text": "capital", "offsets": [12, 19], "label": "misc",
-                     "finegrained_label": [["misc", 1.0]]},
-                    {"text": "russia", "offsets": [23, 29], "label": "location",
-                     "finegrained_label": [["country", 0.953]]},
+                    {"text": "capital", "offsets": [12, 19], "label": "misc", "finegrained_label": [["misc", 1.0]]},
+                    {
+                        "text": "russia",
+                        "offsets": [23, 29],
+                        "label": "location",
+                        "finegrained_label": [["country", 0.953]],
+                    },
                 ],
             }
         ],
-        [{"entities": ["politics"], "labelled_entities": [{"text": "politics", "offsets": [17, 25], "label": "misc",
-                                                           "finegrained_label": [["misc", 1.0]]}]}],
+        [
+            {
+                "entities": ["politics"],
+                "labelled_entities": [
+                    {"text": "politics", "offsets": [17, 25], "label": "misc", "finegrained_label": [["misc", 1.0]]}
+                ],
+            }
+        ],
     ]
 
     count = 0

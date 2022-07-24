@@ -14,8 +14,9 @@
       {
         "class_name": "src.entity_linking:EntityLinker",
         "in": ["entity_substr", "entity_tags", "sentences"],
-        "out": ["entity_ids", "entity_conf", "entity_pages"],
+        "out": ["entity_ids", "entity_conf", "entity_pages", "first_pars"],
         "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream",
+        "add_info_filename": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream/add_info.db",
         "tags_filename": "{MODELS_PATH}/el_tags_distilbert/tag.dict",
         "words_dict_filename": "{DOWNLOADS_PATH}/entity_linking_eng/words_dict.pickle",
         "ngrams_matrix_filename": "{DOWNLOADS_PATH}/entity_linking_eng/ngrams_matrix.npz",
@@ -33,7 +34,7 @@
         "lang": "en"
       }
     ],
-    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_pages"]
+    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_pages", "first_pars"]
   },
   "metadata": {
     "variables": {
