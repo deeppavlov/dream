@@ -61,6 +61,7 @@ services:
   dialogpt-persona:
     volumes:
       - "./services/dialogpt_persona:/src"
+      - "./common:/src/common"
     ports:
       - 8131:8131
   

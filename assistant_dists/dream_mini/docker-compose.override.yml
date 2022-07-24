@@ -2,18 +2,10 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_mini/pipeline_conf.json --cors'
     environment:
-      WAIT_HOSTS: "
-        convers-evaluator-annotator:8004, 
-        dff-program-y-skill:8008, 
-        sentseg:8011, 
-        convers-evaluation-selector:8009, 
-        dff-intent-responder-skill:8012, 
-        intent-catcher:8014, 
-        badlisted-words:8018, 
-        spelling-preprocessing:8074, 
-        dialogpt:8125, 
-        dialogpt-persona:8131, 
-        sentence-ranker:8130 "
+      WAIT_HOSTS: " convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, 
+        convers-evaluation-selector:8009, dff-intent-responder-skill:8012, 
+        intent-catcher:8014, badlisted-words:8018, spelling-preprocessing:8074, 
+        dialogpt:8125, dialogpt-persona:8131, sentence-ranker:8130 "
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [ .env ]
@@ -187,7 +179,8 @@ services:
         SERVICE_PORT: 8131
         SERVICE_NAME: dialogpt_persona
         PRETRAINED_MODEL_NAME_OR_PATH: dim/dialogpt-medium-persona-chat
-      context: ./services/dialogpt_persona/
+      context: .
+      dockerfile: ./services/dialogpt_persona/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
     environment:
       - CUDA_VISIBLE_DEVICES=0

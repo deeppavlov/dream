@@ -9,6 +9,7 @@ from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+from common.utils import get_intents
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -125,6 +126,14 @@ def respond():
         start_time = time.time()
         persona = request.json['persona'][0]
         utterances_histories = request.json['utterances_histories']
+
+        intents = request.json['intents'][0]
+        if "open_question_personal" in get_intents(intents):
+            logger.info("open_question_personal")
+            DEFAULT_CONFIDENCE = 1.0
+        else:
+            logger.info("NOT open_question_personal")
+            DEFAULT_CONFIDENCE = 0.95
         
         response = generate_response(
             model=model, 
