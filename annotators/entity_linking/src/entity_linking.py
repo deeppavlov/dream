@@ -203,8 +203,9 @@ class EntityLinker(Component, Serializable):
                         res = self.add_info_cur.execute(query)
                         first_par = res.fetchall()
                         first_pars.append(first_par[0][0])
-                    except:
+                    except Exception as e:
                         first_pars.append("")
+                        log.info(f"error {e}")
                 first_par_list.append(first_pars)
             first_par_batch.append(first_par_list)
         return first_par_batch
