@@ -142,6 +142,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
             raw_responses = resp.json()
         except Exception:
+            logger.info("Keyword storygpt service didn't respond.")
             return ""
         reply = raw_responses[0][0]
         reply = "Oh, that reminded me of a story! " + reply
@@ -186,6 +187,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
             raw_responses = resp.json()
         except Exception:
+            logger.info("Prompt storygpt service didn't respond.")
             return ""
         logger.info(f"Skill receives from service: {raw_responses}")
         reply = raw_responses[0][0]
