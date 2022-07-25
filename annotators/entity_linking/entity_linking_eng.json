@@ -50,6 +50,10 @@
         "subdir": "{MODELS_PATH}/entity_descr_nll_ranking"
       },
       {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/bert_small.tar.gz",
+        "subdir": "{TRANSFORMER}"
+      },
+      {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/el_eng_dream_files.tar.gz",
         "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
       },

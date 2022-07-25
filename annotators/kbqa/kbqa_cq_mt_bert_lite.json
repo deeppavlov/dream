@@ -1,6 +1,6 @@
 {
   "chainer": {
-    "in": ["x_init", "x_init", "template_type", "entities", "types"],
+    "in": ["x_init", "x_init", "template_type", "entities", "tags"],
     "pipe": [
       {
         "class_name": "template_matcher",
@@ -14,7 +14,7 @@
         "id": "linker_entities",
         "url": "{ENTITY_LINKING_URL}",
         "out": ["entity_ids"],
-        "param_names": ["entity_substr", "template_found"]
+        "param_names": ["entity_substr", "entity_tags", "context"]
       },
       {
         "class_name": "wiki_parser",
@@ -44,7 +44,7 @@
         "rels_to_leave": 40
       },
       {
-        "class_name": "query_generator",
+        "class_name": "query_generator:QueryGenerator",
         "id": "query_g",
         "linker_entities": "#linker_entities",
         "linker_types": "#linker_types",
@@ -62,7 +62,7 @@
         "max_comb_num": 50,
         "use_wp_api_requester": false,
         "use_el_api_requester": true,
-        "in": ["x_init", "x_init", "template_type", "entities", "types"],
+        "in": ["x_init", "x_init", "template_type", "entities", "tags"],
         "out": ["candidate_rels_answers", "entities", "template_answers"]
       },
       {

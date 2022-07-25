@@ -567,9 +567,6 @@ def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2
     entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
-    out = open("ner_output.txt", "a")
-    out.write(f"ner_output {entities_with_labels}" + "\n")
-    out.close()
     entity_substr_list, entity_tags_list = [], []
     for entity in entities_with_labels:
         if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
@@ -598,17 +595,20 @@ def kbqa_formatter_dialog(dialog: Dict):
             sentences = [deepcopy(annotations["sentseg"]["punct_sent"])]
     else:
         sentences = [deepcopy(dialog["human_utterances"][-1]["text"])]
-    entity_substr = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=False)
-    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-    entities = []
-    if entity_substr:
-        entities = [entity_substr]
-    elif nounphrases:
-        entities = [nounphrases]
-    else:
-        entities = [[]]
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
 
-    return [{"x_init": sentences, "entities": entities}]
+    return [{"x_init": sentences, "entities": [entity_substr_list], "entity_tags": [entity_tags_list]}]
 
 
 def fact_random_formatter_dialog(dialog: Dict):

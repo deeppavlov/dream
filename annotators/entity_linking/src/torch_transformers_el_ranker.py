@@ -73,7 +73,7 @@ class TorchTransformersEntityRankerInfer:
         do_lower_case: bool = True,
         batch_size: int = 5,
         descr_batch_size: int = 30,
-        device: str = "cpu",
+        device: str = "gpu",
         **kwargs,
     ):
         self.device = torch.device("cuda" if torch.cuda.is_available() and device == "gpu" else "cpu")
