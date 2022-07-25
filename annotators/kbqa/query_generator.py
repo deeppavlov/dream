@@ -159,7 +159,7 @@ class QueryGenerator(QueryGeneratorBase):
         define_sorting_order = query_info["define_sorting_order"]
         property_types = query_info["property_types"]
         log.debug(f"(query_parser)query: {query}, {rels_for_search}, {query_seq_num}, {return_if_found}")
-        query_triplets = re.findall("{[ ]?(.*?)[ ]?}", query)[0].split(" . ")
+        query_triplets = re.findall(r"{[ ]?(.*?)[ ]?}", query)[0].split(" . ")
         log.debug(f"(query_parser)query_triplets: {query_triplets}")
         query_triplets = [triplet.split(" ")[:3] for triplet in query_triplets]
         query_sequence_dict = {num: triplet for num, triplet in zip(query_seq_num, query_triplets)}
@@ -185,7 +185,7 @@ class QueryGenerator(QueryGeneratorBase):
         rels_from_query = [triplet[1] for triplet in query_triplets if triplet[1].startswith("?")]
         answer_ent = re.findall(r"select [\(]?([\S]+) ", query)
         order_info_nt = namedtuple("order_info", ["variable", "sorting_order"])
-        order_variable = re.findall("order by (asc|desc)\((.*)\)", query)
+        order_variable = re.findall(r"order by (asc|desc)\((.*)\)", query)
         if order_variable:
             if define_sorting_order:
                 answers_sorting_order = order_of_answers_sorting(question)
@@ -195,7 +195,7 @@ class QueryGenerator(QueryGeneratorBase):
         else:
             order_info = order_info_nt(None, None)
         log.debug(f"question, order_info: {question}, {order_info}")
-        filter_from_query = re.findall("contains\((\?\w), (.+?)\)", query)
+        filter_from_query = re.findall(r"contains\((\?\w), (.+?)\)", query)
         log.debug(f"(query_parser)filter_from_query: {filter_from_query}")
 
         year = extract_year(question_tokens, question)
