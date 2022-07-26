@@ -19,7 +19,18 @@ def test_respond():
                         }
                     }
                 ]
-            }
+            },
+            {
+                "human_utterances": [
+                    {
+                        "annotations": {
+                            "sentseg": {
+                                "punct_sent": "My mum working hard. What about you?"
+                            }
+                        }
+                    }
+                ]
+            },
         ]
     }
 

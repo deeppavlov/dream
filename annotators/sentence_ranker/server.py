@@ -105,17 +105,18 @@ def respond():
         start_time = time.time()
         dialogs = request.json.get("dialogs", [])
         process_result = []
-        # take the last replica, then take the result of the sentseg annotator from it
-        last_utterance = dialogs[0]["human_utterances"][-1]["annotations"]['sentseg']['punct_sent']
-        max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences(
-            [last_utterance], 
-            k=TOP_SIMILAR_SENTENCES
-        )
-        
-        process_result.append([
-            max_likelihood_sentences, 
-            max_sentence_similarity
-        ])
+        for last_utterance in dialogs:
+            # take the last replica, then take the result of the sentseg annotator from it
+            last_utterance = last_utterance["human_utterances"][-1]["annotations"]['sentseg']['punct_sent']
+            max_likelihood_sentences, max_sentence_similarity = sentence_ranker.rank_sentences(
+                [last_utterance], 
+                k=TOP_SIMILAR_SENTENCES
+            )
+            
+            process_result.append([
+                max_likelihood_sentences, 
+                max_sentence_similarity
+            ])
 
     except Exception as exc:
         logger.exception(exc)

@@ -38,8 +38,6 @@ except Exception as e:
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("INFO")
 MAX_PERSONA_SENTENCES = 3
-def last_index(array, elem):
-    return len(array) - 1 - array[::-1].index(elem)
 
 def generate_response(
         persona=None,  
@@ -47,16 +45,16 @@ def generate_response(
         tokenizer=None, 
         utterances_histories=None
     ):
-    """генерирует следующую реплику бота на основе короткой персоны состоящей из нескольких предложений.
+    """generates the next replica of the bot based on a short persona consisting of several sentences.
 
     Args:
-        persona (List[List[str], float]): Топ предложений похожих на последнюю реплику. Defaults to None.
-        model (AutoModelForCausalLM): gpt модель. Defaults to None.
-        tokenizer (AutoTokenizer): gpt токенизатор. Defaults to None.
-        utterances_histories (List[List[str]]): история диалога. Defaults to None.
+        persona (List[List[str], float]): Top sentences similar to the last replica. Defaults to None.
+        model (AutoModelForCausalLM): gpt model. Defaults to None.
+        tokenizer (AutoTokenizer): gpt tokenizer. Defaults to None.
+        utterances_histories (List[List[str]]): dialog history. Defaults to None.
 
     Returns:
-        str: следующая реплика
+        str: next utterance
     """
     
     SPECIAL_TOKENS = { 
@@ -124,26 +122,29 @@ def generate_response(
 def respond():
     try:
         start_time = time.time()
-        persona = request.json['persona'][0]
-        utterances_histories = request.json['utterances_histories']
+        responses = [] 
+        confidences = []
+        for utt_pos in range(len(request.json['persona'])):
+            persona = request.json['persona'][utt_pos]
+            utterances_histories = request.json['utterances_histories']
 
-        intents = request.json['intents'][0]
-        if "open_question_personal" in get_intents(intents):
-            logger.info("open_question_personal")
-            DEFAULT_CONFIDENCE = 1.0
-        else:
-            logger.info("NOT open_question_personal")
-            DEFAULT_CONFIDENCE = 0.95
-        
-        response = generate_response(
-            model=model, 
-            tokenizer=tokenizer, 
-            persona=persona, 
-            utterances_histories=utterances_histories
-        )
+            intents = request.json['intents'][utt_pos]
+            if "open_question_personal" in get_intents(intents):
+                logger.info("open_question_personal")
+                DEFAULT_CONFIDENCE = 1.0
+            else:
+                logger.info("NOT open_question_personal")
+                DEFAULT_CONFIDENCE = 0.95
+            
+            response = generate_response(
+                model=model, 
+                tokenizer=tokenizer, 
+                persona=persona, 
+                utterances_histories=utterances_histories
+            )
 
-        response = [[response]] 
-        confidences = [[DEFAULT_CONFIDENCE]] 
+            responses.append([response]) 
+            confidences.append([DEFAULT_CONFIDENCE])
 
     except Exception as exc:
         logger.exception(exc)
@@ -152,4 +153,4 @@ def respond():
     total_time = time.time() - start_time
     logger.info(f"dialog_persona exec time: {total_time:.3f}s")
     
-    return jsonify(list(zip(response, confidences)))
+    return jsonify(list(zip(responses, confidences)))
