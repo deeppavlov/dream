@@ -112,9 +112,6 @@ def get_result(request, what_to_annotate):
                 if entity.lower() not in stopwords and len(entity) > 2 and start_offset >= last_utt_start:
                     entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                     entity = DOUBLE_SPACES.sub(" ", entity).strip()
-                    out = open("log.txt", "a")
-                    out.write(f"entity {entity} tag {tag} finegrained tags {finegrained_tags}" + "\n")
-                    out.close()
                     filtered_finegrained_tags = []
                     if finegrained_tags[0][0] > 0.5:
                         tag = finegrained_tags[0][1].lower()
