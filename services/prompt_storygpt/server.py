@@ -8,6 +8,7 @@ from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 from transformers import BartForConditionalGeneration, BartTokenizer
+from string import punctuation
 
 import nltk
 from nltk.corpus import stopwords
@@ -63,8 +64,10 @@ def generate_part(texts, max_len, temp, num_sents, first):
         text = pattern.sub("", text)  # delete everything in ()
         text = text.replace(" .", ".").replace("..", ".").replace("..", ".")
         sents = sent_tokenize(text)
-        text = text[: len(" ".join(sents[:num_sents]))]
-        if text[-1] not in ",.!?;":
+        text = " ".join(sents[:num_sents])
+        if text[-1] not in ".!?":
+            if text[-1] in punctuation:
+                text = text[-1]
             text += "."
         if first:
             text += " At the end,"
