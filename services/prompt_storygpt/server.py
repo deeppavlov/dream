@@ -51,28 +51,26 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_part(texts, max_len, temp, num_sents, first):
-    encoding = tokenizer(texts, padding=True, return_tensors="pt").to(device)
+def generate_part(text, max_len, temp, num_sents, first):
+    encoding = tokenizer([text], padding=True, return_tensors="pt").to(device)
     with torch.no_grad():
         generated_ids = model.generate(
             **encoding, max_length=max_len, length_penalty=-100.0, temperature=temp, do_sample=True
         )
     generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
-    texts = []
-    for text in generated_texts:
-        text = pattern.sub("", text)  # delete everything in ()
-        text = text.replace(" .", ".").replace("..", ".").replace("..", ".")
-        sents = sent_tokenize(text)
-        text = " ".join(sents[:num_sents])
-        if text[-1] not in ".!?":
-            if text[-1] in punctuation:
-                text = text[-1]
-            text += "."
-        if first:
-            text += " At the end,"
-        texts.append(text)
-    return texts
+    text = generated_texts[0]
+    text = pattern.sub("", text)  # delete everything in ()
+    text = text.replace(" .", ".").replace("..", ".").replace("..", ".")
+    sents = sent_tokenize(text)
+    text = " ".join(sents[:num_sents])
+    if text[-1] not in ".!?":
+        if text[-1] in punctuation:
+            text = text[-1]
+        text += "."
+    if first:
+        text += " At the end,"
+    return text
 
 
 def fill_mask(masked_phrase):
@@ -88,12 +86,11 @@ def generate_response(context):
     logger.info(f"Topic in StoryGPT service: {noun}")
     masked = f"Let me share a story about {noun}. I <mask> {noun}"
     filled = fill_mask(masked)
-    texts = [filled]
-    first_texts = generate_part(texts, 100, 1, 4, first=True)
-    logger.info(f"First part generated: {first_texts[0]}")
-    final_texts = generate_part(first_texts * 2, 150, 0.8, 5, first=False)
-    logger.info(f"Generated: {final_texts[0]}")
-    reply = final_texts[0]
+    first_text = generate_part(filled, 100, 1, 4, first=True)
+    logger.info(f"First part generated: {first_text}")
+    final_text = generate_part(first_text * 2, 150, 0.8, 5, first=False)
+    logger.info(f"Generated: {final_text}")
+    reply = final_text
     return reply
 
 
