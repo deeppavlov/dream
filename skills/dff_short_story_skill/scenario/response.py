@@ -14,6 +14,12 @@ from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTI
 logger = logging.getLogger(__name__)
 
 care_pattern = re.compile(r"(don't|(do not)) (care|know)")
+choose_texts = [
+    'What would you like to hear about?',
+    'What do you want the story to be about?',
+    'Please tell me a topic and I will share a story!',
+    'Please tell me, which topic would you like it to be about?'
+    ]
 
 with open(
     "data/stories.json",
@@ -164,7 +170,7 @@ def choose_noun(nouns):
 def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     int_ctx.set_confidence(ctx, actor, 1.0)
-    return "What do you want the story to be about?"
+    return random.choice(choose_texts)
 
 
 def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:

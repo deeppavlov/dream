@@ -13,6 +13,12 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE")
 pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)")
+choose_texts = [
+    'What would you like to hear about?',
+    'What do you want the story to be about?',
+    'Please tell me a topic and I will share a story!',
+    'Please tell me, which topic would you like it to be about?'
+    ]
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:
@@ -84,8 +90,9 @@ def should_return(ctx: Context, actor: Actor) -> bool:
 def prev_is_question(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
     if utt["text"]:
-        if "What do you want the story to be about?" in utt["text"]:
-            return True
+        for text in choose_texts:
+            if text in utt["text"]:
+                return True
     return False
 
 
