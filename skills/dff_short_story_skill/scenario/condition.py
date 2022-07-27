@@ -14,11 +14,11 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 STORY_TYPE = os.getenv("STORY_TYPE")
 pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)")
 choose_texts = [
-    'What would you like to hear about?',
-    'What do you want the story to be about?',
-    'Please tell me a topic and I will share a story!',
-    'Please tell me, which topic would you like it to be about?'
-    ]
+    "What would you like to hear about?",
+    "What do you want the story to be about?",
+    "Please tell me a topic and I will share a story!",
+    "Please tell me, which topic would you like it to be about?",
+]
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:

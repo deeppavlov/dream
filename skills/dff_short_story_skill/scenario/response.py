@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 
 care_pattern = re.compile(r"(don't|(do not)) (care|know)")
 choose_texts = [
-    'What would you like to hear about?',
-    'What do you want the story to be about?',
-    'Please tell me a topic and I will share a story!',
-    'Please tell me, which topic would you like it to be about?'
-    ]
+    "What would you like to hear about?",
+    "What do you want the story to be about?",
+    "Please tell me a topic and I will share a story!",
+    "Please tell me, which topic would you like it to be about?",
+]
 
 with open(
     "data/stories.json",
