@@ -207,19 +207,27 @@ services:
           memory: 1536M
 
   ner:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
-      context: ./annotators/NER/
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base.json
+        PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: EN
+      context: ./
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     tty: true
     deploy:
       resources:
         limits:
-          memory: 1512M
+          memory: 2G
         reservations:
-          memory: 1512M
+          memory: 2G
 
   eliza:
     env_file: [.env]

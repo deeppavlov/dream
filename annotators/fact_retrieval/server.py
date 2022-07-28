@@ -3,7 +3,6 @@ import logging
 import nltk
 import os
 import pickle
-import random
 import re
 import time
 
@@ -40,9 +39,6 @@ with open("%s" % DATA_SENTENCES, "rb") as fl:
 
 try:
     fact_retrieval = build_model(CONFIG, download=True)
-    for i in range(50):
-        utt = random.choice(test_sentences)
-        test_res = fact_retrieval([utt], [utt], [["moscow"]], [[["Moscow"]]])
 
     with open("/root/.deeppavlov/downloads/wikidata/entity_types_sets.pickle", "rb") as fl:
         entity_types_sets = pickle.load(fl)
@@ -116,7 +112,7 @@ def find_facts(entity_substr_batch, entity_ids_batch, entity_pages_batch):
             for entity_id, entity_page in zip(entity_ids, entity_pages):
                 for entity_types_substr in entity_types_sets:
                     if entity_id in entity_types_sets[entity_types_substr]:
-                        logger.info(f"found_entity_types_substr {entity_types_substr}")
+                        logger.info(f"found_entity_types_substr {entity_types_substr} entity_page {entity_page}")
                         if entity_types_substr in {"food", "fruit", "vegetable", "berry"}:
                             found_page_title = ""
                             entity_tokens = set(re.findall(re_tokenizer, entity_substr))
@@ -193,6 +189,9 @@ def respond():
     entity_ids = request.json.get("entity_ids", [])
     if not entity_ids:
         entity_ids = [[] for _ in cur_utt]
+    logger.info(
+        f"cur_utt {cur_utt} dialog_history {dialog_history} nounphr_list {nounphr_list} entity_pages {entity_pages}"
+    )
 
     nf_numbers, f_utt, f_dh, f_nounphr_list, f_entity_pages = [], [], [], [], []
     for n, (utt, dh, nounphrases, input_pages) in enumerate(zip(cur_utt, dialog_history, nounphr_list, entity_pages)):
@@ -207,8 +206,13 @@ def respond():
     out_res = [{"facts": [], "topic_facts": []} for _ in cur_utt]
     try:
         facts_batch = find_facts(entity_substr, entity_ids, entity_pages_titles)
+        logger.info(f"f_utt {f_utt}")
         if f_utt:
-            fact_res = fact_retrieval(f_utt, f_dh, f_nounphr_list, f_entity_pages)
+            fact_res = fact_retrieval(f_utt) if len(f_utt[0].split()) > 3 else fact_retrieval(f_dh)
+            if fact_res:
+                fact_res = fact_res[0]
+            fact_res = [[fact.replace('""', '"') for fact in facts] for facts in fact_res]
+
             out_res = []
             cnt_fnd = 0
             for i in range(len(cur_utt)):
