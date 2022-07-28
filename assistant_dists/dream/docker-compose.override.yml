@@ -1172,7 +1172,7 @@ services:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
-      resources:x
+      resources:
         limits:
           memory: 2G
         reservations:
