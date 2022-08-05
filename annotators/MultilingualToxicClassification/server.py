@@ -64,7 +64,7 @@ def classify_sentences(sentences):
             if torch.cuda.is_available():
                 inputs = inputs.to("cuda")
             outputs = model(**inputs)[0]
-            model_output = torch.sigmoid(outputs).cpu().detach().numpy()
+            model_output = torch.sigmoid(outputs).detach().cpu().numpy()
             result = []
 
             for i, cla in zip(sentences, model_output):

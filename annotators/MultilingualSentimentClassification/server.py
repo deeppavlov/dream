@@ -43,7 +43,7 @@ def classify_sentences(sentences):
             if torch.cuda.is_available():
                 inputs = inputs.to("cuda")
             outputs = model(**inputs)[0]
-            model_output = torch.nn.functional.softmax(outputs, dim=-1)
+            model_output = torch.nn.functional.softmax(outputs, dim=-1).cpu()
             result = []
 
             for i, cla in zip(sentences, model_output):
