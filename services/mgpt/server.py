@@ -18,9 +18,12 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
-N_HYPOTHESES_TO_GENERATE = 1
+N_HYPOTHESES_TO_GENERATE = 3
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
+CONFIG = os.environ.get("CONFIG")
+conf = json.load(open(f"{CONFIG}", 'r'))
+conf["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -39,16 +42,15 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+
 def generate_response(context, model, tokenizer):
     encoded_context = []
     text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle(['Alex', 'Bob']), context[-MAX_HISTORY_DEPTH:] + [""]))))
+    logger.info(f"Context: {text}")
     bot_input_ids = tokenizer.encode(text, return_tensors="pt")
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
-
-        CONFIG = os.environ.get("CONFIG")
-        conf = json.load(open(f"{CONFIG}", 'r'))
 
         chat_history_ids = model.generate(
             bot_input_ids,
@@ -58,7 +60,8 @@ def generate_response(context, model, tokenizer):
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    return tokenizer.decode(chat_history_ids[0], skip_special_tokens=True)[len(text):].lstrip().split('\n')[0]
+    outputs = [tokenizer.decode(x, skip_special_tokens=True)[len(text):].lstrip().split('\n')[0] for x in chat_history_ids]
+    return outputs
 
 
 @app.route("/respond", methods=["POST"])
@@ -72,8 +75,8 @@ def respond():
         for context in contexts:
             curr_responses = []
             curr_confidences = []
-            for i in range(N_HYPOTHESES_TO_GENERATE):
-                response = generate_response(context, model, tokenizer)
+            preds = generate_response(context, model, tokenizer)
+            for response in preds:
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]

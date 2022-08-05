@@ -4,7 +4,7 @@
             "emotion-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://emotion-classification:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -14,7 +14,7 @@
             "toxic-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://toxic-classification:8127/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -24,7 +24,7 @@
             "sentiment-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://sentiment-classification:8129/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -52,7 +52,7 @@
             "mgpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 40,
+                    "timeout": 5,
                     "url": "http://mgpt:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -67,7 +67,7 @@
             "sentence-ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://sentence-ranker:8130/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
@@ -78,7 +78,7 @@
             "emotion-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://emotion-classification:8128/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -91,7 +91,7 @@
             "toxic-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://toxic-classification:8127/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -102,7 +102,7 @@
             "sentiment-classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://sentiment-classification:8129/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -117,7 +117,7 @@
             "convers_evaluation_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 1,
                     "url": "http://convers-evaluation-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
