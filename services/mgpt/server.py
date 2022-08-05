@@ -1,6 +1,7 @@
 import logging
 import time
 import os
+import re
 import json
 import sentry_sdk
 import torch
@@ -24,6 +25,7 @@ MAX_HISTORY_DEPTH = 3
 CONFIG = os.environ.get("CONFIG")
 conf = json.load(open(f"{CONFIG}", 'r'))
 conf["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
+compiled_nick = re.compile("@[a-zA-Z0-9\.\,!\?]+")
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -77,6 +79,8 @@ def respond():
             curr_confidences = []
             preds = generate_response(context, model, tokenizer)
             for response in preds:
+                response = re.sub(compiled_nick, "", response).strip()
+
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]
