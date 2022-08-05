@@ -39,16 +39,15 @@ try:
         state_dict=loaded["state_dict"],
         local_files_only=False
     )
+    model.eval()
+    if torch.cuda.is_available():
+        model.to("cuda")
+        logger.info("toxic-classification is set to run on cuda")
     tokenizer = getattr(transformers, tokenizer_name).from_pretrained(
         model_type,
         local_files_only=False,
     )
-
-    if torch.cuda.is_available():
-        model.to("cuda")
-        logger.info("MultilingualToxicClassification is set to run on cuda")
-
-    logger.info("MultilingualToxicClassification is ready")
+    logger.info("toxic-classification is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -61,12 +60,15 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def classify_sentences(sentences):
     try:
         inputs = tokenizer(sentences, return_tensors="pt", truncation=True, padding=True)
-        outputs = model(**inputs)[0]
-        model_output = torch.sigmoid(outputs).cpu().detach().numpy()
-        result = []
+        with torch.no_grad():
+            if torch.cuda.is_available():
+                inputs = inputs.to("cuda")
+            outputs = model(**inputs)[0]
+            model_output = torch.sigmoid(outputs).cpu().detach().numpy()
+            result = []
 
-        for i, cla in zip(sentences, model_output):
-            result += [{class_names[id_column]: float(cla[id_column]) for id_column in range(len(class_names))}]
+            for i, cla in zip(sentences, model_output):
+                result += [{class_names[id_column]: float(cla[id_column]) for id_column in range(len(class_names))}]
 
     except Exception as exc:
         logger.exception(exc)
@@ -82,7 +84,7 @@ def respond():
     sentences = request.json.get("sentences", [])
     result = classify_sentences(sentences)
     total_time = time.time() - st_time
-    logger.info(f"MultilingualToxicClassification exec time: {total_time:.3f}s")
+    logger.info(f"toxic-classification exec time: {total_time:.3f}s")
 
     return jsonify(result)
 
@@ -93,6 +95,6 @@ def respond_batch():
     sentences = request.json.get("sentences", [])
     result = classify_sentences(sentences)
     total_time = time.time() - st_time
-    logger.info(f"MultilingualToxicClassification exec time: {total_time:.3f}s")
+    logger.info(f"toxic-classification exec time: {total_time:.3f}s")
 
     return jsonify([{"batch": result}])
