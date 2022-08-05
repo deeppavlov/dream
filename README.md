@@ -293,8 +293,8 @@ Dream Architecture is presented in the following image:
 | Name                     | Requirements             | Description                                                                                                                                                    |
 |--------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Sentiment Classification | 2 GiB RAM, 2 GiB GPU     | classifies sentiment to positive, negative and neutral classes                                                                                                 |
-| Toxic Classification     | 3  GiB RAM, 2 GiB GPU    | classifies whether the utterance is toxic or not                                                                                                               |
-| Emotion Classification   | 2.5 GiB RAM, 2 GiB GPU   | classifies emotions                                                                                                                                            |
+| Toxic Classification     | 3  GiB RAM, 2 GiB GPU    | classifies toxicity: identity_attack, insult, obscene, severe_toxicity, sexual_explicit, threat, toxicity                                                      |
+| Emotion Classification   | 2.5 GiB RAM, 2 GiB GPU   | classifies emotions: anger, fear, joy, sadness                                                                                                                 |
 | Sentence Ranker          | 2.5 GiB RAM, 1.8 GiB GPU | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
 
 ## Skills & Services
