@@ -22,9 +22,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 2G
+          memory: 3G
         reservations:
-          memory: 2G
+          memory: 3G
 
   convers-evaluation-selector:
     env_file: [.env]
@@ -72,9 +72,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 10G
+          memory: 6G
         reservations:
-          memory: 10G
+          memory: 6G
 
   emotion-classification:
     env_file: [ .env ]
@@ -91,9 +91,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 3.5G
         reservations:
-          memory: 2.5G
+          memory: 3.5G
 
   toxic-classification:
     env_file: [ .env ]
@@ -110,9 +110,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 3.5G
         reservations:
-          memory: 2.5G
+          memory: 3.5G
 
   sentiment-classification:
     env_file: [ .env ]
@@ -129,7 +129,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 3.5G
         reservations:
-          memory: 2.5G
+          memory: 3.5G
 version: '3.7'
