@@ -11,6 +11,7 @@ def main():
             ["i have heard about justin. he is in sahara desert"],
             ["I have heard about Justin. He is in Sahara Desert"],
             ["can john smith move forward for 15 meters, then for fifteen meters, and get back to las vegas then"],
+            ["я бы проехала на 30 метров вперед, а потом повернула на сорок пять градусов по часовой стрелке"],
         ]
     }
 
@@ -36,6 +37,10 @@ def main():
             {"confidence": 1, "end_pos": 8, "start_pos": 6, "text": "15 meters", "type": "QUANTITY"},
             {"confidence": 1, "end_pos": 13, "start_pos": 11, "text": "fifteen meters", "type": "QUANTITY"},
             {"confidence": 1, "end_pos": 20, "start_pos": 18, "text": "las vegas", "type": "LOC"},
+        ],
+        [
+            {"confidence": 1, "end_pos": 6, "start_pos": 3, "text": "на 30 метров", "type": "QUANTITY"},
+            {"confidence": 1, "end_pos": 14, "start_pos": 13, "text": "пять", "type": "QUANTITY"},
         ],
     ]
 
