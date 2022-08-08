@@ -2,7 +2,6 @@ import logging
 import os
 import time
 
-import numpy as np
 import sentry_sdk
 from flask import Flask, jsonify, request
 
