@@ -85,6 +85,7 @@ def get_result(request):
             dialog_ids.append(i)
 
     tokens_batch, tags_batch = ner_model(samples)
+    logger.info(f"NER model predictions: tokens: {tokens_batch}, tags: {tags_batch}")
     ret = convert_prediction(tokens_batch, tags_batch)
 
     logger.info(f"NER output: {ret}")
