@@ -147,9 +147,9 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     if re.search(r"counter[- ]?clock-?wise", utt["text"]):
-        response = "turn_clockwise"
-    else:
         response = "turn_counterclockwise"
+    else:
+        response = "turn_clockwise"
     return response
 
 def move_forward_respond(ctx: Context, actor: Actor, intention: str):
