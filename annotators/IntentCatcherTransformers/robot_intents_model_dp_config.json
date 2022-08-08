@@ -182,7 +182,7 @@
       },
       "download": [
         {
-          "url": "http://files.deeppavlov.ai/deeppavlov_data/intents_model_v2.tar.gz",
+          "url": "http://files.deeppavlov.ai/dream_data/robot_intents_model_v0.tar.gz",
           "subdir": "{MODELS_PATH}/classifiers"
         }
       ]
