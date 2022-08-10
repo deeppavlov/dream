@@ -14,6 +14,9 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE", "generated")
 pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)", re.IGNORECASE)
+re_s = '(' + ')|('.join(STORY_TOPIC_QUESTIONS) + ')'
+re_s = re_s.replace('?', '\?')
+prev_pattern = re.compile(f"{re_s}", re.IGNORECASE)
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:
@@ -87,9 +90,8 @@ def should_return(ctx: Context, actor: Actor) -> bool:
 def prev_is_question(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
     if utt.get("text", ""):
-        for text in STORY_TOPIC_QUESTIONS:
-            if text in utt["text"]:
-                return True
+        if prev_pattern.search(utt["text"]):
+            return True
     return False
 
 
