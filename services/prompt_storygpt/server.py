@@ -51,47 +51,58 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_part(text, max_len, temp, num_sents, first):
-    encoding = tokenizer([text], padding=True, return_tensors="pt").to(device)
+def generate_part(texts, max_len, temp, num_sents, first):
+    if not first:
+        texts = [text + " At the end," for text in texts]
+    encoding = tokenizer(texts, padding=True, return_tensors="pt").to(device)
     with torch.no_grad():
         generated_ids = model.generate(
             **encoding, max_length=max_len, length_penalty=-100.0, temperature=temp, do_sample=True
         )
     generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
-    text = generated_texts[0]
-    text = pattern.sub("", text)  # delete everything in ()
-    text = text.replace(" .", ".").replace("..", ".").replace("..", ".")
-    sents = sent_tokenize(text)
-    text = " ".join(sents[:num_sents])
-    if text[-1] not in ".!?":
-        if text[-1] in punctuation:
-            text = text[-1]
-        text += "."
-    if first:
-        text += " At the end,"
-    return text
+    return_texts = []
+    for text in generated_texts:
+        text = pattern.sub("", text)  # delete everything in ()
+        text = text.replace(" .", ".").replace("..", ".").replace("..", ".")
+        sents = sent_tokenize(text)
+        text = " ".join(sents[:num_sents])
+        if text[-1] not in ".!?":
+            if text[-1] in punctuation:
+                text = text[:-1]
+            text += "."
+        return_texts.append(text)
+    return texts
 
 
-def fill_mask(masked_phrase):
-    batch = bart_tok(masked_phrase, return_tensors="pt")
+def fill_mask(masked_phrases):
+    batch = bart_tok(masked_phrases, return_tensors="pt")
     generated_ids = bart_model.generate(batch["input_ids"])
     filled = bart_tok.batch_decode(generated_ids, skip_special_tokens=True)
-    logger.info(f"Filled mask: {filled}")
-    return filled[0]
+    logger.info(f"Filled masks: {filled}")
+    return filled
 
 
 def generate_response(context):
-    noun = context[-1]
-    logger.info(f"Topic in StoryGPT service: {noun}")
-    masked = f"Let me share a story about {noun}. I <mask> {noun}"
-    filled = fill_mask(masked)
-    first_text = generate_part(filled, 100, 1, 4, first=True)
-    logger.info(f"First part generated: {first_text}")
-    final_text = generate_part(first_text * 2, 150, 0.8, 5, first=False)
-    logger.info(f"Generated: {final_text}")
-    reply = final_text
-    return reply
+    """
+    Parameters
+    context: List[str]
+        a list consisting of nouns chosen from spacy_nounphrases annotator
+    Returns
+    final_text: List[str]
+        generated stories
+    """
+    nouns = context
+    logger.info(f"Topic in StoryGPT service: {nouns}")
+    masked_phrases = []
+    for noun in nouns:
+        masked_phrases.append(f"Let me share a story about {noun}. I <mask> {noun}")
+    filled = fill_mask(masked_phrases)
+    first_texts = generate_part(filled, 100, 1, 4, first=True)
+    logger.info(f"First parts generated: {first_texts}")
+    final_texts = generate_part(first_texts, 150, 0.8, 5, first=False)
+    logger.info(f"Generated: {final_texts}")
+    return final_texts
 
 
 @app.route("/respond", methods=["POST"])
@@ -100,10 +111,10 @@ def respond():
     contexts = request.json.get("utterances_histories", [])
 
     try:
+        tmp_responses = generate_response(contexts)
         responses = []
         confidences = []
-        for context in contexts:
-            response = generate_response(context)
+        for response in tmp_responses:
             if len(response) > 3:
                 # drop too short responses
                 responses += [response]

@@ -10,16 +10,12 @@ from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
 import common.dff.integration.condition as int_cnd
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
+from common.short_story import STORY_TOPIC_QUESTIONS
 
 logger = logging.getLogger(__name__)
 
-care_pattern = re.compile(r"(don't|(do not)) (care|know)")
-choose_texts = [
-    "What would you like to hear about?",
-    "What do you want the story to be about?",
-    "Please tell me a topic and I will share a story!",
-    "Please tell me, which topic would you like it to be about?",
-]
+care_pattern = re.compile(r"(don't|(do not)) (care|know)", re.IGNORECASE)
+story_pattern = re.compile("\bstory\b", re.IGNORECASE)
 
 with open(
     "data/stories.json",
@@ -31,14 +27,15 @@ with open(
 ) as phrases_json:
     phrases = json.load(phrases_json)
 
-STORYGPT_SERVICE_URL = os.getenv("STORYGPT_SERVICE_URL")
-STORYGPT_KEYWORDS_SERVICE_URL = os.getenv("STORYGPT_KEYWORDS_SERVICE_URL")
+STORYGPT_SERVICE_URL = os.getenv("STORYGPT_SERVICE_URL", "http://prompt-storygpt:8127/respond")
+STORYGPT_KEYWORDS_SERVICE_URL = os.getenv("STORYGPT_KEYWORDS_SERVICE_URL", "http://storygpt:8126/respond")
 
 
 def get_previous_node(ctx: Context) -> str:
     try:
         return [node_tuple[1] for node_tuple in ctx.labels.values()][-2]
-    except Exception:
+    except Exception as e:
+        logger.info(e)
         return "start_node"
 
 
@@ -62,7 +59,8 @@ def get_story_left(ctx: Context, actor: Actor) -> str:
     stories_left = list(set(stories.get(story_type, [])) - set(ctx.misc.get("stories_told", [])))
     try:
         return random.choice(sorted(stories_left))
-    except Exception:
+    except Exception as e:
+        logger.info(e)
         return ""
 
 
@@ -135,9 +133,9 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)["text"]
     if utt:
         full_ctx = int_ctx.get_human_utterances(ctx, actor)
-        nouns = full_ctx[-1].get(["annotations"], {}).get(["rake_keywords"], [])
+        nouns = full_ctx[-1].get("annotations", {}).get("rake_keywords", [])
         if len(full_ctx) > 1:
-            nouns_tmp = full_ctx[-2].get(["annotations"], {}).get(["rake_keywords"], [])
+            nouns_tmp = full_ctx[-2].get("annotations", {}).get("rake_keywords", [])
             nouns_tmp.extend(nouns)
             nouns = nouns_tmp
         logger.info(f"Keywords from annotator: {nouns}")
@@ -146,8 +144,8 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             raw_responses = resp.json()
             int_ctx.set_confidence(ctx, actor, 0.9)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-        except Exception:
-            logger.info("Keyword storygpt service didn't respond.")
+        except Exception as e:
+            logger.info(f"Keyword storygpt service didn't respond. Error: {e}")
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
             return ""
@@ -162,7 +160,8 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def choose_noun(nouns):
     for noun in nouns:
-        if "story" not in noun:
+        story_word = re.search(story_pattern, noun)
+        if not story_word:
             return noun
     return ""
 
@@ -170,13 +169,13 @@ def choose_noun(nouns):
 def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     int_ctx.set_confidence(ctx, actor, 1.0)
-    return random.choice(choose_texts)
+    return random.choice(STORY_TOPIC_QUESTIONS)
 
 
 def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    utt = int_ctx.get_last_human_utterance(ctx, actor)["text"]
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
     last_utt = utt["text"]
-    logger.info(f"Utterance: {utt}")
+    logger.info(f"Utterance: {last_utt}")
     if last_utt:
         nouns = utt.get("annotations", {}).get("spacy_nounphrases", [])
         final_noun = choose_noun(nouns)
@@ -193,8 +192,8 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         try:
             resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
             raw_responses = resp.json()
-        except Exception:
-            logger.info("Prompt storygpt service didn't respond.")
+        except Exception as e:
+            logger.info(f"Prompt storygpt service didn't respond. Error: {e}")
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
             return ""

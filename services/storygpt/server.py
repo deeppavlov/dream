@@ -85,7 +85,7 @@ def generate_response(context, model, tokenizer):
             pad_token_id=tokenizer.eos_token_id,
             no_repeat_ngram_size=3,
         )
-        if device != "cpu":
+        if device == "cuda":
             chat_history_ids = chat_history_ids.cpu()
     result = tokenizer.decode(chat_history_ids[:, input_ids.shape[-1] :][0])
     logger.info(f"Generated from storyline: {result}")

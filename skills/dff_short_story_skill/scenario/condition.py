@@ -6,19 +6,14 @@ from . import response as loc_rsp
 from df_engine.core import Context, Actor
 
 import common.dff.integration.context as int_ctx
+from common.short_story import STORY_TOPIC_QUESTIONS
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-STORY_TYPE = os.getenv("STORY_TYPE")
-pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)")
-choose_texts = [
-    "What would you like to hear about?",
-    "What do you want the story to be about?",
-    "Please tell me a topic and I will share a story!",
-    "Please tell me, which topic would you like it to be about?",
-]
+STORY_TYPE = os.getenv("STORY_TYPE", "generated")
+pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)", re.IGNORECASE)
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:
@@ -48,8 +43,10 @@ def needs_scripted_story(ctx: Context, actor: Actor) -> bool:
 
 def has_story_intent(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    if utt["text"]:
-        story_intent = utt["annotations"]["intent_catcher"]["tell_me_a_story"]["detected"]
+    if utt.get("text", ""):
+        story_intent = (
+            utt.get("annotations", {}).get("intent_catcher", {}).get("tell_me_a_story", {}).get("detected", 0)
+        )
         logger.info(f"Story intent value: {story_intent}")
         if story_intent == 1:
             return True
@@ -58,7 +55,7 @@ def has_story_intent(ctx: Context, actor: Actor) -> bool:
 
 def prev_is_story(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
-    if utt["text"]:
+    if utt.get("text", ""):
         if utt["text"].startswith("Oh, that reminded me of a story!") or utt["text"].startswith(
             "Ok, Let me tell you a story about"
         ):
@@ -68,8 +65,8 @@ def prev_is_story(ctx: Context, actor: Actor) -> bool:
 
 def asks_more(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    if utt["text"]:
-        text = utt["text"].lower().strip()
+    if utt.get("text", ""):
+        text = utt["text"].strip()
         s = pattern.search(text)
         if s:
             if s.group(0) == text:
@@ -89,8 +86,8 @@ def should_return(ctx: Context, actor: Actor) -> bool:
 
 def prev_is_question(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
-    if utt["text"]:
-        for text in choose_texts:
+    if utt.get("text", ""):
+        for text in STORY_TOPIC_QUESTIONS:
             if text in utt["text"]:
                 return True
     return False
@@ -98,11 +95,11 @@ def prev_is_question(ctx: Context, actor: Actor) -> bool:
 
 def has_five_keywords(ctx: Context, actor: Actor):
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
-    if utt["text"]:
+    if utt.get("text", ""):
         utterances = int_ctx.get_human_utterances(ctx, actor)
         if len(utterances) > 1:
-            nouns = utterances[-1]["annotations"].get("rake_keywords", [])
-            nouns.extend(utterances[-2]["annotations"].get("rake_keywords", []))
+            nouns = utterances[-1].get("annotations", {}).get("rake_keywords", [])
+            nouns.extend(utterances[-2].get("annotations", {}).get("rake_keywords", []))
             if len(nouns) >= 5:
                 return True
     return False

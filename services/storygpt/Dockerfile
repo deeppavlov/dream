@@ -17,14 +17,14 @@ ARG PRETRAINED_MODEL_NAME_OR_PATH
 ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
-ARG MODELS_URL
-ENV MODELS_URL ${MODELS_URL}
+ARG FINETUNED_GPT_URL
+ENV FINETUNED_GPT_URL ${FINETUNED_GPT_URL}
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 WORKDIR /data
-RUN wget ${MODELS_URL} -q -O ./filtered_ROCStories_gpt_medium.pt
+RUN wget ${FINETUNED_GPT_URL} -q -O ./filtered_ROCStories_gpt_medium.pt
 
 WORKDIR /src
 
