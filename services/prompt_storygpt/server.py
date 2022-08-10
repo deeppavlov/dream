@@ -72,7 +72,7 @@ def generate_part(texts, max_len, temp, num_sents, first):
                 text = text[:-1]
             text += "."
         return_texts.append(text)
-    return texts
+    return return_texts
 
 
 def fill_mask(masked_phrases):
@@ -96,7 +96,7 @@ def generate_response(context):
     logger.info(f"Topic in StoryGPT service: {nouns}")
     masked_phrases = []
     for noun in nouns:
-        masked_phrases.append(f"Let me share a story about {noun}. I <mask> {noun}")
+        masked_phrases.append(f"Let me share a story about {noun[0]}. I <mask> {noun[0]}")
     filled = fill_mask(masked_phrases)
     first_texts = generate_part(filled, 100, 1, 4, first=True)
     logger.info(f"First parts generated: {first_texts}")
