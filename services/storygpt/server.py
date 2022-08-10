@@ -80,7 +80,7 @@ def generate_response(context, model, tokenizer):
             do_sample=True,
             max_length=150,
             temperature=0.8,
-            top_k=20,
+            top_k=5,
             top_p=0.9,
             pad_token_id=tokenizer.eos_token_id,
             no_repeat_ngram_size=3,

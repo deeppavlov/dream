@@ -14,8 +14,8 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE", "generated")
 pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)", re.IGNORECASE)
-re_s = '(' + ')|('.join(STORY_TOPIC_QUESTIONS) + ')'
-re_s = re_s.replace('?', '\?')
+re_s = "(" + ")|(".join(STORY_TOPIC_QUESTIONS) + ")"
+re_s = re_s.replace("?", r"\?")
 prev_pattern = re.compile(f"{re_s}", re.IGNORECASE)
 
 
