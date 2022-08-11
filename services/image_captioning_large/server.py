@@ -67,7 +67,7 @@ def respond():
         for image_path in image_paths:
             image = io.imread(image_path)
             pil_image = PIL.Image.fromarray(image)
-            pil_image.thumbnail(os.getenv("MAX_SIZE"))
+            pil_image.thumbnail(os.getenv("MAX_SIZE"), os.getenv("MAX_SIZE"))
             image = preprocess(pil_image).unsqueeze(0).to(device)
             if images is None:
                 images = image
