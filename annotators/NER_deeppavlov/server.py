@@ -2,6 +2,7 @@ import logging
 import os
 import time
 
+import numpy as np
 import sentry_sdk
 from flask import Flask, jsonify, request
 
@@ -86,7 +87,14 @@ def get_result(request):
 
     tokens_batch, tags_batch = ner_model(samples)
     logger.info(f"NER model predictions: tokens: {tokens_batch}, tags: {tags_batch}")
-    ret = convert_prediction(tokens_batch, tags_batch)
+    good_preds = convert_prediction(tokens_batch, tags_batch)
+    dialog_ids = np.array(dialog_ids)
+
+    ret = []
+    for i, utterance_sents in enumerate(last_utterances):
+        curr_ids = np.where(dialog_ids == i)[0]
+        curr_preds = [good_preds[curr_id] for curr_id in curr_ids]
+        ret.append(curr_preds)
 
     logger.info(f"NER output: {ret}")
     total_time = time.time() - st_time
