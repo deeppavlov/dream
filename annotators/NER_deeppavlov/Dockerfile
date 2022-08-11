@@ -16,5 +16,6 @@ COPY $SRC_DIR /src
 WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
+RUN python -m deeppavlov download $CONFIG
 
 CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8021
