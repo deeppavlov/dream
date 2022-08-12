@@ -22,10 +22,17 @@ DEFAULT_CONFIDENCE = 0.9
 N_HYPOTHESES_TO_GENERATE = 3
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
-CONFIG = os.environ.get("CONFIG")
-conf = json.load(open(f"{CONFIG}", 'r'))
-conf["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
-compiled_nick = re.compile("@[a-zA-Z0-9\.\,!\?]+")
+CONFIG_NAME = os.environ.get("CONFIG_NAME")
+with open(CONFIG_NAME, "r") as f:
+    generation_params = json.load(f)
+generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
+
+NICK_COMPILED = re.compile(r"\@[^\s]+\b")
+SPECIFIC_SYMBOLS = "[#$%&()*+/;<=>@\^_`{|}~\[\]�]"
+SPECIFIC_WORDS_COMPILED = re.compile(rf"{SPECIFIC_SYMBOLS}[a-zA-Z]+{SPECIFIC_SYMBOLS}")
+URLS_COMPILED = re.compile(r"(http[^\s]+\b|<a href[^>]+>)")
+ANYTHING_EXCEPT_OF_LETTERS_SPACE_AND_PUNCT_COMPILED = re.compile(SPECIFIC_SYMBOLS)
+NEW_UTTERANCE = ""
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -45,9 +52,9 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 def generate_response(context, model, tokenizer):
-    text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle(['Alex', 'Bob']),
-                                                          context[-MAX_HISTORY_DEPTH:] + [""]))))
-    logger.info(f"Context: {text}")
+    encoded_context = []
+    text = "\n".join(
+        list(map(lambda x: NEW_UTTERANCE.join(x), zip(cycle(['', '']), context[-MAX_HISTORY_DEPTH:] + [""]))))
     bot_input_ids = tokenizer.encode(text, return_tensors="pt")
     with torch.no_grad():
         if torch.cuda.is_available():
@@ -56,13 +63,17 @@ def generate_response(context, model, tokenizer):
         chat_history_ids = model.generate(
             bot_input_ids,
             pad_token_id=tokenizer.eos_token_id,
-            **conf
+            **generation_params
         )
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    outputs = [tokenizer.decode(x, skip_special_tokens=True)[len(text):].lstrip().split('\n')[0]
-               for x in chat_history_ids]
+    outputs = [tokenizer.decode(x, skip_special_tokens=True)[len(text):].lstrip().split('\n')[0] for x in
+               chat_history_ids]
+    outputs = [re.sub(NICK_COMPILED, "", response) for response in outputs]
+    outputs = [re.sub(URLS_COMPILED, "", response) for response in outputs]
+    outputs = [re.sub(SPECIFIC_WORDS_COMPILED, "", response) for response in outputs]
+    outputs = [ANYTHING_EXCEPT_OF_LETTERS_SPACE_AND_PUNCT_COMPILED.sub("", response).strip() for response in outputs]
     return outputs
 
 
