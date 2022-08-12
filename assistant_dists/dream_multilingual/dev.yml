@@ -16,9 +16,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  mgpt:
+  gpt2-generator:
     volumes:
-      - "./services/mgpt:/src"
+      - "./services/gpt2_generator:/src"
     ports:
       - 8132:8132
   toxic-classification:

@@ -49,11 +49,11 @@
             }
         },
         "skills": {
-            "mgpt": {
+            "gpt2_generator": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 5,
-                    "url": "http://mgpt:8132/respond"
+                    "url": "http://gpt2-generator:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

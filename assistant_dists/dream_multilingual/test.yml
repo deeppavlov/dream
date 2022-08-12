@@ -4,7 +4,7 @@ services:
       - "/cephfs/home/ignatov/artifacts:/output"
     ports:
       - ${AGENT_PORT}:4242
-  mgpt:
+  gpt2-generator:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   emotion-classification:

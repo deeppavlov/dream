@@ -32,9 +32,9 @@ try:
     model = GPT2LMHeadModel.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("mgpt is set to run on cuda")
+        logger.info("gpt2-generator is set to run on cuda")
 
-    logger.info("mgpt is ready")
+    logger.info("gpt2-generator is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -44,10 +44,9 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-
 def generate_response(context, model, tokenizer):
-    encoded_context = []
-    text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle(['Alex', 'Bob']), context[-MAX_HISTORY_DEPTH:] + [""]))))
+    text = "\n".join(list(map(lambda x: ": ".join(x), zip(cycle(['Alex', 'Bob']),
+                                                          context[-MAX_HISTORY_DEPTH:] + [""]))))
     logger.info(f"Context: {text}")
     bot_input_ids = tokenizer.encode(text, return_tensors="pt")
     with torch.no_grad():
@@ -62,7 +61,8 @@ def generate_response(context, model, tokenizer):
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    outputs = [tokenizer.decode(x, skip_special_tokens=True)[len(text):].lstrip().split('\n')[0] for x in chat_history_ids]
+    outputs = [tokenizer.decode(x, skip_special_tokens=True)[len(text):].lstrip().split('\n')[0]
+               for x in chat_history_ids]
     return outputs
 
 
@@ -99,7 +99,7 @@ def respond():
         confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"mgpt exec time: {total_time:.3f}s")
+    logger.info(f"gpt2-generator exec time: {total_time:.3f}s")
     logger.info(responses)
     logger.info(confidences)
     return jsonify(list(zip(responses, confidences)))
