@@ -11,6 +11,7 @@ import common.dff.integration.context as int_ctx
 import common.dff.integration.condition as int_cnd
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.short_story import STORY_TOPIC_QUESTIONS
+import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +35,9 @@ STORYGPT_KEYWORDS_SERVICE_URL = os.getenv("STORYGPT_KEYWORDS_SERVICE_URL", "http
 def get_previous_node(ctx: Context) -> str:
     try:
         return [node_tuple[1] for node_tuple in ctx.labels.values()][-2]
-    except Exception as e:
-        logger.info(e)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
         return "start_node"
 
 
@@ -59,8 +61,9 @@ def get_story_left(ctx: Context, actor: Actor) -> str:
     stories_left = list(set(stories.get(story_type, [])) - set(ctx.misc.get("stories_told", [])))
     try:
         return random.choice(sorted(stories_left))
-    except Exception as e:
-        logger.info(e)
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
         return ""
 
 
@@ -144,8 +147,9 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             raw_responses = resp.json()
             int_ctx.set_confidence(ctx, actor, 0.9)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-        except Exception as e:
-            logger.info(f"Keyword storygpt service didn't respond. Error: {e}")
+        except Exception as exc:
+            logger.exception(exc)
+            sentry_sdk.capture_exception(exc)
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
             return ""
@@ -192,8 +196,9 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         try:
             resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
             raw_responses = resp.json()
-        except Exception as e:
-            logger.info(f"Prompt storygpt service didn't respond. Error: {e}")
+        except Exception as exc:
+            logger.exception(exc)
+            sentry_sdk.capture_exception(exc)
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
             return ""
