@@ -25,15 +25,15 @@ services:
     volumes:
       - "./annotators/MultilingualToxicClassification:/src"
     ports:
-      - 8127:8127
+      - 8013:8013
   emotion-classification:
     volumes:
       - "./annotators/MultilingualEmotionalClassification:/src"
     ports:
-      - 8128:8128
+      - 8038:8038
   sentiment-classification:
     volumes:
       - "./annotators/MultilingualSentimentClassification:/src"
     ports:
-      - 8129:8129
+      - 8024:8024
 version: "3.7"

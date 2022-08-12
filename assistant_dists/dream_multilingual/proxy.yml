@@ -32,8 +32,8 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8128
-      - PORT=8128
+      - PROXY_PASS=dream.deeppavlov.ai:8038
+      - PORT=8038
 
   toxic-classication:
     command: [ "nginx", "-g", "daemon off;" ]
@@ -41,8 +41,8 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8127
-      - PORT=8127
+      - PROXY_PASS=dream.deeppavlov.ai:8013
+      - PORT=8013
 
   sentiment-classication:
     command: [ "nginx", "-g", "daemon off;" ]
@@ -50,6 +50,6 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8129
-      - PORT=8129
+      - PROXY_PASS=dream.deeppavlov.ai:8024
+      - PORT=8024
 version: '3.7'

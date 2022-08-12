@@ -5,7 +5,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://emotion-classification:8128/respond"
+                    "url": "http://emotion-classification:8038/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -15,7 +15,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://toxic-classification:8127/respond"
+                    "url": "http://toxic-classification:8013/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -25,7 +25,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://sentiment-classification:8129/respond"
+                    "url": "http://sentiment-classification:8024/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -79,7 +79,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://emotion-classification:8128/respond_batch"
+                    "url": "http://emotion-classification:8038/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -92,7 +92,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://toxic-classification:8127/respond_batch"
+                    "url": "http://toxic-classification:8013/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -103,7 +103,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://sentiment-classification:8129/respond_batch"
+                    "url": "http://sentiment-classification:8024/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
