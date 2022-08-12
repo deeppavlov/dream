@@ -16,10 +16,10 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
+N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
-N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
@@ -43,7 +43,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_response(context, model, tokenizer):
+def generate_responses(context, model, tokenizer):
     encoded_context = []
     for uttr in context[-MAX_HISTORY_DEPTH:]:
         encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
@@ -56,7 +56,7 @@ def generate_response(context, model, tokenizer):
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    outputs = [tokenizer.decode(x[len(bot_input_ids[0]) :], skip_special_tokens=True) for x in chat_history_ids]
+    outputs = [tokenizer.decode(x[len(bot_input_ids[0]):], skip_special_tokens=True) for x in chat_history_ids]
     return outputs
 
 
@@ -71,8 +71,8 @@ def respond():
         for context in contexts:
             curr_responses = []
             curr_confidences = []
-            responses = generate_response(context, model, tokenizer)
-            for response in responses:
+            outputs = generate_responses(context, model, tokenizer)
+            for response in outputs:
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]
