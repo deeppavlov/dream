@@ -51,15 +51,11 @@ def generate_response(context, model, tokenizer):
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
-        chat_history_ids = model.generate(
-            bot_input_ids,
-            pad_token_id=tokenizer.eos_token_id,
-            **generation_params
-        )
+        chat_history_ids = model.generate(bot_input_ids, pad_token_id=tokenizer.eos_token_id, **generation_params)
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    outputs = [tokenizer.decode(x[len(bot_input_ids[0]):], skip_special_tokens=True) for x in chat_history_ids]
+    outputs = [tokenizer.decode(x[len(bot_input_ids[0]) :], skip_special_tokens=True) for x in chat_history_ids]
     return outputs
 
 
