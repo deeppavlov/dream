@@ -32,11 +32,12 @@ def respond():
     qa_res = [["", 0.0, 0, ""] for _ in questions]
     try:
         tm_st = time.time()
+        logger.info(f"questions {questions} facts {facts}")
         qa_res = qa(questions, facts)
         qa_res = [[elem[i] for elem in qa_res] for i in range(len(qa_res[0]))]
         for i in range(len(qa_res)):
             qa_res[i][1] = float(qa_res[i][1])
-        logger.info(f"text_qa exec time: {time.time() - tm_st}")
+        logger.info(f"text_qa exec time: {time.time() - tm_st} qa_res {qa_res}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

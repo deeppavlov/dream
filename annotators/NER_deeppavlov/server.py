@@ -20,22 +20,57 @@ try:
     ner_model = build_model(config_name, download=True)
     r = "я видела ивана в москве"
     logger.info(f"Original: {r}. NER: {ner_model([r])}")
-    logger.info("ner ru model is loaded.")
+    logger.info("NER model is loaded.")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
     raise e
 
 
-def convert_prediction(s, token, tag):
-    start_pos = s.find(token)
-    return {
-        "confidence": 1,
-        "text": token,
-        "type": tag.replace("B-", "").replace("I-", ""),
-        "start_pos": start_pos,
-        "end_pos": start_pos + len(token),
-    }
+def convert_prediction(sents, pred_labels):
+    entities = []
+    for sent, tags in zip(sents, pred_labels):
+        entities.append([])
+        start = end = -1
+        for i, (word, tag) in enumerate(zip(sent, tags)):
+            if tag[0] == "B":
+                if start != -1:
+                    entities[-1].append(
+                        {
+                            "start_pos": start,
+                            "end_pos": end,
+                            "type": tags[start].split("-")[1],
+                            "text": " ".join(sent[start:end]),
+                            "confidence": 1,
+                        }
+                    )
+                start = i
+                end = i + 1
+            elif tag[0] == "I":
+                end = i + 1
+            else:
+                if start != -1:
+                    entities[-1].append(
+                        {
+                            "start_pos": start,
+                            "end_pos": end,
+                            "type": tags[start].split("-")[1],
+                            "text": " ".join(sent[start:end]),
+                            "confidence": 1,
+                        }
+                    )
+                    start = -1
+        if start != -1:
+            entities[-1].append(
+                {
+                    "start_pos": start,
+                    "end_pos": end,
+                    "type": tags[start].split("-")[1],
+                    "text": " ".join(sent[start:end]),
+                    "confidence": 1,
+                }
+            )
+    return entities
 
 
 def get_result(request):
@@ -51,10 +86,8 @@ def get_result(request):
             dialog_ids.append(i)
 
     tokens_batch, tags_batch = ner_model(samples)
-    good_preds = [
-        [convert_prediction(s, token, tag) for token, tag in zip(tokens, tags) if tag != "O"]
-        for s, tokens, tags in zip(samples, tokens_batch, tags_batch)
-    ]
+    logger.info(f"NER model predictions: tokens: {tokens_batch}, tags: {tags_batch}")
+    good_preds = convert_prediction(tokens_batch, tags_batch)
     dialog_ids = np.array(dialog_ids)
 
     ret = []

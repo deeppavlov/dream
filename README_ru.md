@@ -94,7 +94,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/VERSION/docker-compose.o
 Локально поднимаются только агент и база данные mongo.
 См. [использование proxy](#proxy-usage).
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/proxy.yml up --build
 ```
 
 #### **Dream (локально)**
@@ -158,7 +158,7 @@ convers-evaluator-annotator:
 и включайте этот файл в команду запуска:
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/proxy.yml up --build
+docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/proxy.yml up --build
 ```
 
 По умолчанию, `proxy.yml` содержит все контейнеры кроме агента и базы данных.
