@@ -24,6 +24,7 @@ ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
+generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -70,8 +71,8 @@ def respond():
         for context in contexts:
             curr_responses = []
             curr_confidences = []
-            for i in range(N_HYPOTHESES_TO_GENERATE):
-                response = generate_response(context, model, tokenizer)
+            responses = generate_response(context, model, tokenizer)
+            for response in responses:
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]
