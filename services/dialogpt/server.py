@@ -1,6 +1,7 @@
 import logging
-import time
+import json
 import os
+import time
 
 import sentry_sdk
 import torch
@@ -15,11 +16,14 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
+CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
+with open(CONFIG_NAME, "r") as f:
+    generation_params = json.load(f)
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -41,7 +45,7 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def generate_response(context, model, tokenizer):
     encoded_context = []
     for uttr in context[-MAX_HISTORY_DEPTH:]:
-        encoded_context += [tokenizer.encode(uttr + tokenizer.eos_token, return_tensors="pt")]
+        encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
     bot_input_ids = torch.cat(encoded_context, dim=-1)
 
     with torch.no_grad():
@@ -49,15 +53,14 @@ def generate_response(context, model, tokenizer):
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
             bot_input_ids,
-            do_sample=True,
-            max_length=100,
-            temperature=0.6,
-            repetition_penalty=1.3,
             pad_token_id=tokenizer.eos_token_id,
+            **generation_params
         )
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
-    return tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1] :][0], skip_special_tokens=True)
+
+    outputs = [tokenizer.decode(x[len(bot_input_ids[0]):], skip_special_tokens=True) for x in chat_history_ids]
+    return outputs
 
 
 @app.route("/respond", methods=["POST"])
