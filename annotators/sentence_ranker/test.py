@@ -13,7 +13,7 @@ def main():
         "pastResponses": [" no. let's chat about animals. "],
         "pastUtterances": ["let's chat about jesus"],
     }
-    gold_results = [{'batch': [{"score": 0.6278616}, {"score": 0.19288766}, {"score": 0.5522217}]}]
+    gold_results = [{"batch": [{"score": 0.6278616}, {"score": 0.19288766}, {"score": 0.5522217}]}]
 
     results = requests.post(url, json=request_data).json()[0]["batch"]
     print(results)

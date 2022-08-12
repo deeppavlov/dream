@@ -37,7 +37,7 @@ try:
         config=model_type,
         num_labels=num_classes,
         state_dict=loaded["state_dict"],
-        local_files_only=False
+        local_files_only=False,
     )
     model.eval()
     if torch.cuda.is_available():

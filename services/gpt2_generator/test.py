@@ -11,7 +11,7 @@ def test_respond():
     assert [
         len(sample[0]) > 0 and all([len(text) > 0 for text in sample[0]]) and all([conf > 0.0 for conf in sample[1]])
         for sample in results
-    ] 
+    ]
     print("Success")
 
 

@@ -27,7 +27,6 @@ try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model = AutoModel.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
 
-
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("sentence_ranker is set to run on cuda")
@@ -53,12 +52,10 @@ def batch_respond():
     t = time.time()
     data = request.json
     sentence = transform(request.json)
-    inputs = tokenizer.batch_encode_plus([sentence] + data["hypotheses"],
-                                         return_tensors='pt',
-                                         padding=True)
+    inputs = tokenizer.batch_encode_plus([sentence] + data["hypotheses"], return_tensors="pt", padding=True)
 
-    input_ids = inputs['input_ids']
-    attention_mask = inputs['attention_mask']
+    input_ids = inputs["input_ids"]
+    attention_mask = inputs["attention_mask"]
 
     if torch.cuda.is_available():
         input_ids = input_ids.cuda()

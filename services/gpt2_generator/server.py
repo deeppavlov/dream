@@ -54,22 +54,20 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def generate_response(context, model, tokenizer):
     encoded_context = []
     text = "\n".join(
-        list(map(lambda x: NEW_UTTERANCE.join(x), zip(cycle(['', '']), context[-MAX_HISTORY_DEPTH:] + [""]))))
+        list(map(lambda x: NEW_UTTERANCE.join(x), zip(cycle(["", ""]), context[-MAX_HISTORY_DEPTH:] + [""])))
+    )
     bot_input_ids = tokenizer.encode(text, return_tensors="pt")
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
 
-        chat_history_ids = model.generate(
-            bot_input_ids,
-            pad_token_id=tokenizer.eos_token_id,
-            **generation_params
-        )
+        chat_history_ids = model.generate(bot_input_ids, pad_token_id=tokenizer.eos_token_id, **generation_params)
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    outputs = [tokenizer.decode(x, skip_special_tokens=True)[len(text):].lstrip().split('\n')[0] for x in
-               chat_history_ids]
+    outputs = [
+        tokenizer.decode(x, skip_special_tokens=True)[len(text) :].lstrip().split("\n")[0] for x in chat_history_ids
+    ]
     outputs = [re.sub(NICK_COMPILED, "", response) for response in outputs]
     outputs = [re.sub(URLS_COMPILED, "", response) for response in outputs]
     outputs = [re.sub(SPECIFIC_WORDS_COMPILED, "", response) for response in outputs]
