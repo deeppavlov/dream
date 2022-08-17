@@ -39,4 +39,4 @@ flows = {
 }
 
 
-actor = Actor(flows, start_label=("sevice", "start"), fallback_label=("sevice", "fallback"))
+actor = Actor(flows, start_label=("service", "start"), fallback_label=("service", "fallback"))
