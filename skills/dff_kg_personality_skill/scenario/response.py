@@ -1,7 +1,5 @@
 import logging
-import json
-import re
-import random
+import numpy as np
 
 from df_engine.core import Context, Actor
 
@@ -27,6 +25,11 @@ def find_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
         entity_answer = utt.get("annotations", {}).get("entity_linking", [])
+        # for entity in entity_answer:
+        #     logger.info(f'Entities: {entity}')
+        #     max_ind = np.argmax(entity['confidences'])
+        #     best_entity = entity['entity_pages_titles'][max_ind]
+        #     logger.info(f'Best entity: {best_entity}')
         logger.info(f'Entities: {entity_answer}')
     return "Empty response for now"
 
