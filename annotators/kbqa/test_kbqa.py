@@ -5,8 +5,8 @@ def main():
     url = "http://0.0.0.0:8072/model"
 
     request_data = [
-        {"x_init": ["Who is Donald Trump?"], "entities": [["Donald Trump"]]},
-        {"x_init": ["How old is Donald Trump?"], "entities": [["Donald Trump"]]},
+        {"x_init": ["Who is Donald Trump?"], "entities": [["Donald Trump"]], "entity_tags": [[["per", 1.0]]]},
+        {"x_init": ["How old is Donald Trump?"], "entities": [["Donald Trump"]], "entity_tags": [[["per", 1.0]]]},
     ]
 
     gold_answers = ["Donald Trump is 45th and current president of the United States.", "Donald Trump is 75 years old."]
