@@ -413,7 +413,7 @@ services:
       - 8120:8120
   dff-kg-personality-skill:
     volumes:
-      - "./skills/dff_template_skill:/src"
+      - "./skills/dff_kg_personality_skill:/src"
       - "./common:/src/common"
     ports:
       - 8123:8123
