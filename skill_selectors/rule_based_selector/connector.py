@@ -231,6 +231,8 @@ class RuleBasedSkillSelectorConnector:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
+            skills_for_uttr = ["dff_kg_personality_skill"]
+
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time

@@ -838,6 +838,10 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
 
+def dff_kg_personality_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_kg_personality_skill_formatter")
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
