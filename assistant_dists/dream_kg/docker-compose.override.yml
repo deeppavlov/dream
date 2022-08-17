@@ -1242,7 +1242,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8123
-        SERVICE_NAME: dff_template_skill
+        SERVICE_NAME: dff_kg_personality_skill
       context: .
       dockerfile: ./skills/dff_kg_personality_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8123 --reload
