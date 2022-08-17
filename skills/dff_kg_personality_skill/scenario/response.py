@@ -13,10 +13,21 @@ from deeppavlov_kg import KnowledgeGraph
 
 logger = logging.getLogger(__name__)
 
+graph = KnowledgeGraph(
+    "bolt://neo4j:neo4j@localhost:7687",
+    ontology_kinds_hierarchy_path="deeppavlov_kg/database/ontology_kinds_hierarchy.pickle",
+    ontology_data_model_path="deeppavlov_kg/database/ontology_data_model.json",
+    db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
+)
+
 
 def find_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    extracted_entity = extract_entity(ctx, "any_entity")
-    logger.info(f'Entities: {extracted_entity}')
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    last_utt = utt["text"]
+    logger.info(f"Utterance: {last_utt}")
+    if last_utt:
+        entity_answer = utt.get("annotations", {}).get("entity_linking", [])
+        logger.info(f'Entities: {entity_answer}')
     return "Empty response for now"
 
 
