@@ -18,3 +18,10 @@ def find_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     extracted_entity = extract_entity(ctx, "any_entity")
     logger.info(f'Entities: {extracted_entity}')
     return "Empty response for now"
+
+
+def example_response(reply: str):
+    def example_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        return reply
+
+    return example_response_handler
