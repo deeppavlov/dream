@@ -981,7 +981,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-kg-personality-skill:8121/respond"
+                    "url": "http://dff-kg-personality-skill:8123/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_kg_personality_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

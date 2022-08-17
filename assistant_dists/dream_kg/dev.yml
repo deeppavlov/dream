@@ -416,5 +416,5 @@ services:
       - "./skills/dff_template_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8121:8121
+      - 8123:8123
 version: "3.7"
