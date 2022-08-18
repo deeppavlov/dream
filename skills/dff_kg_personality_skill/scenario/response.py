@@ -44,7 +44,7 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         #     )
         #     graph.create_entity(entity_type, str(uuid.uuid4()), {'name': entity_name})
 
-        graph.create_entity("User", str(uuid.uuid4()), {'name': "Pavel"})
+        graph.create_entity("User", str(uuid.uuid4()), ['name'],["Pavel"])
         logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
         gr_ents = graph.search_for_entities()
         for e in gr_ents:
