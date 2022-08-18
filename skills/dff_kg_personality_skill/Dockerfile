@@ -15,6 +15,7 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/deepmipt/custom_kg_svc
+RUN python deeppavlov_kg/tests/test.py
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
