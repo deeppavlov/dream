@@ -34,7 +34,7 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info('ALL CURRENT ENTITIES IN GRAPH:')
         gr_ents = graph.search_for_entities()
         for e in gr_ents:
-            logger.info(f'{graph.get_current_state(e.get("Id")).get("name")}')
+            logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
 
         # for entity in entities:
         #     entity_type = entity.get('label', 'no entity label')
@@ -51,7 +51,7 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
         gr_ents = graph.search_for_entities()
         for e in gr_ents:
-            logger.info(f'{graph.get_current_state(e.get("Id")).get("name")}')
+            logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
     return "Empty response for now"
 
 
