@@ -27,8 +27,9 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
-        dialog = int_ctx.get_dialog(ctx, actor)
-        logger.info(f'DIALOG: {dialog}')
+        dialog = int_ctx.get_human_utterances(ctx, actor)
+        user_id = dialog.get("user", {}).get("id", "")
+        logger.info(f'User id: {user_id}')
 
         entity_detection = utt.get("annotations", {}).get("entity_detection", [])
         logger.info(f'Entity detection answer: {entity_detection}')
@@ -52,7 +53,7 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
         graph.create_entity("User", str(uuid.uuid4()), ['name'], ["Pavel"])
         logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
-        gr_ents = graph.search_for_entities()
+        gr_ents = graph.search_for_entities("User")
         for e in gr_ents:
             logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
     return "Empty response for now"
