@@ -19,7 +19,7 @@ graph = KnowledgeGraph(
 )
 
 graph.drop_database()
-graph.ontology.create_entity_kind("User")
+graph.ontology.create_entity_kind("User",  kind_properties=["name"])
 
 
 def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
