@@ -1,5 +1,5 @@
 import logging
-import numpy as np
+import uuid
 
 from df_engine.core import Context, Actor
 
@@ -19,22 +19,35 @@ graph = KnowledgeGraph(
 )
 
 
-def find_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
-        entity_linking = utt.get("annotations", {}).get("entity_linking", [])
-        logger.info(f'Entity linking answer: {entity_linking}')
         entity_detection = utt.get("annotations", {}).get("entity_detection", [])
         logger.info(f'Entity detection answer: {entity_detection}')
-        wiki_parser = utt.get("annotations", {}).get("wiki_parser", [])
-        logger.info(f'Wiki parser  answer: {wiki_parser.get("entities_info", {})}')
-        # for entity in entity_answer:
-        #     logger.info(f'Entities: {entity}')
-        #     max_ind = np.argmax(entity['confidences'])
-        #     best_entity = entity['entity_pages_titles'][max_ind]
-        #     logger.info(f'Best entity: {best_entity}')
+        entities = entity_detection.get('labelled_entities', [])
+
+        logger.info('ALL CURRENT ENTITIES IN GRAPH:')
+        gr_ents = graph.search_for_entities()
+        for e in gr_ents:
+            logger.info(f'{graph.get_current_state(e.get("Id")).get("name")}')
+
+        for entity in entities:
+            entity_type = entity.get('label', 'no entity label')
+            entity_name = entity.get('text', 'no entity name')
+            logger.info(f'Entity type: {entity_type}')
+            logger.info(f'Entity name: {entity_name}')
+            graph.ontology.create_entity_kind(
+                entity_type,
+                kind_properties=set(),
+            )
+            graph.create_entity(entity_type, str(uuid.uuid4()), {'name': entity_name})
+
+        logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
+        gr_ents = graph.search_for_entities()
+        for e in gr_ents:
+            logger.info(f'{graph.get_current_state(e.get("Id")).get("name")}')
     return "Empty response for now"
 
 

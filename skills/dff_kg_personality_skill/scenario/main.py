@@ -46,7 +46,7 @@ flows = {
             },
         },
         "node1": {
-            RESPONSE: loc_rsp.find_entities,  # several hypothesis
+            RESPONSE: loc_rsp.add_new_entities,  # several hypothesis
             PROCESSING: {
                 "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
             },
