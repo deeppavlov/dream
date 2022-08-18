@@ -95,7 +95,7 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
                 for e in gr_ents:
                     logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
             return f"I guess your name is {texts[0]}! I added it as your property!"
-        
+
     return "Something went wrong"
 
 
