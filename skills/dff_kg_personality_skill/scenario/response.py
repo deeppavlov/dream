@@ -20,7 +20,9 @@ graph = KnowledgeGraph(
 
 # graph.drop_database()
 # graph.ontology.create_entity_kind("User",  kind_properties=["name"])
+logger.info('Starting graph tests...')
 mocks.run_all(graph, drop_when_populating=True)
+logger.info('Graph tests are finished!')
 
 
 def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
