@@ -33,17 +33,18 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         for e in gr_ents:
             logger.info(f'{graph.get_current_state(e.get("Id")).get("name")}')
 
-        for entity in entities:
-            entity_type = entity.get('label', 'no entity label')
-            entity_name = entity.get('text', 'no entity name')
-            logger.info(f'Entity type: {entity_type}')
-            logger.info(f'Entity name: {entity_name}')
-            graph.ontology.create_entity_kind(
-                entity_type,
-                kind_properties=set(),
-            )
-            graph.create_entity(entity_type, str(uuid.uuid4()), {'name': entity_name})
+        # for entity in entities:
+        #     entity_type = entity.get('label', 'no entity label')
+        #     entity_name = entity.get('text', 'no entity name')
+        #     logger.info(f'Entity type: {entity_type}')
+        #     logger.info(f'Entity name: {entity_name}')
+        #     graph.ontology.create_entity_kind(
+        #         entity_type,
+        #         kind_properties=set(),
+        #     )
+        #     graph.create_entity(entity_type, str(uuid.uuid4()), {'name': entity_name})
 
+        graph.create_entity("User", str(uuid.uuid4()), {'name': "Pavel"})
         logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
         gr_ents = graph.search_for_entities()
         for e in gr_ents:
