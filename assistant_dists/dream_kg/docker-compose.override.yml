@@ -19,7 +19,8 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, dff-kg-personality-skill:8123"
+          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120,
+          neo4j:7474, entity-extraction-kg:9103, wiki-parser-kg:9077, dff-kg-personality-skill:8123"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -1237,6 +1238,50 @@ services:
       #      NEO4J_dbms_connector_bolt_tls__level: "OPTIONAL"
       NEO4JLABS_PLUGINS: "[\"apoc\"]"
 
+  entity-extraction-kg:
+    build:
+      args:
+        NER_CONFIG: entity_detection_en.json
+        EL_CONFIG: entity_linking_en_full.json
+        PORT: 9103
+        SRC_DIR: annotators/entity_extraction_kg/
+        INCLUDE_MISC: 1
+        MISC_THRES: 0.88
+      context: ./
+      dockerfile: annotators/entity_extraction_kg/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  wiki-parser-kg:
+    env_file: [.env]
+    build:
+      args:
+        WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt
+        WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
+        WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
+        CONFIG: wiki_parser.json
+        PORT: 9077
+        SRC_DIR: annotators/wiki_parser_kg
+        COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+      context: ./
+      dockerfile: annotators/wiki_parser_kg/Dockerfile
+    command: flask run -h 0.0.0.0 -p 9077
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
   dff-kg-personality-skill:
     env_file: [ .env ]
     build:
@@ -1245,7 +1290,10 @@ services:
         SERVICE_NAME: dff_kg_personality_skill
       context: .
       dockerfile: ./skills/dff_kg_personality_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8123 --reload
+    command: sh -c 'bin/wait && gunicorn --workers=1 server:app -b 0.0.0.0:8123 --reload'
+    environment:
+      WAIT_HOSTS: "neo4j:7474"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       resources:
         limits:

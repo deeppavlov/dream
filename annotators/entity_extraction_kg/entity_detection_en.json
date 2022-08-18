@@ -1,0 +1,43 @@
+{
+  "chainer": {
+    "in": ["x"],
+    "pipe": [
+      {
+        "class_name": "src.ner_chunker:NerChunker",
+        "batch_size": 16,
+        "max_chunk_len" : 180,
+        "max_seq_len" : 300,
+        "vocab_file": "{TRANSFORMER}",
+        "in": ["x"],
+        "out": ["x_chunk", "chunk_nums", "chunk_sentences_offsets", "chunk_sentences"]
+      },
+      {
+        "thres_proba": 0.81,
+        "o_tag": "O",
+        "tags_file": "{NER_PATH}/tag.dict",
+        "return_entities_with_tags": true,
+        "not_used_tags": ["DATE", "CARDINAL", "ORDINAL", "PERCENT", "TIME", "QUANTITY", "MONEY"],
+        "class_name": "src.entity_detection_parser:EntityDetectionParser",
+        "id": "edp"
+      },
+      {
+        "class_name": "src.ner_chunker:NerChunkModel",
+        "ner": {"config_path": "src/wiki_entity_detection.json"},
+        "ner_parser": "#edp",
+        "in": ["x", "x_chunk", "chunk_nums", "chunk_sentences_offsets", "chunk_sentences"],
+        "out": ["entity_substr", "init_entity_offsets", "entity_offsets", "entity_positions", "tags", "sentences_offsets", "sentences", "probas"]
+      }
+    ],
+    "out": ["entity_substr", "init_entity_offsets", "entity_offsets", "entity_positions", "tags", "sentences_offsets", "sentences", "probas"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
+      "TRANSFORMER": "bert-base-cased",
+      "NER_PATH": "{MODELS_PATH}/wiki_entity_detection_bert_full"
+    }
+  }
+}

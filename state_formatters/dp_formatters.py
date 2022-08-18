@@ -958,3 +958,39 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
     contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
 
     return [{"dialog_contexts": contexts, "hypotheses": hypots}]
+
+
+def wp_kg_formatter_dialog(dialog: Dict):
+    # Used by: wiki_parser_kg annotator
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    utt_index = len(dialog["human_utterances"])
+    input_entity_info_list = []
+    if entity_info_list:
+        for entity_info in entity_info_list:
+            if (
+                entity_info
+                and "entity_substr" in entity_info
+                and "entity_ids" in entity_info
+                and "tokens_match_conf" in entity_info
+            ):
+                input_entity_info_list.append(
+                    {
+                        "entity_substr": entity_info["entity_substr"],
+                        "entity_ids": entity_info["entity_ids"][:5],
+                        "confidences": entity_info["confidences"][:5],
+                        "tokens_match_conf": entity_info["tokens_match_conf"][:5],
+                    }
+                )
+    parser_info = ["find_top_triplets"]
+    if not input_entity_info_list:
+        input_entity_info_list = [{}]
+    return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
+
+
+def entity_extraction_kg_formatter_dialog(dialog: Dict) -> List[Dict]:
+    # Used by: entity_extraction_kg annotator
+    num_last_utterances = 2
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+    return [{"texts": context}]

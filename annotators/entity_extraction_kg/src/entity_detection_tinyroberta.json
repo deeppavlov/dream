@@ -1,0 +1,222 @@
+{
+  "dataset_reader": {
+    "class_name": "conll2003_reader",
+    "data_path": "{DOWNLOADS_PATH}/ontonotes_test/",
+    "dataset_name": "ontonotes",
+    "provide_pos": false
+  },
+  "dataset_iterator": {
+    "class_name": "data_learning_iterator"
+  },
+  "chainer": {
+    "in": [
+      "x"
+    ],
+    "in_y": [
+      "y"
+    ],
+    "pipe": [
+      {
+        "class_name": "src.torch_transformers_preprocessor:TorchTransformersNerPreprocessor",
+        "vocab_file": "{TRANSFORMER}",
+        "do_lower_case": false,
+        "return_offsets": true,
+        "max_seq_length": 512,
+        "max_subword_length": 15,
+        "token_masking_prob": 0.0,
+        "in": [
+          "x"
+        ],
+        "out": [
+          "x_tokens",
+          "x_subword_tokens",
+          "x_subword_tok_ids",
+          "startofword_markers",
+          "attention_mask",
+          "token_offsets"
+        ]
+      },
+      {
+        "class_name": "src.torch_transformers_preprocessor:SplitMarkups",
+        "in": [
+          "y"
+        ],
+        "out": [
+          "y_ent",
+          "y_seq"
+        ]
+      },
+      {
+        "id": "tag_vocab_seq",
+        "class_name": "src.simple_vocab:SimpleVocabulary",
+        "unk_token": [
+          "O"
+        ],
+        "pad_with_zeros": true,
+        "save_path": "{MODEL_PATH}/tag_seq.dict",
+        "load_path": "{MODEL_PATH}/tag_seq.dict",
+        "fit_on": [
+          "y_seq"
+        ],
+        "in": [
+          "y_seq"
+        ],
+        "out": [
+          "y_seq_ind"
+        ]
+      },
+      {
+        "id": "tag_vocab_ent",
+        "class_name": "simple_vocab",
+        "unk_token": [
+          "O"
+        ],
+        "pad_with_zeros": true,
+        "save_path": "{MODEL_PATH}/tag_ent.dict",
+        "load_path": "{MODEL_PATH}/tag_ent.dict",
+        "fit_on": [
+          "y_ent"
+        ],
+        "in": [
+          "y_ent"
+        ],
+        "out": [
+          "y_ent_ind"
+        ]
+      },
+      {
+        "class_name": "src.torch_transformers_sequence_tagger:TorchTransformersSequenceTagger",
+        "pretrained_bert": "{TRANSFORMER}",
+        "attention_probs_keep_prob": 0.5,
+        "two_heads": true,
+        "n_tags": 4,
+        "n_tags_ent": "#tag_vocab_ent.len",
+        "encoder_layer_ids": [
+          -1
+        ],
+        "optimizer": "AdamW",
+        "optimizer_parameters": {
+          "lr": 1.8e-05,
+          "weight_decay": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-06
+        },
+        "clip_norm": 1.0,
+        "min_learning_rate": 1e-07,
+        "learning_rate_drop_patience": 3,
+        "learning_rate_drop_div": 1.5,
+        "load_before_drop": true,
+        "save_path": "{MODEL_PATH}/model",
+        "load_path": "{MODEL_PATH}/model",
+        "encoder_path": "{MODEL_PATH}/encoder",
+        "seq_linear_path": "{MODEL_PATH}/seq_linear",
+        "ent_linear_path": "{MODEL_PATH}/ent_linear",
+        "in": [
+          "x_subword_tok_ids",
+          "attention_mask",
+          "startofword_markers"
+        ],
+        "in_y": [
+          "y_seq_ind",
+          "y_ent_ind"
+        ],
+        "out": [
+          "y_seq_pred_ind",
+          "y_ent_pred_ind"
+        ]
+      },
+      {
+        "ref": "tag_vocab_seq",
+        "in": [
+          "y_seq_pred_ind"
+        ],
+        "out": [
+          "y_seq_pred"
+        ]
+      },
+      {
+        "class_name": "src.torch_transformers_preprocessor:MergeMarkups",
+        "tags_file": "{MODEL_PATH}/tag_ent.dict",
+        "top_n": 3,
+        "include_misc": true,
+        "ent_thres": 0.28,
+        "in": [
+          "x_tokens",
+          "y_ent_pred_ind",
+          "y_seq_pred"
+        ],
+        "out": [
+          "y_pred",
+          "entities",
+          "positions",
+          "tags",
+          "probas"
+        ],
+        "misc_thres": 0.88
+      }
+    ],
+    "out": [
+      "x_tokens",
+      "y_pred",
+      "token_offsets",
+      "entities",
+      "positions",
+      "tags",
+      "probas"
+    ]
+  },
+  "train": {
+    "epochs": 30,
+    "batch_size": 24,
+    "valid_batch_size": 48,
+    "metrics": [
+      {
+        "name": "ner_f1",
+        "inputs": [
+          "y",
+          "y_pred"
+        ]
+      },
+      {
+        "name": "ner_token_f1",
+        "inputs": [
+          "y",
+          "y_pred"
+        ]
+      }
+    ],
+    "validation_patience": 10,
+    "val_every_n_batches": 200,
+    "log_every_n_batches": 20,
+    "show_examples": false,
+    "pytest_max_batches": 2,
+    "pytest_batch_size": 8,
+    "evaluation_targets": [
+      "valid",
+      "test"
+    ],
+    "class_name": "torch_trainer"
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/roberta_tiny_cased",
+      "MODEL_PATH": "{MODELS_PATH}/entity_detection_tinyroberta_42"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/v1/ner/entity_detection_tinyroberta_42_sep.tar.gz",
+        "subdir": "{MODEL_PATH}"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/roberta_tiny_cased.tar.gz",
+        "subdir": "{TRANSFORMER}"
+      }
+    ]
+  }
+}

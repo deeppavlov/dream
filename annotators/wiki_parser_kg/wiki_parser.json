@@ -1,0 +1,40 @@
+{
+  "chainer": {
+    "in": ["parser_info", "query"],
+    "pipe": [
+      {
+        "class_name": "wiki_parser",
+        "in": ["parser_info", "query"],
+        "out": ["wiki_parser_output"],
+        "wiki_filename": "{DOWNLOADS_PATH}/wikidata/wikidata_lite.hdt",
+        "file_format": "hdt",
+        "max_comb_num": 1000,
+        "lang": "@en"
+      }
+    ],
+    "out": ["wiki_parser_output"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "requirements": ["{DEEPPAVLOV_PATH}/requirements/hdt.txt"],
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
+      }
+    ]
+  }
+}
