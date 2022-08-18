@@ -411,10 +411,20 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  entity-extraction-kg:
+    volumes:
+      - "./annotators/entity_extraction_kg:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 9103:9103
+  wiki-parser-kg:
+    ports:
+      - 9077:9077
   dff-kg-personality-skill:
     volumes:
       - "./skills/dff_kg_personality_skill:/src"
       - "./common:/src/common"
+      - "./bin:/src/bin"
     ports:
       - 8123:8123
 version: "3.7"

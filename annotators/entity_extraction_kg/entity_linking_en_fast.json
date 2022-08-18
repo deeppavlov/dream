@@ -1,0 +1,53 @@
+{
+  "chainer": {
+    "in": ["entity_substr", "tags", "sentences", "entity_offsets", "sentences_offsets", "probas"],
+    "pipe": [
+      {
+        "class_name": "src.entity_linking:EntityLinker",
+        "in": ["entity_substr", "tags", "sentences", "entity_offsets", "sentences_offsets", "probas"],
+        "out": ["entity_ids", "entity_tags", "entity_conf", "entity_pages"],
+        "load_path": "{DOWNLOADS_PATH}/entity_linking_eng",
+        "db_format": "pickle",
+        "name_to_q_filename": "name_to_idlist_en.pickle",
+        "word_to_q_filename": "word_to_idlist_en.pickle",
+        "entity_ranking_dict_filename": "entity_ranking_dict.pickle",
+        "entity_to_tag_filename": "entity_to_tag.pickle",
+        "q_to_name_filename": "q_to_name.pickle",
+        "p131_filename": "p131_dict.pickle",
+        "p641_filename": "p641_dict.pickle",
+        "types_dict_filename": "types_dict.pickle",
+        "q_to_page_filename": "q_to_page.pickle",
+        "wikidata_filename": "wikidata.pickle",
+        "rank_in_runtime": true,
+        "num_entities_for_conn_ranking": 30,
+        "include_mention": false,
+        "num_entities_to_return": 5,
+        "lemmatize": true,
+        "use_tags": true,
+        "use_descriptions": true,
+        "use_connections": true,
+        "full_paragraph": false,
+        "return_confidences": true,
+        "ignore_tags": true,
+        "delete_hyphens": true,
+        "log_to_file": true,
+        "lang": "en"
+      }
+    ],
+    "out": ["entity_ids", "entity_tags", "entity_conf", "entity_pages"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/wikidata_el_en.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
+      }
+    ]
+  }
+}

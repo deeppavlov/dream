@@ -1,0 +1,60 @@
+{
+  "chainer": {
+    "in": ["entity_substr", "sentences", "entity_offsets", "sentences_offsets"],
+    "pipe": [
+      {
+        "class_name": "src.entity_linking:EntityLinker",
+        "in": ["entity_substr", "sentences", "entity_offsets", "sentences_offsets"],
+        "out": ["entity_ids", "entity_tags", "entity_conf", "entity_pages", "image_links", "categories", "first_pars", "dbpedia_types"],
+        "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_kg_48types",
+        "occ_labels_filename": "{DOWNLOADS_PATH}/entity_linking_eng/occ_labels.pickle",
+        "add_info_filename": "add_info.db",
+        "tags_filename": "{MODELS_PATH}/el_tags_roberta/tag.dict",
+        "entity_ranker": {"config_path": "/src/src/el_tags_infer.json"},
+        "rank_in_runtime": true,
+        "num_entities_for_conn_ranking": 30,
+        "include_mention": false,
+        "num_entities_to_return": 5,
+        "lemmatize": true,
+        "use_tags": true,
+        "use_descriptions": true,
+        "use_connections": true,
+        "full_paragraph": false,
+        "return_confidences": true,
+        "ignore_tags": true,
+        "delete_hyphens": true,
+        "log_to_file": true,
+        "lang": "en",
+        "return_additional_info": true
+      }
+    ],
+    "out": ["entity_ids", "entity_tags", "entity_conf", "entity_pages", "image_links", "categories", "first_pars", "dbpedia_types"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/bert_small",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/el_eng_kg_48types_files.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/occ_labels.pickle",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/siamese_distilbert_biencoder.tar.gz",
+        "subdir": "{MODELS_PATH}/siamese_distilbert_biencoder"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/bert_small.tar.gz",
+        "subdir": "{TRANSFORMER}"
+      }
+    ]
+  }
+}

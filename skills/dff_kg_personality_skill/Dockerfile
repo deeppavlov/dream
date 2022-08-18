@@ -18,6 +18,7 @@ RUN pip install git+https://github.com/deepmipt/custom_kg_svc
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
+COPY ./bin ./bin
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}

@@ -1,0 +1,43 @@
+{
+  "chainer": {
+    "in": ["entity_substr", "tags", "sentences", "entity_offsets", "sentences_offsets", "probas"],
+    "pipe": [
+      {
+        "class_name": "src.entity_linking:EntityLinker",
+        "in": ["entity_substr", "tags", "sentences", "entity_offsets", "sentences_offsets", "probas"],
+        "out": ["entity_ids", "entity_tags", "entity_conf", "entity_pages"],
+        "load_path": "{DOWNLOADS_PATH}/entity_linking_eng",
+        "entities_database_filename": "el_eng_kg_04.2022.db",
+        "rank_in_runtime": true,
+        "num_entities_for_conn_ranking": 30,
+        "include_mention": false,
+        "num_entities_to_return": 5,
+        "lemmatize": true,
+        "use_tags": true,
+        "use_descriptions": true,
+        "use_connections": true,
+        "full_paragraph": false,
+        "return_confidences": true,
+        "ignore_tags": true,
+        "delete_hyphens": true,
+        "log_to_file": true,
+        "lang": "en"
+      }
+    ],
+    "out": ["entity_ids", "entity_tags", "entity_conf", "entity_pages"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/el_eng_kg_04.2022.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
+      }
+    ]
+  }
+}
