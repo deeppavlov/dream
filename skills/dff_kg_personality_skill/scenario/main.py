@@ -27,7 +27,8 @@ flows = {
     "sevice": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("greeting", "node1"): cnd.true()},
+            # TRANSITIONS: {("greeting", "node1"): cnd.true()},
+            TRANSITIONS: {"new_node1": cnd.true()},
         },
         "fallback": {
             RESPONSE: "Ooops",
@@ -35,6 +36,14 @@ flows = {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),
             },
+        },
+        "new_node1": {
+            RESPONSE: 'What is your name?',
+            TRANSITIONS: {"new_node2": cnd.true()},
+        },
+        "new_node2": {
+            RESPONSE: loc_rsp.find_name,
+            TRANSITIONS: {("greeting", "node1"): loc_cnd.example_lets_talk_about()},
         },
     },
     "greeting": {
