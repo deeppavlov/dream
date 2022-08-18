@@ -58,7 +58,6 @@ flows = {
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(),
-                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
             },
         },
         "node1": {
@@ -67,7 +66,6 @@ flows = {
         },
         "node2": {
             RESPONSE: loc_rsp.find_name,
-            TRANSITIONS: {"node3": loc_cnd.example_lets_talk_about()},
         },
         "node3": {
             RESPONSE: "Sorry, I can not talk about that now. Maybe late. Do you like {topic}?",

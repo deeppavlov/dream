@@ -82,12 +82,18 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info(f'Entity types: {types}')
         logger.info(f'Entity names: {texts}')
 
-        graph.create_entity("User", str(user_id), ['name'], [texts[0]])
+        if texts:
+            existing_ids = [
+                user[0].get("Id") for user in graph.search_for_entities("User")
+            ]
+            logger.info(f"Existing Ids: {existing_ids}")
+            if user_id not in existing_ids:
+                graph.create_entity("User", str(user_id), ['name'], [texts[0]])
 
-        logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
-        gr_ents = graph.search_for_entities("User")
-        for e in gr_ents:
-            logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
+                logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
+                gr_ents = graph.search_for_entities("User")
+                for e in gr_ents:
+                    logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
 
         return f"I guess your name is {texts[0]}! I added it as your property!"
     return "Something went wrong"
