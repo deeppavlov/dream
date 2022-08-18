@@ -39,10 +39,16 @@ flows = {
         },
         "new_node1": {
             RESPONSE: 'What is your name?',
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.0),
+                "set_can_continue": int_prs.set_can_continue()},
             TRANSITIONS: {"new_node2": cnd.true()},
         },
         "new_node2": {
             RESPONSE: loc_rsp.find_name,
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.0),
+                "set_can_continue": int_prs.set_can_continue()},
             TRANSITIONS: {("greeting", "node1"): loc_cnd.example_lets_talk_about()},
         },
     },
