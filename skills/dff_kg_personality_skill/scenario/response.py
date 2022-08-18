@@ -27,6 +27,9 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
+        dialog = int_ctx.get_dialog(ctx, actor)
+        logger.info(f'DIALOG: {dialog}')
+
         entity_detection = utt.get("annotations", {}).get("entity_detection", [])
         logger.info(f'Entity detection answer: {entity_detection}')
         entities = entity_detection.get('labelled_entities', [])
