@@ -7,7 +7,7 @@ import common.dff.integration.context as int_ctx
 import common.dff.integration.condition as int_cnd
 # import common.dff.integration.processing as int_prs
 from common.wiki_skill import extract_entity
-from deeppavlov_kg import KnowledgeGraph
+from deeppavlov_kg import KnowledgeGraph, mocks
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +18,9 @@ graph = KnowledgeGraph(
     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
 )
 
-graph.drop_database()
-graph.ontology.create_entity_kind("User",  kind_properties=["name"])
+# graph.drop_database()
+# graph.ontology.create_entity_kind("User",  kind_properties=["name"])
+mocks.run_all(graph, drop_when_populating=True)
 
 
 def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -63,17 +64,31 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
+        user_id = utt.get("user", {}).get("id", "")
+        logger.info(f'User id: {user_id}')
+
         entity_detection = utt.get("annotations", {}).get("entity_detection", [])
         logger.info(f'Entity detection answer: {entity_detection}')
         entities = entity_detection.get('labelled_entities', [])
         types = []
         texts = []
         for entity in entities:
-            types.append(entity.get('label', 'no entity label'))
-            texts.append(entity.get('text', 'no entity name'))
+            name = entity.get('text', 'no entity name')
+            if name != 'name':
+                types.append(entity.get('label', 'no entity label'))
+                texts.append(name)
         logger.info(f'Entity types: {types}')
         logger.info(f'Entity names: {texts}')
-    return "I can't understand names yet!"
+
+        graph.create_entity("User", str(user_id), ['name'], [texts[0]])
+
+        logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
+        gr_ents = graph.search_for_entities("User")
+        for e in gr_ents:
+            logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
+
+        return f"I guess your name is {texts[0]}! I added it as your property!"
+    return "Something went wrong"
 
 
 def example_response(reply: str):

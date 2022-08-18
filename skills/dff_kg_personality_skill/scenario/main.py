@@ -46,15 +46,11 @@ flows = {
             },
         },
         "node1": {
-            RESPONSE: loc_rsp.add_new_entities,  # several hypothesis
-            PROCESSING: {
-                "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
-            },
-            TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
+            RESPONSE: 'What is your name?',
+            TRANSITIONS: {"node2": cnd.true()},
         },
         "node2": {
-            RESPONSE: loc_rsp.example_response("Good. What do you want to talk about?"),
-            # loc_rsp.example_response is just for an example, you can use just str without example_response func
+            RESPONSE: loc_rsp.find_name,
             TRANSITIONS: {"node3": loc_cnd.example_lets_talk_about()},
         },
         "node3": {
