@@ -18,6 +18,9 @@ graph = KnowledgeGraph(
     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
 )
 
+graph.drop_database()
+graph.ontology.create_entity_kind("User")
+
 
 def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
@@ -44,7 +47,7 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         #     )
         #     graph.create_entity(entity_type, str(uuid.uuid4()), {'name': entity_name})
 
-        graph.create_entity("User", str(uuid.uuid4()), ['name'],["Pavel"])
+        graph.create_entity("User", str(uuid.uuid4()), ['name'], ["Pavel"])
         logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
         gr_ents = graph.search_for_entities()
         for e in gr_ents:
