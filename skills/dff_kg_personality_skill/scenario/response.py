@@ -24,13 +24,17 @@ def find_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
-        entity_answer = utt.get("annotations", {}).get("entity_linking", [])
+        entity_linking = utt.get("annotations", {}).get("entity_linking", [])
+        logger.info(f'Entity linking answer: {entity_linking}')
+        entity_detection = utt.get("annotations", {}).get("entity_detection", [])
+        logger.info(f'Entity detection answer: {entity_detection}')
+        wiki_parser = utt.get("annotations", {}).get("wiki_parser", [])
+        logger.info(f'Wiki parser  answer: {wiki_parser.get("entities_info", {})}')
         # for entity in entity_answer:
         #     logger.info(f'Entities: {entity}')
         #     max_ind = np.argmax(entity['confidences'])
         #     best_entity = entity['entity_pages_titles'][max_ind]
         #     logger.info(f'Best entity: {best_entity}')
-        logger.info(f'Entities: {entity_answer}')
     return "Empty response for now"
 
 
