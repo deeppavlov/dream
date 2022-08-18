@@ -12,7 +12,7 @@ from deeppavlov_kg import KnowledgeGraph
 logger = logging.getLogger(__name__)
 
 graph = KnowledgeGraph(
-    "bolt://neo4j:neo4j@localhost:7687",
+    "bolt://neo4j:neo4j@neo4j:7687",
     ontology_kinds_hierarchy_path="deeppavlov_kg/database/ontology_kinds_hierarchy.pickle",
     ontology_data_model_path="deeppavlov_kg/database/ontology_data_model.json",
     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
@@ -49,6 +49,24 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         for e in gr_ents:
             logger.info(f'{graph.get_current_state(e.get("Id")).get("name")}')
     return "Empty response for now"
+
+
+def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    last_utt = utt["text"]
+    logger.info(f"Utterance: {last_utt}")
+    if last_utt:
+        entity_detection = utt.get("annotations", {}).get("entity_detection", [])
+        logger.info(f'Entity detection answer: {entity_detection}')
+        entities = entity_detection.get('labelled_entities', [])
+        types = []
+        texts = []
+        for entity in entities:
+            types.append(entity.get('label', 'no entity label'))
+            texts.append(entity.get('text', 'no entity name'))
+        logger.info(f'Entity types: {types}')
+        logger.info(f'Entity names: {texts}')
+    return "I can't understand names yet!"
 
 
 def example_response(reply: str):
