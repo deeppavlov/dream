@@ -74,7 +74,7 @@ flows = {
                 "start_node": cnd.true(),
             },
         },
-        "gpt_topic": {RESPONSE: "What about?", TRANSITIONS: {"gpt_story": loc_cnd.prev_is_question}},
+        "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story": loc_cnd.prev_is_question}},
         "gpt_story": {RESPONSE: "I have no stories. Go away."},
     },
 }

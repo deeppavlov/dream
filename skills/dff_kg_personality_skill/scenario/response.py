@@ -8,6 +8,7 @@ import common.dff.integration.condition as int_cnd
 # import common.dff.integration.processing as int_prs
 from common.wiki_skill import extract_entity
 from deeppavlov_kg import KnowledgeGraph, mocks
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 
 logger = logging.getLogger(__name__)
 
@@ -104,3 +105,9 @@ def example_response(reply: str):
         return reply
 
     return example_response_handler
+
+
+def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+    int_ctx.set_confidence(ctx, actor, 1.0)
+    return "Which story?"
