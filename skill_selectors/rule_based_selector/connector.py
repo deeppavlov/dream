@@ -231,8 +231,8 @@ class RuleBasedSkillSelectorConnector:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
-            if user_uttr_text == 'kg test':
-                skills_for_uttr = ["dff_kg_personality_skill"]
+            # if user_uttr_text == 'kg test':
+            skills_for_uttr = ["dff_kg_personality_skill"]
 
             logger.info(f"Selected skills: {skills_for_uttr}")
 
