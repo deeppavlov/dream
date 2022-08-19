@@ -1290,14 +1290,14 @@ services:
         SERVICE_NAME: dff_kg_personality_skill
       context: .
       dockerfile: ./skills/dff_kg_personality_skill/Dockerfile
-    command: sh -c 'bin/wait && gunicorn --workers=1 --timeout=120 --log-level=info server:app -b 0.0.0.0:8123 --reload'
+    command: sh -c 'bin/wait && gunicorn --workers=1 server:app -b 0.0.0.0:8123 --reload'
     environment:
       WAIT_HOSTS: "neo4j:7474"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 512M
         reservations:
-          memory: 128M
+          memory: 512M
 version: '3.7'
