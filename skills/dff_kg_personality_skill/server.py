@@ -15,6 +15,8 @@ from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
 import test_server
+from skills.dff_kg_personality_skill.log_utils import create_logger
+logger = create_logger(__file__)
 
 
 ignore_logger("root")
@@ -25,7 +27,7 @@ SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
@@ -77,7 +79,6 @@ def handler(requested_data, random_seed=None):
 #     logger.exception(exc)
 #     raise exc
 
-logger.error("something")
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 
