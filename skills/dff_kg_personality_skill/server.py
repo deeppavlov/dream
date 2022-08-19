@@ -77,6 +77,7 @@ def handler(requested_data, random_seed=None):
 #     logger.exception(exc)
 #     raise exc
 
+logger.error("something")
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 
