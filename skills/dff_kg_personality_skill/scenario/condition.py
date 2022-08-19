@@ -8,8 +8,10 @@ logger = logging.getLogger(__name__)
 # ....
 
 
-def example_lets_talk_about():
-    def example_lets_talk_about_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-        return int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
+def prev_is_question(ctx: Context, actor: Actor) -> bool:
+    return True
 
-    return example_lets_talk_about_handler
+
+def has_story_intent(ctx: Context, actor: Actor) -> bool:
+    return True
+
