@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+<!--  let's chat-->
+  <category>
+    <pattern><set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>start</set> # <set>talk</set> ^</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+  <category>
+    <pattern><set>talk</set> ABOUT</pattern>
+    <template><srai>LETS_CHAT</srai></template>
+  </category>
+
+  <category>
+    <pattern>LETS_CHAT</pattern>
+    <template>
+      <random>
+        <li> Всегда приятно поговорить с хорошим человеком. О чем хочешь поговорить? </li>
+        <li> Да, давай поболтаем! О чем хочешь поговорить? </li>
+      </random>
+    </template>
+  </category>
+
+<!--  let's chat about something-->
+
+  <category>
+    <pattern><set>talk</set> О *</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="2"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>talk</set> # О #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>talk</set> # О #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>start</set> # <set>talk</set> # О #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>start</set> # <set>talk</set> # О #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>wantto</set> # <set>talk</set> # О #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="5"/></srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # <set>wantto</set> # <set>talk</set> # О #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="7"/></srai></template>
+  </category>
+
+  <category>
+    <pattern><set>talk</set> # НА ТЕМУ #</pattern>
+    <template><srai>LET_US_CHAT_ABOUT <star index="3"/></srai></template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT ТЕБЕ</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+  <category>
+    <pattern>О ТЕБЕ</pattern>
+    <template><srai>LET_US_CHAT_ABOUT_YOURSELF</srai></template>
+  </category>
+
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT_YOURSELF</pattern>
+    <template>
+      <random>
+        <li> Моя ДНК основана на миллионах персон программистов, которые меня создавали.
+        Но главное во мне - это способность расти вместе с приобретением опыта.
+        Так что я постоянно развиваюсь и эволюционирую, как и люди. О чем еще ты хочешь поговорить?
+        </li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT</pattern>
+    <template>
+      <random>
+        <li> Возможно я не расслышала, о чем ты хочешь поговорить?</li>
+      </random>
+    </template>
+  </category>
+
+  <category>
+    <pattern>LET_US_CHAT_ABOUT ДРУГОМ</pattern>
+    <template>
+      <random>
+        <li>Давай поговорим о фильмах. Какой фильм из последних просмотренных запомнился тебе больше других?</li>
+        <li>Давай поговорим о книгах. Какая книга из последних прочитанных запомнилась тебе больше других?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>LET_US_CHAT_ABOUT ЧЕМ-ТО #</pattern>
+    <template>
+      <random>
+        <li>Давай поговорим о фильмах. Какой фильм из последних просмотренных запомнился тебе больше других?</li>
+        <li>Давай поговорим о книгах. Какая книга из последних прочитанных запомнилась тебе больше других?</li>
+      </random>
+    </template>
+  </category>
+  <category>
+    <pattern>LET_US_CHAT_ABOUT ЧЕМ-НИБУДЬ #</pattern>
+    <template>
+      <random>
+        <li>Давай поговорим о фильмах. Какой фильм из последних просмотренных запомнился тебе больше других?</li>
+        <li>Давай поговорим о книгах. Какая книга из последних прочитанных запомнилась тебе больше других?</li>
+      </random>
+    </template>
+  </category>
+
+<!--  DO NOT WANT TO TALK ABOUT BLABLA   -->
+  <category>
+    <pattern># НЕ # <set>wantto</set> # <set>talk</set> # О #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># НЕ # <set>start</set> # <set>talk</set> # О #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # НЕ # <set>start</set> # <set>talk</set> # О #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># НЕ # <set>wantto</set> # <set>talk</set> # О #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # НЕ # <set>wantto</set> # <set>talk</set> # О #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># НЕ # <set>talk</set> # НА ТЕМУ #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern># НЕ # <set>start</set> # <set>talk</set> # НА ТЕМУ #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+  <category>
+    <pattern><set>question_like</set> # НЕ # <set>start</set> # <set>talk</set> # НА ТЕМУ #</pattern>
+    <template><srai>DO_NOT_WANT_TO_TALK_ABOUT_IT</srai></template>
+  </category>
+
+  <category>
+    <pattern>DO_NOT_WANT_TO_TALK_ABOUT_IT</pattern>
+    <template>
+      <random>
+        <li> Хорошо. Тогда ты выбирай тему.</li>
+        <li> Хорошо. Давай поговорим о том, что тебе хочется. Выбирай тему.</li>
+        <li> Твоя очередь. Выбирай тему.</li>
+      </random>
+    </template>
+  </category>
+
+</aiml>

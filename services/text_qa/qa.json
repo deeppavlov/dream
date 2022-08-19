@@ -4,20 +4,20 @@
     "pipe": [
       {
         "class_name": "string_multiplier",
-        "id": "str_mult"
+        "in": ["question_raw", "top_facts"],
+        "out":["questions"]
       },
       {
-        "class_name": "logit_ranker",
-        "string_multiplier": "#str_mult",
-        "batch_size": 32,
-        "squad_model": {"config_path": "{CONFIGS_PATH}/squad/multi_squad_noans_infer.json"},
+        "class_name": "logit_ranker:LogitRanker",
+        "batch_size": 64,
+        "squad_model": {"config_path": "./qa_squad2_bert.json"},
         "sort_noans": true,
         "return_answer_sentence": true,
-        "in": ["question_raw", "top_facts"],
-        "out": ["answer", "answer_score", "answer_place", "answer_sentence", "answer_context"]
+        "in": ["top_facts", "questions"],
+        "out": ["answer", "answer_score", "answer_place", "answer_sentence"]
       }
     ],
-    "out": ["answer", "answer_score", "answer_place", "answer_sentence"]
+    "out":  ["answer", "answer_score", "answer_place", "answer_sentence"] 
   },
   "metadata": {
     "variables": {
@@ -27,9 +27,7 @@
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
     },
     "requirements": [
-      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
-      "{DEEPPAVLOV_PATH}/requirements/spacy.txt",
-      "{DEEPPAVLOV_PATH}/requirements/en_core_web_sm.txt"
+      "{DEEPPAVLOV_PATH}/requirements/tf.txt"
     ]
   }
 }

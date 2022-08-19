@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+    <!-- File: reductions1.aiml -->
+    <!-- Last modified: September 5, 2014 -->
+    <!--  -->
+    <!-- This AIML file is part of the Rosie knowledge base. -->
+    <!--  -->
+    <!-- Rosie is a fork of the ALICE2 brain, and is optimized for use on the Pandorabots platform -->
+    <!--  -->
+    <!-- Rosie is Copyright &copy; 2014 by Pandorabots, Inc. -->
+    <!--  -->
+    <!-- The Rosie brain is released under the terms of the GNU Lesser General -->
+    <!-- Public License, as published by the Free Software Foundation. -->
+    <!--  -->
+    <!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+    <!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+    <!--  -->
+    <!-- For more information: -->
+    <!-- http://www.pandorabots.com -->
+    <!--  http://www.alicebot.org -->
+    <!--  -->
+
+    <!-- Modified for Y-Bot by Keith Sterling July 2017 -->
+
+   <category>
+        <pattern>ДА</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+   </category>
+
+   <category>
+        <pattern>КОНЕЧНО</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+   </category>
+
+    <category>
+        <pattern>АГА</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ТОЧНО</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+    </category>
+
+    <category>БЕЗУСЛОВНО</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>ДА ДА</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>РАЗУМЕЕТСЯ</pattern>
+        <template>
+            <srai>YES</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>YES</pattern>
+        <template>
+            <random>
+                <li>Хорошо.</li>
+                <li>Интересно.</li>
+            </random>
+        </template>
+    </category>
+
+</aiml>

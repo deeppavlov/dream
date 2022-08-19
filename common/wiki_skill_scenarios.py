@@ -5,8 +5,8 @@ from common.books import WHAT_BOOK_RECOMMEND
 from common.hobbies import HOBBIES_RE
 from common.greeting import GREETING_QUESTIONS
 
-HOBBIES_TEMPLATE = f"({'|'.join(GREETING_QUESTIONS['what_are_your_hobbies'])})"
 
+HOBBIES_TEMPLATE = "|".join(sum([GREETING_QUESTIONS[lang]["what_are_your_hobbies"] for lang in ["EN", "RU"]], []))
 
 topic_config = {
     "hobbies": {

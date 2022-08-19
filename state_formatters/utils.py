@@ -135,7 +135,7 @@ def replace_with_annotated_utterances(dialog, mode="punct_sent"):
 
 def clean_up_utterances_to_avoid_unwanted_keys(
     dialog,
-    wanted_keys=["text", "annotations", "active_skill"],
+    wanted_keys=["text", "annotations", "active_skill", "user"],
     types_utterances=["human_utterances", "bot_utterances", "utterances"],
     used_annotations=None,
 ):
@@ -264,7 +264,7 @@ def dff_formatter(
             "human_utter_index_batch": [human_utter_index],
             "dialog_batch": [new_dialog],
             f"{state_name}_batch": [state],
-            f"dff_shared_state_batch": [dff_shared_state],
+            "dff_shared_state_batch": [dff_shared_state],
             "entities_batch": [entities],
             "used_links_batch": [used_links],
             "age_group_batch": [age_group],

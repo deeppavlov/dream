@@ -237,7 +237,7 @@ def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
     return False
 
 
-def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor, sentiment=None):
+def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor, sentiment=None, lang="EN"):
     if sentiment is None:
         sentiment = int_ctx.get_human_sentiment(ctx, actor)
         if is_yes_vars(ctx, actor) or is_no_vars(ctx, actor):
@@ -247,7 +247,7 @@ def get_not_used_and_save_sentiment_acknowledgement(ctx: Context, actor: Actor, 
     last_acknowledgements = shared_memory.get("last_acknowledgements", [])
 
     ack = common_utils.get_not_used_template(
-        used_templates=last_acknowledgements, all_templates=GENERAL_ACKNOWLEDGEMENTS[sentiment]
+        used_templates=last_acknowledgements, all_templates=GENERAL_ACKNOWLEDGEMENTS[lang][sentiment]
     )
 
     used_acks = last_acknowledgements + [ack]

@@ -3,6 +3,7 @@ import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
 
 from df_engine.core import Actor, Context
+from common.utils import high_priority_intents
 
 
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     intention, confidence = get_detected_intents(annotated_utterance)
 
     response = ""
-    if intention is not None and confidence > 0:
+    if intention is not None and confidence > 0 and intention in response_funcs.get_respond_funcs():
         logger.debug(f"Intent is defined as {intention}")
         dialog = int_ctx.get_dialog(ctx, actor)
         dialog["seen"] = dialog["called_intents"][intention]
@@ -47,8 +48,11 @@ def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
-    _, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
-    int_ctx.set_confidence(ctx, actor, confidence)
+    intent, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
+    if intent in high_priority_intents["dff_intent_responder_skill"]:
+        int_ctx.set_confidence(ctx, actor, 1.0)
+    else:
+        int_ctx.set_confidence(ctx, actor, confidence)
     return ctx
 
 
@@ -61,7 +65,7 @@ def get_detected_intents(annotated_utterance):
     intents = get_intents(annotated_utterance)
     intent, confidence = None, 0.0
     for key, value in intents.items():
-        if value.get("detected", 0) == 1:
+        if value.get("detected", 0) == 1 and key in response_funcs.get_respond_funcs():
             confidence_current = value.get("confidence", 0.0)
             if confidence_current > confidence:
                 intent, confidence = key, confidence_current
