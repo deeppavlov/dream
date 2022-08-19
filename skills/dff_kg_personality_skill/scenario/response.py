@@ -1,17 +1,14 @@
-import logging
 import uuid
 
 from df_engine.core import Context, Actor
 
 import common.dff.integration.context as int_ctx
-import common.dff.integration.condition as int_cnd
 # import common.dff.integration.processing as int_prs
-from common.wiki_skill import extract_entity
 from deeppavlov_kg import KnowledgeGraph, mocks
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
+from common.constants import MUST_CONTINUE
 
 # logger = logging.getLogger(__name__)
-from skills.dff_kg_personality_skill.log_utils import create_logger
+from log_utils import create_logger
 logger = create_logger(__file__)
 
 graph = KnowledgeGraph(
