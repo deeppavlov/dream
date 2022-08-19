@@ -62,6 +62,15 @@ def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return "Empty response for now"
 
 
+def check_graph_entities(graph):
+    # check the graph state
+    logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
+    gr_ents = graph.search_for_entities("User")
+    logger.info(f'Num of entities in graph: {len(gr_ents)}')
+    for e in gr_ents:
+        logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
+
+
 def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     last_utt = utt["text"]
@@ -93,6 +102,8 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
                 # user_id is new -- adding entity + property
                 graph.create_entity("User", str(user_id), ['name'], [texts[0]])
 
+                check_graph_entities(graph)
+
                 return f"I guess your name is {texts[0]}! I added it as your property!"
             else:
                 # user_id is already in the graph -- updating property
@@ -101,15 +112,12 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
                     property_kind="name",
                     property_value=texts[0],
                 )
+                
+                check_graph_entities(graph)
+
                 return f"I already have you in the graph! Updating your property name to {texts[0]}!"
 
-        # check the graph state
-        logger.info('ALL ENTITIES IN GRAPH AFTER UPDATE:')
-        gr_ents = graph.search_for_entities("User")
-        logger.info(f'Num of entities in graph: {len(gr_ents)}')
-        for e in gr_ents:
-            logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
-
+        check_graph_entities(graph)
     return "No entities in the utterance!"
 
 
