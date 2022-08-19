@@ -109,7 +109,7 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info(f'Num of entities in graph: {len(gr_ents)}')
         for e in gr_ents:
             logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
-        
+
     return "No entities in the utterance!"
 
 
