@@ -1,8 +1,9 @@
 from df_engine.core import Context, Actor
+import logging
 
-# logger = logging.getLogger(__name__)
-from log_utils import create_logger
-logger = create_logger(__file__)
+logger = logging.getLogger(__name__)
+# from log_utils import create_logger
+# logger = create_logger(__file__)
 # ....
 
 

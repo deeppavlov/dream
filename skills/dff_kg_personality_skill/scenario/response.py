@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 from df_engine.core import Context, Actor
@@ -7,9 +8,9 @@ import common.dff.integration.context as int_ctx
 from deeppavlov_kg import KnowledgeGraph, mocks
 from common.constants import MUST_CONTINUE
 
-# logger = logging.getLogger(__name__)
-from log_utils import create_logger
-logger = create_logger(__file__)
+logger = logging.getLogger(__name__)
+# from log_utils import create_logger
+# logger = create_logger(__file__)
 
 graph = KnowledgeGraph(
     "bolt://neo4j:neo4j@neo4j:7687",

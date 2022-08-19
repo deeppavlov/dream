@@ -1,3 +1,5 @@
+import logging
+
 import re
 
 from df_engine.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
@@ -10,9 +12,9 @@ import common.dff.integration.processing as int_prs
 from . import response as loc_rsp
 from . import condition as loc_cnd
 
-# logger = logging.getLogger(__name__)
-from log_utils import create_logger
-logger = create_logger(__file__)
+logger = logging.getLogger(__name__)
+# from log_utils import create_logger
+# logger = create_logger(__file__)
 
 # flows = {
 #     GLOBAL: {
