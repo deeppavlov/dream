@@ -14,11 +14,12 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
+RUN python -c "import nltk; nltk.download('punkt')"
 RUN pip install git+https://github.com/deepmipt/custom_kg_svc
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
+COPY ./bin ./bin
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}

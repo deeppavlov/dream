@@ -1,0 +1,62 @@
+{
+    "TALKED_WITH": [
+        [
+            "Bot",
+            "User",
+            [
+                "on"
+            ]
+        ]
+    ],
+    "KEEPS_UP": [
+        [
+            "User",
+            "Habit",
+            [
+                "since"
+            ]
+        ]
+    ],
+    "STUDY": [
+        [
+            "User",
+            "University",
+            []
+        ]
+    ],
+    "LIKES": [
+        [
+            "User",
+            "Interest",
+            []
+        ]
+    ],
+    "DISLIKES": [
+        [
+            "User",
+            "Interest",
+            []
+        ]
+    ],
+    "CAUSES": [
+        [
+            "Habit",
+            "Disease",
+            []
+        ]
+    ],
+    "CURES": [
+        [
+            "Interest",
+            "Disease",
+            []
+        ]
+    ],
+    "RELATED_TO": [
+        [
+            "Habit",
+            "Interest",
+            []
+        ]
+    ]
+}

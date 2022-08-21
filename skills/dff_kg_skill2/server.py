@@ -14,7 +14,8 @@ from sentry_sdk.integrations.logging import ignore_logger
 from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
-import test_server
+# from scenario.log_utils import create_logger
+# logger = create_logger(__file__)
 
 
 ignore_logger("root")
@@ -69,7 +70,6 @@ def handler(requested_data, random_seed=None):
 
 #     t_utils.save_to_test(responses, out_file, indent=4)  # TEST
 
-# RETURN TESTS!!!
 # try:
 #     test_server.run_test(handler)
 #     logger.info("test query processed")
