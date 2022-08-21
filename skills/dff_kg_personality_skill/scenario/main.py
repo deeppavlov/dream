@@ -78,7 +78,7 @@ flows = {
                       TRANSITIONS: {
                           "gpt_story": cnd.true(2.0),
                           lbl.forward(): cnd.true()}},
-        "gpt_story": {RESPONSE: "I have no stories. Go away."},
+        "gpt_story": {RESPONSE: loc_rsp.dummy_story},
     },
 }
 

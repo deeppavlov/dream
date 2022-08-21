@@ -27,7 +27,6 @@ graph.ontology.create_entity_kind("User",  kind_properties=["name"])
 
 
 def add_new_entities(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    logger.info(f'FULL CONTEXT: {ctx.misc["agent"]["dialog"]}')
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
@@ -130,6 +129,14 @@ def example_response(reply: str):
 
 
 def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.info(f'FULL CONTEXT: {ctx.misc["agent"]["dialog"]}')
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     int_ctx.set_confidence(ctx, actor, 1.0)
     return "Which story?"
+
+
+def dummy_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.info(f'FULL CONTEXT in Dummy story: {ctx.misc["agent"]["dialog"]}')
+    int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+    int_ctx.set_confidence(ctx, actor, 1.0)
+    return "I have no stories. Go away."
