@@ -36,7 +36,7 @@ flows = {
         },
         "which_story_node": {
             RESPONSE: 'What is your name?',
-            TRANSITIONS: {"choose_story_node": cnd.all([loc_cnd.has_story_left])},
+            TRANSITIONS: {"choose_story_node": cnd.true()},
         },
         "tell_punchline_node": {
             RESPONSE: loc_rsp.tell_punchline,
