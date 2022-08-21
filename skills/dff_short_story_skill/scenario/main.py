@@ -30,8 +30,9 @@ flows = {
         "choose_story_node": {
             RESPONSE: loc_rsp.find_name,
             TRANSITIONS: {
-                "tell_punchline_node": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars]),
-                "which_story_node": int_cnd.is_no_vars,
+                "choose_story_node": cnd.true()
+                # "tell_punchline_node": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars]),
+                # "which_story_node": int_cnd.is_no_vars,
             },
         },
         "which_story_node": {
