@@ -426,5 +426,5 @@ services:
       - "./common:/src/common"
       - "./bin:/src/bin"
     ports:
-      - 8123:8123
+      - 8058:8058
 version: "3.7"

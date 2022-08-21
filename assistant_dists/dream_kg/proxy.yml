@@ -618,6 +618,6 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8123
-      - PORT=8123
+      - PROXY_PASS=dream.deeppavlov.ai:8058
+      - PORT=8058
 version: '3.7'
