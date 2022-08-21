@@ -129,14 +129,14 @@ def example_response(reply: str):
 
 
 def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    logger.info(f'FULL CONTEXT: {ctx.misc["agent"]["dialog"]}')
+    logger.info(f'FULL DIALOG: {int_ctx.get_dialog(ctx, actor)}')
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     int_ctx.set_confidence(ctx, actor, 1.0)
     return "Which story?"
 
 
 def dummy_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    logger.info(f'FULL CONTEXT in Dummy story: {ctx.misc["agent"]["dialog"]}')
+    logger.info(f'FULL DIALOG in Dummy story: {int_ctx.get_dialog(ctx, actor)}')
     int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     int_ctx.set_confidence(ctx, actor, 1.0)
     return "I have no stories. Go away."
