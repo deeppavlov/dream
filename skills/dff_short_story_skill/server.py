@@ -69,14 +69,13 @@ def handler(requested_data, random_seed=None):
 
 #     t_utils.save_to_test(responses, out_file, indent=4)  # TEST
 
-# RETURN TESTS!!!
-# try:
-#     test_server.run_test(handler)
-#     logger.info("test query processed")
-# except Exception as exc:
-#     sentry_sdk.capture_exception(exc)
-#     logger.exception(exc)
-#     raise exc
+try:
+    test_server.run_test(handler)
+    logger.info("test query processed")
+except Exception as exc:
+    sentry_sdk.capture_exception(exc)
+    logger.exception(exc)
+    raise exc
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
