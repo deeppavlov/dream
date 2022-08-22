@@ -56,7 +56,7 @@ def generate_responses(context, model, tokenizer):
         if torch.cuda.is_available():
             chat_history_ids = chat_history_ids.cpu()
 
-    outputs = [tokenizer.decode(x[len(bot_input_ids[0]):], skip_special_tokens=True) for x in chat_history_ids]
+    outputs = [tokenizer.decode(x[len(bot_input_ids[0]) :], skip_special_tokens=True) for x in chat_history_ids]
     return outputs
 
 
