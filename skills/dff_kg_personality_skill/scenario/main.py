@@ -13,33 +13,28 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {TRANSITIONS: {("story_flow", "fallback_node"): cnd.true()}},
-    "story_flow": {
+    "main_flow": {
         "start_node": {
             RESPONSE: "",
             TRANSITIONS: {
-                "which_story_node": cnd.true(),
+                "ask_name": cnd.true(),
             },
         },
-        "choose_story_node": {
+        "process_name": {
             RESPONSE: loc_rsp.find_name,
             TRANSITIONS: {
-                "choose_story_node": cnd.true()
-                # "tell_punchline_node": cnd.any([int_cnd.is_yes_vars, int_cnd.is_do_not_know_vars]),
-                # "which_story_node": int_cnd.is_no_vars,
+                "process_name": cnd.true()
             },
         },
-        "which_story_node": {
+        "ask_name": {
             RESPONSE: 'What is your name?',
-            TRANSITIONS: {"choose_story_node": cnd.true()},
-        },
-        "tell_punchline_node": {
-            RESPONSE: loc_rsp.tell_punchline,
+            TRANSITIONS: {"process_name": cnd.true()},
         },
         "fallback_node": {
             RESPONSE: loc_rsp.fallback,
-            TRANSITIONS: {"which_story_node": cnd.all([loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars])},
+            TRANSITIONS: {"ask_name": cnd.true()},
         },
     },
 }
 
-actor = Actor(flows, start_label=("story_flow", "start_node"), fallback_label=("story_flow", "fallback_node"))
+actor = Actor(flows, start_label=("main_flow", "start_node"), fallback_label=("main_flow", "fallback_node"))
