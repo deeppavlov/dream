@@ -17,14 +17,7 @@ flows = {
         "start_node": {
             RESPONSE: "",
             TRANSITIONS: {
-                "choose_story_node": cnd.all(
-                    [
-                        loc_cnd.is_tell_me_a_story,
-                        loc_cnd.has_story_type,
-                        loc_cnd.has_story_left,
-                    ]
-                ),
-                "which_story_node": cnd.all([loc_cnd.is_tell_me_a_story, cnd.neg(loc_cnd.has_story_type)]),
+                "which_story_node": cnd.true(),
             },
         },
         "choose_story_node": {
