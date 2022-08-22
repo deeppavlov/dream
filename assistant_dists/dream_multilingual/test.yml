@@ -7,9 +7,6 @@ services:
   gpt2-generator:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  emotion-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   toxic-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=8

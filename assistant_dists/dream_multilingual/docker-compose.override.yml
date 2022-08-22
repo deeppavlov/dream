@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_multilingual/pipeline_conf.json --cors'
     environment:
       WAIT_HOSTS: "sentence-ranker:8130, convers-evaluation-selector:8009, 
-          gpt2-generator:8132, emotion-classification:8038, toxic-classification:8013,
+          gpt2-generator:8132, toxic-classification:8013,
           sentiment-classification:8024"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
@@ -75,25 +75,6 @@ services:
           memory: 6G
         reservations:
           memory: 6G
-
-  emotion-classification:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8038
-        SERVICE_NAME:   emotion-classification
-        PRETRAINED_MODEL_NAME_OR_PATH: MilaNLProc/xlm-emo-t
-      context: ./annotators/MultilingualEmotionalClassification/
-    command: flask run -h 0.0.0.0 -p 8038
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3.5G
-        reservations:
-          memory: 3.5G
 
   toxic-classification:
     env_file: [ .env ]

@@ -26,11 +26,6 @@ services:
       - "./annotators/MultilingualToxicClassification:/src"
     ports:
       - 8013:8013
-  emotion-classification:
-    volumes:
-      - "./annotators/MultilingualEmotionalClassification:/src"
-    ports:
-      - 8038:8038
   sentiment-classification:
     volumes:
       - "./annotators/MultilingualSentimentClassification:/src"
