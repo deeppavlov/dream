@@ -841,7 +841,7 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_kg_personality_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_kg_personality_skill_formatter")
+    return utils.dff_formatter(dialog, "dff_kg_personality_skill")
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
