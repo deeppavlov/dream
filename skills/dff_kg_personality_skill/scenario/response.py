@@ -106,6 +106,7 @@ def tell_punchline(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    logger.info('FALLBACK')
     prev_node = get_previous_node(ctx)
     story_type = get_story_type(ctx, actor)
     story_left = get_story_left(ctx, actor)
