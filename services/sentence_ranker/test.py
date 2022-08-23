@@ -16,7 +16,6 @@ def test_respond():
 
     request_data = {"sentence_pairs": sentence_pairs}
     result = requests.post(url, json=request_data).json()[0]["batch"]
-    print(result)
     for i, score in enumerate(result):
         assert round(score, 4) == round(gold[i], 4), f"Expected:{gold[i]}\tGot\n{score}"
     print("Success!")

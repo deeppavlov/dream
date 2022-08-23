@@ -84,6 +84,7 @@ def respond():
 
     try:
         scores = get_sim_for_pair_embeddings(sentence_pairs)
+        logger.info(f"sentence-ranker output: {scores}")
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
