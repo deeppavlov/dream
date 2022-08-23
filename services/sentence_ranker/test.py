@@ -2,18 +2,18 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:8122/respond"
+    url = "http://0.0.0.0:8128/respond"
 
-    contexts = ["Привет! Как дела?", "Привет! Как дела?", "Какой твой любимый фильм?", "Какой твой любимый фильм?"]
-    hypotheses = [
-        "хорошо. а у тебя как дела?",
-        "какой твой любимый фильм?",
-        "пересматриваю Гордость и предубеждение иногда.",
-        "я люблю играть в компьюетрные игры.",
+    sentence_pairs = [
+        ["Привет! Как дела?", "хорошо. а у тебя как дела?"],
+        ["Привет! Как дела?", "какой твой любимый фильм?"],
+        ["Какой твой любимый фильм?", "пересматриваю Гордость и предубеждение иногда."],
+        ["Какой твой любимый фильм?", "я люблю играть в компьютерные игры."]
     ]
+
     gold = [0.334246, 0.33038276, 0.40354252, 0.3839873]
 
-    request_data = {"dialog_contexts": contexts, "hypotheses": hypotheses}
+    request_data = {"sentence_pairs": sentence_pairs}
     result = requests.post(url, json=request_data).json()[0]["batch"]
     print(result)
     for i, score in enumerate(result):
