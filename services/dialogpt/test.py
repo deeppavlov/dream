@@ -8,8 +8,7 @@ N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 def test_respond():
     url = "http://0.0.0.0:8128/respond"
 
-    sentence_pairs = [["hi", "hi. how are you?"],
-                      ["let's chat about movies", "cool. what movies do you like?"]]
+    sentence_pairs = [["hi", "hi. how are you?"], ["let's chat about movies", "cool. what movies do you like?"]]
 
     result = requests.post(url, json={"sentence_pairs": sentence_pairs}).json()
     assert [

@@ -4,7 +4,7 @@ import os
 
 import sentry_sdk
 import torch
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoModel, AutoTokenizer
@@ -16,7 +16,8 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get(
-    "PRETRAINED_MODEL_NAME_OR_PATH", "DeepPavlov/bert-base-multilingual-cased-sentence")
+    "PRETRAINED_MODEL_NAME_OR_PATH", "DeepPavlov/bert-base-multilingual-cased-sentence"
+)
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 
 try:
@@ -39,26 +40,26 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def get_sim_for_pair_embeddings(sentence_pairs_batch):
     # source code: https://towardsdatascience.com/bert-for-measuring-text-similarity-eec91c6bf9e1
     # initialize dictionary to store tokenized sentences
-    tokens = {'input_ids': [], 'attention_mask': []}
+    tokens = {"input_ids": [], "attention_mask": []}
 
     for pair in sentence_pairs_batch:
         # encode each sentence and append to dictionary
         for sentence in pair:
-            new_tokens = tokenizer.encode_plus(sentence, max_length=64,
-                                               truncation=True, padding='max_length',
-                                               return_tensors='pt')
-            tokens['input_ids'].append(new_tokens['input_ids'][0])
-            tokens['attention_mask'].append(new_tokens['attention_mask'][0])
+            new_tokens = tokenizer.encode_plus(
+                sentence, max_length=64, truncation=True, padding="max_length", return_tensors="pt"
+            )
+            tokens["input_ids"].append(new_tokens["input_ids"][0])
+            tokens["attention_mask"].append(new_tokens["attention_mask"][0])
 
     # reformat list of tensors into single tensor
-    tokens['input_ids'] = torch.stack(tokens['input_ids'])
-    tokens['attention_mask'] = torch.stack(tokens['attention_mask'])
+    tokens["input_ids"] = torch.stack(tokens["input_ids"])
+    tokens["attention_mask"] = torch.stack(tokens["attention_mask"])
     if torch.cuda.is_available():
-        tokens['input_ids'] = tokens['input_ids'].cuda()
-        tokens['attention_mask'] = tokens['attention_mask'].cuda()
+        tokens["input_ids"] = tokens["input_ids"].cuda()
+        tokens["attention_mask"] = tokens["attention_mask"].cuda()
 
     embeddings = model(**tokens).last_hidden_state
-    attention_mask = tokens['attention_mask']
+    attention_mask = tokens["attention_mask"]
     mask = attention_mask.unsqueeze(-1).expand(embeddings.size()).float()
     masked_embeddings = embeddings * mask
     summed = torch.sum(masked_embeddings, 1)
@@ -72,10 +73,7 @@ def get_sim_for_pair_embeddings(sentence_pairs_batch):
     # calculate
     scores = []
     for i in range(len(sentence_pairs_batch)):
-        scores += [cosine_similarity(
-            [mean_pooled[i * 2]],
-            [mean_pooled[i * 2 + 1]]
-        )[0][0]]
+        scores += [cosine_similarity([mean_pooled[i * 2]], [mean_pooled[i * 2 + 1]])[0][0]]
     return scores
 
 
@@ -89,7 +87,7 @@ def respond():
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        scores = [0.] * len(sentence_pairs)
+        scores = [0.0] * len(sentence_pairs)
 
     total_time = time.time() - st_time
     logger.info(f"sentence-ranker exec time: {total_time:.3f}s")
