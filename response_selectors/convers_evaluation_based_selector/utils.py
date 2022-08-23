@@ -153,7 +153,7 @@ def calculate_single_evaluator_score(hypothesis_annotations):
     elif "sentence_ranker" in hypothesis_annotations:
         return hypothesis_annotations["sentence_ranker"]
     else:
-        return 0.
+        return 0.0
 
 
 def downscore_toxic_badlisted_responses(scores, confidences, is_toxics):

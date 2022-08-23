@@ -293,17 +293,14 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             score_conv_eval = calculate_single_evaluator_score(candidates[i]["annotations"])
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
             logger.info(
-                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. "
-                f"Toxicity: {is_toxics[i]}"
+                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. " f"Toxicity: {is_toxics[i]}"
             )
             curr_single_scores.append(score)
         else:
             skill_name = skill_names[i]
             score_conv_eval = calculate_single_evaluator_score(candidates[i]["annotations"])
             score = CONV_EVAL_STRENGTH * score_conv_eval + curr_score
-            logger.info(
-                f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}"
-            )
+            logger.info(f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}")
             curr_single_scores.append(score)
 
     highest_conf_exist = True if any(confidences >= 1.0) else False
