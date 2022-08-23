@@ -48,14 +48,9 @@ def needs_scripted_story(ctx: Context, actor: Actor) -> bool:
 def has_story_intent(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     if utt.get("text", ""):
-        intent = get_intents(utt)
-        logger.info(f'NEW INTENTS: {intent}')
-        
-        story_intent = (
-            utt.get("annotations", {}).get("intent_catcher", {}).get("tell_me_a_story", {}).get("detected", 0)
-        )
-        logger.info(f"Story intent value: {story_intent}")
-        if story_intent == 1:
+        intents = get_intents(utt)
+        logger.info(f"Detected Intents: {intents}")
+        if "tell_me_a_story" in intents:
             return True
     return False
 

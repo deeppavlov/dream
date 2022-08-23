@@ -182,9 +182,8 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
-        entities = get_entities(utt, only_named=False, with_labels=False)
-        logger.info(f'ENTITIES: {entities}')
-        nouns = utt.get("annotations", {}).get("spacy_nounphrases", [])
+        nouns = get_entities(utt, only_named=False, with_labels=False)
+        logger.info(f"Found entities: {nouns}")
         final_noun = choose_noun(nouns)
         if care_pattern.search(last_utt):
             final_noun = "cat"
