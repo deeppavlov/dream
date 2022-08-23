@@ -34,7 +34,7 @@ STORYGPT_KEYWORDS_SERVICE_URL = os.getenv("STORYGPT_KEYWORDS_SERVICE_URL", "http
 
 def get_previous_node(ctx: Context) -> str:
     try:
-        return [node_tuple[1] for node_tuple in ctx.labels.values()][-1]
+        return [node_tuple[1] for node_tuple in ctx.labels.values()][-2]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)

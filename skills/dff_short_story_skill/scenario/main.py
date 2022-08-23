@@ -80,7 +80,7 @@ flows = {
             RESPONSE: loc_rsp.fallback,
             TRANSITIONS: {
                 "which_story_node": cnd.all(
-                    [loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars, loc_cnd.needs_scripted_story]
+                    [int_cnd.is_yes_vars, loc_cnd.needs_scripted_story]
                 )
             },
         },
