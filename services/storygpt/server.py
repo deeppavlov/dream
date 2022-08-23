@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+FINETUNED_GPT_URL = os.environ.get("FINETUNED_GPT_URL")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
 
@@ -30,7 +31,8 @@ try:
     tokenizer.add_tokens(["<EOT>", "<EOL>"], special_tokens=True)
     tokenizer.add_special_tokens({"pad_token": "[PAD]"})
     model.resize_token_embeddings(len(tokenizer))
-    model.load_state_dict(torch.load("/data/filtered_ROCStories_gpt_medium.pt", map_location=torch.device("cpu")))
+    finetuned_model_path = "/data/" + FINETUNED_GPT_URL.split('/')[-1]
+    model.load_state_dict(torch.load(finetuned_model_path, map_location=torch.device("cpu")))
     logger.info("storygpt is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)

@@ -26,15 +26,17 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
+BART_MODEL_NAME = os.environ.get("BART_MODEL_NAME")
+FINETUNED_MODEL_NAME = os.environ.get("FINETUNED_MODEL_NAME")
 pattern = re.compile(r"\(.*?\)")
 
 try:
-    tokenizer = GPT2Tokenizer.from_pretrained("/data/finetuned2")
+    tokenizer = GPT2Tokenizer.from_pretrained(FINETUNED_MODEL_NAME)
     tokenizer.padding_side = "left"
     tokenizer.pad_token = tokenizer.eos_token
-    model = GPT2LMHeadModel.from_pretrained("/data/finetuned2")
-    bart_model = BartForConditionalGeneration.from_pretrained("facebook/bart-large", forced_bos_token_id=0)
-    bart_tok = BartTokenizer.from_pretrained("facebook/bart-large")
+    model = GPT2LMHeadModel.from_pretrained(FINETUNED_MODEL_NAME)
+    bart_model = BartForConditionalGeneration.from_pretrained(BART_MODEL_NAME, forced_bos_token_id=0)
+    bart_tok = BartTokenizer.from_pretrained(BART_MODEL_NAME)
     if torch.cuda.is_available():
         device = "cuda"
     else:

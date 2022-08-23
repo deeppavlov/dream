@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE", "generated")
-more_stories_pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)", re.IGNORECASE)
+more_stories_pattern = re.compile(r"^(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)[.,!?;]*$", re.IGNORECASE)
 prev_question_pattern_tmp = "(" + ")|(".join(STORY_TOPIC_QUESTIONS) + ")"
 prev_question_pattern_tmp = prev_question_pattern_tmp.replace("?", r"\?")
 prev_question_pattern = re.compile(f"{prev_question_pattern_tmp}", re.IGNORECASE)
@@ -69,10 +69,8 @@ def asks_more(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     if utt.get("text", ""):
         text = utt["text"]
-        s = more_stories_pattern.search(text)
-        if s:
-            if s.group(0) == text:
-                return True
+        if more_stories_pattern.match(text):
+            return True
     return False
 
 
