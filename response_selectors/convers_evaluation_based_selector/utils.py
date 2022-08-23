@@ -137,17 +137,23 @@ def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confi
                 scores[i]["isResponseInteresting"] *= lower_coeff
 
 
-def calculate_single_convers_evaluator_score(cand_scores):
-    score_conv_eval = sum(
-        [
-            cand_scores["isResponseOnTopic"],
-            cand_scores["isResponseInteresting"],
-            cand_scores["responseEngagesUser"],
-            cand_scores["isResponseComprehensible"],
-        ]
-    )
-    score_conv_eval -= cand_scores["isResponseErroneous"]
-    return score_conv_eval
+def calculate_single_evaluator_score(hypothesis_annotations):
+    if "convers_evaluator_annotator" in hypothesis_annotations:
+        cand_scores = hypothesis_annotations["convers_evaluator_annotator"]
+        score_conv_eval = sum(
+            [
+                cand_scores["isResponseOnTopic"],
+                cand_scores["isResponseInteresting"],
+                cand_scores["responseEngagesUser"],
+                cand_scores["isResponseComprehensible"],
+            ]
+        )
+        score_conv_eval -= cand_scores["isResponseErroneous"]
+        return score_conv_eval
+    elif "sentence_ranker" in hypothesis_annotations:
+        return hypothesis_annotations["sentence_ranker"]
+    else:
+        return 0.
 
 
 def downscore_toxic_badlisted_responses(scores, confidences, is_toxics):

@@ -28,7 +28,7 @@ from common.utils import (
     get_dialog_breakdown_annotations,
 )
 from utils import (
-    calculate_single_convers_evaluator_score,
+    calculate_single_evaluator_score,
     CONV_EVAL_STRENGTH,
     CONFIDENCE_STRENGTH,
     how_are_you_spec,
@@ -258,13 +258,12 @@ def compute_curr_single_scores(candidates, scores, confidences):
             curr_single_scores.append(candidates[i]["annotations"]["hypothesis_scorer"])
     else:
         for i in range(len(scores)):
-            cand_scores = scores[i]
             confidence = confidences[i]
             skill_name = candidates[i]["skill_name"]
             if all(["dialogrpt" in cand["annotations"] for cand in candidates]):
                 score_conv_eval = candidates[i]["annotations"]["dialogrpt"]
             else:
-                score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
+                score_conv_eval = calculate_single_evaluator_score(candidates[i]["annotations"])
             score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
 
             logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
