@@ -2,7 +2,7 @@
 
 Image Captioning Service (Large) is the large version of the Image Captioning Service that provides text descriptions of received images. 
 
-One 256 X 256 image is processed ~0.02 s (GPU).
+One 256 X 256 image is processed ~5 s.
 
 RAM ~1.5GB, GPU RAM 3Gb. 
 ## Running server
