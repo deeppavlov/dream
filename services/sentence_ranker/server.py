@@ -91,4 +91,4 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"sentence-ranker exec time: {total_time:.3f}s")
-    return jsonify(scores)
+    return jsonify([{"batch": scores}])
