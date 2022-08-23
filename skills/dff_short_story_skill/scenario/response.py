@@ -16,7 +16,7 @@ import sentry_sdk
 logger = logging.getLogger(__name__)
 
 care_pattern = re.compile(r"(don't|(do not)) (care|know)", re.IGNORECASE)
-story_pattern = re.compile("\bstory\b", re.IGNORECASE)
+story_pattern = re.compile(r"\bstory\b", re.IGNORECASE)
 
 with open(
     "data/stories.json",
@@ -53,7 +53,7 @@ def get_story_type(ctx: Context, actor: Actor) -> str:
     ):
         return "bedtime"
     else:
-        return ""
+        return "funny"
 
 
 def get_story_left(ctx: Context, actor: Actor) -> str:
