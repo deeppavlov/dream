@@ -73,7 +73,7 @@ def get_sim_for_pair_embeddings(sentence_pairs_batch):
     # calculate
     scores = []
     for i in range(len(sentence_pairs_batch)):
-        scores += [cosine_similarity([mean_pooled[i * 2]], [mean_pooled[i * 2 + 1]])[0][0]]
+        scores += [cosine_similarity([mean_pooled[i * 2]], [mean_pooled[i * 2 + 1]]).tolist()[0][0]]
     return scores
 
 
