@@ -57,7 +57,11 @@ def generate_part(texts, max_len, temp, num_sents, first):
     encoding = tokenizer(texts, padding=True, return_tensors="pt").to(device)
     with torch.no_grad():
         generated_ids = model.generate(
-            **encoding, max_length=max_len, length_penalty=-100.0, temperature=temp, do_sample=True,
+            **encoding,
+            max_length=max_len,
+            length_penalty=-100.0,
+            temperature=temp,
+            do_sample=True,
         )
     generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 

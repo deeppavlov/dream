@@ -133,6 +133,9 @@ services:
   storygpt:
     environment:
       - CUDA_VISIBLE_DEVICES=7
+  prompt-storygpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   infilling:
     environment:
       - CUDA_VISIBLE_DEVICES=8

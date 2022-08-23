@@ -28,8 +28,8 @@ with open(
 ) as phrases_json:
     phrases = json.load(phrases_json)
 
-STORYGPT_SERVICE_URL = os.getenv("STORYGPT_SERVICE_URL", "http://prompt-storygpt:8127/respond")
-STORYGPT_KEYWORDS_SERVICE_URL = os.getenv("STORYGPT_KEYWORDS_SERVICE_URL", "http://storygpt:8126/respond")
+PROMPT_STORYGPT_SERVICE_URL = os.getenv("PROMPT_STORYGPT_SERVICE_URL", "http://prompt-storygpt:8127/respond")
+STORYGPT_SERVICE_URL = os.getenv("STORYGPT_SERVICE_URL", "http://storygpt:8126/respond")
 
 
 def get_previous_node(ctx: Context) -> str:
@@ -143,7 +143,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             nouns = nouns_tmp
         logger.info(f"Keywords from annotator: {nouns}")
         try:
-            resp = requests.post(STORYGPT_KEYWORDS_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
+            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
             raw_responses = resp.json()
             int_ctx.set_confidence(ctx, actor, 0.9)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
@@ -151,13 +151,13 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
             int_ctx.set_confidence(ctx, actor, 0.0)
-            int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+            int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
             return ""
         reply = raw_responses[0][0]
         reply = "Oh, that reminded me of a story! " + reply
     else:
         int_ctx.set_confidence(ctx, actor, 0.0)
-        int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
         logger.info("No context")
     return reply
 
@@ -194,13 +194,13 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             logger.info(f"Final noun: {final_noun}")
 
         try:
-            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
+            resp = requests.post(PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
             raw_responses = resp.json()
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
             int_ctx.set_confidence(ctx, actor, 0.0)
-            int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+            int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
             return ""
         logger.info(f"Skill receives from service: {raw_responses}")
         reply = raw_responses[0][0]
@@ -210,5 +210,5 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     else:
         reply = ""
         int_ctx.set_confidence(ctx, actor, 0.0)
-        int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
     return reply

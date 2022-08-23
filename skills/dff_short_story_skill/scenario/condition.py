@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 STORY_TYPE = os.getenv("STORY_TYPE", "generated")
-pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)", re.IGNORECASE)
-re_s = "(" + ")|(".join(STORY_TOPIC_QUESTIONS) + ")"
-re_s = re_s.replace("?", r"\?")
-prev_pattern = re.compile(f"{re_s}", re.IGNORECASE)
+more_stories_pattern = re.compile(r"(((tell\s(me\s)*)|(one\s))*more(\sstor((y)|(ies)))*)", re.IGNORECASE)
+prev_question_pattern_tmp = "(" + ")|(".join(STORY_TOPIC_QUESTIONS) + ")"
+prev_question_pattern_tmp = prev_question_pattern_tmp.replace("?", r"\?")
+prev_question_pattern = re.compile(f"{prev_question_pattern_tmp}", re.IGNORECASE)
 
 
 def has_story_type(ctx: Context, actor: Actor) -> bool:
@@ -69,8 +69,8 @@ def prev_is_story(ctx: Context, actor: Actor) -> bool:
 def asks_more(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     if utt.get("text", ""):
-        text = utt["text"].strip()
-        s = pattern.search(text)
+        text = utt["text"]
+        s = more_stories_pattern.search(text)
         if s:
             if s.group(0) == text:
                 return True
@@ -90,7 +90,7 @@ def should_return(ctx: Context, actor: Actor) -> bool:
 def prev_is_question(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
     if utt.get("text", ""):
-        if prev_pattern.search(utt["text"]):
+        if prev_question_pattern.search(utt["text"]):
             return True
     return False
 
