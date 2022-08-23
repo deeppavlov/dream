@@ -58,7 +58,6 @@ def generate_part(texts, max_len, temp, num_sents, first):
     with torch.no_grad():
         generated_ids = model.generate(
             **encoding, max_length=max_len, length_penalty=-100.0, temperature=temp, do_sample=True,
-            top_k=5, top_p=0.9
         )
     generated_texts = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
@@ -99,9 +98,12 @@ def generate_response(context):
     for noun in nouns:
         masked_phrases.append(f"Let me share a story about {noun[0]}. I <mask> {noun[0]}")
     filled = fill_mask(masked_phrases)
-    first_texts = generate_part(filled, 100, 1, 4, first=True)
+    st_time = time.time()
+    first_texts = generate_part(filled, 50, 1, 3, first=True)
+    total_time = time.time() - st_time
+    logger.info(f"Time for first part generation: {total_time:.3f}s")
     logger.info(f"First parts generated: {first_texts}")
-    final_texts = generate_part(first_texts, 150, 0.8, 5, first=False)
+    final_texts = generate_part(first_texts, 100, 0.8, 4, first=False)
     logger.info(f"Generated: {final_texts}")
     return final_texts
 
