@@ -4,7 +4,7 @@ import os
 
 import sentry_sdk
 import torch
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoModel, AutoTokenizer
@@ -91,4 +91,4 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"sentence-ranker exec time: {total_time:.3f}s")
-    return scores
+    return jsonify(scores)
