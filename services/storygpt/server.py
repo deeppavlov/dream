@@ -31,7 +31,7 @@ try:
     tokenizer.add_tokens(["<EOT>", "<EOL>"], special_tokens=True)
     tokenizer.add_special_tokens({"pad_token": "[PAD]"})
     model.resize_token_embeddings(len(tokenizer))
-    finetuned_model_path = "/data/" + FINETUNED_GPT_URL.split('/')[-1]
+    finetuned_model_path = "/data/" + FINETUNED_GPT_URL.split("/")[-1]
     model.load_state_dict(torch.load(finetuned_model_path, map_location=torch.device("cpu")))
     logger.info("storygpt is ready")
 except Exception as e:
