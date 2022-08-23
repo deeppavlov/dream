@@ -7,6 +7,7 @@ from df_engine.core import Context, Actor
 
 import common.dff.integration.context as int_ctx
 from common.short_story import STORY_TOPIC_QUESTIONS
+from common.utils import get_intents
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -47,6 +48,9 @@ def needs_scripted_story(ctx: Context, actor: Actor) -> bool:
 def has_story_intent(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     if utt.get("text", ""):
+        intent = get_intents(utt)
+        logger.info(f'NEW INTENTS: {intent}')
+        
         story_intent = (
             utt.get("annotations", {}).get("intent_catcher", {}).get("tell_me_a_story", {}).get("detected", 0)
         )

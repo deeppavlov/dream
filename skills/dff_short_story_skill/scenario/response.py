@@ -11,6 +11,7 @@ import common.dff.integration.context as int_ctx
 import common.dff.integration.condition as int_cnd
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
 from common.short_story import STORY_TOPIC_QUESTIONS
+from common.utils import get_entities
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -181,6 +182,8 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
+        entities = get_entities(utt, only_named=False, with_labels=False)
+        logger.info(f'ENTITIES: {entities}')
         nouns = utt.get("annotations", {}).get("spacy_nounphrases", [])
         final_noun = choose_noun(nouns)
         if care_pattern.search(last_utt):
