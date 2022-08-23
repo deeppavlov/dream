@@ -18,7 +18,7 @@ graph = KnowledgeGraph(
     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
 )
 
-# graph.drop_database()
+graph.drop_database()
 graph.ontology.create_entity_kind("User",  kind_properties=["name"])
 
 
