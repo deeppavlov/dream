@@ -33,6 +33,7 @@ def respond():
     context_batch = inp.get("context", [[""]])
     opt_context_batch = []
     for hist_utt in context_batch:
+        hist_utt = [utt for utt in hist_utt if len(utt) > 1]
         last_utt = hist_utt[-1]
         if last_utt[-1] not in {".", "!", "?"}:
             last_utt = f"{last_utt}."
