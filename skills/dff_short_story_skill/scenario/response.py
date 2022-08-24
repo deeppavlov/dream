@@ -177,7 +177,7 @@ def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return random.choice(STORY_TOPIC_QUESTIONS)
 
 
-def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
@@ -196,7 +196,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             logger.info(f"Final noun: {final_noun}")
 
         try:
-            resp = requests.post(PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun]]}, timeout=2)
+            resp = requests.post(PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun], first]}, timeout=2)
             raw_responses = resp.json()
         except Exception as exc:
             logger.exception(exc)
@@ -214,3 +214,12 @@ def generate_prompt_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.set_confidence(ctx, actor, 0.0)
         int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
     return reply
+
+
+def generate_first_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    return generate_prompt_story(ctx, actor, first=True)
+
+
+def generate_second_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    return generate_prompt_story(ctx, actor, first=False)
+

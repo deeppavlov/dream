@@ -85,7 +85,7 @@ flows = {
             },
         },
         "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story": loc_cnd.prev_is_question}},
-        "gpt_story": {RESPONSE: loc_rsp.generate_prompt_story},
+        "gpt_story": {RESPONSE: loc_rsp.generate_first_prompt_part},
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,
         },

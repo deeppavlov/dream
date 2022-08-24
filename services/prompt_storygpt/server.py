@@ -29,6 +29,7 @@ ZERO_CONFIDENCE = 0.0
 BART_MODEL_NAME = os.environ.get("BART_MODEL_NAME")
 FINETUNED_MODEL_NAME = os.environ.get("FINETUNED_MODEL_NAME")
 pattern = re.compile(r"\(.*?\)")
+continue_phrase = ' Should I continue?'
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(FINETUNED_MODEL_NAME)
@@ -89,7 +90,7 @@ def fill_mask(masked_phrases):
     return filled
 
 
-def generate_response(context):
+def generate_first_part(context):
     """
     Parameters
     context: List[str]
@@ -104,14 +105,35 @@ def generate_response(context):
     for noun in nouns:
         masked_phrases.append(f"Let me share a story about {noun[0]}. I <mask> {noun[0]}")
     filled = fill_mask(masked_phrases)
+
     st_time = time.time()
-    first_texts = generate_part(filled, 100, 1, 4, first=True)
+    final_texts = generate_part(filled, 75, 0.8, 4, first=True)
     total_time = time.time() - st_time
     logger.info(f"Time for first part generation: {total_time:.3f}s")
-    logger.info(f"First parts generated: {first_texts}")
-    final_texts = generate_part(first_texts, 150, 0.8, 5, first=False)
-    logger.info(f"Generated: {final_texts}")
+    final_texts = [text + continue_phrase for text in final_texts]
+    logger.info(f"First parts generated: {final_texts}")
     return final_texts
+
+
+def generate_second_part(context):
+    first_texts = context
+    logger.info(f"Received first part: {first_texts}")
+    first_texts = [text.replace(continue_phrase, '') for text in first_texts]
+    st_time = time.time()
+    final_texts = generate_part(first_texts, 120, 0.8, 5, first=False)
+    logger.info(f"Generated: {final_texts}")
+    total_time = time.time() - st_time
+    logger.info(f"Time for generation: {total_time:.3f}s")
+    return final_texts
+
+
+def generate_response(context):
+    texts, first_part = context
+    if first_part:
+        replies = generate_first_part(texts)  # text is a list of nouns
+    else:
+        replies = generate_second_part(texts)  # text is a list of first part texts
+    return replies
 
 
 @app.route("/respond", methods=["POST"])
