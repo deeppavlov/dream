@@ -84,8 +84,12 @@ flows = {
                 )
             },
         },
-        "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story": loc_cnd.prev_is_question}},
-        "gpt_story": {RESPONSE: loc_rsp.generate_first_prompt_part},
+        "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story_first_part": loc_cnd.prev_is_question}},
+        "gpt_story_first_part": {
+            RESPONSE: loc_rsp.generate_first_prompt_part,
+            TRANSITIONS: {"gpt_story_second_part": int_cnd.is_yes_vars},
+        },
+        "gpt_story_second_part": {RESPONSE: loc_rsp.generate_second_prompt_part},
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,
         },

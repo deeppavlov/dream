@@ -196,7 +196,9 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
             logger.info(f"Final noun: {final_noun}")
 
         try:
-            resp = requests.post(PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun], first]}, timeout=2)
+            resp = requests.post(
+                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun], first]}, timeout=2
+            )
             raw_responses = resp.json()
         except Exception as exc:
             logger.exception(exc)
@@ -222,4 +224,3 @@ def generate_first_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> s
 
 def generate_second_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return generate_prompt_story(ctx, actor, first=False)
-

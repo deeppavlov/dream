@@ -29,7 +29,7 @@ ZERO_CONFIDENCE = 0.0
 BART_MODEL_NAME = os.environ.get("BART_MODEL_NAME")
 FINETUNED_MODEL_NAME = os.environ.get("FINETUNED_MODEL_NAME")
 pattern = re.compile(r"\(.*?\)")
-continue_phrase = ' Should I continue?'
+continue_phrase = " Should I continue?"
 
 try:
     tokenizer = GPT2Tokenizer.from_pretrained(FINETUNED_MODEL_NAME)
@@ -118,7 +118,7 @@ def generate_first_part(context):
 def generate_second_part(context):
     first_texts = context
     logger.info(f"Received first part: {first_texts}")
-    first_texts = [text.replace(continue_phrase, '') for text in first_texts]
+    first_texts = [text.replace(continue_phrase, "") for text in first_texts]
     st_time = time.time()
     final_texts = generate_part(first_texts, 100, 0.8, 5, first=False)
     logger.info(f"Generated: {final_texts}")
