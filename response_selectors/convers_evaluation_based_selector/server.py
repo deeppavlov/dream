@@ -70,6 +70,7 @@ def respond():
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_confidences = []
+        curr_scores = []
         curr_is_toxics = []
 
         try:
@@ -102,11 +103,16 @@ def respond():
                         )
                         logger.info(msg)
 
+                curr_scores += [calculate_single_evaluator_score(skill_data.get("annotations"),
+                                                                 skill_data["confidence"])]
+
             curr_is_toxics = np.array(curr_is_toxics)
+            curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
             # now we collected all current candidates and their annotations. select response among them
             best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
                 curr_candidates,
+                curr_scores,
                 curr_confidences,
                 curr_is_toxics,
                 dialog,
@@ -287,18 +293,16 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
         if curr_score is None:
+            score = scores[i]
             confidence = confidences[i]
             skill_name = skill_names[i]
-            score_conv_eval = calculate_single_evaluator_score(candidates[i]["annotations"])
-            score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
             logger.info(
                 f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. " f"Toxicity: {is_toxics[i]}"
             )
             curr_single_scores.append(score)
         else:
+            score = scores[i]
             skill_name = skill_names[i]
-            score_conv_eval = calculate_single_evaluator_score(candidates[i]["annotations"])
-            score = CONV_EVAL_STRENGTH * score_conv_eval + curr_score
             logger.info(f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}")
             curr_single_scores.append(score)
 
