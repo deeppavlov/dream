@@ -197,7 +197,7 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
 
         try:
             resp = requests.post(
-                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun], first]}, timeout=2
+                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun], first]}, timeout=3
             )
             raw_responses = resp.json()
         except Exception as exc:
