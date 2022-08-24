@@ -213,12 +213,8 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
             return ""
         logger.info(f"Skill receives from service: {raw_responses}")
         reply = raw_responses[0][0]
-        int_ctx.set_confidence(ctx, actor, 1.0)
-        int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
     else:
         reply = ""
-        int_ctx.set_confidence(ctx, actor, 0.0)
-        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
     return reply
 
 
