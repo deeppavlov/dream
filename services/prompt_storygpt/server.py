@@ -24,7 +24,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DEFAULT_CONFIDENCE = 0.9
+DEFAULT_CONFIDENCE = 1.0
 ZERO_CONFIDENCE = 0.0
 BART_MODEL_NAME = os.environ.get("BART_MODEL_NAME")
 FINETUNED_MODEL_NAME = os.environ.get("FINETUNED_MODEL_NAME")
@@ -110,7 +110,7 @@ def generate_first_part(context):
     final_texts = generate_part(filled, 50, 0.8, 4, first=True)
     total_time = time.time() - st_time
     logger.info(f"Time for first part generation: {total_time:.3f}s")
-    final_texts = [text + continue_phrase for text in final_texts]
+    final_texts = ["Ok,  " + text + continue_phrase for text in final_texts]
     logger.info(f"First parts generated: {final_texts}")
     return final_texts
 
