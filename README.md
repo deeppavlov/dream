@@ -119,7 +119,7 @@ AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/do
 
 ### Let's chat
 
-Dream Agent provides several options for interaction: a command line interface, an HTTP API, and a Telegram bot 
+DeepPavlov Agent provides several options for interaction: a command line interface, an HTTP API, and a Telegram bot 
 
 #### CLI
 In a separate terminal tab run:
@@ -130,9 +130,9 @@ docker-compose exec agent python -m deeppavlov_agent.run agent.channel=cmd agent
 
 Enter your username and have a chat with Dream!
 
-
 #### HTTP API
-Once you've started the bot, DeepPavlov's Agent API will run on `http://localhost:4242`. You can learn about its API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
+Once you've started the bot, DeepPavlov's Agent API will run on `http://localhost:4242`.
+You can learn about the API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
 
 A basic chat interface will be available at `http://localhost:4242/chat`.
 
