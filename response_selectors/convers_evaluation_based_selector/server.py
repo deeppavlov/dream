@@ -70,7 +70,6 @@ def respond():
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_confidences = []
-        curr_scores = []
         curr_is_toxics = []
 
         try:
