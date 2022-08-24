@@ -223,8 +223,22 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
 
 
 def generate_first_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    return generate_prompt_story(ctx, actor, first=True)
+    reply = generate_prompt_story(ctx, actor, first=True)
+    if reply:
+        int_ctx.set_confidence(ctx, actor, 1.0)
+        int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.0)
+        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+    return reply
 
 
 def generate_second_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    return generate_prompt_story(ctx, actor, first=False)
+    reply = generate_prompt_story(ctx, actor, first=False)
+    if reply:
+        int_ctx.set_confidence(ctx, actor, 1.0)
+        int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.0)
+        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+    return reply
