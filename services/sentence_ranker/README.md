@@ -1,15 +1,9 @@
-# Russian DialogRPT model
+# Sentence Ranker Service
 
-Code from https://github.com/golsun/DialogRPT
+This is a universal service for evaluation of a sentence pair.
 
-Trained on 827k samples (plus 95k validation samples) from Russian Pikabu web-site. 
+The model can be selected from HugginFace library and passed as a `PRETRAINED_MODEL_NAME_OR_PATH` parameter.
 
-Data parsed from Pikabu by `zhirzemli` (OpenDataScience Slack nickname), code is available [on GitHub](https://github.com/alexeykarnachev/dialogs_data_parsers) 
-and the data is available [here](https://drive.google.com/file/d/1XYCprTqn_MlzDD9qgj7ANJkwFigK66mv/view?usp=sharing).
+The service accepts a batch of sentence pairs (a pair is a list of two strings), and returns a batch of floating point values. 
 
-Final acc=0.64 (on valid).
-
-Trained on 8 GPUs.
-```
-python src/main.py train --data=data/out/updown  --min_score_gap=20 --min_rank_gap=0.5 --max_seq_len 256 --batch 16 1>out.txt 2>&1
-```
+To rank a list of sentence pairs, one can get floating point values for each pair and maximize the value.
