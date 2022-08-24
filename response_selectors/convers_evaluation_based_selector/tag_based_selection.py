@@ -326,8 +326,9 @@ def rule_based_prioritization(cand_uttr, dialog):
     return flag
 
 
-def tag_based_response_selection(dialog, candidates, curr_single_scores, confidences, bot_utterances,
-                                 all_prev_active_skills=None):
+def tag_based_response_selection(
+    dialog, candidates, curr_single_scores, confidences, bot_utterances, all_prev_active_skills=None
+):
     all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
     all_prev_active_skills = Counter(all_prev_active_skills)
     annotated_uttr = dialog["human_utterances"][-1]

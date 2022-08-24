@@ -28,8 +28,6 @@ from utils import (
     lower_retrieve_skills_confidence_if_scenario_exist,
     calculate_single_evaluator_score,
     downscore_toxic_badlisted_responses,
-    CONV_EVAL_STRENGTH,
-    CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
     misheard_with_spec1,
@@ -103,8 +101,9 @@ def respond():
                         )
                         logger.info(msg)
 
-                curr_scores += [calculate_single_evaluator_score(skill_data.get("annotations"),
-                                                                 skill_data["confidence"])]
+                curr_scores += [
+                    calculate_single_evaluator_score(skill_data.get("annotations"), skill_data["confidence"])
+                ]
 
             curr_is_toxics = np.array(curr_is_toxics)
             curr_scores = np.array(curr_scores)
