@@ -179,25 +179,30 @@ def choose_topic(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    last_utt = utt["text"]
+    last_utt = utt.get("text", "")
     logger.info(f"Utterance: {last_utt}")
     if last_utt:
-        nouns = get_entities(utt, only_named=False, with_labels=False)
-        logger.info(f"Found entities: {nouns}")
-        final_noun = choose_noun(nouns)
-        if care_pattern.search(last_utt):
-            final_noun = "cat"
-            logger.info(f"Final noun: {final_noun}, because User doesn't know the topic or doesn't care")
-        if not final_noun:
-            final_noun = "cat"
-            logger.info(f"Final noun: {final_noun}, because User didn't suggest noun for the topic")
+        if first:
+            nouns = get_entities(utt, only_named=False, with_labels=False)
+            logger.info(f"Found entities: {nouns}")
+            final_noun = choose_noun(nouns)
+            if care_pattern.search(last_utt):
+                final_noun = "cat"
+                logger.info(f"Final noun: {final_noun}, because User doesn't know the topic or doesn't care")
+            if not final_noun:
+                final_noun = "cat"
+                logger.info(f"Final noun: {final_noun}, because User didn't suggest noun for the topic")
+            else:
+                final_noun = final_noun.split(" ")[-1].lower()
+                logger.info(f"Final noun: {final_noun}")
+            service_input = final_noun
         else:
-            final_noun = final_noun.split(" ")[-1].lower()
-            logger.info(f"Final noun: {final_noun}")
-
+            bot_utt = int_ctx.get_last_bot_utterance(ctx, actor)
+            service_input = bot_utt.get("text", "")
+            logger.info(f"Previous story part: {service_input}")
         try:
             resp = requests.post(
-                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[final_noun], first]}, timeout=3
+                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[service_input], first]}, timeout=3
             )
             raw_responses = resp.json()
         except Exception as exc:
