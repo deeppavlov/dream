@@ -103,11 +103,11 @@ def generate_first_part(context):
     logger.info(f"Topic in StoryGPT service: {nouns}")
     masked_phrases = []
     for noun in nouns:
-        masked_phrases.append(f"Let me share a story about {noun[0]}. I <mask> {noun[0]}")
+        masked_phrases.append(f"Let me share a story about {noun}. I <mask> {noun}")
     filled = fill_mask(masked_phrases)
 
     st_time = time.time()
-    final_texts = generate_part(filled, 75, 0.8, 4, first=True)
+    final_texts = generate_part(filled, 50, 0.8, 4, first=True)
     total_time = time.time() - st_time
     logger.info(f"Time for first part generation: {total_time:.3f}s")
     final_texts = [text + continue_phrase for text in final_texts]
@@ -120,7 +120,7 @@ def generate_second_part(context):
     logger.info(f"Received first part: {first_texts}")
     first_texts = [text.replace(continue_phrase, '') for text in first_texts]
     st_time = time.time()
-    final_texts = generate_part(first_texts, 120, 0.8, 5, first=False)
+    final_texts = generate_part(first_texts, 100, 0.8, 5, first=False)
     logger.info(f"Generated: {final_texts}")
     total_time = time.time() - st_time
     logger.info(f"Time for generation: {total_time:.3f}s")
