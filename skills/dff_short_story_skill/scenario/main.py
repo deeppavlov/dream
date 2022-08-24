@@ -45,18 +45,18 @@ flows = {
                 ),
                 "choose_story_node": cnd.all(
                     [
+                        loc_cnd.needs_scripted_story,
                         loc_cnd.is_tell_me_a_story,
                         loc_cnd.has_story_type,
                         loc_cnd.has_story_left,
-                        loc_cnd.needs_scripted_story,
                         loc_cnd.should_return,
                     ]
                 ),
                 "which_story_node": cnd.all(
                     [
+                        loc_cnd.needs_scripted_story,
                         loc_cnd.is_tell_me_a_story,
                         cnd.neg(loc_cnd.has_story_type),
-                        loc_cnd.needs_scripted_story,
                         loc_cnd.should_return,
                     ]
                 ),
@@ -80,7 +80,7 @@ flows = {
             RESPONSE: loc_rsp.fallback,
             TRANSITIONS: {
                 "which_story_node": cnd.all(
-                    [loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars, loc_cnd.needs_scripted_story]
+                    [loc_cnd.needs_scripted_story, loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars]
                 )
             },
         },

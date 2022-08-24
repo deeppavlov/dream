@@ -35,7 +35,7 @@ def is_tell_me_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def is_asked_for_a_story(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    prev_node = loc_rsp.get_previous_node(ctx)
+    prev_node = loc_rsp.get_previous_node(ctx, actor)
     return prev_node != "which_story_node"
 
 

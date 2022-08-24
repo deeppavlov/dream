@@ -33,12 +33,17 @@ PROMPT_STORYGPT_SERVICE_URL = os.getenv("PROMPT_STORYGPT_SERVICE_URL", "http://p
 STORYGPT_SERVICE_URL = os.getenv("STORYGPT_SERVICE_URL", "http://storygpt:8126/respond")
 
 
-def get_previous_node(ctx: Context) -> str:
-    try:
-        return [node_tuple[1] for node_tuple in ctx.labels.values()][-2]
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
+def get_previous_node(ctx: Context, actor: Actor) -> str:
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    last_utt = utt.get("text", "")
+    if last_utt:
+        try:
+            return [node_tuple[1] for node_tuple in ctx.labels.values()][-2]
+        except Exception as exc:
+            logger.exception(exc)
+            sentry_sdk.capture_exception(exc)
+            return "start_node"
+    else:
         return "start_node"
 
 
@@ -69,7 +74,7 @@ def get_story_left(ctx: Context, actor: Actor) -> str:
 
 
 def choose_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    prev_node = get_previous_node(ctx)
+    prev_node = get_previous_node(ctx, actor)
     story = get_story_left(ctx, actor)
     story_type = get_story_type(ctx, actor)
     setup = stories.get(story_type, {}).get(story, {}).get("setup", "")
@@ -87,7 +92,7 @@ def choose_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
-    prev_node = get_previous_node(ctx)
+    prev_node = get_previous_node(ctx, actor)
     if prev_node in ["start_node", "fallback_node"]:
         int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
 
@@ -111,7 +116,7 @@ def tell_punchline(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    prev_node = get_previous_node(ctx)
+    prev_node = get_previous_node(ctx, actor)
     story_type = get_story_type(ctx, actor)
     story_left = get_story_left(ctx, actor)
 
@@ -202,12 +207,11 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
             logger.info(f"Previous story part: {service_input}")
         try:
             resp = requests.post(
-                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[service_input], first]}, timeout=1
+                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[service_input], first]}, timeout=3
             )
             raw_responses = resp.json()
-        except Exception as exc:
-            logger.exception(exc)
-            sentry_sdk.capture_exception(exc)
+        except requests.exceptions.Timeout:
+            logger.info('Prompt StoryGPT service timeout.')
             if first:
                 sorry_message = f"Sorry, can't remember any stories about {service_input}! " \
                                 f"Maybe you can tell me something about {service_input}?"
@@ -216,7 +220,14 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
                                 "Maybe you can continue my story?"
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+            logger.info(f'Sorry message: {sorry_message}')
             return sorry_message
+        except Exception as exc:
+            logger.exception(exc)
+            sentry_sdk.capture_exception(exc)
+            int_ctx.set_confidence(ctx, actor, 0.0)
+            int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+            return ""
         logger.info(f"Skill receives from service: {raw_responses}")
         reply = raw_responses[0][0]
         int_ctx.set_confidence(ctx, actor, 1.0)
