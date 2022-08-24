@@ -202,15 +202,21 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
             logger.info(f"Previous story part: {service_input}")
         try:
             resp = requests.post(
-                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[service_input], first]}, timeout=3
+                PROMPT_STORYGPT_SERVICE_URL, json={"utterances_histories": [[service_input], first]}, timeout=1
             )
             raw_responses = resp.json()
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
+            if first:
+                sorry_message = f"Sorry, can't remember any stories about {service_input}! " \
+                                f"Maybe you can tell me something about {service_input}?"
+            else:
+                sorry_message = "Sorry, I suddenly forgot what happened next! " \
+                                "Maybe you can continue my story?"
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
-            return ""
+            return sorry_message
         logger.info(f"Skill receives from service: {raw_responses}")
         reply = raw_responses[0][0]
         int_ctx.set_confidence(ctx, actor, 1.0)
