@@ -52,6 +52,8 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info(f'User id: {user_id}')
 
         entity_detection = utt.get("annotations", {}).get("entity_detection", [])
+        entity_linking = utt.get("annotations", {}).get("entity_linking", [])
+        logger.info(f'Entity linking answer: {entity_detection}')
         logger.info(f'Entity detection answer: {entity_detection}')
         entities = entity_detection.get('labelled_entities', [])
         types = []
