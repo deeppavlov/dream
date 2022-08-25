@@ -261,7 +261,12 @@ class EntityLinker(Component, Serializable):
                     entity_substr_split = [
                         word for word in entity_substr.split(" ") if word not in self.stopwords and len(word) > 0
                     ]
-                    if not cand_ent_init and len(entity_substr_split) == 1 and self.word_searcher:
+                    if (
+                        not cand_ent_init
+                        and len(entity_substr_split) == 1
+                        and self.word_searcher
+                        and all([letter.isalpha() for letter in entity_substr_split[0]])
+                    ):
                         corr_words = self.word_searcher(entity_substr_split[0], set(clean_tags + corr_clean_tags))
                         if corr_words:
                             cand_ent_init = self.find_exact_match(corr_words[0], tags + corr_tags)
