@@ -149,7 +149,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             nouns = nouns_tmp
         logger.info(f"Keywords from annotator: {nouns}")
         try:
-            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
+            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=3)
             raw_responses = resp.json()
             int_ctx.set_confidence(ctx, actor, 0.9)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
