@@ -115,19 +115,32 @@ AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/do
 ```
 
 ### Использование
-В отдельном вкладке терминала запустите:
+
+DeepPavlov Agent предоставляет 3 варианта взаимодействия: через интерфейс командной строки, API и Телеграм-бот
+
+#### CLI
+В отдельной вкладке терминала запустите:
 
 ```
-docker-compose exec agent python -m deeppavlov_agent.run -pl assistant_dists/dream/pipeline_conf.json
+docker-compose exec agent python -m deeppavlov_agent.run agent.channel=cmd agent.pipeline_config=assistant_dists/dream/pipeline_conf.json
 ```
 
-Введите имя пользователя и можете начать болтать с Dream!
+Введите имя пользователя и можете начать общаться с Dream!
 
+#### HTTP API
+Как только вы подняли бота, Agent API станет доступен по адресу `http://localhost:4242`.
+Узнать больше про API можно в [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
 
-### Использование с HTTP API
-Как только вы подняли бота, DeepPavlov's Agent API запускает `http://localhost:4242'. 
-Брайзерный интерфейс по умолчанию в DeepPavlov Agent доступен как `http://localhost:4242/chat'. 
-Узнать больше про  API можно в [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
+Браузерный интерфейс чата в DeepPavlov Agent доступен по адресу `http://localhost:4242/chat'.
+
+#### Telegram Bot
+На данный момент Телеграм-бот разворачивается **вместо** HTTP API
+Измените определение `agent` `command` внутри `docker-compose.override.yml`:
+```
+agent:
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=<TELEGRAM_BOT_TOKEN> agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
+```
+**ВАЖНО:** Не храните токен бота в открытом репозитории!
 
 # Конфигурация и использование proxy 
 Dream использует несколько конфигурационных файлов для docker-compose:
