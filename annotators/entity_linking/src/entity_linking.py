@@ -186,29 +186,33 @@ class EntityLinker(Component, Serializable):
             entity_ids_batch.append(entity_ids_list)
             entity_conf_batch.append(entity_conf_list)
             entity_pages_batch.append(entity_pages_list)
-            first_par_batch = self.extract_add_info(entity_pages_batch)
-        return entity_ids_batch, entity_conf_batch, entity_pages_batch, first_par_batch
+            first_par_batch, dbpedia_types_batch = self.extract_add_info(entity_pages_batch)
+        return entity_ids_batch, entity_conf_batch, entity_pages_batch, first_par_batch, dbpedia_types_batch
 
     def extract_add_info(self, entity_pages_batch: List[List[List[str]]]):
-        first_par_batch = []
+        first_par_batch, dbpedia_types_batch = [], []
         for entity_pages_list in entity_pages_batch:
-            first_par_list = []
+            first_par_list, dbpedia_types_list = [], []
             for entity_pages in entity_pages_list:
-                first_pars = []
+                first_pars, dbpedia_types = [], []
                 for entity_page in entity_pages:
                     try:
-                        query = "SELECT first_paragraph FROM entity_additional_info WHERE page_title='{}';".format(
-                            entity_page
-                        )
+                        query = "SELECT * FROM entity_additional_info WHERE page_title='{}';".format(entity_page)
                         res = self.add_info_cur.execute(query)
-                        first_par = res.fetchall()
-                        first_pars.append(first_par[0][0])
+                        fetch_res = res.fetchall()
+                        first_par = fetch_res[0][1]
+                        dbpedia_types_elem = fetch_res[0][2].split()
+                        first_pars.append(first_par)
+                        dbpedia_types.append(dbpedia_types_elem)
                     except Exception as e:
                         first_pars.append("")
+                        dbpedia_types.append([])
                         log.info(f"error {e}")
                 first_par_list.append(first_pars)
+                dbpedia_types_list.append(dbpedia_types)
             first_par_batch.append(first_par_list)
-        return first_par_batch
+            dbpedia_types_batch.append(dbpedia_types_list)
+        return first_par_batch, dbpedia_types_batch
 
     def link_entities(
         self,
