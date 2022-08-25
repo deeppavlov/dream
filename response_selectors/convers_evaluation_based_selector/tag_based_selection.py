@@ -400,6 +400,10 @@ def tag_based_response_selection(
         if confidences[cand_id] == 0.0 and cand_uttr["skill_name"] not in ACTIVE_SKILLS:
             logger.info(f"Dropping cand_id: {cand_id} due to toxicity/badlists")
             continue
+        skill_name = cand_uttr["skill_name"]
+        confidence = confidences[cand_id]
+        score = curr_single_scores[cand_id]
+        logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
             cand_uttr
