@@ -427,32 +427,6 @@
                     "annotators.midas_classification",
                     "annotators.combined_classification"
                 ]
-            },
-            "entity_extraction_kg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://entity-extraction-kg:9103/entity_extraction"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:entity_extraction_kg_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.entity_linking"
-                ]
-            },
-            "wiki_parser_kg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://wiki-parser-kg:9077/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:wp_kg_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.entity_linking"
-                ]
             }
         },
         "skill_selectors": {
