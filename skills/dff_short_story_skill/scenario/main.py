@@ -96,10 +96,7 @@ flows = {
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,
         },
-        "suggest_more": {
-            RESPONSE: "Would you like another story?",
-            TRANSITIONS: {"gpt_topic": int_cnd.is_yes_vars}
-        },
+        "suggest_more": {RESPONSE: "Would you like another story?", TRANSITIONS: {"gpt_topic": int_cnd.is_yes_vars}},
     },
 }
 
