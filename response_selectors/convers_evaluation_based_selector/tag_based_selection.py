@@ -429,15 +429,7 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         )
         skill_name = cand_uttr["skill_name"]
         _is_dialog_abandon = get_dialog_breakdown_annotations(cand_uttr) and PRIORITIZE_NO_DIALOG_BREAKDOWN
-        _is_just_prompt = (
-            cand_uttr["skill_name"] == "dummy_skill"
-            and any(
-                [
-                    question_type in cand_uttr.get("type", "")
-                    for question_type in ["normal_question", "link_to_for_response_selector"]
-                ]
-            )
-        ) or cand_uttr.get("response_parts", []) == ["prompt"]
+        _is_just_prompt = cand_uttr.get("response_parts", []) == ["prompt"]
         if cand_uttr["confidence"] == 1.0:
             # for those hypotheses where developer forgot to set tag to MUST_CONTINUE
             cand_uttr["can_continue"] = MUST_CONTINUE
