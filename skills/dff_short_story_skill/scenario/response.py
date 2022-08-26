@@ -267,4 +267,3 @@ def suggest_more_stories(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_confidence(ctx, actor, 0.7)
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
     return reply
-
