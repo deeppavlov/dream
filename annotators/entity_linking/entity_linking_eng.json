@@ -9,6 +9,7 @@
         "text_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/text_encoder.pth.tar",
         "descr_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/descr_encoder.pth.tar",
         "special_token_id": 30522,
+        "descr_batch_size": 10,
         "device": "gpu"
       },
       {
