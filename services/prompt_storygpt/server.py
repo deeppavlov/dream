@@ -121,6 +121,7 @@ def generate_second_part(context):
     first_texts = [text.replace(continue_phrase, "") for text in first_texts]
     st_time = time.time()
     final_texts = generate_part(first_texts, 100, 0.8, 5, first=False)
+    final_texts = [final_texts[i].replace(first_texts[i], "") for i in range(len(final_texts))]
     logger.info(f"Generated: {final_texts}")
     total_time = time.time() - st_time
     logger.info(f"Time for generation: {total_time:.3f}s")
