@@ -260,3 +260,11 @@ def generate_second_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> 
         int_ctx.set_confidence(ctx, actor, 0.0)
         int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
     return reply
+
+
+def suggest_more_stories(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    reply = "Would you like another story?"
+    int_ctx.set_confidence(ctx, actor, 0.7)
+    int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+    return reply
+

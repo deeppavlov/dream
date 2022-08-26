@@ -89,9 +89,14 @@ flows = {
             RESPONSE: loc_rsp.generate_first_prompt_part,
             TRANSITIONS: {"gpt_story_second_part": int_cnd.is_yes_vars},
         },
-        "gpt_story_second_part": {RESPONSE: loc_rsp.generate_second_prompt_part},
+        "gpt_story_second_part": {RESPONSE: loc_rsp.generate_second_prompt_part,
+                                  TRANSITIONS: {"suggest_more": cnd.true()}},
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,
+        },
+        "suggest_more": {
+            RESPONSE: "Would you like another story?",
+            TRANSITIONS: {"gpt_topic": int_cnd.is_yes_vars()}
         },
     },
 }
