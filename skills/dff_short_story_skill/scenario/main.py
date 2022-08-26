@@ -98,7 +98,7 @@ flows = {
         },
         "suggest_more": {
             RESPONSE: "Would you like another story?",
-            TRANSITIONS: {"gpt_topic": int_cnd.is_yes_vars(ctx, Actor)}
+            TRANSITIONS: {"gpt_topic": int_cnd.is_yes_vars}
         },
     },
 }
