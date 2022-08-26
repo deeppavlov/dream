@@ -14,7 +14,6 @@
 
 from collections import defaultdict
 from logging import getLogger
-from string import punctuation
 from typing import List
 
 import numpy as np
