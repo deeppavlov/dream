@@ -149,7 +149,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             nouns = nouns_tmp
         logger.info(f"Keywords from annotator: {nouns}")
         try:
-            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=2)
+            resp = requests.post(STORYGPT_SERVICE_URL, json={"utterances_histories": [[nouns]]}, timeout=3)
             raw_responses = resp.json()
             int_ctx.set_confidence(ctx, actor, 0.9)
             int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
@@ -211,16 +211,17 @@ def generate_prompt_story(ctx: Context, actor: Actor, first=True, *args, **kwarg
             )
             raw_responses = resp.json()
         except requests.exceptions.Timeout:
-            logger.info('Prompt StoryGPT service timeout.')
+            logger.info("Prompt StoryGPT service timeout.")
             if first:
-                sorry_message = f"Sorry, can't remember any stories about {service_input}! " \
-                                f"Maybe you can tell me something about {service_input}?"
+                sorry_message = (
+                    f"Sorry, can't remember any stories about {service_input}! "
+                    f"Maybe you can tell me something about {service_input}?"
+                )
             else:
-                sorry_message = "Sorry, I suddenly forgot what happened next! " \
-                                "Maybe you can continue my story?"
+                sorry_message = "Sorry, I suddenly forgot what happened next! " "Maybe you can continue my story?"
             int_ctx.set_confidence(ctx, actor, 0.0)
             int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
-            logger.info(f'Sorry message: {sorry_message}')
+            logger.info(f"Sorry message: {sorry_message}")
             return sorry_message
         except Exception as exc:
             logger.exception(exc)
