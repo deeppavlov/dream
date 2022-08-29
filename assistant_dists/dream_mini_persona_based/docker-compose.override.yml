@@ -192,4 +192,22 @@ services:
         reservations:
           memory: 2G
 
+  relative-persona-extractor:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8133
+        SERVICE_NAME: relative_persona_extractor
+      context: .
+      dockerfile: ./annotators/relative_persona_extractor/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8133
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 80M
+        reservations:
+          memory: 80M
+
 version: '3.7'

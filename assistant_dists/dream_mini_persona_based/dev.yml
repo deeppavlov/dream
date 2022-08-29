@@ -62,4 +62,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8131:8131
+  relative-persona-extractor:
+    volumes:
+      - "./services/relative_persona_extractor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8133:8133
 version: "3.7"
