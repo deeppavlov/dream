@@ -12,3 +12,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  dialogpt-persona-based:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""

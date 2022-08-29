@@ -10,13 +10,13 @@ ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
 
-COPY ./services/dialogpt_persona/requirements.txt /src/requirements.txt
+COPY ./services/dialogpt_persona_based/requirements.txt /src/requirements.txt
 COPY ./common/ /src/common/
 RUN pip install -r /src/requirements.txt
 
 RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 RUN python -c "from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
-COPY ./services/dialogpt_persona/ /src
+COPY ./services/dialogpt_persona_based/ /src
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300

@@ -28,9 +28,9 @@ try:
 
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("dialogpt_persona is set to run on cuda")
+        logger.info("dialogpt_persona_based is set to run on cuda")
 
-    logger.info("dialogpt_persona is ready")
+    logger.info("dialogpt_persona_based is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
