@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
-N_SENTENCES_OT_RETURN = getenv("N_SENTENCES_OT_RETURN")
+N_SENTENCES_OT_RETURN = int(getenv("N_SENTENCES_OT_RETURN"))
 with open("common/persona_sentences.txt", "r") as f:
     PERSONA_SENTENCES = f.read().splitlines()
-PERSONA_SENTENCES = [x for x in PERSONA_SENTENCES if len(x.strip())]
+PERSONA_SENTENCES = [x.strip() for x in PERSONA_SENTENCES if len(x.strip())]
 
 
 def get_result(request):
@@ -37,6 +37,7 @@ def get_result(request):
         scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
             "batch"
         ]
+        scores = np.array(scores)
         for i, context in enumerate(contexts):
             curr_ids = np.where(context_ids == i)[0]
             most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_OT_RETURN]

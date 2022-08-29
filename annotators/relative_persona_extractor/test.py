@@ -8,16 +8,26 @@ def main():
             [
                 "How do you spend your spare time?",
                 "I like to watch movies and eat pizza.",
-                "Cool! What else do you like?"
+                "Cool! What else do you like?",
             ],
             [
-                "I like to go to the cinema on fridays"
-                "great. how do you spend your spare time?",
+                "I like to go to the cinema on fridays" "great. how do you spend your spare time?",
                 "I like to watch movies and eat pizza.",
             ],
         ]
     }
-    gold = []
+    gold = [
+        [
+            "I like Italian food especially pasta and pizza.",
+            "I like to watch football and basketball on TV.",
+            "I like watching travel video blogs.",
+        ],
+        [
+            "I like Italian food especially pasta and pizza.",
+            "I like to watch football and basketball on TV.",
+            "I like watching travel video blogs.",
+        ],
+    ]
 
     result = requests.post(url, json=input_data).json()
     assert result == gold, print(result)
