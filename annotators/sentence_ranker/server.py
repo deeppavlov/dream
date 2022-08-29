@@ -1,13 +1,17 @@
-from sentence_transformers import SentenceTransformer
 import logging
-import time
 import os
+import time
 
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
+from sentence_transformers import SentenceTransformer
 from sentry_sdk.integrations.flask import FlaskIntegration
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
 
 class SentenceRanker:
     def __init__(self, 
@@ -73,17 +77,14 @@ class SentenceRanker:
         b_norm = torch.nn.functional.normalize(b, p=2, dim=1)
         return torch.sum(a_norm * b_norm, dim=1)
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-
-logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-TOP_SIMILAR_SENTENCES = 5
+TOP_SIMILAR_SENTENCES = int(os.environ.get("TOP_SIMILAR_SENTENCES", 5))
 
 try:
     sentence_model = SentenceTransformer(PRETRAINED_MODEL_NAME_OR_PATH)
     
-    persona = open("./persona_sentences.txt").read()
+    persona = open("../../common/persona_sentences.txt").read()
     persona_sentences = persona.split("\n")
     persona_sentences = [item.strip() for item in persona_sentences if len(item) > 0]
     
@@ -98,6 +99,7 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
+
 
 @app.route("/response", methods=["POST"])
 def respond():
