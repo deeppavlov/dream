@@ -49,7 +49,7 @@ services:
       - 8126:8126
   ner:
     volumes:
-      - './annotators/NER_ru:/src'
+      - './annotators/NER_deeppavlov:/src'
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021

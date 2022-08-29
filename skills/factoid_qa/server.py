@@ -287,7 +287,7 @@ def respond():
             question_nums.append(n)
 
     text_qa_response_batch = [{"answer": "", "answer_sentence": "", "confidence": 0.0} for _ in dialogs_batch]
-    resp = requests.post(TEXT_QA_URL, json={"question_raw": questions_batch, "top_facts": facts_batch}, timeout=0.5)
+    resp = requests.post(TEXT_QA_URL, json={"question_raw": questions_batch, "top_facts": facts_batch}, timeout=1.8)
     if resp.status_code != 200:
         logger.info("API Error: Text QA inaccessible")
     else:

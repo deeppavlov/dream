@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_russian/pipeline_conf.json --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_russian/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
@@ -146,19 +146,19 @@ services:
           memory: 3G
 
   ner:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
-        CONFIG: ner_uncased_rus_bert_torch.json
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
         PORT: 8021
-        SRC_DIR: annotators/NER_ru
+        SRC_DIR: annotators/NER_deeppavlov
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: RU
       context: ./
-      dockerfile: annotators/NER_ru/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8021 --without-threads
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     tty: true
     deploy:
       resources:

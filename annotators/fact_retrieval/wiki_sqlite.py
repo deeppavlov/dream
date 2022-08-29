@@ -61,7 +61,7 @@ class WikiSQLiteVocab(SQLiteDataIterator, Component):
             contents_list = []
             for ids in ids_list:
                 contents = [self.get_doc_content(doc_id) for doc_id in ids]
-                logger.info(f"contents {contents}")
+                logger.debug(f"contents {contents}")
                 if self.join_docs:
                     contents = " ".join(contents)
                 contents_list.append(contents)

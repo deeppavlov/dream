@@ -361,6 +361,14 @@ def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     return [conv]
 
 
+def sentence_ranker_formatter(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    last_human_uttr = dialog["human_utterances"][-1]["text"]
+    sentence_pairs = [[last_human_uttr, h["text"]] for h in dialog["human_utterances"][-1]["hypotheses"]]
+    return [{"sentence_pairs": sentence_pairs}]
+
+
 def dp_classes_formatter_service(payload: List):
     # Used by: dp_toxic_formatter
     return payload[0]
@@ -653,8 +661,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
     dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])]
 
     last_human_utt = dialog["human_utterances"][-1]
-
-    nounphrases = [last_human_utt["annotations"].get("cobot_entities", {}).get("entities", [])]
+    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
 
     entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
     entity_pages_list = []
@@ -671,7 +678,7 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
         {
             "human_sentences": [last_human_utt["text"]],
             "dialog_history": dialog_history,
-            "nounphrases": nounphrases,
+            "nounphrases": [nounphrases],
             "entity_substr": [entity_substr_list],
             "entity_pages": [entity_pages_list],
             "entity_ids": [entity_ids_list],

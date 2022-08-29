@@ -10,7 +10,7 @@ def main():
             "top_facts": [
                 [
                     "Yuri Gagarin was a Russian pilot and cosmonaut who became the first human to "
-                    "journey into outer space"
+                    "journey into outer space."
                 ]
             ],
         },
@@ -26,7 +26,7 @@ def main():
         },
     ]
 
-    gold_results = [[["Yuri Gagarin", 0.8753020167350769, 0]], [["Jim Parsons", 0.9997597932815552, 151]]]
+    gold_results = [[["Yuri Gagarin", 0.7544615864753723, 0]], [["Jim Parsons", 0.9996281862258911, 151]]]
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
