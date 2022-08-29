@@ -7,7 +7,7 @@ ENV N_SENTENCES_OT_RETURN ${N_SENTENCES_OT_RETURN}
 
 RUN mkdir /src
 
-COPY annotators/relative_persona_extractor /src/
+COPY ./annotators/relative_persona_extractor/ /src/
 COPY ./common/ /src/common/
 
 COPY annotators/relative_persona_extractor/requirements.txt /src/requirements.txt
@@ -15,4 +15,4 @@ RUN pip install -r /src/requirements.txt
 
 WORKDIR /src
 
-CMD gunicorn --workers=2 server:app
+CMD gunicorn --workers=1 server:app --bind 0.0.0.0:8000

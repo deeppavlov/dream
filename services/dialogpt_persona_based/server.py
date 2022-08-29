@@ -1,6 +1,6 @@
 import logging
-import time
 import os
+import time
 
 import sentry_sdk
 import torch
@@ -16,10 +16,21 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
+app = Flask(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-DEFAULT_CONFIDENCE = 1.0
+SUPER_CONFIDENCE = 1.0
+DEFAULT_CONFIDENCE = 0.9
 
+MAX_PERSONA_SENTENCES = 3
+SPECIAL_TOKENS = {
+    "<sp_1>": "<sp_1>",
+    "</sp_1>": "</sp_1>",
+    "<sp_2>": "<sp_2>",
+    "</sp_2>": "</sp_2>",
+    "<persona>": "<persona>",
+    "</persona>": "</persona>",
+}
 
 try:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -36,10 +47,6 @@ except Exception as e:
     logger.exception(e)
     raise e
 
-app = Flask(__name__)
-logging.getLogger("werkzeug").setLevel("INFO")
-MAX_PERSONA_SENTENCES = 3
-
 
 def generate_response(persona=None, model=None, tokenizer=None, utterances_histories=None):
     """generates the next replica of the bot based on a short persona consisting of several sentences.
@@ -53,16 +60,7 @@ def generate_response(persona=None, model=None, tokenizer=None, utterances_histo
     Returns:
         str: next utterance
     """
-
-    SPECIAL_TOKENS = {
-        "<sp_1>": "<sp_1>",
-        "</sp_1>": "</sp_1>",
-        "<sp_2>": "<sp_2>",
-        "</sp_2>": "</sp_2>",
-        "<persona>": "<persona>",
-        "</persona>": "</persona>",
-    }
-    VOCAB_TOKENS = tokenizer.get_added_vocab()
+    vocab_tokens = tokenizer.get_added_vocab()
     threshhold = 0.2
 
     max_likelihood_sentences, max_sentence_similarity = persona
@@ -111,43 +109,46 @@ def generate_response(persona=None, model=None, tokenizer=None, utterances_histo
     model_response = model_response.to(device)
     model_response_list = list(model_response[0])
 
-    end_speaker_index = model_response_list.index(VOCAB_TOKENS["</sp_2>"])
+    end_speaker_index = model_response_list.index(vocab_tokens["</sp_2>"])
     model_response = model_response[:, : end_speaker_index + 1]
 
     chat_history_ids = model_response
-    bot_response_decode = tokenizer.decode(chat_history_ids[0][len(bot_input_ids[0]) - 1 :], skip_special_tokens=True)
+    bot_response_decode = tokenizer.decode(chat_history_ids[0][len(bot_input_ids[0]) - 1:], skip_special_tokens=True)
 
     return bot_response_decode
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    try:
-        start_time = time.time()
-        responses = []
-        confidences = []
-        for utt_pos in range(len(request.json["persona"])):
-            persona = request.json["persona"][utt_pos]
-            utterances_histories = request.json["utterances_histories"]
+    start_time = time.time()
+    responses = []
+    confidences = []
 
-            intents = request.json["intents"][utt_pos]
-            if "open_question_personal" in get_intents(intents):
-                logger.info("open_question_personal")
-                DEFAULT_CONFIDENCE = 1.0
-            else:
-                logger.info("NOT open_question_personal")
-                DEFAULT_CONFIDENCE = 0.95
+    last_annotated_utterances_batch = request.json["last_annotated_utterance"]
+    utterances_histories = request.json["utterances_histories"]
+    try:
+        for utt_pos in range(len(last_annotated_utterances_batch)):
+            persona = last_annotated_utterances_batch[utt_pos].get("annotations", {}).get(
+                "relative_persona_extractor", [])
 
             response = generate_response(
                 model=model, tokenizer=tokenizer, persona=persona, utterances_histories=utterances_histories
             )
 
-            responses.append([response])
-            confidences.append([DEFAULT_CONFIDENCE])
+            if "open_question_personal" in get_intents(last_annotated_utterances_batch[utt_pos]):
+                logger.info("open_question_personal")
+                responses.append([response])
+                confidences.append([SUPER_CONFIDENCE])
+            else:
+                logger.info("NOT open_question_personal")
+                responses.append([response])
+                confidences.append([DEFAULT_CONFIDENCE])
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
+        responses = [""] * len(last_annotated_utterances_batch)
+        confidences = [0.0] * len(last_annotated_utterances_batch)
 
     total_time = time.time() - start_time
     logger.info(f"dialog_persona exec time: {total_time:.3f}s")
