@@ -2,29 +2,10 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_multilingual/pipeline_conf.json --cors'
     environment:
-      WAIT_HOSTS: "sentence-ranker:8130, convers-evaluation-selector:8009, 
+      WAIT_HOSTS: "convers-evaluation-selector:8009, 
           gpt2-generator:8132, toxic-classification:8013,
-          sentiment-classification:8024"
+          sentiment-classification:8024, sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-
-  sentence-ranker:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8130
-        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
-      context: .
-      dockerfile: ./annotators/sentence_ranker/Dockerfile
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
 
   convers-evaluation-selector:
     env_file: [.env]
@@ -113,4 +94,23 @@ services:
           memory: 3.5G
         reservations:
           memory: 3.5G
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
 version: '3.7'

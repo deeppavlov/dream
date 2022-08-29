@@ -5,11 +5,6 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  sentence-ranker:
-    volumes:
-      - "./annotators/sentence_ranker:/src"
-    ports:
-      - 8130:8130
   convers-evaluation-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
@@ -31,4 +26,9 @@ services:
       - "./annotators/MultilingualSentimentClassification:/src"
     ports:
       - 8024:8024
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+    ports:
+      - 8128:8128
 version: "3.7"
