@@ -222,7 +222,7 @@ class DummySkillConnector:
                     logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
                     cands += [choice(questions_same_nps)]
                     confs += [0.5]
-                    attrs += [{"type": "nounphrase_question"}]
+                    attrs += [{"type": "nounphrase_question", "response_parts": ["prompt"]}]
                     human_attrs += [{}]
                     bot_attrs += [{}]
 
@@ -267,13 +267,13 @@ class DummySkillConnector:
                 else:
                     confs += [0.05]  # Use it only as response selector retrieve skill output modifier
                 cands += [link_to_question]
-                attrs += [{"type": "link_to_for_response_selector"}]
+                attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
             elif is_russian:
                 cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
                 confs += [0.8]
-                attrs += [{"type": "link_to_for_response_selector"}]
+                attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                 human_attrs += [{}]
                 bot_attrs += [{}]
 
@@ -293,7 +293,7 @@ class DummySkillConnector:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
                 confs += [0.5]
-                attrs += [{"type": "nounphrase_fact"}]
+                attrs += [{"type": "nounphrase_fact", "response_parts": ["body"]}]
                 human_attrs += [{}]
                 bot_attrs += [{}]
 

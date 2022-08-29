@@ -1,12 +1,4 @@
 services:
-  convers-evaluator-annotator:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8004
-      - PORT=8004
 
   dff-program-y-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -80,4 +72,12 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8125
       - PORT=8125
 
+  sentence-ranker:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8128
+      - PORT=8128
 version: '3.7'

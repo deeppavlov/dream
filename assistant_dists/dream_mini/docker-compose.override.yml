@@ -1,30 +1,11 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_mini/pipeline_conf.json --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+      WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-  convers-evaluator-annotator:
-    env_file: [.env]
-    build:
-      args:
-        CONFIG: conveval.json
-        PORT: 8004
-        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
-      context: .
-      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
 
   dff-program-y-skill:
     env_file: [.env]
@@ -160,6 +141,7 @@ services:
         SERVICE_NAME: dialogpt
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
+        CONFIG_NAME: dialogpt_en.json
       context: ./services/dialogpt/
     command: flask run -h 0.0.0.0 -p 8125
     environment:
@@ -171,5 +153,23 @@ services:
           memory: 2G
         reservations:
           memory: 2G
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 
 version: '3.7'
