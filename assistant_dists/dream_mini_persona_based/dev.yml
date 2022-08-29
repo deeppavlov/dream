@@ -64,7 +64,7 @@ services:
       - 8131:8131
   relative-persona-extractor:
     volumes:
-      - "./services/relative_persona_extractor:/src"
+      - "./annotators/relative_persona_extractor:/src"
       - "./common:/src/common"
     ports:
       - 8133:8133
