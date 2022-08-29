@@ -28,7 +28,7 @@ with open(CONFIG_NAME, "r") as f:
 generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
 
 NICK_COMPILED = re.compile(r"\@[^\s]+\b")
-SPECIFIC_SYMBOLS = "[#$%&()*+/;<=>@\^_`{|}~\[\]�]"
+SPECIFIC_SYMBOLS = r"[#$%&()*+/;<=>@\^_`{|}~\[\]�]"
 SPECIFIC_WORDS_COMPILED = re.compile(rf"{SPECIFIC_SYMBOLS}[a-zA-Z]+{SPECIFIC_SYMBOLS}")
 URLS_COMPILED = re.compile(r"(http[^\s]+\b|<a href[^>]+>)")
 ANYTHING_EXCEPT_OF_LETTERS_SPACE_AND_PUNCT_COMPILED = re.compile(SPECIFIC_SYMBOLS)
@@ -52,7 +52,6 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 def generate_response(context, model, tokenizer):
-    encoded_context = []
     text = "\n".join(
         list(map(lambda x: NEW_UTTERANCE.join(x), zip(cycle(["", ""]), context[-MAX_HISTORY_DEPTH:] + [""])))
     )
@@ -88,7 +87,7 @@ def respond():
             curr_confidences = []
             preds = generate_response(context, model, tokenizer)
             for response in preds:
-                response = re.sub(compiled_nick, "", response).strip()
+                response = re.sub(NICK_COMPILED, "", response).strip()
 
                 if len(response) > 3:
                     # drop too short responses
