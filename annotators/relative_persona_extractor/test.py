@@ -11,27 +11,28 @@ def main():
                 "Cool! What else do you like?",
             ],
             [
-                "I like to go to the cinema on fridays" "great. how do you spend your spare time?",
-                "I like to watch movies and eat pizza.",
+                "I like to go to the cinema on fridays",
+                "great. how do you spend your spare time?",
+                "I like to watch movies",
             ],
         ]
     }
     gold = [
         {
+            "max_similarity": 0.6948127746582031,
             "persona": [
                 "I like Italian food especially pasta and pizza.",
                 "I like to watch football and basketball on TV.",
                 "I like watching travel video blogs.",
             ],
-            "max_similarity": 0.9
         },
         {
+            "max_similarity": 0.6451027989387512,
             "persona": [
-                "I like Italian food especially pasta and pizza.",
-                "I like to watch football and basketball on TV.",
                 "I like watching travel video blogs.",
+                "I like to watch football and basketball on TV.",
+                "I like Italian food especially pasta and pizza.",
             ],
-            "max_similarity": 0.9
         },
     ]
 
