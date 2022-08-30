@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = f"http://0.0.0.0:8133/respond"
+    url = "http://0.0.0.0:8133/respond"
     input_data = {
         "contexts": [
             [

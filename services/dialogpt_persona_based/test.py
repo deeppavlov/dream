@@ -11,14 +11,10 @@ def test_respond():
                 "annotations": {
                     "relative_persona_extractor": {
                         "persona": ["I like ice-cream.", "I hate onions."],
-                        "max_similarity": 0.8
+                        "max_similarity": 0.8,
                     },
-                    "midas_classification": [
-                        {
-                            "open_question_personal": 1.0
-                        }
-                    ]
-                }
+                    "midas_classification": [{"open_question_personal": 1.0}],
+                },
             }
         ],
         "utterances_histories": [
@@ -26,9 +22,9 @@ def test_respond():
                 "What are you doing?",
                 "I am planning what to cook.",
                 "Sounds interesting.",
-                "What should I cook for a dinner?"
+                "What should I cook for a dinner?",
             ]
-        ]
+        ],
     }
     gold = []
 

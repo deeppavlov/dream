@@ -113,7 +113,7 @@ def generate_response(persona=None, model=None, tokenizer=None, utterances_histo
     model_response = model_response[:, : end_speaker_index + 1]
 
     chat_history_ids = model_response
-    bot_response_decode = tokenizer.decode(chat_history_ids[0][len(bot_input_ids[0]) - 1:], skip_special_tokens=True)
+    bot_response_decode = tokenizer.decode(chat_history_ids[0][len(bot_input_ids[0]) - 1 :], skip_special_tokens=True)
 
     return bot_response_decode
 
@@ -128,8 +128,9 @@ def respond():
     utterances_histories = request.json["utterances_histories"]
     try:
         for utt_pos in range(len(last_annotated_utterances_batch)):
-            persona = last_annotated_utterances_batch[utt_pos].get("annotations", {}).get(
-                "relative_persona_extractor", [])
+            persona = (
+                last_annotated_utterances_batch[utt_pos].get("annotations", {}).get("relative_persona_extractor", [])
+            )
 
             response = generate_response(
                 model=model, tokenizer=tokenizer, persona=persona, utterances_histories=utterances_histories
