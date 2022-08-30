@@ -1208,18 +1208,6 @@ FACTS_EXTRA_WORDS = re.compile(
 )
 
 
-def get_conv_eval_annotations(annotated_utterance):
-    default_conv_eval = {
-        "isResponseOnTopic": 0.0,
-        "isResponseInteresting": 0.0,
-        "responseEngagesUser": 0.0,
-        "isResponseComprehensible": 0.0,
-        "isResponseErroneous": 0.0,
-    }
-
-    return annotated_utterance.get("annotations", {}).get("convers_evaluator_annotator", default_conv_eval)
-
-
 def get_dialog_breakdown_annotations(annotated_utterance):
     breakdown = annotated_utterance.get("annotations", {}).get("dialog_breakdown", {}).get("breakdown", 0.0) > 0.5
     return breakdown
