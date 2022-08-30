@@ -41,7 +41,10 @@ def get_result(request):
         for i, context in enumerate(contexts):
             curr_ids = np.where(context_ids == i)[0]
             most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_OT_RETURN]
-            curr_result = [PERSONA_SENTENCES[_id] for _id in most_relevant_sent_ids]
+            curr_result = {
+                "persona": [PERSONA_SENTENCES[_id] for _id in most_relevant_sent_ids],
+                "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]]
+            }
             result += [curr_result]
     except Exception as exc:
         logger.exception(exc)

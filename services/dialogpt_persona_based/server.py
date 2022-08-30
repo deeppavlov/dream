@@ -124,7 +124,7 @@ def respond():
     responses = []
     confidences = []
 
-    last_annotated_utterances_batch = request.json["last_annotated_utterance"]
+    last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
     try:
         for utt_pos in range(len(last_annotated_utterances_batch)):

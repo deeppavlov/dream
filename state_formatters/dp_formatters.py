@@ -447,7 +447,7 @@ def persona_bot_formatter(dialog: Dict):
     amount_utterances_history = 3
     utterances_histories = utterances_histories[-amount_utterances_history:]
 
-    return [{"utterances_histories": [utterances_histories], "last_annotated_utterance": [last_uttr]}]
+    return [{"utterances_histories": [utterances_histories], "last_annotated_utterances": [last_uttr]}]
 
 
 def full_history_dialog(dialog: Dict):
