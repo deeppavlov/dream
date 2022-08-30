@@ -205,8 +205,11 @@ class QueryGeneratorBase(Component, Serializable):
                     if any([elem[0] != "misc" for elem in types]):
                         filtered_entities.append(entity)
                         filtered_types.append(types)
-                entities_from_ner = [filtered_entities[-1]]
-                types_from_ner = [filtered_types[-1]]
+                if filtered_entities:
+                    entities_from_ner = [filtered_entities[-1]]
+                    types_from_ner = [filtered_types[-1]]
+                else:
+                    entities_from_ner, types_from_ner = [], []
 
             entity_ids = self.get_entity_ids(
                 entities_from_ner, "entities", question=question, entity_types=types_from_ner

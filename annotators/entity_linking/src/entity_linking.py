@@ -313,6 +313,7 @@ class EntityLinker(Component, Serializable):
         return cand_ent_init
 
     def find_exact_match(self, entity_substr, tags):
+        entity_substr = entity_substr.lower()
         entity_substr_split = entity_substr.split()
         cand_ent_init = defaultdict(set)
         for tag, tag_conf in tags:
@@ -327,6 +328,7 @@ class EntityLinker(Component, Serializable):
         return cand_ent_init
 
     def find_fuzzy_match(self, entity_substr_split, tags):
+        entity_substr_split = [word.lower() for word in entity_substr_split]
         cand_ent_init = defaultdict(set)
         for tag, tag_conf in tags:
             if tag.lower() in self.cursors:

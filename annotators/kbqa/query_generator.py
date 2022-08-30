@@ -173,6 +173,7 @@ class QueryGenerator(QueryGeneratorBase):
         ]
         log.debug(f"(query_parser)rel_directions: {triplet_info_list}")
         entity_ids = [entity[: self.entities_to_leave] for entity in entity_ids]
+        entity_ids = [[entity for entity in entities if entity != "not in wiki"] for entities in entity_ids]
         rel_tm1 = time.time()
         if rels_from_template is not None:
             rels = [[(rel, 1.0) for rel in rel_list] for rel_list in rels_from_template]

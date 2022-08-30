@@ -39,11 +39,11 @@ class WordSearcher:
     def __call__(self, query, tags):
         ngrams_list = []
         for i in range(len(query) - 1):
-            ngram = query[i : i + 2]
+            ngram = query[i : i + 2].lower()
             ngram_id = self.bigrams_dict[ngram]
             ngrams_list.append(ngram_id)
         for i in range(len(query) - 2):
-            ngram = query[i : i + 3]
+            ngram = query[i : i + 3].lower()
             ngram_id = self.trigrams_dict[ngram]
             ngrams_list.append(ngram_id)
         ngrams_with_cnts = Counter(ngrams_list).most_common()

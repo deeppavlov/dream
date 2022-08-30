@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_sfc/pipeline_conf.json --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_sfc/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
           spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,

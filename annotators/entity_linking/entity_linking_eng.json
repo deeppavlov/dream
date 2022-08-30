@@ -9,12 +9,13 @@
         "text_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/text_encoder.pth.tar",
         "descr_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/descr_encoder.pth.tar",
         "special_token_id": 30522,
-        "device": "gpu"
+        "descr_batch_size": 10,
+        "device": "cpu"
       },
       {
         "class_name": "src.entity_linking:EntityLinker",
         "in": ["entity_substr", "entity_tags", "sentences"],
-        "out": ["entity_ids", "entity_conf", "entity_pages", "first_pars"],
+        "out": ["entity_ids", "entity_conf", "entity_pages", "first_pars", "dbpedia_types"],
         "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream",
         "add_info_filename": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream/add_info.db",
         "tags_filename": "{MODELS_PATH}/finegrained_tags/tag.dict",
@@ -34,7 +35,7 @@
         "lang": "en"
       }
     ],
-    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_pages", "first_pars"]
+    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_pages", "first_pars", "dbpedia_types"]
   },
   "metadata": {
     "variables": {
