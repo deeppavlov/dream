@@ -61,7 +61,6 @@ services:
   eliza:
   convert-reddit:
   personal-info-skill:
-  asr:
   misheard-asr:
   dff-book-skill:
   dff-weather-skill:
