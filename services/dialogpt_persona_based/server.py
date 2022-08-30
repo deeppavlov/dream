@@ -48,7 +48,7 @@ except Exception as e:
     raise e
 
 
-def generate_response(persona=None, model=None, tokenizer=None, utterances_histories=None):
+def generate_response(persona: dict = None, model=None, tokenizer=None, utterances_histories=None):
     """generates the next replica of the bot based on a short persona consisting of several sentences.
 
     Args:
@@ -63,7 +63,8 @@ def generate_response(persona=None, model=None, tokenizer=None, utterances_histo
     vocab_tokens = tokenizer.get_added_vocab()
     threshhold = 0.2
 
-    max_likelihood_sentences, max_sentence_similarity = persona
+    max_likelihood_sentences = persona["persona"]
+    max_sentence_similarity = persona["max_similarity"]
     max_likelihood_sentences = max_likelihood_sentences[:MAX_PERSONA_SENTENCES]
     max_likelihood_sentences = " ".join(max_likelihood_sentences)
     max_likelihood_sentences = f"{SPECIAL_TOKENS['<persona>']}{max_likelihood_sentences}{SPECIAL_TOKENS['</persona>']}"
