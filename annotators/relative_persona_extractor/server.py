@@ -45,6 +45,7 @@ def get_result(request):
                 "persona": [PERSONA_SENTENCES[_id] for _id in most_relevant_sent_ids],
                 "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
             }
+            logger.info(f"Persona: {curr_result['persona']}")
             result += [curr_result]
     except Exception as exc:
         logger.exception(exc)
