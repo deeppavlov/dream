@@ -50,6 +50,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+LANGUAGE = getenv("LANGUAGE", "EN")
 WORK_DIR = pathlib.Path(__file__).parent
 
 TOPICS = json.load((WORK_DIR / "comet_predefined.json").open())
@@ -249,7 +250,7 @@ def get_response_for_particular_topic_and_status(topic, curr_meta_script_status,
 
         prev_what_to_talk_about_outputs = [
             get_outputs_with_response_from_dialog(dialog["utterances"][-3:], response=response, activated=True)
-            for response in GREETING_QUESTIONS[list(GREETING_QUESTIONS.keys())[0]]
+            for response in GREETING_QUESTIONS[LANGUAGE][list(GREETING_QUESTIONS[LANGUAGE].keys())[0]]
         ]
         prev_what_to_talk_about_outputs = sum(
             [list_of_outputs for list_of_outputs in prev_what_to_talk_about_outputs if len(list_of_outputs) > 0], []

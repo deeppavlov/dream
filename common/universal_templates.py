@@ -14,13 +14,27 @@ from common.utils import (
     get_entities,
     join_word_beginnings_in_or_pattern,
 )
-from common.greeting import GREETING_QUESTIONS, WHAT_DO_YOU_DO_RESPONSES, FREE_TIME_RESPONSES
+from common.greeting import GREETING_QUESTIONS_TEXTS
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
+DUMMY_DONTKNOW_RESPONSES = {
+    "EN": [
+        "What do you want to talk about?",
+        "I am a bit confused. What would you like to chat about?",
+        "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
+        "Sorry, I didn't catch that. What would you like to chat about?",
+    ],
+    "RU": [
+        "О чем ты хочешь поговорить?",
+        "Кажется, я немного потерялась. О чем ты хочешь поговорить?",
+        "Извини, возможно я не совсем поняла, что ты имеешь в виду. О чем ты хочешь поговорить?",
+        "Извини, я не уловила информацию. О чем ты хочешь поболтать?",
+    ],
+}
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
 UNIVERSAL_OPINION_REQUESTS = [
     "This is interesting, isn't it?",
@@ -75,8 +89,8 @@ def nounphrases_questions(nounphrase=None):
 
 
 ARTICLES = r"\s?(\ba\b|\ban\b|\bthe\b|\bsome\b|\bany\b)?\s?"
-ANY_WORDS = r"[a-zA-Z0-9 ]*"
-ANY_SENTENCES = r"[A-Za-z0-9-!,\?\.’'\"’ ]*"
+ANY_WORDS = r"[a-zA-Zа-яА-ЯйЙёЁ0-9 ]*"
+ANY_SENTENCES = r"[A-Za-zа-яА-ЯйЙёЁ0-9-!,\?\.’'\"’ ]*"
 END = r"([!,\?\.’'\"’]+.*|$)"
 BEGIN_OF_SENT = r"^(.*[!,\?\.’'\"’]+ )?"
 
@@ -143,9 +157,32 @@ WANT_LIKE = [
     "care to",
 ]
 TO_ME_LIKE = [r"to me( now)?", r"with me( now)?", r"me( now)?", "now"]
-SOMETHING_LIKE = ["anything", "something", "that", "everything", "thing", "stuff", "other things"]
-NOTHING_LIKE = ["nothing", "none", "neither"]
-DONOTKNOW_LIKE = [r"(i )?(do not|don't) know", "you (choose|decide|pick up)", "hard (to say|one)", "none"]
+SOMETHING_LIKE = [
+    "anything",
+    "something",
+    "that",
+    "everything",
+    "thing",
+    "stuff",
+    "other things",
+    "что-нибудь",
+    "что-то",
+    "что угодно",
+    "всё",
+    "что-либо",
+    "всякое",
+    "другое",
+]
+NOTHING_LIKE = ["nothing", "none", "neither", "ничего", "нечего", "ни о чем", "не о чем", r"ни то,? ни то"]
+DONOTKNOW_LIKE = [
+    r"(i )?(do not|don't) know",
+    "you (choose|decide|pick up)",
+    "hard (to say|one)",
+    "none",
+    r"(я )?(не знаю|без понятия)",
+    "(ты|сам) (выбери|выбирай|реши|решай)",
+    "сложно (сказать|выбрать)",
+]
 KNOW_LIKE = ["know", "learn", "find out"]
 LIKE_TEMPLATE = ["like", "love", "prefer"]
 ASK_TEMPLATE = ["ask", "request"]
@@ -156,7 +193,9 @@ ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_
 SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\s?"
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
-SOMETHING_ELSE = re.compile(r"((something|anything|everything) (else|other))", re.IGNORECASE)
+SOMETHING_ELSE = re.compile(
+    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))", re.IGNORECASE
+)
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
 COMPILE_LETS_TALK = re.compile(
@@ -380,8 +419,6 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
 ANY_TOPIC_AMONG_OFFERED = re.compile(
     r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know" r"|you (choose|pick up|tell me|want|wish|like)\.?$)"
 )
-GREETING_QUESTIONS_TEXTS = [question.lower() for t in GREETING_QUESTIONS for question in GREETING_QUESTIONS[t]]
-GREETING_QUESTIONS_TEXTS += [t.lower() for t in WHAT_DO_YOU_DO_RESPONSES + FREE_TIME_RESPONSES]
 
 
 def if_utterance_requests_topic(annotated_uttr):

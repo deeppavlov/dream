@@ -1,15 +1,25 @@
 {
   "chainer": {
-    "in": ["current_utterance", "dialog_history", "nounphr", "entity_pages"],
+    "in": ["utterance"],
     "pipe": [
       {
-        "class_name": "fact_ranking:FactRankerInfer",
-        "in": ["dialog_history", "entity_pages"],
+        "class_name": "bpr:BPR",
+        "load_path": "{MODEL_PATH}",
+        "query_encoder_file": "query_encoder_en.pth.tar",
+        "bpr_index": "ivf_nq_pruned.idx",
+        "pretrained_model": "bert-base-uncased",
+        "top_n": 70,
+        "nprobe": 8,
+        "in": ["utterance"],
+        "out": ["par_ids"]
+      },
+      {
+        "class_name": "wiki_sqlite:WikiSQLiteVocab",
+        "in": ["par_ids"],
         "out": ["top_facts"],
-        "facts_to_leave": 20,
-        "thres": 0.93,
-        "use_topical_chat_facts": false,
-        "ranker": {"config_path": "{CONFIGS_PATH}/classifiers/fact_ranking_bert_lite.json"}
+        "join_docs": false,
+        "shuffle": false,
+        "load_path": "{DOWNLOADS_PATH}/bpr/eng/enwiki_l100.db"
       }
     ],
     "out": ["top_facts"]
@@ -19,6 +29,7 @@
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/bpr/eng",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
     },
     "requirements": [
@@ -28,12 +39,16 @@
     ],
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/entity_types_sets.pickle",
-        "subdir": "{DOWNLOADS_PATH}/wikidata"
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/bpr/bpr_db_eng_l100.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/bpr/eng"
       },
       {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/topical_chat.tar.gz",
-        "subdir": "{DOWNLOADS_PATH}/topical_chat"
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/bpr/query_encoder_en.tar.gz",
+        "subdir": "{MODEL_PATH}"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/bpr/bpr_lite_eng.tar.gz",
+        "subdir": "{MODEL_PATH}"
       }
     ]
   }

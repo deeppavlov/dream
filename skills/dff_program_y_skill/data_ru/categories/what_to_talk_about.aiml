@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+  <category>
+    <pattern>О ЧЕМ ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>О ЧЕМ ^ <set>talk</set></pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>О ЧЕМ-НИБУДЬ ^ <set>wantto</set> ^ <set>talk</set> ^ ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>О ЧЕМ-НИБУДЬ ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>О ЧЕМ-НИБУДЬ ^ <set>talk</set> ABOUT ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+
+  <category>
+    <pattern>^ НЕ ЗНАЮ ^ О ЧЕМ ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ НЕ ЗНАЮ ^ О ЧЕМ ^ <set>wantto</set> ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ НЕ ЗНАЮ ^ О ЧЕМ ^ <set>talk</set> ^</pattern>
+    <template>
+      <srai>WHAT_TO_TALK_ABOUT</srai>
+    </template>
+  </category>
+  <category>
+    <pattern>^ Я ^ ВЫБЕРУ ^ ТЕМУ ^</pattern>
+    <template>
+      Мы можем поговорить почти о чем угодно. О чем ты хочешь поговорить?
+    </template>
+  </category>
+
+  <category>
+    <pattern>WHAT_TO_TALK_ABOUT</pattern>
+    <template>
+      <random>
+        <li>Мы можем поговорить почти о чем угодно. О чем ты хочешь поговорить?</li>
+      </random>
+    </template>
+  </category>
+
+
+</aiml>

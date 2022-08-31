@@ -1,0 +1,48 @@
+[
+    [
+        "\u042f \u0436\u0435 \u0431\u043e\u0442, \u044f \u0436\u0438\u0432\u0443 \u0432 \u043e\u0431\u043b\u0430\u043a\u0435. \u041a\u0441\u0442\u0430\u0442\u0438, \u0447\u0442\u043e\u0431\u044b \u043b\u0443\u0447\u0448\u0435 \u0443\u0437\u043d\u0430\u0442\u044c \u0434\u0440\u0443\u0433 \u0434\u0440\u0443\u0433\u0430, \u043d\u0430\u043c \u043d\u0430\u0434\u043e \u043f\u043e\u0431\u043e\u043b\u044c\u0448\u0435 \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u043f\u043e\u0431\u043e\u043b\u0442\u0430\u0442\u044c. Where are you from? #+#where_are_you_from",
+        1.0,
+        {
+            "dff_intent_responder_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "1": [
+                        "context_driven_response",
+                        "intent_catcher"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "49ecbd72-c4ff-4e1c-a9c6-be298c57b7f4",
+                    "labels": {
+                        "0": [
+                            "context_driven_response",
+                            "intent_catcher"
+                        ]
+                    },
+                    "requests": {
+                        "0": "\u043e\u0442\u043a\u0443\u0434\u0430 \u0442\u044b \u0440\u043e\u0434\u043e\u043c?"
+                    },
+                    "responses": {
+                        "0": "\u042f \u0436\u0435 \u0431\u043e\u0442, \u044f \u0436\u0438\u0432\u0443 \u0432 \u043e\u0431\u043b\u0430\u043a\u0435. \u041a\u0441\u0442\u0430\u0442\u0438, \u0447\u0442\u043e\u0431\u044b \u043b\u0443\u0447\u0448\u0435 \u0443\u0437\u043d\u0430\u0442\u044c \u0434\u0440\u0443\u0433 \u0434\u0440\u0443\u0433\u0430, \u043d\u0430\u043c \u043d\u0430\u0434\u043e \u043f\u043e\u0431\u043e\u043b\u044c\u0448\u0435 \u0432\u0440\u0435\u043c\u0435\u043d\u0438 \u043f\u043e\u0431\u043e\u043b\u0442\u0430\u0442\u044c. Where are you from? #+#where_are_you_from"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

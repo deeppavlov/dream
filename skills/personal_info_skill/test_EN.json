@@ -1,0 +1,320 @@
+{
+  "dialogs": [
+    {
+      "expected_response": "Nice to meet you, John.",
+      "utterances": [
+        {
+          "text": "my name is john.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "john",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "my name is john.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "john",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "My bad. What is your name again?",
+      "utterances": [
+        {
+          "text": "my name isn't john.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "john",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "my name isn't john.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "john",
+                  "type": "PER"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Is that where you live now?",
+      "utterances": [
+        {
+          "text": "i'm from moscow.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "moscow",
+                  "type": "LOC"
+                }
+              ]
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "i'm from moscow.",
+          "annotations": {
+            "ner": [
+              [
+                {
+                  "text": "moscow",
+                  "type": "LOC"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Sorry, but I really do not know your name. Would you be so kind to tell me you name?",
+      "utterances": [
+        {
+          "text": "how do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "how do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Ah, you have probably forgotten that you told me your name before. Maybe you told me your name the last time we talked.",
+      "utterances": [
+        {
+          "text": "how do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": "John"
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "how do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Your name is John.",
+      "utterances": [
+        {
+          "text": "do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": "John"
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Sorry, we are still not familiar. What is your name?",
+      "utterances": [
+        {
+          "text": "do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "do you know my name?",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "I didn't get your name. Could you, please, repeat it.",
+      "utterances": [
+        {
+          "text": "my name is blabla.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "my name is blabla.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "expected_response": "Sorry, but I probably misheard you. Could you please tell me in which city or region you are now?",
+      "utterances": [
+        {
+          "text": "hi!",
+          "annotations": {
+          }
+        },
+        {
+          "text": "where are you?",
+          "annotations": {
+          }
+        },
+        {
+          "text": "at work.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ],
+      "bot_utterances": [
+        {
+          "text": "where are you?",
+          "annotations": {
+          }
+        }
+      ],
+      "human": {
+        "attributes": {},
+        "profile": {
+          "name": null
+        }
+      },
+      "human_utterances": [
+        {
+          "text": "at work.",
+          "annotations": {
+            "ner": [
+              []
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

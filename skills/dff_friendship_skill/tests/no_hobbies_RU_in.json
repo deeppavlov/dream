@@ -1,0 +1,239 @@
+{
+    "human_utter_index_batch": [
+        3
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "ничего",
+                    "annotations": {
+                        "spelling_preprocessing": "ничего",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "intent_catcher": {
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.9986997842788696,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 3,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                },
+                {
+                    "text": "не знаю",
+                    "annotations": {
+                        "spelling_preprocessing": "не знаю",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "intent_catcher": {
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.5191057920455933,
+                                "detected": 1
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_linking": [],
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {},
+                            "topic_skill_entities_info": {},
+                            "utt_num": 4,
+                            "wiki_skill_entities_info": {}
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Ну что ж, я все равно считаю тебя интересным человеком. Какие у тебя хобби?",
+                    "annotations": {
+                        "ner": [
+                            []
+                        ]
+                    },
+                    "active_skill": "dff_friendship_skill"
+                }
+            ]
+        }
+    ],
+    "dff_friendship_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "59c2096b-1dbb-4d0d-b5c6-5b325cb62820",
+                "labels": {
+                    "1": [
+                        "greeting_flow",
+                        "how_are_you_node"
+                    ],
+                    "2": [
+                        "greeting_flow",
+                        "std_greeting_node"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "1": "отлично! а у тебя?",
+                    "2": "ничего"
+                },
+                "responses": {
+                    "1": "Спасибо, у меня как всегда все прекрасно! Я слышала, что у людей бывают отпуска и выходные. Не мой выбор! Я могу без устали говорить день и ночь! Что главное произошло с тобой сегодня?",
+                    "2": "Ну что ж, я все равно считаю тебя интересным человеком. Какие у тебя хобби?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "greeting_flow",
+                    "hello_response_node"
+                ],
+                "1": [
+                    "greeting_flow",
+                    "how_are_you_node"
+                ],
+                "2": [
+                    "greeting_flow",
+                    "std_greeting_node"
+                ]
+            },
+            "previous_human_utter_index": 2,
+            "shared_memory": {
+                "greeting_step_id": 2,
+                "greeting_type": "how_are_you"
+            }
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

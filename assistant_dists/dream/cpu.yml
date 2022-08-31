@@ -43,6 +43,12 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
   dialogpt:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  infilling:
     environment:
       CUDA_VISIBLE_DEVICES: ""
