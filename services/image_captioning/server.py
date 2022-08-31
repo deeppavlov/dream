@@ -18,26 +18,18 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 # Register caption task
-register_task("caption", CaptionTask)
+register_task('caption', CaptionTask)
 
 # turn on cuda if GPU is available
 use_cuda = torch.cuda.is_available()
 # use fp16 only when GPU is available
 use_fp16 = False
 
-overrides = {
-    "bpe_dir": "/ofa/utils/BPE",
-    "eval_cider": False,
-    "beam": 5,
-    "max_len_b": 16,
-    "no_repeat_ngram_size": 3,
-    "seed": 7,
-}
-
+overrides={"bpe_dir":"/ofa/utils/BPE", "eval_cider":False, "beam":5, "max_len_b":16, "no_repeat_ngram_size":3, "seed":7}
 models, cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-    utils.split_paths("/opt/conda/lib/python3.7/site-packages/data/models/caption.pt"),
-    arg_overrides=overrides,
-)
+        utils.split_paths('/opt/conda/lib/python3.7/site-packages/data/models/caption.pt'),
+        arg_overrides=overrides
+    )
 
 # Move models to GPU
 for model in models:
@@ -56,17 +48,12 @@ generator = task.build_generator(models, cfg.generation)
 mean = [0.5, 0.5, 0.5]
 std = [0.5, 0.5, 0.5]
 
-patch_resize_transform = transforms.Compose(
-    [
-        lambda image: image.convert("RGB"),
-        transforms.Resize(
-            (cfg.task.patch_image_size, cfg.task.patch_image_size),
-            interpolation=Image.BICUBIC,
-        ),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=mean, std=std),
-    ]
-)
+patch_resize_transform = transforms.Compose([
+    lambda image: image.convert("RGB"),
+    transforms.Resize((cfg.task.patch_image_size, cfg.task.patch_image_size), interpolation=Image.BICUBIC),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=mean, std=std),
+])
 
 # Text preprocess
 bos_item = torch.LongTensor([task.src_dict.bos()])
@@ -75,7 +62,11 @@ pad_idx = task.src_dict.pad()
 
 
 def encode_text(text, length=None, append_bos=False, append_eos=False):
-    s = task.tgt_dict.encode_line(line=task.bpe.encode(text), add_if_not_exist=False, append_eos=False).long()
+    s = task.tgt_dict.encode_line(
+        line=task.bpe.encode(text),
+        add_if_not_exist=False,
+        append_eos=False
+    ).long()
     if length is not None:
         s = s[:length]
     if append_bos:
@@ -92,13 +83,13 @@ def construct_sample(image):
     src_text = encode_text(" what does the image describe?", append_bos=True, append_eos=True).unsqueeze(0)
     src_length = torch.LongTensor([s.ne(pad_idx).long().sum() for s in src_text])
     sample = {
-        "id": np.array(["42"]),
+        "id": np.array(['42']),
         "net_input": {
             "src_tokens": src_text,
             "src_lengths": src_length,
             "patch_images": patch_image,
-            "patch_masks": patch_mask,
-        },
+            "patch_masks": patch_mask
+        }
     }
     return sample
 
@@ -139,7 +130,7 @@ def respond():
 
             with torch.no_grad():
                 caption, scores = eval_step(task, generator, models, sample)
-
+            
             captions.append(caption)
 
     except Exception as exc:

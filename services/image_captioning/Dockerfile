@@ -29,6 +29,7 @@ COPY ./requirements.txt /ofa/requirements.txt
 RUN pip install -r requirements.txt
 
 RUN apt-get install wget -y
+RUN pip install gdown
 
 RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
 
