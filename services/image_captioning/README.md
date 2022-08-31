@@ -3,7 +3,7 @@
 
 One 256 X 256 picture is processed ~10 sec (on average).
 
-GPU RAM ~4Gb. 
+GPU RAM ~5.4 GiB, RAM ~4 GiB. 
 
 ## Running server
 
