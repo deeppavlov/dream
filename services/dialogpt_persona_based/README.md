@@ -1,6 +1,7 @@
-GPU RAM = ??? Gb
+RAM = 3 Gb
+GPU RAM = 2.1 Gb
 cpu time = 70 sec 
-gpu time = ??? sec 
+gpu time = 1-1.2 sec 
 
 ### Finetune details
 - epochs=1

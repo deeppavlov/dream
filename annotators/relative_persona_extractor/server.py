@@ -50,7 +50,7 @@ def get_result(request):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = [[]] * len(contexts)
+        result = [{"persona": [], "max_similarity": 0.0}] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"relative-persona-extractor exec time: {total_time:.3f}s")

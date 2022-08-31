@@ -153,6 +153,6 @@ def respond():
         confidences = [0.0] * len(last_annotated_utterances_batch)
 
     total_time = time.time() - start_time
-    logger.info(f"dialog_persona exec time: {total_time:.3f}s")
+    logger.info(f"dialogpt_persona_based exec time: {total_time:.3f}s")
 
     return jsonify(list(zip(responses, confidences)))
