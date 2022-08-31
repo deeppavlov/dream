@@ -57,4 +57,9 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
+  image-captioning:
+    volumes:
+      - "./services/image_captioning:/src"
+    ports:
+      - 8123:8123
 version: "3.7"
