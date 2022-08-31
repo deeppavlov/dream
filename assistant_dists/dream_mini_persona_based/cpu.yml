@@ -16,3 +16,6 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  midas-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

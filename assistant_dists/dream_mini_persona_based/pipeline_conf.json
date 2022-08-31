@@ -130,6 +130,20 @@
         "previous_services": [
           "annotators.spelling_preprocessing"
         ]
+      },
+      "midas_classification": {
+        "connector": {
+          "protocol": "http",
+          "timeout": 1,
+          "url": "http://midas-classification:8090/model"
+        },
+        "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+        "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+        "previous_services": [
+          "annotators.spelling_preprocessing",
+          "annotators.sentseg"
+        ],
+        "state_manager_method": "add_annotation"
       }
     },
     "skill_selectors": {
@@ -149,19 +163,6 @@
       }
     },
     "skills": {
-      "dff_program_y_skill": {
-        "connector": {
-          "protocol": "http",
-          "timeout": 2,
-          "url": "http://dff-program-y-skill:8008/respond"
-        },
-        "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
-        "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-        "previous_services": [
-          "skill_selectors"
-        ],
-        "state_manager_method": "add_hypothesis"
-      },
       "dff_intent_responder_skill": {
         "connector": {
           "protocol": "http",
