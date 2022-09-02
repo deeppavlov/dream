@@ -7,7 +7,7 @@ WORKDIR /base
 RUN rm -rf DeepPavlov
 RUN git clone https://github.com/dimakarp1996/DeepPavlov.git 
 WORKDIR /base/DeepPavlov
-RUN git checkout pal-bert+ner
+RUN git checkout clean_multitask_ready
 
 
 ARG CONFIG
@@ -28,6 +28,7 @@ RUN ls /tmp
 
 #RUN python -m deeppavlov install $CONFIG
 RUN pip install -r requirements.txt
-ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/pal_bert_7in1/model.pth.tar
+ARG DATA_URL=http://files.deeppavlov.ai/dream_data/combined_6in1/model.pth.tar
 ADD $DATA_URL /tmp
 CMD gunicorn --workers=1 --bind 0.0.0.0:8087 --timeout=300 server:app
+

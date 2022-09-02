@@ -122,56 +122,17 @@ combined_classes = {
         "not_toxic",
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
-    "cobot_topics": [
-        "Phatic",
-        "Other",
-        "Movies_TV",
-        "Music",
-        "SciTech",
-        "Literature",
-        "Travel_Geo",
-        "Celebrities",
-        "Games",
-        "Pets_Animals",
-        "Sports",
-        "Psychology",
-        "Religion",
-        "Weather_Time",
-        "Food_Drink",
-        "Politics",
-        "Sex_Profanity",
-        "Art_Event",
-        "Math",
-        "News",
-        "Entertainment",
-        "Fashion",
-    ],
-    "cobot_dialogact_topics": [
-        "Other",
-        "Phatic",
-        "Entertainment_Movies",
-        "Entertainment_Books",
-        "Entertainment_General",
-        "Interactive",
-        "Entertainment_Music",
-        "Science_and_Technology",
-        "Sports",
-        "Politics",
-        "Inappropriate_Content",
-    ],
-    "cobot_dialogact_intents": [
-        "Information_DeliveryIntent",
-        "General_ChatIntent",
-        "Information_RequestIntent",
-        "User_InstructionIntent",
-        "InteractiveIntent",
-        "Opinion_ExpressionIntent",
-        "OtherIntent",
-        "ClarificationIntent",
-        "Topic_SwitchIntent",
-        "Opinion_RequestIntent",
-        "Multiple_GoalsIntent",
-    ],
+    "midas_classification": ["open_question_factual", "open_question_opinion",
+                             "open_question_personal", "yes_no_question", "clarifying_question",
+                             "command", "dev_command", "appreciation", "opinion",
+                             "complaint", "comment", "statement", "other_answers", "pos_answer", "neg_answer"],
+    "topic_classification": ['Food', 'Books&Literature', 'Music', 'Gadgets',
+                             'Movies_TV', 'Leisure', 'Beauty', 'Clothes', 'Travel', 'News', 'Art&Hobbies', 'Videogames',
+                             'Job', 'Home&Design', 'Depression', 'Celebrities&Events', 'Politics', 'Toys&Games',
+                             'Animals&Pets', 'PersonalTransport', 'Garden',
+                             'Family&Relationships', 'Health&Medicine', 'Religion',
+                             'ArtificialIntelligence', 'Finance', 'Space', 'Disasters', 'Science_and_Technology',
+                             'Psychology', 'MassTransit', 'Education', 'Sports']
 }
 
 midas_classes = {
@@ -727,7 +688,6 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     cobot_topics_probs, cobot_topics_labels = {}, []
     if "cobot_topics" in annotations:
         cobot_topics_labels = _process_text(annotations.get("cobot_topics", {}))
-        cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes.get("cobot_topics", {}))
     if "combined_classification" in annotations and not cobot_topics_labels:
         cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="cobot_topics"
@@ -738,9 +698,9 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
 
     cobot_da_topics_probs, cobot_da_topics_labels = {}, []
     if "cobot_dialogact" in annotations and "topics" in annotations["cobot_dialogact"]:
-        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact"]["topics"]
+        cobot_da_topics_labels = annotations["cobot_dialogact"]["topics"]
     elif "cobot_dialogact_topics" in annotations:
-        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact_topics"]
+        cobot_da_topics_labels = annotations["cobot_dialogact_topics"]
 
     if "combined_classification" in annotations and not cobot_da_topics_labels:
         cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
@@ -750,13 +710,24 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     if not cobot_da_topics_probs:
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels, combined_classes["cobot_dialogact_topics"])
 
+    topics_probs, topics_labels = {}, []
+    if 'topics_classification' in annotations:
+        topics_labels = annotations['topics_classification']
+        topics_probs = _labels_to_probs(topics_labels, combined_classes['topics_classification'])
+    if 'combined_classification' in annotations and not topics_labels:
+        topics_probs, topics_labels = _get_combined_annotations(
+            annotated_utterance, model_name="topics_classification"
+        )
+
     if which == "all":
-        answer_labels = cobot_topics_labels + cobot_da_topics_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs}
+        answer_labels = cobot_topics_labels + cobot_da_topics_labels + topics_labels
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **topics_labels}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
         answer_probs, answer_labels = cobot_da_topics_probs, cobot_da_topics_labels
+    elif which == "topics":
+        answer_probs, answer_labels = topics_probs, topics_labels
     else:
         logger.exception(f"Unknown input type in get_topics: {which}")
         answer_probs, answer_labels = default_probs, default_labels
@@ -798,8 +769,10 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
     detected_intent_probs = {key: 1 for key in detected_intents}
-
     midas_intent_probs = annotations.get("midas_classification", {})
+    if "combined_classification" in annotations and not midas_intent_probs:
+        midas_intent_probs, midas_intent_labels = _get_combined_annotations(annotated_utterance,
+                                                                            model_name="midas_classification")
     if isinstance(midas_intent_probs, dict) and midas_intent_probs:
         semantic_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_SEMANTIC_LABELS}
         functional_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_FUNCTIONAL_LABELS}
@@ -1191,7 +1164,7 @@ def is_special_factoid_question(annotated_utterance):
     found = FACTOID_PATTERNS.search(uttr_text)
     if found and not COUNTER_FACTOID_PATTERNS.search(uttr_text):
         # remove first question like part
-        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]) :].strip()
+        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]):].strip()
         if PERSONAL_PRONOUNS.search(rest_string):
             # if any personal pronouns - not our case
             return False
@@ -1206,18 +1179,6 @@ FACTS_EXTRA_WORDS = re.compile(
     r"|here's a fact about [a-zA-Z0-9\- \,]+\.)",
     re.IGNORECASE,
 )
-
-
-def get_conv_eval_annotations(annotated_utterance):
-    default_conv_eval = {
-        "isResponseOnTopic": 0.0,
-        "isResponseInteresting": 0.0,
-        "responseEngagesUser": 0.0,
-        "isResponseComprehensible": 0.0,
-        "isResponseErroneous": 0.0,
-    }
-
-    return annotated_utterance.get("annotations", {}).get("convers_evaluator_annotator", default_conv_eval)
 
 
 def get_dialog_breakdown_annotations(annotated_utterance):

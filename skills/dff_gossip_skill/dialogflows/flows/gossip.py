@@ -314,10 +314,10 @@ def get_random_judgement_for_emotion(emotion):
     return random.choice(judgements) if judgements else "Great"
 
 
-supported_cobot_topics = [
-    "Entertainment_Movies",
-    "Entertainment_Music",
-    "Entertainment_Books",
+supported_topics = [
+    "Movies_TV",
+    "Music",
+    "Books&Literature",
     "Sports",
     "Politics",
     "Entertainment_General",
@@ -325,10 +325,10 @@ supported_cobot_topics = [
 ]
 
 
-def get_supported_cobot_topics(vars):
-    topics = common_utils.get_topics(state_utils.get_last_human_utterance(vars), which="cobot_dialogact_topics")
-    selected_topics = set(topics) & set(supported_cobot_topics)
-    selected_topics = selected_topics if selected_topics else supported_cobot_topics
+def get_supported_topics(vars):
+    topics = common_utils.get_topics(state_utils.get_last_human_utterance(vars), which="all")
+    selected_topics = set(topics) & set(supported_topics)
+    selected_topics = selected_topics if selected_topics else supported_topics
     return selected_topics
 
 
@@ -481,7 +481,7 @@ def sys_topic_to_event_request(ngrams, vars):
     # we get here because user mentioned a topic, or we've got a topic
     # ok so let's for the time being believe that we are here by default - just because a topic was mentioned
     bot_utterance = state_utils.get_last_bot_utterance(vars)
-    flag = (bool(get_supported_cobot_topics(vars)) and talk_about_gossip_request(ngrams, vars)) or (
+    flag = (bool(get_supported_topics(vars)) and talk_about_gossip_request(ngrams, vars)) or (
         any([phrase in bot_utterance["text"] for phrase in skill_trigger_phrases()])
         and condition_utils.is_yes_vars(vars)
     )
@@ -502,7 +502,7 @@ def usr_topic_to_event_response(vars):
     # %ack%. So, speaking of %target_topic%, this happened recently: %event%. Have you heard about it?
     logger.debug("exec usr_topic_to_event_response")
     try:
-        selected_topics = get_supported_cobot_topics(vars)
+        selected_topics = get_supported_topics(vars)
         if selected_topics:
             cobot_topic = random.choice(list(selected_topics))  # "Entertainment_Movies" # for the time being
         else:

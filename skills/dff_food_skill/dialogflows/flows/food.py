@@ -520,7 +520,7 @@ def what_fav_food_response(vars):
 def fav_food_check(vars):
     flag = False
     user_fav_food = get_entities(state_utils.get_last_human_utterance(vars), only_named=False, with_labels=False)
-    # cobot_topic = "Food_Drink" in get_topics(state_utils.get_last_human_utterance(vars), which="cobot_topics")
+    # cobot_topic = "Food" in get_topics(state_utils.get_last_human_utterance(vars), which="all")
     food_words_search = bool(re.search(FOOD_WORDS_RE, state_utils.get_last_human_utterance(vars)["text"]))
     if all(
         [

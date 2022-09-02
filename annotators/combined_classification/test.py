@@ -26,16 +26,16 @@ def main_test():
             "task": "emotion_classification",
             "answers": [["anger"]],
         },
-        {
-            "sentences": ["let's talk about movies"],
-            "task": "cobot_dialogact_topics",
-            "answers": [["Entertainment_Movies"]],
-        },
-        {"sentences": ["let's talk about games"], "task": "cobot_topics", "answers": [["Games"]]},
-        {"sentences": ["let's switch topic"], "task": "cobot_dialogact_intents", "answers": [["Topic_SwitchIntent"]]},
+        {"sentences_with_history": ["this is the best dog [SEP] so what you think ha"],
+         "sentences": ["so what you think ha"],
+         "task":"midas_classification", "answers": [["comment"]]},
+        {"sentences": ["let's talk about games"], "task": "topics_classification", "answers": [["Toys&Games"]]}
     ]
     for config in configs:
-        config["utterances_with_histories"] = [[k] for k in config["sentences"]]
+        if "sentences_with_history" in config:
+            config["utterances_with_histories"] = [[k] for k in config['sentences_with_history']]
+        else:
+            config["utterances_with_histories"] = [[k] for k in config['sentences']]
         responses = requests.post(url, json=config).json()
         batch_responses = requests.post(batch_url, json=config).json()
         assert batch_responses[0]["batch"] == responses, (

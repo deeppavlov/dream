@@ -10,13 +10,12 @@ from deeppavlov import build_model
 from common.utils import combined_classes
 
 task_names = [
-    "cobot_topics",
-    "cobot_dialogact_topics",
-    "cobot_dialogact_intents",
     "emotion_classification",
     "sentiment_classification",
     "toxic_classification",
     "factoid_classification",
+    "midas_classification",
+    "topics_classification"
 ]  # ORDER MATTERS!
 
 logger = logging.getLogger(__name__)
@@ -38,7 +37,7 @@ def get_result(sentences, sentences_with_history):
 
     try:
         if sentences and sentences_with_history:
-            res = model(sentences, sentences_with_history)
+            prob_list = model(sentences, sentences_with_history)
         else:
             raise Exception(
                 f"Empty list of sentences or sentences with history received."
@@ -46,7 +45,7 @@ def get_result(sentences, sentences_with_history):
                 f"Sentences with history: {sentences_with_history}"
             )
 
-        for name, value in zip(task_names, res):
+        for task_name, prob_list in zip(task_names, res):
             for i in range(len(value)):
                 is_toxic = "toxic" in name and value[i][-1] < 0.5
                 if is_toxic:  # sum of probs of all toxic classes >0.5
@@ -62,7 +61,7 @@ def get_result(sentences, sentences_with_history):
         logger.exception(e)
 
     total_time = time.time() - st_time
-    logger.info(f"7in1 exec time: {total_time:.3f}s")
+    logger.info(f"Combined classifier exec time: {total_time:.3f}s")
     logger.info(ans)
     return ans
 
@@ -85,7 +84,7 @@ def respond():
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist)
 
-    logger.info(f"7in1 result: {answer}")
+    logger.info(f"6in1 result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify(answer)
 
@@ -98,7 +97,7 @@ def batch_respond():
     sentences = [s[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist)
 
-    logger.info(f"7in1 batch result: {answer}")
+    logger.info(f"6in1 batch result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
 

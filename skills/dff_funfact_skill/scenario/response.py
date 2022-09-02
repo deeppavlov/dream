@@ -52,7 +52,7 @@ def thematic_funfact_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
     if len(entity) > 1:
         entity = entity[1]
         human_utter = get_last_human_utterance(ctx, actor)
-        topic = get_topics(human_utter, which="cobot_topics")[0]
+        topic = get_topics(human_utter, which="topics")[0]
         funfact = get_fact(entity, f"fact about {entity}")
         if funfact:
             link_question = make_question(topic)

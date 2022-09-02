@@ -15,7 +15,23 @@ INTENT_DICT = {
     "Topic_SwitchIntent": "You wanted to change topic, right?",
     "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?",
 }
+    "midas_classification": ["open_question_factual", "open_question_opinion",
+                             "open_question_personal", "yes_no_question", "clarifying_question",
+                             "command", "dev_command", "appreciation", "opinion",
+                             "complaint", "comment", "statement", "other_answers", "pos_answer", "neg_answer"],
+    "topic_classification": ['Food', 'Books&Literature', 'Music', 'Gadgets',
+                             'Movies_TV', 'Leisure', 'Beauty', 'Clothes', 'Travel', 'News', 'Art&Hobbies', 'Videogames',
+                             'Job', 'Home&Design', 'Depression', 'Celebrities&Events', 'Politics', 'Toys&Games',
+                             'Animals&Pets', 'PersonalTransport', 'Garden',
+                             'Family&Relationships', 'Health&Medicine', 'Religion',
+                             'ArtificialIntelligence', 'Finance', 'Space', 'Disasters', 'Science_and_Technology',
+                             'Psychology', 'MassTransit', 'Education', 'Sports']
 
+MIDAS_INTENT_DICT={}
+TOPIC_DICT={"Food":"We were discussing food, am I right?",
+            "Books&Literature":"We were discussing books, am I right?",
+            "Music":"We were discussing music, am I right?",
+            }
 
 DA_TOPIC_DICT = {
     "Entertainment_Movies": "We were discussing movies, am I right?",

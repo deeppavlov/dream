@@ -202,7 +202,7 @@ def collect_topics_and_statuses(dialogs):
         else:
             logger.info(f"News skill was NOT active.")
             about_news = (
-                ({"News"} & set(get_topics(curr_uttr, which="cobot_topics")))
+                ({"News"} & set(get_topics(curr_uttr, which="all")))
                 or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())
             ) and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())
             lets_chat_about_particular_topic = if_chat_about_particular_topic(curr_uttr, prev_uttr)
@@ -342,7 +342,7 @@ def respond():
             dialog["human_utterances"][-1], dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
         )
         curr_uttr = dialog["human_utterances"][-1]
-        about_news = ({"News"} & set(get_topics(curr_uttr, which="cobot_topics"))) or re.search(
+        about_news = ({"News"} & set(get_topics(curr_uttr, which="all"))) or re.search(
             NEWS_TEMPLATES, curr_uttr["text"].lower()
         )
         about_news = about_news and not re.search(FALSE_NEWS_TEMPLATES, curr_uttr["text"].lower())

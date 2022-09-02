@@ -27,14 +27,16 @@ def get_unused_topics(vars):
 
 
 def get_supported_cobot_topics(vars):
-    topics = common_utils.get_topics(state_utils.get_last_human_utterance(vars), which="cobot_dialogact_topics")
+    topics = common_utils.get_topics(state_utils.get_last_human_utterance(vars), which="all")
     selected_topics = set(topics) & set(SCIENCE_COBOT_TOPICS)
     selected_topics = selected_topics if selected_topics else SCIENCE_COBOT_TOPICS
     return selected_topics
 
 
 def get_supported_cobot_dialog_topics(vars):
-    topics = common_utils.get_topics(state_utils.get_last_human_utterance(vars), which="cobot_dialogact_topics")
+    topics = common_utils.get_topics(state_utils.get_last_human_utterance(vars), which="all")
     selected_topics = set(topics) & set(SCIENCE_COBOT_DIALOGACTS)
     selected_topics = selected_topics if selected_topics else SCIENCE_COBOT_DIALOGACTS
     return selected_topics
+
+

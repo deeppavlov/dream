@@ -6,9 +6,8 @@ from common.utils import get_topics, get_intents, get_entities
 from .utils import (
     get_midas_intent_acknowledgement,
     reformulate_question_to_statement,
-    INTENT_DICT,
-    DA_TOPIC_DICT,
-    COBOT_TOPIC_DICT,
+    MIDAS_INTENT_DICT,
+    TOPIC_DICT,
     get_entity_name,
     get_midas_analogue_intent_for_any_intent,
 )
@@ -28,9 +27,8 @@ PRIVACY_REPLY = (
     "learn more by visiting amazon.com/alexaprivacy."
 )
 
-INTENTS_BY_POPULARITY = list(INTENT_DICT.keys())[::-1]
-DA_TOPICS_BY_POPULARITY = list(DA_TOPIC_DICT.keys())[::-1]
-COBOT_TOPICS_BY_POPULARITY = list(COBOT_TOPIC_DICT.keys())[::-1]
+INTENTS_BY_POPULARITY = list(MIDAS_INTENT_DICT.keys())[::-1]
+TOPICS_BY_POPULARITY = list(TOPIC_DICT.keys())[::-1]
 LINKTO_QUESTIONS_LOWERCASED = [
     question.lower() for set_of_quests in skills_phrases_map.values() for question in set_of_quests
 ]
@@ -63,22 +61,19 @@ def get_bot_based_on_skill_reply(bot_utterances):
 def get_bot_based_on_topic_or_intent_reply(prev_human_utterance):
     reply = None
     # collect prev current intents, topics
-    intent_list, da_topic_list, cobot_topic_list = collect_topics_entities_intents(prev_human_utterance)
+    intent_list, topic_list = collect_topics_entities_intents(prev_human_utterance)
     # get prev entity_name
     prev_annotations = prev_human_utterance.get("annotations", {}) if len(prev_human_utterance) > 1 else {}
     entity_name = get_entity_name(prev_annotations)
 
     for intent in INTENTS_BY_POPULARITY:  # start from least popular
         if intent in intent_list and reply is None and len(entity_name) > 0:
-            reply = INTENT_DICT[intent].replace("ENTITY_NAME", entity_name)
+            reply = MIDAS_INTENT_DICT[intent].replace("ENTITY_NAME", entity_name)
     if len(entity_name) > 0 and reply is None:
         reply = f"We are discussing {entity_name}, aren't we?"
-    for topic in DA_TOPICS_BY_POPULARITY:  # start from least popular
-        if topic in da_topic_list and reply is None:
-            reply = DA_TOPIC_DICT[topic]
-    for topic in COBOT_TOPICS_BY_POPULARITY:  # start from least popular
-        if topic in cobot_topic_list and reply is None:
-            reply = COBOT_TOPIC_DICT[topic]
+    for topic in TOPICS_BY_POPULARITY:  # start from least popular
+        if topic in topic_list and reply is None:
+            reply = TOPIC_DICT[topic]
     return reply
 
 
@@ -87,17 +82,15 @@ def get_bot_based_on_topic_or_intent_reply(prev_human_utterance):
 #####################################################################
 def collect_topics_entities_intents(prev_human_utterance):
     if len(prev_human_utterance) > 1:
-        intent_list = get_intents(prev_human_utterance, which="cobot_dialogact_intents")
-        da_topic_list = get_topics(prev_human_utterance, which="cobot_dialogact_topics")
-        cobot_topic_list = get_topics(prev_human_utterance, which="cobot_topics")
+        intent_list = get_intents(prev_human_utterance, which="midas")
+        topic_list = get_topics(prev_human_utterance, which="topics")
 
         intent_list = list(set(intent_list))
-        da_topic_list = list(set(da_topic_list))
-        cobot_topic_list = list(set(cobot_topic_list))
+        topic_list = list(set(topic_list))
     else:
-        intent_list, da_topic_list, cobot_topic_list = [], [], []
+        intent_list, topic_list = [], []
 
-    return intent_list, da_topic_list, cobot_topic_list
+    return intent_list, topic_list
 
 
 def get_current_intents(last_human_utterances):

@@ -2,8 +2,7 @@ from common.utils import get_topics, get_intents
 
 
 psycho_help_spec = "you can call the National Suicide Prevention Lifeline"
-sensitive_topics = {"Politics", "Religion", "Sex_Profanity"}
-sensitive_dialogact_topics = {"Politics", "Inappropriate_Content"}
+sensitive_all_topics = {"Politics", "Religion", "Sex_Profanity", "Depression", "Inappropriate_Content", "Disasters"}
 sensitive_all_intents = {
     "Opinion_RequestIntent",  # cobot_dialogact
     "opinion_request",  # intent_catcher
@@ -14,11 +13,8 @@ sensitive_all_intents = {
 
 
 def is_sensitive_topic_and_request(annotated_uttr):
-    cobot_dialogact_topics = set(get_topics(annotated_uttr, which="cobot_dialogact_topics"))
-    cobot_topics = set(get_topics(annotated_uttr, which="cobot_topics"))
-    sensitive_topics_detected = any([t in sensitive_topics for t in cobot_topics]) or any(
-        [t in sensitive_dialogact_topics for t in cobot_dialogact_topics]
-    )
+    topics = set(get_topics(annotated_uttr, which="all"))
+    sensitive_topics_detected = any([t in sensitive_all_topics for t in topics])
 
     all_intents = get_intents(annotated_uttr, probs=False, which="all")
     sensitive_dialogacts_detected = any([t in sensitive_all_intents for t in all_intents])

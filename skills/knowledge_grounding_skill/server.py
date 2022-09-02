@@ -186,28 +186,35 @@ def get_intents_flags(utt):
 
 def get_lets_chat_topic(lets_chat_about_flag, utt):
     lets_chat_topic = ""
-    COBOT_DA_FILE_TOPICS_MATCH = {
+    TOPICS_MATCH = {
         "Entertainment_Movies": "movies",
+        "Movies_TV": "movies",
         "Entertainment_Music": "music",
+        "Music": "music",
         "Science_and_Technology": "science",
+        "SciTech": "science",
         "Sports": "sports",
         "Games": "games",
-        "Movies_TV": "movies",
-        "SciTech": "science",
+        "Toys&Games": "games",
+        "Videogames": "games",
         "Psychology": "emotions",
-        "Music": "music",
+        "Depression": "emotions",
         "Food_Drink": "food",
+        "Food": "food",
         "Weather_Time": "weather",
         "Entertainment": "activities",
         "Celebrities": "celebrities",
+        "Celebrities&Events": "celebrities",
         "Travel_Geo": "travel",
+        "Travel": "travel",
         "Art_Event": "art",
+        "Arg&Hobbies": "art"
     }
     if lets_chat_about_flag:
         _get_topics = get_topics(utt, which="all")
         for topic in _get_topics:
-            if topic in COBOT_DA_FILE_TOPICS_MATCH:
-                lets_chat_topic = COBOT_DA_FILE_TOPICS_MATCH[topic]
+            if topic in TOPICS_MATCH:
+                lets_chat_topic = TOPICS_MATCH[topic]
                 if lets_chat_topic not in utt["text"]:
                     lets_chat_topic = ""
     return lets_chat_topic
