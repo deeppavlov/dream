@@ -19,18 +19,44 @@ INTENT_DICT = {
                              "open_question_personal", "yes_no_question", "clarifying_question",
                              "command", "dev_command", "appreciation", "opinion",
                              "complaint", "comment", "statement", "other_answers", "pos_answer", "neg_answer"],
-    "topic_classification": ['Food', 'Books&Literature', 'Music', 'Gadgets',
-                             'Movies_TV', 'Leisure', 'Beauty', 'Clothes', 'Travel', 'News', 'Art&Hobbies', 'Videogames',
-                             'Job', 'Home&Design', 'Depression', 'Celebrities&Events', 'Politics', 'Toys&Games',
-                             'Animals&Pets', 'PersonalTransport', 'Garden',
-                             'Family&Relationships', 'Health&Medicine', 'Religion',
-                             'ArtificialIntelligence', 'Finance', 'Space', 'Disasters', 'Science_and_Technology',
-                             'Psychology', 'MassTransit', 'Education', 'Sports']
+    "topic_classification": [
+                            'Leisure','Clothes','Home&Design',
+                             'Family&Relationships', 'Health&Medicine', ]
 
 MIDAS_INTENT_DICT={}
-TOPIC_DICT={"Food":"We were discussing food, am I right?",
+TOPIC_DICT={"Garden":"We were discussing gardening, am I right?",
+            "PersonalTransport":"We were discussing cars, am I right?",
+            "Animals&Pets": "We were discussing animals, am I right?",
+            "Toys&Games": "We were discussing games, am I right?",
+            "Videogames": "We were discussing videogames, am I right?",
+            "Beauty": "We were talking about beauty, am I right?",
+            "Job": "We were talking about job, am I right?",
+            "Art&Hobbies": "We were talking about art and hobbies, am I right?",
+
+            "Sports": "We were discussing sports, am I right?",
+            "News": "We were discussing news, am I right?",
+            "Travel": "We were discussing traveling, am I right?",
+            "Clothes": "We were discussing clothing, am I right?",
+
+            "Politics": "We were discussing politics, am I right?",
+            "Celebrities&Events": "We were discussing celebrities, am I right?",
+            "Depression": "We were talking about depression, am I right?",
+            "Food":"We were discussing food, am I right?",
             "Books&Literature":"We were discussing books, am I right?",
             "Music":"We were discussing music, am I right?",
+            "Gadgets":"We were discussing gadgets, am I right?",
+            "Movies_TV":"We were discussing movies, am I right?",
+            "Education":"We were discussing education, am I right?",
+            "MassTransit":"We were discussing mass transit, am I right?",
+            "Psychology":"We were discussing psychology, am I right?",
+            "Science_and_Technology":"We were discussing science and technology, am I right?",
+            "Disasters":"We were discussing something bad, am I right?",
+            "Space":"We were discussing space, am I right?",
+            "Finance":"We were discussing finance, am I right?",
+            "Artificial_Intelligence":"We were discussing AI, am I right?",
+            "Religion":"We were discussing religion, am I right?",
+
+
             }
 
 DA_TOPIC_DICT = {
