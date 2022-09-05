@@ -23,12 +23,22 @@ flows = {
         "process_name": {
             RESPONSE: loc_rsp.find_name,
             TRANSITIONS: {
+                "ask_name_again": loc_cnd.wrong_name,
                 "process_name": cnd.true()
             },
         },
         "ask_name": {
             RESPONSE: 'What is your name?',
             TRANSITIONS: {"process_name": cnd.true()},
+        },
+        "ask_name_again": {
+            RESPONSE: 'I am so sorry! Please tell me your name again!',
+            TRANSITIONS: {'fix_name': cnd.true()}
+        },
+        "fix_name": {
+            RESPONSE: loc_rsp.fix_wrong_name,
+            TRANSITIONS: {"ask_name_again": loc_cnd.wrong_name,
+                          "process_name": cnd.true()}
         },
         "fallback_node": {
             RESPONSE: loc_rsp.fallback,

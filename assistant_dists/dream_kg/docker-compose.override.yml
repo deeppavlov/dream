@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_kg/pipeline_conf.json --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
           spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
@@ -514,10 +514,9 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: kbqa_entity_linking_page.json
+        CONFIG: entity_linking_eng.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
-        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
     environment:
