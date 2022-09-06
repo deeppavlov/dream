@@ -22,10 +22,10 @@ graph = KnowledgeGraph(
     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
 )
 
-# graph.drop_database()
+graph.drop_database()
 # if 'User' not in dict_tree['Kinds']:
 # graph.ontology.create_entity_kind("User", kind_properties=["name"])
-# mocks.populate(graph, drop=True)
+mocks.populate(graph, drop=True)
 
 # graph.ontology.create_relationship_kind("SPOKE_ABOUT", "User")
 
@@ -105,6 +105,10 @@ def get_entities_with_dbpedia_type(utt):
 
 def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
+
+    entity_linking = utt.get("annotations", {}).get("entity_linking", [])
+    logger.info(f'Entity linking answer: {entity_linking}')
+
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if last_utt:

@@ -115,8 +115,6 @@ services:
   entity-detection:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   convers-evaluator-annotator:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

@@ -171,8 +171,6 @@ services:
     restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
   convers-evaluator-annotator:
     restart: unless-stopped
     environment:
