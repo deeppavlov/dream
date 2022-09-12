@@ -39,4 +39,3 @@ def get_supported_cobot_dialog_topics(vars):
     selected_topics = selected_topics if selected_topics else SCIENCE_COBOT_DIALOGACTS
     return selected_topics
 
-
