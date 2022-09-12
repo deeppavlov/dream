@@ -18,7 +18,7 @@ INTENT_DICT = {
 MIDAS_INTENT_DICT = {"open_question_factual": "You have asked me about ENTITY_NAME, right?",
                      "open_question_opinion": "You have requested my opinion about ENTITY_NAME, right?",
                      "open_question_personal": "You have asked me a personal question, right?",
-                     "yes_no_question": "You have asked me a yes-no question about ENTITY_NAME, right?"
+                     "yes_no_question": "You have asked me a yes-no question about ENTITY_NAME, right?",
                      "clarifying_question": "You asked to clarify what I've just said about ENTITY_NAME, right?",
                      "command": "You just gave me a command. Am I right?",
                      "dev_command": "You have just given me a command. Am I right?",
