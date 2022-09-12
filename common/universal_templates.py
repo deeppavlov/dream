@@ -349,9 +349,14 @@ def if_switch_topic(uttr):
 
 def book_movie_music_found(annotated_uttr):
     topics = set(get_topics(annotated_uttr, which="all"))
-    target_topics = {"Entertainment_Books", "Books&Literature",
-                     "Movies_TV", "Entertainment_Movies",
-                     "Music", "Entertainment_Music"}
+    target_topics = {
+        "Entertainment_Books",
+        "Books&Literature",
+        "Movies_TV",
+        "Entertainment_Movies",
+        "Music",
+        "Entertainment_Music",
+    }
     target_topic_met = len(target_topics & topics) > 0
     return target_topic_met
 

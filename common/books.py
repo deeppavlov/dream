@@ -43,5 +43,5 @@ BOOK_PATTERN = re.compile(
 def about_book(annotated_utterance):
     y1 = "Entertainment_Books" in get_topics(annotated_utterance, which="all")
     y2 = re.search(BOOK_PATTERN, annotated_utterance["text"])
-    y3 = 'Books&Literature' in get_topics(annotated_utterance, which="all")
+    y3 = "Books&Literature" in get_topics(annotated_utterance, which="all")
     return y1 or y2 or y3

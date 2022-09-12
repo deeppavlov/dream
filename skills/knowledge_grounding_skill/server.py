@@ -208,7 +208,7 @@ def get_lets_chat_topic(lets_chat_about_flag, utt):
         "Travel_Geo": "travel",
         "Travel": "travel",
         "Art_Event": "art",
-        "Arg&Hobbies": "art"
+        "Arg&Hobbies": "art",
     }
     if lets_chat_about_flag:
         _get_topics = get_topics(utt, which="all")

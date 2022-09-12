@@ -401,7 +401,7 @@ class MovieSkillTemplates:
         opinion_request_detected = is_opinion_request(dialog["human_utterances"][-1])
 
         # favorite movies
-        if set(midas_classes['semantic_request']['question']) & set(intents) or opinion_request_detected:
+        if set(midas_classes["semantic_request"]["question"]) & set(intents) or opinion_request_detected:
             if re.search(self.LESSFAVORITE_PATTERN, user_uttr) or re.search(NOT_LIKE_PATTERN, user_uttr):
                 # less favorite movie
                 if re.search(

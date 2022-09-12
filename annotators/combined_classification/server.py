@@ -15,7 +15,7 @@ task_names = [
     "toxic_classification",
     "factoid_classification",
     "midas_classification",
-    "topics_classification"
+    "topics_classification",
 ]  # ORDER MATTERS!
 
 logger = logging.getLogger(__name__)
