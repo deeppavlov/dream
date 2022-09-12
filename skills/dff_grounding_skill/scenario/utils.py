@@ -56,7 +56,7 @@ TOPIC_DICT={"Garden": "We were discussing gardening, am I right?",
             "Finance": "We were discussing finance, am I right?",
             "Artificial_Intelligence": "We were discussing AI, am I right?",
             "Religion": "We were discussing religion, am I right?",
-            "Leisure": "We were talking about leisure time, am I right?"
+            "Leisure": "We were talking about leisure time, am I right?",
             "Clothes": "We were talking about clothes, am I right?",
             "Health&Medicine": "We were discussing health issues, am I right?",
             "Home&Design": "We were discussing home utilities, am I right?",
