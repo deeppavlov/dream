@@ -47,13 +47,13 @@ def get_result(sentences, sentences_with_history):
 
         for task_name, prob_list in zip(task_names, prob_lists):
             for i in range(len(prob_list)):
-                is_toxic = "toxic" in name and prob_list[i][-1] < 0.5
+                is_toxic = "toxic" in task_name and prob_list[i][-1] < 0.5
                 if is_toxic:  # sum of probs of all toxic classes >0.5
                     prob_list[i][-1] = 0
                     prob_list[i] = [k / sum(prob_list[i]) for k in prob_list[i]]
-                for class_, prob in zip(combined_classes[name], prob_list[i]):
+                for class_, prob in zip(combined_classes[task_name], prob_list[i]):
                     if prob == max(prob_list[i]):
-                        if class_ != "not_toxic" and name == "toxic_classification":
+                        if class_ != "not_toxic" and task_name == "toxic_classification":
                             prob = 1
                         ans[i][task_name] = {class_: float(prob)}
     except Exception as e:
