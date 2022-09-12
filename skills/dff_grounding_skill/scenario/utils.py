@@ -13,7 +13,8 @@ INTENT_DICT = {
     "Opinion_ExpressionIntent": "You just shared your opinion about ENTITY_NAME with me, right?",
     "ClarificationIntent": "You clarified me what you've just said about ENTITY_NAME, right?",
     "Topic_SwitchIntent": "You wanted to change topic, right?",
-    "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?",
+    "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?"}
+
 MIDAS_INTENT_DICT = {"open_question_factual": "You have asked me about ENTITY_NAME, right?",
                      "open_question_opinion": "You have requested my opinion about ENTITY_NAME, right?",
                      "open_question_personal": "You have asked me a personal question, right?",
@@ -23,7 +24,7 @@ MIDAS_INTENT_DICT = {"open_question_factual": "You have asked me about ENTITY_NA
                      "dev_command": "You have just given me a command. Am I right?",
                      "pos_answer": "You have just given me a positive answer. Am I right?",
                      "neg_answer": "You have just given me a negative answer. Am I right?",
-                     "statement": "You have just stated something. Am I right?
+                     "statement": "You have just stated something. Am I right?",
                      "complaint": "You have just complained on ENTITY_NAME. Am I right?",
                      "comment": "You have just commented on ENTITY_NAME. Am I right?"}
 
@@ -59,8 +60,7 @@ TOPIC_DICT={"Garden": "We were discussing gardening, am I right?",
             "Clothes": "We were talking about clothes, am I right?",
             "Health&Medicine": "We were discussing health issues, am I right?",
             "Home&Design": "We were discussing home utilities, am I right?",
-            "Family&Relationships": "We were discussing family matters, am I right?"
-            }
+            "Family&Relationships": "We were discussing family matters, am I right?"}
 
 DA_TOPIC_DICT = {
     "Entertainment_Movies": "We were discussing movies, am I right?",
