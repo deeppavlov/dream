@@ -28,7 +28,7 @@ MIDAS_INTENT_DICT = {"open_question_factual": "You have asked me about ENTITY_NA
                      "complaint": "You have just complained on ENTITY_NAME. Am I right?",
                      "comment": "You have just commented on ENTITY_NAME. Am I right?"}
 
-TOPIC_DICT={"Garden": "We were discussing gardening, am I right?",
+TOPIC_DICT = {"Garden": "We were discussing gardening, am I right?",
             "PersonalTransport": "We were discussing cars, am I right?",
             "Animals&Pets": "We were discussing animals, am I right?",
             "Toys&Games": "We were discussing games, am I right?",
