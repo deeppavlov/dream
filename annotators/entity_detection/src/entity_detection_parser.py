@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections import defaultdict
 from logging import getLogger
 from typing import List
-from collections import defaultdict
 
 import numpy as np
 from nltk.corpus import stopwords
@@ -122,7 +122,7 @@ class EntityDetectionParser(Component):
     def tags_from_probas(self, tokens, probas):
         tags = []
         tag_probas = []
-        for token, proba in zip(tokens, probas):
+        for proba in probas:
             if proba[0] < self.thres_proba:
                 tag_num = np.argmax(proba[1:]) + 1
             else:
@@ -157,7 +157,7 @@ class EntityDetectionParser(Component):
         replace_tokens = [("'s", ""), (" .", ""), ("{", ""), ("}", ""), ("  ", " "), ('"', "'"), ("(", ""), (")", "")]
 
         cnt = 0
-        for n, (tok, tag, probas) in enumerate(zip(tokens, tags, tag_probas)):
+        for tok, tag, probas in zip(tokens, tags, tag_probas):
             if tag.split("-")[-1] in self.entity_tags:
                 f_tag = tag.split("-")[-1]
                 if tag.startswith("B-") and any(entity_dict.values()):
@@ -165,7 +165,7 @@ class EntityDetectionParser(Component):
                         entity = " ".join(entity)
                         for old, new in replace_tokens:
                             entity = entity.replace(old, new)
-                        if entity:
+                        if entity and entity.lower() not in self.stopwords:
                             entities_dict[c_tag].append(entity)
                             entities_positions_dict[c_tag].append(entity_positions_dict[c_tag])
                             cur_probas = entity_probas_dict[c_tag]
@@ -174,12 +174,13 @@ class EntityDetectionParser(Component):
                         entity_positions_dict[c_tag] = []
                         entity_probas_dict[c_tag] = []
 
-                entity_dict[f_tag].append(tok)
-                entity_positions_dict[f_tag].append(cnt)
-                if f_tag == "MISC":
-                    entity_probas_dict[f_tag].append(self.misc_proba)
-                else:
-                    entity_probas_dict[f_tag].append(probas[self.tags_ind[tag]])
+                if tok not in {"?", "!"}:
+                    entity_dict[f_tag].append(tok)
+                    entity_positions_dict[f_tag].append(cnt)
+                    if f_tag == "MISC":
+                        entity_probas_dict[f_tag].append(self.misc_proba)
+                    else:
+                        entity_probas_dict[f_tag].append(probas[self.tags_ind[tag]])
 
             elif any(entity_dict.values()):
                 for tag, entity in entity_dict.items():
@@ -189,7 +190,7 @@ class EntityDetectionParser(Component):
                         entity = entity.replace(old, new)
                         if entity.replace(" - ", "-").lower() in text.lower():
                             entity = entity.replace(" - ", "-")
-                    if entity:
+                    if entity and entity.lower() not in self.stopwords:
                         entities_dict[c_tag].append(entity)
                         entities_positions_dict[c_tag].append(entity_positions_dict[c_tag])
                         cur_probas = entity_probas_dict[c_tag]
@@ -199,6 +200,20 @@ class EntityDetectionParser(Component):
                     entity_positions_dict[c_tag] = []
                     entity_probas_dict[c_tag] = []
             cnt += 1
+
+        if any(entity_dict.values()):
+            for tag, entity in entity_dict.items():
+                c_tag = tag.split("-")[-1]
+                entity = " ".join(entity)
+                for old, new in replace_tokens:
+                    entity = entity.replace(old, new)
+                    if entity.replace(" - ", "-").lower() in text.lower():
+                        entity = entity.replace(" - ", "-")
+                if entity and entity.lower() not in self.stopwords:
+                    entities_dict[c_tag].append(entity)
+                    entities_positions_dict[c_tag].append(entity_positions_dict[c_tag])
+                    cur_probas = entity_probas_dict[c_tag]
+                    entities_probas_dict[c_tag].append(round(sum(cur_probas) / len(cur_probas), 4))
 
         entities_list = [entity for tag, entities in entities_dict.items() for entity in entities]
         entities_positions_list = [

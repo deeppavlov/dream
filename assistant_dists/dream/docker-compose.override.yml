@@ -513,10 +513,9 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: kbqa_entity_linking_page.json
+        CONFIG: entity_linking_eng.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
-        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
     environment:
