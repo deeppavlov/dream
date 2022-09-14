@@ -55,20 +55,20 @@ Deepy GoBot Base содержит аннотатор исправления оп
 Мини-версия DeepPavlov Dream Socialbot.
 Данная версия основана на нейросетевой генерации с использованием [English DialoGPT модели](https://huggingface.co/microsoft/DialoGPT-medium). 
 Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
-[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_mini)
+[Link to the distribution.](https://github.com/deeppavlovteam/dream/tree/main/assistant_dists/dream_mini)
 
 ### Dream Russian
 Русскоязычная версия  DeepPavlov Dream Socialbot. Данная версия основана на нейросетевой генерации с использованием
 [Russian DialoGPT модели](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2). 
 Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
-[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_russian)
+[Link to the distribution.](https://github.com/deeppavlovteam/dream/tree/main/assistant_dists/dream_russian)
 
 # Quick Start
 
 ### Склонируйте репозиторий
 
 ```
-git clone https://github.com/deepmipt/dream.git
+git clone https://github.com/deeppavlovteam/dream.git
 ```
 
 

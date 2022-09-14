@@ -50,18 +50,18 @@ We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai
 ### Dream Mini
 Mini version of DeepPavlov Dream Socialbot.
 This is a generative-based socialbot that uses [English DialoGPT model](https://huggingface.co/microsoft/DialoGPT-medium) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.
-[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_mini)
+[Link to the distribution.](https://github.com/deeppavlovteam/dream/tree/main/assistant_dists/dream_mini)
 
 ### Dream Russian
 Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT model](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
-[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_russian)
+[Link to the distribution.](https://github.com/deeppavlovteam/dream/tree/main/assistant_dists/dream_russian)
 
 # Quick Start
 
 ### Clone the repo
 
 ```
-git clone https://github.com/deepmipt/dream.git
+git clone https://github.com/deeppavlovteam/dream.git
 ```
 
 
