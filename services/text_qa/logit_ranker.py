@@ -142,11 +142,18 @@ class LogitRanker(Component):
                 )
         logger.info(f"batch_best_answers {batch_best_answers}")
         if self.top_n == 1:
-            batch_best_answers = [x[0] for x in batch_best_answers]
-            batch_best_answers_place = [x[0] for x in batch_best_answers_place]
-            batch_best_answers_score = [x[0] for x in batch_best_answers_score]
-            batch_best_answers_doc_ids = [x[0] for x in batch_best_answers_doc_ids]
-            batch_best_answers_sentences = [x[0] for x in batch_best_answers_sentences]
+            if batch_best_answers and batch_best_answers[0]:
+                batch_best_answers = [x[0] for x in batch_best_answers]
+                batch_best_answers_place = [x[0] for x in batch_best_answers_place]
+                batch_best_answers_score = [x[0] for x in batch_best_answers_score]
+                batch_best_answers_doc_ids = [x[0] for x in batch_best_answers_doc_ids]
+                batch_best_answers_sentences = [x[0] for x in batch_best_answers_sentences]
+            else:
+                batch_best_answers = ["" for _ in questions_batch]
+                batch_best_answers_place = [0 for _ in questions_batch]
+                batch_best_answers_score = [0.0 for _ in questions_batch]
+                batch_best_answers_doc_ids = ["" for _ in questions_batch]
+                batch_best_answers_sentences = ["" for _ in questions_batch]
 
         if doc_ids_batch is None:
             if self.return_answer_sentence:

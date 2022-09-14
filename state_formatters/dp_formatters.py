@@ -574,24 +574,23 @@ def wp_formatter_dialog(dialog: Dict):
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2
-    ner_output = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=True)
-    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-    entity_substr_list = []
-    if ner_output:
-        for entity in ner_output:
-            if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
-                entity_substr_list.append(entity["text"])
-    entity_substr_lower_list = {entity_substr.lower() for entity_substr in entity_substr_list}
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-    if nounphrases:
-        entity_substr_list += [
-            nounphrase for nounphrase in nounphrases if nounphrase.lower() not in entity_substr_lower_list
-        ]
-    entity_substr_list = list(set(entity_substr_list))
 
-    return [{"entity_substr": [entity_substr_list], "template": [""], "context": context}]
+    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": context}]
 
 
 def kbqa_formatter_dialog(dialog: Dict):
@@ -604,17 +603,20 @@ def kbqa_formatter_dialog(dialog: Dict):
             sentences = [deepcopy(annotations["sentseg"]["punct_sent"])]
     else:
         sentences = [deepcopy(dialog["human_utterances"][-1]["text"])]
-    entity_substr = get_entities(dialog["human_utterances"][-1], only_named=True, with_labels=False)
-    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-    entities = []
-    if entity_substr:
-        entities = [entity_substr]
-    elif nounphrases:
-        entities = [nounphrases]
-    else:
-        entities = [[]]
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
 
-    return [{"x_init": sentences, "entities": entities}]
+    return [{"x_init": sentences, "entities": [entity_substr_list], "entity_tags": [entity_tags_list]}]
 
 
 def fact_random_formatter_dialog(dialog: Dict):
@@ -648,11 +650,11 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
     entity_substr_list = []
     entity_pages_titles_list = []
     for entity_info in entity_info_list:
-        if "entity_pages" in entity_info and entity_info["entity_pages"]:
-            entity_pages_list.append(entity_info["entity_pages"])
+        if "pages_titles" in entity_info and entity_info["pages_titles"]:
+            entity_pages_list.append(entity_info["first_paragraphs"])
             entity_ids_list.append(entity_info["entity_ids"])
             entity_substr_list.append(entity_info["entity_substr"])
-            entity_pages_titles_list.append(entity_info["entity_pages_titles"])
+            entity_pages_titles_list.append(entity_info["pages_titles"])
     return [
         {
             "human_sentences": [last_human_utt["text"]],

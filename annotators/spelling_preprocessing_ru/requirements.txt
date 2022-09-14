@@ -3,3 +3,6 @@ flask==1.1.1
 gunicorn==19.9.0
 requests==2.22.0
 itsdangerous==2.0.1
+sortedcontainers==2.1.0
+git+https://github.com/kpu/kenlm.git@96d303cfb1a0c21b8f060dbad640d7ab301c019a#egg=kenlm
+cryptography==2.8

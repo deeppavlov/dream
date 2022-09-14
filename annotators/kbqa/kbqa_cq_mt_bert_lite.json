@@ -1,6 +1,6 @@
 {
   "chainer": {
-    "in": ["x_init", "x_init", "template_type", "entities", "types"],
+    "in": ["x_init", "x_init", "template_type", "entities", "tags"],
     "pipe": [
       {
         "class_name": "template_matcher",
@@ -14,7 +14,7 @@
         "id": "linker_entities",
         "url": "{ENTITY_LINKING_URL}",
         "out": ["entity_ids"],
-        "param_names": ["entity_substr", "template_found"]
+        "param_names": ["entity_substr", "entity_tags", "context"]
       },
       {
         "class_name": "wiki_parser",
@@ -25,7 +25,7 @@
         "lang": "@en"
       },
       {
-        "class_name": "kbqa_entity_linker",
+        "class_name": "kbqa_entity_linking:KBEntityLinker",
         "id": "linker_types",
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "inverted_index_filename": "inverted_index_types_eng.pickle",
@@ -36,7 +36,7 @@
         "use_prefix_tree": false
       },
       {
-        "class_name": "rel_ranking_infer",
+        "class_name": "rel_ranking_infer:RelRankerInfer",
         "id": "rel_r_inf",
         "ranker": {"config_path": "/src/rel_ranking_bert_en.json"},
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
@@ -44,7 +44,7 @@
         "rels_to_leave": 40
       },
       {
-        "class_name": "query_generator",
+        "class_name": "query_generator:QueryGenerator",
         "id": "query_g",
         "linker_entities": "#linker_entities",
         "linker_types": "#linker_types",
@@ -62,17 +62,16 @@
         "max_comb_num": 50,
         "use_wp_api_requester": false,
         "use_el_api_requester": true,
-        "in": ["x_init", "x_init", "template_type", "entities", "types"],
+        "in": ["x_init", "x_init", "template_type", "entities", "tags"],
         "out": ["candidate_rels_answers", "entities", "template_answers"]
       },
       {
-        "class_name": "rel_ranking_infer",
+        "class_name": "rel_ranking_infer:RelRankerInfer",
         "rank": false,
         "wiki_parser": "#wiki_p",
         "batch_size": 32,
         "load_path": "{DOWNLOADS_PATH}/wikidata_eng",
         "rel_q2name_filename": "wiki_dict_properties.pickle",
-        "use_mt_bert": true,
         "use_api_requester": false,
         "return_confidences": true,
         "return_all_possible_answers": true,
@@ -94,8 +93,6 @@
       "ENTITY_LINKING_URL": "http://entity-linking:8075/model"
     },
     "requirements": [
-      "{DEEPPAVLOV_PATH}/requirements/tf.txt",
-      "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt",
       "{DEEPPAVLOV_PATH}/requirements/fasttext.txt",
       "{DEEPPAVLOV_PATH}/requirements/rapidfuzz.txt",
       "{DEEPPAVLOV_PATH}/requirements/hdt.txt",
