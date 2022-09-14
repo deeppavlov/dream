@@ -202,13 +202,13 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "convers_evaluator_annotator": {
+            "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://convers-evaluator-annotator:8004/batch_model"
+                    "url": "http://sentence-ranker:8128/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": ["skills"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
