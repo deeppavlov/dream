@@ -33,7 +33,6 @@
             "optimizer_parameters":{
                "lr":2e-5
             },
-            "gradient_accumulation_steps":"{GRADIENT_ACC_STEPS}",
             "learning_rate_drop_patience":2,
             "learning_rate_drop_div":2.0,
             "return_probas":true,

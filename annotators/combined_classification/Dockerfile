@@ -1,9 +1,5 @@
-FROM deeppavlov/base-gpu:0.12.1
-RUN pip install git+https://github.com/deeppavlovteam/DeepPavlov.git@0.12.1
-
-WORKDIR /base
-RUN rm -rf DeepPavlov
-RUN git clone https://github.com/dimakarp1996/DeepPavlov.git 
+FROM deeppavlov/base-gpu:0.17.5
+RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@clean_multitask_ready
 WORKDIR /base/DeepPavlov
 RUN git checkout clean_multitask_ready
 
@@ -21,7 +17,7 @@ COPY common/ common/
 RUN ls /tmp
 
 RUN pip install -r requirements.txt
-ARG DATA_URL=http://files.deeppavlov.ai/dream_data/distil6in1/model.pth.tar
-ADD $DATA_URL /tmp
+# ARG DATA_URL=http://files.deeppavlov.ai/dream_data/distil6in1/model.pth.tar
+# ADD $DATA_URL /tmp
 CMD gunicorn --workers=1 --bind 0.0.0.0:8087 --timeout=300 server:app
 
