@@ -5,12 +5,6 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  convers-evaluator-annotator:
-    volumes:
-      - "./annotators/ConversationEvaluator:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8004:8004
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -57,4 +51,9 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+    ports:
+      - 8128:8128
 version: "3.7"

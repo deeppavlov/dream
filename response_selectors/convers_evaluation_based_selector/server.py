@@ -20,17 +20,14 @@ from common.utils import (
     low_priority_intents,
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
-    get_conv_eval_annotations,
 )
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
     lower_duplicates_score,
     lower_retrieve_skills_confidence_if_scenario_exist,
-    calculate_single_convers_evaluator_score,
+    calculate_single_evaluator_score,
     downscore_toxic_badlisted_responses,
-    CONV_EVAL_STRENGTH,
-    CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
     misheard_with_spec1,
@@ -104,7 +101,9 @@ def respond():
                         )
                         logger.info(msg)
 
-                curr_scores += [get_conv_eval_annotations(skill_data)]
+                curr_scores += [
+                    calculate_single_evaluator_score(skill_data.get("annotations"), skill_data["confidence"])
+                ]
 
             curr_is_toxics = np.array(curr_is_toxics)
             curr_scores = np.array(curr_scores)
@@ -293,24 +292,17 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
         if curr_score is None:
-            cand_scores = scores[i]
+            score = scores[i]
             confidence = confidences[i]
             skill_name = skill_names[i]
-            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
-            score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
             logger.info(
-                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. "
-                f"Toxicity: {is_toxics[i]}. Cand scores: {cand_scores}"
+                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. " f"Toxicity: {is_toxics[i]}"
             )
             curr_single_scores.append(score)
         else:
-            cand_scores = scores[i]
+            score = scores[i]
             skill_name = skill_names[i]
-            score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
-            score = CONV_EVAL_STRENGTH * score_conv_eval + curr_score
-            logger.info(
-                f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}. Cand scores: {cand_scores}"
-            )
+            logger.info(f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}")
             curr_single_scores.append(score)
 
     highest_conf_exist = True if any(confidences >= 1.0) else False

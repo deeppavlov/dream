@@ -315,15 +315,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8086
       - PORT=8086
 
-  masked-lm:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8088
-      - PORT=8088
-
   entity-storer:
     command: ["nginx", "-g", "daemon off;"]
     build:

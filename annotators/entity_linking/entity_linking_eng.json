@@ -1,0 +1,71 @@
+{
+  "chainer": {
+    "in": ["entity_substr", "entity_tags", "sentences"],
+    "pipe": [
+      {
+        "class_name": "src.torch_transformers_el_ranker:TorchTransformersEntityRankerInfer",
+        "id": "entity_descr_ranking",
+        "pretrained_bert": "{TRANSFORMER}",
+        "text_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/text_encoder.pth.tar",
+        "descr_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/descr_encoder.pth.tar",
+        "special_token_id": 30522,
+        "descr_batch_size": 10,
+        "device": "cpu"
+      },
+      {
+        "class_name": "src.entity_linking:EntityLinker",
+        "in": ["entity_substr", "entity_tags", "sentences"],
+        "out": ["entity_ids", "entity_conf", "entity_pages", "first_pars", "dbpedia_types"],
+        "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream",
+        "add_info_filename": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream/add_info.db",
+        "tags_filename": "{MODELS_PATH}/finegrained_tags/tag.dict",
+        "words_dict_filename": "{DOWNLOADS_PATH}/entity_linking_eng/words_dict.pickle",
+        "ngrams_matrix_filename": "{DOWNLOADS_PATH}/entity_linking_eng/ngrams_matrix.npz",
+        "entity_ranker": "#entity_descr_ranking",
+        "rank_in_runtime": true,
+        "num_entities_for_bert_ranking": 20,
+        "use_gpu": false,
+        "include_mention": false,
+        "num_entities_to_return": 5,
+        "lemmatize": true,
+        "use_tags": true,
+        "use_descriptions": true,
+        "full_paragraph": true,
+        "return_confidences": true,
+        "lang": "en"
+      }
+    ],
+    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_pages", "first_pars", "dbpedia_types"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/bert_small",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/entity_descr_nll_ranking.tar.gz",
+        "subdir": "{MODELS_PATH}/entity_descr_nll_ranking"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/bert_small.tar.gz",
+        "subdir": "{TRANSFORMER}"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/el_eng_dream_files.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/el_eng_tags.tar.gz",
+        "subdir": "{MODELS_PATH}/finegrained_tags"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/word_spelling.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/entity_linking_eng"
+      }
+    ]
+  }
+}
