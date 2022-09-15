@@ -1,14 +1,14 @@
 version: '3.7'
 services:
-  convers-evaluator-annotator:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
   dialogpt:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
   intent-catcher:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  sentence-ranker:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

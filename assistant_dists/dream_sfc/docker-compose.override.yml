@@ -12,7 +12,7 @@ services:
           comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
           spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
-          dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
+          dff-friendship-skill:8086, entity-storer:8089,
           dff-book-sfc-skill:8034, dff-grounding-skill:8080,
           dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
           midas-classification:8090, fact-random:8119, fact-retrieval:8100,
@@ -658,24 +658,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  masked-lm:
-    env_file: [.env]
-    build:
-      context: ./services/masked_lm/
-      args:
-        SERVICE_PORT: 8088
-        PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased"
-    command: flask run -h 0.0.0.0 -p 8088
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2.5G
-        reservations:
-          memory: 2.5G
 
   entity-storer:
     env_file: [.env]

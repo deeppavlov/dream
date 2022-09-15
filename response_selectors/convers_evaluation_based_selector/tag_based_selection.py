@@ -28,9 +28,6 @@ from common.utils import (
     get_dialog_breakdown_annotations,
 )
 from utils import (
-    calculate_single_convers_evaluator_score,
-    CONV_EVAL_STRENGTH,
-    CONFIDENCE_STRENGTH,
     how_are_you_spec,
     what_i_can_do_spec,
     misheard_with_spec1,
@@ -251,28 +248,6 @@ def acknowledgement_decision(all_user_intents):
     return False
 
 
-def compute_curr_single_scores(candidates, scores, confidences):
-    curr_single_scores = []
-    if all(["hypothesis_scorer" in cand["annotations"] for cand in candidates]):
-        for i in range(len(candidates)):
-            curr_single_scores.append(candidates[i]["annotations"]["hypothesis_scorer"])
-    else:
-        for i in range(len(scores)):
-            cand_scores = scores[i]
-            confidence = confidences[i]
-            skill_name = candidates[i]["skill_name"]
-            if all(["dialogrpt" in cand["annotations"] for cand in candidates]):
-                score_conv_eval = candidates[i]["annotations"]["dialogrpt"]
-            else:
-                score_conv_eval = calculate_single_convers_evaluator_score(cand_scores)
-            score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
-
-            logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
-            curr_single_scores.append(score)
-
-    return curr_single_scores
-
-
 def add_to_top1_category(cand_id, categorized, _is_require_action_intent):
     if _is_require_action_intent:
         categorized["active_same_topic_entity_no_db_reqda"].append(cand_id)
@@ -351,7 +326,9 @@ def rule_based_prioritization(cand_uttr, dialog):
     return flag
 
 
-def tag_based_response_selection(dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills=None):
+def tag_based_response_selection(
+    dialog, candidates, curr_single_scores, confidences, bot_utterances, all_prev_active_skills=None
+):
     all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
     all_prev_active_skills = Counter(all_prev_active_skills)
     annotated_uttr = dialog["human_utterances"][-1]
@@ -423,21 +400,17 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
         if confidences[cand_id] == 0.0 and cand_uttr["skill_name"] not in ACTIVE_SKILLS:
             logger.info(f"Dropping cand_id: {cand_id} due to toxicity/badlists")
             continue
+        skill_name = cand_uttr["skill_name"]
+        confidence = confidences[cand_id]
+        score = curr_single_scores[cand_id]
+        logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
             cand_uttr
         )
         skill_name = cand_uttr["skill_name"]
         _is_dialog_abandon = get_dialog_breakdown_annotations(cand_uttr) and PRIORITIZE_NO_DIALOG_BREAKDOWN
-        _is_just_prompt = (
-            cand_uttr["skill_name"] == "dummy_skill"
-            and any(
-                [
-                    question_type in cand_uttr.get("type", "")
-                    for question_type in ["normal_question", "link_to_for_response_selector"]
-                ]
-            )
-        ) or cand_uttr.get("response_parts", []) == ["prompt"]
+        _is_just_prompt = cand_uttr.get("response_parts", []) == ["prompt"]
         if cand_uttr["confidence"] == 1.0:
             # for those hypotheses where developer forgot to set tag to MUST_CONTINUE
             cand_uttr["can_continue"] = MUST_CONTINUE
@@ -646,7 +619,6 @@ def tag_based_response_selection(dialog, candidates, scores, confidences, bot_ut
 
     logger.info(f"Current CASE: {CASE}")
     # now compute current scores as one float value
-    curr_single_scores = compute_curr_single_scores(candidates, scores, confidences)
 
     # remove disliked skills from hypotheses
     if IGNORE_DISLIKED_SKILLS:
