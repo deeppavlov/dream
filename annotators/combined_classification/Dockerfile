@@ -4,7 +4,7 @@ FROM deeppavlov/base-gpu:0.12.1
 
 #Set up git lfs for your user account: git lfs install
 WORKDIR /base
-RUN rm -rf DeepPavlov
+#RUN rm -rf DeepPavlov
 RUN git clone https://github.com/dimakarp1996/DeepPavlov.git 
 WORKDIR /base/DeepPavlov
 RUN git checkout clean_multitask_ready
