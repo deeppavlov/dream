@@ -119,10 +119,6 @@ services:
     restart: unless-stopped
   dff-grounding-skill:
     restart: unless-stopped
-  masked-lm:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   dff-friendship-skill:
     restart: unless-stopped
   entity-storer:
