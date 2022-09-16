@@ -360,6 +360,14 @@ def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     return [conv]
 
 
+def sentence_ranker_formatter(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    last_human_uttr = dialog["human_utterances"][-1]["text"]
+    sentence_pairs = [[last_human_uttr, h["text"]] for h in dialog["human_utterances"][-1]["hypotheses"]]
+    return [{"sentence_pairs": sentence_pairs}]
+
+
 def dp_classes_formatter_service(payload: List):
     # Used by: dp_toxic_formatter
     return payload[0]

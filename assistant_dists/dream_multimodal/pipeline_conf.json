@@ -117,6 +117,16 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
+            },
+            "image_captioning": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3,
+                    "url": "http://image_captioning:8123/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:image_formatter_service",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {

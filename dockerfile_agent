@@ -22,7 +22,7 @@ WORKDIR /dp-agent
 
 RUN mkdir /pavlov && \
     cd /pavlov && \
-    git clone https://github.com/deepmipt/DeepPavlov && \
+    git clone https://github.com/deeppavlovteam/DeepPavlov.git && \
     cd DeepPavlov && \
     pip install -e .
 

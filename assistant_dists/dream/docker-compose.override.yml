@@ -19,7 +19,7 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, image-captioning:8123"
+          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -1222,23 +1222,5 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  image-captioning:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8123
-        SERVICE_NAME: image_captioning
-      context: ./services/image_captioning/
-    command: flask run -h 0.0.0.0 -p 8123
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 5G
-        reservations:
-          memory: 5G
 
 version: '3.7'

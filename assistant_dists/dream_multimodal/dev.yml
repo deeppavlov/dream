@@ -56,4 +56,9 @@ services:
       - "./services/sentence_ranker:/src"
     ports:
       - 8128:8128
+  image-captioning:
+    volumes:
+      - "./services/image_captioning:/src"
+    ports:
+      - 8123:8123
 version: "3.7"

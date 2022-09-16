@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   dff-program-y-skill:
@@ -171,5 +171,23 @@ services:
           memory: 3G
         reservations:
           memory: 3G
+
+  image-captioning:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8123
+        SERVICE_NAME: image_captioning
+      context: ./services/image_captioning/
+    command: flask run -h 0.0.0.0 -p 8123
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+        reservations:
+          memory: 5G
 
 version: '3.7'
