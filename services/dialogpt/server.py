@@ -43,10 +43,14 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer):
+def generate_responses(context, model, tokenizer, continue_last_uttr=False):
     encoded_context = []
-    for uttr in context[-MAX_HISTORY_DEPTH:]:
+    for uttr in context[-MAX_HISTORY_DEPTH:-1]:
         encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
+    if continue_last_uttr:
+        encoded_context += [tokenizer.encode(context[-1] + " ", return_tensors="pt")]
+    else:
+        encoded_context += [tokenizer.encode(context[-1] + " " + tokenizer.eos_token, return_tensors="pt")]
     bot_input_ids = torch.cat(encoded_context, dim=-1)
 
     with torch.no_grad():
@@ -93,3 +97,32 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))
+
+
+@app.route("/continue", methods=["POST"])
+def continue_last_uttr():
+    st_time = time.time()
+    contexts = request.json.get("utterances_histories", [])
+
+    try:
+        responses = []
+        for context in contexts:
+            curr_responses = []
+            outputs = generate_responses(context, model, tokenizer, continue_last_uttr=True)
+            for response in outputs:
+                if len(response) > 3:
+                    # drop too short responses
+                    curr_responses += [response]
+                else:
+                    curr_responses += [""]
+
+            responses += [curr_responses]
+
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        responses = [[""]] * len(contexts)
+
+    total_time = time.time() - st_time
+    logger.info(f"dialogpt continue exec time: {total_time:.3f}s")
+    return jsonify(responses)

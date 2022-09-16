@@ -244,11 +244,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8086:8086
-  masked-lm:
-    volumes:
-      - "./services/masked_lm:/src"
-    ports:
-      - 8088:8088
   entity-storer:
     volumes:
       - "./common:/src/common"
