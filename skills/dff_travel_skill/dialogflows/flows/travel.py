@@ -46,9 +46,6 @@ from common.fact_random import get_fact
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
-
-MASKED_LM_SERVICE_URL = os.getenv("MASKED_LM_SERVICE_URL")
-
 logger = logging.getLogger(__name__)
 
 SUPER_CONFIDENCE = 1.0

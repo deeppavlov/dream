@@ -33,7 +33,6 @@ RUN pip install -r /src/requirements.txt
 COPY $SRC_DIR /src
 
 WORKDIR /src
-RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 

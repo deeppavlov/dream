@@ -103,7 +103,7 @@ def get_result(request, what_to_annotate):
             utts_nums,
         ):
             utt_entities = {}
-            for entity, tag, finegrained_tag, (start_offset, end_offset) in zip(
+            for entity, tag, finegrained_tags, (start_offset, end_offset) in zip(
                 entity_substr_list, tags_list, finegrained_tags_list, entity_offsets_list
             ):
                 entity_init = uttr[start_offset:end_offset]
@@ -112,10 +112,18 @@ def get_result(request, what_to_annotate):
                 if entity.lower() not in stopwords and len(entity) > 2 and start_offset >= last_utt_start:
                     entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                     entity = DOUBLE_SPACES.sub(" ", entity).strip()
-                    if finegrained_tag[0][0] > 0.5:
-                        tag = finegrained_tag[0][1].lower()
+                    filtered_finegrained_tags = []
+                    if finegrained_tags[0][0] > 0.5:
+                        tag = finegrained_tags[0][1].lower()
+                        conf, finegrained_tag = finegrained_tags[0]
+                        filtered_finegrained_tags.append((finegrained_tag.lower(), round(conf, 3)))
+                        for finegrained_elem in finegrained_tags[1:]:
+                            conf, finegrained_tag = finegrained_elem
+                            if conf > 0.2:
+                                filtered_finegrained_tags.append((finegrained_tag.lower(), round(conf, 3)))
                     else:
                         tag = "misc"
+                        filtered_finegrained_tags.append(("misc", 1.0))
                     if not finegrained:
                         tag = replace_finegrained_tags(tag)
                     if "entities" in utt_entities:
@@ -124,6 +132,7 @@ def get_result(request, what_to_annotate):
                             {
                                 "text": entity,
                                 "label": tag,
+                                "finegrained_label": filtered_finegrained_tags,
                                 "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
                             }
                         )
@@ -133,6 +142,7 @@ def get_result(request, what_to_annotate):
                             {
                                 "text": entity,
                                 "label": tag,
+                                "finegrained_label": filtered_finegrained_tags,
                                 "offsets": (start_offset - last_utt_start, end_offset - last_utt_start),
                             }
                         ]
