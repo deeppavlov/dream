@@ -405,6 +405,18 @@ services:
       - "./services/infilling:/src"
     ports:
       - 8122:8122
+  dff-recommendation-skill:
+    volumes:
+      - "./skills/dff_recommendation_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8118:8118
+  dff-recommendation-skill-gpt:
+    volumes:
+      - "./skills/dff_recommendation_skill_gpt:/src"
+      - "./common:/src/common"
+    ports:
+      - 8123:8123
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

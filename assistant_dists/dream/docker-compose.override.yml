@@ -18,7 +18,8 @@ services:
           midas-classification:8090, fact-random:8119, fact-retrieval:8100,
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
-          user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
+          user-persona-extractor:8114, wiki-facts:8116, dff-recommendation-skill:8118, dff-recommendation-skill-gpt:8123, 
+          dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
@@ -1206,6 +1207,38 @@ services:
           memory: 2.5G # ?
         reservations:
           memory: 2.5G # ?
+
+  dff-recommendation-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8118
+        SERVICE_NAME: dff_recommendation_skill
+      context: .
+      dockerfile: ./skills/dff_recommendation_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8118 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-recommendation-skill-gpt:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8123
+        SERVICE_NAME: dff_recommendation_skill_gpt
+      context: .
+      dockerfile: ./skills/dff_recommendation_skill_gpt/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8123 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
 
   dff-template-skill:
     env_file: [.env]

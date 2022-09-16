@@ -964,6 +964,32 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
+            "dff_recommendation_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 4,
+                    "url": "http://dff-recommendation-skill:8118/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_recommendation_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_recommendation_skill_gpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 4,
+                    "url": "http://dff-recommendation-skill-gpt:8123/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_recommendation_skill_gpt_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
             "dff_template_skill": {
                 "connector": {
                     "protocol": "http",

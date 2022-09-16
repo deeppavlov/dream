@@ -133,5 +133,7 @@ services:
   infilling:
     environment:
       - CUDA_VISIBLE_DEVICES=8
+  dff-recommendation-skill:
+  dff-recommendation-skill-gpt:
   dff-template-skill:
 version: '3.7'
