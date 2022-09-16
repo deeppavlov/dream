@@ -27,6 +27,9 @@ services:
   combined-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  masked-lm:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
   text-qa:
     environment:
       CUDA_VISIBLE_DEVICES: ""
