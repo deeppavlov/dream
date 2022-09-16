@@ -17,7 +17,11 @@ try:
     kbqa = build_model(config_name, download=True)
     if NER_INPUT:
         test_res = kbqa(
-            ["What is the capital of Russia?"], ["What is the capital of Russia?"], ["-1"], [["Russia"]], [[]]
+            ["What is the capital of Russia?"],
+            ["What is the capital of Russia?"],
+            ["-1"],
+            [["Russia"]],
+            [[[("country", 1.0)]]],
         )
     else:
         test_res = kbqa(["What is the capital of Russia?"])
@@ -36,7 +40,7 @@ def respond():
     questions = inp.get("x_init", [" "])
     template_types = ["-1" for _ in questions]
     entities = inp.get("entities", [[]])
-    entity_types = [[] for _ in questions]
+    entity_tags = inp.get("entity_tags", [[]])
     sanitized_questions, sanitized_entities = [], []
     nf_numbers = []
     if len(questions) == len(entities):
@@ -51,7 +55,7 @@ def respond():
     kbqa_input = []
     if sanitized_questions:
         if NER_INPUT:
-            kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_types]
+            kbqa_input = [sanitized_questions, sanitized_questions, template_types, sanitized_entities, entity_tags]
         else:
             kbqa_input = [sanitized_questions]
     logger.info(f"kbqa_input: {kbqa_input}")

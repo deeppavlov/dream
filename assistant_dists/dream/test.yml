@@ -58,11 +58,8 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  eliza:
   convert-reddit:
   personal-info-skill:
-  asr:
-  misheard-asr:
   dff-book-skill:
   dff-weather-skill:
   emotion-skill:
@@ -84,9 +81,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
   dff-grounding-skill:
-  masked-lm:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-friendship-skill:
   entity-storer:
   knowledge-grounding-skill:
@@ -124,14 +118,11 @@ services:
       - CUDA_VISIBLE_DEVICES=8
   dff-coronavirus-skill:
   dff-short-story-skill:
-  midas-predictor:
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   infilling:
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=7
   dff-template-skill:
 version: '3.7'
