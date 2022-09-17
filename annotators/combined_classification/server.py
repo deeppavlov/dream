@@ -15,7 +15,7 @@ task_names = [
     "toxic_classification",
     "factoid_classification",
     "midas_classification",
-    "topics_classification"
+    "topics_classification",
 ]  # ORDER MATTERS!
 
 logger = logging.getLogger(__name__)
@@ -50,8 +50,9 @@ def get_result(sentences, sentences_with_history):
                 if is_toxic:  # sum of probs of all toxic classes >0.5
                     prob_list[i][-1] = 0
                     prob_list[i] = [k / sum(prob_list[i]) for k in prob_list[i]]
-                ans[i][task_name] = {class_: float(prob)
-                                     for class_, prob in zip(combined_classes[task_name], prob_list[i])}
+                ans[i][task_name] = {
+                    class_: float(prob) for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                }
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -76,7 +77,7 @@ except Exception as e:
 @app.route("/model", methods=["POST"])
 def respond():
     t = time.time()
-    logger.info('Respond')
+    logger.info("Respond")
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     logger.info(str((sentences, sentences_with_hist)))
@@ -89,9 +90,9 @@ def respond():
 
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
-    logger.info('Batch respond')
+    logger.info("Batch respond")
     t = time.time()
-    sep = ' [SEP] '
+    sep = " [SEP] "
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
     logger.info(utterances_with_histories)
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
