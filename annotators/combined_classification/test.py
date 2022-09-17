@@ -49,7 +49,7 @@ def main_test():
         )
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers"], config["sentences"]):
-            predicted_classes = [class_ for class_ in response]
+            predicted_classes = [class_ for class_ in response if response[class_] == max(response[class_].values())]
             assert sorted(answer) == sorted(predicted_classes), " * ".join(
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
             )
