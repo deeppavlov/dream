@@ -30,15 +30,18 @@ def main_test():
             "sentences_with_history": ["this is the best dog [SEP] so what you think ha"],
             "sentences": ["so what you think ha"],
             "task": "midas_classification",
-            "answers": [["comment"]],
+            "answers": [["open_question_opinion"]],
         },
-        {"sentences": ["let's talk about games"], "task": "topics_classification", "answers": [["Toys&Games"]]},
+        {"sentences": ["books"], "task": "topics_classification", "answers": [["Books&Literature"]]},
     ]
     for config in configs:
+        print(config)
         if "sentences_with_history" in config:
             config["utterances_with_histories"] = [[k] for k in config["sentences_with_history"]]
         else:
             config["utterances_with_histories"] = [[k] for k in config["sentences"]]
+        print('edited')
+        print(config)
         responses = requests.post(url, json=config).json()
         batch_responses = requests.post(batch_url, json=config).json()
         assert batch_responses[0]["batch"] == responses, (
@@ -46,7 +49,7 @@ def main_test():
         )
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers"], config["sentences"]):
-            predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
+            predicted_classes = [class_ for class_ in response]
             assert sorted(answer) == sorted(predicted_classes), " * ".join(
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
             )

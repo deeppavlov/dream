@@ -15,7 +15,7 @@ task_names = [
     "toxic_classification",
     "factoid_classification",
     "midas_classification",
-    "topics_classification",
+    "topics_classification"
 ]  # ORDER MATTERS!
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ def get_result(sentences, sentences_with_history):
                 f"Sentences: {sentences} "
                 f"Sentences with history: {sentences_with_history}"
             )
-
+        logger.info((task_names,prob_lists))
         for task_name, prob_list in zip(task_names, prob_lists):
             for i in range(len(prob_list)):
                 is_toxic = "toxic" in task_name and prob_list[i][-1] < 0.5
@@ -80,8 +80,10 @@ except Exception as e:
 @app.route("/model", methods=["POST"])
 def respond():
     t = time.time()
+    logger.info('Respond')
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
+    logger.info(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"6in1 result: {answer}")
@@ -91,10 +93,14 @@ def respond():
 
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
+    logger.info('Batch respond')
     t = time.time()
+    sep = ' [SEP] '
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
-    sentences_with_hist = [" [SEP] ".join(s) for s in utterances_with_histories]
-    sentences = [s[-1] for s in utterances_with_histories]
+    logger.info(utterances_with_histories)
+    sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
+    sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
+    logger.info(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"6in1 batch result: {answer}")

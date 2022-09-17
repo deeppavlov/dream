@@ -119,7 +119,7 @@ combined_classes = {
         "sexual_explicit",
         "threat",
         "toxic",
-        "not_toxic",
+        "not_toxic"
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "midas_classification": [
@@ -137,9 +137,9 @@ combined_classes = {
         "statement",
         "other_answers",
         "pos_answer",
-        "neg_answer",
+        "neg_answer"
     ],
-    "topic_classification": [
+    "topics_classification": [
         "Food",
         "Books&Literature",
         "Music",
@@ -172,7 +172,7 @@ combined_classes = {
         "Psychology",
         "MassTransit",
         "Education",
-        "Sports",
+        "Sports"
     ],
 }
 

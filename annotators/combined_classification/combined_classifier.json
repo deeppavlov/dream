@@ -1,5 +1,5 @@
 {
-   "metadata":{"variables":{"BACKBONE":"bert-base-uncased","MODELS_PATH":"/tmp","SINGLE_SENTENCE_LEN":32,"MULTI_SENTENCE_LEN":64}},
+   "metadata":{"variables":{"BACKBONE":"roberta-base","MODELS_PATH":"/tmp","SINGLE_SENTENCE_LEN":32,"MULTI_SENTENCE_LEN":64}},
    "chainer":{
       "in":[
          "x","x_with_history"
