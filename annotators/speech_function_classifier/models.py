@@ -22,7 +22,7 @@ nlp = spacy.load("en_core_web_sm")
 
 cuda_is_available = torch.cuda.is_available()
 
-with open("data/res_cor.json") as data:
+with open("/models/res_cor.json") as data:
     res_cor = json.load(data)
 
 with open("/models/track_list.txt") as track_list:
