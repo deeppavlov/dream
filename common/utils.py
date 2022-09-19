@@ -712,14 +712,16 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     Args:
         annotated_utterance: dictionary with annotated utterance
         probs: if False we return labels, otherwise we return probs
-        default_probs, default_labels: default probabilities and labels we return
+        default_probs: default probabilities to return
+        default_labels: default labels to return
         which: which topics to return.
             'all' means topics by `cobot_topics` and `cobot_dialogact_topics`,
             'cobot_topics' means topics by `cobot_topics`,
             'cobot_dialogact_topics' means topics by `cobot_dialogact_topics`.
 
     Returns:
-        list of topics
+        list of topic labels, if probs == False,
+        dictionary where all keys are topic labels and values are probabilities, if probs == True
     """
     default_probs = {} if default_probs is None else default_probs
     default_labels = [] if default_labels is None else default_labels
@@ -760,19 +762,12 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     else:
         logger.exception(f"Unknown input type in get_topics: {which}")
         answer_probs, answer_labels = default_probs, default_labels
-    try:
-        assert answer_labels, annotations
-    except Exception:
-        annotations_to_log = {
-            key: value
-            for key, value in annotations.items()
-            if key in ["cobot_dialogact", "combined_classification", "cobot_topics"]
-        }
-        logger.warning(f"Not answer_labels with payload {annotations_to_log} which {which}")
-        answer_probs, answer_labels = default_probs, default_labels
+
     if probs:
+        logger.info(f"Result in get_topics: {answer_probs}")
         return answer_probs
     else:
+        logger.info(f"Result in get_topics: {answer_labels}")
         return answer_labels
 
 
@@ -782,7 +777,8 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     Args:
         annotated_utterance: dictionary with annotated utterance
         probs: if False we return labels, otherwise we return probs
-        default_probs, default_labels: default probabilities and labels we return
+        default_probs: default probabilities to return
+        default_labels: default labels to return
         which: which intents to return:
             'all' means intents detected by `intent_catcher`,
             `cobot_dialogact_intents` and  `midas_classification`.
@@ -790,7 +786,8 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
             'cobot_dialogact_intents' means intents detected by `cobot_dialogact_intents`.
             'midas' means intents detected by `midas_classification`.
     Returns:
-        list of intents
+        list of intent labels, if probs == False,
+        dictionary where all keys are intent labels and values are probabilities, if probs == True
     """
     default_probs = {} if default_probs is None else default_probs
     default_labels = [] if default_labels is None else default_labels
@@ -863,27 +860,12 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     else:
         logger.warning(f"Unknown type in get_intents {which}")
         answer_probs, answer_labels = default_probs, default_labels
-    if which not in ["intent_catcher", "midas"]:
-        try:
-            assert answer_labels, annotations
-        except Exception:
-            annotations_to_log = {
-                key: value
-                for key, value in annotations.items()
-                if key
-                in [
-                    "intent_catcher",
-                    "cobot_dialogact",
-                    "cobot_dialogact_intents",
-                    "combined_classification",
-                    "midas_classification",
-                ]
-            }
-            logger.warning(f"Not answer_labels with payload {annotations_to_log} which {which}")
-            answer_probs, answer_labels = default_probs, default_labels
+
     if probs:
+        logger.info(f"Result in get_intents: {answer_probs}")
         return answer_probs
     else:
+        logger.info(f"Result in get_intents: {answer_labels}")
         return answer_labels
 
 
