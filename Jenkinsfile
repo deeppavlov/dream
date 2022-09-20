@@ -256,6 +256,105 @@ pipeline {
         }
       }
     }
+
+    stage('Build-ML') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                tests/runtests.sh MODE=clean
+                tests/runtests_multilingual.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        failure {
+          script {
+            sh 'tests/runtests_multilingual.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+
+    stage('Start-ML') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_multilingual.sh MODE=clean && tests/runtests_multilingual.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        failure {
+          script {
+            sh 'tests/runtests_multilingual.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_multilingual.sh MODE=clean'
+          }
+        }
+      }
+    }
+
+    stage('Test skills-ML') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_multilingual.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_multilingual.sh MODE=clean'
+          }
+        }
+      }
+    }
   }
   post {
     aborted {
@@ -268,6 +367,7 @@ pipeline {
         if (started) {
           sh './tests/runtests.sh MODE=clean'
           sh './tests/runtests_russian.sh MODE=clean'
+          sh './tests/runtests_multilingual.sh MODE=clean'
         }
       }
     }
