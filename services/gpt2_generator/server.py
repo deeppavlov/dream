@@ -17,12 +17,14 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-DEFAULT_CONFIDENCE = 0.9
-N_HYPOTHESES_TO_GENERATE = 3
-ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 3
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
+N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE"), 3)
+MAX_HISTORY_DEPTH = int(os.environ.get("MAX_HISTORY_DEPTH"), 3)
+logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+
+DEFAULT_CONFIDENCE = 0.9
+ZERO_CONFIDENCE = 0.0
+
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
@@ -96,7 +98,7 @@ def respond():
                 else:
                     curr_responses += [""]
                     curr_confidences += [ZERO_CONFIDENCE]
-
+            logger.info(f"gpt2-generator for context: `{context}`\n returns: {curr_responses}")
             responses += [curr_responses]
             confidences += [curr_confidences]
 
@@ -108,6 +110,4 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"gpt2-generator exec time: {total_time:.3f}s")
-    logger.info(responses)
-    logger.info(confidences)
     return jsonify(list(zip(responses, confidences)))
