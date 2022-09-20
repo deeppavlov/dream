@@ -400,6 +400,23 @@ services:
       - "./services/infilling:/src"
     ports:
       - 8122:8122
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+    ports:
+      - 8128:8128
+  dialogpt-persona-based:
+    volumes:
+      - "./services/dialogpt_persona_based:/src"
+      - "./common:/src/common"
+    ports:
+      - 8131:8131
+  relative-persona-extractor:
+    volumes:
+      - "./annotators/relative_persona_extractor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8133:8133
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
