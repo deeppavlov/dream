@@ -45,6 +45,7 @@ services:
         CONFIG_NAME: mgpt.json
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 3
+        MAX_HISTORY_DEPTH: 3
       context: ./services/gpt2_generator/
     command: flask run -h 0.0.0.0 -p 8132
     environment:
