@@ -121,7 +121,7 @@ services:
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  infilling:
+  dialogpt-persona-based:
     environment:
       - CUDA_VISIBLE_DEVICES=7
   dff-template-skill:
