@@ -53,7 +53,7 @@
                 "state_manager_method": "add_hypothesis"
             }
         },
-        "post_skill_selector_annotators": {,
+        "post_skill_selector_annotators": {
             "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
