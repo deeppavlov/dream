@@ -211,6 +211,21 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     return [{"sentences": context}]
 
 
+def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
+    out = open(f"{len(dialog['human_utterances'])}.json", 'w')
+    json.dump(dialog, out, indent=2)
+    out.close()
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    return [
+        {
+            "utterances": [dialog["human_utterances"][-1]["text"]],
+            "entities_with_labels": [entities_with_labels],
+            "entity_info": [entity_info_list],
+        }
+    ]
+
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
