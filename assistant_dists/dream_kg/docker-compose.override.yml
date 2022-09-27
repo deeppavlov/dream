@@ -20,7 +20,7 @@ services:
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120,
-          neo4j:7474, entity-extraction-kg:9103, wiki-parser-kg:9077, dff-kg-personality-skill:8058"
+          neo4j:7474, entity-extraction-kg:9103, wiki-parser-kg:9077, dff-kg-personality-skill:8058, property-extraction:8126"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -1299,4 +1299,23 @@ services:
           memory: 512M
         reservations:
           memory: 512M
+  property-extraction:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: t5_generative_ie_infer.json
+        PORT: 8126
+        SRC_DIR: annotators/property_extraction/
+      context: ./
+      dockerfile: annotators/property_extraction/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8126
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=3
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
 version: '3.7'

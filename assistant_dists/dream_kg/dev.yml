@@ -427,4 +427,10 @@ services:
       - "./bin:/src/bin"
     ports:
       - 8058:8058
+  property-extraction:
+    volumes:
+      - "./annotators/property_extraction:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8126:8126
 version: "3.7"

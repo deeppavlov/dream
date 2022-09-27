@@ -106,6 +106,9 @@ def get_entities_with_dbpedia_type(utt):
 def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
 
+    attributes = utt.get("annotations", {}).get("property_extraction", [])
+    logger.info(f'Attributes: {attributes}')
+
     entity_linking = utt.get("annotations", {}).get("entity_linking", [])
     logger.info(f'Entity linking answer: {entity_linking}')
 
