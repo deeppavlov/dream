@@ -154,8 +154,12 @@ class T5GenerativeIE(TorchModel):
                             processed_answers.append(answer)
                             processed_scores.append(score)
                 if self.top_n == 1:
-                    answers_batch.append(processed_answers[0])
-                    scores_batch.append(processed_scores[0])
+                    if processed_answers:
+                        answers_batch.append(processed_answers[0])
+                        scores_batch.append(processed_scores[0])
+                    else:
+                        answers_batch.append("")
+                        scores_batch.append(0.0)
                 else:
                     answers_batch.append(processed_answers)
                     scores_batch.append(processed_scores)
