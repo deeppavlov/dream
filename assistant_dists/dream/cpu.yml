@@ -40,7 +40,10 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  intent-catcher:
+  storygpt:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  prompt-storygpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   dialogpt:
@@ -53,4 +56,7 @@ services:
   dialogpt-persona-based:
     environment:
       DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
       CUDA_VISIBLE_DEVICES: ""
