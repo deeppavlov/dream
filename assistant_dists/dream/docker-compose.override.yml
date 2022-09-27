@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+          spacy-nounphrases:8006, rake-keywords:8007, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009,
           personality-catcher:8010, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous-skill:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
@@ -19,7 +19,7 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120"
+          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, infilling:8122, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -47,6 +47,21 @@ services:
       context: .
       dockerfile: ./annotators/spacy_nounphrases/Dockerfile
     command: flask run -h 0.0.0.0 -p 8006
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  rake-keywords:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/rake_keywords/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8007
     environment:
       - FLASK_APP=server
     deploy:
@@ -1090,6 +1105,7 @@ services:
       args:
         SERVICE_PORT: 8057
         SERVICE_NAME: dff_short_story_skill
+        STORY_TYPE: generated
       context: .
       dockerfile: ./skills/dff_short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload
@@ -1188,6 +1204,47 @@ services:
         reservations:
           memory: 2.5G # ?
 
+  storygpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8126
+        SERVICE_NAME: storygpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt2-medium
+        FINETUNED_GPT_URL: http://files.deeppavlov.ai/dream_data/story_skill/filtered_ROCStories_gpt_medium.pt
+      context: ./services/storygpt/
+    command: flask run -h 0.0.0.0 -p 8126
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+        reservations:
+          memory: 10G
+
+  prompt-storygpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8127
+        SERVICE_NAME: prompt_storygpt
+        MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
+        BART_MODEL_NAME: facebook/bart-large
+        FINETUNED_MODEL_NAME: /data/finetuned2
+      context: ./services/prompt_storygpt/
+    command: flask run -h 0.0.0.0 -p 8127
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+        reservations:
+          memory: 10G
+
   dff-template-skill:
     env_file: [.env]
     build:
@@ -1204,3 +1261,4 @@ services:
         reservations:
           memory: 128M
 version: '3.7'
+

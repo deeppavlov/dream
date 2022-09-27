@@ -181,6 +181,14 @@ services:
     restart: unless-stopped
   midas-predictor:
     restart: unless-stopped
+  storygpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  prompt-storygpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   dialogpt:
     restart: unless-stopped
     environment:
