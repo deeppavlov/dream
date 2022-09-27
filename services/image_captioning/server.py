@@ -75,9 +75,7 @@ pad_idx = task.src_dict.pad()
 
 
 def encode_text(text, length=None, append_bos=False, append_eos=False):
-    s = task.tgt_dict.encode_line(
-        line=task.bpe.encode(text), add_if_not_exist=False, append_eos=False
-    ).long()
+    s = task.tgt_dict.encode_line(line=task.bpe.encode(text), add_if_not_exist=False, append_eos=False).long()
     if length is not None:
         s = s[:length]
     if append_bos:
@@ -91,9 +89,7 @@ def encode_text(text, length=None, append_bos=False, append_eos=False):
 def construct_sample(image):
     patch_image = patch_resize_transform(image).unsqueeze(0)
     patch_mask = torch.tensor([True])
-    src_text = encode_text(
-        " what does the image describe?", append_bos=True, append_eos=True
-    ).unsqueeze(0)
+    src_text = encode_text(" what does the image describe?", append_bos=True, append_eos=True).unsqueeze(0)
     src_length = torch.LongTensor([s.ne(pad_idx).long().sum() for s in src_text])
     sample = {
         "id": np.array(["42"]),
@@ -117,9 +113,7 @@ def apply_half(t):
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)

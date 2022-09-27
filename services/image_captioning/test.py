@@ -12,9 +12,7 @@ def test_respond():
     print(caption)
     obligatory_word = "bird"
 
-    assert (
-        obligatory_word in caption
-    ), f"Expected the word '{obligatory_word}' to present in caption"
+    assert obligatory_word in caption, f"Expected the word '{obligatory_word}' to present in caption"
     print("\n", "Success!!!")
 
 
