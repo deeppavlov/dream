@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.1
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
 ARG COMMIT
@@ -14,12 +15,7 @@ ENV COMMIT=$COMMIT
 COPY ./annotators/kbqa/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN cd DeepPavlov && \
-    git config --global user.email "you@example.com" && \
-    git config --global user.name "Your Name" && \
-    git fetch --all --tags --prune && \
-    git checkout $COMMIT && \
-    pip install -e .
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@$COMMIT
 
 COPY $SRC_DIR /src
 

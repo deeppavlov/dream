@@ -1,4 +1,5 @@
 FROM deeppavlov/base-cpu:0.6.1
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.6.1
 
 ARG skillconfig
 ARG skillport
@@ -27,7 +28,7 @@ RUN python -m deeppavlov download $CONFIG
 RUN mkdir -p /dp-agent/$DIR
 COPY $DIR /dp-agent/$DIR
 
-RUN python -m deeppavlov install $CONFIG
+# RUN python -m deeppavlov install $CONFIG
 
 COPY dp/ /dp-agent/dp
 RUN python dp/dp_server_config.py

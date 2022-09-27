@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.14.1
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.14.1
 
 ARG CONFIG
 ARG SED_ARG=" | "
@@ -15,7 +16,6 @@ COPY . /src/
 
 WORKDIR /src
 
-RUN python -m deeppavlov install $CONFIG
 RUN python -m spacy download en_core_web_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"

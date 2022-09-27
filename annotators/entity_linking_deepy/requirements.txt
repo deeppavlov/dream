@@ -1,3 +1,5 @@
 aiohttp
 jinja2<=3.0.3
 Werkzeug<=2.0.3
+git+https://github.com/deeppavlov/bert.git@feat/multi_gpu
+tensorflow==1.15.5

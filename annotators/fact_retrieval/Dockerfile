@@ -24,13 +24,12 @@ ENV PORT=$PORT
 COPY ./annotators/fact_retrieval/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
 
 COPY $SRC_DIR /src
 
 WORKDIR /src
 COPY ./common/ ./common/
-RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 RUN sed -i "s|$SED_ARG|g" "$CONFIG_WIKI"

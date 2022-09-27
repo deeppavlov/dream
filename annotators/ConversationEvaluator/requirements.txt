@@ -8,3 +8,5 @@ cachetools==4.0.0
 blinker==1.4
 jinja2<=3.0.3
 Werkzeug<=2.0.3
+git+https://github.com/deeppavlov/bert.git@feat/multi_gpu
+tensorflow==1.15.5

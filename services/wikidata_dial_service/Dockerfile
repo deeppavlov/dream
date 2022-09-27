@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.1
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
 ARG COMMIT=0.13.0
@@ -26,7 +27,6 @@ WORKDIR /src
 
 RUN sed -i "s|$SED_ARG|g" "kg_dial_generator.json"
 
-RUN python -m deeppavlov install $CONFIG
 RUN python -m spacy download en_core_web_sm
 
 CMD gunicorn --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8092

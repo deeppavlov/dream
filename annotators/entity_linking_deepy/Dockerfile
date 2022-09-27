@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.1
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
 ARG COMMIT
@@ -20,7 +21,5 @@ RUN cd DeepPavlov && \
 COPY $SRC_DIR /src
 
 WORKDIR /src
-
-RUN python -m deeppavlov install $CONFIG
 
 CMD python -m deeppavlov riseapi $CONFIG -p $PORT -d

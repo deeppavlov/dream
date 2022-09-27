@@ -117,7 +117,8 @@ class EntityLinker(Component, Serializable):
             lines = fl.readlines()
         tags = []
         for line in lines:
-            tags.append(line.strip().split()[0])
+            tag_str = line.strip().split()[:-1]
+            tags.append("_".join(tag_str))
         if "O" in tags:
             tags.remove("O")
         self.cursors = {}
@@ -226,7 +227,7 @@ class EntityLinker(Component, Serializable):
             f"entity_substr_list {entity_substr_list} entity_tags_list {entity_tags_list} "
             f"entity_offsets_list {entity_offsets_list}"
         )
-        entity_ids_list, conf_list, pages_list, descr_list = [], [], [], []
+        entity_ids_list, conf_list, pages_list, pages_dict_list, descr_list = [], [], [], [], []
         if entity_substr_list:
             entities_scores_list = []
             cand_ent_scores_list = []
@@ -276,25 +277,28 @@ class EntityLinker(Component, Serializable):
                 cand_ent_scores = []
                 for entity in cand_ent_init:
                     entities_scores = list(cand_ent_init[entity])
-                    entities_scores = sorted(entities_scores, key=lambda x: (x[0], x[2], x[1]), reverse=True)
+                    entities_scores = sorted(entities_scores, key=lambda x: (x[0], x[3], x[2]), reverse=True)
                     cand_ent_scores.append(([entity] + list(entities_scores[0])))
 
-                cand_ent_scores = sorted(cand_ent_scores, key=lambda x: (x[1], x[3], x[2]), reverse=True)
+                cand_ent_scores = sorted(cand_ent_scores, key=lambda x: (x[1], x[4], x[3]), reverse=True)
                 cand_ent_scores = cand_ent_scores[: self.num_entities_for_bert_ranking]
                 cand_ent_scores_list.append(cand_ent_scores)
                 entity_ids = [elem[0] for elem in cand_ent_scores]
-                scores = [elem[1:4] for elem in cand_ent_scores]
+                pages = [elem[5] for elem in cand_ent_scores]
+                scores = [elem[1:5] for elem in cand_ent_scores]
                 entities_scores_list.append(
                     {entity_id: entity_scores for entity_id, entity_scores in zip(entity_ids, scores)}
                 )
                 entity_ids_list.append(entity_ids)
-                pages_list.append([elem[4] for elem in cand_ent_scores])
-                descr_list.append([elem[5] for elem in cand_ent_scores])
+                pages_list.append(pages)
+                pages_dict_list.append({entity_id: page for entity_id, page in zip(entity_ids, pages)})
+                descr_list.append([elem[6] for elem in cand_ent_scores])
 
             if self.use_descriptions:
                 substr_lens = [len(entity_substr.split()) for entity_substr in entity_substr_list]
                 entity_ids_list, conf_list = self.rank_by_description(
                     entity_substr_list,
+                    entity_tags_list,
                     entity_offsets_list,
                     entity_ids_list,
                     descr_list,
@@ -303,13 +307,17 @@ class EntityLinker(Component, Serializable):
                     sentences_offsets_list,
                     substr_lens,
                 )
+                pages_list = [
+                    [pages_dict.get(entity_id, "") for entity_id in entity_ids]
+                    for entity_ids, pages_dict in zip(entity_ids_list, pages_dict_list)
+                ]
 
         return entity_ids_list, conf_list, pages_list
 
     def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf):
-        for entity_title, entity_id, entity_rels, _, page, descr in entities_and_ids:
+        for entity_title, entity_id, entity_rels, anchor_cnt, _, page, descr in entities_and_ids:
             substr_score = self.calc_substr_score(entity_title, entity_substr_split)
-            cand_ent_init[entity_id].add((substr_score, entity_rels, tag_conf, page, descr))
+            cand_ent_init[entity_id].add((substr_score, anchor_cnt, entity_rels, tag_conf, page, descr))
         return cand_ent_init
 
     def find_exact_match(self, entity_substr, tags):
@@ -320,6 +328,15 @@ class EntityLinker(Component, Serializable):
             if tag.lower() in self.cursors:
                 query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
                 res = self.cursors[tag.lower()].execute(query)
+                entities_and_ids = res.fetchall()
+                if entities_and_ids:
+                    cand_ent_init = self.process_cand_ent(
+                        cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf
+                    )
+        if tags and tags[0][0] == "misc" and not cand_ent_init:
+            for tag in self.cursors:
+                query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
+                res = self.cursors[tag].execute(query)
                 entities_and_ids = res.fetchall()
                 if entities_and_ids:
                     cand_ent_init = self.process_cand_ent(
@@ -370,6 +387,7 @@ class EntityLinker(Component, Serializable):
     def rank_by_description(
         self,
         entity_substr_list: List[str],
+        entity_tags_list: List[List[Tuple[str, int]]],
         entity_offsets_list: List[List[int]],
         cand_ent_list: List[List[str]],
         cand_ent_descr_list: List[List[str]],
@@ -437,16 +455,17 @@ class EntityLinker(Component, Serializable):
 
         scores_list = self.entity_ranker(contexts, cand_ent_list, cand_ent_descr_list)
 
-        for context, candidate_entities, substr_len, entities_scores, scores in zip(
-            contexts, cand_ent_list, substr_lens, entities_scores_list, scores_list
+        for context, entity_tags, candidate_entities, substr_len, entities_scores, scores in zip(
+            contexts, entity_tags_list, cand_ent_list, substr_lens, entities_scores_list, scores_list
         ):
             log.info(f"len candidate entities {len(candidate_entities)}")
             if len(context.split()) < 4:
                 entities_with_scores = [
                     (
                         entity,
-                        round(entities_scores.get(entity, (0.0, 0))[0], 2),
-                        entities_scores.get(entity, (0.0, 0))[1],
+                        round(entities_scores.get(entity, (0.0, 0, 0))[0], 2),
+                        entities_scores.get(entity, (0.0, 0, 0))[1],
+                        entities_scores.get(entity, (0.0, 0, 0))[2],
                         0.95,
                     )
                     for entity, score in scores
@@ -455,30 +474,34 @@ class EntityLinker(Component, Serializable):
                 entities_with_scores = [
                     (
                         entity,
-                        round(entities_scores.get(entity, (0.0, 0))[0], 2),
-                        entities_scores.get(entity, (0.0, 0))[1],
+                        round(entities_scores.get(entity, (0.0, 0, 0))[0], 2),
+                        entities_scores.get(entity, (0.0, 0, 0))[1],
+                        entities_scores.get(entity, (0.0, 0, 0))[2],
                         round(score, 2),
                     )
                     for entity, score in scores
                 ]
             log.info(f"len entities with scores {len(entities_with_scores)}")
-            entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[3], x[2]), reverse=True)
+            if entity_tags and entity_tags[0][0] == "misc":
+                entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[2], x[4]), reverse=True)
+            else:
+                entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[4], x[3]), reverse=True)
             log.info(f"--- entities_with_scores {entities_with_scores}")
 
             if not entities_with_scores:
                 top_entities = [self.not_found_str]
-                top_conf = [(0.0, 0, 0.0)]
+                top_conf = [(0.0, 0, 0, 0.0)]
             elif entities_with_scores and substr_len == 1 and entities_with_scores[0][1] < 1.0:
                 top_entities = [self.not_found_str]
-                top_conf = [(0.0, 0, 0.0)]
+                top_conf = [(0.0, 0, 0, 0.0)]
             elif entities_with_scores and (
                 entities_with_scores[0][1] < 0.3
-                or (entities_with_scores[0][3] < 0.13 and entities_with_scores[0][2] < 20)
-                or (entities_with_scores[0][3] < 0.3 and entities_with_scores[0][2] < 4)
+                or (entities_with_scores[0][4] < 0.13 and entities_with_scores[0][3] < 20)
+                or (entities_with_scores[0][4] < 0.3 and entities_with_scores[0][3] < 4)
                 or entities_with_scores[0][1] < 0.6
             ):
                 top_entities = [self.not_found_str]
-                top_conf = [(0.0, 0, 0.0)]
+                top_conf = [(0.0, 0, 0, 0.0)]
             else:
                 top_entities = [score[0] for score in entities_with_scores]
                 top_conf = [score[1:] for score in entities_with_scores]
@@ -488,15 +511,15 @@ class EntityLinker(Component, Serializable):
             high_conf_entities = []
             high_conf_nums = []
             for elem_num, (entity, conf) in enumerate(zip(top_entities, top_conf)):
-                if len(conf) == 3 and conf[0] == 1.0 and conf[1] > 50 and conf[2] > 0.3:
+                if len(conf) == 3 and conf[0] == 1.0 and conf[2] > 50 and conf[3] > 0.3:
                     new_conf = list(conf)
-                    if new_conf[1] > 55:
-                        new_conf[2] = 1.0
+                    if new_conf[2] > 55:
+                        new_conf[3] = 1.0
                     new_conf = tuple(new_conf)
                     high_conf_entities.append((entity,) + new_conf)
                     high_conf_nums.append(elem_num)
 
-            high_conf_entities = sorted(high_conf_entities, key=lambda x: (x[1], x[3], x[2]), reverse=True)
+            high_conf_entities = sorted(high_conf_entities, key=lambda x: (x[1], x[4], x[3]), reverse=True)
             for n, elem_num in enumerate(high_conf_nums):
                 if elem_num - n >= 0 and elem_num - n < len(top_entities):
                     del top_entities[elem_num - n]

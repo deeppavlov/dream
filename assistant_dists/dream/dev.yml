@@ -246,11 +246,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8086:8086
-  masked-lm:
-    volumes:
-      - "./services/masked_lm:/src"
-    ports:
-      - 8088:8088
   entity-storer:
     volumes:
       - "./common:/src/common"
@@ -411,4 +406,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  property-extraction:
+    volumes:
+      - "./annotators/property_extraction:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8126:8126
 version: "3.7"

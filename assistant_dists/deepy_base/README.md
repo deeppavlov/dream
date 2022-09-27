@@ -8,10 +8,10 @@ Deepy was inspired by Gerty 3000, a moonbase A.I. Assistant from the Moon Movie 
 ![img](https://cdn-images-1.medium.com/max/800/0*HarsFmC8UKJBaNU6.jpg)
 
 ## Learn More About Deepy
-Official wiki is located here: [Deepy Wiki](https://github.com/deepmipt/assistant-base/wiki).
+Official wiki is located here: [Deepy Wiki](https://github.com/deeppavlov/assistant-base/wiki).
 
 ## Distributions
-You can find distributions in the /assistant_dists subdirectory of the repository. Learn more about distributions here: [Distributions](https://github.com/deepmipt/assistant-base/wiki/Distributions) 
+You can find distributions in the /assistant_dists subdirectory of the repository. Learn more about distributions here: [Distributions](https://github.com/deeppavlov/assistant-base/wiki/Distributions) 
 
 # Quick Demo
 1. Clone repository

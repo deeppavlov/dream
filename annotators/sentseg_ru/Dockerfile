@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.17.2
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.17.2
 
 ARG CONFIG
 ARG SED_ARG=" | "
@@ -15,7 +16,6 @@ COPY . /src/
 
 WORKDIR /src
 RUN pip install pymorphy2==0.9.1
-RUN python -m deeppavlov install $CONFIG
 RUN python -m spacy download ru_core_news_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"

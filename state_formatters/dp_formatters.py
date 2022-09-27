@@ -211,6 +211,21 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     return [{"sentences": context}]
 
 
+def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
+    out = open(f"{len(dialog['human_utterances'])}.json", 'w')
+    json.dump(dialog, out, indent=2)
+    out.close()
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    return [
+        {
+            "utterances": [dialog["human_utterances"][-1]["text"]],
+            "entities_with_labels": [entities_with_labels],
+            "entity_info": [entity_info_list],
+        }
+    ]
+
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
@@ -358,6 +373,14 @@ def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
     conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
     return [conv]
+
+
+def sentence_ranker_formatter(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    last_human_uttr = dialog["human_utterances"][-1]["text"]
+    sentence_pairs = [[last_human_uttr, h["text"]] for h in dialog["human_utterances"][-1]["hypotheses"]]
+    return [{"sentence_pairs": sentence_pairs}]
 
 
 def dp_classes_formatter_service(payload: List):

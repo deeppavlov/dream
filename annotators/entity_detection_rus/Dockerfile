@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.1
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
 ARG PORT

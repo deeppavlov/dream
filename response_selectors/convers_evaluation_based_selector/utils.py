@@ -103,7 +103,7 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         # no penalties for repeat intent
         if cand["skill_name"] == "dff_intent_responder_skill" and "#+#repeat" in cand["text"]:
             continue
-        # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deepmipt/assistant/issues/80
+        # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deeppavlov/assistant/issues/80
         if cand["skill_name"] in ["game_cooperative_skill", "news_api_skill", "dff_movie_skill"]:
             continue
 
@@ -119,8 +119,7 @@ def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
         # apply penalties to non-script skills and in case if response consists only from duplicates
         if confidences[i] < 1.0 or n_duplicates == len(cand_sents):
             confidences[i] /= coeff
-            scores[i]["isResponseInteresting"] /= coeff
-            scores[i]["responseEngagesUser"] /= coeff
+            scores[i] /= coeff
 
 
 def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confidences):
@@ -134,33 +133,42 @@ def lower_retrieve_skills_confidence_if_scenario_exist(candidates, scores, confi
         for i, cand in enumerate(candidates):
             if cand["skill_name"] in retrieve_skills:
                 confidences[i] *= lower_coeff
-                scores[i]["isResponseInteresting"] *= lower_coeff
+                scores[i] *= lower_coeff
 
 
-def calculate_single_convers_evaluator_score(cand_scores):
-    score_conv_eval = sum(
-        [
-            cand_scores["isResponseOnTopic"],
-            cand_scores["isResponseInteresting"],
-            cand_scores["responseEngagesUser"],
-            cand_scores["isResponseComprehensible"],
-        ]
-    )
-    score_conv_eval -= cand_scores["isResponseErroneous"]
-    return score_conv_eval
+def calculate_single_evaluator_score(hypothesis_annotations, confidence):
+    if "convers_evaluator_annotator" in hypothesis_annotations:
+        cand_scores = hypothesis_annotations["convers_evaluator_annotator"]
+        score_conv_eval = sum(
+            [
+                cand_scores["isResponseOnTopic"],
+                cand_scores["isResponseInteresting"],
+                cand_scores["responseEngagesUser"],
+                cand_scores["isResponseComprehensible"],
+            ]
+        )
+        score_conv_eval -= cand_scores["isResponseErroneous"]
+        score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
+        return score
+    elif "dialogrpt" in hypothesis_annotations:
+        score_conv_eval = hypothesis_annotations["dialogrpt"]
+        score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
+        return score
+    elif "sentence_ranker" in hypothesis_annotations:
+        score_conv_eval = hypothesis_annotations["sentence_ranker"]
+        score = CONV_EVAL_STRENGTH * score_conv_eval + CONFIDENCE_STRENGTH * confidence
+        return score
+    elif "hypothesis_scorer" in hypothesis_annotations:
+        return hypothesis_annotations["hypothesis_scorer"]
+    else:
+        return 0.0
 
 
 def downscore_toxic_badlisted_responses(scores, confidences, is_toxics):
     # exclude toxic messages and messages with badlisted phrases
     ids = np.arange(len(confidences))[is_toxics]
     logger.info(f"Bot excluded utterances: {ids}. is_toxics: {is_toxics}")
-    scores[ids] = {
-        "isResponseOnTopic": 0.0,
-        "isResponseInteresting": 0.0,
-        "responseEngagesUser": 0.0,
-        "isResponseComprehensible": 0.0,
-        "isResponseErroneous": 1.0,
-    }
+    scores[ids] = 0.0
     confidences[ids] = 0.0
 
     return len(ids), scores, confidences

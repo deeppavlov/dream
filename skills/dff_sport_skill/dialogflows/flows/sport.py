@@ -55,9 +55,6 @@ from common.utils import get_sentiment, get_named_persons
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
 LANGUAGE = os.getenv("LANGUAGE", "EN")
-
-MASKED_LM_SERVICE_URL = os.getenv("MASKED_LM_SERVICE_URL")
-
 logger = logging.getLogger(__name__)
 
 

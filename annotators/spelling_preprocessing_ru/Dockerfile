@@ -25,13 +25,11 @@ ENV PORT=$PORT
 COPY ./annotators/spelling_preprocessing_ru/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
 
 COPY $SRC_DIR /src
 
 WORKDIR /src
-
-RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 

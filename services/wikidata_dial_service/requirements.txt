@@ -9,3 +9,5 @@ torch==1.7.0
 torchtext==0.4.0
 transformers==4.0.0
 click==7.1.2
+git+https://github.com/deeppavlov/bert.git@feat/multi_gpu
+tensorflow==1.15.5

@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.0
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.0
 
 ARG CONFIG
 ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
@@ -19,5 +20,4 @@ RUN pip install -r requirements.txt
 COPY annotators/ConversationEvaluator/ ./
 COPY common/ common/
 
-RUN python -m deeppavlov install $CONFIG
 CMD gunicorn --workers=1 --bind 0.0.0.0:8004 --timeout=300 server:app

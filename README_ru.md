@@ -55,20 +55,20 @@ Deepy GoBot Base содержит аннотатор исправления оп
 Мини-версия DeepPavlov Dream Socialbot.
 Данная версия основана на нейросетевой генерации с использованием [English DialoGPT модели](https://huggingface.co/microsoft/DialoGPT-medium). 
 Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
-[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_mini)
+[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_mini)
 
 ### Dream Russian
 Русскоязычная версия  DeepPavlov Dream Socialbot. Данная версия основана на нейросетевой генерации с использованием
 [Russian DialoGPT модели](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2). 
 Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
-[Link to the distribution.](https://github.com/deepmipt/dream/tree/main/assistant_dists/dream_russian)
+[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
 # Quick Start
 
 ### Склонируйте репозиторий
 
 ```
-git clone https://github.com/deepmipt/dream.git
+git clone https://github.com/deeppavlov/dream.git
 ```
 
 
@@ -184,27 +184,27 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 
 ## Аннотаторы (Annotators)
 
-| Name                   | Requirements             | Description                                                                                                                                                                                                  |
-|------------------------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Badlisted words        | 50 MiB RAM               | Аннотатор детекции нецензурных слов основан на лемматизации с помощью pymorphy2 и проверки по словарю нецензурных слов.                                                                                      |
-| Entity Detection       | 3  GiB RAM               | Аннотатор извлечения не именованных сущностей и определения их типа для русского языка нижнего регистра на основе на основе нейросетевой модели ruBERT (PyTorch).                                            |
-| Entity Linking         | 300 MiB RAM              | Аннотатор связывания (нахождения Wikidata id) сущностей, извлеченных с помощью Entity detection, на основе дистиллированной модели ruBERT.                                                                   |
-| Intent Catcher         | 1.8 MiB RAM, 4.9 Gib GPU | Аннотатор детектирования специальных намерений пользователя на основе многоязычной модели Universal Sentence Encoding.                                                                                       |
-| NER                    | 1.8 GiB RAM, 4.9 Gib GPU | Аннотатор извлечения именованных сущностей для русского языка нижнего регистра на основе нейросетевой модели Conversational ruBERT (PyTorch).                                                                |
-| Sentseg                | 2.4 GiB RAM, 4.9 Gib GPU | Аннотатор восстановления пунктуации для русского языка нижнего регистра на основе нейросетевой модели ruBERT (PyTorch). Модель обучена на русскоязычных субтитрах.                                           |
-| Spacy Annotator        | 250 MiB RAM              | Аннотатор токенизации и аннотирования токенов на основе библиотеки spacy и входящей в нее модели “ru_core_news_sm”.                                                                                          |
-| Spelling Preprocessing | 4.4 GiB RAM              | Аннотатор исправления опечаток и грамматических ошибок на основе модели расстояния Левенштейна. Используется предобученная модель из библиотеки DeepPavlov.                                                  |
-| Toxic Classification   | 1.9 GiB RAM, 1.2 Gib GPU | Классификатор токсичности для фильтрации реплик пользователя [от Сколтеха](https://huggingface.co/SkolkovoInstitute/russian_toxicity_classifier)                                          |
-| Wiki Parser            | 100 MiB RAM              | Аннотатор извлечения триплетов из Wikidata для сущностей, извлеченных с помощью  Entity detection.                                                                                                           |
-| DialogRPT              | 3.9 GiB RAM,  2 GiB GPU  | Сервис оценки вероятности реплики понравиться пользователю (updown) на основе ранжирующей модели DialogRPT, которая дообучена на основе генеративной модели Russian DialoGPT на комментариев с сайта Пикабу. |
+| Name                   | Requirements             | Description                                                                                                                                                                                                   |
+|------------------------|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Badlisted words        | 50 MiB RAM               | Аннотатор детекции нецензурных слов основан на лемматизации с помощью pymorphy2 и проверки по словарю нецензурных слов.                                                                                       |
+| Entity Detection       | 3 GiB RAM                | Аннотатор извлечения не именованных сущностей и определения их типа для русского языка нижнего регистра на основе на основе нейросетевой модели ruBERT (PyTorch).                                             |
+| Entity Linking         | 300 MiB RAM              | Аннотатор связывания (нахождения Wikidata id) сущностей, извлеченных с помощью Entity detection, на основе дистиллированной модели ruBERT.                                                                    |
+| Intent Catcher         | 1.8 GiB RAM, 5 Gib GPU   | Аннотатор детектирования специальных намерений пользователя на основе многоязычной модели Universal Sentence Encoding.                                                                                        |
+| NER                    | 1.8 GiB RAM, 5 Gib GPU   | Аннотатор извлечения именованных сущностей для русского языка нижнего регистра на основе нейросетевой модели Conversational ruBERT (PyTorch).                                                                 |
+| Sentseg                | 2.4 GiB RAM, 5 Gib GPU   | Аннотатор восстановления пунктуации для русского языка нижнего регистра на основе нейросетевой модели ruBERT (PyTorch). Модель обучена на русскоязычных субтитрах.                                            |
+| Spacy Annotator        | 250 MiB RAM              | Аннотатор токенизации и аннотирования токенов на основе библиотеки spacy и входящей в нее модели “ru_core_news_sm”.                                                                                           |
+| Spelling Preprocessing | 4.5 GiB RAM              | Аннотатор исправления опечаток и грамматических ошибок на основе модели расстояния Левенштейна. Используется предобученная модель из библиотеки DeepPavlov.                                                   |
+| Toxic Classification   | 1.9 GiB RAM, 1.3 Gib GPU | Классификатор токсичности для фильтрации реплик пользователя [от Сколтеха](https://huggingface.co/SkolkovoInstitute/russian_toxicity_classifier)                                                              |
+| Wiki Parser            | 100 MiB RAM              | Аннотатор извлечения триплетов из Wikidata для сущностей, извлеченных с помощью  Entity detection.                                                                                                            |
+| DialogRPT              | 3.9 GiB RAM, 2.2 GiB GPU |  Сервис оценки вероятности реплики понравиться пользователю (updown) на основе ранжирующей модели DialogRPT, которая дообучена на основе генеративной модели Russian DialoGPT на комментариев с сайта Пикабу. |
 
 ## Навыки и Сервисы (Skills & Services)
 | Name                 | Requirements              | Description                                                                                                                                                                   |
 |----------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DialoGPT             | 2.8 GiB RAM, 2 GiB GPU    | Сервис генерации реплики по текстовому контексту диалога на основе предобученной модели Russian [DialoGPT](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) |
+| DialoGPT             | 2.8 GiB RAM, 2.2 GiB GPU  | Сервис генерации реплики по текстовому контексту диалога на основе предобученной модели Russian [DialoGPT](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) |
 | Dummy Skill          | a part of agent container | Навык для генерации ответов-заглушек и выдачис лучайных вопросов из базы в каечстве linking-questions.                                                                        |
 | Personal Info Skill  | 40 MiB RAM                | Сценарный навык для извлечения и запоминания основной личной информации о пользователе.                                                                                       |
-| DFF Generative Skill | 50 MiB RAM                | **[New DFF version]** навык, выдающий 5 гипотез, выданных сервисом DialoGPT                                                                                                  |
+| DFF Generative Skill | 50 MiB RAM                | **[New DFF version]** навык, выдающий 5 гипотез, выданных сервисом DialoGPT                                                                                                   |
 | DFF Intent Responder | 50 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF для ответа на специальные намерения пользователя.                                                                         |
 | DFF Program Y Skill  | 80 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF для ответа на общие вопросы в виде AIML компоненты.                                                                       |
 | DFF Friendship Skill | 70 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF приветственной части диалога с пользователем.                                                                             |

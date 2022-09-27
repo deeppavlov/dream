@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.17.2
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.17.2
 
 RUN apt-key del 7fa2af80  && \
     rm -f /etc/apt/sources.list.d/cuda*.list && \
@@ -23,7 +24,6 @@ COPY ./common/ ./common/
 COPY annotators/IntentCatcherTransformers/ /src
 WORKDIR /src
 
-RUN python -m deeppavlov install ${CONFIG_NAME}
 RUN python -m deeppavlov download ${CONFIG_NAME}
 RUN python train_model_if_not_exist.py
 
