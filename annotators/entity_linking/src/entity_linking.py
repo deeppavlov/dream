@@ -59,7 +59,6 @@ class EntityLinker(Component, Serializable):
         **kwargs,
     ) -> None:
         """
-
         Args:
             load_path: path to folder with inverted index files
             entity_ranker: component deeppavlov.models.kbqa.rel_ranking_bert
@@ -333,7 +332,7 @@ class EntityLinker(Component, Serializable):
                     cand_ent_init = self.process_cand_ent(
                         cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf
                     )
-        if tags and tags[0][0] == "misc" and not cand_ent_init:
+        if tags and ((tags[0][0] == "misc" and not cand_ent_init) or tags[0][1] < 0.7):
             for tag in self.cursors:
                 query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
                 res = self.cursors[tag].execute(query)
@@ -481,8 +480,8 @@ class EntityLinker(Component, Serializable):
                     )
                     for entity, score in scores
                 ]
-            log.info(f"len entities with scores {len(entities_with_scores)}")
-            if entity_tags and entity_tags[0][0] == "misc":
+            log.info(f"len entities with scores {len(entities_with_scores)} --- entity_tags {entity_tags}")
+            if entity_tags and (entity_tags[0][0] == "misc" or entity_tags[0][1] < 0.7):
                 entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[2], x[4]), reverse=True)
             else:
                 entities_with_scores = sorted(entities_with_scores, key=lambda x: (x[1], x[4], x[3]), reverse=True)
