@@ -19,10 +19,11 @@ logging.getLogger("werkzeug").setLevel("INFO")
 app = Flask(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
+MAX_PERSONA_SENTENCES = int(os.environ.get("MAX_PERSONA_SENTENCES"))
+
 SUPER_CONFIDENCE = 1.0
 DEFAULT_CONFIDENCE = 0.9
 
-MAX_PERSONA_SENTENCES = 3
 SPECIAL_TOKENS = {
     "<sp_1>": "<sp_1>",
     "</sp_1>": "</sp_1>",
@@ -88,22 +89,22 @@ def generate_response(persona: dict = None, model=None, tokenizer=None, utteranc
     if max_sentence_similarity > threshhold:
         model_response = model.generate(
             bot_input_ids,
-            max_length=250,
+            max_length=150,
             pad_token_id=tokenizer.eos_token_id,
             do_sample=True,
             num_beams=2,
             temperature=0.95,
-            top_k=100,
+            top_k=50,
             top_p=0.95,
         )
     else:
         model_response = model.generate(
             bot_input_ids,
-            max_length=250,
+            max_length=150,
             pad_token_id=tokenizer.eos_token_id,
             do_sample=True,
             temperature=0.95,
-            top_k=100,
+            top_k=50,
             top_p=0.95,
         )
 
