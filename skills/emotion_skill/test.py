@@ -24,7 +24,7 @@ def make_input_data(curr_sent, bot_sent, human_attributes=None, emotion=None, in
                                     "anger": 0,
                                     "fear": 0,
                                     "joy": 0,
-                                    "love": 0,
+                                    "disgust": 0,
                                     "sadness": 0.9,
                                     "surprise": 0,
                                     "neutral": 0,
