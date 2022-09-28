@@ -217,9 +217,11 @@ Dream Architecture is presented in the following image:
 | Wiki Facts                  | 1.7 GiB RAM              |                                                                                                                                                                                                                                |
 
 ## Services
+
 | Name                | Requirements               | Description                                                                                                                                                                                              |
 |---------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | DialoGPT            | 1.2 GiB RAM, 2.1 GiB GPU   | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU) |
+| Image captioning    | 4 GiB RAM, 5.4 GiB GPU   | creates text representation of a received image                                                                                                                                                          |
 | Infilling           | 1  GiB RAM, 1.2 GiB GPU    | generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens                                                    |
 | Knowledge Grounding | 2 GiB RAM, 2.1 GiB GPU     | generative service based on BlenderBot architecture providing a response to the context taking into account an additional text paragraph                                                                 |
 | Masked LM           | 1.1 GiB RAM, 1 GiB GPU     |                                                                                                                                                                                                          |
