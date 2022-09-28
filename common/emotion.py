@@ -203,7 +203,7 @@ def if_turn_on_emotion(user_utt, bot_uttr):
         if prob == max(emotions.values()):
             found_emotion, found_prob = emotion, prob
     emo_found_emotion = found_emotion != "neutral" and found_prob > emo_prob_threshold
-    good_emotion_prob = max([emotions.get("joy", 0), emotions.get("love", 0)])
+    good_emotion_prob = emotions.get("joy", 0)
     bad_emotion_prob = max([emotions.get("anger", 0), emotions.get("fear", 0), emotions.get("sadness", 0)])
     not_strange_emotion_prob = not (good_emotion_prob > 0.6 and bad_emotion_prob > 0.5)
     how_are_you = any(
