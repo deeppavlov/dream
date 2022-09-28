@@ -42,8 +42,8 @@ except Exception as e:
 def get_result(request):
     st_time = time.time()
     uttrs = request.json.get("utterances", [])
-    entities_with_labels_batch = request.json.get("entities_with_labels", [])
-    entity_info_batch = request.json.get("entity_info", [])
+    entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in uttrs])
+    entity_info_batch = request.json.get("entity_info", [[] for _ in uttrs])
 
     triplets_batch = []
     outputs, scores = generative_ie(uttrs)
@@ -55,6 +55,7 @@ def get_result(request):
             if triplet[0] == "i":
                 triplet[0] = "user"
         triplets_batch.append(triplet)
+    logger.info(f"outputs {outputs} scores {scores} triplets_batch {triplets_batch}")
     if rel_cls_flag:
         rels = rel_cls(uttrs)
         logger.info(f"classified relations: {rels}")
@@ -74,7 +75,7 @@ def get_result(request):
         uttr = uttr.lower()
         entity_substr_dict = {}
         formatted_triplet = {}
-        if len(uttr.split()) > 1:
+        if len(uttr.split()) > 2:
             for entity in entities_with_labels:
                 if "text" in entity:
                     entity_substr = entity["text"]
