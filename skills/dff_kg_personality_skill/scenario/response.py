@@ -22,10 +22,10 @@ graph = KnowledgeGraph(
     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
 )
 
-graph.drop_database()
+# graph.drop_database()
 # if 'User' not in dict_tree['Kinds']:
 # graph.ontology.create_entity_kind("User", kind_properties=["name"])
-mocks.populate(graph, drop=True)
+# mocks.populate(graph, drop=True)
 
 # graph.ontology.create_relationship_kind("SPOKE_ABOUT", "User")
 
