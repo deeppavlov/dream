@@ -40,9 +40,9 @@
             "save_path":"{MODELS_PATH}/model",
             "load_path":"{MODELS_PATH}/model",
             "tasks":{
-               "emo":{"type":"classification","options":7},
+               "emo":{"type":"classification","options":7, "multilabel":true},
                "sentiment":{"type":"classification","options":3},
-               "toxic":{"type":"classification","options":7},
+               "toxic":{"type":"classification","options":7, "multilabel": true},
                "factoid":{"type":"classification","options":2},
                "midas":{"type":"classification","options":15},
                "topics":{"type":"classification","options":33}
