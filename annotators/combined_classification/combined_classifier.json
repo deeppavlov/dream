@@ -42,7 +42,7 @@
             "tasks":{
                "emo":{"type":"classification","options":7},
                "sentiment":{"type":"classification","options":3},
-               "toxic":{"type":"classification","options":8},
+               "toxic":{"type":"classification","options":7},
                "factoid":{"type":"classification","options":2},
                "midas":{"type":"classification","options":15},
                "topics":{"type":"classification","options":33}
