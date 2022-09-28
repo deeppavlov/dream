@@ -110,7 +110,7 @@ low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
 combined_classes = {
     "factoid_classification": ["is_factoid", "is_conversational"],
-    "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
+    "emotion_classification": ["anger", "fear", "joy", "disgust", "sadness", "surprise", "neutral"],
     "toxic_classification": [
         "identity_hate",
         "insult",
@@ -118,8 +118,7 @@ combined_classes = {
         "severe_toxic",
         "sexual_explicit",
         "threat",
-        "toxic",
-        "not_toxic",
+        "toxic"
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "midas_classification": [
@@ -693,7 +692,7 @@ def get_emotions(annotated_utterance, probs=True, default_probs=None, default_la
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
     default_probs = (
-        {"anger": 0, "fear": 0, "joy": 0, "love": 0, "sadness": 0, "surprise": 0, "neutral": 1}
+        {"anger": 0, "fear": 0, "joy": 0, "disgust": 0, "sadness": 0, "surprise": 0, "neutral": 1}
         if default_probs is None
         else default_probs
     )
