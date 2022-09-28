@@ -74,8 +74,6 @@ services:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -121,6 +119,12 @@ services:
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  storygpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  prompt-storygpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   infilling:
     environment:
       - CUDA_VISIBLE_DEVICES=7
