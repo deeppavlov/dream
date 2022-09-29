@@ -1,0 +1,12 @@
+Flask==1.1.1
+gunicorn==19.9.0
+requests==2.27.1
+jinja2<=3.0.3
+Werkzeug<=2.0.3
+sentry-sdk==0.12.3
+pyopenssl==22.0.0
+itsdangerous==2.0.1
+click==7.1.2
+nltk==3.5
+numpy
+uuid

@@ -28,6 +28,24 @@ graph = KnowledgeGraph(
 # mocks.populate(graph, drop=True)
 
 # graph.ontology.create_relationship_kind("SPOKE_ABOUT", "User")
+rel_type_dict = {}
+with open("rel_list.txt", "r") as fl:
+    lines = fl.readlines()
+    for line in lines:
+        rel, rel_type = line.strip().split()
+        if rel_type == "r":
+            rel_type = "relation"
+        else:
+            rel_type = "property"
+        rel_type_dict[rel.replace("_", " ")] = rel_type
+
+
+# for rel in rel_type_dict:
+#     if rel_type_dict[rel] == 'relation':
+#         rel_name = '_'.join(rel.split(' ')).upper()
+#         graph.ontology.create_relationship_kind(rel_name, "User")
+#     else:
+#         graph.ontology.create_entity_kind_properties("User", [rel])
 
 
 def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -42,8 +60,18 @@ def check_graph_entities(graph):
     logger.info(f'Num of entities in graph: {len(gr_ents)}')
     for e in gr_ents:
         logger.info(f'{graph.get_current_state(e[0].get("Id")).get("name")}')
-        
-        
+
+
+def add_entity_from_triplet_extraction(graph, entity_kind, entity_name, rel_type, user_id):
+    entity_kind = entity_kind.replace('_', '').title()
+    new_entity_id = str(uuid.uuid4())
+    graph.ontology.create_entity_kind(entity_kind, kind_properties=["name"])
+    graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
+    graph.create_relationship(user_id, rel_type, new_entity_id)
+    logger.info(f'Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}!')
+    logger.info(f'{entity_name} is connected with User by {rel_type} relationship.')
+
+
 def add_entity_with_abstract_relationship(graph, entity_kind, entity_name, user_id):
     entity_kind = entity_kind.replace('_', '').title()
     new_entity_id = str(uuid.uuid4())
@@ -70,6 +98,15 @@ def add_name_property(graph, user_id, names):
     graph.create_entity("User", str(user_id), ['name'], [names[0]])
     # check_graph_entities(graph)
     return f"I guess your name is {names[0]}! I added it as your property!"
+
+
+def add_any_property(graph, user_id, property_type, property_value):
+    graph.create_or_update_property_of_entity(
+        id_=user_id,
+        property_kind=property_type,
+        property_value=property_value,
+    )
+    return f"I added a property {property_type} with value {property_value}!"
 
 
 def fix_wrong_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -103,13 +140,45 @@ def get_entities_with_dbpedia_type(utt):
     return entities_to_add
 
 
+def get_entity_type_from_property_extraction(attributes):
+    entity_info = attributes['entity_info']
+    if not entity_info:
+        return 'Misc'
+    exact_entity_info = entity_info[attributes['triplet']['object']]
+    entity_kinds = exact_entity_info['dbpedia_types']
+    if entity_kinds:
+        if entity_kinds[0]:
+            return entity_kinds[0][0].split('/')[-1].replace("Wikipedia:", "")
+    else:
+        return 'Misc'
+
+
+def add_relations_and_properties(utt, user_id):
+    attributes = utt.get("annotations", {}).get("property_extraction", {})
+    # logger.info(f'Attributes: {attributes}')
+    if attributes and attributes['triplet']:
+        triplet = attributes['triplet']
+        if triplet['subject'] != 'user':
+            return "No relations to the User were found!"
+        if 'relation' in triplet:
+            entity_kind = get_entity_type_from_property_extraction(attributes)
+            entity_name = triplet['object']
+            relation = '_'.join(triplet['relation'].split(' ')).upper()
+            add_entity_from_triplet_extraction(graph, entity_kind, entity_name, relation, user_id)
+            return f"Added entity {entity_name} and connected it with you! "
+        else:
+            ans = add_any_property(graph, user_id, triplet['property'], triplet['object'])
+            return ans
+    return 'No relationships found!'
+
+
 def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     utt = int_ctx.get_last_human_utterance(ctx, actor)
 
-    attributes = utt.get("annotations", {}).get("property_extraction", [])
-    logger.info(f'Attributes: {attributes}')
+    # attributes = utt.get("annotations", {}).get("property_extraction", [])
+    # logger.info(f'Attributes: {attributes}')
 
-    entity_linking = utt.get("annotations", {}).get("entity_linking", [])
+    entity_linking = utt.get("annotations", {}).get("entity_linking", {})
     logger.info(f'Entity linking answer: {entity_linking}')
 
     last_utt = utt["text"]
@@ -121,7 +190,9 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         entities = entity_detection.get('labelled_entities', [])
         entities = [entity.get('text', 'no entity name') for entity in entities]
         if not entities:
-            return "No entities in the utterance!"
+            ans = add_relations_and_properties(utt, user_id)
+            return ans
+            # return "No entities in the utterance!"
 
         names = get_named_persons(utt)
         if names:
@@ -135,15 +206,18 @@ def find_name(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             else:
                 return "You are telling me someone's name, but I guess it's not yours!"
         else:
-            entities_to_add = get_entities_with_dbpedia_type(utt)
-            if not entities_to_add:
-                return f"Couldn't get Kinds for entities {','.join(entities)}, " \
-                       f"so won't add anything to graph :("
-            for entity_name in entities_to_add:
-                add_entity_with_abstract_relationship(graph, entities_to_add[entity_name], entity_name, user_id)
-            entities_joined = ', '.join(list(entities_to_add.keys()))
-            return f"Added entities {entities_joined} to the graph as related to you!"
-            # return "There are entities that are not names. I can't do anything with them yet!"
+            ans = add_relations_and_properties(utt, user_id)
+            return ans
+
+            # ENTITIES WITH ABSTRACT RELATION "SPOKE ABOUT" IF FOUND ANY DBPEDIA TYPES
+            # entities_to_add = get_entities_with_dbpedia_type(utt)
+            # if not entities_to_add:
+            #     return f"Couldn't get Kinds for entities {','.join(entities)}, " \
+            #            f"so won't add anything to graph :("
+            # for entity_name in entities_to_add:
+            #     add_entity_with_abstract_relationship(graph, entities_to_add[entity_name], entity_name, user_id)
+            # entities_joined = ', '.join(list(entities_to_add.keys()))
+            # return f"Added entities {entities_joined} to the graph as related to you!"
 
     check_graph_entities(graph)
     return "We shouldn't be here."

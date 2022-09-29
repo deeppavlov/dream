@@ -1,0 +1,106 @@
+{
+    "TALKED_WITH": [
+        [
+            "Bot",
+            "User",
+            {
+                "on": {
+                    "type": "<class 'datetime.datetime'>",
+                    "measurement_unit": ""
+                },
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "KEEPS_UP": [
+        [
+            "User",
+            "Habit",
+            {
+                "since": {
+                    "type": "<class 'str'>",
+                    "measurement_unit": ""
+                },
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "STUDY": [
+        [
+            "User",
+            "University",
+            {
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "LIKES": [
+        [
+            "User",
+            "Interest",
+            {
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "DISLIKES": [
+        [
+            "User",
+            "Interest",
+            {
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "CAUSES": [
+        [
+            "Habit",
+            "Disease",
+            {
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "CURES": [
+        [
+            "Interest",
+            "Disease",
+            {
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ],
+    "RELATED_TO": [
+        [
+            "Habit",
+            "Interest",
+            {
+                "_deleted": {
+                    "type": "<class 'bool'>",
+                    "measurement_unit": ""
+                }
+            }
+        ]
+    ]
+}

@@ -316,6 +316,19 @@
                     "annotators.entity_linking"
                 ]
             },
+            "user_knowledge_graph": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://user-knowledge-graph:8127/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.entity_linking"
+                ]
+            },
             "wiki_parser": {
                 "connector": {
                     "protocol": "http",
