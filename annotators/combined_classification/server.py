@@ -45,11 +45,8 @@ def get_result(sentences, sentences_with_history):
                 f"Sentences with history: {sentences_with_history}"
             )
         for task_name, prob_list in zip(task_names, prob_lists):
+            # we assume toxic has 7 classes
             for i in range(len(prob_list)):
-                is_toxic = "toxic" in task_name and prob_list[i][-1] < 0.5
-                if is_toxic:  # sum of probs of all toxic classes >0.5
-                    prob_list[i][-1] = 0
-                    prob_list[i] = [k / sum(prob_list[i]) for k in prob_list[i]]
                 ans[i][task_name] = {
                     class_: float(prob) for class_, prob in zip(combined_classes[task_name], prob_list[i])
                 }

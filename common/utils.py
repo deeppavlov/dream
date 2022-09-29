@@ -120,7 +120,7 @@ combined_classes = {
         "threat",
         "toxic",
     ],
-    "sentiment_classification": ["positive", "negative", "neutral"],
+    "sentiment_classification": ["positive", "neutral", "negative"],
     "midas_classification": [
         "open_question_factual",
         "open_question_opinion",
@@ -569,7 +569,12 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification" and "factoid_classification" not in combined_annotations:
+        if all(
+            [
+                model_name in ["toxic_classification", "emotion_classification"],
+                "factoid_classification" not in combined_annotations,
+            ]
+        ):
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)

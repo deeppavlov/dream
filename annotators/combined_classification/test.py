@@ -17,11 +17,6 @@ def main_test():
             "answers_bert": [["positive"], ["negative"], ["neutral"]],
         },
         {
-            "sentences": ["you son of the bitch", "yes"],
-            "task": "toxic_classification",
-            "answers_bert": [["obscene"], ["not_toxic"]],
-        },
-        {
             "sentences": ["why you are so dumb"],
             "task": "emotion_classification",
             "answers_bert": [["anger"]],
@@ -30,10 +25,16 @@ def main_test():
             "sentences_with_history": ["this is the best dog [SEP] so what you think ha"],
             "sentences": ["so what you think ha"],
             "task": "midas_classification",
-            "answers_bert": [["open_question_opinion"]],
+            "answers_bert": [["comment"]],
         },
-        {"sentences": ["books"], "task": "topics_classification", "answers_bert": [["Books&Literature"]]},
+        {"sentences": ["movies"], "task": "topics_classification", "answers_bert": [["Movies_TV"]]},
+        {
+            "sentences": ["you son of the bitch", "yes"],
+            "task": "toxic_classification",
+            "answers_bert": [["insult", "obscene","toxic"], []],
+        },
     ]
+
     for config in configs:
         if "sentences_with_history" in config:
             config["utterances_with_histories"] = [[k] for k in config["sentences_with_history"]]
@@ -47,7 +48,10 @@ def main_test():
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
             print(response)
-            predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
+            if config["task"] in ["toxic_classification", "emotion_classification"]:  # multilabel_task
+                predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
+            else:
+                predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
             assert sorted(answer) == sorted(predicted_classes), " * ".join(
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
             )
