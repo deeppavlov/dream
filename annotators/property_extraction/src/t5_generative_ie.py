@@ -54,7 +54,7 @@ class T5GenerativeIE(TorchModel):
         generate_max_length: int = 50,
         top_n: int = 1,
         batch_decode: bool = False,
-        scores_thres: float = -0.055,
+        scores_thres: float = -0.17,
         **kwargs,
     ) -> None:
 
@@ -146,6 +146,7 @@ class T5GenerativeIE(TorchModel):
                     scores = outputs.sequences_scores
                     scores = scores.cpu().numpy().tolist()
                     answers = [self.tokenizer.decode(output, skip_special_tokens=False) for output in sequences]
+                    logger.info(f"triplets {answers} scores {scores}")
                     processed_answers, processed_scores = [], []
                     for answer, score in zip(answers, scores):
                         if score > self.scores_thres:

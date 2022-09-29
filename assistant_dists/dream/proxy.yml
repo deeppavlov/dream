@@ -549,15 +549,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8061
       - PORT=8061
 
-  dff-short-story-skill:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8057
-      - PORT=8057
-
   dff-weather-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -575,7 +566,7 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8121
       - PORT=8121
-  
+
   dialogpt:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -594,6 +585,15 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8122
       - PORT=8122
 
+  dff-short-story-skill:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8057
+      - PORT=8057
+
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -603,4 +603,30 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8120
       - PORT=8120
 
+  rake-keywords:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8007
+      - PORT=8007
+
+  storygpt:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8126
+      - PORT=8126
+
+  prompt-storygpt:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8127
+      - PORT=8127
 version: '3.7'

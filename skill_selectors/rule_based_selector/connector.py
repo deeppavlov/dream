@@ -231,6 +231,16 @@ class RuleBasedSkillSelectorConnector:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
+            if "tell_me_a_story" in intent_catcher_intents:
+                skills_for_uttr.append("dff_short_story_skill")
+
+            if len(dialog["human_utterances"]) > 1:
+                nouns = dialog["human_utterances"][-1].get("annotations", {}).get("rake_keywords", [])
+                nouns.extend(dialog["human_utterances"][-2].get("annotations", {}).get("rake_keywords", []))
+                if prev_active_skill != "dff_short_story_skill":
+                    if len(nouns) >= 5:
+                        skills_for_uttr.append("dff_short_story_skill")
+
             skills_for_uttr = ["dff_kg_personality_skill"]
 
             logger.info(f"Selected skills: {skills_for_uttr}")

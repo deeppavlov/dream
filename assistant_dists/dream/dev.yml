@@ -17,6 +17,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8006:8006
+  rake-keywords:
+    volumes:
+      - "./annotators/rake_keywords:/src"
+    ports:
+      - 8007:8007
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -390,6 +395,16 @@ services:
       - "./annotators/midas_predictor:/src"
     ports:
       - 8121:8121
+  storygpt:
+    volumes:
+      - "./services/storygpt:/src"
+    ports:
+      - 8126:8126
+  prompt-storygpt:
+    volumes:
+      - "./services/prompt_storygpt:/src"
+    ports:
+      - 8127:8127
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
