@@ -118,7 +118,7 @@ combined_classes = {
         "severe_toxic",
         "sexual_explicit",
         "threat",
-        "toxic"
+        "toxic",
     ],
     "sentiment_classification": ["positive", "negative", "neutral"],
     "midas_classification": [
@@ -222,7 +222,7 @@ combined_classes = {
         "Topic_SwitchIntent",
         "Opinion_RequestIntent",
         "Multiple_GoalsIntent",
-    ]
+    ],
 }
 
 midas_classes = {
