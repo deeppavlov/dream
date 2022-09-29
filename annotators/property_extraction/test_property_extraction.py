@@ -6,7 +6,6 @@ def main():
 
     request_data = [{"utterances": ["i live in moscow"]}]
 
-    count = 0
     for data in request_data:
         result = requests.post(url, json=data).json()
         print(result)

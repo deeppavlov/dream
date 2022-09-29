@@ -167,11 +167,11 @@ class EntityLinker(Component, Serializable):
                     entity_offsets_list.append([st_offset, end_offset])
                 entity_offsets_batch.append(entity_offsets_list)
 
-        entity_ids_batch, entity_conf_batch, entity_pages_batch = [], [], []
+        entity_ids_batch, entity_conf_batch, entity_pages_batch, entity_id_tags_batch = [], [], [], []
         for entity_substr_list, entity_offsets_list, entity_tags_list, sentences_list, sentences_offsets_list in zip(
             entity_substr_batch, entity_offsets_batch, entity_tags_batch, sentences_batch, sentences_offsets_batch
         ):
-            entity_ids_list, entity_conf_list, entity_pages_list = self.link_entities(
+            entity_ids_list, entity_conf_list, entity_pages_list, entity_id_tags_list = self.link_entities(
                 entity_substr_list,
                 entity_offsets_list,
                 entity_tags_list,
@@ -185,9 +185,17 @@ class EntityLinker(Component, Serializable):
                 entity_pages_list = [entity_pages[: self.num_entities_to_return] for entity_pages in entity_pages_list]
             entity_ids_batch.append(entity_ids_list)
             entity_conf_batch.append(entity_conf_list)
+            entity_id_tags_batch.append(entity_id_tags_list)
             entity_pages_batch.append(entity_pages_list)
             first_par_batch, dbpedia_types_batch = self.extract_add_info(entity_pages_batch)
-        return entity_ids_batch, entity_conf_batch, entity_pages_batch, first_par_batch, dbpedia_types_batch
+        return (
+            entity_ids_batch,
+            entity_conf_batch,
+            entity_id_tags_batch,
+            entity_pages_batch,
+            first_par_batch,
+            dbpedia_types_batch,
+        )
 
     def extract_add_info(self, entity_pages_batch: List[List[List[str]]]):
         first_par_batch, dbpedia_types_batch = [], []
@@ -226,7 +234,8 @@ class EntityLinker(Component, Serializable):
             f"entity_substr_list {entity_substr_list} entity_tags_list {entity_tags_list} "
             f"entity_offsets_list {entity_offsets_list}"
         )
-        entity_ids_list, conf_list, pages_list, pages_dict_list, descr_list = [], [], [], [], []
+        entity_ids_list, conf_list, pages_list, entity_id_tags_list, descr_list = [], [], [], [], []
+        pages_dict_list = []
         if entity_substr_list:
             entities_scores_list = []
             cand_ent_scores_list = []
@@ -283,15 +292,22 @@ class EntityLinker(Component, Serializable):
                 cand_ent_scores = cand_ent_scores[: self.num_entities_for_bert_ranking]
                 cand_ent_scores_list.append(cand_ent_scores)
                 entity_ids = [elem[0] for elem in cand_ent_scores]
-                pages = [elem[5] for elem in cand_ent_scores]
+                entity_id_tags = [elem[5] for elem in cand_ent_scores]
+                pages = [elem[6] for elem in cand_ent_scores]
                 scores = [elem[1:5] for elem in cand_ent_scores]
                 entities_scores_list.append(
                     {entity_id: entity_scores for entity_id, entity_scores in zip(entity_ids, scores)}
                 )
                 entity_ids_list.append(entity_ids)
+                entity_id_tags_list.append(entity_id_tags)
                 pages_list.append(pages)
-                pages_dict_list.append({entity_id: page for entity_id, page in zip(entity_ids, pages)})
-                descr_list.append([elem[6] for elem in cand_ent_scores])
+                pages_dict_list.append(
+                    {
+                        entity_id: (page, entity_id_tag)
+                        for entity_id, page, entity_id_tag in zip(entity_ids, pages, entity_id_tags)
+                    }
+                )
+                descr_list.append([elem[7] for elem in cand_ent_scores])
 
             if self.use_descriptions:
                 substr_lens = [len(entity_substr.split()) for entity_substr in entity_substr_list]
@@ -307,16 +323,19 @@ class EntityLinker(Component, Serializable):
                     substr_lens,
                 )
                 pages_list = [
-                    [pages_dict.get(entity_id, "") for entity_id in entity_ids]
+                    [pages_dict.get(entity_id, ("", ""))[0] for entity_id in entity_ids]
                     for entity_ids, pages_dict in zip(entity_ids_list, pages_dict_list)
                 ]
-
-        return entity_ids_list, conf_list, pages_list
+                entity_id_tags_list = [
+                    [pages_dict.get(entity_id, ("", ""))[1] for entity_id in entity_ids]
+                    for entity_ids, pages_dict in zip(entity_ids_list, pages_dict_list)
+                ]
+        return entity_ids_list, conf_list, pages_list, entity_id_tags_list
 
     def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf):
-        for entity_title, entity_id, entity_rels, anchor_cnt, _, page, descr in entities_and_ids:
+        for entity_title, entity_id, entity_rels, anchor_cnt, tag, page, descr in entities_and_ids:
             substr_score = self.calc_substr_score(entity_title, entity_substr_split)
-            cand_ent_init[entity_id].add((substr_score, anchor_cnt, entity_rels, tag_conf, page, descr))
+            cand_ent_init[entity_id].add((substr_score, anchor_cnt, entity_rels, tag_conf, tag, page, descr))
         return cand_ent_init
 
     def find_exact_match(self, entity_substr, tags):

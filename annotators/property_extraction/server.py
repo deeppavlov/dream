@@ -96,6 +96,9 @@ def get_result(request):
                                 entity_substr_dict[entity_substr] = {}
                             entity_substr_dict[entity_substr]["entity_ids"] = entity_info["entity_ids"]
                             entity_substr_dict[entity_substr]["dbpedia_types"] = entity_info.get("dbpedia_types", [])
+                            entity_substr_dict[entity_substr]["finegrained_types"] = entity_info.get(
+                                "dbpedia_types", []
+                            )
         if triplet:
             formatted_triplet = {"subject": triplet[0], rel_type_dict[triplet[1]]: triplet[1], "object": triplet[2]}
         triplets_info_batch.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
