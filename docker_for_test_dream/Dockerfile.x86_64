@@ -1,0 +1,34 @@
+FROM nvcr.io/nvidia/tensorrt:21.09-py3
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+#install required libs and packages
+RUN apt-get update && apt-get install -y --no-install-recommends wget build-essential git curl \
+    ca-certificates libjpeg-dev libpng-dev python3-pip python3-dev \
+	lsb-release ninja-build
+
+RUN apt-get update && \
+    apt-get install -y libqt5gui5 && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install -y iputils-ping
+
+ENV QT_DEBUG_PLUGINS=1
+
+RUN python3 -m pip install pip --upgrade
+
+# RUN pip install matplotlib pandas scipy orjson seaborn opencv-python numpy dill tqdm ncls
+
+RUN pip3 install requests
+
+
+ARG USER=docker_robot
+ARG UID=1000
+ARG GID=1000
+# default password
+ARG PW=user
+
+RUN useradd -m ${USER} --uid=${UID} && echo "${USER}:${PW}" | chpasswd && adduser ${USER} sudo
+WORKDIR /home/${USER}
+RUN mkdir -p catkin_ws && chown -R ${UID}:${GID} /home/${USER}
+USER ${UID}:${GID}

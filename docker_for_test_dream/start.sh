@@ -3,23 +3,24 @@
 cd "$(dirname "$0")"
 # cd ..
 
-workspace_dir=$PWD
+# --env="DISPLAY" \
 
-# -v $workspace_dir/../data:/home/docker_current/data:rw \
-# -v $workspace_dir/../py_files:/home/docker_current/py_files:rw \
+workspace_dir=$PWD
 
 desktop_start() {
     xhost +local:
     docker run -it -d --rm \
-        --gpus '"device=0"' \
+        --gpus all \
         --ipc host \
-        --env="DISPLAY" \
+        --network host \
+        --env="DISPLAY=$DISPLAY" \
+        -v "$HOME/.Xauthority:/root/.Xauthority:ro" \
         --env="QT_X11_NO_MITSHM=1" \
         --privileged \
-        --name deeppavlov \
+        --name test_dream \
         -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-        -v $workspace_dir/../../:/home/docker_current:rw \
-        ${ARCH}/deeppavlov:latest
+        -v $workspace_dir/tests/:/home/docker_robot/tests:rw \
+        ${ARCH}/noetic/test_dream:latest
     xhost -
 }
 
@@ -27,16 +28,17 @@ arm_start() {
     xhost +local:
     docker run -it -d --rm \
         --runtime nvidia \
-        --name deeppavlov \
+        --name robot_voice_navigation \
         --network host \
+        -v "$HOME/.Xauthority:/root/.Xauthority:ro" \
         --env="DISPLAY" \
         -p 1025:1025 \
         --env="QT_X11_NO_MITSHM=1" \
         -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
         --privileged \
-        -v $workspace_dir/../../:/home/docker_trajectronplusplus/catkin_ws/src:rw \
-	    -v /home/jetson/tpp_ros/rosbags/:/home/docker_trajectronplusplus/catkin_ws/rosbags:rw \
-        ${ARCH}/noetic/deeppavlov:latest
+        -v $workspace_dir/../../:/home/docker_robot/catkin_ws/src:rw \
+	    -v /home/jetson/tpp_ros/rosbags/:/home/docker_robot/catkin_ws/rosbags:rw \
+        ${ARCH}/noetic/robot_voice_navigation:latest
     xhost -
 }
 
