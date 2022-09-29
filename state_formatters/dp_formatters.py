@@ -775,7 +775,7 @@ def dff_coronavirus_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_short_story_skill")
+    return utils.dff_formatter(dialog, "dff_short_story_skill", human_last_turns=3)
 
 
 def dff_generative_skill_formatter(dialog: Dict) -> List[Dict]:

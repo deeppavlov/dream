@@ -169,6 +169,19 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
+            "rake_keywords": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://rake-keywords:8007/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
             "conceptnet": {
                 "connector": {
                     "protocol": "http",
@@ -655,7 +668,7 @@
             "dff_short_story_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 3,
                     "url": "http://dff-short-story-skill:8057/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
