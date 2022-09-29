@@ -11,8 +11,14 @@ RUN rm -r /etc/apt/sources.list.d && \
     git checkout 8f71d678d2457dffc4d07b52e75be11433313e15 && \
     pip install -r requirements.txt
 
-RUN apt-get update && \
-    apt-get install unzip \
+RUN apt-key del 7fa2af80  && \
+    rm -f /etc/apt/sources.list.d/cuda*.list && \
+    curl https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb \
+    -o cuda-keyring_1.0-1_all.deb && \
+    dpkg -i cuda-keyring_1.0-1_all.deb
+
+RUN apt update && \
+    apt install unzip \
                 wget
 
 RUN apt install -y libsndfile-dev

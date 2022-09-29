@@ -3,14 +3,14 @@ services:
     volumes:
       - "./services/:/dp-agent/services/"
 
-  clone_tts:
-    command: uvicorn main:app --host 0.0.0.0 --reload --port 4344
-    build:
-      context: services/speech/thirdparty/clone_tts
-    ports:
-      - 4344:4344
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
+  # clone_tts:
+  #   command: uvicorn main:app --host 0.0.0.0 --reload --port 4344
+  #   build:
+  #     context: services/speech/thirdparty/clone_tts
+  #   ports:
+  #     - 4344:4344
+  #   environment:
+  #     - CUDA_VISIBLE_DEVICES=0
 
   nemo:
     command: uvicorn main:app --host 0.0.0.0 --reload --port 4343
