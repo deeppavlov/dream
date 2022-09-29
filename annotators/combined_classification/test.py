@@ -31,7 +31,7 @@ def main_test():
         {
             "sentences": ["you son of the bitch", "yes"],
             "task": "toxic_classification",
-            "answers_bert": [["insult", "obscene","toxic"], []],
+            "answers_bert": [["insult", "obscene", "toxic"], []],
         },
     ]
 
