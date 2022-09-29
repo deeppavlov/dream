@@ -92,6 +92,7 @@ class EntityLinker(Component, Serializable):
         self.full_paragraph = full_paragraph
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
         self.not_found_str = "not in wiki"
+        self.stemmer = nltk.PorterStemmer()
         self.related_tags = {
             "loc": ["gpe", "country", "city", "us_state", "river"],
             "gpe": ["loc", "country", "city", "us_state"],
@@ -105,6 +106,16 @@ class EntityLinker(Component, Serializable):
             "musician": ["per"],
             "politician": ["per"],
             "writer": ["per"],
+        }
+        self.not_named_entities_tags = {
+            "animal",
+            "food",
+            "music_genre",
+            "misc",
+            "language",
+            "occupation",
+            "type_of_sport",
+            "product",
         }
         self.word_searcher = None
         if self.words_dict_filename:
@@ -279,6 +290,10 @@ class EntityLinker(Component, Serializable):
                         corr_words = self.word_searcher(entity_substr_split[0], set(clean_tags + corr_clean_tags))
                         if corr_words:
                             cand_ent_init = self.find_exact_match(corr_words[0], tags + corr_tags)
+                    if len(entity_substr_split) == 1 and self.stemmer.stem(entity_substr) != entity_substr:
+                        entity_substr_stemmed = self.stemmer.stem(entity_substr)
+                        stem_cand_ent_init = self.find_exact_match(entity_substr_stemmed, tags)
+                        cand_ent_init = {**cand_ent_init, **stem_cand_ent_init}
                     if not cand_ent_init and len(entity_substr_split) > 1:
                         cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
 
@@ -353,13 +368,14 @@ class EntityLinker(Component, Serializable):
                     )
         if tags and ((tags[0][0] == "misc" and not cand_ent_init) or tags[0][1] < 0.7):
             for tag in self.cursors:
-                query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
-                res = self.cursors[tag].execute(query)
-                entities_and_ids = res.fetchall()
-                if entities_and_ids:
-                    cand_ent_init = self.process_cand_ent(
-                        cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf
-                    )
+                if (tags[0][0] == "misc" and tag in self.not_named_entities_tags) or tags[0][0] != "misc":
+                    query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
+                    res = self.cursors[tag].execute(query)
+                    entities_and_ids = res.fetchall()
+                    if entities_and_ids:
+                        cand_ent_init = self.process_cand_ent(
+                            cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf
+                        )
         return cand_ent_init
 
     def find_fuzzy_match(self, entity_substr_split, tags):
