@@ -72,6 +72,7 @@ FUNFACT_LIST = [
 
 def make_question(topic=""):
     if topic:
+        topic = topic[:topic.index('&')]
         return f"Would you like to talk about {topic}? Or would you like to hear another fun fact?"
     else:
         return "Would you like to hear another fun fact?"

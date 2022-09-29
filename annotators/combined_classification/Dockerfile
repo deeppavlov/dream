@@ -18,7 +18,7 @@ COPY common/ common/
 RUN ls /tmp
 
 RUN pip install -r requirements.txt
-ARG DATA_URL=http://files.deeppavlov.ai/dream_data/6in1/model.pth.tar
+ARG DATA_URL=http://files.deeppavlov.ai/dream_data/6in1_toxic_and_emo_multilabel/model.pth.tar
 ADD $DATA_URL /tmp
 CMD gunicorn --workers=1 --bind 0.0.0.0:8087 --timeout=300 server:app
 
