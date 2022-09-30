@@ -72,7 +72,7 @@ FUNFACT_LIST = [
 
 def make_question(topic=""):
     if topic:
-        topic = topic[: topic.index("&")]
+        topic = topic.split('&')[0].split('_')[0]  # handling names of topics from topic_classification
         return f"Would you like to talk about {topic}? Or would you like to hear another fun fact?"
     else:
         return "Would you like to hear another fun fact?"

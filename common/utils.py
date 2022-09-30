@@ -568,7 +568,8 @@ def _get_combined_annotations(annotated_utterance, model_name):
         if model_name in combined_annotations:
             answer_probs = combined_annotations[model_name]
         else:
-            raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
+            logger.warning(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
+            answer_probs = {}
         if all(
             [
                 model_name in ["toxic_classification", "emotion_classification"],
