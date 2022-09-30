@@ -25,7 +25,7 @@ def main_test():
             "sentences_with_history": ["this is the best dog [SEP] so what you think ha"],
             "sentences": ["so what you think ha"],
             "task": "midas_classification",
-            "answers_bert": [["comment"]],
+            "answers_bert": [["open_question_opinion"]],
         },
         {"sentences": ["movies"], "task": "topics_classification", "answers_bert": [["Movies_TV"]]},
         {
