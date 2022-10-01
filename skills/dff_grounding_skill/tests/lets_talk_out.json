@@ -1,7 +1,7 @@
 [
     [
         [
-            "You just told me about star wars, right?",
+            "We are discussing star wars, aren't we?",
             "You like to ask interesting questions.",
             "You have so many interesting questions. I'm ashamed, I don't know."
         ],
@@ -73,7 +73,7 @@
                             ],
                             "2": [
                                 [
-                                    "You just told me about star wars, right?",
+                                    "We are discussing star wars, aren't we?",
                                     1.0,
                                     {},
                                     {},
@@ -196,7 +196,7 @@
                             ],
                             "2": [
                                 [
-                                    "You just told me about star wars, right?",
+                                    "We are discussing star wars, aren't we?",
                                     1.0,
                                     {},
                                     {},
@@ -319,7 +319,7 @@
                             ],
                             "2": [
                                 [
-                                    "You just told me about star wars, right?",
+                                    "We are discussing star wars, aren't we?",
                                     1.0,
                                     {},
                                     {},
