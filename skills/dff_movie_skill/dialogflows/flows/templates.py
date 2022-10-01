@@ -397,7 +397,7 @@ class MovieSkillTemplates:
         result = []
 
         user_uttr = dialog["human_utterances"][-1]["text"].lower()
-        intents = get_intents(dialog["human_utterances"][-1], which="midas")
+        intents = get_intents(dialog["human_utterances"][-1], which="all")
         opinion_request_detected = is_opinion_request(dialog["human_utterances"][-1])
 
         # favorite movies
