@@ -570,10 +570,9 @@ def _get_combined_annotations(annotated_utterance, model_name):
         else:
             logger.warning(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
             answer_probs = {}
-        if all(
+        if any(
             [
                 model_name in ["toxic_classification", "emotion_classification"],
-                "factoid_classification" not in combined_annotations,
             ]
         ):
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
