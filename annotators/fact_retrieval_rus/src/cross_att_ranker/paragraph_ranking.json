@@ -1,0 +1,45 @@
+{
+  "chainer": {
+    "in": ["question", "doc_ids", "paragraphs"],
+    "in_y": ["y"],
+    "pipe": [
+      {
+        "class_name": "src.cross_att_ranker.torch_transformers_preprocessor:ParagraphRankingPreprocessor",
+        "vocab_file": "{TRANSFORMER}",
+        "do_lower_case": false,
+        "add_special_tokens": ["<par>"],
+        "max_seq_length": 510,
+        "in": ["question", "doc_ids", "paragraphs"],
+        "out": ["bert_features"]
+      },
+      {
+        "class_name": "src.cross_att_ranker.paragraph_ranker:ParagraphRankerInfer",
+        "in": ["bert_features"],
+        "out": ["model_output"],
+        "return_probas": true,
+        "encoder_save_path": "{MODEL_PATH}/encoder",
+        "linear_save_path": "{MODEL_PATH}/linear",
+        "model_name": "in_batch_ranking_model",
+        "pretrained_bert": "{TRANSFORMER}",
+        "learning_rate_drop_patience": 5,
+        "learning_rate_drop_div": 1.5
+      }
+    ],
+    "out": ["model_output"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "TRANSFORMER": "DeepPavlov/distilrubert-tiny-cased-conversational-v1",
+      "MODEL_PATH": "{MODELS_PATH}/classifiers/paragraph_ranking_distilbert"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/odqa_dream_rus/paragraph_ranking_distilbert.tar.gz",
+        "subdir": "{MODEL_PATH}"
+      }
+    ]
+  }
+}

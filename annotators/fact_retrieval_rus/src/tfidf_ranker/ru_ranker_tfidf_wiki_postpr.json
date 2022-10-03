@@ -1,0 +1,40 @@
+{
+  "chainer": {
+    "in": ["question_raw", "entity_substr", "tags"],
+    "out": ["tfidf_doc_ids"],
+    "pipe": [
+      {
+        "class_name": "hashing_tfidf_vectorizer",
+        "id": "vectorizer",
+        "load_path": "{ODQA_PATH}/ruwiki_tfidf_matrix_fast.npz",
+        "tokenizer": {
+          "class_name": "ru_tokenizer",
+          "lemmas": true,
+          "ngram_range": [1, 3]
+        }
+      },
+      {
+        "class_name": "src.tfidf_ranker.tfidf_ranker:TfidfRanker",
+        "top_n": 10000,
+        "out_top_n": 200,
+        "in": ["question_raw", "entity_substr", "tags"],
+        "out": ["tfidf_doc_ids", "tfidf_doc_scores"],
+        "filter_flag": true,
+        "vectorizer": "#vectorizer"
+      }
+    ]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "ODQA_PATH": "{MODELS_PATH}/odqa"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/odqa_dream_rus/ruwiki_tfidf_matrix_fast.tar.gz",
+        "subdir": "{ODQA_PATH}"
+      }
+    ]
+  }
+}
