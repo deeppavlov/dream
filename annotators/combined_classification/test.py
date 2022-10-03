@@ -22,7 +22,7 @@ def main_test():
             "answers_bert": [["anger"]],
         },
         {
-            "sentences_with_history": ["this is the best dog [SEP] so what you think ha"],
+            "sentences_with_history": ["this is the best dog [SEP] so what you think"],
             "sentences": ["so what you think ha"],
             "task": "midas_classification",
             "answers_bert": [["open_question_opinion"]],
