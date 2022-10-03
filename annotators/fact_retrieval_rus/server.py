@@ -27,15 +27,23 @@ except Exception as e:
 def respond():
     st_time = time.time()
     inp = request.json
-    sentences = inp.get("sentences", [])
-    entity_substr_batch = inp.get("entity_substr", [])
-    entity_tags_batch = inp.get("entity_tags", [])
-    entity_pages_batch = inp.get("entity_pages", [[] for _ in sentences])
-    contexts_with_scores_batch = [[] for _ in sentences]
+    dialog_history_batch = inp.get("dialog_history", [])
+    entity_substr_batch = inp.get("entity_substr", [[] for _ in dialog_history_batch])
+    entity_tags_batch = inp.get("entity_tags", [[] for _ in dialog_history_batch])
+    entity_pages_batch = inp.get("entity_pages", [[] for _ in dialog_history_batch])
+    sentences_batch = []
+    for dialog_history in dialog_history_batch:
+        if (len(dialog_history[-1].split()) > 2 and "?" in dialog_history[-1]) or len(dialog_history) == 1:
+            sentence = dialog_history[-1]
+        else:
+            sentence = " ".join(dialog_history)
+        sentences_batch.append(sentence)
+
+    contexts_with_scores_batch = [[] for _ in sentences_batch]
     try:
         contexts_with_scores_batch = []
         contexts_batch, scores_batch, from_linked_page_batch = fact_retrieval(
-            sentences, entity_substr_batch, entity_tags_batch, entity_pages_batch
+            sentences_batch, entity_substr_batch, entity_tags_batch, entity_pages_batch
         )
         for contexts, scores, from_linked_page_list in zip(contexts_batch, scores_batch, from_linked_page_batch):
             contexts_with_scores = list(zip(contexts, scores, from_linked_page_list))

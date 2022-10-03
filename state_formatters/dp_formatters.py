@@ -211,6 +211,32 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     return [{"sentences": context}]
 
 
+def odqa_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+
+    return [
+        {
+            "sentences": [dialog["human_utterances"][-1]["text"]],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+        }
+    ]
+
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
@@ -629,32 +655,22 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])]
-
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-2:]])]
     last_human_utt = dialog["human_utterances"][-1]
 
-    nounphrases = [last_human_utt["annotations"].get("cobot_entities", {}).get("entities", [])]
-
     entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
-    entity_pages_list = []
-    entity_ids_list = []
-    entity_substr_list = []
-    entity_pages_titles_list = []
+    entity_substr_list, entity_tags_list, entity_pages_list = [], [], []
     for entity_info in entity_info_list:
         if "entity_pages" in entity_info and entity_info["entity_pages"]:
-            entity_pages_list.append(entity_info["entity_pages"])
-            entity_ids_list.append(entity_info["entity_ids"])
             entity_substr_list.append(entity_info["entity_substr"])
-            entity_pages_titles_list.append(entity_info["entity_pages_titles"])
+            entity_tags_list.append(entity_info["entity_tags"])
+            entity_pages_list.append(entity_info["entity_pages"])
     return [
         {
-            "human_sentences": [last_human_utt["text"]],
-            "dialog_history": dialog_history,
-            "nounphrases": nounphrases,
+            "dialog_history": [dialog_history],
             "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
             "entity_pages": [entity_pages_list],
-            "entity_ids": [entity_ids_list],
-            "entity_pages_titles": [entity_pages_titles_list],
         }
     ]
 
