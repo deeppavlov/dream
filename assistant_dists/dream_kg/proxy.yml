@@ -278,14 +278,14 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8074
       - PORT=8074
 
-  entity-linking:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8075
-      - PORT=8075
+#  entity-linking:
+#    command: [ "nginx", "-g", "daemon off;" ]
+#    build:
+#      context: dp/proxy/
+#      dockerfile: Dockerfile
+#    environment:
+#      - PROXY_PASS=dream.deeppavlov.ai:8075
+#      - PORT=8075
 
   wiki-parser:
     command: [ "nginx", "-g", "daemon off;" ]

@@ -168,7 +168,8 @@ def name_scenario(utt, user_id):
     """Checks if there is a Name given and adds it as a property."""
     names = get_named_persons(utt)
     if not names:
-        return 'No names were found.'
+        logger.info('No names were found.')
+        return {}
     logger.info(f'I found a name: {names[0]}')
     existing_ids = [user[0].get("Id") for user in graph.search_for_entities("User")]
     if user_id not in existing_ids:
@@ -210,11 +211,16 @@ def get_result(request):
     entity_detection = utt.get("annotations", {}).get("entity_detection", [])
     entities = entity_detection.get('labelled_entities', [])
     entities = [entity.get('text', 'no entity name') for entity in entities]
+    added = []
     name_result = {}
     if entities:
         name_result = name_scenario(utt, user_id)
     property_result = add_relations_or_properties(utt, user_id)
-    return [{'graph': 'nothing yet'}]
+    if name_result:
+        added.append(name_result)
+    if property_result:
+        added.append(property_result)
+    return [{'added_to_graph': added}]
 
 
 @app.route("/respond", methods=["POST"])
