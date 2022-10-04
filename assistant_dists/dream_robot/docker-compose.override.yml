@@ -1,10 +1,10 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client -pl assistant_dists/dream_mini/pipeline_conf.json --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_robot/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021"
+          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, robot:8130"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
