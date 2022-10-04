@@ -219,8 +219,10 @@ class EntityLinker(Component, Serializable):
                         query = "SELECT * FROM entity_additional_info WHERE page_title='{}';".format(entity_page)
                         res = self.add_info_cur.execute(query)
                         fetch_res = res.fetchall()
-                        first_par = fetch_res[0][1]
-                        dbpedia_types_elem = fetch_res[0][2].split()
+                        first_par, dbpedia_types = "", []
+                        if fetch_res:
+                            first_par = fetch_res[0][1]
+                            dbpedia_types_elem = fetch_res[0][2].split()
                         first_pars.append(first_par)
                         dbpedia_types.append(dbpedia_types_elem)
                     except Exception as e:

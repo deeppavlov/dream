@@ -3,6 +3,7 @@ import os
 import re
 import time
 
+import nltk
 import sentry_sdk
 from flask import Flask, jsonify, request
 
@@ -13,6 +14,8 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
+
+stemmer = nltk.PorterStemmer()
 
 config_name = os.getenv("CONFIG")
 rel_cls_flag = int(os.getenv("REL_CLS_FLAG", "0"))
@@ -98,13 +101,16 @@ def get_result(request):
                 for entity_info in entity_info_list:
                     if entity_info and "entity_substr" in entity_info and "entity_ids" in entity_info:
                         entity_substr = entity_info["entity_substr"]
-                        if triplet and entity_substr in [triplet[0], triplet[2]]:
+                        if triplet and (
+                            entity_substr in [triplet[0], triplet[2]]
+                            or stemmer.stem(entity_substr) in [triplet[0], triplet[2]]
+                        ):
                             if entity_substr not in entity_substr_dict:
                                 entity_substr_dict[entity_substr] = {}
                             entity_substr_dict[entity_substr]["entity_ids"] = entity_info["entity_ids"]
                             entity_substr_dict[entity_substr]["dbpedia_types"] = entity_info.get("dbpedia_types", [])
                             entity_substr_dict[entity_substr]["finegrained_types"] = entity_info.get(
-                                "dbpedia_types", []
+                                "entity_id_tags", []
                             )
         if triplet:
             formatted_triplet = {"subject": triplet[0], rel_type_dict[triplet[1]]: triplet[1], "object": triplet[2]}
