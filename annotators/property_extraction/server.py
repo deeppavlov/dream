@@ -28,6 +28,13 @@ with open("rel_list.txt", "r") as fl:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
 
+
+def check_triplet(triplet):
+    if triplet[0] in {"hi", "hello"} or any([word in triplet[0] for word in {" hi ", " hello "}]):
+        return False
+    return True
+
+
 try:
     generative_ie = build_model(config_name, download=True)
     logger.info("property extraction model is loaded.")
@@ -62,7 +69,7 @@ def get_result(request):
         filtered_triplets_batch = []
         for triplet, rel in zip(triplets_batch, rels):
             rel = rel.replace("_", " ")
-            if len(triplet) == 3 and triplet[1] == rel:
+            if len(triplet) == 3 and triplet[1] == rel and check_triplet(triplet):
                 filtered_triplets_batch.append(triplet)
             else:
                 filtered_triplets_batch.append([])
