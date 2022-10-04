@@ -69,4 +69,10 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
+  robot:
+    volumes:
+      - "./skills/robot_skill:/src"
+    ports:
+      - 8130:8130
+
 version: "3.7"
