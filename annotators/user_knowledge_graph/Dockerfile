@@ -15,7 +15,6 @@ RUN python -m nltk.downloader wordnet
 RUN pip install git+https://github.com/deeppavlovteam/custom_kg_svc
 
 COPY annotators/user_knowledge_graph/ ./
-COPY ./common/ ./common/
 
 ARG PORT
 ENV PORT ${PORT}

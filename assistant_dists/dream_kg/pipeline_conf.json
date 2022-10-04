@@ -291,7 +291,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 5,
                     "url": "http://entity-linking:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",

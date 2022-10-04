@@ -2,8 +2,8 @@ import logging
 import uuid
 import re
 
-# from common.utils import get_named_persons
-# from common.personal_info import my_name_is_pattern
+from common.utils import get_named_persons
+from common.personal_info import my_name_is_pattern
 
 from flask import Flask, jsonify, request
 from deeppavlov_kg import KnowledgeGraph, mocks
@@ -12,57 +12,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
-
-my_name_is_pattern = re.compile(
-    r"my (name is|name's)|call me|"
-    r"мо[её] (имя [а-яА-ЯЙйЁё]+|прозвище|название)|меня зовут|(зови|называй) меня|обращайся ко мне",
-    re.IGNORECASE,
-)
-
-COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
-
-
-def get_entities(annotated_utterance, only_named=False, with_labels=False):
-    if not only_named:
-        if "entity_detection" in annotated_utterance.get("annotations", {}):
-            labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
-            # skip some labels
-            entities = [ent for ent in labelled_entities if ent["label"] not in COBOT_ENTITIES_SKIP_LABELS]
-            if not with_labels:
-                entities = [ent["text"] for ent in entities]
-        else:
-            entities = annotated_utterance.get("annotations", {}).get("spacy_nounphrases", [])
-            if with_labels:
-                # actually there are no labels for cobot nounphrases
-                # so, let's make it as for cobot_entities format
-                entities = [{"text": ent, "label": "misc"} for ent in entities]
-    else:
-        # `ner` contains list of lists of dicts. the length of the list is n-sentences
-        # each entity is {"confidence": 1, "end_pos": 1, "start_pos": 0, "text": "unicorns", "type": "ORG"}
-        entities = annotated_utterance.get("annotations", {}).get("ner", [])
-        entities = sum(entities, [])  # flatten list, now it's a list of dicts-entities
-        if not with_labels:
-            entities = [ent["text"] for ent in entities]
-    return entities if entities is not None else []
-
-
-def get_named_persons(annotated_utterance):
-    named_entities = get_entities(annotated_utterance, only_named=True, with_labels=True)
-    all_entities = get_entities(annotated_utterance, only_named=False, with_labels=True)
-
-    named_persons = []
-    if "cobot_entities" in annotated_utterance["annotations"]:
-        for ent in all_entities:
-            if ent["label"] == "person":
-                named_persons.append(ent["text"])
-    if "ner" in annotated_utterance["annotations"]:
-        for ent in named_entities:
-            if ent["type"] == "PER":
-                named_persons.append(ent["text"])
-
-    named_persons = list(set(named_persons))
-
-    return named_persons
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
