@@ -14,14 +14,14 @@ RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
 RUN pip install git+https://github.com/deeppavlovteam/custom_kg_svc
 
-COPY annotators//user_knowledge_graph/ ./
+COPY annotators/user_knowledge_graph/ ./
 COPY ./common/ ./common/
 
 ARG PORT
 ENV PORT ${PORT}
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
-HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${PORT}/healthcheck || exit 1
+#HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${PORT}/healthcheck || exit 1
 
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${PORT}

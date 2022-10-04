@@ -15,12 +15,12 @@ from common.personal_info import _is_not_re, my_name_is_not_pattern, my_name_is_
 
 logger = logging.getLogger(__name__)
 
-graph = KnowledgeGraph(
-    "bolt://neo4j:neo4j@neo4j:7687",
-    ontology_kinds_hierarchy_path="deeppavlov_kg/database/ontology_kinds_hierarchy.pickle",
-    ontology_data_model_path="deeppavlov_kg/database/ontology_data_model.json",
-    db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
-)
+# graph = KnowledgeGraph(
+#     "bolt://neo4j:neo4j@neo4j:7687",
+#     ontology_kinds_hierarchy_path="deeppavlov_kg/database/ontology_kinds_hierarchy.pickle",
+#     ontology_data_model_path="deeppavlov_kg/database/ontology_data_model.json",
+#     db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
+# )
 
 # graph.drop_database()
 # if 'User' not in dict_tree['Kinds']:
