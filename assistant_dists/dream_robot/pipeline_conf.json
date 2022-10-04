@@ -215,6 +215,19 @@
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
+            },
+            "robot": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://robot:8130/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:robot_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
             }
         },
         "post_skill_selector_annotators": {
