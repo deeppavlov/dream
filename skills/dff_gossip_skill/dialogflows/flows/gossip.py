@@ -322,6 +322,9 @@ supported_topics = [
     "Politics",
     "Entertainment_General",
     "Science_and_Technology",
+    "Entertainment_Movies",
+    "Entertainment_Music",
+    "Entertainment_Books"
 ]
 
 

@@ -14,9 +14,6 @@ INTENT_DICT = {
     "ClarificationIntent": "You clarified me what you've just said about ENTITY_NAME, right?",
     "Topic_SwitchIntent": "You wanted to change topic, right?",
     "Opinion_RequestIntent": "You wanted to hear my thoughts about ENTITY_NAME, am I correct?",
-}
-
-MIDAS_INTENT_DICT = {
     "open_question_factual": "You have asked me about ENTITY_NAME, right?",
     "open_question_opinion": "You have requested my opinion about ENTITY_NAME, right?",
     "open_question_personal": "You have asked me a personal question, right?",
@@ -40,48 +37,31 @@ TOPIC_DICT = {
     "Beauty": "We were talking about beauty, am I right?",
     "Job": "We were talking about job, am I right?",
     "Art&Hobbies": "We were talking about art and hobbies, am I right?",
-    "Sports": "We were discussing sports, am I right?",
-    "News": "We were discussing news, am I right?",
     "Travel": "We were discussing traveling, am I right?",
-    "Politics": "We were discussing politics, am I right?",
     "Celebrities&Events": "We were discussing celebrities, am I right?",
     "Depression": "We were talking about depression, am I right?",
     "Food": "We were discussing food, am I right?",
     "Books&Literature": "We were discussing books, am I right?",
-    "Music": "We were discussing music, am I right?",
     "Gadgets": "We were discussing gadgets, am I right?",
-    "Movies_TV": "We were discussing movies, am I right?",
     "Education": "We were discussing education, am I right?",
     "MassTransit": "We were discussing mass transit, am I right?",
-    "Psychology": "We were discussing psychology, am I right?",
-    "Science_and_Technology": "We were discussing science and technology, am I right?",
     "Disasters": "We were discussing something bad, am I right?",
     "Space": "We were discussing space, am I right?",
     "Finance": "We were discussing finance, am I right?",
     "Artificial_Intelligence": "We were discussing AI, am I right?",
-    "Religion": "We were discussing religion, am I right?",
     "Leisure": "We were talking about leisure time, am I right?",
     "Clothes": "We were talking about clothes, am I right?",
     "Health&Medicine": "We were discussing health issues, am I right?",
     "Home&Design": "We were discussing home utilities, am I right?",
     "Family&Relationships": "We were discussing family matters, am I right?",
-}
-
-DA_TOPIC_DICT = {
     "Entertainment_Movies": "We were discussing movies, am I right?",
     "Entertainment_Books": "We were discussing books, am I right?",
     "Entertainment_General": "We are just trying to be polite to each other, aren't we?",
     "Science_and_Technology": "I was under impression we were chatting about technology stuff.",
-    "Sports": "So I thought we were talking about sports.",
-    "Politics": "Correct me if I'm wrong but I thought we were discussing politics.",
-}
-
-
-COBOT_TOPIC_DICT = {
     "Phatic": "We are just trying to be polite to each other, aren't we?",
     "Other": "I can't figure out what we are talking about exactly. Can you spare a hand?",
     "Movies_TV": "We were discussing movies, am I right?",
-    "Music": "Thought we were talking about music.",
+    "Music": "I thought we were talking about music.",
     "SciTech": "I was under impression we were chatting about technology stuff.",
     "Literature": "We were discussing literature, am I right?",
     "Travel_Geo": "Thought we were talking about some travel stuff.",

@@ -1,56 +1,105 @@
 {
-   "metadata":{"variables":{"BACKBONE":"distilbert-base-uncased","MODELS_PATH":"/tmp","SINGLE_SENTENCE_LEN":32,"MULTI_SENTENCE_LEN":64}},
-   "chainer":{
-      "in":[
-         "x","x_with_history"
-      ],
-      "pipe":[
-            {
-                "class_name":"torch_transformers_preprocessor",
-                "vocab_file":"{BACKBONE}",
-                "max_seq_length":"{SINGLE_SENTENCE_LEN}",
-                "in":[
-                    "x"
-                ],
-                "out":[
-                    "bert_features_x"
-                ]
-            },
-            {
-                "class_name":"torch_transformers_preprocessor",
-                "vocab_file":"{BACKBONE}",
-                "max_seq_length":"{MULTI_SENTENCE_LEN}",
-                "in":[
-                    "x_with_history"
-                ],
-                "out":[
-                    "bert_features_x_with_history"
-                ]
-            },
-         {
-            "id":"multitask_bert",
-            "class_name":"multitask_bert",
-            "optimizer_parameters":{
-               "lr":2e-5
-            },
-            "learning_rate_drop_patience":2,
-            "learning_rate_drop_div":2.0,
-            "return_probas":true,
-            "backbone_model":"{BACKBONE}",
-            "save_path":"{MODELS_PATH}/model",
-            "load_path":"{MODELS_PATH}/model",
-            "tasks":{
-               "emo":{"type":"classification","options":7, "multilabel":true},
-               "sentiment":{"type":"classification","options":3},
-               "toxic":{"type":"classification","options":8, "multilabel": true},
-               "factoid":{"type":"classification","options":2},
-               "midas":{"type":"classification","options":15},
-               "topics":{"type":"classification","options":33}
-            },
-            "in":["bert_features_x","bert_features_x","bert_features_x","bert_features_x","bert_features_x_with_history","bert_features_x"],
-            "out":["y_emo_pred_probas","y_sentiment_pred_probas","y_toxic_pred_probas","y_factoid_pred_probas","y_midas_pred_probas","y_topics_pred_probas"]
-         }
-      ],
-      "out":["y_emo_pred_probas","y_sentiment_pred_probas","y_toxic_pred_probas","y_factoid_pred_probas","y_midas_pred_probas","y_topics_pred_probas"]
-   }
+  "metadata": {
+    "variables": {
+      "BACKBONE": "distilbert-base-uncased",
+      "MODELS_PATH": "/tmp",
+      "SINGLE_SENTENCE_LEN": 32,
+      "MULTI_SENTENCE_LEN": 64
+    }
+  },
+  "chainer": {
+    "in": [
+      "x",
+      "x_with_history"
+    ],
+    "pipe": [
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x"
+        ],
+        "out": [
+          "bert_features_x"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{MULTI_SENTENCE_LEN}",
+        "in": [
+          "x_with_history"
+        ],
+        "out": [
+          "bert_features_x_with_history"
+        ]
+      },
+      {
+        "id": "multitask_bert",
+        "class_name": "multitask_bert",
+        "optimizer_parameters": {
+          "lr": 2e-5
+        },
+        "learning_rate_drop_patience": 2,
+        "learning_rate_drop_div": 2.0,
+        "return_probas": true,
+        "backbone_model": "{BACKBONE}",
+        "save_path": "{MODELS_PATH}/model",
+        "load_path": "{MODELS_PATH}/model",
+        "tasks": {
+          "emo": {
+            "type": "classification",
+            "options": 7,
+            "multilabel": true
+          },
+          "sentiment": {
+            "type": "classification",
+            "options": 3
+          },
+          "toxic": {
+            "type": "classification",
+            "options": 8,
+            "multilabel": true
+          },
+          "factoid": {
+            "type": "classification",
+            "options": 2
+          },
+          "midas": {
+            "type": "classification",
+            "options": 15
+          },
+          "topics": {
+            "type": "classification",
+            "options": 33
+          }
+        },
+        "in": [
+          "bert_features_x",
+          "bert_features_x",
+          "bert_features_x",
+          "bert_features_x",
+          "bert_features_x_with_history",
+          "bert_features_x"
+        ],
+        "out": [
+          "y_emo_pred_probas",
+          "y_sentiment_pred_probas",
+          "y_toxic_pred_probas",
+          "y_factoid_pred_probas",
+          "y_midas_pred_probas",
+          "y_topics_pred_probas"
+        ]
+      }
+    ],
+    "out": [
+      "y_emo_pred_probas",
+      "y_sentiment_pred_probas",
+      "y_toxic_pred_probas",
+      "y_factoid_pred_probas",
+      "y_midas_pred_probas",
+      "y_topics_pred_probas"
+    ]
+  }
 }

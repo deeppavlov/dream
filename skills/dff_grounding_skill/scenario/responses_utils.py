@@ -6,7 +6,7 @@ from common.utils import get_topics, get_intents, get_entities
 from .utils import (
     get_midas_intent_acknowledgement,
     reformulate_question_to_statement,
-    MIDAS_INTENT_DICT,
+    INTENT_DICT,
     TOPIC_DICT,
     get_entity_name,
     get_midas_analogue_intent_for_any_intent,
@@ -27,7 +27,7 @@ PRIVACY_REPLY = (
     "learn more by visiting amazon.com/alexaprivacy."
 )
 
-INTENTS_BY_POPULARITY = list(MIDAS_INTENT_DICT.keys())[::-1]
+INTENTS_BY_POPULARITY = list(INTENT_DICT.keys())[::-1]
 TOPICS_BY_POPULARITY = list(TOPIC_DICT.keys())[::-1]
 LINKTO_QUESTIONS_LOWERCASED = [
     question.lower() for set_of_quests in skills_phrases_map.values() for question in set_of_quests
@@ -68,7 +68,7 @@ def get_bot_based_on_topic_or_intent_reply(prev_human_utterance):
 
     for intent in INTENTS_BY_POPULARITY:  # start from least popular
         if intent in intent_list and reply is None and len(entity_name) > 0:
-            reply = MIDAS_INTENT_DICT[intent].replace("ENTITY_NAME", entity_name)
+            reply = INTENT_DICT[intent].replace("ENTITY_NAME", entity_name)
     if len(entity_name) > 0 and reply is None:
         reply = f"We are discussing {entity_name}, aren't we?"
     for topic in TOPICS_BY_POPULARITY:  # start from least popular
@@ -82,9 +82,8 @@ def get_bot_based_on_topic_or_intent_reply(prev_human_utterance):
 #####################################################################
 def collect_topics_entities_intents(prev_human_utterance):
     if len(prev_human_utterance) > 1:
-        intent_list = get_intents(prev_human_utterance, which="midas")
-        topic_list = get_topics(prev_human_utterance, which="topics")
-
+        intent_list = get_intents(prev_human_utterance, which="all")
+        topic_list = get_topics(prev_human_utterance, which="all")
         intent_list = list(set(intent_list))
         topic_list = list(set(topic_list))
     else:

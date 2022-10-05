@@ -821,7 +821,7 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
         answer_probs, answer_labels = cobot_da_topics_probs, cobot_da_topics_labels
-    elif which == "topics":
+    elif which == "deeppavlov_topics":
         answer_probs, answer_labels = topics_probs, topics_labels
     else:
         logger.exception(f"Unknown input type in get_topics: {which}")
