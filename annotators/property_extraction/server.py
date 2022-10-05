@@ -52,6 +52,7 @@ except Exception as e:
 def get_result(request):
     st_time = time.time()
     uttrs = request.json.get("utterances", [])
+    named_entities_batch = request.json.get("named_entities", [[] for _ in uttrs])
     entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in uttrs])
     entity_info_batch = request.json.get("entity_info", [[] for _ in uttrs])
 
@@ -79,12 +80,12 @@ def get_result(request):
         triplets_batch = filtered_triplets_batch
 
     triplets_info_batch = []
-    for triplet, uttr, entities_with_labels, entity_info_list in zip(
-        triplets_batch, uttrs, entities_with_labels_batch, entity_info_batch
+    for triplet, uttr, named_entities, entities_with_labels, entity_info_list in zip(
+        triplets_batch, uttrs, named_entities_batch, entities_with_labels_batch, entity_info_batch
     ):
         uttr = uttr.lower()
         entity_substr_dict = {}
-        formatted_triplet = {}
+        formatted_triplet, per_triplet = {}, {}
         if len(uttr.split()) > 2:
             for entity in entities_with_labels:
                 if "text" in entity:
@@ -114,8 +115,19 @@ def get_result(request):
                             )
         if triplet:
             formatted_triplet = {"subject": triplet[0], rel_type_dict[triplet[1]]: triplet[1], "object": triplet[2]}
-        triplets_info_batch.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
+            named_entities_list = []
+            for elem in named_entities:
+                for entity in elem:
+                    named_entities_list.append(entity)
+            per_entities = [entity for entity in named_entities_list if entity.get("type", "") == "PER"]
+            if triplet[1] in {"have pet", "have family", "have sibling", "have chidren"} and per_entities:
+                per_triplet = {"subject": triplet[2], "property": "name", "object": per_entities[0].get("text", "")}
 
+        triplets_info_batch.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
+        if per_triplet:
+            triplets_info_batch.append(
+                {"triplet": per_triplet, "entity_info": {per_triplet["object"]: {"entity_id_tags": ["PER"]}}}
+            )
     total_time = time.time() - st_time
     logger.info(f"property extraction exec time: {total_time: .3f}s")
     logger.info(f"property extraction, input {uttrs}, output {triplets_info_batch} scores {scores}")
