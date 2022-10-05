@@ -209,6 +209,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
                         "dff_short_story_skill",
+                        "robot_skill",
                     ],
                 )
                 # adding linked-to skills
