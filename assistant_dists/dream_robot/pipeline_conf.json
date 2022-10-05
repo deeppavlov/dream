@@ -216,7 +216,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "robot": {
+            "robot_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 5,
