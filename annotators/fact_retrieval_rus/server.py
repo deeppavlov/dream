@@ -42,13 +42,33 @@ def respond():
     contexts_with_scores_batch = [[] for _ in sentences_batch]
     try:
         contexts_with_scores_batch = []
-        contexts_batch, scores_batch, from_linked_page_batch = fact_retrieval(
+        contexts_batch, scores_batch, from_linked_page_batch, numbers_batch = fact_retrieval(
             sentences_batch, entity_substr_batch, entity_tags_batch, entity_pages_batch
         )
-        for contexts, scores, from_linked_page_list in zip(contexts_batch, scores_batch, from_linked_page_batch):
-            contexts_with_scores = list(zip(contexts, scores, from_linked_page_list))
-            contexts_with_scores = sorted(contexts_with_scores, key=lambda x: x[1], reverse=True)
-            contexts_with_scores_batch.append(contexts_with_scores[:top_n])
+        for contexts, scores, from_linked_page_list, numbers in zip(
+            contexts_batch, scores_batch, from_linked_page_batch, numbers_batch
+        ):
+            contexts_with_scores_linked, contexts_with_scores_not_linked, contexts_with_scores_first = [], [], []
+            for context, score, from_linked_page, number in zip(contexts, scores, from_linked_page_list, numbers):
+                if from_linked_page and number > 0:
+                    contexts_with_scores_linked.append((context, score, number))
+                elif from_linked_page and number == 0:
+                    contexts_with_scores_first.append((context, score, number))
+                else:
+                    contexts_with_scores_not_linked.append((context, score, number))
+            contexts_with_scores_linked = sorted(contexts_with_scores_linked, key=lambda x: (x[1], x[2]), reverse=True)
+            contexts_with_scores_not_linked = sorted(
+                contexts_with_scores_not_linked, key=lambda x: (x[1], x[2]), reverse=True
+            )
+            contexts_with_scores = []
+            contexts_with_scores += [(context, score, True) for context, score, _ in contexts_with_scores_first]
+            contexts_with_scores += [
+                (context, score, True) for context, score, _ in contexts_with_scores_linked[: top_n // 2]
+            ]
+            contexts_with_scores += [
+                (context, score, False) for context, score, _ in contexts_with_scores_not_linked[: top_n // 2]
+            ]
+            contexts_with_scores_batch.append(contexts_with_scores)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

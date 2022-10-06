@@ -15,7 +15,7 @@
       {
         "config_path": "src/ruwiki_db/wiki_db.json",
         "in": ["tfidf_doc_ids", "entity_pages"],
-        "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "doc_pages", "from_linked_page"]
+        "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "doc_pages", "from_linked_page", "numbers"]
       },
       {
         "class_name": "src.filter_docs:FilterDocs",
@@ -34,6 +34,6 @@
         "out": ["scores"]
       }
     ],
-    "out": ["filtered_doc_text", "scores", "from_linked_page"]
+    "out": ["filtered_doc_text", "scores", "from_linked_page", "numbers"]
   }
 }

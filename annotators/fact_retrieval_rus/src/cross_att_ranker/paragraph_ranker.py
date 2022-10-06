@@ -57,5 +57,6 @@ class ParagraphRankerInfer:
                     scores = self.fc(cls_emb)
                 scores = scores.cpu().numpy().tolist()
                 scores_list += scores
+            scores_list = [elem[0] for elem in scores_list]
             scores_batch.append(scores_list)
         return scores_batch

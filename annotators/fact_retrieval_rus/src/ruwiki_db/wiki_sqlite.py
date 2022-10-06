@@ -45,9 +45,9 @@ class WikiSQLiteVocab(Component):
         self.doc2index = self.map_doc2idx()
 
     def __call__(self, par_ids_batch, entities_pages_batch, *args, **kwargs):
-        all_contents, all_contents_ids, all_pages, all_from_linked_page = [], [], [], []
+        all_contents, all_contents_ids, all_pages, all_from_linked_page, all_numbers = [], [], [], [], []
         for entities_pages, par_ids in zip(entities_pages_batch, par_ids_batch):
-            page_contents, page_contents_ids, pages, from_linked_page = [], [], [], []
+            page_contents, page_contents_ids, pages, from_linked_page, numbers = [], [], [], [], []
             for entity_pages in entities_pages:
                 for entity_page in entity_pages[: self.top_n]:
                     cur_page_contents, cur_page_contents_ids, cur_pages = self.get_page_content(entity_page)
@@ -55,6 +55,8 @@ class WikiSQLiteVocab(Component):
                     page_contents_ids += cur_page_contents_ids
                     pages += cur_pages
                     from_linked_page += [True for _ in cur_pages]
+                    numbers += list(range(len(cur_pages)))
+
             par_contents = []
             par_pages = []
             for par_id in par_ids:
@@ -62,12 +64,14 @@ class WikiSQLiteVocab(Component):
                 par_contents.append(text)
                 par_pages.append(page)
                 from_linked_page.append(False)
+                numbers.append(0)
             all_contents.append(page_contents + par_contents)
             all_contents_ids.append(page_contents_ids + par_ids)
             all_pages.append(pages + par_pages)
             all_from_linked_page.append(from_linked_page)
+            all_numbers.append(numbers)
 
-        return all_contents, all_contents_ids, all_pages, all_from_linked_page
+        return all_contents, all_contents_ids, all_pages, all_from_linked_page, all_numbers
 
     def get_paragraph_content(self, par_id):
         cursor = self.connect.cursor()

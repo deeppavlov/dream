@@ -5,12 +5,12 @@
       {
         "class_name": "src.ruwiki_db.wiki_sqlite:WikiSQLiteVocab",
         "in": ["tfidf_doc_ids", "entity_pages"],
-        "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "total_pages", "from_linked_page"],
+        "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "total_pages", "from_linked_page", "numbers"],
         "shuffle": false,
         "load_path": "{DOWNLOADS_PATH}/odqa/ruwiki_par_doc_fast.db"
       }
     ],
-    "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "total_pages", "from_linked_page"]
+    "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "total_pages", "from_linked_page", "numbers"]
   },
   "metadata": {
     "variables": {
