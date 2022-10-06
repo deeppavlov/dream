@@ -206,7 +206,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://fact-retrieval:8127/respond"
+                    "url": "http://fact-retrieval:8130/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
