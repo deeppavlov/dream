@@ -129,4 +129,9 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=7
   dff-template-skill:
+  property-extraction:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
 version: '3.7'
