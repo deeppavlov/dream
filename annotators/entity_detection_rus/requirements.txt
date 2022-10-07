@@ -1,12 +1,12 @@
 Flask==1.1.1
-nltk==3.2.5
+nltk==3.4.5
 gunicorn==19.9.0
 requests==2.22.0
 sentry-sdk==0.12.3
 torch==1.6.0
 transformers==4.6.0
 deeppavlov==0.17.2
-pymorphy2==0.9.1
+pymorphy2==0.8
 pymorphy2-dicts==2.4.393442.3710985
 pymorphy2-dicts-ru==2.4.417127.4579844
 itsdangerous==2.0.1

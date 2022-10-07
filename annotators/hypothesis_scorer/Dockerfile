@@ -1,5 +1,5 @@
 FROM deeppavlov/base-gpu:0.14.1
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.14.1
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.14.1
 
 ARG MIDAS_DATA_URL=https://files.deeppavlov.ai/alexaprize_data/midas.tar.gz
 ARG CONVERT_DATA_URL=https://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.8.tar.gz

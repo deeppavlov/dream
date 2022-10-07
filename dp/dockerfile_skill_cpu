@@ -1,5 +1,5 @@
 FROM deeppavlov/base-cpu:0.6.1
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.6.1
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.6.1
 
 ARG skillconfig
 ARG skillport
@@ -32,7 +32,7 @@ COPY $DIR /dp-agent/$DIR
 
 COPY dp/ /dp-agent/dp
 RUN python dp/dp_server_config.py
-
+RUN pip install --upgrade pip
 RUN sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov/deeppavlov/utils/server/server.py"
 
 RUN pip install sentry-sdk==0.13.0 # TODO: Move it to separate requirements

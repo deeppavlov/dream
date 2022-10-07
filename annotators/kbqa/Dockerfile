@@ -1,5 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.1
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
 ARG COMMIT
@@ -13,7 +13,7 @@ ENV PORT=$PORT
 ENV COMMIT=$COMMIT
 
 COPY ./annotators/kbqa/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
 RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@$COMMIT
 

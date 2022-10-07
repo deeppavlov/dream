@@ -1,5 +1,5 @@
 FROM deeppavlov/base-gpu:0.14.1
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.14.1
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.14.1
 
 ARG CONFIG
 ARG SED_ARG=" | "
