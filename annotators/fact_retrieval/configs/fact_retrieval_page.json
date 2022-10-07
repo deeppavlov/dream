@@ -49,6 +49,10 @@
       {
         "url": "http://files.deeppavlov.ai/deeppavlov_data/bpr/bpr_lite_eng.tar.gz",
         "subdir": "{MODEL_PATH}"
+      },
+      {
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/entity_types_sets.pickle",
+        "subdir": "{DOWNLOADS_PATH}/wikidata"
       }
     ]
   }

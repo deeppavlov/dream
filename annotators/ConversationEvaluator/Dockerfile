@@ -1,5 +1,5 @@
 FROM deeppavlov/base-gpu:0.12.0
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.0
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.0
 
 ARG CONFIG
 ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
