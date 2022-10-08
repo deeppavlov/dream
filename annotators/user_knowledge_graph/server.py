@@ -81,11 +81,12 @@ def get_entity_type(attributes):
     entity_info = attributes['entity_info']
     if not entity_info:
         return 'Misc'
-    exact_entity_info = entity_info[attributes['triplet']['object']]
-    entity_kinds = exact_entity_info['dbpedia_types']
-    if entity_kinds:
-        if entity_kinds[0]:
-            return entity_kinds[0][0].split('/')[-1].replace("Wikipedia:", "")
+    exact_entity_info = entity_info[list(entity_info.keys())[0]]
+    finegrained = exact_entity_info.get('finegrained_types', [])
+    if finegrained:
+        entity_type = finegrained[0].capitalize()
+        logger.info(f'Fine-grained type: {entity_type}')
+        return entity_type
     return 'Misc'
 
 
