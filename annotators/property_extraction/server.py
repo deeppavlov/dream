@@ -19,6 +19,7 @@ stemmer = nltk.PorterStemmer()
 
 config_name = os.getenv("CONFIG")
 rel_cls_flag = int(os.getenv("REL_CLS_FLAG", "0"))
+add_entity_info = int(os.getenv("ADD_ENTITY_INFO", "0"))
 
 rel_type_dict = {}
 with open("rel_list.txt", "r") as fl:
@@ -123,11 +124,19 @@ def get_result(request):
             if triplet[1] in {"have pet", "have family", "have sibling", "have chidren"} and per_entities:
                 per_triplet = {"subject": triplet[2], "property": "name", "object": per_entities[0].get("text", "")}
 
-        triplets_info_batch.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
+        triplets_info_list = []
+        if add_entity_info:
+            triplets_info_list.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
+        else:
+            triplets_info_list.append({"triplet": formatted_triplet})
         if per_triplet:
-            triplets_info_batch.append(
-                {"triplet": per_triplet, "entity_info": {per_triplet["object"]: {"entity_id_tags": ["PER"]}}}
-            )
+            if add_entity_info:
+                triplets_info_list.append(
+                    {"triplet": per_triplet, "entity_info": {per_triplet["object"]: {"entity_id_tags": ["PER"]}}}
+                )
+            else:
+                triplets_info_list.append({"triplet": per_triplet})
+        triplets_info_batch.append(triplets_info_list)
     total_time = time.time() - st_time
     logger.info(f"property extraction exec time: {total_time: .3f}s")
     logger.info(f"property extraction, input {uttrs}, output {triplets_info_batch} scores {scores}")

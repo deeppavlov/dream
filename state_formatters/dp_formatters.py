@@ -600,6 +600,12 @@ def el_formatter_dialog(dialog: Dict):
                 entity_tags_list.append([[entity["label"].lower(), 1.0]])
             else:
                 entity_tags_list.append([["misc", 1.0]])
+    triplets = dialog["human_utterances"][-1]["annotations"].get("property_extraction", [{}])
+    for triplet in triplets:
+        object_entity_substr = triplet.get("object", "")
+        if object_entity_substr and object_entity_substr not in entity_substr_list:
+            entity_substr_list.append(object_entity_substr)
+            entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]

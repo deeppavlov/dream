@@ -301,6 +301,20 @@
                     "annotators.entity_linking"
                 ]
             },
+            "property_extraction": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://property-extraction:8129/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
+            },
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
@@ -313,20 +327,8 @@
                 "previous_services": [
                     "annotators.ner",
                     "annotators.entity_detection",
-                    "annotators.spacy_nounphrases"
-                ]
-            },
-            "property_extraction": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://property-extraction:8126/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "previous_services": [
-                    "annotators.entity_linking"
+                    "annotators.spacy_nounphrases",
+                    "annotators.property_extraction"
                 ]
             },
             "wiki_parser": {
