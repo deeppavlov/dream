@@ -147,6 +147,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_program_y_wide_skill")
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
+                skills_for_uttr.append("gpt2-generator")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:

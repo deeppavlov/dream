@@ -308,6 +308,25 @@ Dream Architecture is presented in the following image:
 | DFF Friendship skill   | 70 MiB RAM                | **[New DFF version]** DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill |
 | DFF Wiki skill         | 150 MiB RAM               | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                      |
 
+
+# Components Multilingual Version
+
+Dream Architecture is presented in the following image:
+![DREAM](multilingualDREAM.png)
+
+## Annotators
+
+| Name                     | Requirements             | Description                                                                                                                                                    |
+|--------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Sentiment Classification | 2 GiB RAM, 2 GiB GPU     | classifies sentiment to positive, negative and neutral classes                                                                                                 |
+| Toxic Classification     | 3  GiB RAM, 2 GiB GPU    | classifies toxicity: identity_attack, insult, obscene, severe_toxicity, sexual_explicit, threat, toxicity                                                      |
+| Sentence Ranker          | 2.5 GiB RAM, 1.8 GiB GPU | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
+
+## Skills & Services
+| Name           | Requirements           | Description                                                                                                                                       |
+|----------------|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| gpt2-generator | 5 GiB RAM, 6.5 GiB GPU | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
+
 # Papers
 ### Alexa Prize 3
 [Kuratov Y. et al. DREAM technical report for the Alexa Prize 2019 //Alexa Prize Proceedings. – 2020.](https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexaprize/assets/challenge3/proceedings/Moscow-DREAM.pdf)
