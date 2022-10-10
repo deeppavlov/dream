@@ -38,7 +38,7 @@ class EmotionSkillScenario:
             "anger": 0.9,
             "fear": 0.894,
             "joy": 1,
-            "love": 0.778,
+            "disgust": 0.778,
             "sadness": 1,
             "surprise": 0.745,
             "neutral": 0,
@@ -101,7 +101,7 @@ class EmotionSkillScenario:
             "fear": "fear",
             "anger": "anger",
             "surprise": "surprise",
-            "love": "love",
+            "disgust": "disgust"
         }
         if "emotion_skill" not in human_attr:
             human_attr["emotion_skill"] = {}
