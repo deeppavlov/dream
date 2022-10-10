@@ -118,7 +118,7 @@ combined_classes = {
         "severe_toxic",
         "sexual_explicit",
         "threat",
-        "toxic",
+        "toxic"
     ],
     "sentiment_classification": ["positive", "neutral", "negative"],
     "midas_classification": [
@@ -136,7 +136,7 @@ combined_classes = {
         "statement",
         "other_answers",
         "pos_answer",
-        "neg_answer",
+        "neg_answer"
     ],
     "topics_classification": [
         "Food",
@@ -171,7 +171,7 @@ combined_classes = {
         "Psychology",
         "MassTransit",
         "Education",
-        "Sports",
+        "Sports"
     ],
     "cobot_topics": [
         "Phatic",
@@ -195,7 +195,7 @@ combined_classes = {
         "Math",
         "News",
         "Entertainment",
-        "Fashion",
+        "Fashion"
     ],
     "cobot_dialogact_topics": [
         "Other",
@@ -208,7 +208,7 @@ combined_classes = {
         "Science_and_Technology",
         "Sports",
         "Politics",
-        "Inappropriate_Content",
+        "Inappropriate_Content"
     ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
@@ -221,8 +221,8 @@ combined_classes = {
         "ClarificationIntent",
         "Topic_SwitchIntent",
         "Opinion_RequestIntent",
-        "Multiple_GoalsIntent",
-    ],
+        "Multiple_GoalsIntent"
+    ]
 }
 
 midas_classes = {
