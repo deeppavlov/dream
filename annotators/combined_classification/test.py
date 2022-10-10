@@ -1,9 +1,6 @@
 import requests
 import logging
 
-from common.utils import multilabel_tasks
-
-
 def main_test():
     url = "http://0.0.0.0:8087/model"
     batch_url = "http://0.0.0.0:8087/batch_model"
@@ -22,6 +19,7 @@ def main_test():
             "sentences": ["why you are so dumb"],
             "task": "emotion_classification",
             "answers_bert": [["anger"]],
+            "multilabel": True
         },
         {
             "sentences_with_history": ["this is the best dog [SEP] so what you think"],
@@ -34,17 +32,23 @@ def main_test():
             "sentences": ["you son of the bitch", "yes"],
             "task": "toxic_classification",
             "answers_bert": [["insult", "obscene", "toxic"], []],
+            "multilabel": True
         },
         {
             "sentences": ["let's talk about movies"],
             "task": "cobot_dialogact_topics",
             "answers_bert": [["Entertainment_Movies"]],
+            "multilabel": True
         },
-        {"sentences": ["let's talk about games"], "task": "cobot_topics", "answers_bert": [["Games"]]},
+        {"sentences": ["let's talk about games"], 
+         "task": "cobot_topics",
+         "answers_bert": [["Games"]], 
+         "multilabel": True},
         {
             "sentences": ["let's switch topic"],
             "task": "cobot_dialogact_intents",
             "answers_bert": [["Topic_SwitchIntent"]],
+            "multilabel":True
         },
     ]
 
@@ -61,7 +65,7 @@ def main_test():
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
             print(response)
-            if config["task"] in multilabel_tasks:  # multilabel_task
+            if config.get("multilabel", False):  # multilabel_task
                 predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
             else:
                 predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
