@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  dialogpt:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  sentence-ranker:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  dialogpt-persona-based:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  midas-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

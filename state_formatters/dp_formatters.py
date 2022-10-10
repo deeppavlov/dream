@@ -437,6 +437,19 @@ def utt_non_punct_dialog(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
+def persona_bot_formatter(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    distill_dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    last_uttr = distill_dialog["human_utterances"][-1]
+
+    utterances_histories = [utt["text"] for utt in distill_dialog["utterances"]]
+    amount_utterances_history = 3
+    utterances_histories = utterances_histories[-amount_utterances_history:]
+
+    return [{"utterances_histories": [utterances_histories], "last_annotated_utterances": [last_uttr]}]
+
+
 def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector
@@ -962,3 +975,11 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
     contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
 
     return [{"dialog_contexts": contexts, "hypotheses": hypots}]
+
+
+def context_formatter_dialog(dialog: Dict) -> List[Dict]:
+    num_last_utterances = 4
+    dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    return [{"contexts": contexts}]

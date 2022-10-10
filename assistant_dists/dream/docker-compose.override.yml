@@ -19,7 +19,7 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, infilling:8122, dff-template-skill:8120"
+          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -1187,22 +1187,63 @@ services:
         reservations:
           memory: 2G
 
-  infilling:
+  dialogpt-persona-based:
     env_file: [ .env ]
     build:
-      context: ./services/infilling/
       args:
-        SERVICE_PORT: 8122
-    command: flask run -h 0.0.0.0 -p 8122
+        SERVICE_PORT: 8131
+        SERVICE_NAME: dialogpt_persona_based
+        PRETRAINED_MODEL_NAME_OR_PATH: dim/dialogpt-medium-persona-chat
+        MAX_PERSONA_SENTENCES: 3
+      context: .
+      dockerfile: ./services/dialogpt_persona_based/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8131
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 2.5G # ?
+          memory: 2G
         reservations:
-          memory: 2.5G # ?
+          memory: 2G
+
+  relative-persona-extractor:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8133
+        SERVICE_NAME: relative_persona_extractor
+        N_SENTENCES_OT_RETURN: 3
+      context: .
+      dockerfile: ./annotators/relative_persona_extractor/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8133
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 80M
+        reservations:
+          memory: 80M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 
   storygpt:
     env_file: [ .env ]
@@ -1261,4 +1302,3 @@ services:
         reservations:
           memory: 128M
 version: '3.7'
-

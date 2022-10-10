@@ -193,10 +193,14 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  infilling:
+  dialogpt-persona-based:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=7
+  sentence-ranker:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'
