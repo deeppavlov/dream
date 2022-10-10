@@ -45,7 +45,7 @@ def main_test():
          "answers_bert": [["Games"]], 
          "multilabel": True},
         {
-            "sentences": ["let's switch topic"],
+            "sentences": ["let's change the subject"],
             "task": "cobot_dialogact_intents",
             "answers_bert": [["Topic_SwitchIntent"]],
             "multilabel":True
