@@ -140,6 +140,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dialogpt")  # generative skill
+                skills_for_uttr.append("dialogpt_persona_based")  # generative skill persona-based
                 skills_for_uttr.append("small_talk_skill")
                 skills_for_uttr.append("knowledge_grounding_skill")
                 skills_for_uttr.append("convert_reddit")
@@ -147,6 +148,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_program_y_wide_skill")
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
+                skills_for_uttr.append("gpt2-generator")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -231,8 +233,17 @@ class RuleBasedSkillSelectorConnector:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 
-            logger.info(f"Selected skills: {skills_for_uttr}")
+            if "tell_me_a_story" in intent_catcher_intents:
+                skills_for_uttr.append("dff_short_story_skill")
 
+            if len(dialog["human_utterances"]) > 1:
+                nouns = dialog["human_utterances"][-1].get("annotations", {}).get("rake_keywords", [])
+                nouns.extend(dialog["human_utterances"][-2].get("annotations", {}).get("rake_keywords", []))
+                if prev_active_skill != "dff_short_story_skill":
+                    if len(nouns) >= 5:
+                        skills_for_uttr.append("dff_short_story_skill")
+
+            logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))

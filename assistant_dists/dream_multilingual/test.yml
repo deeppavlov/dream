@@ -1,0 +1,22 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  gpt2-generator:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  toxic-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  sentiment-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  sentence-ranker:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+version: '3.7'

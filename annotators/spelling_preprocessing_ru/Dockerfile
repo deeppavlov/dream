@@ -23,9 +23,9 @@ ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
 COPY ./annotators/spelling_preprocessing_ru/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deeppavlovteam/DeepPavlov.git@${COMMIT}
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
 
 COPY $SRC_DIR /src
 

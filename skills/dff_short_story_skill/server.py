@@ -10,7 +10,6 @@ from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-
 from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
@@ -23,6 +22,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
+STORY_TYPE = os.getenv("STORY_TYPE")
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -82,9 +82,10 @@ logger.info(f"{SERVICE_NAME} is loaded and ready")
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
+    # test
+    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/tell_funny_story_in.json",indent=4)
     # responses = handler(request.json, RANDOM_SEED)  # TEST
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
+    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/tell_funny_story_out.json",indent=4)
     responses = handler(request.json)
     return jsonify(responses)
 

@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  gpt2-generator:
+    environment:
+      DEVICE: cuda
+      CUDA_VISIBLE_DEVICES: ""
+  toxic-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  sentiment-classification:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  sentence-ranker:
+    environment:
+      DEVICE: cuda
+      CUDA_VISIBLE_DEVICES: ""
