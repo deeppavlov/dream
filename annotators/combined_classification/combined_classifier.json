@@ -59,7 +59,7 @@
           },
           "toxic": {
             "type": "classification",
-            "options": 7,
+            "options": 8,
             "multilabel": true
           },
           "factoid": {
