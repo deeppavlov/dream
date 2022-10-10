@@ -75,6 +75,9 @@ def main_test():
                 )
             except Exception as e:
                 print(e)
+                print('ERROR')
+                print(config)
+                print(answer)
     logging.info("SUCCESS!")
     return 0
 
