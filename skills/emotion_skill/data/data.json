@@ -102,9 +102,9 @@
       "next_step":["offered_advice"],
       "link": ""
     },
-    "love":{
+    "disgust":{
       "answers": [
-        "Oh, you are in a lovely mood, I see. That's cool. I love some drama movies a lot."
+         "I see that you are in disgust. I am sorry. Maybe we should talk about movies instead?"
       ],
       "next_step":[""],
       "link": "dff_movie_skill"
