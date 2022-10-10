@@ -75,6 +75,7 @@ def main_test():
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
                 )
     logging.info("SUCCESS!")
+    print("SUCCESS!")
     return 0
 
 
