@@ -225,6 +225,10 @@ combined_classes = {
     ]
 }
 
+multilabel_tasks = ["cobot_topics", "cobot_dialogact_topics",
+                    "cobot_dialogact_intents", "emotion_classification",
+                    "toxic_classification"]
+
 midas_classes = {
     "semantic_request": {
         "question": [
@@ -568,8 +572,12 @@ def _get_combined_annotations(annotated_utterance, model_name):
         if model_name in combined_annotations:
             answer_probs = combined_annotations[model_name]
         else:
-            raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification" and "factoid_classification" not in combined_annotations:
+            logger.warning(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
+            answer_probs = {}
+        old_style_toxic = all([model_name == "toxic_classification",
+                               "factoid_classification" not in combined_annotations])
+        if model_name in multilabel_tasks or old_style_toxic:
+        ):
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
@@ -756,10 +764,8 @@ def get_emotions(annotated_utterance, probs=True, default_probs=None, default_la
         default_labels=default_labels,
     )
 
-
 def get_topics(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get topics from particular annotator or all detected.
-
     Args:
         annotated_utterance: dictionary with annotated utterance
         probs: if False we return labels, otherwise we return probs
@@ -769,7 +775,6 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
             'all' means topics by `cobot_topics` and `cobot_dialogact_topics`,
             'cobot_topics' means topics by `cobot_topics`,
             'cobot_dialogact_topics' means topics by `cobot_dialogact_topics`.
-
     Returns:
         list of topic labels, if probs == False,
         dictionary where all keys are topic labels and values are probabilities, if probs == True
@@ -780,7 +785,6 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     cobot_topics_probs, cobot_topics_labels = {}, []
     if "cobot_topics" in annotations:
         cobot_topics_labels = _process_text(annotations.get("cobot_topics", {}))
-        cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes.get("cobot_topics", {}))
     if "combined_classification" in annotations and not cobot_topics_labels:
         cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="cobot_topics"
@@ -791,9 +795,9 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
 
     cobot_da_topics_probs, cobot_da_topics_labels = {}, []
     if "cobot_dialogact" in annotations and "topics" in annotations["cobot_dialogact"]:
-        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact"]["topics"]
+        cobot_da_topics_labels = annotations["cobot_dialogact"]["topics"]
     elif "cobot_dialogact_topics" in annotations:
-        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact_topics"]
+        cobot_da_topics_labels = annotations["cobot_dialogact_topics"]
 
     if "combined_classification" in annotations and not cobot_da_topics_labels:
         cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
@@ -803,13 +807,22 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     if not cobot_da_topics_probs:
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels, combined_classes["cobot_dialogact_topics"])
 
+    topics_probs, topics_labels = {}, []
+    if "topics_classification" in annotations:
+        topics_labels = annotations["topics_classification"]
+        topics_probs = _labels_to_probs(topics_labels, combined_classes["topics_classification"])
+    elif "combined_classification" in annotations and not topics_labels:
+        topics_probs, topics_labels = _get_combined_annotations(annotated_utterance, model_name="topics_classification")
+
     if which == "all":
-        answer_labels = cobot_topics_labels + cobot_da_topics_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs}
+        answer_labels = cobot_topics_labels + cobot_da_topics_labels + topics_labels
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **topics_probs}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
         answer_probs, answer_labels = cobot_da_topics_probs, cobot_da_topics_labels
+    elif which == "deeppavlov_topics":
+        answer_probs, answer_labels = topics_probs, topics_labels
     else:
         logger.exception(f"Unknown input type in get_topics: {which}")
         answer_probs, answer_labels = default_probs, default_labels
@@ -824,7 +837,6 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
 
 def get_intents(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get intents from particular annotator or all detected.
-
     Args:
         annotated_utterance: dictionary with annotated utterance
         probs: if False we return labels, otherwise we return probs
@@ -846,8 +858,11 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
     detected_intent_probs = {key: 1 for key in detected_intents}
-
     midas_intent_probs = annotations.get("midas_classification", {})
+    if "combined_classification" in annotations and not midas_intent_probs:
+        midas_intent_probs, midas_intent_labels = _get_combined_annotations(
+            annotated_utterance, model_name="midas_classification"
+        )
     if isinstance(midas_intent_probs, dict) and midas_intent_probs:
         semantic_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_SEMANTIC_LABELS}
         functional_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_FUNCTIONAL_LABELS}
