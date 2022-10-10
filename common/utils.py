@@ -110,7 +110,7 @@ low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
 combined_classes = {
     "factoid_classification": ["is_factoid", "is_conversational"],
-    "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
+    "emotion_classification": ["anger", "fear", "joy", "disgust", "sadness", "surprise", "neutral"],
     "toxic_classification": [
         "identity_hate",
         "insult",
@@ -118,10 +118,61 @@ combined_classes = {
         "severe_toxic",
         "sexual_explicit",
         "threat",
-        "toxic",
-        "not_toxic",
+        "toxic"
     ],
-    "sentiment_classification": ["positive", "negative", "neutral"],
+    "sentiment_classification": ["positive", "neutral", "negative"],
+    "midas_classification": [
+        "open_question_factual",
+        "open_question_opinion",
+        "open_question_personal",
+        "yes_no_question",
+        "clarifying_question",
+        "command",
+        "dev_command",
+        "appreciation",
+        "opinion",
+        "complaint",
+        "comment",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer"
+    ],
+    "topics_classification": [
+        "Food",
+        "Books&Literature",
+        "Music",
+        "Gadgets",
+        "Movies_TV",
+        "Leisure",
+        "Beauty",
+        "Clothes",
+        "Travel",
+        "News",
+        "Art&Hobbies",
+        "Videogames",
+        "Job",
+        "Home&Design",
+        "Depression",
+        "Celebrities&Events",
+        "Politics",
+        "Toys&Games",
+        "Animals&Pets",
+        "PersonalTransport",
+        "Garden",
+        "Family&Relationships",
+        "Health&Medicine",
+        "Religion",
+        "ArtificialIntelligence",
+        "Finance",
+        "Space",
+        "Disasters",
+        "Science_and_Technology",
+        "Psychology",
+        "MassTransit",
+        "Education",
+        "Sports"
+    ],
     "cobot_topics": [
         "Phatic",
         "Other",
@@ -144,7 +195,7 @@ combined_classes = {
         "Math",
         "News",
         "Entertainment",
-        "Fashion",
+        "Fashion"
     ],
     "cobot_dialogact_topics": [
         "Other",
@@ -157,7 +208,7 @@ combined_classes = {
         "Science_and_Technology",
         "Sports",
         "Politics",
-        "Inappropriate_Content",
+        "Inappropriate_Content"
     ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
@@ -170,8 +221,8 @@ combined_classes = {
         "ClarificationIntent",
         "Topic_SwitchIntent",
         "Opinion_RequestIntent",
-        "Multiple_GoalsIntent",
-    ],
+        "Multiple_GoalsIntent"
+    ]
 }
 
 midas_classes = {
