@@ -1,7 +1,7 @@
 import requests
 import logging
 
-from common import multilabel_tasks
+from common.utils import multilabel_tasks
 
 
 def main_test():
