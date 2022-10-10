@@ -1,6 +1,7 @@
 import requests
 import logging
 
+
 def main_test():
     url = "http://0.0.0.0:8087/model"
     batch_url = "http://0.0.0.0:8087/batch_model"
@@ -19,7 +20,7 @@ def main_test():
             "sentences": ["why you are so dumb"],
             "task": "emotion_classification",
             "answers_bert": [["anger"]],
-            "multilabel": True
+            "multilabel": True,
         },
         {
             "sentences_with_history": ["this is the best dog [SEP] so what you think"],
@@ -32,25 +33,26 @@ def main_test():
             "sentences": ["you son of the bitch", "yes"],
             "task": "toxic_classification",
             "answers_bert": [["insult", "obscene", "toxic"], []],
-            "multilabel": True
+            "multilabel": True,
         },
         {
             "sentences": ["let's talk about movies"],
             "task": "cobot_dialogact_topics",
             "answers_bert": [["Entertainment_Movies"]],
-            "multilabel": True
+            "multilabel": True,
         },
-        {"sentences": ["let's talk about games"], 
-         "task": "cobot_topics",
-         "answers_bert": [["Games"]], 
-         "multilabel": True},
         {
-            "sentences_with_history": ["What is the capital of Great Britain" \
-                                       " [SEP] I don't know"],
+            "sentences": ["let's talk about games"],
+            "task": "cobot_topics",
+            "answers_bert": [["Games"]],
+            "multilabel": True,
+        },
+        {
+            "sentences_with_history": ["What is the capital of Great Britain" " [SEP] I don't know"],
             "sentences": ["I don't know"],
             "task": "cobot_dialogact_intents",
             "answers_bert": [["Information_DeliveryIntent"]],
-            "multilabel":True
+            "multilabel": True,
         },
     ]
 
@@ -63,7 +65,7 @@ def main_test():
         batch_responses = requests.post(batch_url, json=config).json()
         assert batch_responses[0]["batch"] == responses, (
             f"Batch responses {batch_responses} " f"not match to responses {responses}"
-            )
+        )
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
             print(response)
@@ -73,7 +75,7 @@ def main_test():
                 predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
             assert sorted(answer) == sorted(predicted_classes), " * ".join(
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
-                )
+            )
     logging.info("SUCCESS!")
     print("SUCCESS!")
     return 0

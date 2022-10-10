@@ -230,7 +230,7 @@ multilabel_tasks = [
     "cobot_dialogact_topics",
     "cobot_dialogact_intents",
     "emotion_classification",
-    "toxic_classification"
+    "toxic_classification",
 ]
 
 midas_classes = {
