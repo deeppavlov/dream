@@ -10,7 +10,7 @@ from dialogflows.flows.utils import list_unique_values
 
 from common.movies import extract_movies_names_from_annotations
 from common.universal_templates import LIKE_PATTERN, NOT_LIKE_PATTERN
-from common.utils import get_intents, is_opinion_request
+from common.utils import get_intents, is_opinion_request, midas_classes
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -397,11 +397,14 @@ class MovieSkillTemplates:
         result = []
 
         user_uttr = dialog["human_utterances"][-1]["text"].lower()
-        intents = get_intents(dialog["human_utterances"][-1], which="cobot_dialogact_intents")
+        intents = get_intents(dialog["human_utterances"][-1], which="all")
         opinion_request_detected = is_opinion_request(dialog["human_utterances"][-1])
 
         # favorite movies
-        if "Information_RequestIntent" in intents or opinion_request_detected:
+        information_request_detected = any(
+            [set(midas_classes["semantic_request"]["question"]) & set(intents), "Information_RequestIntent" in intents]
+        )
+        if information_request_detected or opinion_request_detected:
             if re.search(self.LESSFAVORITE_PATTERN, user_uttr) or re.search(NOT_LIKE_PATTERN, user_uttr):
                 # less favorite movie
                 if re.search(
