@@ -29,10 +29,7 @@ def main_test():
             "task": "midas_classification",
             "answers_bert": [["open_question_opinion"]],
         },
-        {
-            "sentences": ["movies"],
-            "task": "topics_classification",
-            "answers_bert": [["Movies_TV"]]},
+        {"sentences": ["movies"], "task": "topics_classification", "answers_bert": [["Movies_TV"]]},
         {
             "sentences": ["you son of the bitch", "yes"],
             "task": "toxic_classification",
@@ -43,16 +40,12 @@ def main_test():
             "task": "cobot_dialogact_topics",
             "answers_bert": [["Entertainment_Movies"]],
         },
-        {
-            "sentences": ["let's talk about games"],
-            "task": "cobot_topics",
-            "answers_bert": [["Games"]]
-        },
+        {"sentences": ["let's talk about games"], "task": "cobot_topics", "answers_bert": [["Games"]]},
         {
             "sentences": ["let's switch topic"],
             "task": "cobot_dialogact_intents",
-            "answers_bert": [["Topic_SwitchIntent"]]
-        }
+            "answers_bert": [["Topic_SwitchIntent"]],
+        },
     ]
 
     for config in configs:

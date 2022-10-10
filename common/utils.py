@@ -118,7 +118,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "severe_toxic",
         "sexual_explicit",
         "threat",
-        "toxic"
+        "toxic",
     ],
     "factoid_classification": ["is_factoid", "is_conversational"],
     "midas_classification": [
@@ -136,7 +136,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "statement",
         "other_answers",
         "pos_answer",
-        "neg_answer"
+        "neg_answer",
     ],
     "deeppavlov_topics": [
         "Food",
@@ -171,7 +171,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Psychology",
         "MassTransit",
         "Education",
-        "Sports"
+        "Sports",
     ],
     "cobot_topics": [
         "Phatic",
@@ -195,7 +195,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Math",
         "News",
         "Entertainment",
-        "Fashion"
+        "Fashion",
     ],
     "cobot_dialogact_topics": [
         "Other",
@@ -208,7 +208,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Science_and_Technology",
         "Sports",
         "Politics",
-        "Inappropriate_Content"
+        "Inappropriate_Content",
     ],
     "cobot_dialogact_intents": [
         "Information_DeliveryIntent",
@@ -221,13 +221,17 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "ClarificationIntent",
         "Topic_SwitchIntent",
         "Opinion_RequestIntent",
-        "Multiple_GoalsIntent"
-    ]
+        "Multiple_GoalsIntent",
+    ],
 }
 
-multilabel_tasks = ["cobot_topics", "cobot_dialogact_topics",
-                    "cobot_dialogact_intents", "emotion_classification",
-                    "toxic_classification"]
+multilabel_tasks = [
+    "cobot_topics",
+    "cobot_dialogact_topics",
+    "cobot_dialogact_intents",
+    "emotion_classification",
+    "toxic_classification",
+]
 
 midas_classes = {
     "semantic_request": {
@@ -574,10 +578,10 @@ def _get_combined_annotations(annotated_utterance, model_name):
         else:
             logger.warning(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
             answer_probs = {}
-        old_style_toxic = all([model_name == "toxic_classification",
-                               "factoid_classification" not in combined_annotations])
+        old_style_toxic = all(
+            [model_name == "toxic_classification", "factoid_classification" not in combined_annotations]
+        )
         if model_name in multilabel_tasks or old_style_toxic:
-        ):
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
@@ -764,6 +768,7 @@ def get_emotions(annotated_utterance, probs=True, default_probs=None, default_la
         default_labels=default_labels,
     )
 
+
 def get_topics(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get topics from particular annotator or all detected.
     Args:
@@ -812,8 +817,9 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         dp_topics_labels = annotations["topics_classification"]
         dp_topics_probs = _labels_to_probs(topics_labels, combined_classes["topics_classification"])
     elif "combined_classification" in annotations and not dp_topics_labels:
-        dp_topics_probs, dp_topics_labels = _get_combined_annotations(annotated_utterance,
-                                                                      model_name="deeppavlov_topics")
+        dp_topics_probs, dp_topics_labels = _get_combined_annotations(
+            annotated_utterance, model_name="deeppavlov_topics"
+        )
     if which == "all":
         answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels
         answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs}

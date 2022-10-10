@@ -101,7 +101,7 @@ class EmotionSkillScenario:
             "fear": "fear",
             "anger": "anger",
             "surprise": "surprise",
-            "disgust": "disgust"
+            "disgust": "disgust",
         }
         if "emotion_skill" not in human_attr:
             human_attr["emotion_skill"] = {}
