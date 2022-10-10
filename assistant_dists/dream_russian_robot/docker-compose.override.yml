@@ -1,0 +1,302 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_russian/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "dff-program-y-skill:8008, convers-evaluation-selector:8009, 
+          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
+          ner:8021, personal-info-skill:8030, dff-generative-skill:8092,
+          dff-friendship-skill:8086, entity-detection:8103, dialogpt:8091,
+          dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+
+  dff-program-y-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: RU
+      context: .
+      dockerfile: ./skills/dff_program_y_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  convers-evaluation-selector:
+    env_file: [.env]
+    build:
+      args:
+        TAG_BASED_SELECTION: 1
+        CALL_BY_NAME_PROBABILITY: 0.5
+        PROMPT_PROBA: 0.3
+        ACKNOWLEDGEMENT_PROBA: 0.3
+        PRIORITIZE_WITH_REQUIRED_ACT: 1
+        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
+        IGNORE_DISLIKED_SKILLS: 0
+        GREETING_FIRST: 1
+        RESTRICTION_FOR_SENSITIVE_CASE: 1
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+        PRIORITIZE_SCRIPTED_SKILLS: 0
+        LANGUAGE: RU
+      context: .
+      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8009
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  dff-intent-responder-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8012
+        SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_RU.json
+        LANGUAGE: RU
+      context: .
+      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  intent-catcher:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+      args:
+        SERVICE_PORT: 8014
+        CONFIG_NAME: intents_model_dp_config_RU.json
+        INTENT_PHRASES_PATH: intent_phrases_RU.json
+    command: python -m flask run -h 0.0.0.0 -p 8014
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
+
+  badlisted-words:
+    env_file: [.env]
+    build:
+      context: annotators/BadlistedWordsDetector_ru/
+    command: flask run -h 0.0.0.0 -p 8018
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  toxic-classification:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/toxic_classification_ru/
+      args:
+        SERVICE_PORT: 8126
+        PRETRAINED_MODEL_NAME_OR_PATH: "SkolkovoInstitute/russian_toxicity_classifier"
+        LANGUAGE: RU
+    command: flask run -h 0.0.0.0 -p 8126
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  ner:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+        PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      context: ./
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+  
+  entity-detection:
+    env_file: [.env]
+    build:
+      args:
+        CONFIG: entity_detection_rus.json
+        PORT: 8103
+        SRC_DIR: annotators/entity_detection_rus
+        LANGUAGE: RU
+      context: ./
+      dockerfile: annotators/entity_detection_rus/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8103
+    environment:
+      - FLASK_APP=server
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
+
+  personal-info-skill:
+    env_file: [.env]
+    build:
+      context: .
+      dockerfile: ./skills/personal_info_skill/Dockerfile
+      args:
+        LANGUAGE: RU
+    command: flask run -h 0.0.0.0 -p 8030
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  spacy-annotator:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8125
+        SRC_DIR: annotators/spacy_annotator
+        SPACY_MODEL: ru_core_news_sm
+        TOKEN_ATTRIBUTES: pos_|dep_|lemma_|ent_iob_|ent_type_|morph
+        ANNOTATE_BATCH_WITH_TOKENS_ONLY: 1
+      context: ./
+      dockerfile: annotators/spacy_annotator/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8125
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  dff-friendship-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8086
+        SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
+        LANGUAGE: RU
+      context: .
+      dockerfile: ./skills/dff_friendship_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
+    # command:  flask run -h 0.0.0.0 -p 8086
+    # environment:
+    #   - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dialogpt:
+    env_file: [ .env ]
+    build:
+      context: ./services/dialogpt_RU/
+      args:
+        SERVICE_PORT: 8091
+        PRETRAINED_MODEL_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+        LANGUAGE: RU
+    command: flask run -h 0.0.0.0 -p 8091
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  dff-generative-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8092
+        SERVICE_NAME: dff_generative_skill
+        LANGUAGE: RU
+      context: .
+      dockerfile: ./skills/dff_generative_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8092 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dialogrpt:
+    env_file: [ .env ]
+    build:
+      context: ./services/dialogrpt_ru/
+      args:
+        SERVICE_PORT: 8122
+        PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+        TOKENIZER_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+    command: flask run -h 0.0.0.0 -p 8122
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
+
+  dff-template-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8120
+        SERVICE_NAME: dff_template_skill
+      context: .
+      dockerfile: ./skills/dff_template_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+version: '3.7'

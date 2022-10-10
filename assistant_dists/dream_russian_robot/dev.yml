@@ -1,0 +1,101 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  dff-program-y-skill:
+    volumes:
+      - "./skills/dff_program_y_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8008:8008
+  convers-evaluation-selector:
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  dff-intent-responder-skill:
+    volumes:
+      - "./skills/dff_intent_responder_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8012:8012
+  intent-catcher:
+    volumes:
+      - "./annotators/IntentCatcherTransformers:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8014:8014
+  badlisted-words:
+    volumes:
+      - "./annotators/BadlistedWordsDetector_ru:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+  toxic-classification:
+    volumes:
+      - "./annotators/toxic_classification_ru:/src"
+    ports:
+      - 8126:8126
+  ner:
+    volumes:
+      - './annotators/NER_deeppavlov:/src'
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8021:8021
+  personal-info-skill:
+    volumes:
+      - "./skills/personal_info_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8030:8030
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spacy-annotator:
+    volumes:
+      - "./annotators/spacy_annotator:/src"
+    ports:
+      - 8125:8125
+  dff-friendship-skill:
+    volumes:
+      - "./skills/dff_friendship_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8086:8086
+  entity-detection:
+    volumes:
+      - "./annotators/entity_detection_rus:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8103:8103
+  dialogpt:
+    volumes:
+      - "./services/dialogpt_RU:/src"
+    ports:
+      - 8091:8091
+  dff-generative-skill:
+    volumes:
+      - "./skills/dff_generative_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8092:8092
+  dialogrpt:
+    volumes:
+      - "./services/dialogrpt_ru:/src"
+    ports:
+      - 8122:8122
+  dff-template-skill:
+    volumes:
+      - "./skills/dff_template_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8120:8120
+version: "3.7"
