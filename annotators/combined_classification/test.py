@@ -49,7 +49,7 @@ def main_test():
                                        " [SEP] I don't know"],
             "sentences": ["I don't know"],
             "task": "cobot_dialogact_intents",
-            "answers_bert": [["Topic_SwitchIntent"]],
+            "answers_bert": [["Information_DeliveryIntent"]],
             "multilabel":True
         },
     ]
