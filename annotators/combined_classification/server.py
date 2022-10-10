@@ -68,7 +68,7 @@ def respond():
     logger.info("Respond")
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
-    logger.info(str((sentences, sentences_with_hist)))
+    logger.warning(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"9in1 result: {answer}")
@@ -85,7 +85,7 @@ def batch_respond():
     logger.info(utterances_with_histories)
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
-    logger.info(str((sentences, sentences_with_hist)))
+    logger.warning(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"9in1 batch result: {answer}")
