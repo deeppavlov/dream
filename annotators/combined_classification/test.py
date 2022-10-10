@@ -61,7 +61,7 @@ def main_test():
         batch_responses = requests.post(batch_url, json=config).json()
         assert batch_responses[0]["batch"] == responses, (
             f"Batch responses {batch_responses} " f"not match to responses {responses}"
-        )
+            )
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
             print(response)
@@ -69,9 +69,12 @@ def main_test():
                 predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
             else:
                 predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
-            assert sorted(answer) == sorted(predicted_classes), " * ".join(
+            try:
+                assert sorted(answer) == sorted(predicted_classes), " * ".join(
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
-            )
+                )
+            except Exception as e:
+                print(e)
     logging.info("SUCCESS!")
     return 0
 
