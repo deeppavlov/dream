@@ -45,7 +45,9 @@ def main_test():
          "answers_bert": [["Games"]], 
          "multilabel": True},
         {
-            "sentences_with_history": ["What is the capital of Great Britain [SEP] I don't know"],
+            "sentences_with_history": ["What is the capital of Great Britain [SEP]" \
+                                       "I don't know"],
+            "sentences": ["I don't know"],
             "task": "cobot_dialogact_intents",
             "answers_bert": [["Topic_SwitchIntent"]],
             "multilabel":True
@@ -69,15 +71,9 @@ def main_test():
                 predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
             else:
                 predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
-            try:
-                assert sorted(answer) == sorted(predicted_classes), " * ".join(
+            assert sorted(answer) == sorted(predicted_classes), " * ".join(
                 [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
                 )
-            except Exception as e:
-                print(e)
-                print('ERROR')
-                print(config)
-                print(answer)
     logging.info("SUCCESS!")
     return 0
 
