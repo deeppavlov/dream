@@ -1,4 +1,5 @@
 import requests
+from time import time
 import logging
 
 
@@ -55,7 +56,7 @@ def main_test():
             "multilabel": True,
         },
     ]
-
+    t = time()
     for config in configs:
         if "sentences_with_history" in config:
             config["utterances_with_histories"] = [[k] for k in config["sentences_with_history"]]
@@ -78,6 +79,7 @@ def main_test():
             )
     logging.info("SUCCESS!")
     print("SUCCESS!")
+    print(time() - t)
     return 0
 
 
