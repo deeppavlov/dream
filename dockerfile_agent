@@ -20,6 +20,7 @@ RUN mkdir dp-agent
 WORKDIR /dp-agent
 # TODO: Copy only necessary dirs and files
 
+RUN pip install --upgrade pip
 RUN mkdir /pavlov && \
     cd /pavlov && \
     git clone https://github.com/deeppavlov/DeepPavlov && \

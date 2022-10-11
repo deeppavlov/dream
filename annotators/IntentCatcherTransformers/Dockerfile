@@ -1,5 +1,5 @@
 FROM deeppavlov/base-gpu:0.17.2
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.17.2
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.17.2
 
 RUN apt-key del 7fa2af80  && \
     rm -f /etc/apt/sources.list.d/cuda*.list && \
