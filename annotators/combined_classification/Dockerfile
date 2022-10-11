@@ -1,5 +1,5 @@
 FROM deeppavlov/base-gpu:0.17.5
-RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@24f5c46f67b2a131366ead710d549632d2792d2e
+RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@bec2124c5dc623bbf298398782512ce7b8640bbc
 
 WORKDIR /base/DeepPavlov
 RUN git checkout clean_multitask_ready
