@@ -577,7 +577,6 @@ def _get_combined_annotations(annotated_utterance, model_name):
             answer_probs = combined_annotations[model_name]
         else:
             logger.warning(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-            answer_probs = {}
         old_style_toxic = all(
             [model_name == "toxic_classification", "factoid_classification" not in combined_annotations]
         )
@@ -780,6 +779,8 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
             'all' means topics by `cobot_topics` and `cobot_dialogact_topics`,
             'cobot_topics' means topics by `cobot_topics`,
             'cobot_dialogact_topics' means topics by `cobot_dialogact_topics`.
+            'deeppavlov_topics' means topics by `deeppavlov_topics`.
+
     Returns:
         list of topic labels, if probs == False,
         dictionary where all keys are topic labels and values are probabilities, if probs == True
@@ -813,8 +814,8 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels, combined_classes["cobot_dialogact_topics"])
 
     dp_topics_probs, dp_topics_labels = {}, []
-    if "topics_classification" in annotations:
-        dp_topics_labels = annotations["topics_classification"]
+    if "deeppavlov_topics" in annotations:
+        dp_topics_labels = annotations["deeppavlov_topics"]
         dp_topics_probs = _labels_to_probs(dp_topics_labels, combined_classes["topics_classification"])
     elif "combined_classification" in annotations and not dp_topics_labels:
         dp_topics_probs, dp_topics_labels = _get_combined_annotations(
