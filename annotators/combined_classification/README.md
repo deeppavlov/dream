@@ -1,5 +1,3 @@
-This is an old description. New description TBA after the final training
-
 This model is based on the transformer-agnostic multitask neural architecture. 
 It can solve several tasks similtaneously, almost as good as single-task models.
 The models were trained on the following datasets:
@@ -11,13 +9,5 @@ Note that the original topics model doesnt account for that dataset changes(whic
 Sentiment classification : For the Sentiment classification task, we used the Dynabench dataset (r1 + r2). 
 Toxic classification : For the toxic classification task, we used the dataset from kaggle https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/datawith the 7 toxic classes that pose an interest to us. Note that this task is multiclass.
 The models (multitask and comparative single task) were trained with initial learning rate 2e-5(with validation patience 2 it could be dropped 2 times), batch size 32,optimizer adamw(betas (0.9,0.99) and early stop on 3 epochs. The criteria on early stopping was average accuracy for all tasks for multitask models, or the single-task accuracy for singletask models. 
-Here are the model scores. Note that scores fo
 
-| model                                  | factoid  (acc/f1) | sentiment (acc/f1) | midas (acc/f1) | emotion (acc/f1) | toxic(acc/f1) | topics (acc/f1) |
-|----------------------------------------|-------------------|--------------------|----------------|------------------|---------------|-----------------|
-| singletask, distilbert base uncased    | 83.05/83.02       | 74.45/74.23        | 81.71/81.36    | 61.21/68.07      | 91.54/61.95   | 79.82/79.75     |
-| **multitask, distilbert base uncased** |                   |                    |                |                  |               |                 |
-| singletask, bert base uncased          | 84.07/84.02       | 76.28/76.24        | 82.46/82.34    | 60.62/66.52      | 93.59/67.69   | 80.3/80.25      |
-| multitask, bert base uncased           |                   |                    |                |                  |               |                 |
-| source models, bert base uncased       | 86.44/86.27       | 76.94/             | /79.28         | /64              | to eval       | incompatible    |
-
+This model(with a distilbert-base-uncased backbone) takes only 2439 Mb for 9 tasks, whereas single-task models with the same backbone for every of these tasks take up almost the same memory(~2437 Mb for every of these 9 tasks).
