@@ -174,7 +174,7 @@
         "intents_dataset_reader"
       ],
       "variables": {
-        "TRANSFORMER": "rubert-base-cased-conversational",
+        "TRANSFORMER": "DeepPavlov/rubert-base-cased-conversational",
         "ROOT_PATH": "~/.deeppavlov",
         "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
         "MODELS_PATH": "{ROOT_PATH}/models",
