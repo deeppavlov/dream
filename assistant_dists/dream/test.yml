@@ -125,9 +125,12 @@ services:
   prompt-storygpt:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  infilling:
+  dialogpt-persona-based:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=9
+  sentence-ranker:
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
   property-extraction:
     volumes:

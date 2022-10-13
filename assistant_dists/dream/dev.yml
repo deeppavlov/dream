@@ -410,11 +410,23 @@ services:
       - "./services/dialogpt:/src"
     ports:
       - 8125:8125
-  infilling:
+  sentence-ranker:
     volumes:
-      - "./services/infilling:/src"
+      - "./services/sentence_ranker:/src"
     ports:
-      - 8122:8122
+      - 8128:8128
+  dialogpt-persona-based:
+    volumes:
+      - "./services/dialogpt_persona_based:/src"
+      - "./common:/src/common"
+    ports:
+      - 8131:8131
+  relative-persona-extractor:
+    volumes:
+      - "./annotators/relative_persona_extractor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8133:8133
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

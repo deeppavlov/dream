@@ -1,0 +1,9 @@
+{
+  "max_length": 100,
+  "do_sample": true,
+  "top_k": 20,
+  "top_p": 0.9,
+  "temperature": 0.5,
+  "no_repeat_ngram_size": 3,
+  "num_return_sequences": 3
+}

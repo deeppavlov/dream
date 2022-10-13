@@ -1,0 +1,109 @@
+{
+    "services": {
+        "annotators": {
+            "toxic_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://toxic-classification:8013/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            },
+            "sentiment_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://sentiment-classification:8024/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ]
+            }
+        },
+        "skills": {
+            "gpt2_generator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://gpt2-generator:8132/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            }
+        },
+        "post_skill_selector_annotators": {
+            "sentence_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://sentence-ranker:8128/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "toxic_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://toxic-classification:8013/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": ["skills"],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "sentiment_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://sentiment-classification:8024/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            }
+        },
+        "response_selectors": {
+            "convers_evaluation_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://convers-evaluation-selector:8009/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "post_skill_selector_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance"
+            }
+        }
+    }
+}
