@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu
+FROM deeppavlov/base-gpu:0.17.6
 
 RUN apt-get update && apt-get install git -y
 

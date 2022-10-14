@@ -207,6 +207,4 @@ services:
     restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=4
 version: '3.7'
