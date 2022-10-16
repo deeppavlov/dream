@@ -14,7 +14,7 @@ ENV COMMIT=$COMMIT
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deepmipt/DeepPavlov.git@${COMMIT}
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
 
 COPY . /src
 
