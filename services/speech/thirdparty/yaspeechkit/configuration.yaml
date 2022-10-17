@@ -1,0 +1,24 @@
+api:
+    folder_id: b1gami13b761380nb5hb
+    api_key_secret: AQVN3XofRyHEW5PJOhBYCiObnGaZNYM8IvAQskdp
+    
+    oauth_token: y0_AgAAAABXeZIrAATuwQAAAADRBwzjI75hA_9PSouitV9pHH8Yl1ptr2U
+
+asr:
+    file_format: ogg
+    input_dir: ../asr_tts
+    lang: ru-RU
+    format: OGG_OPUS #lpcm
+    sample_rate: 48000 
+    numbers_as_words: "false"
+    save_results: null
+    output_dir: .
+tts:
+    output_dir: null
+    lang: ru-RU
+    voice: filipp
+    format: oggopus #lpcm
+    #emotion: evil
+    speed: 1.1
+    sample_rate: 48000 
+
