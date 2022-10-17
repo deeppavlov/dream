@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu
+FROM deeppavlov/base-gpu:0.17.6
 
 RUN apt-get update && apt-get install git -y
 
@@ -6,7 +6,6 @@ ARG COMMIT=0.13.0
 ARG CONFIG
 ARG PORT
 ARG SRC_DIR
-ARG SED_ARG=" | "
 ARG TOP_N
 
 ENV COMMIT=$COMMIT
@@ -18,6 +17,7 @@ COPY ./annotators/fact_retrieval_rus/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
+RUN pip install pyOpenSSL==22.0.0
 
 COPY $SRC_DIR /src
 
