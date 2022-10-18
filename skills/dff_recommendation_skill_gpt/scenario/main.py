@@ -44,13 +44,21 @@ THANK_PATTERN = re.compile(r"thanks|thank you|(I'll|I will) (try|watch|read|cook
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("recommend", "ask_for_details"): cnd.regexp(r"recommend", re.IGNORECASE),
+            ("give_recommendation", "begin"): cnd.regexp(r"give recommendation flow", re.IGNORECASE),
+            ("ask_about", "begin"): cnd.regexp(r"ask about flow", re.IGNORECASE),
+            ("greeting", "begin"): cnd.regexp(r"greeting flow", re.IGNORECASE),
+            ("chat_about", "begin"): cnd.regexp(r"chat about flow", re.IGNORECASE)
         },
     },
     "sevice": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("recommend", "begin"): cnd.true()},
+            TRANSITIONS: {
+                ("give_recommendation", "begin"): cnd.regexp(r"give recommendation flow", re.IGNORECASE),
+                ("ask_about", "begin"): cnd.regexp(r"ask about flow", re.IGNORECASE),
+                ("greeting", "begin"): cnd.regexp(r"greeting flow", re.IGNORECASE),
+                ("chat_about", "begin"): cnd.regexp(r"chat about flow", re.IGNORECASE)
+                },
         },
         "fallback": {
             RESPONSE: "Ooops",
@@ -60,7 +68,7 @@ flows = {
             },
         },
     },
-    "recommend": {
+    "give_recommendation": {
         LOCAL: {
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
@@ -76,9 +84,14 @@ flows = {
         "ask_for_details": {
             RESPONSE: int_rsp.multi_response(replies=["Could you give me some more details on what you want?", 
             "Any details?"]),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance("request")
+            },
             TRANSITIONS: {"details_denied": cnd.any(
                 [int_cnd.is_no_vars, 
-                int_cnd.is_do_not_know_vars],
+                int_cnd.is_do_not_know_vars,
+                loc_cnd.is_negative_sentiment
+                ],
                 ),
                 "details_given": cnd.true()
             },
@@ -86,14 +99,14 @@ flows = {
         "details_denied": {
             RESPONSE: loc_rsp.generative_response(recommend=True),
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance("details")
+                "save_slots_to_ctx": loc_prs.save_previous_utterance("")
             },
             # loc_rsp.example_response is just for an example, you can use just str without example_response func
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
                 "give_opinion": int_cnd.is_opinion_request,
                 "user_contented": cnd.regexp(THANK_PATTERN),  # it will be chosen if other conditions are False
-                "second_recommendation": cnd.true(),
+                "ask_for_approval": cnd.true(),
             },
         },
         "details_given": {
@@ -105,7 +118,7 @@ flows = {
                 "answer_question": int_cnd.is_question, 
                 "give_opinion": int_cnd.is_opinion_request,
                 "user_contented": cnd.regexp(THANK_PATTERN),  # it will be chosen if other conditions are False
-                "second_recommendation": cnd.true(),
+                "ask_for_approval": cnd.true(),
             },
         },
         "answer_question": {
@@ -127,32 +140,312 @@ flows = {
                 },
         },
         "ask_for_approval": {
-            RESPONSE: int_rsp.multi_response(replies=["So what do you think about my recommendation?", 
+            RESPONSE: int_rsp.multi_response(replies=["So are you gonna try this one out?",
+            "What do you think about it?"
+            "So what do you think about my recommendation?", 
             "Do you like my suggestion?"]),
             TRANSITIONS: {
-                "user_contented": cnd.any(
+                "user_discontented": cnd.any(
                 [int_cnd.is_no_vars, 
                 int_cnd.is_do_not_know_vars,
                 loc_cnd.is_negative_sentiment
                 ],
                 ),
-                "finish": cnd.true()
+                "user_contented": cnd.true()
                 },
         },
         "user_contented": {
-            RESPONSE: "Happy to help. Do you want another recommendation from me?",
+            RESPONSE: "Happy to help. By the way, I have some other ideas! Do you want to hear me out?",
             TRANSITIONS: {
                 "second_recommendation": int_cnd.is_yes_vars,
                 "finish": cnd.true()
                 },
         },
-        "second_recommendation": {
-            RESPONSE: loc_rsp.generative_response(recommend=True),
-            TRANSITIONS: {"finish": cnd.true()},
+        "user_discontented": {
+            RESPONSE: int_rsp.multi_response(replies=["Let me try again! I'll do my best.",
+            "Oh, I'm not a wizard, I'm still learning... But I have another idea!"]),
+            TRANSITIONS: {
+                "finish": int_cnd.is_no_vars,
+                "second_recommendation": cnd.true()
+                },
+        },
+        "second_recommendation": { # доделать нормальный контекст
+            RESPONSE: loc_rsp.generative_response(recommend=True, discussed_entity="request"),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "finish": cnd.true()},
         },
         "finish": {
             RESPONSE: "Okay, have fun.",
             TRANSITIONS: {},
+        },
+    },
+    "ask_about": { #продумать вход
+        LOCAL: {
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.0),
+                "set_can_continue": int_prs.set_can_continue(),
+                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+            },
+        },
+        "begin": {
+            RESPONSE: loc_rsp.ask_about_presequence,  # pre-question
+            TRANSITIONS: {
+                "user_ignores_question": cnd.any(
+                    [
+                    int_cnd.is_question, 
+                    int_cnd.is_opinion_request
+                    ]
+                ),
+                "begin": cnd.any(
+                    [
+                    int_cnd.is_no_vars, 
+                    int_cnd.is_do_not_know_vars,
+                    loc_cnd.is_negative_sentiment
+                    ],
+                ),
+                "likes_topic": cnd.true()
+            },
+        },
+        "user_ignores_question": {
+            RESPONSE: loc_rsp.ask_about_presequence_2,  # several hypothesis
+            TRANSITIONS: {
+                "begin": cnd.any(
+                    [
+                    int_cnd.is_no_vars, 
+                    int_cnd.is_do_not_know_vars,
+                    loc_cnd.is_negative_sentiment,
+                    int_cnd.is_question, 
+                    int_cnd.is_opinion_request
+                    ],
+                ),
+                "likes_topic": cnd.true()
+            },
+        },
+        "likes_topic": {
+            RESPONSE: loc_rsp.generate_for_ask_about,  # several hypothesis
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "give_bots_opinion_entity": cnd.true()
+            },
+        },
+        "give_bots_opinion_entity": {
+            RESPONSE: loc_rsp.generative_response(),  # several hypothesis
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                ("give_recommendation", "finish"): cnd.true()
+            },
+        },
+        "answer_question": {
+            RESPONSE: loc_rsp.generative_response(),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                },
+        },
+        "give_opinion": {
+            RESPONSE: loc_rsp.generative_response(),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                },
+        },
+    },
+    "greeting": {
+        LOCAL: {
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.0),
+                "set_can_continue": int_prs.set_can_continue(),
+                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+            },
+        },
+        "begin": { # convers-evaluation-selector: GREETING-FIRST = 0 
+            RESPONSE: int_rsp.multi_response(replies=["Hey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How are you doing?", 
+            "Hey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How is it going?",
+            "Hey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How are you feeling?"]),  # several hypothesis
+            PROCESSING: {
+            },
+            TRANSITIONS: {"second_utt": cnd.true(),
+            },
+        }, # заменить noun phrases на get_entities НУЖНО ЧТОБ БЫЛ ВКЛЮЧЕН АННОТАТОР entity detection
+        "second_utt": {
+            RESPONSE: loc_rsp.generate_np_response(response_options=['What are you up to today?', 'What are your plans for today?',
+            'Any special plans for today?']),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity') # RENAME
+            },
+            TRANSITIONS: {
+                "new_entity": loc_cnd.contains_noun_phrase,
+                "continue_discussing_entity": loc_cnd.is_slot_filled,
+                "third_utt": cnd.true(),
+            },
+        },
+        "third_utt": {
+            RESPONSE: loc_rsp.generate_np_response(response_options=["""By the way, what is your favourite dish?"""]),  # several hypothesis
+            TRANSITIONS: {
+                "continue_discussing_entity": cnd.true(),
+            },
+        },
+        "continue_discussing_entity": { #спросить у Дили, как поcчитать количество заходов в ноду
+            RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+            },
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "ask_name": loc_cnd.enough_generative_responses,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                "continue_discussing_entity": cnd.true(),
+            },
+        },
+        "new_entity": {
+            RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+            },
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "ask_name": loc_cnd.enough_generative_responses,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                "continue_discussing_entity": cnd.true(),
+            },
+        },
+        "answer_question": {
+            RESPONSE: loc_rsp.generative_response(),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "ask_name": loc_cnd.enough_generative_responses,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                "continue_discussing_entity": cnd.true(),
+                },
+        },
+        "give_opinion": {
+            RESPONSE: loc_rsp.generative_response(),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "ask_name": loc_cnd.enough_generative_responses,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                "continue_discussing_entity": cnd.true(),
+                },
+        },
+        "ask_name": { # проверить чтоб у нас не лежало имя посмотреть personal info skill
+            RESPONSE: int_rsp.multi_response(replies=["Oh, I still don't your name! What should I call you?", 
+            "By the way, what is your name, if I may ask?", "Now that we know each other better, may I ask your name?"]),
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('test')
+            },
+            TRANSITIONS: {
+                "react_name": cnd.true()
+                },
+        },
+        "react_name": { # проверить чтоб у нас не лежало имя посмотреть personal info skill (если добавляем то это более-менее бесполезно тк нас перебьет персонлинфо скилл)
+            RESPONSE: 'Nice to meet you, {test}', #нужно сделать свой дфф-форматтер (добавить возвр. имени),  написать денису спросить как получить доступ к диалоговому стейту
+            PROCESSING: {
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+            },
+            TRANSITIONS: {
+                },
+        },
+    },
+    "chat_about": { #продумать вход
+        LOCAL: {
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.0),
+                "set_can_continue": int_prs.set_can_continue(),
+                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+            },
+        },
+        "begin": {
+            RESPONSE: 'What do you want to chat about today?',  # pre-question
+            TRANSITIONS: {
+                "user_ignores_question": cnd.any(
+                    [
+                    int_cnd.is_question, 
+                    int_cnd.is_opinion_request
+                    ]
+                ),
+                "new_entity": loc_cnd.contains_noun_phrase
+            },
+        },
+        "user_ignores_question": {
+            RESPONSE: loc_rsp.generative_response(),  # several hypothesis
+            TRANSITIONS: {
+                "begin": cnd.any(
+                    [
+                    int_cnd.is_no_vars, 
+                    int_cnd.is_do_not_know_vars,
+                    loc_cnd.is_negative_sentiment
+                    ],
+                ),
+                "user_ignores_question": cnd.any(
+                    [
+                    int_cnd.is_question, 
+                    int_cnd.is_opinion_request
+                    ]
+                ),
+                "new_entity": cnd.true()
+            },
+        },
+        "continue_discussing_entity": { #спросить у Дили, как поcчитать количество заходов в ноду
+            RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+            },
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                #"continue_discussing_entity": cnd.true(),
+                "ask_a_question": cnd.true(),
+            },
+        },
+        "new_entity": {
+            RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+            },
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                #"continue_discussing_entity": cnd.true(),
+                "ask_a_question": cnd.true(),
+            },
+        },
+        "ask_a_question": {
+            RESPONSE: loc_rsp.generative_response(question=True, discussed_entity='discussed_entity'),  # several hypothesis
+            PROCESSING: {
+                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+            },
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "new_entity": loc_cnd.contains_noun_phrase,
+                "continue_discussing_entity": cnd.true(),
+            },
+        },
+        "answer_question": {
+            RESPONSE: loc_rsp.generative_response(),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "continue_discussing_entity": cnd.true(),
+                },
+        },
+        "give_opinion": {
+            RESPONSE: loc_rsp.generative_response(),
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                "give_opinion": int_cnd.is_opinion_request,
+                "continue_discussing_entity": cnd.true(),
+                },
         },
     },
 }

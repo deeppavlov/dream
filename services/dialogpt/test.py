@@ -17,6 +17,5 @@ def test_respond():
     ], f"Got\n{result}\n, but expected:\n{gold_result}"
     print("Success")
 
-
 if __name__ == "__main__":
     test_respond()

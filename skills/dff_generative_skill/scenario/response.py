@@ -6,6 +6,7 @@ from typing import Any
 
 import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
+import common.dff.integration.processing as int_prs
 from df_engine.core import Context, Actor
 from common.constants import CAN_CONTINUE_SCENARIO
 
@@ -52,7 +53,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     request_data = compose_data_for_dialogpt(ctx, actor)
     if len(request_data) > 0:
-        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1.8)
+        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1.8) #допишу свой урл
         hypotheses = response.json()["generated_responses"][0]
     else:
         hypotheses = []
@@ -61,6 +62,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if hyp[-1] not in [".", "?", "!"]:
             hyp += "."
         gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+    
+    ctx = int_prs.save_slots_to_ctx({"recommendation": hypotheses[0]})(ctx, actor)
 
     if len(curr_responses) == 0:
         return ""

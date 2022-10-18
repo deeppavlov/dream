@@ -193,6 +193,8 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=7
+  dff-recommendation-skill:
+    restart: unless-stopped
   dff-template-skill:
     restart: unless-stopped
 version: '3.7'

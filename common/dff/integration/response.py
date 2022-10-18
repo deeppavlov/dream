@@ -1,5 +1,5 @@
 import logging
-from typing import Union
+from typing import Union, List
 
 from df_engine.core import Context, Actor
 
@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def multi_response(
-    replies: list[str],
+    replies: List[str],
     confidences: Union[list, float] = 0.0,
     human_attr: Union[list, dict] = {},
     bot_attr: Union[list, dict] = {},

@@ -6,9 +6,20 @@ from common.dff.integration import condition as int_cnd
 import common.dff.integration.context as int_ctx
 import common.dialogflow_framework.utils.state as state_utils
 import common.utils as common_utils
-
+import requests
+from os import getenv
+from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, is_any_question_sentence_in_utterance
 logger = logging.getLogger(__name__)
 # ....
+
+SPACY_NOUN_PHRASES = getenv("SPACY_NOUN_PHRASES")
+
+def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    result = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
+    if result:
+        return True
+    else:
+        return False
 
 
 def example_lets_talk_about():
@@ -38,24 +49,48 @@ def get_human_sentiment(annotated_utterance, negative_threshold=0.5, positive_th
     return "neutral"
 
 
-def is_positive_sentiment():
-    def is_positive_sentiment_handler(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-        sentiment = state_utils.get_human_sentiment(ctx)
-        print(sentiment)
+def is_slot_filled(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.misc.get("slots", []):
+        if ctx.misc["slots"]["first_discussed_entity"]:
+            return True
+        else: 
+            return False
+    else:
+        return False
+
+
+def enough_generative_responses(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if int(ctx.misc.get("num_gen_responses", 0)) > 3:
+        ctx.misc["num_gen_responses"] = 0
+        return True
+    else:
+        return False
+
+
+def is_positive_sentiment(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.misc:
+        sentiment = state_utils.get_human_sentiment(ctx.misc)
         if sentiment == 'positive':
             return True
         else: 
             return False
+    else:
+        return False
 
-    return is_positive_sentiment_handler
+def is_question(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    user_uttr = state_utils.get_last_human_utterance(ctx, actor)
+    return is_any_question_sentence_in_utterance(user_uttr)
 
 
 def is_negative_sentiment(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.validation:
+        return False
     if ctx.misc:
-        sentiment = state_utils.get_human_sentiment(ctx.misc["agent"]["dialog"]["human_utterances"][-1])
+        sentiment = state_utils.get_human_sentiment(ctx.misc)
         if sentiment == 'negative':
             return True
         else: 
             return False
-    return False
+    else:
+        return False
 
