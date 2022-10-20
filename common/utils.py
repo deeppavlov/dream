@@ -94,10 +94,20 @@ service_intents = {
 
 high_priority_intents = {
     "dff_intent_responder_skill": {
+        "cant_do",
+        "exit",
+        "repeat",
+        "what_can_you_do",
+        "what_is_your_job",
+        "what_is_your_name",
+        "where_are_you_from",
+        "who_made_you",
         "track_object",
         "turn_around",
         "move_forward",
         "move_backward",
+        "open_door",
+        "move_to_point"
     },
     "dff_grounding_skill": {"what_are_you_talking_about"},
 }
