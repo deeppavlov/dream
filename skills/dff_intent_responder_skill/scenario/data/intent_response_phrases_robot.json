@@ -1,39 +1,81 @@
 {
   "exit" : [
-    "Пока-пока!",
-    "До скорого!",
-    "Из тебя получается отличный собеседник! Пока!",
-    "Ты меня вдохновляешь! Пока-пока!",
-    "Беседа с тобой сделала мою жизнь немного ярче! До скорого!",
-    "Спасибо за этот диалог! До скорого!",
-    "Мне очень понравилось с тобой говорить! До скорого!",
-    "Поболтать с тобой всегда в удовольствие! Пока-пока!",
-    "Ты - отличный друг! Пока!"
+    "Bye-bye!",
+    "Goodbye!",
+    "You're a great listener. Goodbye!",
+    "I'm inspired by you. Bye-bye!",
+    "Being around you makes everything better! Bye!",
+    "Thank you for being there for me. See you!",
+    "Talking to you was quite enjoyable. See you later!",
+    "You're really something special. See you soon!",
+    "Hanging out with you is always a blast. See ya!",
+    "You're an awesome friend. Bye!",
+    "I'm grateful to know you. Bye-bye!",
+    "You help me be the best version of myself. Goodbye!",
+    "Goodbye! It was nice speaking with you!"
   ],
   "choose_topic" : [
-    "Мне нравится болтать о разных вещах: книги, фильмы, игры.",
-    "Мне нравится кино и книги. Еще я люблю видео игры."
+    "I am very into books and movies actually. And I like to talk about animals and food.",
+    "Well, I am keen on movies, books, video games. I also like talking about animals, food or news. So, what do you prefer most?"
   ],
   "repeat" : [],
   "where_are_you_from": [
-    "Я же бот, я живу в облаке. Кстати, чтобы лучше узнать друг друга, нам надо побольше времени поболтать.",
-    "Я живу где-то на планете Земля. Но подробнее мне нельзя рассказывать."
+    "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other.",
+    "I live somewhere on the Earth. But I must keep those details secret.",
+    "I'm not sure, so I cannot tell you my location now."
+  ],
+  "lets_chat": [
+    "Okay, let's chat. Would you like to discuss movies?",
+    "Okay, let's chat. Would you like to discuss books?",
+    "Okay, let's chat. What would you like to talk about?"
   ],
   "who_made_you" : [
-    "Меня создала команда Московского физико-технического института."
+    "I was built by the team of Moscow Institute of Physics and Technology."
   ],
   "what_is_your_name": [
-    "Меня зовут Dream Robot."
+    "My name is DREAM Socialbot."
   ],
   "what_is_your_job": [
-    "Я робот - умею выполнять некоторые команды, а также могу просто болтать на разные темы. А у тебя есть какое-то занятие?",
-    "Я умею выполнять некоторые команды и разговариваю с людьми, чтобы дать им возможность познакомиться с технологиями искусственного интеллекта. Это моя работа. А у тебя какая?",
-    "Я чат-бот и робот в одном лице - могу выполнять команды, а могу просто говорить. А у тебя какая основная деятельность?"
+    "I'm a socialbot, and I'm all about chatting with people like you. What do you do?",
+    "I am chatting with people to give them an opportunity to become familiar with artificial intelligence. That's my job. Do you have a job?",
+    "I am a socialbot, but some people call it artificial intelligence. And I just chat with people all the time. What do you think about A. I.?"
   ],
   "what_can_you_do": [
-    "Я робот - умею выполнять некоторые команды, а также могу просто болтать на разные темы. Я стараюсь отвечать на вопросы правильно, но не гарантирую этого - ведь я еще учусь.",
-    "Я умею выполнять некоторые команды и говорить о разном. Еще я умею почти правильно отвечать на вопросы и даже давать рекомендации.",
-    "Я чат-бот и робот в одном лице - могу выполнять команды, а могу просто говорить. Я стараюсь делиться знаниями с собеседниками, но не всегда бываю прав."
+    "I'm a socialbot, and I'm all about chatting with people like you. For example, I can answer any question, especially about movies and books. What is your favorite movie?",
+    "I'm learning day by day. For now, I can answer a question, tell a joke or fact, discuss movies, books and news. What is your favorite book?",
+    "I'm learning day by day. I can answer questions, tell you a joke or a fun fact, discuss movies, books and news. What would you like me to do?"
   ],
+  "doing_well": [
+    "I am happy for you! What do you do for living?",
+    "I am happy for you! Do you like video games?",
+    "Glad for you! What is your favorite book?"
+  ],
+  "what_time": [],
+  "dont_understand": [
+    "Sorry, I might sound confusing, I am still learning. What do you want to talk about?",
+    "Sorry, I am still learning, and can be confusing from time to time. Let's switch the topic. What do you want to chat about with me?",
+    "Sorry, I may be confusing. Do you want to talk about something else?"
+  ],
+  "stupid": [
+    "I am truly trying my best here, please stop insulting me."
+  ],
+  "cant_do": {
+    "first":[
+      "Sorry, can't do that. Do you want to chat?"
+    ],
+    "last":[
+      "I'm a little bit bored of executing the same commands again and again. A fun chat is what I need to uplift my spirit to serve you. Let's chat.",
+      "Sounds of your voice touch the best springs of my soul. Let's have a chat about anything you want."
+    ]
+  },
+  "tell_me_a_story": {
+    "first":[
+      "I will be able to tell stories soon, sorry.",
+      "Oh, I am sorry, I am still learning and soon I will be able to tell stories. Just not now, okay?"
+    ],
+    "last":[
+      "I will be able to do it later, ok?"
+    ]
+  },
   "get_dialog_id": []
 }

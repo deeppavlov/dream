@@ -62,7 +62,7 @@ services:
       args:
         SERVICE_PORT: 8012
         SERVICE_NAME: dff_intent_responder_skill
-        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_RU.json
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_robot_RU.json
         LANGUAGE: RU
       context: .
       dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
