@@ -18,24 +18,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:9011
       - PORT=9011
 
-  dff-intent-responder-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:9012
-      - PORT=9012
-
-  intent-catcher:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:9014
-      - PORT=9014
-
   badlisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:
