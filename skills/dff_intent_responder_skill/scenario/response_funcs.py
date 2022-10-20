@@ -126,14 +126,15 @@ def get_respond_funcs():
         "track_object": track_object_respond,
         "turn_around": turn_around_respond,
         "move_forward": move_forward_respond,
-        "move_backward": move_backward_respond,   
+        "move_backward": move_backward_respond,
+        "open_door": open_door_respond,
+        "move_to_point": move_to_point_respond
     }
 
 
 def get_human_utterances(ctx: Context, actor: Actor) -> list:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
 
-################# CUSTOM FOR ROBOT
 
 def track_object_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
@@ -144,6 +145,7 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
         response = "track_object_unknown"
     return response
 
+
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     if re.search(r"counter[- ]?clock-?wise", utt["text"]):
@@ -152,15 +154,17 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
         response = "turn_clockwise"
     return response
 
+
 def move_forward_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     dist = re.findall(r"[0-9]+", utt["text"])
     if len(dist) == 1:
         response = f"move_forward_{dist[0]}"
     else:
-        response = f"move_forward"
+        response = "move_forward"
         
     return response
+
 
 def move_backward_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
@@ -168,5 +172,27 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
     if len(dist) == 1:
         response = f"move_backward_{dist[0]}"
     else:
-        response = f"move_backward"
+        response = "move_backward"
     return response
+
+
+def open_door_respond(ctx: Context, actor: Actor, intention: str):
+    return "open_door"
+
+
+# covers coords like "5,35", "5, 35", "5 35"
+COMPILED_COORDS_PATTERN = re.compile(r"[0-9]+[ ,]+[0-9]+", re.IGNORECASE)
+
+
+def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    entities = get_entities(utt, only_named=False, with_labels=False)
+    coords = COMPILED_COORDS_PATTERN.search(utt["text"])
+    if len(entities) == 1:
+        response = f"move_to_point_{entities[0]}"
+    elif coords:
+        response = f"move_to_point_{coords}"
+    else:
+        response = "move_to_point_unknown"
+    return response
+
