@@ -63,7 +63,6 @@
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
-                    "sentseg",
                     "ner"
                 ]
             },
@@ -103,7 +102,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_and_tokenized_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.spacy_annotator"
                 ],
                 "state_manager_method": "add_annotation"
@@ -117,7 +115,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -131,8 +128,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
                 ]
             },
             "ner": {
@@ -141,7 +136,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
             },
@@ -155,8 +149,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
                 ]
             }
         },
