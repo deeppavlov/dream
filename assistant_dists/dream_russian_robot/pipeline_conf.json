@@ -1,10 +1,5 @@
 {
     "connectors": {
-        "sentseg": {
-            "protocol": "http",
-            "timeout": 1.5,
-            "url": "http://sentseg:8011/sentseg"
-        },
         "ner": {
             "protocol": "http",
             "timeout": 1.5,
@@ -18,13 +13,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
-                        "segments": [
-                            "Извини, что-то пошло не так в моем мозгу.",
-                            "Пожалуйста, повтори предыдущую реплику."
-                        ]
-                    },
                     "ner": [
                         []
                     ]
@@ -41,13 +29,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
-                        "segments": [
-                            "Извини, что-то пошло не так в моем мозгу.",
-                            "Пожалуйста, повтори предыдущую реплику."
-                        ]
-                    },
                     "ner": [
                         []
                     ]
@@ -136,7 +117,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.sentseg"
                 ]
             },
             "entity_detection": {
