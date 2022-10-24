@@ -98,4 +98,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  robot:
+    volumes:
+      - "./skills/robot_skill:/src"
+    ports:
+      - 8130:8130
 version: "3.7"
