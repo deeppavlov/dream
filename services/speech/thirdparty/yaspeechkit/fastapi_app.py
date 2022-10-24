@@ -40,8 +40,7 @@ def infer_asr(user_id: str, file: UploadFile = File(None)) -> JSONResponse:
         ```
 
     """
-    # transcript = api.speech_to_text_v1([file.file], asr_config)["text_result"][0]
-    transcript = "оурыаисофытслдотыслоиц"
+    transcript = api.speech_to_text_v1([file.file], asr_config)["text_result"][0]
     post_response = requests.post("http://0.0.0.0:4242", 
                                   json = {"user_id": user_id, "payload": b64encode(transcript.encode('utf-8')).decode()},
                                 )
