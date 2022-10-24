@@ -38,7 +38,7 @@ services:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
-      - "../.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8014:8014
   badlisted-words:
