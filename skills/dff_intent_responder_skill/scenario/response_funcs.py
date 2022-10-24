@@ -191,7 +191,7 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
     if len(entities) == 1:
         response = f"move_to_point_{entities[0]}"
     elif coords:
-        response = f"move_to_point_{coords}"
+        response = f"move_to_point_{coords[0]}"
     else:
         response = "move_to_point_unknown"
     return response
