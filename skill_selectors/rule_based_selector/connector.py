@@ -91,6 +91,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
+                skills_for_uttr.append("robot_skill")
             elif is_sensitive_topic_and_request(user_uttr):
                 # process user utterance with sensitive content, "safe mode"
 
@@ -133,6 +134,7 @@ class RuleBasedSkillSelectorConnector:
                 # general case
                 if low_priority_intent_detected:
                     skills_for_uttr.append("dff_intent_responder_skill")
+                    skills_for_uttr.append("robot_skill")
                 # adding open-domain skills
                 skills_for_uttr.append("dff_grounding_skill")
                 skills_for_uttr.append("dff_program_y_skill")
@@ -209,7 +211,6 @@ class RuleBasedSkillSelectorConnector:
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
                         "dff_short_story_skill",
-                        "robot_skill",
                     ],
                 )
                 # adding linked-to skills
