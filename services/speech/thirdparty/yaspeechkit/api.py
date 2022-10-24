@@ -69,13 +69,13 @@ class API:
     def speech_to_text_v1(self, files: List[str], config: ASRConfig) -> Dict[str, List[str]]:
         asr_results = []
         for audiofile_name in files:
-            audiofile_name = os.path.join(config.input_dir, audiofile_name)
-
-            if not os.path.isfile(audiofile_name) and not audiofile_name.endswith(config.file_format):
-                continue
-
-            with open(audiofile_name, "rb") as f:
-                data = f.read()
+            try:    
+                data = audiofile_name.read()
+            except Exception as e:
+                print(
+                    f"could not read this file beacuse of exception \n {e}"
+                )
+                exit(-1)
 
             params = "&".join([
                 f"topic=general",
@@ -165,17 +165,16 @@ class API:
                     yield chunk
         
 
-        audio = list()
-        for audio_content in synthesize():
-            audio.append(audio_content)
+
 
         if config.output_dir is not None:
+            audio = list()
+            for audio_content in synthesize():
+                audio.append(audio_content)
             with open(os.path.join(config.output_dir, f"{name_generator()}.{config.format}" ), "wb") as f:
                 [f.write(audio_content) for audio_content in audio]
 
-        return audio
+        return synthesize()
 
 
-                    
 
-    
