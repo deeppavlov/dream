@@ -57,6 +57,7 @@ flows = {
             ("commands", "stop"): loc_cnd.is_intent("stop"),
             ("commands", "destroy_block"): loc_cnd.is_intent("destroy_block"),
             ("commands", "place_block"): loc_cnd.is_intent("place_block"),
+            ("commands", "build_house"): loc_cnd.is_intent("build_house"),
             ("commands", "destroy_and_grab_block"): loc_cnd.is_intent(
                 "destroy_and_grab_block"
             ),
@@ -107,6 +108,11 @@ flows = {
         "place_block": {
             PROCESSING: {1: loc_prs.add_encoding_no_range("place_block")},
             RESPONSE: loc_rsp.response_for_intent("place_block"),
+            TRANSITIONS: {},
+        },
+        "build_house": {
+            PROCESSING: {1: loc_prs.add_encoding_no_range("destroy_and_grab_block")},
+            RESPONSE: loc_rsp.response_for_intent("build_house"),
             TRANSITIONS: {},
         },
         "destroy_and_grab_block": {

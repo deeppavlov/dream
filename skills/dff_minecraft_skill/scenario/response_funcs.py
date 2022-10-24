@@ -29,7 +29,8 @@ def get_response_funcs():
         "destroy_block": default_response,
         "place_block": default_response,
         "destroy_and_grab_block": default_response,
-        "look_at_user": default_response
+        "look_at_user": default_response,
+        "build_house": default_response
     }
 
 
