@@ -990,4 +990,4 @@ def robot_formatter(dialog: Dict) -> Dict:
     """This formatter currently provides the JSON as is, without modifying it.
     Either edit it later or choose one of the existing formatters"""
     detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
-    return detected
+    return [{"detected": detected}]
