@@ -2,7 +2,7 @@ import logging
 from copy import deepcopy
 from typing import Dict, List
 
-from common.utils import get_entities
+from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
@@ -989,4 +989,5 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
 def robot_formatter(dialog: Dict) -> Dict:
     """This formatter currently provides the JSON as is, without modifying it.
     Either edit it later or choose one of the existing formatters"""
-    return dialog
+    detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
+    return detected
