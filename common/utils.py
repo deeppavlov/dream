@@ -814,10 +814,7 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels, combined_classes["cobot_dialogact_topics"])
 
     dp_topics_probs, dp_topics_labels = {}, []
-    if "deeppavlov_topics" in annotations:
-        dp_topics_labels = annotations["deeppavlov_topics"]
-        dp_topics_probs = _labels_to_probs(dp_topics_labels, combined_classes["topics_classification"])
-    elif "combined_classification" in annotations and not dp_topics_labels:
+    if "combined_classification" in annotations and not dp_topics_labels:
         dp_topics_probs, dp_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="deeppavlov_topics"
         )
