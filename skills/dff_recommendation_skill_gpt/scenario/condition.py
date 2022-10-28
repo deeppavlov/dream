@@ -14,12 +14,13 @@ logger = logging.getLogger(__name__)
 
 SPACY_NOUN_PHRASES = getenv("SPACY_NOUN_PHRASES")
 
-def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    result = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
-    if result:
-        return True
-    else:
-        return False
+def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs):
+        result = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
+        if result:
+                #ctx.misc["topic_entity"] = result[0]
+            return True
+        else:
+            return False
 
 
 def example_lets_talk_about():
@@ -59,9 +60,10 @@ def is_slot_filled(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
         return False
 
 
+
 def enough_generative_responses(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    if int(ctx.misc.get("num_gen_responses", 0)) > 3:
-        ctx.misc["num_gen_responses"] = 0
+    if int(ctx.misc.get("num_gen_responses", 0)) > 1: #поменять на побольше
+        ctx.misc["num_gen_responses"] = -4
         return True
     else:
         return False
