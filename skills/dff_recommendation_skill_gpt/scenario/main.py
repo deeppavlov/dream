@@ -1,22 +1,20 @@
 import logging
 import re
 
-from df_engine.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
-from df_engine.core import Actor, Context
-import df_engine.conditions as cnd
-import df_engine.labels as lbl
-
+import common.constants as common_constants
 import common.dff.integration.condition as int_cnd
+import common.dff.integration.context as int_ctx
 import common.dff.integration.processing as int_prs
 import common.dff.integration.response as int_rsp
-import common.dff.integration.context as int_ctx
-
 import common.utils as common_utils
-import common.constants as common_constants
+import df_engine.conditions as cnd
+import df_engine.labels as lbl
+from df_engine.core import Actor, Context
+from df_engine.core.keywords import (GLOBAL, LOCAL, PROCESSING, RESPONSE, TRANSITIONS)
 
 from . import condition as loc_cnd
-from . import response as loc_rsp
 from . import processing as loc_prs
+from . import response as loc_rsp
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +82,7 @@ flows = {
             RESPONSE: int_rsp.multi_response(replies=["Could you give me some more details on what you want?", 
             "Any details?"]),
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance("request")
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps("request")
             },
             TRANSITIONS: {"details_denied": cnd.any(
                 [int_cnd.is_no_vars, 
@@ -98,7 +96,7 @@ flows = {
         "details_denied": {
             RESPONSE: loc_rsp.generative_response(recommend=True),
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance("")
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps("")
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -110,7 +108,7 @@ flows = {
         "details_given": {
             RESPONSE: loc_rsp.generative_response(recommend=True),
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance("details")
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps("details")
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -271,7 +269,7 @@ flows = {
             RESPONSE: loc_rsp.generate_np_response(response_options=['What are you up to today?', 'What are your plans for today?',
             'Any special plans for today?']), 
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity') 
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity') 
             },
             TRANSITIONS: {
                 "new_entity": loc_cnd.contains_noun_phrase,
@@ -288,7 +286,7 @@ flows = {
         "continue_discussing_entity": { 
             RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'), 
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -301,7 +299,7 @@ flows = {
         "new_entity": {
             RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'),  
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -335,7 +333,7 @@ flows = {
             RESPONSE: int_rsp.multi_response(replies=["Oh, I still don't your name! What should I call you?", 
             "By the way, what is your name, if I may ask?", "Now that we know each other better, may I ask your name?"]),
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('test')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('test')
             },
             TRANSITIONS: {
                 "react_name": cnd.true()
@@ -355,7 +353,6 @@ flows = {
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(),
-            
             },
         },
         "begin": {
@@ -385,7 +382,7 @@ flows = {
         "start_topic": { 
             RESPONSE: loc_rsp.generative_response(discussed_entity='topic_entity'),  
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('topic_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('topic_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -397,7 +394,7 @@ flows = {
         "continue_discussing_entity": { 
             RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'), 
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -409,7 +406,7 @@ flows = {
         "new_entity": {
             RESPONSE: loc_rsp.generative_response(discussed_entity='discussed_entity'),  # several hypothesis
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_new_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_new_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
@@ -421,7 +418,7 @@ flows = {
         "ask_hyponym_question": {
             RESPONSE: loc_rsp.generate_with_string(to_append='get_hyponyms'),  
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance('discussed_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 

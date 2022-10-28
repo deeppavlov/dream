@@ -9,12 +9,10 @@ from os import getenv
 logger = logging.getLogger(__name__)
 # ....
 
-SPACY_NOUN_PHRASES = getenv("SPACY_NOUN_PHRASES")
 
+def save_previous_utterance_nps(slot_name):
 
-def save_previous_utterance(slot_name):
-
-    def previous_human_utterance(
+    def previous_human_utterance_nps(
         ctx: Context,
         actor: Actor,
         *args,
@@ -25,28 +23,8 @@ def save_previous_utterance(slot_name):
             ctx = int_prs.save_slots_to_ctx({slot_name: ' '.join(human_text)})(ctx, actor)
         return ctx
 
-    return previous_human_utterance
+    return previous_human_utterance_nps
 
-
-def save_noun_phrase(slot_name): # NOT USED
-
-    def get_noun_phrase(
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
-    ) -> Context:
-        human_uttrs = int_ctx.get_human_utterances(ctx, actor)
-        if len(human_uttrs) > 0:
-            text_uttr =  human_uttrs[-1]["text"]
-        else:
-            text_uttr = ''
-        input_data = {"sentences": [text_uttr]}
-        result = requests.post(SPACY_NOUN_PHRASES, json=input_data)
-        ctx = int_prs.save_slots_to_ctx({slot_name: str(input_data)})(ctx, actor)
-        return ctx
-
-    return get_noun_phrase
 
 def save_user_name(slot_name):
 
