@@ -109,6 +109,13 @@
       "next_step":[""],
       "link": "dff_movie_skill"
     },
+    "surprise":{
+      "answers": [
+         "I see that you are surprised."
+      ],
+      "next_step":[""],
+      "link": ""
+    },
     "anger":{
       "answers": [
         "Frequent feelings of displeasure have been linked to higher risk of heart disease, high blood pressure, depression and difficulty sleeping. "
