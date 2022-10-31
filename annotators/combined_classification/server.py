@@ -16,6 +16,7 @@ app = Flask(__name__)
 
 
 def get_result(sentences, sentences_with_history, postannotations=False):
+    logger.debug((sentences, sentences_with_history, postannotations))
     st_time = time.time()
     ans = [{} for _ in sentences]
     if not sentences:
@@ -41,21 +42,18 @@ def get_result(sentences, sentences_with_history, postannotations=False):
         data = [[] for _ in range(9)]
         data[2] = sentences
     try:
-        logger.info(data)
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
             # we assume toxic has 7 classes
             for i in range(len(prob_list)):
-                ans[i][task_name] = {
-                    class_: float(prob) for class_, prob in zip(combined_classes[task_name], prob_list[i])
-                }
+                if prob_list[i]:
+                    ans[i][task_name] = {
+                        class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                    }
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
 
-    total_time = time.time() - st_time
-    logger.info(f"Combined classifier exec time: {total_time:.3f}s")
-    logger.info(ans)
     return ans
 
 
@@ -76,27 +74,21 @@ def respond():
     logger.info("Respond")
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
-    logger.debug(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist, postannotations=False)
-
-    logger.info(f"9in1 result: {answer}")
+    logger.debug(f"9in1 result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify(answer)
 
 
 @app.route("/batch_model", methods=["POST"])
 def batch_respond():
-    logger.info("Batch respond")
     t = time.time()
     sep = " [SEP] "
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
-    logger.info(utterances_with_histories)
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
-    logger.debug(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist, postannotations=True)
-
-    logger.info(f"9in1 batch result: {answer}")
+    logger.debug(f"9in1 batch result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
 

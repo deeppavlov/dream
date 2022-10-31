@@ -69,7 +69,9 @@ def main_test():
         t = time()
         batch_responses = requests.post(batch_url, json=config).json()
         print(time() - t)
-        assert batch_responses[0]["batch"]["toxic_classification"] == responses["toxic_classification"], (
+        print(responses)
+        print(batch_responses)
+        assert batch_responses[0]["batch"][0]["toxic_classification"] == responses[0]["toxic_classification"], (
             f"Batch responses {batch_responses} " f"not match to responses {responses}"
         )
         responses = [j[config["task"]] for j in responses]
