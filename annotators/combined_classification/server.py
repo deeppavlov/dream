@@ -17,7 +17,6 @@ app = Flask(__name__)
 
 def get_result(sentences, sentences_with_history, postannotations=False):
     logger.debug((sentences, sentences_with_history, postannotations))
-    st_time = time.time()
     ans = [{} for _ in sentences]
     if not sentences:
         logger.exception("Input sentences not received")
@@ -48,8 +47,7 @@ def get_result(sentences, sentences_with_history, postannotations=False):
             for i in range(len(prob_list)):
                 if prob_list[i]:
                     ans[i][task_name] = {
-                        class_: round(float(prob), 2)
-                        for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                        class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
                     }
     except Exception as e:
         sentry_sdk.capture_exception(e)
