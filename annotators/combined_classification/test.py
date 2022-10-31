@@ -62,9 +62,14 @@ def main_test():
             config["utterances_with_histories"] = [[k] for k in config["sentences_with_history"]]
         else:
             config["utterances_with_histories"] = [[k] for k in config["sentences"]]
+        t = time()
         responses = requests.post(url, json=config).json()
+        print(time() - t)
+        print("b")
+        t = time()
         batch_responses = requests.post(batch_url, json=config).json()
-        assert batch_responses[0]["batch"] == responses, (
+        print(time() - t)
+        assert batch_responses[0]["batch"]["toxic_classification"] == responses["toxic_classification"], (
             f"Batch responses {batch_responses} " f"not match to responses {responses}"
         )
         responses = [j[config["task"]] for j in responses]

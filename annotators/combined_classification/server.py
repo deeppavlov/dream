@@ -15,26 +15,34 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
 
 
-def get_result(sentences, sentences_with_history):
+def get_result(sentences, sentences_with_history, postannotations=False):
     st_time = time.time()
     ans = [{} for _ in sentences]
-
     if not sentences:
         logger.exception("Input sentences not received")
         sentences = [" "]
     if not sentences_with_history:
         logger.exception("Input sentences with history not received")
         sentences_with_history = sentences
-
+    if not postannotations:
+        data = [
+            sentences,  # emo was trained without history
+            sentences,  # sentiment was trained without history
+            sentences,  # toxic was trained without history
+            sentences,  # factoid was trained without history
+            sentences_with_history,  # midas was trained with history
+            sentences,  # deeppavlov topics was trained without history
+            sentences,  # cobot topics was trained without history
+            sentences_with_history,  # cobot dialogact topics was trained with history
+            sentences_with_history,
+        ]  # cobot dialogact intents was trained with history
+    elif postannotations:
+        # While using postannotations, we annotate only for toxic class
+        data = [[] for _ in range(9)]
+        data[2] = sentences
     try:
-        if sentences and sentences_with_history:
-            prob_lists = model(sentences, sentences_with_history)
-        else:
-            raise Exception(
-                f"Empty list of sentences or sentences with history received."
-                f"Sentences: {sentences} "
-                f"Sentences with history: {sentences_with_history}"
-            )
+        logger.info(data)
+        prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
             # we assume toxic has 7 classes
             for i in range(len(prob_list)):
@@ -69,7 +77,7 @@ def respond():
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     logger.debug(str((sentences, sentences_with_hist)))
-    answer = get_result(sentences, sentences_with_hist)
+    answer = get_result(sentences, sentences_with_hist, postannotations=False)
 
     logger.info(f"9in1 result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
@@ -86,7 +94,7 @@ def batch_respond():
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
     logger.debug(str((sentences, sentences_with_hist)))
-    answer = get_result(sentences, sentences_with_hist)
+    answer = get_result(sentences, sentences_with_hist, postannotations=True)
 
     logger.info(f"9in1 batch result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
