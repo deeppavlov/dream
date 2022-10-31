@@ -1,3 +1,4 @@
+from code import interact
 import logging
 import random
 import re
@@ -31,9 +32,11 @@ DIALOGPT_RESPOND = getenv("DIALOGPT_RESPOND_ENG_SERVICE_URL")
 assert INFILLING
 
 
-STOP_WORDS = re.compile(r'''reddit|\bop\b|upvote|thanks|\?|this movie|guy|username|add me|\blt\b|thread|
-I'll reply|downvote|comment|message|\bpm\b|sent you|link|I'll send|I'll see|upvote''', re.IGNORECASE)
-HYPONYM_QUESTIONS = ["What do you think about _?", "Why don't we discuss _?", "Let's talk about _.", 
+STOP_WORDS = re.compile(r'''reddit|\bop\b|upvote|thanks|\?|this movie|this guy|that guy|username|add me|\blt\b|thread|
+I'll reply|downvote|comment|message|\bpm\b|sent you|link|I'll send|I'll see|upvote|trade|\bsub\b|post''', re.IGNORECASE)
+SWITCH_TOPIC = ["But enough about that! _ are much more interesting. ", "You know what? ", "Well... ", 
+"Why don't we get back to _?", "Back to _. ", "_... I never forgot!"]
+HYPONYM_TOPIC = ["What do you think about _?", "Why don't we discuss _?", "Let's talk about _.", 
 'By the way, I really like _. What about you?',
 "I've been thinking about _ recently..."]
 ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для поспрашивать насчет топика который идет сейчас!!!
@@ -56,6 +59,14 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         "question": "Which one are you playing now?"
         },
     } 
+BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have|I am a|I will|I want|I had|My (sister|brother|mother|father|
+friend)|I was|I went|he is a troll|I don't have|I'll|I'd like''', re.IGNORECASE)
+TOXIC_BOT = re.compile(r'''hate|evil|porn''', re.IGNORECASE)
+SUPER_CONFIDENCE = 1.0
+HIGH_CONFIDENCE = 0.98
+DEFAULT_CONFIDENCE = 0.95
+BIT_LOWER_CONFIDENCE = 0.90
+ZERO_CONFIDENCE = 0.0
 
 
 with open("popular_30k.txt", "r") as f:
@@ -85,7 +96,23 @@ def compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym='
     return data
 
 
+def determine_confidence(hypothesis: str) -> int:
+    if not hypothesis:
+        return 0
+    confidence = 0.99
+    if re.search(STOP_WORDS, hypothesis):
+        confidence -= 0.07
+    if len(hypothesis.split()) < 5:
+        confidence -= 0.04
+    if re.search(BOT_PERSONAL_INFORMATION_PATTERNS, hypothesis):
+        confidence -= 0.06
+    if re.search(TOXIC_BOT, hypothesis):
+        confidence -= 0.1
+    return confidence
+
+
 def generative_response(recommend=False, question=False, discussed_entity=""):
+
     def generative_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if ctx.misc.get("num_gen_responses", 0):
             num_gen_responses = ctx.misc.get("num_gen_responses", 0)
@@ -114,12 +141,15 @@ def generative_response(recommend=False, question=False, discussed_entity=""):
             hypotheses = []
         if hypotheses:
             for hyp in hypotheses[0]:
-                if hyp and not re.search(STOP_WORDS, hyp):
+                if hyp:
                     if hyp[-1] not in [".", "?", "!"]:
                         hyp += "."
-                    gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+                    gathering_responses(hyp, determine_confidence(hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
         if len(curr_responses) == 0:
             return ""
+
+        with open("test.txt", "w") as f:
+            f.write(str(curr_responses) + str(curr_confidences))
 
         return int_rsp.multi_response(
             replies=curr_responses,
@@ -160,9 +190,10 @@ def generate_np_response(response_options=[''], recommend=False, discussed_entit
             
             if hypotheses:
                 for hyp in hypotheses[0]:
-                    if hyp[-1] not in [".", "?", "!"]:
-                        hyp += "."
-                    gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+                    if hyp:
+                        if hyp[-1] not in [".", "?", "!"]:
+                            hyp += "."
+                        gathering_responses(hyp, determine_confidence(hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
             if len(curr_responses) == 0:
                 return ""
 
@@ -260,14 +291,27 @@ def get_hyponyms(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         # blob = TextBlob([hyponym])
         # plural_hyponym = [word.pluralize() for word in blob.words][0]
         hyponym = hyponym + 's'
-        return HYPONYM_QUESTIONS[random.randrange(0, len(HYPONYM_QUESTIONS))].replace('_', hyponym)
+        hyponym_topic = HYPONYM_TOPIC[random.randrange(0, len(HYPONYM_TOPIC))].replace('_', hyponym)
+        switch_topic = SWITCH_TOPIC[random.randrange(0, len(SWITCH_TOPIC))].replace('_', ctx.misc.get("slots", {}).get('topic_entity', ''))
+        hyponym_question = switch_topic + hyponym_topic
+        return hyponym_question
     else:
-        hyponym = ''
         return ''
 
 
 def generate_with_string(to_append='get_questions', position_string='before'):
     def generate_with_string_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
+
+        def gathering_responses(reply, confidence, human_attr, bot_attr, attr):
+            nonlocal curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs
+            if reply and confidence:
+                curr_responses += [reply]
+                curr_confidences += [confidence]
+                curr_human_attrs += [human_attr]
+                curr_bot_attrs += [bot_attr]
+                curr_attrs += [attr]
+                logger.info(f"dff-generative-skill: {reply}")
         if ctx.validation:
             return ""
         request_data = compose_data_for_dialogpt(False, "", ctx, actor)
@@ -290,13 +334,20 @@ def generate_with_string(to_append='get_questions', position_string='before'):
                         hyp += "."
                 if string_to_attach:
                     if position_string == 'before':
-                        return hyp + ' ' + str(string_to_attach)
+                        hyp = hyp + ' ' + str(string_to_attach)
                     elif position_string == 'after':
-                        return str(string_to_attach) + ' ' + hyp
-                else:
-                    return hyp 
-        else:
-            return ''
+                        hyp = str(string_to_attach) + ' ' + hyp #тут аккуратнее, мб стоит добавить малтиреспонс хэндлер
+                gathering_responses(hyp, determine_confidence(hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+        if len(curr_responses) == 0:
+                return ""
+
+        return int_rsp.multi_response(
+            replies=curr_responses,
+            confidences=curr_confidences,
+            human_attr=curr_human_attrs,
+            bot_attr=curr_bot_attrs,
+            hype_attr=curr_attrs,
+        )(ctx, actor, *args, **kwargs)
     return generate_with_string_handler
 
 # а в каком случае его включать? посмотреть на другие сценарии! нужна ли штука которая поспрашивает вопросы для текущего топика: возможно впишется в чат эбаут

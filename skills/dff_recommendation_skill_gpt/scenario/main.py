@@ -351,7 +351,6 @@ flows = {
     "chat_about": { 
         LOCAL: {
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(),
             },
         },
