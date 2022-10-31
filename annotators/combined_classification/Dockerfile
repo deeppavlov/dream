@@ -1,6 +1,6 @@
 FROM deeppavlov/base-gpu:0.17.5
 
-RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@1efb0422552f6df22a5bf295bcd722ce47a179ec
+RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@d52f49efc1e7f5c2d4c7c6da8ada3032d836ce82
 WORKDIR /base/DeepPavlov
 
 ARG CONFIG
