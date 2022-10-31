@@ -8,6 +8,31 @@ def main_test():
     batch_url = "http://0.0.0.0:8087/batch_model"
     configs = [
         {
+            "sentences": ["do you like porn", "you son of the bitch", "yes"],
+            "task": "toxic_classification",
+            "answers_bert": [[], ["insult", "obscene", "toxic"], []],
+            "multilabel": True,
+        },
+        {
+            "sentences": ["let's talk about movies"],
+            "task": "cobot_dialogact_topics",
+            "answers_bert": [["Entertainment_Movies"]],
+            "multilabel": True,
+        },
+        {
+            "sentences": ["let's talk about games"],
+            "task": "cobot_topics",
+            "answers_bert": [["Games"]],
+            "multilabel": True,
+        },
+        {
+            "sentences_with_history": ["What is the capital of Great Britain" " [SEP] I don't know"],
+            "sentences": ["I don't know"],
+            "task": "cobot_dialogact_intents",
+            "answers_bert": [["Information_DeliveryIntent", "ClarificationIntent"]],
+            "multilabel": True,
+        },
+        {
             "sentences": ["how do I empty my DNS cache?", "which do you prefer?"],
             "task": "factoid_classification",
             "answers_bert": [["is_factoid"], ["is_conversational"]],
@@ -30,31 +55,6 @@ def main_test():
             "answers_bert": [["open_question_opinion"]],
         },
         {"sentences": ["movies"], "task": "deeppavlov_topics", "answers_bert": [["Movies_TV"]]},
-        {
-            "sentences": ["you son of the bitch", "yes"],
-            "task": "toxic_classification",
-            "answers_bert": [["insult", "obscene", "toxic"], []],
-            "multilabel": True,
-        },
-        {
-            "sentences": ["let's talk about movies"],
-            "task": "cobot_dialogact_topics",
-            "answers_bert": [["Entertainment_Movies"]],
-            "multilabel": True,
-        },
-        {
-            "sentences": ["let's talk about games"],
-            "task": "cobot_topics",
-            "answers_bert": [["Games"]],
-            "multilabel": True,
-        },
-        {
-            "sentences_with_history": ["What is the capital of Great Britain" " [SEP] I don't know"],
-            "sentences": ["I don't know"],
-            "task": "cobot_dialogact_intents",
-            "answers_bert": [["Information_DeliveryIntent"]],
-            "multilabel": True,
-        },
     ]
     t = time()
     for config in configs:
@@ -69,7 +69,6 @@ def main_test():
         )
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
-            print(response)
             if config.get("multilabel", False):  # multilabel_task
                 predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
             else:
