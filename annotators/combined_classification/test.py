@@ -29,7 +29,7 @@ def main_test():
             "sentences_with_history": ["What is the capital of Great Britain" " [SEP] I don't know"],
             "sentences": ["I don't know"],
             "task": "cobot_dialogact_intents",
-            "answers_bert": [["Information_DeliveryIntent"]],
+            "answers_bert": [["Information_DeliveryIntent", "ClarificationIntent"]],
             "multilabel": True,
         },
         {
@@ -67,9 +67,6 @@ def main_test():
         assert batch_responses[0]["batch"] == responses, (
             f"Batch responses {batch_responses} " f"not match to responses {responses}"
         )
-        print(config)
-        print(responses)
-        breakpoint()
         responses = [j[config["task"]] for j in responses]
         for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
             if config.get("multilabel", False):  # multilabel_task
