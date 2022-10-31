@@ -68,11 +68,11 @@ def respond():
     logger.info("Respond")
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
-    logger.debug(str((sentences, sentences_with_hist)))
+    logger.exception(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"9in1 result: {answer}")
-    logger.info(f"Combined classifier exec time: {time.time() - t}")
+    logger.exception(f"Combined classifier exec time: {time.time() - t}")
     return jsonify(answer)
 
 
@@ -85,11 +85,11 @@ def batch_respond():
     logger.info(utterances_with_histories)
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
-    logger.debug(str((sentences, sentences_with_hist)))
+    logger.exception(str((sentences, sentences_with_hist)))
     answer = get_result(sentences, sentences_with_hist)
 
     logger.info(f"9in1 batch result: {answer}")
-    logger.info(f"Combined classifier exec time: {time.time() - t}")
+    logger.exception(f"Combined classifier batch exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
 
 
