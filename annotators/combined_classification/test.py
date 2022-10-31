@@ -10,7 +10,7 @@ def main_test():
         {
             "sentences": ["do you like porn", "you son of the bitch", "yes"],
             "task": "toxic_classification",
-            "answers_bert": [[],["insult", "obscene", "toxic"], []],
+            "answers_bert": [[], ["insult", "obscene", "toxic"], []],
             "multilabel": True,
         },
         {
