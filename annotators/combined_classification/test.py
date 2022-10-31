@@ -54,7 +54,7 @@ def main_test():
             "task": "midas_classification",
             "answers_bert": [["open_question_opinion"]],
         },
-        {"sentences": ["movies"], "task": "deeppavlov_topics", "answers_bert": [["Movies_TV"]]}
+        {"sentences": ["movies"], "task": "deeppavlov_topics", "answers_bert": [["Movies_TV"]]},
     ]
     t = time()
     for config in configs:
