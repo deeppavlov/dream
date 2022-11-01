@@ -74,7 +74,7 @@ def respond():
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist, postannotations=False)
-    logger.debug(f"9in1 result: {answer}")
+    logger.exception(f"9in1 result: {answer}")
     logger.info(f"Combined classifier exec time: {time.time() - t}")
     return jsonify(answer)
 
