@@ -6,7 +6,7 @@ services:
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           ner:8021, personal-info-skill:8030, dff-generative-skill:8092,
           dff-friendship-skill:8086, entity-detection:8103, dialogpt:8091,
-          dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126, robot:8130"
+          dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   dff-program-y-skill:
@@ -292,21 +292,6 @@ services:
       context: .
       dockerfile: ./skills/dff_template_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
-  robot:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8130
-      context: .
-      dockerfile: ./skills/robot_skill/Dockerfile
-    command: uvicorn --workers=1 server:app --host 0.0.0.0 --port 8130 --reload
     deploy:
       resources:
         limits:
