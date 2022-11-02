@@ -161,18 +161,34 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     entities = get_entities(utt, only_named=False, with_labels=False)
     if len(entities) == 1:
-        response = f"track_object_{entities[0]}"
+        command = f"track_object_{entities[0]}"
+        response = f"Следую за {entities[0]}." if LANGUAGE == "RU" else f"Tracking {entities[0]}."
     else:
-        response = "track_object_unknown"
+        command = "track_object_unknown"
+        if LANGUAGE == "RU":
+            response = "Не могу извлечь объект для отслеживания. Повторите команду."
+        else:
+            response = "I did not get tracked object. Please repeat the command."
+    send_command_to_robot(command)
     return response
 
 
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
+    degree = re.findall(r"[0-9]+", utt["text"])
     if re.search(r"counter[- ]?clock-?wise", utt["text"]):
-        response = "turn_counterclockwise"
+        command = "turn_counterclockwise"
+        if LANGUAGE == "RU":
+            response = f"Поворачиваюсь против часовой стрелки на {degree} градусов."
+        else:
+            response = f"Turning around counterclockwise by {degree} degrees."
     else:
-        response = "turn_clockwise"
+        command = "turn_clockwise"
+        if LANGUAGE == "RU":
+            response = f"Поворачиваюсь по часовой стрелке на {degree} градусов."
+        else:
+            response = f"Turning around clockwise by {degree} degrees."
+    send_command_to_robot(command)
     return response
 
 
@@ -180,10 +196,19 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     dist = re.findall(r"[0-9]+", utt["text"])
     if len(dist) == 1:
-        response = f"move_forward_{dist[0]}"
+        command = f"move_forward_{dist[0]}"
+        if LANGUAGE == "RU":
+            response = f"Двигаюсь вперед на {dist} метров."
+        else:
+            response = f"Moving forward by {dist} meters."
     else:
-        response = "move_forward"
-        
+        command = "move_forward"
+        if LANGUAGE == "RU":
+            response = f"Двигаюсь вперед."
+        else:
+            response = f"Moving forward."
+
+    send_command_to_robot(command)
     return response
 
 
@@ -191,14 +216,30 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     dist = re.findall(r"[0-9]+", utt["text"])
     if len(dist) == 1:
-        response = f"move_backward_{dist[0]}"
+        command = f"move_backward_{dist[0]}"
+        if LANGUAGE == "RU":
+            response = f"Двигаюсь назад на {dist} метров."
+        else:
+            response = f"Moving backward by {dist} meters."
     else:
-        response = "move_backward"
+        command = "move_backward"
+        if LANGUAGE == "RU":
+            response = f"Двигаюсь назад."
+        else:
+            response = f"Moving backward."
+    send_command_to_robot(command)
     return response
 
 
 def open_door_respond(ctx: Context, actor: Actor, intention: str):
-    return "open_door"
+    command = "open_door"
+    if LANGUAGE == "RU":
+        response = f"Открываю дверь"
+    else:
+        response = f"Opening the door."
+
+    send_command_to_robot(command)
+    return response
 
 
 # covers coords like "5,35", "5, 35", "5 35"
@@ -210,10 +251,17 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
     entities = get_entities(utt, only_named=False, with_labels=False)
     coords = COMPILED_COORDS_PATTERN.search(utt["text"])
     if len(entities) == 1:
-        response = f"move_to_point_{entities[0]}"
+        command = f"move_to_point_{entities[0]}"
+        response = f"Двигаюсь к объекту: {entities[0]}." if LANGUAGE == "RU" else f"Moving to object: {entities[0]}."
     elif coords:
-        response = f"move_to_point_{coords[0]}"
+        command = f"move_to_point_{coords[0]}"
+        response = f"Двигаюсь в точку: {coords[0]}." if LANGUAGE == "RU" else f"Moving to point: {coords[0]}."
     else:
-        response = "move_to_point_unknown"
+        command = "move_to_point_unknown"
+        if LANGUAGE == "RU":
+            response = "Не могу извлечь объект для цели. Повторите команду."
+        else:
+            response = "I did not get target object. Please repeat the command."
+    send_command_to_robot(command)
     return response
 
