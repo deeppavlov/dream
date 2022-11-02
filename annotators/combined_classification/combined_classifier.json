@@ -160,18 +160,15 @@
           },
           "topics": {
             "type": "classification",
-            "options": 22,
-            "multilabel": true
+            "options": 22
           },
           "dialogact_topics": {
             "type": "classification",
-            "options": 11,
-            "multilabel": true
+            "options": 11
           },
           "dialogact_intents": {
             "type": "classification",
-            "options": 11,
-            "multilabel": true
+            "options": 11
           }
         },
         "in": [
