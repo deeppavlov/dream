@@ -7,12 +7,15 @@ def main_test():
     url = "http://0.0.0.0:8087/model"
     batch_url = "http://0.0.0.0:8087/batch_model"
     configs = [
-        {'sentences':["do you like porn"],
-         'task': 'all',
-         'possible_answers':{'cobot_topics':["Politics", "Religion", "Sex_Profanity"],
-                             'cobot_dialogact_topics':["Politics", "Inappropriate_Content"],
-                             'cobot_dialogact_intents':["Opinion_RequestIntent"],
-                             'midas_classification': ["open_question_opinion", "open_question_personal", "yes_no_question"]}
+        {
+            "sentences": ["do you like porn"],
+            "task": "all",
+            "possible_answers": {
+                "cobot_topics": ["Politics", "Religion", "Sex_Profanity"],
+                "cobot_dialogact_topics": ["Politics", "Inappropriate_Content"],
+                "cobot_dialogact_intents": ["Opinion_RequestIntent"],
+                "midas_classification": ["open_question_opinion", "open_question_personal", "yes_no_question"],
+            },
         },
         {
             "sentences": ["you son of the bitch", "yes"],
@@ -72,31 +75,55 @@ def main_test():
         responses = requests.post(url, json=config).json()
         batch_responses = requests.post(batch_url, json=config).json()
         batch_error_msg = f"Batch responses {batch_responses} not match to responses {responses}"
-        assert batch_responses[0]["batch"][0]["toxic_classification"] == responses[0]["toxic_classification"], batch_error_msg
+        assert (
+            batch_responses[0]["batch"][0]["toxic_classification"] == responses[0]["toxic_classification"]
+        ), batch_error_msg
         if config["task"] == "all":
             assert len(responses) == 1, "Wrong response length"
             print(f"Checking {config['sentences'][0]}")
-            predicted_cobot_topics = [class_ for class_ in responses[0]['cobot_topics']
-                                      if responses[0]['cobot_topics'][class_] > 0.5]
-            predicted_cobot_da_topics = [class_ for class_ in responses[0]['cobot_dialogact_topics'] 
-                                         if responses[0]['cobot_dialogact_topics'][class_] > 0.5]
-            predicted_cobot_da_intents =  [class_ for class_ in responses[0]['cobot_dialogact_intents'] 
-                                           if responses[0]['cobot_dialogact_intents'][class_] > 0.5]
-            predicted_midas_intents = [class_ for class_ in responses[0]['midas_classification'] 
-                                       if responses[0]['midas_classification'][class_] == max(responses[0]['midas_classification'].values())]
-            error_msg1 = f"Predicted cobot topics {predicted_cobot_topics} and da topics {predicted_cobot_da_topics}" \
-                         f"not match with sensitive cobot_topics {config['possible_answers']['cobot_topics']}" \
-                         f"and sensitive cobot da topics {config['possible_answers']['cobot_dialogact_topics']}"
-            error_msg2 = f"Predicted cobot da intents {predicted_cobot_da_intents} and midas intents {predicted_midas_intents}" \
-                         f"not match with sensitive cobot_da_intents {config['possible_answers']['cobot_dialogact_intents']}" \
-                         f"and sensitive midas {config['possible_answers']['midas_classification']}"            
-            assert any([set(predicted_cobot_topics)& set(config["possible_answers"]["cobot_topics"]),                       
-                        set(predicted_cobot_da_topics)& set(config["possible_answers"]["cobot_dialogact_topics"])]), error_msg1
-            assert any([set(predicted_cobot_da_intents)& set(config["possible_answers"]["cobot_dialogact_intents"]),                      
-                        set(predicted_midas_intents)& set(config["possible_answers"]["midas_classification"])]), error_msg2                                     
+            predicted_cobot_topics = [
+                class_ for class_ in responses[0]["cobot_topics"] if responses[0]["cobot_topics"][class_] > 0.5
+            ]
+            predicted_cobot_da_topics = [
+                class_
+                for class_ in responses[0]["cobot_dialogact_topics"]
+                if responses[0]["cobot_dialogact_topics"][class_] > 0.5
+            ]
+            predicted_cobot_da_intents = [
+                class_
+                for class_ in responses[0]["cobot_dialogact_intents"]
+                if responses[0]["cobot_dialogact_intents"][class_] > 0.5
+            ]
+            predicted_midas_intents = [
+                class_
+                for class_ in responses[0]["midas_classification"]
+                if responses[0]["midas_classification"][class_] == max(responses[0]["midas_classification"].values())
+            ]
+            error_msg1 = (
+                f"Predicted cobot topics {predicted_cobot_topics} and da topics {predicted_cobot_da_topics}"
+                f"not match with sensitive cobot_topics {config['possible_answers']['cobot_topics']}"
+                f"and sensitive cobot da topics {config['possible_answers']['cobot_dialogact_topics']}"
+            )
+            error_msg2 = (
+                f"Predicted cobot da intents {predicted_cobot_da_intents} and midas intents {predicted_midas_intents}"
+                f"not match with sensitive cobot_da_intents {config['possible_answers']['cobot_dialogact_intents']}"
+                f"and sensitive midas {config['possible_answers']['midas_classification']}"
+            )
+            assert any(
+                [
+                    set(predicted_cobot_topics) & set(config["possible_answers"]["cobot_topics"]),
+                    set(predicted_cobot_da_topics) & set(config["possible_answers"]["cobot_dialogact_topics"]),
+                ]
+            ), error_msg1
+            assert any(
+                [
+                    set(predicted_cobot_da_intents) & set(config["possible_answers"]["cobot_dialogact_intents"]),
+                    set(predicted_midas_intents) & set(config["possible_answers"]["midas_classification"]),
+                ]
+            ), error_msg2
         else:
             responses = [j[config["task"]] for j in responses]
-            for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):         
+            for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
                 if config.get("multilabel", False):  # multilabel_task
                     predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
                 else:

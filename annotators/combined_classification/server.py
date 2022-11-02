@@ -34,8 +34,8 @@ def get_result(sentences, sentences_with_history, postannotations=False):
             sentences,  # deeppavlov topics was trained without history
             sentences,  # cobot topics was trained without history
             sentences,  # cobot dialogact topics is now trained without history
-            sentences  # cobot dialogact intents is now trained without history
-        ]  
+            sentences,  # cobot dialogact intents is now trained without history
+        ]
     elif postannotations:
         # While using postannotations, we annotate only for toxic class
         data = [[] for _ in range(9)]
