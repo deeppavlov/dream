@@ -3,10 +3,10 @@ import logging
 import json
 import random
 import re
-import aiohttp
-from fastapi import FastAPI
 from datetime import datetime
 from os import getenv
+import requests
+import json
 
 import common.dff.integration.context as int_ctx
 from common.utils import get_entities
@@ -138,57 +138,23 @@ def get_human_utterances(ctx: Context, actor: Actor) -> list:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
 
 
-def send_command_to_robot(command):
-    ROS_FSM_SERVER = "http://172.17.0.1:5000"
-    # Please see https://stackoverflow.com/a/62002628
-    ROS_FSM_STATUS_ENDPOINT = f"{ROS_FSM_SERVER}/robot_status"
-    ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_intent"
-    logger.error(f"Sending to robot the command:\n{command}")
-
-    async with aiohttp.ClientSession() as sess:
-        async with sess.get(ROS_FSM_STATUS_ENDPOINT) as status_response:
-            is_free = (await status_response.json()).get("status") == "free"
-
-            logger.error(f"Robot status: {is_free}")
-
-            if is_free:
-                payload = command  # fix this to actually post what you need
-                await sess.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps(payload))
-    return [command]
-
-
 def track_object_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     entities = get_entities(utt, only_named=False, with_labels=False)
     if len(entities) == 1:
-        command = f"track_object_{entities[0]}"
-        response = f"Следую за {entities[0]}." if LANGUAGE == "RU" else f"Tracking {entities[0]}."
+        response = f"track_object_{entities[0]}"
     else:
-        command = "track_object_unknown"
-        if LANGUAGE == "RU":
-            response = "Не могу извлечь объект для отслеживания. Повторите команду."
-        else:
-            response = "I did not get tracked object. Please repeat the command."
-    send_command_to_robot(command)
+        response = "track_object_unknown"
     return response
 
 
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    degree = re.findall(r"[0-9]+", utt["text"])
     if re.search(r"counter[- ]?clock-?wise", utt["text"]):
-        command = "turn_counterclockwise"
-        if LANGUAGE == "RU":
-            response = f"Поворачиваюсь против часовой стрелки на {degree} градусов."
-        else:
-            response = f"Turning around counterclockwise by {degree} degrees."
+        response = "turn_counterclockwise"
     else:
-        command = "turn_clockwise"
-        if LANGUAGE == "RU":
-            response = f"Поворачиваюсь по часовой стрелке на {degree} градусов."
-        else:
-            response = f"Turning around clockwise by {degree} degrees."
-    send_command_to_robot(command)
+        response = "turn_clockwise"
+    send_command_to_robot(response)
     return response
 
 
@@ -196,19 +162,10 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     dist = re.findall(r"[0-9]+", utt["text"])
     if len(dist) == 1:
-        command = f"move_forward_{dist[0]}"
-        if LANGUAGE == "RU":
-            response = f"Двигаюсь вперед на {dist} метров."
-        else:
-            response = f"Moving forward by {dist} meters."
+        response = f"move_forward_{dist[0]}"
     else:
-        command = "move_forward"
-        if LANGUAGE == "RU":
-            response = f"Двигаюсь вперед."
-        else:
-            response = f"Moving forward."
-
-    send_command_to_robot(command)
+        response = "move_forward"
+    send_command_to_robot(response)
     return response
 
 
@@ -216,52 +173,44 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     dist = re.findall(r"[0-9]+", utt["text"])
     if len(dist) == 1:
-        command = f"move_backward_{dist[0]}"
-        if LANGUAGE == "RU":
-            response = f"Двигаюсь назад на {dist} метров."
-        else:
-            response = f"Moving backward by {dist} meters."
+        response = f"move_backward_{dist[0]}"
     else:
-        command = "move_backward"
-        if LANGUAGE == "RU":
-            response = f"Двигаюсь назад."
-        else:
-            response = f"Moving backward."
-    send_command_to_robot(command)
+        response = "move_backward"
+    send_command_to_robot(response)
     return response
 
 
 def open_door_respond(ctx: Context, actor: Actor, intention: str):
-    command = "open_door"
-    if LANGUAGE == "RU":
-        response = f"Открываю дверь"
-    else:
-        response = f"Opening the door."
+    return "open_door"
 
-    send_command_to_robot(command)
-    return response
+def send_command_to_robot(command):
+    ROS_FSM_SERVER = "http://172.17.0.1:5000"
+    ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
+    logger.info(f"Sending to robot:\n{command}")
 
+    requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}))
 
 # covers coords like "5,35", "5, 35", "5 35"
 COMPILED_COORDS_PATTERN = re.compile(r"[0-9]+[ ,]+[0-9]+", re.IGNORECASE)
-
 
 def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     entities = get_entities(utt, only_named=False, with_labels=False)
     coords = COMPILED_COORDS_PATTERN.search(utt["text"])
     if len(entities) == 1:
-        command = f"move_to_point_{entities[0]}"
-        response = f"Двигаюсь к объекту: {entities[0]}." if LANGUAGE == "RU" else f"Moving to object: {entities[0]}."
+        response = f"move_to_point_{entities[0]}"
     elif coords:
-        command = f"move_to_point_{coords[0]}"
-        response = f"Двигаюсь в точку: {coords[0]}." if LANGUAGE == "RU" else f"Moving to point: {coords[0]}."
+        response = f"move_to_point_{coords[0]}"
     else:
-        command = "move_to_point_unknown"
-        if LANGUAGE == "RU":
-            response = "Не могу извлечь объект для цели. Повторите команду."
-        else:
-            response = "I did not get target object. Please repeat the command."
-    send_command_to_robot(command)
+        response = "move_to_point_unknown"
+    
+    if response == "move_to_point_unknown":
+        try:
+            text = utt.get("text")
+            destination = text.split()[-1].strip()
+            r = f"move_to_point_{destination}"
+            send_command_to_robot(r)
+        except:
+            logger.error(f"can't split phrase: \n{text} or conection lost")
     return response
 
