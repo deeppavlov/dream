@@ -148,10 +148,10 @@ def send_command_to_robot(command):
 
 def track_object_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    entities = get_entities(utt, only_named=False, with_labels=False)
+    entities = get_entities(utt, only_named=False, with_labels=False, return_lemmas=True)
     if len(entities) == 1:
         command = f"track_object_{entities[0]}"
-        response = f"Следую за {entities[0]}." if LANGUAGE == "RU" else f"Tracking {entities[0]}."
+        response = f"Следую за объектом: {entities[0]}." if LANGUAGE == "RU" else f"Tracking object: {entities[0]}."
     else:
         command = "track_object_unknown"
         if LANGUAGE == "RU":
@@ -249,7 +249,7 @@ COMPILED_COORDS_PATTERN = re.compile(r"[0-9]+[ ,]+[0-9]+", re.IGNORECASE)
 
 def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
-    entities = get_entities(utt, only_named=False, with_labels=False)
+    entities = get_entities(utt, only_named=False, with_labels=False, return_lemmas=True)
     coords = COMPILED_COORDS_PATTERN.search(utt["text"])
     if len(entities) == 1:
         command = f"move_to_point_{entities[0]}"
