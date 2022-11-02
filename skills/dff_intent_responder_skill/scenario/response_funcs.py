@@ -165,8 +165,8 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
     degree = re.findall(r"[0-9]+", utt["text"])
-    if re.search(r"counter[- ]?clock-?wise", utt["text"]):
-        command = "turn_counterclockwise"
+    if "против" in utt["text"]:
+        command = f"turn_counterclockwise_{degree[0]}"
         if len(degree) == 1:
             if LANGUAGE == "RU":
                 response = f"Поворачиваюсь против часовой стрелки на {degree[0]} градусов."
@@ -178,7 +178,7 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
             else:
                 response = f"Turning around counterclockwise."
     else:
-        command = "turn_clockwise"
+        command = f"turn_clockwise_{degree[0]}"
         if len(degree) == 1:
             if LANGUAGE == "RU":
                 response = f"Поворачиваюсь по часовой стрелке на {degree[0]} градусов."
