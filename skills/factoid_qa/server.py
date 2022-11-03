@@ -12,7 +12,7 @@ import concurrent.futures
 from flask import Flask, request, jsonify
 from os import getenv
 
-from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
+from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE, FACTOID_THRESHOLD
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, get_factoid
 
@@ -28,7 +28,6 @@ TEXT_QA_URL = getenv("TEXT_QA_URL")
 use_annotators_output = True
 FACTOID_DEFAULT_CONFIDENCE = 0.99  # otherwise dummy often beats it
 ASKED_ABOUT_FACT_PROB = 0.99
-FACTOID_CLASS_THRESHOLD = 0.5
 
 templates_dict = json.load(open("templates_dict.json", "r"))
 
@@ -250,7 +249,7 @@ def respond():
         names = list(set(names))
         nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
         factoid_conf = get_factoid(uttr)
-        is_factoid_cls = factoid_conf.get("is_factoid", 0.0) > 0.9
+        is_factoid_cls = factoid_conf.get("is_factoid", 0.0) > FACTOID_THRESHOLD
         is_factoid = is_factoid_cls and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
