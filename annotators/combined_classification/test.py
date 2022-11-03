@@ -8,7 +8,7 @@ def main_test():
     batch_url = "http://0.0.0.0:8087/batch_model"
     configs = [
         {
-            "sentences": ["do you like porn", 'where is montreal'],
+            "sentences": ["do you like porn", "where is montreal"],
             "task": "all",
             "possible_answers": {
                 "cobot_topics": ["Politics", "Religion", "Sex_Profanity"],
@@ -43,7 +43,7 @@ def main_test():
             "multilabel": True,
         },
         {
-            "sentences": ["how do I empty my DNS cache?", "which do you prefer?", 'where is montreal'],
+            "sentences": ["how do I empty my DNS cache?", "which do you prefer?", "where is montreal"],
             "task": "factoid_classification",
             "answers_bert": [["is_factoid"], ["is_conversational"], ["is_factoid"]],
         },
@@ -76,20 +76,21 @@ def main_test():
         batch_responses = requests.post(batch_url, json=config).json()
         batch_error_msg = f"Batch responses {batch_responses} not match to responses {responses}"
         assert (
-                batch_responses[0]["batch"][0]["toxic_classification"] == responses[0]["toxic_classification"]
+            batch_responses[0]["batch"][0]["toxic_classification"] == responses[0]["toxic_classification"]
         ), batch_error_msg
         if config["task"] == "all":
             for i in range(len(responses)):
                 print(f"Checking {config['sentences'][i]}")
                 predicted_cobot_topics = [
-                    class_ for class_ in responses[0]["cobot_topics"]
-                    if responses[0]["cobot_topics"][class_] == max(responses[0]['cobot_topics'].values())
+                    class_
+                    for class_ in responses[0]["cobot_topics"]
+                    if responses[0]["cobot_topics"][class_] == max(responses[0]["cobot_topics"].values())
                 ]
                 predicted_cobot_da_topics = [
                     class_
                     for class_ in responses[0]["cobot_dialogact_topics"]
-                    if responses[0]["cobot_dialogact_topics"][class_] == max(
-                        responses[0]['cobot_dialogact_topics'].values())
+                    if responses[0]["cobot_dialogact_topics"][class_]
+                    == max(responses[0]["cobot_dialogact_topics"].values())
                 ]
                 assert any(
                     [
@@ -97,12 +98,12 @@ def main_test():
                         set(predicted_cobot_da_topics) & set(config["possible_answers"]["cobot_dialogact_topics"]),
                     ]
                 ), error_msg1
-                #assert any(
+                # assert any(
                 #    [
                 #        set(predicted_cobot_da_intents) & set(config["possible_answers"]["cobot_dialogact_intents"]),
                 #        set(predicted_midas_intents) & set(config["possible_answers"]["midas_classification"]),
                 #    ]
-                #), error_msg2
+                # ), error_msg2
         else:
             responses = [j[config["task"]] for j in responses]
             for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
@@ -120,4 +121,3 @@ def main_test():
 
 
 main_test()
-

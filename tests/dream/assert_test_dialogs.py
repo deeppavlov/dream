@@ -44,7 +44,7 @@ SPECIAL_SKILLS = {
         "dff_wiki_skill",
         "game_cooperative_skill",
         "dialogpt",
-        "dialogpt_persona_based"
+        "dialogpt_persona_based",
     ],
 }
 
