@@ -40,6 +40,9 @@ def get_result(sentences, sentences_with_history, postannotations=False):
         # While using postannotations, we annotate only for toxic class
         data = [[] for _ in range(9)]
         data[2] = sentences
+        data[-1] = sentences
+        data[-2] = sentences
+        data[-3] = sentences
     try:
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
