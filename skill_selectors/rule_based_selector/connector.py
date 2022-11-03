@@ -25,6 +25,7 @@ from common.utils import (
 )
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news, if_switch_test_skill
+from common.factoid import FACTOID_THRESHOLD
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -54,7 +55,7 @@ class RuleBasedSkillSelectorConnector:
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
-            is_factoid = get_factoid(user_uttr).get("is_factoid", 0.0) > 0.5
+            is_factoid = get_factoid(user_uttr).get("is_factoid", 0.0) > FACTOID_THRESHOLD
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
