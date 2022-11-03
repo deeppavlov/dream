@@ -1,6 +1,6 @@
 import logging
 from typing import Union, List
-
+import random
 from df_engine.core import Context, Actor
 
 
@@ -25,6 +25,8 @@ def multi_response(
     hype_attr = hype_attr if isinstance(hype_attr, list) else [hype_attr] * len(replies)
 
     def multi_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> list:
-        return [hyp for hyp in zip(replies, confidences, human_attr, bot_attr, hype_attr)]
+        hyps = [hyp for hyp in zip(replies, confidences, human_attr, bot_attr, hype_attr)]
+        random.shuffle(hyps)
+        return hyps
 
     return multi_response_handler

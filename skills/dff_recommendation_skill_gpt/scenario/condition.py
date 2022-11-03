@@ -1,19 +1,28 @@
 import logging
+from os import getenv
 
-from df_engine.core import Context, Actor
-
-from common.dff.integration import condition as int_cnd
 import common.dff.integration.context as int_ctx
 import common.dialogflow_framework.utils.state as state_utils
 import common.utils as common_utils
 import requests
-from os import getenv
-from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, is_any_question_sentence_in_utterance
+from common.dff.integration import condition as int_cnd
+from common.universal_templates import (COMPILE_NOT_WANT_TO_TALK_ABOUT_IT,
+                                        is_any_question_sentence_in_utterance)
+from df_engine.core import Actor, Context
+
 logger = logging.getLogger(__name__)
 
 
 def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs):
         result = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
+        if result:
+            return True
+        else:
+            return False
+
+
+def contains_named_entities(ctx: Context, actor: Actor, *args, **kwargs):
+        result = int_ctx.get_named_entities_from_human_utterance(ctx, actor)
         if result:
             return True
         else:
@@ -76,8 +85,16 @@ def is_negative_sentiment(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def enough_generative_responses(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    if int(ctx.misc.get("num_gen_responses", 0)) > 1: #поменять на побольше
-        ctx.misc["num_gen_responses"] = -4
+    if int(ctx.misc.get("num_gen_responses", 0)) > 3: 
+        ctx.misc["slots"]["num_gen_responses"] = 0
+        return True
+    else:
+        return False
+
+
+def bot_takes_initiative(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    human_uttrs = int_ctx.get_human_utterances(ctx, actor)
+    if int_cnd.is_passive_user and int_cnd.no_requests and len(human_uttrs) > 2:
         return True
     else:
         return False

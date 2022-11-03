@@ -73,7 +73,8 @@ def fill_responses_by_slots():
     ) -> Context:
         processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
         for slot_name, slot_value in ctx.misc.get("slots", {}).items():
-            processed_node.response = processed_node.response.replace("{" f"{slot_name}" "}", slot_value)
+            #processed_node.response = processed_node.response.replace("{" f"{slot_name}" "}", slot_value)
+            processed_node.response = processed_node.response.replace(slot_name, slot_value).replace("{", '').replace("}", '')
         ctx.a_s["processed_node"] = processed_node
         return ctx
 

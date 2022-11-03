@@ -9,6 +9,8 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.processing as int_prs
 import common.dff.integration.response as int_rsp
+import common.dff.integration.condition as int_cnd
+import common.utils as common_utils
 import nltk
 import requests
 import sentry_sdk
@@ -29,13 +31,17 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 INFILLING = getenv("INFILLING")
 DIALOGPT_RESPOND = getenv("DIALOGPT_RESPOND_ENG_SERVICE_URL")
+NER = getenv("NER")
 assert INFILLING
 
 
-STOP_WORDS = re.compile(r'''reddit|\bop\b|upvote|thanks|\?|this movie|this guy|that guy|username|add me|\blt\b|thread|
-I'll reply|downvote|comment|message|\bpm\b|sent you|link|I'll send|I'll see|upvote|trade|\bsub\b|post''', re.IGNORECASE)
+STOP_WORDS = re.compile(r'''reddit|moderator|\bop\b|upvote|thanks|this movie|(this|that|the) guy|username|add me|\blt\b|thread|\
+|downvote|comment|message|\bpm\b|sent you|link|trade|\bsub\b|post|the first one|\
+|the second one|(I will|I'll|Ill) (can)*(reply|send|see|give|try|steal|be stealing|be online|be back|pm)|\br\b|\
+|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying''', re.IGNORECASE)
 SWITCH_TOPIC = ["But enough about that! _ are much more interesting. ", "You know what? ", "Well... ", 
-"Why don't we get back to _?", "Back to _. ", "_... I never forgot!"]
+#"Why don't we get back to _? ", 
+"Back to _. ", "_... I never forgot! "]
 HYPONYM_TOPIC = ["What do you think about _?", "Why don't we discuss _?", "Let's talk about _.", 
 'By the way, I really like _. What about you?',
 "I've been thinking about _ recently..."]
@@ -57,10 +63,15 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         "prequestion": "Do you like playing computer games?", 
         "prequestion_1": "And what do you think about computer games?", 
         "question": "Which one are you playing now?"
-        },
+        }, #написать для набора вопросов из коммон
+    
     } 
-BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have|I am a|I will|I want|I had|My (sister|brother|mother|father|
-friend)|I was|I went|he is a troll|I don't have|I'll|I'd like''', re.IGNORECASE)
+BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have|I will|I want|I had|My (sister|brother|mother|father|
+friend)|I was|I went|he is a troll|I don't have|I'll|I'd like|I('m|am) (not|a)''', re.IGNORECASE)
+APOLOGIZE_FOR_DIFFICULT_WORD = ['Oh, yeah, that might have been confusing. Here is what my magic book says:',
+'Sorry, sometimes I forget that human brain is not as large as mine. I can define it as:',
+'Sorry, sometimes I forget that human brain is not as large as mine. It is'
+'Let me look it up... The thesaurus tells me that it is']
 TOXIC_BOT = re.compile(r'''hate|evil|porn''', re.IGNORECASE)
 SUPER_CONFIDENCE = 1.0
 HIGH_CONFIDENCE = 0.98
@@ -96,18 +107,27 @@ def compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym='
     return data
 
 
-def determine_confidence(hypothesis: str) -> int:
+def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommendation=False) -> int:
     if not hypothesis:
         return 0
     confidence = 0.99
     if re.search(STOP_WORDS, hypothesis):
         confidence -= 0.07
-    if len(hypothesis.split()) < 5:
+    if len(hypothesis.split(' ')) < 4:
         confidence -= 0.04
     if re.search(BOT_PERSONAL_INFORMATION_PATTERNS, hypothesis):
         confidence -= 0.06
     if re.search(TOXIC_BOT, hypothesis):
         confidence -= 0.1
+    # if recommendation:
+    #     request_data = {"last_utterances": [[hypothesis]]}
+    #     result = requests.post(NER, json=request_data).json()
+    #     if result[0]:
+    #         confidence += 0.02
+    if int_cnd.is_question:
+        confidence -= 0.01
+    if not re.search(r'[a-zA-Z]', hypothesis):
+        confidence = 0
     return confidence
 
 
@@ -144,12 +164,21 @@ def generative_response(recommend=False, question=False, discussed_entity=""):
                 if hyp:
                     if hyp[-1] not in [".", "?", "!"]:
                         hyp += "."
-                    gathering_responses(hyp, determine_confidence(hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+                    gathering_responses(hyp, determine_confidence(ctx, actor, hyp, recommendation=recommend), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
         if len(curr_responses) == 0:
             return ""
 
-        with open("test.txt", "w") as f:
+        with open("test.txt", "a") as f:
             f.write(str(curr_responses) + str(curr_confidences))
+        for index in sorted(range(len(curr_confidences)), key=lambda k: curr_confidences[k])[:3]:
+            with open("test.txt", "a") as f:
+                f.write(f'\n\n{index}')
+                f.write(f'{curr_responses}')
+            # curr_responses.pop(index)
+            # curr_confidences.pop(index)
+            # curr_human_attrs.pop(index)
+            # curr_bot_attrs.pop(index)
+            # curr_attrs.pop(index)
 
         return int_rsp.multi_response(
             replies=curr_responses,
@@ -193,10 +222,22 @@ def generate_np_response(response_options=[''], recommend=False, discussed_entit
                     if hyp:
                         if hyp[-1] not in [".", "?", "!"]:
                             hyp += "."
-                        gathering_responses(hyp, determine_confidence(hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+                        gathering_responses(hyp, determine_confidence(ctx, actor, hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
             if len(curr_responses) == 0:
                 return ""
 
+            with open("test.txt", "a") as f:
+                f.write(str(curr_responses) + str(curr_confidences))
+            for index in sorted(range(len(curr_confidences)), key=lambda k: curr_confidences[k])[:3]:
+                with open("test.txt", "a") as f:
+                    f.write(f'\n\n{index}')
+                    f.write(f'{curr_responses}')
+            #     curr_responses.pop(index)
+            #     curr_confidences.pop(index)
+            #     curr_human_attrs.pop(index)
+            #     curr_bot_attrs.pop(index)
+            #     curr_attrs.pop(index)
+        
             return int_rsp.multi_response(
                 replies=curr_responses,
                 confidences=curr_confidences,
@@ -251,7 +292,7 @@ def ask_about_presequence_2(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         hypotheses = result[0]
     else:
         hypotheses = []
-    presequence = ctx.misc.get("next_prequestion", [])
+    presequence = ctx.misc.get("next_prequestion", '')
     if hypotheses:
         for hyp in hypotheses[0]:
             if re.search(STOP_WORDS, hyp):
@@ -263,9 +304,10 @@ def ask_about_presequence_2(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         return ''
 
 
-def get_hyponyms(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def get_hyponyms(ctx: Context, actor: Actor, *args, **kwargs) -> str: #sister terms also might be of interest
     common_hyponyms = []
     available_hyponyms = ctx.misc.get("slots", {}).get('available_hyponyms', {})
+    used_hyponyms = ctx.misc.get("slots", {}).get('used_hyponyms', [])
     if ctx.misc.get("slots", {}).get('topic_entity', ''):
         entity =  str(ctx.misc["slots"]['topic_entity'])
         if entity in available_hyponyms.keys():
@@ -287,11 +329,15 @@ def get_hyponyms(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if common_hyponyms:
         hyponym = common_hyponyms[random.randrange(0, len(common_hyponyms))] #заменить на рандомный выбор
         available_hyponyms[entity] = common_hyponyms.remove(hyponym)
-        ctx.misc['available_hyponyms'] = available_hyponyms
+        ctx.misc["slots"]['available_hyponyms'] = available_hyponyms
         # blob = TextBlob([hyponym])
         # plural_hyponym = [word.pluralize() for word in blob.words][0]
-        hyponym = hyponym + 's'
-        hyponym_topic = HYPONYM_TOPIC[random.randrange(0, len(HYPONYM_TOPIC))].replace('_', hyponym)
+        syns = wordnet.synsets(hyponym)
+        used_hyponyms.append(hyponym)
+        hyponym_pl = hyponym + 's'
+        ctx.misc["slots"]['used_hyponyms'] = used_hyponyms
+        ctx.misc["slots"]['current_hyp_definition'] = syns[0].definition()
+        hyponym_topic = HYPONYM_TOPIC[random.randrange(0, len(HYPONYM_TOPIC))].replace('_', hyponym_pl)
         switch_topic = SWITCH_TOPIC[random.randrange(0, len(SWITCH_TOPIC))].replace('_', ctx.misc.get("slots", {}).get('topic_entity', ''))
         hyponym_question = switch_topic + hyponym_topic
         return hyponym_question
@@ -299,7 +345,17 @@ def get_hyponyms(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         return ''
 
 
+def give_hyponym_definition():
+    def give_hyponym_definition_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        random.shuffle(APOLOGIZE_FOR_DIFFICULT_WORD)
+        return APOLOGIZE_FOR_DIFFICULT_WORD[0] + ' ' + str(ctx.misc.get("slots", {}).get('current_hyp_definition', ''))
+    return give_hyponym_definition_handler
+
+
 def generate_with_string(to_append='get_questions', position_string='before'):
+    if type(to_append) == list:
+        to_append = random.choice(to_append)
+
     def generate_with_string_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
@@ -330,14 +386,15 @@ def generate_with_string(to_append='get_questions', position_string='before'):
             for hyp in hypotheses[0]:
                 if re.search(STOP_WORDS, hyp):
                     continue
-                if hyp[-1] not in [".", "?", "!"]: #переделать в отдельную функцию фильтрации реддита
+                if hyp:
+                    if hyp[-1] not in [".", "?", "!"]: #переделать в отдельную функцию фильтрации реддита
                         hyp += "."
                 if string_to_attach:
                     if position_string == 'before':
                         hyp = hyp + ' ' + str(string_to_attach)
                     elif position_string == 'after':
                         hyp = str(string_to_attach) + ' ' + hyp #тут аккуратнее, мб стоит добавить малтиреспонс хэндлер
-                gathering_responses(hyp, determine_confidence(hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+                gathering_responses(hyp, determine_confidence(ctx, actor, hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
         if len(curr_responses) == 0:
                 return ""
 

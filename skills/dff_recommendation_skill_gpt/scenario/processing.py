@@ -26,7 +26,7 @@ def save_previous_utterance_nps(slot_name):
     return previous_human_utterance_nps
 
 
-def save_user_name(slot_name):
+def save_user_name():
 
     def get_name(
         ctx: Context,
@@ -34,8 +34,9 @@ def save_user_name(slot_name):
         *args,
         **kwargs,
     ) -> Context:
-        human_text = str(int_ctx.get_nounphrases_from_human_utterance(ctx, actor))
-        ctx = int_prs.save_slots_to_ctx({slot_name: human_text})(ctx, actor)
+        human_name = int_ctx.get_named_entities_from_human_utterance(ctx, actor)
+        if human_name:
+            ctx = int_prs.save_slots_to_ctx({'user_name': human_name[0]['text']})(ctx, actor)
         return ctx
 
     return get_name
