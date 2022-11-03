@@ -92,6 +92,11 @@ def main_test():
                     if responses[0]["cobot_dialogact_topics"][class_]
                     == max(responses[0]["cobot_dialogact_topics"].values())
                 ]
+                error_msg1 = (
+                    f"Predicted cobot topics {predicted_cobot_topics} and da topics {predicted_cobot_da_topics}"
+                    f"not match with sensitive cobot_topics {config['possible_answers']['cobot_topics']}"
+                    f"and sensitive cobot da topics {config['possible_answers']['cobot_dialogact_topics']}"
+                )
                 assert any(
                     [
                         set(predicted_cobot_topics) & set(config["possible_answers"]["cobot_topics"]),
