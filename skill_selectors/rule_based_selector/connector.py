@@ -241,6 +241,7 @@ class RuleBasedSkillSelectorConnector:
                         "dff_bot_persona_skill",
                         "dff_gaming_skill",
                         "dff_short_story_skill",
+                        "dff_minecraft_skill"
                     ],
                 )
 

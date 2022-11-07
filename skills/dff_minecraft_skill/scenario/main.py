@@ -1,6 +1,7 @@
 import logging
 import re
 
+from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from df_engine.core.keywords import LOCAL, PROCESSING, TRANSITIONS, RESPONSE, GLOBAL
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
@@ -14,6 +15,8 @@ import common.minecraft.core.serializer as serializer
 
 
 import common.constants as common_constants
+
+from common.minecraft.triggers import WHY_MINECRAFT
 
 from . import condition as loc_cnd
 from . import response as loc_rsp
@@ -50,6 +53,7 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
+            ("chat", "why_minecraft"): cnd.regexp(WHY_MINECRAFT),
             ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
             ("commands", "goto"): loc_cnd.is_intent("goto"),
             ("commands", "goto_cursor"): loc_cnd.is_intent("goto_cursor"),
@@ -72,6 +76,80 @@ flows = {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),
             },
+        },
+    },
+    "chat": {
+        LOCAL: {
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(2.0),
+                "set_can_continue": int_prs.set_can_continue()
+            },
+        },
+        "why_minecraft": {
+            RESPONSE: """I'm here to assist you in creating whatever you have in mind! I can learn to build anything! Do you want to try it?""",
+            PROCESSING: {
+                1: loc_prs.add_encoding_for_look_at_user()
+                # "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)
+            },
+            TRANSITIONS: {
+                "wants_try": int_cnd.is_yes_vars,
+                "doesnt_want_try": int_cnd.is_no_vars
+            },
+        },
+        "wants_try": {
+            RESPONSE: """What are we going to build?""",
+            PROCESSING: {},
+            TRANSITIONS: {
+                "doesnt_know_what2build": int_cnd.is_do_not_know_vars,
+                "build_new_oblect": cnd.true()
+            },
+        },
+        "doesnt_want_try": {
+            RESPONSE: """Ok! If you change your mind, feel free to come to me for help!""",
+            PROCESSING: {},
+            TRANSITIONS: {},
+        },
+        "doesnt_know_what2build": {
+            RESPONSE: """Let's build a house! Just type "start building", then show and tell me where to place blocks. And say "done" when we are finished.""",
+            PROCESSING: {},
+            TRANSITIONS: {
+                "start_building": cnd.regexp(r"start building", re.IGNORECASE)
+            },
+        },
+        "build_new_oblect": {
+            RESPONSE: """Great! Let's build it. Just type "start building", then show and tell me where to place blocks. And say "done" when we are finished.""",
+            PROCESSING: {},
+            TRANSITIONS: {
+                "start_building": cnd.regexp(r"start building", re.IGNORECASE)
+            },
+        },
+        "start_building": {
+            RESPONSE: """How should we start?""",
+            PROCESSING: {
+                1: loc_prs.add_encoding_for_look_at_user()
+                # здесь функция с началом записи в буфер -- какой-то флажок о том, что это новый объект, 
+                # start_building = True, например. 
+            },
+            TRANSITIONS: {},
+        },
+        "done": {
+            RESPONSE: """I loved working on it! What should we call it?""",
+            PROCESSING: {
+                1: loc_prs.add_encoding_for_look_at_user()
+                # 2: loc_prs.save_previous_node_response_to_ctx_processing
+                # здесь функция с началом записи в буфер -- меняем флажок start_building на False
+                # присваиваем получившейся последовательности название (равное этой реплике пользователя), записываем его в миск в слоты {minecraft_new_known_object}
+            },
+            TRANSITIONS: {
+                "name_given": cnd.true()
+            },
+        },
+        "name_given": {
+            RESPONSE: """Gotcha! Now if ask me to build {minecraft_new_known_object} -- I can do it seamlessly without any instructions!""",
+            PROCESSING: {
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+            },
+            TRANSITIONS: {},
         },
     },
     "commands": {
@@ -102,11 +180,13 @@ flows = {
         },
         "destroy_block": {
             PROCESSING: {1: loc_prs.add_encoding_no_range("destroy_block")},
+            #  здесь же в процессинге условие "если start_building=True, то записываем команду и координаты в буфер"
             RESPONSE: loc_rsp.response_for_intent("destroy_block"),
             TRANSITIONS: {},
         },
         "place_block": {
             PROCESSING: {1: loc_prs.add_encoding_no_range("place_block")},
+            #  здесь же в процессинге условие "если start_building=True, то записываем команду и координаты в буфер"
             RESPONSE: loc_rsp.response_for_intent("place_block"),
             TRANSITIONS: {},
         },
@@ -118,6 +198,7 @@ flows = {
         "destroy_and_grab_block": {
             PROCESSING: {1: loc_prs.add_encoding_no_range("destroy_and_grab_block")},
             RESPONSE: loc_rsp.response_for_intent("destroy_and_grab_block"),
+            #  здесь же в процессинге условие "если start_building=True, то записываем команду и координаты в буфер"
             TRANSITIONS: {},
         },
         "look_at_user": {
