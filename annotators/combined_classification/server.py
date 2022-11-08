@@ -36,8 +36,8 @@ def get_result(sentences, sentences_with_history, postannotations=False):
             sentences,  # cobot dialogact topics is now trained without history
             sentences,  # cobot dialogact intents is now trained without history
         ]
-    elif postannotations:
-        # While using postannotations, we annotate only for toxic class
+    else:
+        # While using postannotations, we annotate only for tasks we use in response_selector
         data = [[] for _ in range(9)]
         data[2] = sentences
         data[-1] = sentences
