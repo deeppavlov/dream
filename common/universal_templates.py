@@ -531,7 +531,7 @@ QUESTION_BEGINNINGS = [
     "must (i|it|we|you|they)",
     "tell me",
 ]
-
+WHAT_IS_QUESTION = re.compile(r'what is|what does .* mean|what\?|what do you mean|what are', re.IGNORECASE)
 QUESTION_BEGINNINGS_PATTERN = re.compile(r"^(but )?" + join_words_in_or_pattern(QUESTION_BEGINNINGS), re.IGNORECASE)
 
 
@@ -540,6 +540,13 @@ def is_any_question_sentence_in_utterance(annotated_uttr):
     sentences = re.split(r"[\.\?!]", annotated_uttr["text"])
     is_question_any_sent = any([QUESTION_BEGINNINGS_PATTERN.search(sent.strip()) for sent in sentences])
     if is_question_any_sent or is_question_symbol:
+        return True
+    return False
+
+
+def is_what_question_in_utterance(annotated_uttr):
+    is_question_any_sent = re.search(r'what', annotated_uttr)
+    if is_question_any_sent:
         return True
     return False
 

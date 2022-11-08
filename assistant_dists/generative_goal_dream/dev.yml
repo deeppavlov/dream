@@ -1,0 +1,143 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  convers-evaluator-annotator:
+    volumes:
+      - "./annotators/ConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
+  spacy-nounphrases:
+    volumes:
+      - "./annotators/spacy_nounphrases:/src"
+      - "./common:/src/common"
+    ports:
+      - 8006:8006
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  convers-evaluation-selector:
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  intent-catcher:
+    volumes:
+      - "./annotators/IntentCatcherTransformers:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8014:8014
+  badlisted-words:
+    volumes:
+      - "./annotators/BadlistedWordsDetector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+  ner:
+    volumes:
+      - './annotators/NER_deeppavlov:/src'
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8021:8021
+  factoid-qa:
+    volumes:
+      - "./skills/factoid_qa:/src"
+      - "./common:/src/common"
+    ports:
+      - 8071:8071
+  kbqa:
+    volumes:
+      - "./annotators/kbqa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8072:8072
+  entity-linking:
+    volumes:
+      - "./annotators/entity_linking:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8075:8075
+  wiki-parser:
+    volumes:
+      - "./annotators/wiki_parser:/src"
+      - "./common:/src/common"
+    ports:
+      - 8077:8077
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spelling-preprocessing:
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
+  dff-grounding-skill:
+    volumes:
+      - "./skills/dff_grounding_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8080:8080
+  text-qa:
+    volumes:
+      - "./services/text_qa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8078:8078
+  knowledge-grounding:
+    volumes:
+      - "./services/knowledge_grounding:/src"
+    ports:
+      - 8083:8083
+  knowledge-grounding-skill:
+    volumes:
+      - "./common:/src/common"
+      - "./skills/knowledge_grounding_skill:/src"
+    ports:
+      - 8085:8085
+  entity-storer:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/entity_storer:/src"
+    ports:
+      - 8089:8089
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
+  entity-detection:
+    volumes:
+      - "./annotators/entity_detection:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8103:8103
+  dialogpt:
+    volumes:
+      - "./services/dialogpt:/src"
+    ports:
+      - 8125:8125
+  dff-recommendation-skill-gpt:
+    volumes:
+      - "./skills/dff_recommendation_skill_gpt:/src"
+      - "./common:/src/common"
+    ports:
+      - 8123:8123
+  dff-template-skill:
+    volumes:
+      - "./skills/dff_template_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8120:8120
+version: "3.7"

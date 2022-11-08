@@ -44,8 +44,9 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("give_recommendation", "ask_for_details", 1.1): cnd.regexp(GET_RECOMMENDATION_PATTERN), #потом поставить нормальные человеческие конфиденсы
-            ("ask_about", "begin", 1.1): loc_cnd.bot_takes_initiative, #проверить почему там 5 а не 3
+            ("ask_about", "begin", 1.1): loc_cnd.bot_takes_initiative, #проверить почему там 5 а не 3 НЕ РАБОТАЕТ
             ("chat_about", "start_topic", 1.1): cnd.regexp(CHAT_ABOUT_EXPLICIT), 
+            ("ask_about", "begin", 1.1): loc_cnd.short_thank_you
         },
     },
     "sevice": {
@@ -53,7 +54,7 @@ flows = {
             RESPONSE: "",
             TRANSITIONS: {
                 ("give_recommendation", "ask_for_details"): cnd.regexp(GET_RECOMMENDATION_PATTERN),
-                ("ask_about", "begin"): loc_cnd.bot_takes_initiative, #проверить почему там 5 а не 3
+                #("ask_about", "begin"): loc_cnd.bot_takes_initiative, #проверить почему там 5 а не 3
                 ("chat_about", "begin"): cnd.regexp(CHAT_ABOUT_EXPLICIT), 
                 ("greeting", "begin"): cnd.true()
             },
@@ -161,7 +162,7 @@ flows = {
                 ]),
             TRANSITIONS: {
                 "second_recommendation": int_cnd.is_yes_vars,
-                "finish": cnd.true()
+                ("ask_about", "begin"): cnd.true()
                 },
         },
         "user_discontented": {
@@ -171,7 +172,7 @@ flows = {
                 "Let's give it another try, shall we?"
             ]),
             TRANSITIONS: {
-                "finish": int_cnd.is_no_vars,
+                ("ask_about", "begin"): int_cnd.is_no_vars,
                 "second_recommendation": cnd.true()
                 },
         },
@@ -438,12 +439,22 @@ flows = {
                 "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity')
             },
             TRANSITIONS: {
-                "give_hyponym_definition": cnd.any(
+                "give_hyponym_definition": cnd.all([
+                    cnd.any(
                 [int_cnd.is_no_vars, 
                 int_cnd.is_do_not_know_vars,
-                int_cnd.is_question
+                loc_cnd.what_is_question #не отрабатывает это условие, видимо из-за доставания из контекста.
                 ]
                 ),
+                loc_cnd.we_have_hyp_def]),
+                # cnd.all([cnd.any(
+                # [int_cnd.is_no_vars, 
+                # int_cnd.is_do_not_know_vars,
+                # loc_cnd.what_is_question
+                # ]),
+                # loc_cnd.is_hyponym
+                # ]
+                # ),
                 "answer_question": int_cnd.is_question, 
                 "new_entity": loc_cnd.contains_noun_phrase,
                 "continue_discussing_entity": cnd.true(),

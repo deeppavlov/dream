@@ -7,11 +7,15 @@ import common.utils as common_utils
 import requests
 from common.dff.integration import condition as int_cnd
 from common.universal_templates import (COMPILE_NOT_WANT_TO_TALK_ABOUT_IT,
-                                        is_any_question_sentence_in_utterance)
+                                        is_any_question_sentence_in_utterance,
+                                        is_what_question_in_utterance)
+import re
 from df_engine.core import Actor, Context
 
 logger = logging.getLogger(__name__)
 
+WHAT_IS_QUESTION = re.compile(r'what is|what does .* mean|what\?|what do you mean|what are|^what$', re.IGNORECASE)
+THANK_PATTERN = re.compile(r"thanks|thank you|(I'll|I will) (try|watch|read|cook|think)|okay|good|great", re.IGNORECASE)
 
 def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs):
         result = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
@@ -85,16 +89,40 @@ def is_negative_sentiment(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def enough_generative_responses(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    if int(ctx.misc.get("num_gen_responses", 0)) > 3: 
-        ctx.misc["slots"]["num_gen_responses"] = 0
+    if int(ctx.misc.get('num_gen_responses', 0)) > 3: 
+        ctx.misc["num_gen_responses"] = 0
         return True
     else:
         return False
 
 
 def bot_takes_initiative(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    human_uttrs = int_ctx.get_human_utterances(ctx, actor)
-    if int_cnd.is_passive_user and int_cnd.no_requests and len(human_uttrs) > 2:
+    human_uttrs = ctx.get(["agent"], []).get(["dialog"], []).get(["human_utterances"], [])
+    if int_cnd.no_requests and int_cnd.is_passive_user and len(human_uttrs) > 6: #int_cnd.is_passive_user and  and len(human_uttrs) > 2
+        return True
+    else:
+        return False
+
+
+def is_hyponym(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    return bool(ctx.misc.get("slots", {}).get('we_found_hyp', False))
+
+
+def what_is_question(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.validation:
+        return False
+    text = int_ctx.get_last_human_utterance(ctx, actor)["text"]
+    is_question_any_sent = re.search(WHAT_IS_QUESTION, text)
+    return bool(is_question_any_sent)
+
+def we_have_hyp_def(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    return bool(ctx.misc.get("slots", {}).get('current_hyp_definition', False))
+
+def short_thank_you(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.validation:
+        return False
+    text = int_ctx.get_last_human_utterance(ctx, actor)["text"]
+    if re.search(THANK_PATTERN, text) and len(text.split(' ')) < 4:
         return True
     else:
         return False

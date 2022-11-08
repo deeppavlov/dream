@@ -31,14 +31,14 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 INFILLING = getenv("INFILLING")
 DIALOGPT_RESPOND = getenv("DIALOGPT_RESPOND_ENG_SERVICE_URL")
-NER = getenv("NER")
+NER_URL = getenv("NER_URL")
 assert INFILLING
 
 
 STOP_WORDS = re.compile(r'''reddit|moderator|\bop\b|upvote|thanks|this movie|(this|that|the) guy|username|add me|\blt\b|thread|\
-|downvote|comment|message|\bpm\b|sent you|link|trade|\bsub\b|post|the first one|\
-|the second one|(I will|I'll|Ill) (can)*(reply|send|see|give|try|steal|be stealing|be online|be back|pm)|\br\b|\
-|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying''', re.IGNORECASE)
+|downvote|comment|message|\bpm\b|sent you|link|trade|\bsub\b|post|the first one|thread|\blt\b|this one|\
+|the second one|(I will|I'll|Ill|I) (can)*(reply|send|see|give|try|steal|be stealing|be online|be back|pm)|\br\b|\
+|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying|\bpost\b''', re.IGNORECASE)
 SWITCH_TOPIC = ["But enough about that! _ are much more interesting. ", "You know what? ", "Well... ", 
 #"Why don't we get back to _? ", 
 "Back to _. ", "_... I never forgot! "]
@@ -47,13 +47,13 @@ HYPONYM_TOPIC = ["What do you think about _?", "Why don't we discuss _?", "Let's
 "I've been thinking about _ recently..."]
 ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для поспрашивать насчет топика который идет сейчас!!!
     "cinema": {
-        "left_context": ["I love movies and TV series. What about you?"],
+        "left_context": ["I love movies and TV series. Movies are the best. What about you?"],
         "prequestion": "Do you like watching movies?", 
         "prequestion_1": "So, do you like movies in general?", 
         "question": "Which movie is your favourite?"
         },
     "food": {
-        "left_context": ["I love eating. What about you? "],
+        "left_context": ["I love eating, especially sandwiches. What about you? "],
         "prequestion": "I don't know if I can call myself a foodie... And are you?", 
         "prequestion_1": "Well, do you enjoy cooking or going to restaurants?", 
         "question": "What is your favourite dish then?"
@@ -66,17 +66,17 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         }, #написать для набора вопросов из коммон
     
     } 
-BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have|I will|I want|I had|My (sister|brother|mother|father|
+BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have (a|the|two|many|three)|I will|I want|I had|My (sister|brother|mother|father|
 friend)|I was|I went|he is a troll|I don't have|I'll|I'd like|I('m|am) (not|a)''', re.IGNORECASE)
 APOLOGIZE_FOR_DIFFICULT_WORD = ['Oh, yeah, that might have been confusing. Here is what my magic book says:',
 'Sorry, sometimes I forget that human brain is not as large as mine. I can define it as:',
-'Sorry, sometimes I forget that human brain is not as large as mine. It is'
 'Let me look it up... The thesaurus tells me that it is']
-TOXIC_BOT = re.compile(r'''hate|evil|porn''', re.IGNORECASE)
+
+TOXIC_BOT = re.compile(r'''hate|evil|porn|see you|bye''', re.IGNORECASE)
 SUPER_CONFIDENCE = 1.0
-HIGH_CONFIDENCE = 0.98
-DEFAULT_CONFIDENCE = 0.95
-BIT_LOWER_CONFIDENCE = 0.90
+HIGH_CONFIDENCE = 0.95
+DEFAULT_CONFIDENCE = 0.9
+BIT_LOWER_CONFIDENCE = 0.8
 ZERO_CONFIDENCE = 0.0
 
 
@@ -95,8 +95,10 @@ def compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym='
     if len(human_uttrs) > 0:
         text_to_append = human_uttrs[-1]["text"]
         if discussed_entity:
-            if ctx.misc.get("slots", {}).get(discussed_entity):
-                text_to_append +=  ' ' + ctx.misc["slots"][discussed_entity] + '.'
+            if ctx.misc.get("slots", {}).get(discussed_entity, ''):
+                entity = ctx.misc.get("slots", {}).get(discussed_entity,'')
+                if not re.search(entity, human_uttrs[-1]["text"], re.IGNORECASE):
+                    text_to_append +=  ' ' + entity 
             if ctx.misc.get("slots", {}).get("details"):
                 text_to_append +=  ' ' + ctx.misc["slots"]["details"]
         if recommend:
@@ -110,8 +112,8 @@ def compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym='
 def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommendation=False) -> int:
     if not hypothesis:
         return 0
-    confidence = 0.99
-    if re.search(STOP_WORDS, hypothesis):
+    confidence = 0.99 
+    if re.search(STOP_WORDS, hypothesis): #все
         confidence -= 0.07
     if len(hypothesis.split(' ')) < 4:
         confidence -= 0.04
@@ -119,12 +121,12 @@ def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommenda
         confidence -= 0.06
     if re.search(TOXIC_BOT, hypothesis):
         confidence -= 0.1
-    # if recommendation:
-    #     request_data = {"last_utterances": [[hypothesis]]}
-    #     result = requests.post(NER, json=request_data).json()
-    #     if result[0]:
-    #         confidence += 0.02
-    if int_cnd.is_question:
+    if recommendation:
+        request_data = {"last_utterances": [[hypothesis]]}
+        result = requests.post(NER_URL, json=request_data).json()
+        if result[0]:
+            confidence += 0.02
+    if len(re.findall(r'\?', hypothesis)) > 1:
         confidence -= 0.01
     if not re.search(r'[a-zA-Z]', hypothesis):
         confidence = 0
@@ -134,12 +136,14 @@ def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommenda
 def generative_response(recommend=False, question=False, discussed_entity=""):
 
     def generative_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
-        if ctx.misc.get("num_gen_responses", 0):
-            num_gen_responses = ctx.misc.get("num_gen_responses", 0)
+        # ctx.misc.get("slots", {}).get('topic_entity', ''):
+        # entity =  str(ctx.misc["slots"]['topic_entity'])
+        if ctx.misc.get('num_gen_responses', 0):
+            num_gen_responses = ctx.misc.get('num_gen_responses', 0)
             num_gen_responses = int(num_gen_responses) + 1
         else:
             num_gen_responses = 1
-        ctx.misc["num_gen_responses"] = num_gen_responses
+        ctx.misc['num_gen_responses'] = num_gen_responses
         curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
         def gathering_responses(reply, confidence, human_attr, bot_attr, attr):
@@ -327,6 +331,7 @@ def get_hyponyms(ctx: Context, actor: Actor, *args, **kwargs) -> str: #sister te
                     candidate_hyponyms = [ss.lemma_names()[0].replace('_', ' ') for ss in all_candidates]
                     common_hyponyms = list(set(common_words) & set(candidate_hyponyms))
     if common_hyponyms:
+        ctx.misc["slots"]['we_found_hyp'] = True
         hyponym = common_hyponyms[random.randrange(0, len(common_hyponyms))] #заменить на рандомный выбор
         available_hyponyms[entity] = common_hyponyms.remove(hyponym)
         ctx.misc["slots"]['available_hyponyms'] = available_hyponyms
@@ -395,9 +400,15 @@ def generate_with_string(to_append='get_questions', position_string='before'):
                     elif position_string == 'after':
                         hyp = str(string_to_attach) + ' ' + hyp #тут аккуратнее, мб стоит добавить малтиреспонс хэндлер
                 gathering_responses(hyp, determine_confidence(ctx, actor, hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+                
         if len(curr_responses) == 0:
                 return ""
-
+        with open("test.txt", "a") as f:
+            f.write(str(curr_responses) + str(curr_confidences))
+            for index in sorted(range(len(curr_confidences)), key=lambda k: curr_confidences[k])[:3]:
+                with open("test.txt", "a") as f:
+                    f.write(f'\n\n{index}')
+                    f.write(f'{curr_responses}')
         return int_rsp.multi_response(
             replies=curr_responses,
             confidences=curr_confidences,

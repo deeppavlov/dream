@@ -13,6 +13,8 @@ GET_RECOMMENDATION_PATTERN = re.compile('|'.join([GET_RECOMMENDATION_CERTAIN_PAT
 
 CHAT_ABOUT_EXPLICIT = re.compile(r"""(let's|let us|i wanna|i want to) (chat|discuss|talk about)""", re.IGNORECASE)
 
+WHAT_IS_QUESTION = re.compile(r'what is|what does .* mean|what\?|what do you mean|what are', re.IGNORECASE)
+
 hypotheses_reco = ['I wanna watch a movie. Which one should I choose?',
 "Help me choose a movie to watch",
 "I want to do something but I don't know what... What do you think?", #???
@@ -32,8 +34,10 @@ hypotheses_reco = ['I wanna watch a movie. Which one should I choose?',
 "suggest me"
 ]
 
-for hypothesis in hypotheses_reco:
-    print(bool(re.search(GET_RECOMMENDATION_PATTERN, hypothesis)), re.search(GET_RECOMMENDATION_PATTERN, hypothesis))
+# for hypothesis in hypotheses_reco:
+#     print(bool(re.search(GET_RECOMMENDATION_PATTERN, hypothesis)), re.search(GET_RECOMMENDATION_PATTERN, hypothesis))
 
-syns = wordnet.synsets('agua')
-print(syns[0].definition())
+# syns = wordnet.synsets('agua')
+# print(syns[0].definition())
+
+# print(bool(re.search(WHAT_IS_QUESTION, 'what is a bear?')))
