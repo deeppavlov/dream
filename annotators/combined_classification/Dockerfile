@@ -18,6 +18,8 @@ COPY common/ common/
 RUN ls /tmp
 
 RUN pip install -r requirements.txt
-ARG DATA_URL=http://files.deeppavlov.ai/dream_data/distil9in1/model.pth.tar
-ADD $DATA_URL /tmp
+ARG DATA_URL=http://files.deeppavlov.ai/dream_data/distil9in1/9in1.tar.gz
+ADD $DATA_URL ~/.deeppavlov/models
+RUN tar -xzvf ~/.deeppavlov/models/9in1.tar.gz
+
 CMD gunicorn --workers=1 --bind 0.0.0.0:8087 --timeout=300 server:app
