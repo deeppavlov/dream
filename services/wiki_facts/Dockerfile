@@ -19,7 +19,7 @@ RUN pip install -r requirements.txt
 COPY services/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
 
-RUN pip install deeppavlov
+RUN pip install deeppavlov==0.17.2
 RUN python -m deeppavlov install $CONFIG
 
 RUN python -m spacy download en_core_web_sm
