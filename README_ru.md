@@ -59,7 +59,7 @@ Deepy GoBot Base содержит аннотатор исправления оп
 
 ### Dream Russian
 Русскоязычная версия  DeepPavlov Dream Socialbot. Данная версия основана на нейросетевой генерации с использованием
-[Russian DialoGPT модели](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2). 
+[Russian DialoGPT модели by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2). 
 Дистрибутив также содержит компоненты для детектирования запросов пользователя и выдачи специальных ответов на них.
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
@@ -199,15 +199,15 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 | DialogRPT              | 3.9 GiB RAM, 2.2 GiB GPU |  Сервис оценки вероятности реплики понравиться пользователю (updown) на основе ранжирующей модели DialogRPT, которая дообучена на основе генеративной модели Russian DialoGPT на комментариев с сайта Пикабу. |
 
 ## Навыки и Сервисы (Skills & Services)
-| Name                 | Requirements              | Description                                                                                                                                                                   |
-|----------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DialoGPT             | 2.8 GiB RAM, 2.2 GiB GPU  | Сервис генерации реплики по текстовому контексту диалога на основе предобученной модели Russian [DialoGPT](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) |
-| Dummy Skill          | a part of agent container | Навык для генерации ответов-заглушек и выдачис лучайных вопросов из базы в каечстве linking-questions.                                                                        |
-| Personal Info Skill  | 40 MiB RAM                | Сценарный навык для извлечения и запоминания основной личной информации о пользователе.                                                                                       |
-| DFF Generative Skill | 50 MiB RAM                | **[New DFF version]** навык, выдающий 5 гипотез, выданных сервисом DialoGPT                                                                                                   |
-| DFF Intent Responder | 50 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF для ответа на специальные намерения пользователя.                                                                         |
-| DFF Program Y Skill  | 80 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF для ответа на общие вопросы в виде AIML компоненты.                                                                       |
-| DFF Friendship Skill | 70 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF приветственной части диалога с пользователем.                                                                             |
+| Name                 | Requirements              | Description                                                                                                                                                                                     |
+|----------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DialoGPT             | 2.8 GiB RAM, 2.2 GiB GPU  | Сервис генерации реплики по текстовому контексту диалога на основе предобученной модели [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) |
+| Dummy Skill          | a part of agent container | Навык для генерации ответов-заглушек и выдачис лучайных вопросов из базы в каечстве linking-questions.                                                                                          |
+| Personal Info Skill  | 40 MiB RAM                | Сценарный навык для извлечения и запоминания основной личной информации о пользователе.                                                                                                         |
+| DFF Generative Skill | 50 MiB RAM                | **[New DFF version]** навык, выдающий 5 гипотез, выданных сервисом DialoGPT                                                                                                                     |
+| DFF Intent Responder | 50 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF для ответа на специальные намерения пользователя.                                                                                           |
+| DFF Program Y Skill  | 80 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF для ответа на общие вопросы в виде AIML компоненты.                                                                                         |
+| DFF Friendship Skill | 70 MiB RAM                | **[New DFF version]** Сценарный навык на основе DFF приветственной части диалога с пользователем.                                                                                               |
 
 
 # Публикации
