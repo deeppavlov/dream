@@ -119,7 +119,6 @@ def main_test():
                 assert sorted(answer) == sorted(predicted_classes), " * ".join(
                     [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
                 )
-    logging.info("SUCCESS!")
     print("SUCCESS!")
     print(time() - t)
     return 0
