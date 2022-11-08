@@ -200,7 +200,6 @@ class DummySkillConnector:
             human_attrs = []
             bot_attrs = []
             attrs = []
-            prev_human_uttr_text = dialog["human_utterances"][-2]["text"] if len(dialog["human_utterances"]) > 1 else ""
 
             if LANGUAGE == "RU":
                 cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
