@@ -1,6 +1,5 @@
 import requests
 from time import time
-import logging
 
 
 def main_test():
