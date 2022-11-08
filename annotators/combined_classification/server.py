@@ -77,8 +77,8 @@ def respond():
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist, postannotations=False)
-    logger.exception(f"9in1 result: {answer}")
-    logger.info(f"Combined classifier exec time: {time.time() - t}")
+    logger.debug(f"combined_classification result: {answer}")
+    logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify(answer)
 
 
@@ -90,8 +90,8 @@ def batch_respond():
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist, postannotations=True)
-    logger.debug(f"9in1 batch result: {answer}")
-    logger.info(f"Combined classifier exec time: {time.time() - t}")
+    logger.debug(f"combined_classification batch result: {answer}")
+    logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
 
 
