@@ -23,6 +23,10 @@ from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BE
 from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
+
+from common.minecraft.triggers import WHY_MINECRAFT
+
+
 MINECRAFT_COMPILED_PATTERN = re.compile(r'\bminecraft\b',
     re.IGNORECASE
 )
@@ -171,7 +175,7 @@ SKILL_TRIGGERS = {
         "intents": ["tell_me_a_story"],
     },
     "dff_minecraft_skill": {
-        "compiled_patterns": [MINECRAFT_COMPILED_PATTERN],
+        "compiled_patterns": [MINECRAFT_COMPILED_PATTERN, WHY_MINECRAFT],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],

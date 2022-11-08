@@ -30,6 +30,7 @@ ACTIVE_SKILLS = [
     "small_talk_skill",
     "dff_wiki_skill",
     "dff_art_skill",
+    "dff_minecraft_skill"
 ]
 ALMOST_ACTIVE_SKILLS = [
     "friendship_skill",

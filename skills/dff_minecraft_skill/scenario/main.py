@@ -54,6 +54,8 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("chat", "why_minecraft"): cnd.regexp(WHY_MINECRAFT),
+            ("chat", "start_building"): cnd.regexp(r"start building"),
+            ("chat", "done"): cnd.regexp(r"\bdone\b"),
             ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
             ("commands", "goto"): loc_cnd.is_intent("goto"),
             ("commands", "goto_cursor"): loc_cnd.is_intent("goto_cursor"),
@@ -81,14 +83,14 @@ flows = {
     "chat": {
         LOCAL: {
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(2.0),
+                "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue()
             },
         },
         "why_minecraft": {
             RESPONSE: """I'm here to assist you in creating whatever you have in mind! I can learn to build anything! Do you want to try it?""",
             PROCESSING: {
-                1: loc_prs.add_encoding_for_look_at_user()
+                1: loc_prs.add_encoding_for_look_at_user()#,
                 # "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)
             },
             TRANSITIONS: {
@@ -98,10 +100,12 @@ flows = {
         },
         "wants_try": {
             RESPONSE: """What are we going to build?""",
-            PROCESSING: {},
+            PROCESSING: {
+                # "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE)
+            },
             TRANSITIONS: {
                 "doesnt_know_what2build": int_cnd.is_do_not_know_vars,
-                "build_new_oblect": cnd.true()
+                "build_new_object": cnd.true()
             },
         },
         "doesnt_want_try": {
@@ -116,7 +120,7 @@ flows = {
                 "start_building": cnd.regexp(r"start building", re.IGNORECASE)
             },
         },
-        "build_new_oblect": {
+        "build_new_object": {
             RESPONSE: """Great! Let's build it. Just type "start building", then show and tell me where to place blocks. And say "done" when we are finished.""",
             PROCESSING: {},
             TRANSITIONS: {

@@ -70,77 +70,77 @@ def respond():
         curr_scores = []
         curr_is_toxics = []
 
-        try:
-            curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
-            logger.info("Curr candidates:")
-            logger.info(pprint.pformat(curr_candidates, compact=False))
+        # try:
+        curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
+        logger.info("Curr candidates:")
+        logger.info(pprint.pformat(curr_candidates, compact=False))
 
-            for skill_data in curr_candidates:
-                if len(dialog["utterances"]) > 1:
-                    assert len(dialog["human_utterances"]) > 0
-                    assert len(dialog["bot_utterances"]) > 0
+        for skill_data in curr_candidates:
+            if len(dialog["utterances"]) > 1:
+                assert len(dialog["human_utterances"]) > 0
+                assert len(dialog["bot_utterances"]) > 0
 
-                curr_confidences += [skill_data["confidence"]]
-                annotation = skill_data.get("annotations", {})
-                if skill_data["text"] and skill_data["confidence"]:
-                    if not skill_data.get("annotations"):
-                        logger.warning(f"Valid skill data without annotations: {skill_data}")
+            curr_confidences += [skill_data["confidence"]]
+            annotation = skill_data.get("annotations", {})
+            if skill_data["text"] and skill_data["confidence"]:
+                if not skill_data.get("annotations"):
+                    logger.warning(f"Valid skill data without annotations: {skill_data}")
 
-                is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
-                curr_is_toxics.append(is_toxic_utterance)
+            is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
+            curr_is_toxics.append(is_toxic_utterance)
 
-                if is_toxic_utterance:
-                    with sentry_sdk.push_scope() as scope:
-                        scope.set_extra("utterance", skill_data["text"])
-                        scope.set_extra("selected_skills", skill_data)
-                        sentry_sdk.capture_message("response selector got candidate with badlisted phrases")
-                        msg = (
-                            "response selector got candidate with badlisted phrases:\n"
-                            f"utterance: {skill_data['text']}\n"
-                            f"skill name: {skill_data['skill_name']}"
-                        )
-                        logger.info(msg)
+            if is_toxic_utterance:
+                with sentry_sdk.push_scope() as scope:
+                    scope.set_extra("utterance", skill_data["text"])
+                    scope.set_extra("selected_skills", skill_data)
+                    sentry_sdk.capture_message("response selector got candidate with badlisted phrases")
+                    msg = (
+                        "response selector got candidate with badlisted phrases:\n"
+                        f"utterance: {skill_data['text']}\n"
+                        f"skill name: {skill_data['skill_name']}"
+                    )
+                    logger.info(msg)
 
-                default_conv_eval = {
-                    "isResponseOnTopic": 0.0,
-                    "isResponseInteresting": 0.0,
-                    "responseEngagesUser": 0.0,
-                    "isResponseComprehensible": 0.0,
-                    "isResponseErroneous": 0.0,
-                }
-                curr_scores += [annotation.get("convers_evaluator_annotator", default_conv_eval)]
+            default_conv_eval = {
+                "isResponseOnTopic": 0.0,
+                "isResponseInteresting": 0.0,
+                "responseEngagesUser": 0.0,
+                "isResponseComprehensible": 0.0,
+                "isResponseErroneous": 0.0,
+            }
+            curr_scores += [annotation.get("convers_evaluator_annotator", default_conv_eval)]
 
-            curr_is_toxics = np.array(curr_is_toxics)
-            curr_scores = np.array(curr_scores)
-            curr_confidences = np.array(curr_confidences)
-            # now we collected all current candidates and their annotations. select response among them
-            best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
-                curr_candidates,
-                curr_scores,
-                curr_confidences,
-                curr_is_toxics,
-                dialog,
-                all_prev_active_skills,
-            )
-        except Exception as e:
-            logger.exception(e)
-            sentry_sdk.capture_exception(e)
-            if dialog["human_utterances"][-1].get("hypotheses", []):
-                best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
-            else:
-                best_cand = {
-                    "text": random.choice(MOST_DUMMY_RESPONSES),
-                    "confidence": 0.1,
-                    "human_attributes": {},
-                    "bot_attributes": {},
-                    "skill_name": "dummy_skill",
-                    "active_skill": "dummy_skill",
-                }
-            best_skill_name = best_cand["skill_name"]
-            best_text = best_cand["text"]
-            best_confidence = best_cand["confidence"]
-            best_human_attributes = best_cand.get("human_attributes", {})
-            best_bot_attributes = best_cand.get("bot_attributes", {})
+        curr_is_toxics = np.array(curr_is_toxics)
+        curr_scores = np.array(curr_scores)
+        curr_confidences = np.array(curr_confidences)
+        # now we collected all current candidates and their annotations. select response among them
+        best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
+            curr_candidates,
+            curr_scores,
+            curr_confidences,
+            curr_is_toxics,
+            dialog,
+            all_prev_active_skills,
+        )
+        # except Exception as e:
+        #     logger.exception(e)
+        #     sentry_sdk.capture_exception(e)
+        #     if dialog["human_utterances"][-1].get("hypotheses", []):
+        #         best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
+        #     else:
+        #         best_cand = {
+        #             "text": random.choice(MOST_DUMMY_RESPONSES),
+        #             "confidence": 0.1,
+        #             "human_attributes": {},
+        #             "bot_attributes": {},
+        #             "skill_name": "dummy_skill",
+        #             "active_skill": "dummy_skill",
+        #         }
+        #     best_skill_name = best_cand["skill_name"]
+        #     best_text = best_cand["text"]
+        #     best_confidence = best_cand["confidence"]
+        #     best_human_attributes = best_cand.get("human_attributes", {})
+        #     best_bot_attributes = best_cand.get("bot_attributes", {})
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
