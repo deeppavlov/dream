@@ -36,8 +36,8 @@ def get_result(sentences, sentences_with_history, postannotations=False):
             sentences,  # cobot dialogact topics is now trained without history
             sentences,  # cobot dialogact intents is now trained without history
         ]
-    elif postannotations:
-        # While using postannotations, we annotate only for toxic class
+    else:
+        # While using postannotations, we annotate only for tasks we use in response_selector
         data = [[] for _ in range(9)]
         data[2] = sentences
         data[-1] = sentences
@@ -73,12 +73,11 @@ except Exception as e:
 @app.route("/model", methods=["POST"])
 def respond():
     t = time.time()
-    logger.info("Respond")
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
     answer = get_result(sentences, sentences_with_hist, postannotations=False)
-    logger.exception(f"9in1 result: {answer}")
-    logger.info(f"Combined classifier exec time: {time.time() - t}")
+    logger.debug(f"combined_classification result: {answer}")
+    logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify(answer)
 
 
@@ -90,8 +89,8 @@ def batch_respond():
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
     answer = get_result(sentences, sentences_with_hist, postannotations=True)
-    logger.debug(f"9in1 batch result: {answer}")
-    logger.info(f"Combined classifier exec time: {time.time() - t}")
+    logger.debug(f"combined_classification batch result: {answer}")
+    logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
 
 
