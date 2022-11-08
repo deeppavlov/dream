@@ -30,6 +30,10 @@ from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news, i
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+HIGH_PRIORITY_INTENTS = getenv("HIGH_PRIORITY_INTENTS", 1)
+RESTRICTION_FOR_SENSITIVE_CASE = getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1)
+ALWAYS_TURN_ON_ALL_SKILLS = getenv("ALWAYS_TURN_ON_ALL_SKILLS", 0)
+ALWAYS_TURN_ON_GIVEN_SKILL = getenv("ALWAYS_TURN_ON_GIVEN_SKILL", 0)
 
 
 class RuleBasedSkillSelectorConnector:
@@ -40,6 +44,19 @@ class RuleBasedSkillSelectorConnector:
 
             skills_for_uttr = []
             user_uttr = dialog["human_utterances"][-1]
+
+            if ALWAYS_TURN_ON_ALL_SKILLS:
+                skills_for_uttr = []
+                logger.info(f"Selected skills: {skills_for_uttr}")
+                total_time = time.time() - st_time
+                logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+            elif ALWAYS_TURN_ON_GIVEN_SKILL:
+                logger.info(f"Selected skills: {skills_for_uttr}")
+                total_time = time.time() - st_time
+                logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+
             user_uttr_text = user_uttr["text"].lower()
             user_uttr_annotations = user_uttr["annotations"]
             bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
@@ -87,11 +104,11 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
             elif user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
-            elif high_priority_intent_detected:
+            elif high_priority_intent_detected and HIGH_PRIORITY_INTENTS:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
-            elif is_sensitive_topic_and_request(user_uttr):
+            elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:
                 # process user utterance with sensitive content, "safe mode"
 
                 # adding open-domain skills without opinion expression
@@ -148,7 +165,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_program_y_wide_skill")
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
-                skills_for_uttr.append("gpt2-generator")
+                skills_for_uttr.append("gpt2_generator")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
