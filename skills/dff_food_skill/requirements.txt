@@ -1,2 +1,3 @@
-spacy==3.0.6 
+spacy==3.0.6
+typer==0.4.1
 importlib_metadata<5
