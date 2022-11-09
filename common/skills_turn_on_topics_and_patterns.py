@@ -24,7 +24,7 @@ from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
 
-from common.minecraft.triggers import WHY_MINECRAFT
+from common.minecraft.triggers import WHY_MINECRAFT, BUILD_OBJECT_MINECRAFT
 
 
 MINECRAFT_COMPILED_PATTERN = re.compile(r'\bminecraft\b',
@@ -175,7 +175,7 @@ SKILL_TRIGGERS = {
         "intents": ["tell_me_a_story"],
     },
     "dff_minecraft_skill": {
-        "compiled_patterns": [MINECRAFT_COMPILED_PATTERN, WHY_MINECRAFT],
+        "compiled_patterns": [MINECRAFT_COMPILED_PATTERN, WHY_MINECRAFT, BUILD_OBJECT_MINECRAFT],
         "previous_bot_patterns": [],
         "cobot_dialogact_topics": [],
         "cobot_topics": [],

@@ -55,7 +55,10 @@ flows = {
         TRANSITIONS: {
             ("chat", "why_minecraft"): cnd.regexp(WHY_MINECRAFT),
             ("chat", "start_building"): cnd.regexp(r"start building"),
-            ("chat", "done"): cnd.regexp(r"\bdone\b"),
+            ("chat", "done"): cnd.regexp(r"\bfinish building\b"),
+            ("chat", "build_known_object"): cnd.all([cnd.regexp(r"\bbuild\b"), loc_cnd.is_known_object()]),
+            ("chat", "build_new_object"): cnd.regexp(r"\bbuild\b"),
+            ("chat", "accept_gratitude"): cnd.regexp(r"\b(thnx|thanks|thank you)\b"),
             ("commands", "goto_user"): loc_cnd.is_intent("goto_user"),
             ("commands", "goto"): loc_cnd.is_intent("goto"),
             ("commands", "goto_cursor"): loc_cnd.is_intent("goto_cursor"),
@@ -114,14 +117,14 @@ flows = {
             TRANSITIONS: {},
         },
         "doesnt_know_what2build": {
-            RESPONSE: """Let's build a house! Just type "start building", then show and tell me where to place blocks. And say "done" when we are finished.""",
+            RESPONSE: """Let's build a house! Just type "start building", then show and tell me where to place blocks. And say "finish building" when we are finished.""",
             PROCESSING: {},
             TRANSITIONS: {
                 "start_building": cnd.regexp(r"start building", re.IGNORECASE)
             },
         },
         "build_new_object": {
-            RESPONSE: """Great! Let's build it. Just type "start building", then show and tell me where to place blocks. And say "done" when we are finished.""",
+            RESPONSE: """Great! Let's build it. Just type "start building", then show and tell me where to place blocks. And say "finish building" when we are finished.""",
             PROCESSING: {},
             TRANSITIONS: {
                 "start_building": cnd.regexp(r"start building", re.IGNORECASE)
@@ -152,6 +155,20 @@ flows = {
             RESPONSE: """Gotcha! Now if ask me to build {minecraft_new_known_object} -- I can do it seamlessly without any instructions!""",
             PROCESSING: {
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+            },
+            TRANSITIONS: {},
+        },
+        "build_known_object": {
+            RESPONSE: """Building {minecraft_new_known_object}""",
+            PROCESSING: {
+                # функция, которая матчит имя с последовательностью команд
+            },
+            TRANSITIONS: {},
+        },
+        "accept_gratitude": {
+            RESPONSE: """You're welcome!""",
+            PROCESSING: {
+                1: loc_prs.add_encoding_for_look_at_user()
             },
             TRANSITIONS: {},
         },

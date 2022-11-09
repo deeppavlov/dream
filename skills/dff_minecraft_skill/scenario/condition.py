@@ -1,4 +1,5 @@
 import logging
+import re
 
 from df_engine.core import Context, Actor
 from scenario.response_funcs import get_response_funcs
@@ -54,3 +55,14 @@ def is_intent(target_intent_name="look_at_user"):
 
 #     response_funcs = get_response_funcs()
 #     return bool(any([intent in response_funcs for intent in intents_by_minecraft_bot]))
+
+def is_known_object():
+    def is_known_object_handler(ctx: Context, actor: Actor, *args, **kwargs):
+        known_objects = list(ctx.misc.get("slots", {}).values())
+        if known_objects:
+            objects_re = "|".join(known_objects)
+            return bool(re.findall(objects_re, ctx.last_request, re.IGNORECASE))
+
+        return False
+    
+    return is_known_object_handler
