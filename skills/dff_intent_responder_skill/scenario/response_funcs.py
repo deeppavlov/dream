@@ -255,7 +255,7 @@ def open_door_respond(ctx: Context, actor: Actor, intention: str):
 
 
 # covers coords like "5,35", "5, 35", "5 35"
-COMPILED_COORDS_PATTERN = re.compile(r"[0-9]+[ ,]+[0-9]+", re.IGNORECASE)
+COMPILED_COORDS_PATTERN = re.compile(r"[-][0-9]+[ ,]+[-][0-9]+", re.IGNORECASE)
 
 
 def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
@@ -268,6 +268,10 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
     elif coords:
         command = f"move_to_point_{coords[0]}"
         response = f"Двигаюсь в точку: {coords[0]}." if LANGUAGE == "RU" else f"Moving to point: {coords[0]}."
+    elif ' ' in utt["text"]:
+        tokens = utt["text"].split()
+        command = f"move_to_point_{tokens[-1]}"
+        response = f"Двигаюсь в {tokens[-1]}" if LANGUAGE == "RU" else f"Moving to: {tokens[-1]}."
     else:
         command = "move_to_point_unknown"
         if LANGUAGE == "RU":
