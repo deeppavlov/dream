@@ -92,6 +92,11 @@ services:
       - "./services/dialogrpt_ru:/src"
     ports:
       - 8122:8122
+  robot-command-sender:
+    volumes:
+      - "./services/robot_command_sender:/src"
+    ports:
+      - 8135:8135
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

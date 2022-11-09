@@ -138,7 +138,7 @@ def get_human_utterances(ctx: Context, actor: Actor) -> list:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
 
 
-def send_command_to_robot(command):
+def check_if_valid_robot_command(command):
     ROS_FSM_SERVER = "http://172.17.0.1:5000"
     ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
     logger.info(f"Sending to robot:\n{command}")
@@ -158,8 +158,11 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
             response = "Не могу извлечь объект для отслеживания. Повторите команду."
         else:
             response = "I did not get tracked object. Please repeat the command."
-    send_command_to_robot(command)
-    return response
+
+    if check_if_valid_robot_command(command):
+        return response
+    else:
+        return ""
 
 
 def turn_around_respond(ctx: Context, actor: Actor, intention: str):
@@ -189,8 +192,11 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
                 response = f"Поворачиваюсь по часовой стрелке."
             else:
                 response = f"Turning around clockwise."
-    send_command_to_robot(command)
-    return response
+
+    if check_if_valid_robot_command(command):
+        return response
+    else:
+        return ""
 
 
 def move_forward_respond(ctx: Context, actor: Actor, intention: str):
@@ -209,8 +215,10 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = f"Moving forward."
 
-    send_command_to_robot(command)
-    return response
+    if check_if_valid_robot_command(command):
+        return response
+    else:
+        return ""
 
 
 def move_backward_respond(ctx: Context, actor: Actor, intention: str):
@@ -228,8 +236,11 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
             response = f"Двигаюсь назад."
         else:
             response = f"Moving backward."
-    send_command_to_robot(command)
-    return response
+
+    if check_if_valid_robot_command(command):
+        return response
+    else:
+        return ""
 
 
 def open_door_respond(ctx: Context, actor: Actor, intention: str):
@@ -239,8 +250,10 @@ def open_door_respond(ctx: Context, actor: Actor, intention: str):
     else:
         response = f"Opening the door."
 
-    send_command_to_robot(command)
-    return response
+    if check_if_valid_robot_command(command):
+        return response
+    else:
+        return ""
 
 
 # covers coords like "5,35", "5, 35", "5 35"
@@ -263,6 +276,8 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
             response = "Не могу извлечь объект для цели. Повторите команду."
         else:
             response = "I did not get target object. Please repeat the command."
-    send_command_to_robot(command)
-    return response
 
+    if check_if_valid_robot_command(command):
+        return response
+    else:
+        return ""

@@ -283,6 +283,23 @@ services:
         reservations:
           memory: 4G
 
+  robot-command-sender:
+    env_file: [ .env ]
+    build:
+      context: ./services/robot_command_sender/
+      args:
+        SERVICE_PORT: 8135
+        ROS_FSM_SERVER: http://172.17.0.1:5000
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 50M
+
   dff-template-skill:
     env_file: [.env]
     build:

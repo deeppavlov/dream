@@ -314,7 +314,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://robot-command-sender:8101/send"
+                    "url": "http://robot-command-sender:8135/send"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
