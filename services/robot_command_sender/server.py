@@ -23,16 +23,23 @@ ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
 @app.route("/send", methods=["POST"])
 def respond():
     st_time = time.time()
+    results = []
     annotated_bot_utterances = request.json.get("annotated_bot_utterances", [])
     for ann_uttr in annotated_bot_utterances:
         command = ann_uttr.get("attributes", {}).get("robot_command")
         if command:
             logger.info(f"robot_command_sender: sending to robot:\n{command}")
-            requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}))
+            try:
+                requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}), timeout=1.0)
+                results += ["Sent"]
+            except Exception as e:
+                logger.info(f"robot_command_sender: FAILED to send command:\n{e}")
+                results += ["Failed"]
         else:
             logger.info(f"robot_command_sender was called but NO command found in annotated_bot_utterance: "
                         f"{ann_uttr}")
+            results += ["Failed"]
 
     total_time = time.time() - st_time
     logger.info(f"robot_command_sender exec time: {total_time:.3f}s")
-    return jsonify(["Command sent"] * len(annotated_bot_utterances))
+    return jsonify(results)
