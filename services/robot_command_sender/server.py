@@ -20,7 +20,7 @@ ROS_FSM_STATUS_ENDPOINT = f"{ROS_FSM_SERVER}/robot_status"
 ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
 
 
-@app.post("/send")
+@app.route("/send", methods=["POST"])
 def respond(annotated_bot_utterance: Dict):
 
     command = annotated_bot_utterance.get("attributes", {}).get("robot_command")
