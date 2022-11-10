@@ -50,8 +50,8 @@ params_default = {
     "do_sample": True,
     "top_k": 100,
     "top_p": 0.9,
-    "temperature": 0.9,
-    "num_return_sequences": 1,
+    "temperature": 0.6,
+    "num_return_sequences": 3,
     "device": device,
     "is_always_use_length": True,
     "length_generate": f"{LENGTH_TO_GENERATE}",
@@ -178,7 +178,7 @@ def respond():
     st_time = time.time()
 
     dialog_contexts = request.json.get("dialog_contexts", [])
-    num_return_sequences = request.json.get("num_return_sequences", 5)
+    num_return_sequences = request.json.get("num_return_sequences", 3)
 
     try:
         batch_generated_responses = []
