@@ -1,7 +1,7 @@
 import json
 import logging
+import time
 from os import getenv
-from typing import Dict
 
 import requests
 import sentry_sdk
@@ -21,12 +21,18 @@ ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
 
 
 @app.route("/send", methods=["POST"])
-def respond(annotated_bot_utterance: Dict):
+def respond():
+    st_time = time.time()
+    annotated_bot_utterances = request.json.get("annotated_bot_utterances", [])
+    for ann_uttr in annotated_bot_utterances:
+        command = ann_uttr.get("attributes", {}).get("robot_command")
+        if command:
+            logger.info(f"robot_command_sender: sending to robot:\n{command}")
+            requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}))
+        else:
+            logger.info(f"robot_command_sender was called but NO command found in annotated_bot_utterance: "
+                        f"{ann_uttr}")
 
-    command = annotated_bot_utterance.get("attributes", {}).get("robot_command")
-    if command:
-        logger.info(f"robot_command_sender: sending to robot:\n{command}")
-        requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}))
-    else:
-        logger.info(f"robot_command_sender was called but NO command found in annotated_bot_utterance: "
-                    f"{annotated_bot_utterance}")
+    total_time = time.time() - st_time
+    logger.info(f"robot_command_sender exec time: {total_time:.3f}s")
+    return jsonify(["Command sent"] * len(annotated_bot_utterances))
