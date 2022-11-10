@@ -1,5 +1,7 @@
 FROM python:3.9
 
+ARG ROS_FSM_SERVER
+ENV ROS_FSM_SERVER ${ROS_FSM_SERVER}
 
 RUN mkdir /src
 
