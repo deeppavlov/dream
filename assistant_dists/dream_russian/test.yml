@@ -45,7 +45,7 @@ services:
       - CUDA_VISIBLE_DEVICES=7
   dialogpt:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=6
   dialogrpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
