@@ -1,7 +1,7 @@
 import logging
 import time
 import os
-from typing import List
+import random
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
@@ -41,20 +41,19 @@ except Exception as e:
 
 logger.info(f"dialogpt is set to run on {device}")
 
-LENGTH_TO_GENERATE = 1
+SHORT_UTTERANCE_PROBA = 0.7
 CONTEXT_DEPTH = 3
 
 params_default = {
-    "max_length": 256,
+    "max_length": 128,
     "no_repeat_ngram_size": 3,
     "do_sample": True,
-    "top_k": 100,
+    "top_k": 20,
     "top_p": 0.9,
-    "temperature": 0.6,
+    "temperature": 0.7,
     "num_return_sequences": 3,
     "device": device,
     "is_always_use_length": True,
-    "length_generate": f"{LENGTH_TO_GENERATE}",
 }
 
 
@@ -140,7 +139,8 @@ def format_dialogue_for_inference(context, context_depth=4, encode=False, tokeni
                  -context_depth:]
 
     inputs_text = "".join([inputs_by_length(input_) for input_ in inputs])
-    inputs_text += f"|1|{params_default['length_generate']}|"
+    length = "2" if random.uniform(0, 1) > SHORT_UTTERANCE_PROBA else "1"
+    inputs_text += f"|1|{length}|"
 
     if encode:
         # if encode, return encoded context
