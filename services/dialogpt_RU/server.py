@@ -97,10 +97,12 @@ def format_dialogue_with_target(context, context_lengths, context_depth=3, encod
         context_len = len(context)
         # the last uttr is from BOT
         inputs = [{"text": uttr, "speaker": (context_len - uttr_id) % 2} for uttr_id, uttr in enumerate(context)][
-                 -context_depth:]
+            -context_depth:
+        ]
     else:
         inputs = [{"text": uttr["text"], "speaker": 1 if uttr["speaker"] == "bot" else 0} for uttr in context][
-                 -context_depth:]
+            -context_depth:
+        ]
 
     inputs_text = "".join([inputs_by_length(input_, inp_len) for input_, inp_len in zip(inputs, context_lengths)])
 
@@ -133,10 +135,12 @@ def format_dialogue_for_inference(context, context_depth=4, encode=False, tokeni
         context_len = len(context)
         # the last uttr is from HUMAN
         inputs = [{"text": uttr, "speaker": (context_len - uttr_id - 1) % 2} for uttr_id, uttr in enumerate(context)][
-                 -context_depth:]
+            -context_depth:
+        ]
     else:
         inputs = [{"text": uttr["text"], "speaker": 1 if uttr["speaker"] == "bot" else 0} for uttr in context][
-                 -context_depth:]
+            -context_depth:
+        ]
 
     inputs_text = "".join([inputs_by_length(input_) for input_ in inputs])
     length = "2" if random.uniform(0, 1) > SHORT_UTTERANCE_PROBA else "1"
@@ -157,16 +161,13 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 def generate(context, num_return_sequences, context_depth):
     bot_input_ids = format_dialogue_for_inference(
-        context, context_depth=context_depth, encode=True, tokenizer=tokenizer)
+        context, context_depth=context_depth, encode=True, tokenizer=tokenizer
+    )
     bot_input_ids = bot_input_ids.to(device)
     params_default["num_return_sequences"] = num_return_sequences
 
-    chat_history_ids = model.generate(
-        bot_input_ids,
-        pad_token_id=tokenizer.eos_token_id,
-        **params_default
-    )
-    resp_tokens = chat_history_ids[:, bot_input_ids.shape[-1]:]
+    chat_history_ids = model.generate(bot_input_ids, pad_token_id=tokenizer.eos_token_id, **params_default)
+    resp_tokens = chat_history_ids[:, bot_input_ids.shape[-1] :]
     outputs = [tokenizer.decode(x, skip_special_tokens=True) for x in resp_tokens]
     outputs = [x.split("|")[0] for x in outputs]
 
@@ -187,9 +188,9 @@ def respond():
             # context = [{"text": "utterance text", "speaker": "human"}, ...]
             logger.info(f"dialogpt inputs: {context[-CONTEXT_DEPTH:]}")
 
-            hypotheses = generate(context[-CONTEXT_DEPTH:],
-                                  num_return_sequences=num_return_sequences,
-                                  context_depth=CONTEXT_DEPTH)
+            hypotheses = generate(
+                context[-CONTEXT_DEPTH:], num_return_sequences=num_return_sequences, context_depth=CONTEXT_DEPTH
+            )
             logger.info(f"dialogpt hypotheses: {hypotheses}")
             batch_generated_responses.append(hypotheses)
 
