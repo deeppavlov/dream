@@ -221,7 +221,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.remove("convert_reddit")
                 if "comet_dialog_skill" in skills_for_uttr:
                     skills_for_uttr.remove("comet_dialog_skill")
-
+# ПОПРАВИТЬ USED_PROMPTS
             if len(dialog["utterances"]) > 1:
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
                 if user_uttr_annotations.get("asr", {}).get("asr_confidence", "high") == "very_low":

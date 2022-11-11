@@ -9,6 +9,21 @@ from os import getenv
 logger = logging.getLogger(__name__)
 # ....
 
+def save_previous_utterance_topic(slot_name):
+
+    def previous_topic(
+        ctx: Context,
+        actor: Actor,
+        *args,
+        **kwargs,
+    ) -> Context:
+        if ctx.misc.get("question_topic", ""):
+            ctx = int_prs.save_slots_to_ctx({slot_name: str(ctx.misc.get("question_topic", ""))})(ctx, actor)
+            ctx.misc["question_topic"] = ''
+        return ctx
+
+    return previous_topic
+
 
 def save_previous_utterance_nps(slot_name):
 

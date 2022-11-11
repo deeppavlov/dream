@@ -15,8 +15,16 @@ from df_engine.core import Actor, Context
 logger = logging.getLogger(__name__)
 
 WHAT_IS_QUESTION = re.compile(r'what is|what does .* mean|what\?|what do you mean|what are|^what$', re.IGNORECASE)
-THANK_PATTERN = re.compile(r"thanks|thank you|(I'll|I will) (try|watch|read|cook|think)|okay|good|great", re.IGNORECASE)
+THANK_PATTERN = re.compile(r"thanks|thank you|(I'll|I will) (try|watch|read|cook|think)", re.IGNORECASE)
 
+
+def have_questions_left(ctx: Context, actor: Actor, *args, **kwargs):
+    if ctx.misc.get("slots", {}).get("time_to_go", False):
+        return False
+    else:
+        return True
+
+    
 def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs):
         result = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
         if result:
@@ -89,16 +97,21 @@ def is_negative_sentiment(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def enough_generative_responses(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    if int(ctx.misc.get('num_gen_responses', 0)) > 3: 
-        ctx.misc["num_gen_responses"] = 0
+    shared_memory = int_ctx.get_shared_memory(ctx, actor)
+    with open("test5.txt", "a") as f:
+        f.write('\nenough gen responses sees ' + str(shared_memory.get("num_gen_responses", 0)))
+    if int(shared_memory.get("num_gen_responses", 0)) > 3: 
+        with open("test5.txt", "a") as f:
+            f.write('\nenough gen responses says YES to ' + str(shared_memory.get("num_gen_responses", 0)))
+        int_ctx.save_to_shared_memory(ctx, actor, num_gen_responses=0)
         return True
     else:
         return False
 
 
 def bot_takes_initiative(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    human_uttrs = ctx.get(["agent"], []).get(["dialog"], []).get(["human_utterances"], [])
-    if int_cnd.no_requests and int_cnd.is_passive_user and len(human_uttrs) > 6: #int_cnd.is_passive_user and  and len(human_uttrs) > 2
+    human_uttrs = int_ctx.get_human_utterances(ctx, actor)
+    if int_cnd.no_requests and int_cnd.is_passive_user and len(human_uttrs) > 1:
         return True
     else:
         return False
@@ -117,6 +130,13 @@ def what_is_question(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 def we_have_hyp_def(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     return bool(ctx.misc.get("slots", {}).get('current_hyp_definition', False))
+
+def hyp_question_asked(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if ctx.misc.get("slots", {}).get('hyp_question_asked', False):
+        ctx.misc['slots']['hyp_question_asked'] = False
+        return True
+    else:
+        return False
 
 def short_thank_you(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if ctx.validation:

@@ -7,11 +7,11 @@ from nltk.corpus import wordnet
 GET_RECOMMENDATION_CERTAIN_PATTERN = r"""((what|which).*(options|to choose|should|can I|would you|recommend|suggest|(is|are).*(best|good|nice|interesting|cheap|expensive)))|recommend me|\
     |suggest me|help me|recommendation|suggestion|you know any|you have any|give me|is there a|should i"""
 
-GET_RECOMMENDATION_VAGUE_PATTERN = r"""(i wanna|i want to|i'd like to|i would like to|(cannot|can'*t) choose|any.*ideas.*)\?"""
+GET_RECOMMENDATION_VAGUE_PATTERN = r"""(i wanna|i want to|i('d| would) (like|love)|(cannot|can'*t) choose|any.*ideas.*)\?"""
 
 GET_RECOMMENDATION_PATTERN = re.compile('|'.join([GET_RECOMMENDATION_CERTAIN_PATTERN, GET_RECOMMENDATION_VAGUE_PATTERN]), re.IGNORECASE)
 
-CHAT_ABOUT_EXPLICIT = re.compile(r"""(let's|let us|i wanna|i want to) (chat|discuss|talk about)""", re.IGNORECASE)
+CHAT_ABOUT_EXPLICIT = re.compile(r"""(let's|let us|i wanna|i want to|i('d| would) (like|love) to) (chat|discuss|talk about)""", re.IGNORECASE)
 
 WHAT_IS_QUESTION = re.compile(r'what is|what does .* mean|what\?|what do you mean|what are', re.IGNORECASE)
 

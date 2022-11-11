@@ -43,20 +43,21 @@ THANK_PATTERN = re.compile(r"thanks|thank you|(I'll|I will) (try|watch|read|cook
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("give_recommendation", "ask_for_details", 1.1): cnd.regexp(GET_RECOMMENDATION_PATTERN), #потом поставить нормальные человеческие конфиденсы
-            ("ask_about", "begin", 1.1): loc_cnd.bot_takes_initiative, #проверить почему там 5 а не 3 НЕ РАБОТАЕТ
-            ("chat_about", "start_topic", 1.1): cnd.regexp(CHAT_ABOUT_EXPLICIT), 
-            ("ask_about", "begin", 1.1): loc_cnd.short_thank_you
+            #("ask_about", "begin", 1.05): cnd.all([loc_cnd.bot_takes_initiative, loc_cnd.have_questions_left]), #проверить почему там 5 а не 3 НЕ РАБОТАЕТ
+            ("chat_about", "start_topic", 1.05): cnd.all([cnd.regexp(CHAT_ABOUT_EXPLICIT), loc_cnd.contains_noun_phrase]),
+            ("chat_about", "begin", 1.05): cnd.regexp(CHAT_ABOUT_EXPLICIT),
+            ("give_recommendation", "ask_for_details", 1.05): cnd.regexp(GET_RECOMMENDATION_PATTERN),
+            ("ask_about", "begin", 1.03): cnd.all([loc_cnd.short_thank_you, loc_cnd.have_questions_left]),
         },
     },
     "sevice": {
         "start": {
             RESPONSE: "",
             TRANSITIONS: {
-                ("give_recommendation", "ask_for_details"): cnd.regexp(GET_RECOMMENDATION_PATTERN),
                 #("ask_about", "begin"): loc_cnd.bot_takes_initiative, #проверить почему там 5 а не 3
-                ("chat_about", "begin"): cnd.regexp(CHAT_ABOUT_EXPLICIT), 
-                ("greeting", "begin"): cnd.true()
+                ("chat_about", "begin", 1.1): cnd.regexp(CHAT_ABOUT_EXPLICIT), 
+                ("give_recommendation", "ask_for_details", 1.1): cnd.regexp(GET_RECOMMENDATION_PATTERN),
+                ("greeting", "begin", 1.1): cnd.true()
             },
         },
         "fallback": {
@@ -69,10 +70,7 @@ flows = {
     },
     "give_recommendation": {
         LOCAL: {
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
-                "set_can_continue": int_prs.set_can_continue(),
-            },
+            PROCESSING: {},
         },
         "begin": {
             RESPONSE: "I'm here to recommend you something nice.", 
@@ -101,7 +99,6 @@ flows = {
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 "user_contented": cnd.regexp(THANK_PATTERN), 
                 "ask_for_approval": cnd.true(),
             },
@@ -113,7 +110,6 @@ flows = {
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 "user_contented": cnd.regexp(THANK_PATTERN),
                 "ask_for_approval": cnd.true(),
             },
@@ -122,16 +118,6 @@ flows = {
             RESPONSE: loc_rsp.generative_response(),
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
-                "user_contented": cnd.regexp(THANK_PATTERN),
-                "ask_for_approval": cnd.true()
-                },
-        },
-        "give_opinion": {
-            RESPONSE: loc_rsp.generative_response(),
-            TRANSITIONS: {
-                "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 "user_contented": cnd.regexp(THANK_PATTERN),
                 "ask_for_approval": cnd.true()
                 },
@@ -139,7 +125,7 @@ flows = {
         "ask_for_approval": {
             RESPONSE: int_rsp.multi_response(replies=[
                 "So are you gonna try this one?",
-                "What do you think about it?"
+                "What do you think about it?",
                 "So what do you think about this one?", 
                 "Do you like my suggestion?",
                 "So what do you think?"
@@ -162,7 +148,7 @@ flows = {
                 ]),
             TRANSITIONS: {
                 "second_recommendation": int_cnd.is_yes_vars,
-                ("ask_about", "begin"): cnd.true()
+                ("ask_about", "begin"): loc_cnd.have_questions_left
                 },
         },
         "user_discontented": {
@@ -172,7 +158,7 @@ flows = {
                 "Let's give it another try, shall we?"
             ]),
             TRANSITIONS: {
-                ("ask_about", "begin"): int_cnd.is_no_vars,
+                ("ask_about", "begin"): cnd.all([int_cnd.is_no_vars, loc_cnd.have_questions_left]),
                 "second_recommendation": cnd.true()
                 },
         },
@@ -180,8 +166,7 @@ flows = {
             RESPONSE: loc_rsp.generative_response(recommend=True, discussed_entity="request"),
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
-                ("ask_about", "begin"): cnd.true()},
+                ("ask_about", "begin"): loc_cnd.have_questions_left},
         },
         "finish": {
             RESPONSE: "Okay, have fun.",
@@ -190,12 +175,31 @@ flows = {
     },
     "ask_about": {
         LOCAL: {
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
-                "set_can_continue": int_prs.set_can_continue(),
-            },
+            PROCESSING: {},
         },
         "begin": {
+            RESPONSE: loc_rsp.generate_with_string(to_append=["By the way, may I ask you a question? It's quite unrelated, but still.", 
+            "I definitely want to know you better. May I ask you something?",
+            "Oh, and I have a question for you, if you don't mind.",
+            "Oh, and could I ask you something? I really want to know."
+            ], position_gen='before'), 
+            TRANSITIONS: {
+                "user_ignores_question": cnd.any(
+                    [
+                    int_cnd.is_question, 
+                    int_cnd.is_opinion_request
+                    ]
+                ),
+                ("chat_about", "begin_apology"): cnd.any(
+                    [
+                    int_cnd.is_no_vars, 
+                    int_cnd.is_do_not_know_vars
+                    ],
+                ),
+                "pre_sequence": cnd.true()
+            },
+        },
+        "pre_sequence": {
             RESPONSE: loc_rsp.ask_about_presequence, 
             TRANSITIONS: {
                 "user_ignores_question": cnd.any(
@@ -204,7 +208,7 @@ flows = {
                     int_cnd.is_opinion_request
                     ]
                 ),
-                "begin": cnd.any(
+                "user_hates_topic": cnd.any(
                     [
                     int_cnd.is_no_vars, 
                     int_cnd.is_do_not_know_vars,
@@ -214,10 +218,18 @@ flows = {
                 "likes_topic": cnd.true()
             },
         },
+        "user_hates_topic": {
+            RESPONSE: loc_rsp.user_dislikes_topic, 
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question, 
+                ("chat_about", "start_topic"): loc_cnd.contains_noun_phrase,
+                "give_bots_opinion_entity": cnd.true()
+            },
+        },
         "user_ignores_question": {
             RESPONSE: loc_rsp.ask_about_presequence_2, #возможно вложить в прошлую функцию
             TRANSITIONS: {
-                "begin": cnd.any(
+                "user_hates_topic": cnd.any(
                     [
                     int_cnd.is_no_vars, 
                     int_cnd.is_do_not_know_vars,
@@ -230,11 +242,11 @@ flows = {
             },
         },
         "likes_topic": {
-            RESPONSE: loc_rsp.generate_with_string(), 
+            RESPONSE: loc_rsp.generate_with_string(to_append='get_questions'), 
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
-                "give_bots_opinion_entity": loc_cnd.contains_noun_phrase,
+                ("chat_about", "start_topic"): loc_cnd.contains_noun_phrase,
+                "give_bots_opinion_entity": cnd.true()
             },
         },
         "give_bots_opinion_entity": {
@@ -244,7 +256,6 @@ flows = {
                 },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 ("chat_about", "start_topic"): cnd.true()
             },
         },
@@ -252,15 +263,6 @@ flows = {
             RESPONSE: loc_rsp.generative_response(),
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
-                ("chat_about", "start_topic"): cnd.true()
-                },
-        },
-        "give_opinion": {
-            RESPONSE: loc_rsp.generative_response(),
-            TRANSITIONS: {
-                "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 ("chat_about", "start_topic"): cnd.true()
                 },
         },
@@ -268,14 +270,12 @@ flows = {
     "greeting": {
         LOCAL: {
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0), #убрать их отовсюду где нужны разветвления, оба, и сет_конфиденс делать внутри респонс-файла, прям там где мы генерим респонс давать разный конфиденс в зависимости от условий
-                "set_can_continue": int_prs.set_can_continue(),
             },
         },
         "begin": { # convers-evaluation-selector: docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/proxy.yml logs -f dff-recommendation-skill-gpt 0 
-            RESPONSE: int_rsp.multi_response(replies=["Hey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How are you doing?", 
-            "Hey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How is it going?",
-            "Hey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How are you feeling?"]),  # several hypothesis
+            RESPONSE: int_rsp.multi_response(replies=["kHey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How are you doing?", 
+            "kHey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How is it going?",
+            "kHey there, it's DREAM! I can recommend you something interesting, answer your questions or just chat with you. How are you feeling?"]),  # several hypothesis
             PROCESSING: {
             },
             TRANSITIONS: {"second_utt": cnd.true(),
@@ -283,7 +283,7 @@ flows = {
         },
         "second_utt": {
             RESPONSE: loc_rsp.generate_with_string(to_append=['What are you up to today?', 'What are your plans for today?',
-            'Any special plans for today?'], position_string='before'),  #не учитываются вопросы
+            'Any special plans for today?'], position_gen='before'),  #не учитываются вопросы
             PROCESSING: {
                 "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('discussed_entity') 
             },
@@ -294,7 +294,10 @@ flows = {
             },
         },
         "third_utt": {
-            RESPONSE: loc_rsp.generate_with_string(to_append="By the way, I am so hungry... What is your favourite dish?", position_string='before'),
+            RESPONSE: loc_rsp.generate_with_string(to_append=["By the way, I am so hungry... What is your favourite dish?",
+            "Oh, I've seen such a nice kitten on YouTube today. What is your favourite animal?",
+            "Offtopic, but I'd love to drink a cup of coffee if I could drink. Do you prefer tea or coffee btw?"
+            ], position_gen='before'),
             TRANSITIONS: {
                 "continue_discussing_entity": cnd.true(),
             },
@@ -306,7 +309,6 @@ flows = {
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 "ask_name": loc_cnd.enough_generative_responses,
                 "new_entity": loc_cnd.contains_noun_phrase,
                 "continue_discussing_entity": cnd.true(),
@@ -319,7 +321,6 @@ flows = {
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 "ask_name": loc_cnd.enough_generative_responses,
                 "new_entity": loc_cnd.contains_noun_phrase,
                 "continue_discussing_entity": cnd.true(),
@@ -329,17 +330,6 @@ flows = {
             RESPONSE: loc_rsp.generative_response(),
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
-                "ask_name": loc_cnd.enough_generative_responses,
-                "new_entity": loc_cnd.contains_noun_phrase,
-                "continue_discussing_entity": cnd.true(),
-                },
-        },
-        "give_opinion": {
-            RESPONSE: loc_rsp.generative_response(),
-            TRANSITIONS: {
-                "answer_question": int_cnd.is_question, 
-                "give_opinion": int_cnd.is_opinion_request,
                 "ask_name": loc_cnd.enough_generative_responses,
                 "new_entity": loc_cnd.contains_noun_phrase,
                 "continue_discussing_entity": cnd.true(),
@@ -363,7 +353,7 @@ flows = {
             },
             TRANSITIONS: {
                 ("chat_about", "start_topic"): loc_cnd.contains_noun_phrase,
-                ("ask_about", "begin"): cnd.true()
+                ("ask_about", "begin"): loc_cnd.have_questions_left,
                 },
         },
     },
@@ -371,6 +361,21 @@ flows = {
         LOCAL: {
             PROCESSING: {
                 "set_can_continue": int_prs.set_can_continue(),
+            },
+        },
+        "begin_apology": {
+            RESPONSE: int_rsp.multi_response(replies=["Sorry if I was being intrusive. What would you like to discuss today?", 
+            "Oh, okay, no problem. What do you want to chat about?", 
+            "All right. Sorry! What would you like to talk about?",
+            "Then let's just have a chat. What would you like to discuss?"]),  #pre-question
+            TRANSITIONS: {
+                "user_ignores_question": cnd.any(
+                    [
+                    int_cnd.is_question, 
+                    int_cnd.is_opinion_request
+                    ]
+                ),
+                "start_topic": cnd.true()
             },
         },
         "begin": {
@@ -400,11 +405,12 @@ flows = {
         "start_topic": { 
             RESPONSE: loc_rsp.generative_response(discussed_entity='topic_entity'),  
             PROCESSING: {
-                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('topic_entity')
+                "save_slots_to_ctx": loc_prs.save_previous_utterance_nps('topic_entity'),
+                "overwrite_with_topic": loc_prs.save_previous_utterance_topic('topic_entity')
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "ask_hyponym_question": loc_cnd.enough_generative_responses,
+                "ask_hyponym_question": cnd.all([cnd.negation(loc_cnd.hyp_question_asked), loc_cnd.enough_generative_responses]),
                 "new_entity": loc_cnd.contains_noun_phrase,
                 "continue_discussing_entity": cnd.true(),
             },
@@ -416,8 +422,9 @@ flows = {
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "ask_hyponym_question": loc_cnd.enough_generative_responses,
                 "new_entity": loc_cnd.contains_noun_phrase,
+                ('ask_about', 'begin'): cnd.all([loc_cnd.hyp_question_asked, loc_cnd.enough_generative_responses, loc_cnd.have_questions_left]),
+                "ask_hyponym_question": cnd.all([cnd.negation(loc_cnd.hyp_question_asked), loc_cnd.enough_generative_responses]),
                 "continue_discussing_entity": cnd.true(),
             },
         },
@@ -428,7 +435,7 @@ flows = {
             },
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "ask_hyponym_question": loc_cnd.enough_generative_responses,
+                "ask_hyponym_question": cnd.all([cnd.negation(loc_cnd.hyp_question_asked), loc_cnd.enough_generative_responses]),
                 "new_entity": loc_cnd.contains_noun_phrase,
                 "continue_discussing_entity": cnd.true(),
             },
@@ -441,12 +448,12 @@ flows = {
             TRANSITIONS: {
                 "give_hyponym_definition": cnd.all([
                     cnd.any(
-                [int_cnd.is_no_vars, 
-                int_cnd.is_do_not_know_vars,
+                [int_cnd.is_do_not_know_vars,
                 loc_cnd.what_is_question #не отрабатывает это условие, видимо из-за доставания из контекста.
                 ]
                 ),
                 loc_cnd.we_have_hyp_def]),
+                ('ask_about', 'begin'): cnd.all([loc_cnd.have_questions_left, loc_cnd.hyp_question_asked, loc_cnd.enough_generative_responses]),
                 # cnd.all([cnd.any(
                 # [int_cnd.is_no_vars, 
                 # int_cnd.is_do_not_know_vars,
@@ -471,21 +478,30 @@ flows = {
             RESPONSE: loc_rsp.generative_response(),
             TRANSITIONS: {
                 "answer_question": int_cnd.is_question, 
-                "ask_hyponym_question": loc_cnd.enough_generative_responses,
+                "ask_hyponym_question": cnd.all([cnd.negation(loc_cnd.hyp_question_asked), loc_cnd.enough_generative_responses]),
                 "continue_discussing_entity": cnd.true(),
                 },
         },
-        "give_opinion": {
+    },
+    "end_dialog": {
+        "pre_sequence": {
+            RESPONSE: "Okay, I should go now! Nice chatting with you.",
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question,
+                "goodbye": cnd.true()
+            },
+        },
+        "goodbye": {
+            RESPONSE: "See you later, alligator!",
+            TRANSITIONS: {
+                "answer_question": int_cnd.is_question,
+            },
+        },
+        "answer_question": {
             RESPONSE: loc_rsp.generative_response(),
             TRANSITIONS: {
-                "answer_question": int_cnd.is_question, 
-                "ask_hyponym_question": loc_cnd.enough_generative_responses,
-                "continue_discussing_entity": cnd.true(),
+                "answer_question": int_cnd.is_question,
                 },
-        },
-        "bye": {
-            RESPONSE: 'end',
-            TRANSITIONS: {},
         },
     },
 }

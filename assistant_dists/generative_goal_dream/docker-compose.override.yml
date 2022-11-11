@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/generative_goal_dream/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=5673177833:AAFrW0Zq87yWaYc-a96xU5i6NeSnk_Gs9oU agent.pipeline_config=assistant_dists/generative_goal_dream/pipeline_conf.json agent.db_config=assistant_dists/generative_goal_dream/db_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, spacy-nounphrases:8006, convers-evaluation-selector:8009, 
           intent-catcher:8014, badlisted-words:8018, ner:8021, factoid-qa:8071, kbqa:8072,
@@ -387,8 +387,8 @@ services:
       args:
         SERVICE_PORT: 8125
         SERVICE_NAME: dialogpt
-        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
-        N_HYPOTHESES_TO_GENERATE: 5
+        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-large
+        N_HYPOTHESES_TO_GENERATE: 7
         CONFIG_NAME: dialogpt_en.json
       context: ./services/dialogpt/
     command: flask run -h 0.0.0.0 -p 8125

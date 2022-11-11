@@ -1,5 +1,5 @@
 {
-  "max_length": 50,
+  "max_length": 60,
   "temperature": 0.6,
   "do_sample": true,
   "repetition_penalty": 1.3,

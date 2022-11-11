@@ -30,6 +30,7 @@ ACTIVE_SKILLS = [
     "small_talk_skill",
     "dff_wiki_skill",
     "dff_art_skill",
+    "dff_recommendation_skill_gpt"
 ]
 ALMOST_ACTIVE_SKILLS = ["friendship_skill", "dff_friendship_skill", "dff_generative_skill"]
 UNPREDICTABLE_SKILLS = [
