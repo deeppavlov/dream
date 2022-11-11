@@ -20,7 +20,7 @@ def run_test(handler):
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
         is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis, ignored_keys=["id"])
-        if msg and len(msg.split("`")) == 5:
+        if msg and len(msg.split("`")) == 3:
             _, ground_truth_text, _, hypothesis_text, _ = msg.split("`")
             is_equal_flag, ratio = test_utils.compare_text(ground_truth_text, hypothesis_text, 0.0)
             if not is_equal_flag:
