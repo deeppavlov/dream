@@ -45,9 +45,9 @@ services:
       - CUDA_VISIBLE_DEVICES=7
   dialogpt:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=6
   dialogrpt:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=6
   dff-template-skill:
 version: '3.7'

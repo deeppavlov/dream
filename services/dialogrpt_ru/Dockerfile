@@ -22,5 +22,8 @@ RUN pip install -r /src/requirements.txt
 
 COPY . /src
 
+RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${TOKENIZER_NAME_OR_PATH}');"
+RUN python -c "from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained('${TOKENIZER_NAME_OR_PATH}');"
+
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
 
