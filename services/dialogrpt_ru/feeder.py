@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from transformers import AutoTokenizer
 
-TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2")
+TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2")
 
 
 class Feeder:
