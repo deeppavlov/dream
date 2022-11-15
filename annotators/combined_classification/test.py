@@ -111,10 +111,7 @@ def main_test():
         else:
             responses = [j[config["task"]] for j in responses]
             for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
-                if config.get("multilabel", False):  # multilabel_task
-                    predicted_classes = [class_ for class_ in response if response[class_] > 0.5]
-                else:
-                    predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
+                predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
                 assert sorted(answer) == sorted(predicted_classes), " * ".join(
                     [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
                 )
