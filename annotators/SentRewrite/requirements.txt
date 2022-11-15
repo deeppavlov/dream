@@ -3,7 +3,6 @@ itsdangerous==2.0.1
 sentry_sdk==0.12.2
 neuralcoref==4.0
 spacy==2.1.0
-typer==0.4.1
 gunicorn==19.9.0
 nltk==3.2.5
 jinja2<=3.0.3

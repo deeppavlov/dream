@@ -13,5 +13,3 @@ transformers==4.6.0
 pydantic==1.3
 deeppavlov==0.17.3
 spacy==2.2.3
-typer==0.4.1
-
