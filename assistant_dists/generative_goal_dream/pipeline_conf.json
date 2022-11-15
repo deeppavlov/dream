@@ -153,16 +153,6 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "asr": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://asr:8031/asr_check"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:asr_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
-            },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
@@ -254,20 +244,6 @@
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
-            },
-            "entity_storer": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://entity-storer:8089/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:entity_storer_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "update_attributes",
-                "previous_services": [
-                    "annotators.combined_classification",
-                    "annotators.intent_catcher"
-                ]
             }
         },
         "skill_selectors": {
@@ -299,39 +275,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dummy_skill_dialog": {
+            "dff_intent_responder_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dummy-skill-dialog:8052/respond"
+                    "url": "http://dff-intent-responder-skill:8012/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "misheard_asr": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://misheard-asr:8033/misheard_respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
-                "response_formatter": "state_formatters.dp_formatters:misheard_asr_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dff_grounding_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-grounding-skill:8080/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_grounding_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -345,32 +295,6 @@
                     "url": "http://factoid-qa:8071/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "knowledge_grounding_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://knowledge-grounding-skill:8085/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dialogpt": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dialogpt:8125/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

@@ -24,11 +24,11 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         while "#+#" in response:
             response = response[: response.rfind(" #+#")]
         logger.info(f"Response: {response}; intent_name: {intention}")
-        try:
-            response += " #+#{}".format(intention)
-        except TypeError:
-            logger.error(f"TypeError intent_name: {intention} response: {response};")
-            response = "Hmmm... #+#{}".format(intention)
+        # try:
+        #     response += " #+#{}".format(intention)
+        # except TypeError:
+        #     logger.error(f"TypeError intent_name: {intention} response: {response};")
+        #     response = "Hmmm... #+#{}".format(intention)
         # todo: we need to know what intent was called
         # current workaround is to use only one intent if several were detected
         # and to append special token with intent_name

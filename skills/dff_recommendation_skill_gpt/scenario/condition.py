@@ -35,8 +35,12 @@ def contains_noun_phrase(ctx: Context, actor: Actor, *args, **kwargs):
 
 def contains_named_entities(ctx: Context, actor: Actor, *args, **kwargs):
         result = int_ctx.get_named_entities_from_human_utterance(ctx, actor)
+        logger.info(f"get_named_entities_from_human_utterance -- {result}")
         if result:
-            return True
+            if result[0]['type'] != 'CARDINAL':
+                return True
+            else: 
+                return False
         else:
             return False
 
@@ -98,14 +102,12 @@ def is_negative_sentiment(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 def enough_generative_responses(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
-    with open("test5.txt", "a") as f:
-        f.write('\nenough gen responses sees ' + str(shared_memory.get("num_gen_responses", 0)))
-    if int(shared_memory.get("num_gen_responses", 0)) > 3: 
-        with open("test5.txt", "a") as f:
-            f.write('\nenough gen responses says YES to ' + str(shared_memory.get("num_gen_responses", 0)))
-        int_ctx.save_to_shared_memory(ctx, actor, num_gen_responses=0)
+    num_gen_responses = int(shared_memory.get("num_gen_responses", 0))
+    if num_gen_responses > 1: 
+        logger.info(f"enough_generative_responses -- too much generative responses: {num_gen_responses}")
         return True
     else:
+        logger.info(f"enough_generative_responses -- norm generative responses: {num_gen_responses}")
         return False
 
 
@@ -128,8 +130,10 @@ def what_is_question(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     is_question_any_sent = re.search(WHAT_IS_QUESTION, text)
     return bool(is_question_any_sent)
 
+
 def we_have_hyp_def(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     return bool(ctx.misc.get("slots", {}).get('current_hyp_definition', False))
+
 
 def hyp_question_asked(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if ctx.misc.get("slots", {}).get('hyp_question_asked', False):
@@ -137,6 +141,7 @@ def hyp_question_asked(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
         return True
     else:
         return False
+
 
 def short_thank_you(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if ctx.validation:

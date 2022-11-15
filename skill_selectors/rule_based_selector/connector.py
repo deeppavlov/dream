@@ -230,15 +230,15 @@ class RuleBasedSkillSelectorConnector:
             if "/alexa_" in user_uttr_text:
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
-
+            skills_for_uttr += ["dff_recommendation_skill_gpt"] #?
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_recommendation_skill_gpt"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_recommendation_skill_gpt"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["dummy_skill"]))

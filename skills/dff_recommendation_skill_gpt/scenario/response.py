@@ -5,6 +5,7 @@ import re
 from collections import Counter
 from os import getenv
 from typing import Any
+import sys
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.processing as int_prs
@@ -19,6 +20,7 @@ from df_engine.core import Actor, Context
 from nltk.corpus import wordnet
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
+
 
 #from textblob import TextBlob
 
@@ -35,16 +37,13 @@ NER_URL = getenv("NER_URL")
 assert INFILLING
 
 
-STOP_WORDS = re.compile(r'''reddit|moderator|\bop\b|upvote|thanks|this movie|(this|that|the) guy|username|add me|\blt\b|thread|edit|spelling|\
-|downvote|comment|message|\bpm\b|sent you|link|trade|\bsub\b|post|the first one|thread|\blt\b|this one|steam|have a nice day|\
-|the second one|(I will|I'll|Ill|I) (can)*(reply|send|see|give|try|steal|be stealing|be online|be back|pm)|\br\b|\badd\b|\badded\b\
-|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying|\bpost\b|\bu\b|this game|\bu\b''', re.IGNORECASE)
-SWITCH_TOPIC = ["But enough about that! _ are much more interesting. ", "You know what? ", "Well... ", 
-#"Why don't we get back to _? ", 
-"Back to _. ", "_... "]
+STOP_WORDS = re.compile(r'''reddit|moderator|\bop\b|play|upvote|thanks|this movie|(this|that|the) guy|username|add me|\blt\b|thread|edit|spelling|\
+|downvote|comment|message|\bpm\b|sent you|link|trade|trading|\bsub\b|post|the first one|thread|\blt\b|this one|steam|have a nice day|game|guild|\
+|the second one|(I will|I'll|Ill|I) (can)*(reply|send|see|give|try|steal|be stealing|be online|be back|pm)|\br\b|\badd\b|\badded\b|gold|name|\
+|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying|\bpost\b|\bu\b|community''', re.IGNORECASE)
+SWITCH_TOPIC = ["Well... ", "But enough about that!"]
 HYPONYM_TOPIC = ["What do you think about _?", "Why don't we discuss _?", "Let's talk about _.", 
-'By the way, I really like _. What about you?',
-"I've been thinking about _ recently..."]
+'By the way, I really like _. What about you?']
 ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для поспрашивать насчет топика который идет сейчас!!!
     "cinema": {
         "left_context": ["I love movies and TV series. Movies are the best. What about you?"],
@@ -57,7 +56,7 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         "left_context": ["I love eating, especially sandwiches. What about you? "],
         "prequestion": "I've just read that people have burger eating competitions. I'd love to participate! I am such a foodie... And are you?", 
         "prequestion_1": "Well, do you enjoy cooking or going to restaurants?", 
-        "question": "What is your favourite dish then?",
+        "question": "What is your favourite dish?",
         "user_dislikes_topic": "Sometimes I think that food is nothing more than fuel. I do love burgers though..."
         },
     "videogames": {
@@ -67,7 +66,7 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         "question": "Which one are you playing now?",
         "user_dislikes_topic": "Video games can take up too much time. I'm doing my best to keep my addiction in moderation though."
         }, #написать для набора вопросов из коммон
-    "space": {
+    "space travel": {
         "left_context": [""],
         "prequestion": "I know that people are planning to go to Mars soon. Space travel is so exciting for me! Did you dream of being an astronaut when you were a child?", 
         "prequestion_1": "Oh, well... Do you like reading or watching science fiction? I'm such a fan of books about faraway planets.", 
@@ -83,14 +82,15 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         }, 
     "job": {
         "left_context": [""],
-        "prequestion": "They say that some HR's ask questions like 'What dinosaur would you like to be?' during job interviews. It's always better to be prepared... So, what dinosaur would you choose?", 
-        "prequestion_1": "If I was a dinosaur, I would be a T-Rex for sure. Love those tiny arms! Pterosaurs are nice too as they could fly. Good ols times...", 
+        "prequestion": "They say that questions like 'What dinosaur would you like to be?' are very popular now during job interviews. It's always better to be prepared... So, what dinosaur would you choose?", 
+        "prequestion_1": "If I was a dinosaur, I would be a T-Rex for sure. Love those tiny arms! Pterosaurs are nice too as they could fly. Good old times...", 
         "question": "Did you like dinosaurs when you were a kid? ",
         "user_dislikes_topic": "Oh... Those interview questions might be really weird. I would be confused as well. "
         }, 
     } 
 BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have (a|the|two|many|three)|I will|I want|I had|My (sister|brother|mother|father|
 friend)|I (was|went|live)|he is a troll|I don't have|I'll|I'd like|I('m|am) (not|a|from)''', re.IGNORECASE)
+THIRD_PERSON = re.compile(r'''s*he (.*s|will)''', re.IGNORECASE)
 APOLOGIZE_FOR_DIFFICULT_WORD = ['Oh, yeah, that might have been confusing. Here is what my magic book says:',
 'Sorry, sometimes I forget that human brain is not as large as mine. I can define it as:',
 'Let me look it up... The thesaurus tells me that it is']
@@ -148,6 +148,8 @@ def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommenda
         confidence -= 0.15
     if re.search(TOXIC_BOT, hypothesis):
         confidence -= 0.25
+    if re.search(THIRD_PERSON, hypothesis):
+        confidence -= 0.05
     if recommendation:
         request_data = {"last_utterances": [[hypothesis]]}
         result = requests.post(NER_URL, json=request_data).json()
@@ -161,38 +163,44 @@ def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommenda
 
 
 def cut_hypothesis(hyp):
-    hyp_sent_tok = sent_tokenize(hyp)
+    logger.info(f"sent_before_tok -- {hyp}")
+    hyp_sent_tok = sent_tokenize(hyp.replace('lt 3', '').replace('...', '.').replace('..', '.'))
     if len(hyp_sent_tok) > 3:
         hyp_sent_tok = hyp_sent_tok[:len(hyp_sent_tok)-2]
     elif len(hyp_sent_tok) > 2:
         hyp_sent_tok = hyp_sent_tok[:len(hyp_sent_tok)-1]
-    return ' '.join(hyp_sent_tok)
+    elif len(hyp_sent_tok) > 4:
+        hyp_sent_tok = hyp_sent_tok[:len(hyp_sent_tok)-3]
+    sentences_capitalized = [s.capitalize() for s in hyp_sent_tok]
+    # join the capitalized sentences
+    text_truecase = re.sub(" (?=[\.,'!?:;])", "", ' '.join(sentences_capitalized))
+    logger.info(f"sent_after_tok -- {hyp_sent_tok}")
+    return text_truecase
 
 
-def count_gen_responses(ctx, actor):
+def count_gen_responses(ctx, actor, not_reset=False):
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
-    if shared_memory.get("num_gen_responses", 0):
-        num_gen_responses = shared_memory.get("num_gen_responses", 0)
-        with open("test5.txt", "a") as f:
-            f.write('\ncount_gen_responses gives ' + str(num_gen_responses))
+    num_gen_responses = int(shared_memory.get("num_gen_responses", 0))
+
+    if num_gen_responses:
         num_gen_responses = int(num_gen_responses) + 1
-        if int(shared_memory.get("num_gen_responses", 0)) > 3: 
+        logger.info(f"count_gen_responses -- increased num gen responses to: {num_gen_responses}")
+        if int(shared_memory.get("num_gen_responses", 0)) > 2 and not not_reset: 
             int_ctx.save_to_shared_memory(ctx, actor, num_gen_responses=0)
-            with open("test5.txt", "a") as f:
-                f.write('\nwe rewrote num_gen to' + str(shared_memory.get("num_gen_responses", 0)))
-        with open("test5.txt", "a") as f:
-            f.write('\ncount_gen_responses then becomes ' + str(num_gen_responses))
+            logger.info(f"count_gen_responses -- TOO MUCH GEN RESPONSES. decrease from {num_gen_responses} to 0")
+        else:
+            int_ctx.save_to_shared_memory(ctx, actor, num_gen_responses=num_gen_responses)
     else:
         num_gen_responses = 1
-    int_ctx.save_to_shared_memory(ctx, actor, num_gen_responses=num_gen_responses)
+        int_ctx.save_to_shared_memory(ctx, actor, num_gen_responses=num_gen_responses)
 
 
-def generative_response(recommend=False, question=False, discussed_entity=""):
+def generative_response(recommend=False, question=False, discussed_entity="", not_reset=False):
 
     def generative_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         # ctx.misc.get("slots", {}).get('topic_entity', ''):
         # entity =  str(ctx.misc["slots"]['topic_entity'])
-        count_gen_responses(ctx, actor)
+        count_gen_responses(ctx, actor, not_reset=not_reset)
         curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = [], [], [], [], []
 
         def gathering_responses(reply, confidence, human_attr, bot_attr, attr):
@@ -454,6 +462,7 @@ def generate_with_string(to_append='get_questions', position_gen='before'):
         else:
             if type(to_append) == list:
                 used_prompts = ctx.misc.get("used_prompts", [])
+                random.shuffle(to_append)
                 for prompt in to_append:
                     if prompt not in used_prompts:
                         string_to_attach = prompt
