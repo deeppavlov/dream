@@ -19,27 +19,23 @@ def main_test():
         {
             "sentences": ["you son of the bitch", "yes"],
             "task": "toxic_classification",
-            "answers_bert": [["insult", "obscene", "toxic"], []],
-            "multilabel": True,
+            "answers_bert": [["toxic"], ["not_toxic"]],
         },
         {
             "sentences": ["let's talk about movies"],
             "task": "cobot_dialogact_topics",
             "answers_bert": [["Entertainment_Movies"]],
-            "multilabel": True,
         },
         {
             "sentences": ["let's talk about games"],
             "task": "cobot_topics",
             "answers_bert": [["Games"]],
-            "multilabel": True,
         },
         {
             "sentences_with_history": ["What is the capital of Great Britain" " [SEP] I don't know"],
             "sentences": ["I don't know"],
             "task": "cobot_dialogact_intents",
             "answers_bert": [["Information_DeliveryIntent"]],
-            "multilabel": True,
         },
         {
             "sentences": ["how do I empty my DNS cache?", "which do you prefer?", "where is montreal"],
@@ -55,7 +51,6 @@ def main_test():
             "sentences": ["why you are such a fool"],
             "task": "emotion_classification",
             "answers_bert": [["anger"]],
-            "multilabel": True,
         },
         {
             "sentences_with_history": ["this is the best dog [SEP] so what you think"],
