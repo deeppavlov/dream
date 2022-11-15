@@ -411,4 +411,7 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  minecraft:
+    volumes:
+      - "./common/minecraft/command_memory:/src/command_memory"
 version: "3.7"

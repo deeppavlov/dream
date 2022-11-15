@@ -4,8 +4,9 @@ from javascript import require, On, Once, AsyncTask, once, off
 import requests
 
 from botconfig import BotSettings
-from core.serializer import encode_actions, decode_actions
+from core.serializer import encode_actions, decode_actions, CommandBuffer
 from core import actions
+from core.actions import  WrongActionException, GetActionException
 
 
 logging.basicConfig(
@@ -41,7 +42,7 @@ bot = mineflayer.createBot(
         "hideErrors": False,
     }
 )
-
+buffer =  CommandBuffer()
 # The spawn event
 once(bot, "login")
 bot.chat(f"I spawned at {bot.entity.position}")
@@ -60,6 +61,11 @@ def end(event, player):
 
 @On(bot, "chat")
 def on_chat(event, user, message, *args):
+
+    crash_reason = ""        
+    success_flag = True
+    coords = []
+
     if user == bot.username:
         return
 
@@ -101,7 +107,6 @@ def on_chat(event, user, message, *args):
         # response_message = f"Thy will be done! #+# {encode_actions(actions_list)}"
         # end mock
     except Exception as e:
-        print(e)
         response_text = "Sorry, DREAM agent is unavailable for some reason"
     else:
         response_parts = response_message.rsplit("#+#", maxsplit=1)
@@ -110,13 +115,38 @@ def on_chat(event, user, message, *args):
         if len(response_parts) == 2:
             response_actions = decode_actions(response_parts[1])
             for action_data in response_actions:
-                action_f = ACTION_MAP[action_data["action"]]
-                action_f(
-                    bot,
-                    pathfinder,
-                    user,
-                    *action_data.get("args", []),
-                    **action_data.get("kwargs", {}),
+                try:
+                    if action_data["action"] == "stop":
+                        buffer.to_json("./command_memory/commands.json")
+
+                    action_f = ACTION_MAP[action_data["action"]]
+
+                    action_f(
+                        bot,
+                        pathfinder,
+                        user,
+                        *action_data.get("args", []),
+                        **action_data.get("kwargs", {}),
+                    )
+                except WrongActionException as e:
+                    crash_reason = str(e)        
+                    success_flag = False
+                    coords = []
+                # except javascript.errors.JavaScriptError as e:
+                #     success_flag = False
+                #     coords = []
+                except GetActionException as e:
+                    coords = [int(c) for c in str(e).split()]
+                
+
+                buffer.append(
+                    success_flag = success_flag,
+                    crash_reason = crash_reason,
+                    command_name = action_f.__name__,
+                    command_args = action_data.get("args", []),
+                    command_kwargs = action_data["kwargs"],
+                    response = response_text,
+                    coords = coords
                 )
 
     bot.chat(response_text)

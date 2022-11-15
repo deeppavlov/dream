@@ -142,3 +142,4 @@ kubernetes/models
 docker-compose-one-replica.yml
 
 common/minecraft/.env
+common/minecraft/command_memory/*.json

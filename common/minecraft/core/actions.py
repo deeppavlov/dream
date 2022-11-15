@@ -27,6 +27,21 @@ FACE_VECTOR_MAP = {
 }
 
 
+class WrongActionException(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
+
+
+class GetActionException(Exception):
+    def __init__(self, position) -> None:
+        def get_coordinates(position):
+            return f"{position.x} {position.y} {position.z}"
+        super().__init__(get_coordinates(position))
+
+# def jshandler(fn, *args, **kwargs):
+
+
+
 def chat(
     bot,
     pathfinder,
@@ -51,23 +66,35 @@ def chat(
     Returns:
 
     """
-    user_entity = bot.players[invoker_username].entity
-    bot.lookAt(user_entity.position.offset(0, 1.6, 0))
-
-    if nod_head:
-        # this doesn't look great in game, maybe because of the server-side animations?
-        for _ in range(animation_loops):
-            bot.look(bot.entity.yaw, pi / 2.5)
-            bot.look(bot.entity.yaw, -pi / 2.5)
+    try:
+        user_entity = bot.players[invoker_username].entity
         bot.lookAt(user_entity.position.offset(0, 1.6, 0))
 
-    if shake_head:
-        for _ in range(animation_loops):
-            bot.look(bot.entity.yaw + pi / 5, bot.entity.pitch)
-            bot.look(bot.entity.yaw - pi / 5, bot.entity.pitch)
-        bot.lookAt(user_entity.position.offset(0, 1.6, 0))
 
-    bot.chat(text)
+        if nod_head:
+            # this doesn't look great in game, maybe because of the server-side animations?
+            for _ in range(animation_loops):
+                bot.look(bot.entity.yaw, pi / 2.5)
+                bot.look(bot.entity.yaw, -pi / 2.5)
+            bot.lookAt(user_entity.position.offset(0, 1.6, 0))
+
+        if shake_head:
+            for _ in range(animation_loops):
+                bot.look(bot.entity.yaw + pi / 5, bot.entity.pitch)
+                bot.look(bot.entity.yaw - pi / 5, bot.entity.pitch)
+            bot.lookAt(user_entity.position.offset(0, 1.6, 0))
+
+    except Exception as e:
+        raise WrongActionException(
+            f"Couldn't look at you because\n{str(e)}!"
+        )
+
+    try:
+        bot.chat(text)
+    except Exception as e:
+        raise WrongActionException(
+            f"Couldn't chat with you because\n{str(e)}!"
+        )
 
 
 def look_at_user(bot, pathfinder, invoker_username, *args):
@@ -81,8 +108,13 @@ def look_at_user(bot, pathfinder, invoker_username, *args):
     Returns:
 
     """
-    user_entity = bot.players[invoker_username].entity
-    bot.lookAt(user_entity.position.offset(0, 1.6, 0))
+    try:
+        user_entity = bot.players[invoker_username].entity
+        bot.lookAt(user_entity.position.offset(0, 1.6, 0))
+    except Exception as e:
+        raise WrongActionException(
+            f"Couldn't look at you because\n{str(e)}!"
+        )
 
 
 def goto(
@@ -107,6 +139,9 @@ def goto(
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
+        raise WrongActionException(
+            f"Ugh, something's wrong with my pathfinding. Try again? Reason:\n{str(e)}!"
+        )
 
 
 def goto_cursor(bot, pathfinder, invoker_username, range_goal: int = 3):
@@ -135,6 +170,9 @@ def goto_cursor(bot, pathfinder, invoker_username, range_goal: int = 3):
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
+        raise WrongActionException(
+            f"Ugh, something's wrong with my pathfinding. Try again? Reason:\n{str(e)}!"
+        )
 
 
 def goto_user(
@@ -163,6 +201,9 @@ def goto_user(
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
+        raise WrongActionException(
+            f"Ugh, something's wrong with my pathfinding. Try again? Reason:\n{str(e)}!"
+        )
 
 
 def stop(bot, pathfinder, invoker_username, force: bool = True):
@@ -184,7 +225,7 @@ def stop(bot, pathfinder, invoker_username, force: bool = True):
         bot.pathfinder.stop()
 
 
-def destroy_block(bot, pathfinder, invoker_username, *args):
+def destroy_block(bot, pathfinder, invoker_username, target_block = None, *args):
     """Destroys the block which is targeted by the player
 
     Args:
@@ -196,18 +237,21 @@ def destroy_block(bot, pathfinder, invoker_username, *args):
 
     """
     user_entity = bot.players[invoker_username].entity
-    target_block = bot.blockAtEntityCursor(user_entity)
-
+    if target_block is None:
+        target_block = bot.blockAtEntityCursor(user_entity)
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
-        return
+        raise WrongActionException(f"{invoker_username} is not looking at any block")
 
     # logger.debug(f"User: {user_entity}")
     # logger.debug(f"Target block: {target_block}")
-
-    bot.pathfinder.setGoal(
-        pathfinder.goals.GoalLookAtBlock(target_block.position, bot.world)
-    )
+    try:
+        bot.pathfinder.setGoal(
+            pathfinder.goals.GoalLookAtBlock(target_block.position, bot.world)
+        )
+    except Exception as e:
+        raise WrongActionException(
+                "Ugh, something's wrong with my pathfinding. Try again?")
 
     @Once(bot, "goal_reached")
     def start_digging(event, state_goal):
@@ -224,16 +268,19 @@ def destroy_block(bot, pathfinder, invoker_username, *args):
 
                 bot.chat("Started digging!")
 
-            except Exception as e:
-                bot.chat(f"Couldn't finish digging because {type(e)}")
-                logger.warning(f"Couldn't finish digging because {type(e)}:{e}")
+            except Exception as digging_e:
+                bot.chat(f"Couldn't finish digging because {type(digging_e)}")
+                logger.warning(f"Couldn't finish digging because {type(digging_e)}:{digging_e}")
+
         else:
             bot.chat(f"Can't break '{target_block.name}' at {target_block.position}!")
+       
+    raise GetActionException(target_block.position)
 
-
-def destroy_and_grab_block(bot, pathfinder, invoker_username, *args):
+def destroy_and_grab_block(bot, pathfinder, invoker_username, target_block = None, *args):
     user_entity = bot.players[invoker_username].entity
-    target_block = bot.blockAtEntityCursor(user_entity)
+    if target_block is None:
+        target_block = bot.blockAtEntityCursor(user_entity)
 
     try:
 
@@ -243,9 +290,13 @@ def destroy_and_grab_block(bot, pathfinder, invoker_username, *args):
 
         bot.chat(f"Collecting {target_block.position}")
 
+
     except Exception as e:
         bot.chat(f"Couldn't finish collecting because {type(e)}")
         logger.warning(f"Couldn't finish collecting because {e}")
+        raise WrongActionException(f"Couldn't finish collecting because {e}")
+    
+    raise GetActionException(target_block.position)
 
 
 def place_block(
@@ -253,6 +304,7 @@ def place_block(
     pathfinder,
     invoker_username,
     max_range_goal: int = 4,
+    target_block = None
 ):
     """Places a block adjacent to the block which is targeted by the player
 
@@ -265,12 +317,14 @@ def place_block(
     Returns:
 
     """
+    success_flag = True
     user_entity = bot.players[invoker_username].entity
-    target_block = bot.blockAtEntityCursor(user_entity)
+    if target_block is None:
+        target_block = bot.blockAtEntityCursor(user_entity)
 
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
-        return
+        raise WrongActionException(f"{invoker_username} is not looking at any block")
 
     # TODO if not bot_has_block
 
@@ -287,9 +341,12 @@ def place_block(
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
+        raise WrongActionException(
+                "Ugh, something's wrong with my pathfinding. Try again?"
+                )
 
     @Once(bot, "goal_reached")
-    def try_placing(event, state_goal):
+    def try_placing(event, state_goal, success_flag=success_flag):
         try:
             bot.chat(f"Placing a block near {target_block.position}")
             bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
@@ -298,3 +355,50 @@ def place_block(
             logger.warning(
                 f"Couldn't place the block because {type(placing_e)} {placing_e}"
             )
+    
+                     
+    raise GetActionException(target_block.position)
+
+def play_history(bot,
+                pathfinder,
+                invoker_username,
+                history: dict,
+                max_range_goal: int = 4,
+):
+
+    user_entity = bot.players[invoker_username].entity
+    target_coords = bot.blockAtEntityCursor(user_entity).position
+
+    try:
+        # change to GoalPlaceBlock later
+        bot.pathfinder.setGoal(
+            pathfinder.goals.GoalLookAtBlock(
+                target_coords, {"range": max_range_goal}
+            )
+        )
+    except Exception as e:
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
+        logger.warning(f"{type(e)}:{e}")
+        raise WrongActionException(
+                "Ugh, something's wrong with my pathfinding. Try again?"
+                )
+
+
+    for ind, command in enumerate(history["command_name"]):
+        #TODO: shifted position
+        if history["success_flag"][ind]:
+            command(
+            bot,
+            pathfinder,
+            invoker_username,
+            *history["command_args"][ind],
+            **history["command_kwargs"][ind]
+        )  
+
+    
+
+
+    
+
+
+
