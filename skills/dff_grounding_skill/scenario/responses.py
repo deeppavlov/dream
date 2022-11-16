@@ -6,7 +6,7 @@ from typing import Any, Tuple
 
 from df_engine.core import Actor, Context
 import common.dff.integration.response as int_rsp
-from common.constants import MUST_CONTINUE
+from common.constants import MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import link_to_skill2key_words
 from common.grounding import what_we_talk_about, are_we_recorded, MANY_INTERESTING_QUESTIONS
@@ -103,7 +103,7 @@ def are_we_recorded_response(ctx: Context) -> REPLY_TYPE:
         attributes MUST_CONTINUE or (empty)
     """
     last_human_utterance = ctx.last_request
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     if are_we_recorded(last_human_utterance):
         reply, confidence = PRIVACY_REPLY, 1
         attr = {"can_continue": MUST_CONTINUE}
@@ -122,7 +122,7 @@ def what_do_you_mean_response(ctx: Context) -> REPLY_TYPE:
         attributes (empty or MUST_CONTINUE)
     """
     dialog = ctx.misc["agent"]["dialog"]
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     try:
         what_do_you_mean_intent = get_what_do_you_mean_intent(dialog["human_utterances"][-1])
         if not (what_we_talk_about(dialog["human_utterances"][-1]) or what_do_you_mean_intent):
@@ -169,7 +169,7 @@ def generate_acknowledgement_response(ctx: Context) -> REPLY_TYPE:
     curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGEMENTS]
 
     ackn_response = ""
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     curr_human_entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
     contains_question = is_any_question_sentence_in_utterance(dialog["human_utterances"][-1])
 
@@ -205,7 +205,7 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     human_attr["dff_grounding_skill"]["used_universal_intent_responses"] = human_attr["dff_grounding_skill"].get(
         "used_universal_intent_responses", []
     )
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     reply = ""
     confidence = 0.0
     ackn, _, _, _, _ = generate_acknowledgement_response(ctx)
@@ -258,7 +258,7 @@ def ask_for_topic_after_two_no_in_a_row_to_linkto_response(ctx: Context) -> REPL
 
     reply = ""
     confidence = 0.0
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     if prev_was_linkto and prev_prev_was_linkto and human_is_no and prev_human_is_no:
         offer = random.choice(GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
         topics_to_offer = ", ".join(sum(link_to_skill2key_words.values(), []))

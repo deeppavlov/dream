@@ -38,6 +38,7 @@ def main():
     ]
 
     results = requests.post(url, json=request_data).json()[0]["batch"]
+    print(results)
     for result, gold_result in zip(results, gold_results):
         for key in result.keys():
             difference = result[key] - gold_result[key]

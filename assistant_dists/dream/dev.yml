@@ -408,6 +408,7 @@ services:
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
+      - "./common:/src/common"
     ports:
       - 8125:8125
   sentence-ranker:

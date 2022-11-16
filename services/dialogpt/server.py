@@ -5,6 +5,7 @@ import time
 
 import sentry_sdk
 import torch
+from common.constants import CAN_CONTINUE_SCENARIO
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -72,31 +73,37 @@ def respond():
     try:
         responses = []
         confidences = []
+        attributes = []
         for context in contexts:
             curr_responses = []
             curr_confidences = []
+            curr_attributes = []
             outputs = generate_responses(context, model, tokenizer)
             for response in outputs:
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]
                     curr_confidences += [DEFAULT_CONFIDENCE]
+                    curr_attributes += [{"can_continue": CAN_CONTINUE_SCENARIO}]
                 else:
                     curr_responses += [""]
                     curr_confidences += [ZERO_CONFIDENCE]
+                    curr_attributes += [{}]
 
             responses += [curr_responses]
             confidences += [curr_confidences]
+            attributes += [curr_attributes]
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
         confidences = [[ZERO_CONFIDENCE]] * len(contexts)
+        attributes = [[{}]] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
-    return jsonify(list(zip(responses, confidences)))
+    return jsonify(list(zip(responses, confidences, attributes)))
 
 
 @app.route("/continue", methods=["POST"])

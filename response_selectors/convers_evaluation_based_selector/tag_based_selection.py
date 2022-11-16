@@ -56,6 +56,7 @@ PROMPT_PROBA = float(getenv("PROMPT_PROBA", 0.3))
 ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
 PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
 LANGUAGE = getenv("LANGUAGE", "EN")
+MAX_TURNS_WITHOUT_SCRIPTS = int(getenv("MAX_TURNS_WITHOUT_SCRIPTS", 5))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -116,11 +117,11 @@ def categorize_candidate(
             - othr_topic_entity_no_db
             - othr_topic_entity_db
     """
-    if (_can_continue == MUST_CONTINUE) or _is_active_skill:
+    if ((_can_continue == MUST_CONTINUE) or _is_active_skill) and PRIORITIZE_SCRIPTED_SKILLS:
         # so, scripted skills with CAN_CONTINUE_PROMPT status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
-    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT]:
+    elif _can_continue in [CAN_CONTINUE_SCENARIO, CAN_CONTINUE_PROMPT] and PRIORITIZE_SCRIPTED_SKILLS:
         actsuffix = "continued"
     else:
         actsuffix = "finished"
@@ -359,18 +360,15 @@ def tag_based_response_selection(
     _contains_entities = len(get_entities(annotated_uttr, only_named=False, with_labels=False)) > 0
     _is_active_skill_can_not_continue = False
 
+    n_available_bot_uttr = len(dialog["bot_utterances"])
+    _prev_active_skills = []
+    for i in range(min(MAX_TURNS_WITHOUT_SCRIPTS, n_available_bot_uttr)):
+        _prev_active_skills.append(dialog["bot_utterances"][- i - 1]["active_skill"])
+    _no_scripts_n_times_in_a_row = all([skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS for skill in _prev_active_skills])
+
     _prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
     _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
-    _prev_prev_active_skill = dialog["bot_utterances"][-2]["active_skill"] if len(dialog["bot_utterances"]) > 1 else ""
-    _no_script_two_times_in_a_row = False
-    if _prev_active_skill and _prev_prev_active_skill:
-        if all(
-            [
-                skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
-                for skill in [_prev_active_skill, _prev_prev_active_skill]
-            ]
-        ):
-            _no_script_two_times_in_a_row = True
+    
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
 
     _is_dummy_linkto_available = any(
@@ -670,7 +668,7 @@ def tag_based_response_selection(
     )
 
     if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
-        if (_no_script_two_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
+        if (_no_scripts_n_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
             _no_to_first_linkto and _is_best_not_script
         ):
             # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
@@ -700,7 +698,7 @@ def tag_based_response_selection(
         if (
             (prompt_decision() and not _contains_entities and _no_questions_for_3_steps)
             or (_add_prompt_forcibly and PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS)
-            or (PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and _no_script_two_times_in_a_row and _is_best_not_script)
+            or (PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS and _no_scripts_n_times_in_a_row and _is_best_not_script)
         ):
             logger.info("Decided to add a prompt to the best candidate.")
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
@@ -744,4 +742,8 @@ def tag_based_response_selection(
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'
         best_candidate["response_parts"] = ["acknowledgement"] + best_candidate.get("response_parts", [])
 
+    new_response = f"{best_candidate['skill_name']}: {best_candidate['text']}\n\n" 
+    new_response += "\n".join([f"{cand['skill_name']} conf={confidences[cand_id]:.2f} score={curr_single_scores[cand_id]:.2f}\t>>\t{cand['text']}" 
+                               for cand_id, cand in enumerate(candidates) if len(cand['text'].strip()) > 0])
+    logger.info(new_response)
     return best_candidate, best_cand_id, curr_single_scores

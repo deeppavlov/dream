@@ -28,8 +28,8 @@ logger = logging.getLogger(__name__)
 
 ASK_DUMMY_QUESTION_PROB = 0.5
 ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.5
-CONFIDENCE_STRENGTH = 2
-CONV_EVAL_STRENGTH = 0.4
+CONFIDENCE_STRENGTH = float(getenv("CONFIDENCE_STRENGTH"))
+CONV_EVAL_STRENGTH = float(getenv("CONV_EVAL_STRENGTH"))
 how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
 what_i_can_do_spec = "socialbot running inside"
 misheard_with_spec1 = "I misheard you"
