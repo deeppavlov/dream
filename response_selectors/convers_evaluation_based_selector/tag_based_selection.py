@@ -43,6 +43,10 @@ from common.response_selection import (
     NOT_ADD_PROMPT_SKILLS,
 )
 
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 sentry_sdk.init(getenv("SENTRY_DSN"))
 PRIORITIZE_WITH_SAME_TOPIC_ENTITY = int(getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 1))
 PRIORITIZE_NO_DIALOG_BREAKDOWN = int(getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", 0))
@@ -57,9 +61,6 @@ ACKNOWLEDGEMENT_PROBA = float(getenv("ACKNOWLEDGEMENT_PROBA", 0.5))
 PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
 LANGUAGE = getenv("LANGUAGE", "EN")
 MAX_TURNS_WITHOUT_SCRIPTS = int(getenv("MAX_TURNS_WITHOUT_SCRIPTS", 5))
-
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 force_intents_fname = "force_intents_intent_catcher.json"
 FORCE_INTENTS_IC = json.load(open(force_intents_fname))
@@ -599,6 +600,7 @@ def tag_based_response_selection(
             cand_uttr["skill_name"] == "dff_friendship_skill"
             and (how_are_you_spec in cand_uttr["text"] or what_i_can_do_spec in cand_uttr["text"])
             and len(dialog["utterances"]) < 16
+            and PRIORITIZE_SCRIPTED_SKILLS
         ):
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
         # elif cand_uttr["skill_name"] == 'program_y_dangerous' and cand_uttr['confidence'] == 0.98:
@@ -606,7 +608,7 @@ def tag_based_response_selection(
         elif cand_uttr["skill_name"] == "small_talk_skill" and is_sensitive_situation(dialog["human_utterances"][-1]):
             # let small talk to talk about sex ^_^
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
-        elif cand_uttr["confidence"] >= 1.0:
+        elif cand_uttr["confidence"] >= 1.0 and PRIORITIZE_SCRIPTED_SKILLS:
             # -------------------- SUPER CONFIDENCE CASE HERE! --------------------
             categorized_hyps = add_to_top1_category(cand_id, categorized_hyps, _is_require_action_intent)
 
