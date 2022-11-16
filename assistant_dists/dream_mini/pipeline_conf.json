@@ -4,6 +4,11 @@
             "protocol": "http",
             "timeout": 1.5,
             "url": "http://sentseg:8011/sentseg"
+        },
+        "ner": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://ner:8021/ner"
         }
     },
     "services": {
@@ -67,6 +72,19 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "bot_annotator_selector"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt"
+            },
+            "spacy_nounphrases": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://spacy-nounphrases:8006/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }

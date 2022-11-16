@@ -139,6 +139,8 @@ def hyp_question_asked(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if ctx.misc.get("slots", {}).get('hyp_question_asked', False):
         ctx.misc['slots']['hyp_question_asked'] = False
         return True
+    # elif 'hyp_question_asked' not in ctx.misc.get("slots", {}):
+    #     return True
     else:
         return False
 

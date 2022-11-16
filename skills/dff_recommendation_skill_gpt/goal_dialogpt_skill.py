@@ -6,7 +6,7 @@ from nltk.corpus import wordnet
 from common.universal_templates import COMPILE_LETS_TALK_ABOUT_TOPIC
 
 GET_RECOMMENDATION_CERTAIN_PATTERN = r"""((what|which).*(options|to choose|should|can I|would you|recommend|suggest|(is|are).*(best|good|nice|interesting|cheap|expensive)))|recommend me|\
-    |suggest me|help me|recommendation|suggestion|you know any|you have any|give me|is there a|should i"""
+    |suggest me|help me .* choose|need .* recommendation|need .* suggestion|you know any|you have any|is there a|should i"""
 
 GET_RECOMMENDATION_VAGUE_PATTERN = r"""(i wanna|i want to|i('d| would) (like|love)|(cannot|can'*t) choose|any.*ideas.*)\?"""
 

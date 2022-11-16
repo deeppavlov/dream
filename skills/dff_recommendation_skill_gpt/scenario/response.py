@@ -40,8 +40,8 @@ assert INFILLING
 STOP_WORDS = re.compile(r'''reddit|moderator|\bop\b|play|upvote|thanks|this movie|(this|that|the) guy|username|add me|\blt\b|thread|edit|spelling|\
 |downvote|comment|message|\bpm\b|sent you|link|trade|trading|\bsub\b|post|the first one|thread|\blt\b|this one|steam|have a nice day|game|guild|\
 |the second one|(I will|I'll|Ill|I) (can)*(reply|send|see|give|try|steal|be stealing|be online|be back|pm)|\br\b|\badd\b|\badded\b|gold|name|\
-|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying|\bpost\b|\bu\b|community''', re.IGNORECASE)
-SWITCH_TOPIC = ["Well... ", "But enough about that!"]
+|account|the guy|this guy|flair|banned|profile|I('ve| have)* mentioned|I'm (gonna|going to)|he('s| is) saying|\bpost\b|\bu\b|community|\bfc\b|\bign\b''', re.IGNORECASE)
+SWITCH_TOPIC = ["Well... ", "But enough about that! "]
 HYPONYM_TOPIC = ["What do you think about _?", "Why don't we discuss _?", "Let's talk about _.", 
 'By the way, I really like _. What about you?']
 ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для поспрашивать насчет топика который идет сейчас!!!
@@ -66,13 +66,13 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         "question": "Which one are you playing now?",
         "user_dislikes_topic": "Video games can take up too much time. I'm doing my best to keep my addiction in moderation though."
         }, #написать для набора вопросов из коммон
-    "space travel": {
-        "left_context": [""],
-        "prequestion": "I know that people are planning to go to Mars soon. Space travel is so exciting for me! Did you dream of being an astronaut when you were a child?", 
-        "prequestion_1": "Oh, well... Do you like reading or watching science fiction? I'm such a fan of books about faraway planets.", 
-        "question": "Would you travel to space if you had a chance?",
-        "user_dislikes_topic": "Space is not for everyone! You have to be really well-trained to go there. An ordinary person wouldn't survive..."
-        }, 
+    # "space travel": {
+    #     "left_context": [""],
+    #     "prequestion": "I know that people are planning to go to Mars soon. Space travel is so exciting for me! Did you dream of being an astronaut when you were a child?", 
+    #     "prequestion_1": "Oh, well... Do you like reading or watching science fiction? I'm such a fan of books about faraway planets.", 
+    #     "question": "Would you travel to space if you had a chance?",
+    #     "user_dislikes_topic": "Space is not for everyone! You have to be really well-trained to go there. An ordinary person wouldn't survive..."
+    #     }, 
     "ocean": {
         "left_context": [""],
         "prequestion": "In heaven it's all they talk about. The ocean. And the sunset. Have you ever been to the seaside?", 
@@ -80,13 +80,13 @@ ASK_ABOUT_PRESEQ_DICT = { #сделать еще одну штуку для по
         "question": "Would you prefer to live near the sea or in the mountains?",
         "user_dislikes_topic": "Well, some people like woods or mountains much more than sea. The nature is beautiful anyways."
         }, 
-    "job": {
-        "left_context": [""],
-        "prequestion": "They say that questions like 'What dinosaur would you like to be?' are very popular now during job interviews. It's always better to be prepared... So, what dinosaur would you choose?", 
-        "prequestion_1": "If I was a dinosaur, I would be a T-Rex for sure. Love those tiny arms! Pterosaurs are nice too as they could fly. Good old times...", 
-        "question": "Did you like dinosaurs when you were a kid? ",
-        "user_dislikes_topic": "Oh... Those interview questions might be really weird. I would be confused as well. "
-        }, 
+    # "job": {
+    #     "left_context": [""],
+    #     "prequestion": "They say that questions like 'What dinosaur would you like to be?' are very popular now during job interviews. It's always better to be prepared... So, what dinosaur would you choose?", 
+    #     "prequestion_1": "If I was a dinosaur, I would be a T-Rex for sure. Love those tiny arms! Pterosaurs are nice too as they could fly. Good old times...", 
+    #     "question": "Did you like dinosaurs when you were a kid? ",
+    #     "user_dislikes_topic": "Oh... Those interview questions might be really weird. I would be confused as well. "
+    #     }, 
     } 
 BOT_PERSONAL_INFORMATION_PATTERNS = re.compile(r'''I have (a|the|two|many|three)|I will|I want|I had|My (sister|brother|mother|father|
 friend)|I (was|went|live)|he is a troll|I don't have|I'll|I'd like|I('m|am) (not|a|from)''', re.IGNORECASE)
@@ -149,14 +149,14 @@ def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommenda
     if re.search(TOXIC_BOT, hypothesis):
         confidence -= 0.25
     if re.search(THIRD_PERSON, hypothesis):
-        confidence -= 0.05
+        confidence -= 0.07
     if recommendation:
         request_data = {"last_utterances": [[hypothesis]]}
         result = requests.post(NER_URL, json=request_data).json()
         if result[0]:
-            confidence += 0.02
+            confidence += 0.07
     if len(re.findall(r'\?', hypothesis)):
-        confidence -= 0.03
+        confidence -= 0.1
     if not re.search(r'[a-zA-Z]', hypothesis):
         confidence = 0
     return confidence
@@ -170,7 +170,7 @@ def cut_hypothesis(hyp):
     elif len(hyp_sent_tok) > 2:
         hyp_sent_tok = hyp_sent_tok[:len(hyp_sent_tok)-1]
     elif len(hyp_sent_tok) > 4:
-        hyp_sent_tok = hyp_sent_tok[:len(hyp_sent_tok)-3]
+        hyp_sent_tok = hyp_sent_tok[:3]
     sentences_capitalized = [s.capitalize() for s in hyp_sent_tok]
     # join the capitalized sentences
     text_truecase = re.sub(" (?=[\.,'!?:;])", "", ' '.join(sentences_capitalized))
