@@ -1,39 +1,39 @@
 {
     "exit": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "repeat": [
-        "intent_catcher"
+        "dff_intent_responder_skill"
     ],
     "what_time": [
-        "intent_catcher"
+        "dff_intent_responder_skill"
     ],
     "cant_do": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "what_is_your_name": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "where_are_you_from": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "who_made_you": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "what_is_your_job": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "what_can_you_do": [
-        "intent_catcher",
-        "program_y"
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
     ],
     "dont_understand": [
-        "intent_catcher"
+        "dff_intent_responder_skill"
     ]
 }

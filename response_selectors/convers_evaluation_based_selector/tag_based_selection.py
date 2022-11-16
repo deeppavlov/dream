@@ -144,7 +144,7 @@ def categorize_candidate(
         dasuffix = "reqda"
     else:
         dasuffix = ""
-
+    
     categorized_hyps[f"{actsuffix}_{suffix}_{dasuffix}"] += [cand_id]
     if _is_just_prompt:
         categorized_prompts[f"{actsuffix}_{suffix}_{dasuffix}"] += [cand_id]
@@ -198,6 +198,7 @@ def pickup_best_id(categorized, candidates, curr_single_scores, bot_utterances):
         containing other topic/entity without dialog breakdown, containing other topic/entity with dialog breakdown.
     """
     best_cand_id = 0
+    
     for dasuffix in ["reqda", ""]:
         # firstly, consider ACTIVE SKILL
         for actsuffix in ["active"]:
@@ -441,6 +442,7 @@ def tag_based_response_selection(
             _can_continue in [MUST_CONTINUE, CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE]
             or (_can_continue == CAN_CONTINUE_PROMPT and all_prev_active_skills.get(skill_name, []) < 10)
         )
+        _is_active_skill = _is_active_skill or (skill_name in _force_intents_skills and _is_force_intent)
         _is_active_skill = _is_active_skill and PRIORITIZE_SCRIPTED_SKILLS
         if _is_active_skill:
             # we will forcibly add prompt if current scripted skill finishes scenario,
@@ -451,19 +453,18 @@ def tag_based_response_selection(
             # =====force intents, choose as best_on_topic hypotheses from skills responding this request=====
 
             CASE = "Force intent."
-            if cand_uttr["skill_name"] in _force_intents_skills:
-                categorized_hyps, categorized_prompts = categorize_candidate(
-                    cand_id,
-                    skill_name,
-                    categorized_hyps,
-                    categorized_prompts,
-                    _is_just_prompt,
-                    _is_active_skill,
-                    _can_continue,
-                    _same_topic_entity,
-                    _is_dialog_abandon,
-                    _is_required_da=False,
-                )
+            categorized_hyps, categorized_prompts = categorize_candidate(
+                cand_id,
+                skill_name,
+                categorized_hyps,
+                categorized_prompts,
+                _is_just_prompt,
+                _is_active_skill,
+                _can_continue,
+                _same_topic_entity,
+                _is_dialog_abandon,
+                _is_required_da=False,
+            )
 
         elif _is_switch_topic_request or _user_does_not_want_to_chat_about_topic or _user_wants_bot_to_choose_topic:
             # =====direct request by user to switch the topic of current conversation=====
@@ -748,4 +749,7 @@ def tag_based_response_selection(
     new_response += "\n".join([f"{cand['skill_name']} conf={confidences[cand_id]:.2f} score={curr_single_scores[cand_id]:.2f}\t>>\t{cand['text']}" 
                                for cand_id, cand in enumerate(candidates) if len(cand['text'].strip()) > 0])
     logger.info(new_response)
+
+    if "#+#" in best_candidate['text']:
+        best_candidate['text'] = best_candidate['text'][:best_candidate['text'].find("#+#")].strip()
     return best_candidate, best_cand_id, curr_single_scores

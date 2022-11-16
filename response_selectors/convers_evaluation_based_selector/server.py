@@ -74,8 +74,8 @@ def respond():
 
         try:
             curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
-            logger.info("Curr candidates:")
-            logger.info(pprint.pformat(curr_candidates, compact=False))
+            # logger.info("Curr candidates:")
+            # logger.info(pprint.pformat(curr_candidates, compact=False))
 
             for skill_data in curr_candidates:
                 if len(dialog["utterances"]) > 1:
