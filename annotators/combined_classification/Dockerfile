@@ -1,6 +1,6 @@
 FROM deeppavlov/base-gpu:0.17.5
 
-RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@bb12c9845487d952c53a46917fb04d0ff1cca192
+RUN pip install git+https://github.com/dimakarp1996/DeepPavlov.git@50f28296a4303211156aee2aa7d1bfb89bfae205
 
 WORKDIR /base/DeepPavlov
 
