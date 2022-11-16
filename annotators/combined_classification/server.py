@@ -47,7 +47,7 @@ def get_result(sentences, sentences_with_history, postannotations=False):
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
             for i in range(len(prob_list)):
-                if len(prob_list[i]):
+                if prob_list[i] is not None and len(prob_list[i]):
                     is_toxic = "toxic" in task_name and prob_list[i][-1] < 0.5
                     if is_toxic:  # sum of probs of all toxic classes >0.5
                         prob_list[i][-1] = 0
