@@ -119,6 +119,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "sexual_explicit",
         "threat",
         "toxic",
+        "not_toxic",
     ],
     "factoid_classification": ["is_factoid", "is_conversational"],
     "midas_classification": [

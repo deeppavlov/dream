@@ -17,11 +17,6 @@ def main_test():
             },
         },
         {
-            "sentences": ["you son of the bitch", "yes"],
-            "task": "toxic_classification",
-            "answers_bert": [["toxic"], ["not_toxic"]],
-        },
-        {
             "sentences": ["let's talk about movies"],
             "task": "cobot_dialogact_topics",
             "answers_bert": [["Entertainment_Movies"]],
@@ -59,6 +54,11 @@ def main_test():
             "answers_bert": [["opinion"]],
         },
         {"sentences": ["movies"], "task": "deeppavlov_topics", "answers_bert": [["Movies_TV"]]},
+        {
+            "sentences": ["you son of the bitch", "yes"],
+            "task": "toxic_classification",
+            "answers_bert": [["toxic"], ["not_toxic"]],
+        },
     ]
     t = time()
     for config in configs:
@@ -106,6 +106,7 @@ def main_test():
         else:
             responses = [j[config["task"]] for j in responses]
             for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):
+                #  print((response, answer, sentence))
                 predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
                 assert sorted(answer) == sorted(predicted_classes), " * ".join(
                     [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
