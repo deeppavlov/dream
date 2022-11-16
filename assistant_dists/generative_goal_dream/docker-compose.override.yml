@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=5673177833:AAFrW0Zq87yWaYc-a96xU5i6NeSnk_Gs9oU agent.pipeline_config=assistant_dists/generative_goal_dream/pipeline_conf.json agent.db_config=assistant_dists/generative_goal_dream/db_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=5781499366:AAEjZhIu10yaWUAoViBNUS6aspAirmYt4S8 agent.pipeline_config=assistant_dists/generative_goal_dream/pipeline_conf.json agent.db_config=assistant_dists/generative_goal_dream/db_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, spacy-nounphrases:8006, convers-evaluation-selector:8009, 
           intent-catcher:8014, badlisted-words:8018, ner:8021, factoid-qa:8071, kbqa:8072,
