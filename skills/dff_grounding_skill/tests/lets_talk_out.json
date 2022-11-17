@@ -63,7 +63,6 @@
                                     },
                                     {},
                                     {
-                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -189,7 +188,6 @@
                                     },
                                     {},
                                     {
-                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -315,7 +313,6 @@
                                     },
                                     {},
                                     {
-                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"

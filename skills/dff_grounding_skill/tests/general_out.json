@@ -141,7 +141,12 @@
                                     0.5,
                                     {},
                                     {},
-                                    {}
+                                    {
+                                        "can_continue": "no",
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
                                 ],
                                 [
                                     "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
@@ -332,7 +337,12 @@
                                     0.5,
                                     {},
                                     {},
-                                    {}
+                                    {
+                                        "can_continue": "no",
+                                        "response_parts": [
+                                            "acknowledgement"
+                                        ]
+                                    }
                                 ],
                                 [
                                     "I bet that you are so sincere'. I'm so much enjoying getting to know you.",
@@ -411,7 +421,10 @@
         ],
         [
             {
-                "can_continue": "no"
+                "can_continue": "no",
+                "response_parts": [
+                    "acknowledgement"
+                ]
             },
             {
                 "can_continue": "no",
