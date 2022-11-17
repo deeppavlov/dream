@@ -144,7 +144,7 @@ def categorize_candidate(
         dasuffix = "reqda"
     else:
         dasuffix = ""
-    
+
     categorized_hyps[f"{actsuffix}_{suffix}_{dasuffix}"] += [cand_id]
     if _is_just_prompt:
         categorized_prompts[f"{actsuffix}_{suffix}_{dasuffix}"] += [cand_id]
@@ -198,7 +198,7 @@ def pickup_best_id(categorized, candidates, curr_single_scores, bot_utterances):
         containing other topic/entity without dialog breakdown, containing other topic/entity with dialog breakdown.
     """
     best_cand_id = 0
-    
+
     for dasuffix in ["reqda", ""]:
         # firstly, consider ACTIVE SKILL
         for actsuffix in ["active"]:
@@ -365,12 +365,14 @@ def tag_based_response_selection(
     n_available_bot_uttr = len(dialog["bot_utterances"])
     _prev_active_skills = []
     for i in range(min(MAX_TURNS_WITHOUT_SCRIPTS, n_available_bot_uttr)):
-        _prev_active_skills.append(dialog["bot_utterances"][- i - 1]["active_skill"])
-    _no_scripts_n_times_in_a_row = all([skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS for skill in _prev_active_skills])
+        _prev_active_skills.append(dialog["bot_utterances"][-i - 1]["active_skill"])
+    _no_scripts_n_times_in_a_row = all(
+        [skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS for skill in _prev_active_skills]
+    )
 
     _prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
     _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
-    
+
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
 
     _is_dummy_linkto_available = any(
@@ -745,11 +747,17 @@ def tag_based_response_selection(
         best_candidate["text"] = f'{acknowledgement_hypothesis["text"]} {best_candidate["text"]}'
         best_candidate["response_parts"] = ["acknowledgement"] + best_candidate.get("response_parts", [])
 
-    new_response = f"{best_candidate['skill_name']}: {best_candidate['text']}\n\n" 
-    new_response += "\n".join([f"{cand['skill_name']} conf={confidences[cand_id]:.2f} score={curr_single_scores[cand_id]:.2f}\t>>\t{cand['text']}" 
-                               for cand_id, cand in enumerate(candidates) if len(cand['text'].strip()) > 0])
+    new_response = f"{best_candidate['skill_name']}: {best_candidate['text']}\n\n"
+    new_response += "\n".join(
+        [
+            f"{cand['skill_name']} conf={confidences[cand_id]:.2f} "
+            f"score={curr_single_scores[cand_id]:.2f}\t>>\t{cand['text']}"
+            for cand_id, cand in enumerate(candidates)
+            if len(cand["text"].strip()) > 0
+        ]
+    )
     logger.info(new_response)
 
-    if "#+#" in best_candidate['text']:
-        best_candidate['text'] = best_candidate['text'][:best_candidate['text'].find("#+#")].strip()
+    if "#+#" in best_candidate["text"]:
+        best_candidate["text"] = best_candidate["text"][: best_candidate["text"].find("#+#")].strip()
     return best_candidate, best_cand_id, curr_single_scores
