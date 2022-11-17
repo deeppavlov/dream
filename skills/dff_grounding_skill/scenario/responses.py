@@ -177,9 +177,7 @@ def generate_acknowledgement_response(ctx: Context) -> REPLY_TYPE:
     # we generate acknowledgement ONLY if we have some entities!
     if curr_considered_intents and len(curr_human_entities) and contains_question:
         # can generate acknowledgement
-        ackn_response = generate_acknowledgement(
-            dialog["human_utterances"][-1], curr_intents, curr_considered_intents
-        )
+        ackn_response = generate_acknowledgement(dialog["human_utterances"][-1], curr_intents, curr_considered_intents)
         attr = {"response_parts": ["acknowledgement"]}
     elif contains_question:
         ackn_response = random.choice(MANY_INTERESTING_QUESTIONS)
@@ -241,7 +239,7 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     if ackn and not is_toxic_or_badlisted_utterance(dialog["human_utterances"][-1]):
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowledgement", "body"]
-        
+
     attr["can_continue"] = CAN_NOT_CONTINUE
     logger.info(f"generate_universal_response: {reply} + {attr}")
     return reply, confidence, human_attr, {}, attr
