@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
-import pprint
+
+# import pprint
 import random
 
 import re
