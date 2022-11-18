@@ -15,7 +15,7 @@ special_symb_pat = re.compile(r"[^a-z0-9 ]")
 
 SPECIAL_SKILLS = {
     "RANDOM_SKILLS": [
-        "program_y",
+        "dff_program_y_skill",
         "dummy_skill",
         "movie_tfidf_retrieval",
         "entertainment_tfidf_retrieval",
@@ -42,6 +42,7 @@ SPECIAL_SKILLS = {
         "dff_science_skill",
         "dff_travel_skill",
         "dff_wiki_skill",
+        "dff_short_story_skill",
         "game_cooperative_skill",
         "dialogpt",
         "dialogpt_persona_based",
