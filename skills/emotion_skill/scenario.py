@@ -35,7 +35,7 @@ for skill in LIST_OF_SCRIPTED_TOPICS:
 class EmotionSkillScenario:
     def __init__(self, steps, jokes, advices, logger):
         self.emotion_precision = {
-            "anger": 0.9,
+            "anger": 0.999,
             "fear": 0.894,
             "joy": 1,
             "love": 0.778,
