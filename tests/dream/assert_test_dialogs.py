@@ -119,8 +119,9 @@ def main():
                 print(f"FOUND POSSIBLE ERROR: {pred_r[-1]} by skill {skill_name} not in {true_sents}")
 
         if len(acceptable_skill_names) > 0 or len(true_sents) > 0:
-            if (len(acceptable_skill_names) > 0 and passed_acceptable_skills) or \
-                    (len(true_sents) > 0 and passed_gold_phrases):
+            if (len(acceptable_skill_names) > 0 and passed_acceptable_skills) or (
+                len(true_sents) > 0 and passed_gold_phrases
+            ):
                 error_reports += [
                     f"\nERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
                     f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
