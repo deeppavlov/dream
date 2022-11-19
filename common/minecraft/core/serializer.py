@@ -26,7 +26,7 @@ class CommandBuffer(NamedTuple):
         self.crash_reason.append(kwargs.get("crash_reason"))
         self.command_name.append(kwargs.get("command_name"))
         self.command_args.append(kwargs.get("command_args"))
-        self.command_kwargs.append(kwargs.get("success_flag"))
+        self.command_kwargs.append(kwargs.get("command_kwargs"))
 
         self.response.append(kwargs.get("response"))
         self.coords.append(kwargs.get("coords"))
