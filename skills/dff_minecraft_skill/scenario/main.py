@@ -72,7 +72,7 @@ flows = {
             ),
             ("commands", "look_at_user"): loc_cnd.is_intent("look_at_user"),
             ("commands", "recreate"): loc_cnd.is_intent("recreate"),
-        }
+        },
     },
     "service": {
         "start": {RESPONSE: ""},

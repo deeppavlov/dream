@@ -49,8 +49,9 @@ def detect_minecraft_bot_intents(utterance):
         r"(build a house)|(build house)|(build a home)|(build home)", utterance, re.IGNORECASE
     )
 
-    recreate_pattern = re.search( r"recreate", utterance, re.IGNORECASE
-    )
+    recreate_pattern = re.search(
+        r"\brecreate\b", utterance, re.IGNORECASE
+        )
 
     if come_to_me_pattern:
         answer_probs["goto_user"] = 1.0
@@ -82,7 +83,8 @@ def detect_minecraft_bot_intents(utterance):
     elif come_build_house_patterh:
         answer_probs["build_house"] = 1.0
     elif recreate_pattern:
-        answer_probs["recreate_pattern"] = 1.0
+        answer_probs["recreate"] = 1.0
+        answer_labels.append("recreate")
         
 
     if len(answer_labels) > 0:
