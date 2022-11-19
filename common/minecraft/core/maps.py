@@ -21,8 +21,9 @@ def recreate(bot,
                 ):
 
     try:
-        with open(os.path.join("..", "command_history", f"{FILENAME}.json"), "r") as f:
-            buffer = json.load(fp = f)
+        with open(os.path.join("command_memory", f"{FILENAME}.json"), "r") as f:
+            buffer = json.load(f)
+
     except OSError as e:
         print(f"to build {FILENAME} you need to save its json config")
             
