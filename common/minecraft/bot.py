@@ -1,12 +1,12 @@
 import logging
 
-from javascript import require, On, Once, AsyncTask, once, off
+from javascript import require, On, AsyncTask, once, off
 import requests
 
 from botconfig import BotSettings
 from core.serializer import encode_actions, decode_actions, CommandBuffer
-from core import actions
 from core.actions import  WrongActionException, GetActionException
+from core.maps import get_action_map
 
 
 logging.basicConfig(
@@ -16,17 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 USERS = {}
-ACTION_MAP = {
-    "chat": actions.chat,
-    "look_at_user": actions.look_at_user,
-    "goto": actions.goto,
-    "goto_cursor": actions.goto_cursor,
-    "goto_user": actions.goto_user,
-    "stop": actions.stop,
-    "destroy_block": actions.destroy_block,
-    "destroy_and_grab_block": actions.destroy_and_grab_block,
-    "place_block": actions.place_block,
-}
+ACTION_MAP = get_action_map()
 
 bot_settings = BotSettings()
 mineflayer = require("mineflayer")
@@ -132,9 +122,6 @@ def on_chat(event, user, message, *args):
                     crash_reason = str(e)        
                     success_flag = False
                     coords = []
-                # except javascript.errors.JavaScriptError as e:
-                #     success_flag = False
-                #     coords = []
                 except GetActionException as e:
                     coords = [int(c) for c in str(e).split()]
                 

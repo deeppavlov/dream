@@ -6,14 +6,15 @@ and other ``args``/``kwargs`` as needed
 """
 import logging
 from math import pi
+from javascript import AsyncTask, On, require
+from javascript import config, proxy, events
 
-from javascript import AsyncTask, On, Once, require
-
+logger = logging.getLogger(__name__)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
 )
-logger = logging.getLogger(__name__)
+
 
 vec3 = require("vec3").Vec3
 
@@ -40,6 +41,31 @@ class GetActionException(Exception):
 
 # def jshandler(fn, *args, **kwargs):
 
+
+def Once(emitter, event):
+    def decor(fn):
+        i = hash(fn)
+
+        def handler(*args, **kwargs):
+            if config.node_emitter_patches:
+                try:
+                    fn(emitter, *args, **kwargs)
+                except WrongActionException as e:
+                    print(e)
+            else:
+                try:
+                    fn(*args, **kwargs)
+                except WrongActionException as e:
+                    logger.warn(e)      
+
+            del config.event_loop.callbacks[i]
+        try:
+            emitter.once(event, handler)
+            config.event_loop.callbacks[i] = handler
+        except Exception as e:
+            raise e
+            
+    return decor
 
 
 def chat(
@@ -236,6 +262,7 @@ def destroy_block(bot, pathfinder, invoker_username, target_block = None, *args)
     Returns:
 
     """
+    logger.state = None
     user_entity = bot.players[invoker_username].entity
     if target_block is None:
         target_block = bot.blockAtEntityCursor(user_entity)
@@ -271,11 +298,13 @@ def destroy_block(bot, pathfinder, invoker_username, target_block = None, *args)
             except Exception as digging_e:
                 bot.chat(f"Couldn't finish digging because {type(digging_e)}")
                 logger.warning(f"Couldn't finish digging because {type(digging_e)}:{digging_e}")
+                logger.state = "Couldn't finish digging"
 
         else:
             bot.chat(f"Can't break '{target_block.name}' at {target_block.position}!")
        
-    raise GetActionException(target_block.position)
+    raise GetActionException(target_block.position) \
+          if logger.state is None else WrongActionException(logger.state)
 
 def destroy_and_grab_block(bot, pathfinder, invoker_username, target_block = None, *args):
     user_entity = bot.players[invoker_username].entity
@@ -317,7 +346,7 @@ def place_block(
     Returns:
 
     """
-    success_flag = True
+    logger.state = None
     user_entity = bot.players[invoker_username].entity
     if target_block is None:
         target_block = bot.blockAtEntityCursor(user_entity)
@@ -346,7 +375,7 @@ def place_block(
                 )
 
     @Once(bot, "goal_reached")
-    def try_placing(event, state_goal, success_flag=success_flag):
+    def try_placing(event, state_goal):
         try:
             bot.chat(f"Placing a block near {target_block.position}")
             bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
@@ -355,50 +384,13 @@ def place_block(
             logger.warning(
                 f"Couldn't place the block because {type(placing_e)} {placing_e}"
             )
+            logger.state = "Couldn't place the block there"
     
-                     
-    raise GetActionException(target_block.position)
-
-def play_history(bot,
-                pathfinder,
-                invoker_username,
-                history: dict,
-                max_range_goal: int = 4,
-):
-
-    user_entity = bot.players[invoker_username].entity
-    target_coords = bot.blockAtEntityCursor(user_entity).position
-
-    try:
-        # change to GoalPlaceBlock later
-        bot.pathfinder.setGoal(
-            pathfinder.goals.GoalLookAtBlock(
-                target_coords, {"range": max_range_goal}
-            )
-        )
-    except Exception as e:
-        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
-        logger.warning(f"{type(e)}:{e}")
-        raise WrongActionException(
-                "Ugh, something's wrong with my pathfinding. Try again?"
-                )
+    logger.warning(str(logger.state))                 
+    raise GetActionException(target_block.position) \
+          if logger.state is None else WrongActionException(logger.state)
 
 
-    for ind, command in enumerate(history["command_name"]):
-        #TODO: shifted position
-        if history["success_flag"][ind]:
-            command(
-            bot,
-            pathfinder,
-            invoker_username,
-            *history["command_args"][ind],
-            **history["command_kwargs"][ind]
-        )  
-
-    
-
-
-    
 
 
 

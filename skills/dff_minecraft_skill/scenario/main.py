@@ -71,6 +71,7 @@ flows = {
                 "destroy_and_grab_block"
             ),
             ("commands", "look_at_user"): loc_cnd.is_intent("look_at_user"),
+            ("commands", "recreate"): loc_cnd.is_intent("recreate"),
         }
     },
     "service": {
@@ -225,6 +226,11 @@ flows = {
         "look_at_user": {
             PROCESSING: {1: loc_prs.add_encoding_for_look_at_user()},
             RESPONSE: loc_rsp.response_for_intent("look_at_user"),
+            TRANSITIONS: {},
+        },
+        "recreate": {
+            PROCESSING: {1: loc_prs.add_encoding_no_range("recreate")},
+            RESPONSE: loc_rsp.response_for_intent("recreate"),
             TRANSITIONS: {},
         },
     },
