@@ -47,15 +47,15 @@ def recreate(bot,
     for ind, command in enumerate(buffer["command_name"]):
         if buffer["success_flag"][ind]:
             
-            target_block.position.x = target_coords + buffer["coords"][ind][0]
-            target_block.position.y = target_coords + buffer["coords"][ind][1]
-            target_block.position.z = target_coords + buffer["coords"][ind][2]
+            target_block.position.x = target_coords.x + buffer["coords"][ind][0]
+            target_block.position.y = target_coords.y + buffer["coords"][ind][1]
+            target_block.position.z = target_coords.z + buffer["coords"][ind][2]
             
             ACTION_MAP[command](
                                 bot,
                                 pathfinder,
                                 invoker_username,
-                                target_block  = target_block
+                                target_block  = target_block,
                                 *buffer["command_args"][ind],
                                 **buffer["command_kwargs"][ind]
             )  
