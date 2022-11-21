@@ -656,23 +656,23 @@ def print_combined(combined_output):
     logger.info(f"Combined classifier output is {combined_output}")
 
 
-def _get_etc_model(annotated_utterance, model_name, probs, 
+def _get_etc_model(annotated_utterance, model_name, probs,
                    default_probs, default_labels, threshold=0.5):
     """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
         annotated_utterance: dictionary with annotated utterance, or annotations
         probs: return probabilities or not
-        default_probs: default probs to return. 
+        default_probs: default probs to return.
         default_labels: default labels to return.
-        Threshold: threshold to give class if 
+        Threshold: threshold for classification
     Returns:
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
 
     try:
         if model_name in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance, 
+            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance,
                                                                  model_name=model_name,
                                                                  threshold=threshold)
         elif "combined_classification" in annotated_utterance.get("annotations", {}):
