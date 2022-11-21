@@ -5,6 +5,7 @@ from copy import deepcopy
 from random import choice
 
 from common.custom_requests import request_triples_wikidata
+from common.factoid import FACTOID_THRESHOLD
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -566,7 +567,7 @@ def _labels_to_probs(answer_labels, all_labels):
     return answer_probs
 
 
-def _get_combined_annotations(annotated_utterance, model_name):
+def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
     answer_probs, answer_labels = {}, []
     try:
         annotations = annotated_utterance["annotations"]
@@ -581,9 +582,11 @@ def _get_combined_annotations(annotated_utterance, model_name):
             [model_name == "toxic_classification", "factoid_classification" not in combined_annotations]
         )
         if model_name in multilabel_tasks or old_style_toxic:
-            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
+        elif model_name == 'factoid_classification' and answer_probs.get('is_factoid', 0) < threshold:
+            answer_labels = ['is_conversational']
         else:
-            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -615,7 +618,7 @@ def _process_old_sentiment(answer):
         return answer
 
 
-def _get_plain_annotations(annotated_utterance, model_name):
+def _get_plain_annotations(annotated_utterance, model_name, threshold=0.5):
     answer_probs, answer_labels = {}, []
     try:
         annotations = annotated_utterance["annotations"]
@@ -625,7 +628,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
         if isinstance(answer, list):
             if model_name == "sentiment_classification":
                 answer_probs = _process_old_sentiment(answer)
-                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
             else:
                 answer_labels = answer
                 answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
@@ -633,9 +636,11 @@ def _get_plain_annotations(annotated_utterance, model_name):
             answer_probs = answer
             if model_name == "toxic_classification":
                 # this function is only for plain annotations (when toxic_classification is a separate annotator)
-                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
+            elif model_name == 'factoid_classification' and answer_probs.get('is_factoid', 0) < threshold:
+                answer_labels = ['is_conversational']
             else:
-                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
         logger.warning(e)
 
@@ -651,22 +656,29 @@ def print_combined(combined_output):
     logger.info(f"Combined classifier output is {combined_output}")
 
 
-def _get_etc_model(annotated_utterance, model_name, probs, default_probs, default_labels):
+def _get_etc_model(annotated_utterance, model_name, probs, 
+                   default_probs, default_labels, threshold=0.5):
     """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
         annotated_utterance: dictionary with annotated utterance, or annotations
         probs: return probabilities or not
-        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+        default_probs: default probs to return. 
+        default_labels: default labels to return.
+        Threshold: threshold to give class if 
     Returns:
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
 
     try:
         if model_name in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance, model_name=model_name)
+            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance, 
+                                                                 model_name=model_name,
+                                                                 threshold=threshold)
         elif "combined_classification" in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_combined_annotations(annotated_utterance, model_name=model_name)
+            answer_probs, answer_labels = _get_combined_annotations(annotated_utterance,
+                                                                    model_name=model_name,
+                                                                    threshold=threshold)
         else:
             answer_probs, answer_labels = default_probs, default_labels
     except Exception as e:
@@ -717,6 +729,7 @@ def get_factoid(annotated_utterance, probs=True, default_probs=None, default_lab
         probs=probs,
         default_probs=default_probs,
         default_labels=default_labels,
+        threshold=FACTOID_THRESHOLD
     )
 
 
