@@ -583,8 +583,8 @@ def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
         )
         if model_name in multilabel_tasks or old_style_toxic:
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
-        elif model_name == 'factoid_classification' and answer_probs.get('is_factoid', 0) < threshold:
-            answer_labels = ['is_conversational']
+        elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
+            answer_labels = ["is_conversational"]
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
@@ -637,8 +637,8 @@ def _get_plain_annotations(annotated_utterance, model_name, threshold=0.5):
             if model_name == "toxic_classification":
                 # this function is only for plain annotations (when toxic_classification is a separate annotator)
                 answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
-            elif model_name == 'factoid_classification' and answer_probs.get('is_factoid', 0) < threshold:
-                answer_labels = ['is_conversational']
+            elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
+                answer_labels = ["is_conversational"]
             else:
                 answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
@@ -656,8 +656,7 @@ def print_combined(combined_output):
     logger.info(f"Combined classifier output is {combined_output}")
 
 
-def _get_etc_model(annotated_utterance, model_name, probs,
-                   default_probs, default_labels, threshold=0.5):
+def _get_etc_model(annotated_utterance, model_name, probs, default_probs, default_labels, threshold=0.5):
     """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
@@ -672,13 +671,13 @@ def _get_etc_model(annotated_utterance, model_name, probs,
 
     try:
         if model_name in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance,
-                                                                 model_name=model_name,
-                                                                 threshold=threshold)
+            answer_probs, answer_labels = _get_plain_annotations(
+                annotated_utterance, model_name=model_name, threshold=threshold
+            )
         elif "combined_classification" in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_combined_annotations(annotated_utterance,
-                                                                    model_name=model_name,
-                                                                    threshold=threshold)
+            answer_probs, answer_labels = _get_combined_annotations(
+                annotated_utterance, model_name=model_name, threshold=threshold
+            )
         else:
             answer_probs, answer_labels = default_probs, default_labels
     except Exception as e:
@@ -729,7 +728,7 @@ def get_factoid(annotated_utterance, probs=True, default_probs=None, default_lab
         probs=probs,
         default_probs=default_probs,
         default_labels=default_labels,
-        threshold=FACTOID_THRESHOLD
+        threshold=FACTOID_THRESHOLD,
     )
 
 
