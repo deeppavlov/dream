@@ -55,12 +55,21 @@ def recreate(bot,
                 )
 
     logger.info("I " + str(target_block.position))
+    current_rel_height = 0
     for ind, command in enumerate(buffer["command_name"]):
         if buffer["success_flag"][ind]:
             # (0, 0, 0) -> (target_coords)
             target_block.position.x = target_coords[0] + buffer["coords"][ind][0]
-            target_block.position.y = target_coords[1] + buffer["coords"][ind][1]
             target_block.position.z = target_coords[2] + buffer["coords"][ind][2]
+
+            if ind == 0:
+                target_block.position.y = target_coords[1]
+            
+            else:
+                height_diff = buffer["coords"][ind][1] - buffer["coords"][ind-1][1]
+                current_rel_height += height_diff
+                target_block.position.y = target_coords[1] + current_rel_height
+
             logger.info("A " + str(target_block.position))
             ACTION_MAP[command](
                                 bot,

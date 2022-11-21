@@ -336,15 +336,15 @@ def place_block(
     target_block = None
 ):
     """Places a block adjacent to the block which is targeted by the player
-
+ 
     Args:
         bot: bot instance
         pathfinder: pathfinder module instance
         invoker_username: minecraft user who invoked this action
         max_range_goal: max number of blocks away from the goal
-
+ 
     Returns:
-
+ 
     """
     logger.state = None
     user_entity = bot.players[invoker_username].entity
@@ -356,25 +356,31 @@ def place_block(
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
         raise WrongActionException(f"{invoker_username} is not looking at any block")
-
+ 
     # TODO if not bot_has_block
-
+ 
     # sometimes it is None. Why?
     # logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
-
+ 
     try:
         # change to GoalPlaceBlock later
-        if target_block is None:
+        if none_flag:
             bot.pathfinder.setGoal(
                 pathfinder.goals.GoalLookAtBlock(
                     target_block.position, bot.world, {"range": max_range_goal}
                 )
             )
         else:
-            bot.pathfinder.setGoal(pathfinder.goals.GoalBlock(  target_block.position.x,
-                                                                target_block.position.y,
-                                                                target_block.position.z)
-                                                            )
+            # bot.pathfinder.setGoal(pathfinder.goals.GoalBlock(  target_block.position.x,
+            #                                                     target_block.position.y,
+            #                                                     target_block.position.z)
+            #                                                 )
+            bot.pathfinder.setGoal(
+                pathfinder.goals.GoalPlaceBlock(
+                    target_block.position, bot.world
+                )
+            )
+
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
@@ -389,12 +395,18 @@ def place_block(
             bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
         except Exception as placing_e:
             bot.chat(f"Couldn't place the block there")
+            # q = str(target_block.position)
+            # w = str(target_block.face)
+            # e = str(target_block.type)
+            # bot.chat(q + "###" + w + "###" + e)
             logger.warning(
                 f"Couldn't place the block because {type(placing_e)} {placing_e}"
             )
             logger.state = "Couldn't place the block there"
+
                    
     raise GetActionException(target_block.position) 
+
 
 
 
