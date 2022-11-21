@@ -382,7 +382,7 @@ def place_block(
             )
 
     except Exception as e:
-        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?" + str(target_block.position))
         logger.warning(f"{type(e)}:{e}")
         raise WrongActionException(
                 "Ugh, something's wrong with my pathfinding. Try again?"
