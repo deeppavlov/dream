@@ -377,12 +377,13 @@ def place_block(
             #                                                 )
             bot.pathfinder.setGoal(
                 pathfinder.goals.GoalPlaceBlock(
-                    target_block.position, bot.world
+                    target_block.position, bot.world, {"range": max_range_goal}
                 )
             )
 
     except Exception as e:
-        bot.chat("Ugh, something's wrong with my pathfinding. Try again?" + str(target_block.position))
+        # bot.chat("Ugh, something's wrong with my pathfinding. Try again?" + str(target_block.position))
+        bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
         raise WrongActionException(
                 "Ugh, something's wrong with my pathfinding. Try again?"
@@ -402,6 +403,7 @@ def place_block(
             logger.warning(
                 f"Couldn't place the block because {type(placing_e)} {placing_e}"
             )
+            # logger.state = "Couldn't place the block there" + str(target_block.position)
             logger.state = "Couldn't place the block there"
 
                    
