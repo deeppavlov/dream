@@ -125,15 +125,15 @@ def on_chat(event, user, message, *args):
                 except GetActionException as e:
                     coords = [int(c) for c in str(e).split()]
                 
-
-                buffer.append(
-                    success_flag = success_flag,
-                    crash_reason = crash_reason,
-                    command_name = action_f.__name__,
-                    command_args = action_data.get("args", []),
-                    command_kwargs = action_data["kwargs"],
-                    response = response_text,
-                    coords = coords
-                )
+                if action_data["action"] != "recreate":
+                    buffer.append(
+                        success_flag = success_flag,
+                        crash_reason = crash_reason,
+                        command_name = action_f.__name__,
+                        command_args = action_data.get("args", []),
+                        command_kwargs = action_data["kwargs"],
+                        response = response_text,
+                        coords = coords
+                    )
 
     bot.chat(response_text)

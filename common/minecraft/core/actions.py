@@ -348,9 +348,11 @@ def place_block(
     """
     logger.state = None
     user_entity = bot.players[invoker_username].entity
-    if target_block is None:
+    none_flag =target_block is None
+    if none_flag:
         target_block = bot.blockAtEntityCursor(user_entity)
-
+    
+    logger.info(target_block.position)
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
         raise WrongActionException(f"{invoker_username} is not looking at any block")
@@ -362,18 +364,24 @@ def place_block(
 
     try:
         # change to GoalPlaceBlock later
-        bot.pathfinder.setGoal(
-            pathfinder.goals.GoalLookAtBlock(
-                target_block.position, bot.world, {"range": max_range_goal}
+        if target_block is None:
+            bot.pathfinder.setGoal(
+                pathfinder.goals.GoalLookAtBlock(
+                    target_block.position, bot.world, {"range": max_range_goal}
+                )
             )
-        )
+        else:
+            bot.pathfinder.setGoal(pathfinder.goals.GoalBlock(  target_block.position.x,
+                                                                target_block.position.y,
+                                                                target_block.position.z)
+                                                            )
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
         logger.warning(f"{type(e)}:{e}")
         raise WrongActionException(
                 "Ugh, something's wrong with my pathfinding. Try again?"
                 )
-
+    
     @Once(bot, "goal_reached")
     def try_placing(event, state_goal):
         try:
@@ -385,10 +393,8 @@ def place_block(
                 f"Couldn't place the block because {type(placing_e)} {placing_e}"
             )
             logger.state = "Couldn't place the block there"
-    
-    logger.warning(str(logger.state))                 
-    raise GetActionException(target_block.position) \
-          if logger.state is None else WrongActionException(logger.state)
+                   
+    raise GetActionException(target_block.position) 
 
 
 
