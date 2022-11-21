@@ -2,7 +2,7 @@
   "metadata": {
     "variables": {
       "BACKBONE": "distilbert-base-uncased",
-      "MODELS_PATH": "~/.deeppavlov/models",
+      "MODELS_PATH": "/tmp",
       "SINGLE_SENTENCE_LEN": 32,
       "MULTI_SENTENCE_LEN": 64
     },
