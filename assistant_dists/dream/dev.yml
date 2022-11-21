@@ -267,6 +267,7 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"      
     ports:
       - 8087:8087
   midas-classification:
