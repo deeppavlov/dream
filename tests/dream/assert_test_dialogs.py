@@ -122,6 +122,8 @@ def main():
             if (len(acceptable_skill_names) > 0 and passed_acceptable_skills) or (
                 len(true_sents) > 0 and passed_gold_phrases
             ):
+                continue
+            else:
                 error_reports += [
                     f"\nERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
                     f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
