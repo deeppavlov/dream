@@ -323,7 +323,6 @@ def place_block(
     Returns:
  
     """
-    logger.state = None
     user_entity = bot.players[invoker_username].entity
     none_flag =target_block is None
     if none_flag:
@@ -353,14 +352,11 @@ def place_block(
             #                                                     target_block.position.z)
             #                                                 )
             bot.pathfinder.setGoal(
-                pathfinder.goals.GoalFollow(target_block, max_range_goal), False
-            )
-            bot.pathfinder.setGoal(
                 pathfinder.goals.GoalPlaceBlock(
                     target_block.position, bot.world, {"range": max_range_goal}
                 )
             )
-        
+            bot.pathfinder.setGoal(pathfinder.goals.GoalFollow(target_block, max_range_goal), False)
 
     except Exception as e:
         # bot.chat("Ugh, something's wrong with my pathfinding. Try again?" + str(target_block.position))
