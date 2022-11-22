@@ -37,17 +37,17 @@ def recreate(bot,
                      deepcopy(target_block.position.z))  
     
     
-    #target_block.position.x = target_coords[0] 
-    #target_block.position.y = target_coords[1] 
-    #target_block.position.z = target_coords[2]
-    
     try:
+        #it is the question what variant is more feasible
         #bot.pathfinder.setGoal(
         #        pathfinder.goals.GoalLookAtBlock(
         #            target_block.position, bot.world, {"range": max_range_goal}
         #        )
         #    )
-        goal = pathfinder.goals.GoalNear(target_block.position.x, target_block.position.y, target_block.position.z, max_range_goal)
+        goal = pathfinder.goals.GoalNear(target_block.position.x, 
+                                         target_block.position.y, 
+                                         target_block.position.z, 
+                                         max_range_goal)
         bot.pathfinder.setGoal(goal)
     except Exception as e:
         bot.chat("Ugh, something's wrong with my pathfinding. Try again?")
@@ -62,21 +62,19 @@ def recreate(bot,
     current_rel_z = 0
     for ind, command in enumerate(reversed(buffer["command_name"])):
 
-        logger.info(command)
         if buffer["success_flag"][ind]:
             # (0, 0, 0) -> (target_coords)
-            # target_block.position.x = target_coords[0] + buffer["coords"][ind][0]
-            # target_block.position.z = target_coords[2] + buffer["coords"][ind][2]
-            logger.info("new blok")
             if ind  > 0:
-                y_diff = buffer["coords"][ind][1] - buffer["coords"][ind-1][1] 
                 x_diff = buffer["coords"][ind][0] - buffer["coords"][ind-1][0]
+                y_diff = buffer["coords"][ind][1] - buffer["coords"][ind-1][1] 
                 z_diff = buffer["coords"][ind][2] - buffer["coords"][ind-1][2]
+                
                 current_rel_y += y_diff
                 current_rel_x += x_diff
                 current_rel_z += z_diff
-                target_block.position.y = target_coords[1] + current_rel_y
+
                 target_block.position.x = target_coords[0] + current_rel_x
+                target_block.position.y = target_coords[1] + current_rel_y
                 target_block.position.z = target_coords[2] + current_rel_z
 
             logger.info("A " + str(target_block.position))
@@ -90,8 +88,7 @@ def recreate(bot,
                                     **buffer["command_kwargs"][ind]
                 )
             except GetActionException as e:
-                #bot.pathfinder.setGoal(
-                #     pathfinder.goals.GoalFollow(target_block, max_range_goal), False)
+                #this is needed only for the buffer
                 continue
                
 def get_action_map():
