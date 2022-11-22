@@ -1,9 +1,11 @@
-sentry-sdk[flask]==0.14.1
 flask==1.1.1
 itsdangerous==2.0.1
-gunicorn==19.9.0
+gunicorn==20.0.4
+sentry-sdk==0.13.4
 requests==2.22.0
+spacy==3.2.0
 jinja2<=3.0.3
 Werkzeug<=2.0.3
+cryptography==2.8
 inflect==5.3.0
-spacy==3.0.6
+blinker==1.5.0
