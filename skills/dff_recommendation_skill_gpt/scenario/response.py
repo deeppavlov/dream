@@ -6,6 +6,7 @@ from collections import Counter
 from os import getenv
 from typing import Any
 import sys
+from typing import List
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.processing as int_prs
@@ -106,10 +107,12 @@ ZERO_CONFIDENCE = 0.0
 with open("popular_30k.txt", "r") as f:
     common_words = [x.strip() for x in f.read().split("\t")]
 
-def user_dislikes_topic(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+
+def user_dislikes_topic(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     return ctx.misc.get("user_dislikes_topic", '')
 
-def compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym='', question=False):
+
+def compose_data_for_dialogpt(ctx: Context, actor: Actor, recommend: bool=False, discussed_entity: str="") -> List[str]:
     data = []
     human_uttrs = int_ctx.get_human_utterances(ctx, actor)
     bot_uttrs = int_ctx.get_bot_utterances(ctx, actor)
@@ -136,7 +139,7 @@ def compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym='
     return data
 
 
-def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommendation=False) -> int:
+def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommendation: bool=False) -> int:
     if not hypothesis:
         return 0
     confidence = 0.99 
@@ -162,7 +165,7 @@ def determine_confidence(ctx: Context, actor: Actor, hypothesis: str, recommenda
     return confidence
 
 
-def cut_hypothesis(hyp):
+def process_hypothesis(hyp: str) -> str:
     logger.info(f"sent_before_tok -- {hyp}")
     hyp_sent_tok = sent_tokenize(hyp.replace('lt 3', '').replace('...', '.').replace('..', '.'))
     if len(hyp_sent_tok) > 3:
@@ -172,7 +175,6 @@ def cut_hypothesis(hyp):
     elif len(hyp_sent_tok) > 4:
         hyp_sent_tok = hyp_sent_tok[:3]
     sentences_capitalized = [s.capitalize() for s in hyp_sent_tok]
-    # join the capitalized sentences
     text_truecase = re.sub(" (?=[\.,'!?:;])", "", ' '.join(sentences_capitalized))
     logger.info(f"sent_after_tok -- {hyp_sent_tok}")
     return text_truecase
@@ -214,7 +216,7 @@ def generative_response(recommend=False, question=False, discussed_entity="", no
                 logger.info(f"dff-generative-skill: {reply}")
 
         hyponym = ''
-        request_data = compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor, hyponym=hyponym, question=question)
+        request_data = compose_data_for_dialogpt(ctx, actor, recommend=recommend, discussed_entity=discussed_entity)
         if len(request_data) > 0:
             result = requests.post(DIALOGPT_RESPOND, json={"utterances_histories": [request_data]}).json()
             hypotheses = result[0]
@@ -223,7 +225,7 @@ def generative_response(recommend=False, question=False, discussed_entity="", no
         if hypotheses:
             for hyp in hypotheses[0]:
                 if hyp:
-                    hyp = cut_hypothesis(hyp)
+                    hyp = process_hypothesis(hyp)
                     if hyp[-1] not in [".", "?", "!"]:
                         hyp += "."
                     gathering_responses(hyp, determine_confidence(ctx, actor, hyp, recommendation=recommend), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
@@ -273,7 +275,7 @@ def generate_np_response(response_options=[''], recommend=False, discussed_entit
         noun_phrases = int_ctx.get_nounphrases_from_human_utterance(ctx, actor)
         if noun_phrases:
             noun_phrases = noun_phrases[0]
-            request_data = compose_data_for_dialogpt(recommend, discussed_entity, ctx, actor)
+            request_data = compose_data_for_dialogpt(ctx, actor, recommend=recommend, discussed_entity=discussed_entity)
             if len(request_data) > 0:
                 result = requests.post(DIALOGPT_RESPOND, json={"utterances_histories": [request_data]}).json()
                 hypotheses = result[0]
@@ -283,7 +285,7 @@ def generate_np_response(response_options=[''], recommend=False, discussed_entit
             if hypotheses:
                 for hyp in hypotheses[0]:
                     if hyp:
-                        hyp = cut_hypothesis(hyp)
+                        hyp = process_hypothesis(hyp)
                         if hyp[-1] not in [".", "?", "!"]:
                             hyp += "."
                         gathering_responses(hyp, determine_confidence(ctx, actor, hyp), {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
@@ -345,7 +347,7 @@ def ask_about_presequence(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     
     if hypotheses:
         for hyp in hypotheses[0]:
-            hyp = cut_hypothesis(hyp)
+            hyp = process_hypothesis(hyp)
             if re.search(STOP_WORDS, hyp):
                 continue
             if hyp[-1] not in [".", "?", "!"]:
@@ -358,7 +360,7 @@ def ask_about_presequence(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 def ask_about_presequence_2(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if ctx.validation:
         return ""
-    request_data = compose_data_for_dialogpt(False, "", ctx, actor)
+    request_data = compose_data_for_dialogpt(ctx, actor)
     if len(request_data) > 0:
         result = requests.post(DIALOGPT_RESPOND, json={"utterances_histories": [request_data]}).json()
         hypotheses = result[0]
@@ -369,7 +371,7 @@ def ask_about_presequence_2(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         for hyp in hypotheses[0]:
             if re.search(STOP_WORDS, hyp):
                 continue
-            hyp = cut_hypothesis(hyp)
+            hyp = process_hypothesis(hyp)
             if hyp[-1] not in [".", "?", "!"]: #переделать в отдельную функцию фильтрации реддита
                 hyp += "."
             return hyp + ' ' + str(presequence)
@@ -449,7 +451,7 @@ def generate_with_string(to_append='get_questions', position_gen='before'):
                 logger.info(f"dff-generative-skill: {reply}")
         if ctx.validation:
             return ""
-        request_data = compose_data_for_dialogpt(False, "", ctx, actor)
+        request_data = compose_data_for_dialogpt(ctx, actor)
         if len(request_data) > 0:
             result = requests.post(DIALOGPT_RESPOND, json={"utterances_histories": [request_data]}).json()
             hypotheses = result[0]
@@ -472,7 +474,7 @@ def generate_with_string(to_append='get_questions', position_gen='before'):
         if hypotheses:
             for hyp in hypotheses[0]:
                 if hyp:
-                    hyp = cut_hypothesis(hyp)
+                    hyp = process_hypothesis(hyp)
                     if hyp[-1] not in [".", "?", "!"]: #переделать в отдельную функцию фильтрации реддита
                         hyp += "."
                 if string_to_attach:
