@@ -7,6 +7,7 @@ import logging
 from math import pi
 from javascript import AsyncTask, On, require
 from javascript import config, proxy, events
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -332,7 +333,7 @@ def place_block(
  
     """
     user_entity = bot.players[invoker_username].entity
-    none_flag =target_block is None
+    none_flag = target_block is None
 
     if none_flag:
         target_block = bot.blockAtEntityCursor(user_entity)
@@ -355,12 +356,19 @@ def place_block(
                 )
             )
         else:
-            bot.pathfinder.setGoal(
-                pathfinder.goals.GoalPlaceBlock(
-                    target_block.position, bot.world, {"range": max_range_goal}
+            
+            try:
+                bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
+            except Exception as placing_e:
+                bot.chat(f"Couldn't place the block there")
+                # q = str(target_block.position)
+                # w = str(target_block.face)
+                # e = str(target_block.type)
+                # bot.chat(q + "###" + w + "###" + e)
+                logger.warning(
+                    f"Couldn't place the block because {type(placing_e)} {placing_e}"
                 )
-            )
-            bot.pathfinder.setGoal(pathfinder.goals.GoalFollow(target_block, max_range_goal), False)
+
 
     except Exception as e:
         # bot.chat("Ugh, something's wrong with my pathfinding. Try again?" + str(target_block.position))

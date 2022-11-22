@@ -31,7 +31,9 @@ def get_response_funcs():
         "destroy_and_grab_block": default_response,
         "look_at_user": default_response,
         "build_house": default_response,
-        "recreate": default_response
+        "recreate": default_response,
+        "start_building": default_response,
+        "finish_building": default_response
     }
 
 

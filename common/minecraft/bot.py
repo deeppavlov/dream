@@ -33,6 +33,9 @@ bot = mineflayer.createBot(
     }
 )
 buffer =  CommandBuffer()
+is_buffer = False
+# actions2buffer = ["destroy_block", "place_block", "destroy_and_grab_block"]
+command_index = 0
 # The spawn event
 once(bot, "login")
 bot.chat(f"I spawned at {bot.entity.position}")
@@ -51,7 +54,9 @@ def end(event, player):
 
 @On(bot, "chat")
 def on_chat(event, user, message, *args):
-
+    global is_buffer
+    global buffer
+    global command_index
     crash_reason = ""        
     success_flag = True
     coords = []
@@ -106,8 +111,18 @@ def on_chat(event, user, message, *args):
             response_actions = decode_actions(response_parts[1])
             for action_data in response_actions:
                 try:
-                    if action_data["action"] == "stop":
+                    if action_data["action"] == "start_building":
+                        # buffer = CommandBuffer()
+                        is_buffer = True
+                    
+                    elif action_data["action"] == "finish_building":
                         buffer.to_json("./command_memory/commands.json")
+                        file_index = str(command_index)
+                        # buffer.to_json(f"./command_memory/command_{file_index}.json")
+                        is_buffer = False
+                        command_index += 1
+                        buffer = CommandBuffer()
+
 
                     action_f = ACTION_MAP[action_data["action"]]
 
@@ -125,7 +140,7 @@ def on_chat(event, user, message, *args):
                 except GetActionException as e:
                     coords = [int(c) for c in str(e).split()]
                 
-                if action_data["action"] != "recreate":
+                if (action_data["action"] == "place_block") and is_buffer:
                     buffer.append(
                         success_flag = success_flag,
                         crash_reason = crash_reason,
