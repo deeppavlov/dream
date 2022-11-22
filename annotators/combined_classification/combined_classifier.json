@@ -2,9 +2,9 @@
   "metadata": {
     "variables": {
       "BACKBONE": "distilbert-base-uncased",
-      "MODELS_PATH": "/tmp",
-      "SINGLE_SENTENCE_LEN": 32,
-      "MULTI_SENTENCE_LEN": 64
+      "MODELS_PATH": "~/.deeppavlov/models",
+      "SINGLE_SENTENCE_LEN": 64,
+      "MULTI_SENTENCE_LEN": 128
     },
     "download":[{
         "url": "http://files.deeppavlov.ai/dream_data/distil9in1/9in1_v1.tar.gz",
