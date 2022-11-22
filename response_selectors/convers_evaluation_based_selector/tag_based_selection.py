@@ -35,6 +35,7 @@ from utils import (
     join_used_links_in_attributes,
     get_updated_disliked_skills,
     LET_ME_ASK_YOU_PHRASES,
+    downscore_if_question_to_question,
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
@@ -51,6 +52,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 PRIORITIZE_WITH_SAME_TOPIC_ENTITY = int(getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 1))
 PRIORITIZE_NO_DIALOG_BREAKDOWN = int(getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", 0))
 PRIORITIZE_WITH_REQUIRED_ACT = int(getenv("PRIORITIZE_WITH_REQUIRED_ACT", 0))
+PRIORITIZE_HUMAN_INITIATIVE = int(getenv("PRIORITIZE_HUMAN_INITIATIVE", 0))
 IGNORE_DISLIKED_SKILLS = int(getenv("IGNORE_DISLIKED_SKILLS", 0))
 GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
 RESTRICTION_FOR_SENSITIVE_CASE = int(getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1))
@@ -261,7 +263,6 @@ def add_to_top1_category(cand_id, categorized, _is_require_action_intent):
 
 def does_not_require_prompt(candidates, best_cand_id):
     _is_already_prompt = "prompt" in candidates[best_cand_id].get("response_parts", [])
-    _is_question = "?" in candidates[best_cand_id]["text"]
     _is_very_long = len(candidates[best_cand_id]["text"]) > 200
 
     _best_cand_intents = get_intents(candidates[best_cand_id], which="all")
@@ -275,7 +276,6 @@ def does_not_require_prompt(candidates, best_cand_id):
     )
     if (
         _is_already_prompt
-        or _is_question
         or _is_very_long
         or _is_request
         or _is_not_add_prompt_skill
@@ -648,6 +648,12 @@ def tag_based_response_selection(
                     new_ids.append(cand_id)
             categorized_prompts[category] = deepcopy(new_ids)
 
+    _is_question_by_user = is_any_question_sentence_in_utterance(dialog["human_utterances"][-1])
+    if PRIORITIZE_HUMAN_INITIATIVE and _is_question_by_user:
+        # downscore if hypothesis is a question in respond to a user's questions
+        is_questions = [is_any_question_sentence_in_utterance(cand) for cand in candidates]
+        curr_single_scores = downscore_if_question_to_question(curr_single_scores, is_questions)
+
     best_cand_id = pickup_best_id(categorized_hyps, candidates, curr_single_scores, bot_utterances)
     best_candidate = candidates[best_cand_id]
     best_candidate["human_attributes"] = best_candidate.get("human_attributes", {})
@@ -656,9 +662,6 @@ def tag_based_response_selection(
     logger.info(f"Best candidate: {best_candidate}")
     n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
     _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
-    no_question_by_user = "?" not in dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get(
-        "punct_sent", dialog["human_utterances"][-1]["text"]
-    )
 
     # if `no` to 1st in a row linkto question, and chosen response is not from scripted skill
     _no_to_first_linkto = is_no(dialog["human_utterances"][-1]) and any(
@@ -673,7 +676,7 @@ def tag_based_response_selection(
     )
 
     if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
-        if (_no_scripts_n_times_in_a_row and _is_short_or_question_by_not_script and no_question_by_user) or (
+        if (_no_scripts_n_times_in_a_row and _is_short_or_question_by_not_script and not _is_question_by_user) or (
             _no_to_first_linkto and _is_best_not_script
         ):
             # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
