@@ -59,11 +59,13 @@ def recreate(bot,
     current_rel_x = 0
     current_rel_z = 0
     for ind, command in enumerate(buffer["command_name"]):
+
+        logger.info(command)
         if buffer["success_flag"][ind]:
             # (0, 0, 0) -> (target_coords)
             # target_block.position.x = target_coords[0] + buffer["coords"][ind][0]
             # target_block.position.z = target_coords[2] + buffer["coords"][ind][2]
-
+            logger.info("new blok")
             if ind == 0:
                 target_block.position.y = target_coords[1]
                 target_block.position.x = target_coords[0]
@@ -81,16 +83,20 @@ def recreate(bot,
                 target_block.position.z = target_coords[1] + current_rel_z
 
             logger.info("A " + str(target_block.position))
-            ACTION_MAP[command](
-                                bot,
-                                pathfinder,
-                                invoker_username,
-                                target_block  = target_block,
-                                *buffer["command_args"][ind],
-                                **buffer["command_kwargs"][ind]
-            )  
-
-
+            try:
+                ACTION_MAP[command](
+                                    bot,
+                                    pathfinder,
+                                    invoker_username,
+                                    target_block  = target_block,
+                                    *buffer["command_args"][ind],
+                                    **buffer["command_kwargs"][ind]
+                )
+            except GetActionException as e:
+                # bot.pathfinder.setGoal(
+                #     pathfinder.goals.GoalFollow(target_block, max_range_goal), False)
+                continue
+               
 def get_action_map():
     ACTION_MAP.update({"recreate": recreate})   
     return ACTION_MAP
