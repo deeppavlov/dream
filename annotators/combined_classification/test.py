@@ -56,7 +56,6 @@ def main_test():
             "sentences": [
                 "do you like porn",
                 "have you been to Alaska",
-                "what is your favourite animal",
                 "please talk about movies",
                 "please talk about books",
                 "talk about games",
