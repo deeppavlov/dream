@@ -44,7 +44,7 @@ class EmotionSkillScenario:
             "neutral": 0,
         }
         self.emotion_thresholds = {
-            "anger": 0.99,
+            "anger": 1.0,
             "fear": 0.5,
             "joy": 0.5,
             "love": 0.5,
@@ -72,7 +72,7 @@ class EmotionSkillScenario:
         for emotion in emotion_probs.keys():
             if (
                 emotion_probs.get(emotion, 0) == most_likely_prob
-                and emotion_probs.get(emotion, 0) > self.emotion_thresholds[emotion]
+                and emotion_probs.get(emotion, 0) >= self.emotion_thresholds[emotion]
             ):
                 most_likely_emotion = emotion
         return most_likely_emotion
