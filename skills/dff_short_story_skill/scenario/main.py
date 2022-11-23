@@ -71,7 +71,11 @@ flows = {
         },
         "which_story_node": {
             RESPONSE: loc_rsp.which_story,
-            TRANSITIONS: {"choose_story_node": cnd.all([loc_cnd.has_story_type, loc_cnd.has_story_left])},
+            TRANSITIONS: {
+                "choose_story_node": cnd.all(
+                    [loc_cnd.needs_scripted_story, loc_cnd.has_story_type, loc_cnd.has_story_left]
+                )
+            },
         },
         "tell_punchline_node": {
             RESPONSE: loc_rsp.tell_punchline,
@@ -87,7 +91,7 @@ flows = {
         "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story_first_part": loc_cnd.prev_is_question}},
         "gpt_story_first_part": {
             RESPONSE: loc_rsp.generate_first_prompt_part,
-            TRANSITIONS: {"gpt_story_second_part": int_cnd.is_yes_vars},
+            TRANSITIONS: {"gpt_story_second_part": cnd.neg(int_cnd.is_no_vars)},
         },
         "gpt_story_second_part": {
             RESPONSE: loc_rsp.generate_second_prompt_part,
@@ -96,7 +100,13 @@ flows = {
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,
         },
-        "suggest_more": {RESPONSE: "Would you like another story?", TRANSITIONS: {"gpt_topic": int_cnd.is_yes_vars}},
+        "suggest_more": {
+            RESPONSE: loc_rsp.suggest_more_stories,
+            TRANSITIONS: {
+                "fallback_node": int_cnd.is_no_vars,
+                "gpt_topic": cnd.neg(int_cnd.is_no_vars)
+            }
+        },
     },
 }
 
