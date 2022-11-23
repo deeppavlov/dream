@@ -92,20 +92,13 @@ flows = {
         "gpt_story_first_part": {
             RESPONSE: loc_rsp.generate_first_prompt_part,
             TRANSITIONS: {
-                "gpt_story_second_part": cnd.all(
-                    [
-                        cnd.neg(int_cnd.is_no_vars),
-                        loc_cnd.prev_is_story
-                    ]
-                ),
-                "start_node": int_cnd.is_no_vars
+                "gpt_story_second_part": cnd.all([cnd.neg(int_cnd.is_no_vars), loc_cnd.prev_is_story]),
+                "start_node": int_cnd.is_no_vars,
             },
         },
         "gpt_story_second_part": {
             RESPONSE: loc_rsp.generate_second_prompt_part,
-            TRANSITIONS: {
-                "suggest_more": loc_cnd.prev_is_story
-            },
+            TRANSITIONS: {"suggest_more": loc_cnd.prev_is_story},
         },
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,
