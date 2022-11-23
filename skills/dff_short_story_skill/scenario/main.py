@@ -84,18 +84,24 @@ flows = {
             RESPONSE: loc_rsp.fallback,
             TRANSITIONS: {
                 "which_story_node": cnd.all(
-                    [loc_cnd.needs_scripted_story, loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars]
-                )
+                    [loc_cnd.needs_scripted_story, loc_cnd.is_asked_for_a_story, int_cnd.is_yes_vars]),
+                "start_node": cnd.neg(loc_cnd.needs_scripted_story)
             },
         },
         "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story_first_part": loc_cnd.prev_is_question}},
         "gpt_story_first_part": {
             RESPONSE: loc_rsp.generate_first_prompt_part,
-            TRANSITIONS: {"gpt_story_second_part": cnd.neg(int_cnd.is_no_vars)},
+            TRANSITIONS: {
+                "gpt_story_second_part": cnd.neg(int_cnd.is_no_vars),
+                "fallback_node": int_cnd.is_no_vars
+            },
         },
         "gpt_story_second_part": {
             RESPONSE: loc_rsp.generate_second_prompt_part,
-            TRANSITIONS: {"suggest_more": cnd.true()},
+            TRANSITIONS: {
+                "suggest_more": loc_cnd.prev_is_story,
+                "fallback_node": cnd.neg(loc_cnd.prev_is_story)
+            },
         },
         "gpt_keyword_story": {
             RESPONSE: loc_rsp.generate_story,

@@ -267,6 +267,13 @@ def generate_second_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> 
     if "yes" in intents:
         reply_conf = 1.0
 
+    # check if prev utterance was first part of the story (just in case)
+    last_utt = utt.get("text", "")
+    if not last_utt.startswith("Ok,  Let me share a story"):
+        int_ctx.set_confidence(ctx, actor, 0.0)
+        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+        return ""
+
     reply = generate_prompt_story(ctx, actor, first=False)
     if reply:
         int_ctx.set_confidence(ctx, actor, reply_conf)
