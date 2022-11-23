@@ -59,7 +59,7 @@ def prev_is_story(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
     if utt.get("text", ""):
         if utt["text"].startswith("Oh, that reminded me of a story!") or utt["text"].startswith(
-            "Ok, Let me tell you a story about"
+            "Ok,  Let me share a story"
         ):
             return True
     return False
@@ -77,10 +77,12 @@ def asks_more(ctx: Context, actor: Actor) -> bool:
 def should_return(ctx: Context, actor: Actor) -> bool:
     if prev_is_story(ctx, actor):
         if asks_more(ctx, actor):
+            logger.info('Should return is True')
             return True
         else:
             return False
     else:
+        logger.info('Should return is True')
         return True
 
 

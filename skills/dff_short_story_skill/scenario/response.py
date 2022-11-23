@@ -167,6 +167,7 @@ def generate_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             return ""
         reply = raw_responses[0][0]
         reply = "Oh, that reminded me of a story! " + reply
+        logger.info(reply)
     else:
         int_ctx.set_confidence(ctx, actor, 0.0)
         int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
@@ -266,6 +267,15 @@ def generate_second_prompt_part(ctx: Context, actor: Actor, *args, **kwargs) -> 
     reply_conf = 0.5
     if "yes" in intents:
         reply_conf = 1.0
+
+    # check if prev utterance was first part of the story (just in case)
+    bot_utt = int_ctx.get_last_bot_utterance(ctx, actor)
+    last_utt = bot_utt.get("text", "")
+    if not last_utt.startswith("Ok,  Let me share a story"):
+        int_ctx.set_confidence(ctx, actor, 0.0)
+        int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
+        logger.info(f"Previous Bot Utterance wasn't a Story: {last_utt}")
+        return ""
 
     reply = generate_prompt_story(ctx, actor, first=False)
     if reply:
