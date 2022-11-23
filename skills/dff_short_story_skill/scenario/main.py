@@ -102,10 +102,7 @@ flows = {
         },
         "suggest_more": {
             RESPONSE: loc_rsp.suggest_more_stories,
-            TRANSITIONS: {
-                "fallback_node": int_cnd.is_no_vars,
-                "gpt_topic": cnd.neg(int_cnd.is_no_vars)
-            }
+            TRANSITIONS: {"fallback_node": int_cnd.is_no_vars, "gpt_topic": cnd.neg(int_cnd.is_no_vars)},
         },
     },
 }
