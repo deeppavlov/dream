@@ -6,7 +6,7 @@ from typing import Any, Tuple
 
 from df_engine.core import Actor, Context
 import common.dff.integration.response as int_rsp
-from common.constants import MUST_CONTINUE
+from common.constants import MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.greeting import GREETING_QUESTIONS
 from common.link import link_to_skill2key_words
 from common.grounding import what_we_talk_about, are_we_recorded, MANY_INTERESTING_QUESTIONS
@@ -103,12 +103,13 @@ def are_we_recorded_response(ctx: Context) -> REPLY_TYPE:
         attributes MUST_CONTINUE or (empty)
     """
     last_human_utterance = ctx.last_request
-    attr = {}
     if are_we_recorded(last_human_utterance):
         reply, confidence = PRIVACY_REPLY, 1
         attr = {"can_continue": MUST_CONTINUE}
     else:
         reply, confidence = "", 0
+        attr = {"can_continue": CAN_NOT_CONTINUE}
+    logger.info(f"are_we_recorded_response: {reply} + {attr}")
     return reply, confidence, {}, {}, attr
 
 
@@ -122,7 +123,7 @@ def what_do_you_mean_response(ctx: Context) -> REPLY_TYPE:
         attributes (empty or MUST_CONTINUE)
     """
     dialog = ctx.misc["agent"]["dialog"]
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     try:
         what_do_you_mean_intent = get_what_do_you_mean_intent(dialog["human_utterances"][-1])
         if not (what_we_talk_about(dialog["human_utterances"][-1]) or what_do_you_mean_intent):
@@ -133,7 +134,7 @@ def what_do_you_mean_response(ctx: Context) -> REPLY_TYPE:
             reply = get_bot_based_on_skill_reply(dialog.get("bot_utterances", []))
             if reply is None:
                 reply = get_bot_based_on_topic_or_intent_reply(
-                    dialog["human_utterances"][-2] if len(dialog["human_utterances"]) > 1 else []
+                    dialog["human_utterances"][-2] if len(dialog["human_utterances"]) > 1 else {}
                 )
             if reply is None:
                 reply, confidence = DONTKNOW_PHRASE, DONTKNOW_CONF
@@ -151,6 +152,7 @@ def what_do_you_mean_response(ctx: Context) -> REPLY_TYPE:
         reply = ""
         confidence = 0
 
+    logger.info(f"what_do_you_mean_response: {reply} + {attr}")
     return reply, confidence, {}, {}, attr
 
 
@@ -167,24 +169,25 @@ def generate_acknowledgement_response(ctx: Context) -> REPLY_TYPE:
     dialog = ctx.misc["agent"]["dialog"]
     curr_intents = get_current_intents(dialog["human_utterances"][-1])
     curr_considered_intents = [intent for intent in curr_intents if intent in MIDAS_INTENT_ACKNOWLEDGEMENTS]
-
-    ackn_response = ""
     attr = {}
+    ackn_response = ""
     curr_human_entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
     contains_question = is_any_question_sentence_in_utterance(dialog["human_utterances"][-1])
 
     # we generate acknowledgement ONLY if we have some entities!
     if curr_considered_intents and len(curr_human_entities) and contains_question:
         # can generate acknowledgement
-        ackn_response, attr = generate_acknowledgement(
-            dialog["human_utterances"][-1], curr_intents, curr_considered_intents
-        )
+        ackn_response = generate_acknowledgement(dialog["human_utterances"][-1], curr_intents, curr_considered_intents)
+        attr = {"response_parts": ["acknowledgement"]}
     elif contains_question:
         ackn_response = random.choice(MANY_INTERESTING_QUESTIONS)
         attr = {"response_parts": ["acknowledgement"]}
     elif not contains_question and "opinion" in curr_considered_intents:
         ackn_response = get_midas_intent_acknowledgement("opinion", "")
+        attr = {"response_parts": ["acknowledgement"]}
 
+    attr["can_continue"] = CAN_NOT_CONTINUE
+    logger.info(f"generate_acknowledgement_response: {ackn_response} + {attr}")
     return ackn_response, ACKNOWLEDGEMENT_CONF, {}, {}, attr
 
 
@@ -205,10 +208,9 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     human_attr["dff_grounding_skill"]["used_universal_intent_responses"] = human_attr["dff_grounding_skill"].get(
         "used_universal_intent_responses", []
     )
-    attr = {}
     reply = ""
     confidence = 0.0
-    ackn, _, _, _, _ = generate_acknowledgement_response(ctx)
+    ackn, _, _, _, attr = generate_acknowledgement_response(ctx)
     is_question = is_any_question_sentence_in_utterance(dialog["human_utterances"][-1])
 
     def universal_response(intent):
@@ -216,19 +218,20 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
         # for now return random reply UNIVERSAL_INTENT_RESPONSES
         reply = get_unused_reply(intent, human_attr["dff_grounding_skill"]["used_universal_intent_responses"])
         human_attr["dff_grounding_skill"]["used_universal_intent_responses"] += [reply]
-        attr = {"response_parts": ["body"], "type": "universal_response"}
+        attr = {"can_continue": CAN_NOT_CONTINUE, "response_parts": ["body"], "type": "universal_response"}
+        return reply, attr
 
     ctx.misc["dff_grounding_skill"] = human_attr["dff_grounding_skill"]
 
     for intent in curr_intents:
         if intent in UNIVERSAL_INTENT_RESPONSES:
-            universal_response(intent)
+            reply, attr = universal_response(intent)
             confidence = UNIVERSAL_RESPONSE_CONF
             # we prefer the first found intent, as it should be semantic request
             break
     if reply == "":
         if is_question:
-            universal_response("open_question_opinion")
+            reply, attr = universal_response("open_question_opinion")
             confidence = UNIVERSAL_RESPONSE_LOW_CONF
     if is_question and is_sensitive_topic_and_request(dialog["human_utterances"][-1]):
         # if question in sensitive situation - answer with confidence 0.99
@@ -236,6 +239,9 @@ def generate_universal_response(ctx: Context) -> REPLY_TYPE:
     if ackn and not is_toxic_or_badlisted_utterance(dialog["human_utterances"][-1]):
         reply = f"{ackn} {reply}"
         attr["response_parts"] = ["acknowledgement", "body"]
+
+    attr["can_continue"] = CAN_NOT_CONTINUE
+    logger.info(f"generate_universal_response: {reply} + {attr}")
     return reply, confidence, human_attr, {}, attr
 
 
@@ -258,11 +264,12 @@ def ask_for_topic_after_two_no_in_a_row_to_linkto_response(ctx: Context) -> REPL
 
     reply = ""
     confidence = 0.0
-    attr = {}
+    attr = {"can_continue": CAN_NOT_CONTINUE}
     if prev_was_linkto and prev_prev_was_linkto and human_is_no and prev_human_is_no:
         offer = random.choice(GREETING_QUESTIONS[LANGUAGE]["what_to_talk_about"])
         topics_to_offer = ", ".join(sum(link_to_skill2key_words.values(), []))
         reply = f"Okay then. {offer} {topics_to_offer}?"
         confidence = SUPER_CONF
         attr = {"can_continue": MUST_CONTINUE}
+    logger.info(f"ask_for_topic_after_two_no_in_a_row_to_linkto_response: {reply} + {attr}")
     return reply, confidence, {}, {}, attr
