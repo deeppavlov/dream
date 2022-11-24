@@ -15,7 +15,7 @@ ENV COMMIT=$COMMIT
 COPY ./annotators/kbqa/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@$COMMIT
+RUN pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
 
 COPY $SRC_DIR /src
 
