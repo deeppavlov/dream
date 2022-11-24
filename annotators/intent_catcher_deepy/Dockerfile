@@ -18,7 +18,7 @@ COPY ./requirements.txt requirements.txt
 
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt && \
-    pip install git+git://github.com/deeppavlov/DeepPavlov.git@dbcaf73acd8580e2bec337300ab0d29887d78c51
+    pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/dbcaf73acd8580e2bec337300ab0d29887d78c51
 
 RUN python -c "import tensorflow_hub as hub; hub.Module(\"https://tfhub.dev/google/universal-sentence-encoder/2\")" && \
     wget -O /usr/local/lib/python3.6/dist-packages/deeppavlov/utils/server/server.py \
