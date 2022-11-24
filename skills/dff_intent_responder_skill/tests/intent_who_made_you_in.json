@@ -391,7 +391,7 @@
                             "modified_sents": [
                                 "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
                                 "who made you?",
-                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "I was built by the DeepPavlov team. #+#who_made_you",
                                 "who made you?"
                             ]
                         },
@@ -443,12 +443,12 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                    "text": "I was built by the DeepPavlov team. #+#who_made_you",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                            "punct_sent": "I was built by the DeepPavlov team. #+#who_made_you",
                             "segments": [
-                                "I was built by the team of Moscow Institute of Physics and Technology.",
+                                "I was built by the DeepPavlov team.",
                                 "#+#who_made_you"
                             ]
                         },
@@ -470,7 +470,7 @@
                                 "Where are you from?",
                                 "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
                                 "who made you?",
-                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you"
+                                "I was built by the DeepPavlov team. #+#who_made_you"
                             ]
                         }
                     },
@@ -526,7 +526,7 @@
                 },
                 "responses": {
                     "2": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
-                    "3": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you"
+                    "3": "I was built by the DeepPavlov team. #+#who_made_you"
                 },
                 "validation": false
             },
