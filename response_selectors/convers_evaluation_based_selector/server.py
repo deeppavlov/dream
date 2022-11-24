@@ -52,6 +52,27 @@ MOST_DUMMY_RESPONSES = [
 LANGUAGE = getenv("LANGUAGE", "EN")
 GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
 
+scenario_skills = [
+    "dff_art_skill",
+    "dff_movie_skill",
+    "dff_book_skill",
+    "news_api_skill",
+    "dff_food_skill",
+    "dff_animals_skill",
+    "dff_sport_skill",
+    "dff_music_skill",
+    "dff_science_skill",
+    "dff_gossip_skill",
+    "game_cooperative_skill",
+    "dff_weather_skill",
+    "dff_funfact_skill",
+    "dff_travel_skill",
+    "dff_coronavirus_skill",
+    "dff_bot_persona_skill",
+    "dff_gaming_skill",
+    "dff_short_story_skill"
+    ]
+
 
 @app.route("/respond", methods=["POST"])
 def respond():
@@ -168,7 +189,7 @@ def respond():
     )
 
 
-def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxics, bot_utterances):
+def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills):
     curr_single_scores = []
 
     bot_utt_counter = Counter(bot_utterances)
@@ -292,6 +313,9 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             dummy_question = candidates[i]["text"]
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
+        if (skill_names[i] in scenario_skills) and (skill_names[i] in all_prev_active_skills) and (skill_names[i] != all_prev_active_skills[-1]):
+            confidences[i] *= 0.9
+
         if curr_score is None:
             score = scores[i]
             confidence = confidences[i]
@@ -305,6 +329,7 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             skill_name = skill_names[i]
             logger.info(f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}")
             curr_single_scores.append(score)
+
 
     highest_conf_exist = True if any(confidences >= 1.0) else False
     if highest_conf_exist:
@@ -357,7 +382,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     else:
         logger.info("Confidence & ConvEvaluationAnnotator Scores based selection")
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
-            dialog, candidates, scores, confidences, is_toxics, bot_utterances
+            dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
         )
 
     logger.info(f"Best candidate: {best_candidate}")
