@@ -70,8 +70,8 @@ scenario_skills = [
     "dff_coronavirus_skill",
     "dff_bot_persona_skill",
     "dff_gaming_skill",
-    "dff_short_story_skill"
-    ]
+    "dff_short_story_skill",
+]
 
 
 @app.route("/respond", methods=["POST"])
@@ -189,7 +189,9 @@ def respond():
     )
 
 
-def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills):
+def rule_score_based_selection(
+    dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
+):
     curr_single_scores = []
 
     bot_utt_counter = Counter(bot_utterances)
@@ -313,7 +315,11 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             dummy_question = candidates[i]["text"]
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
-        if (skill_names[i] in scenario_skills) and (skill_names[i] in all_prev_active_skills) and (skill_names[i] != all_prev_active_skills[-1]):
+        if (
+            (skill_names[i] in scenario_skills)
+            and (skill_names[i] in all_prev_active_skills)
+            and (skill_names[i] != all_prev_active_skills[-1])
+        ):
             confidences[i] *= 0.9
 
         if curr_score is None:
@@ -329,7 +335,6 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             skill_name = skill_names[i]
             logger.info(f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}")
             curr_single_scores.append(score)
-
 
     highest_conf_exist = True if any(confidences >= 1.0) else False
     if highest_conf_exist:

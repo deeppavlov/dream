@@ -61,8 +61,8 @@ scenario_skills = [
     "dff_coronavirus_skill",
     "dff_bot_persona_skill",
     "dff_gaming_skill",
-    "dff_short_story_skill"
-    ]
+    "dff_short_story_skill",
+]
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 PRIORITIZE_WITH_SAME_TOPIC_ENTITY = int(getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 1))
@@ -426,7 +426,11 @@ def tag_based_response_selection(
         confidence = confidences[cand_id]
         score = curr_single_scores[cand_id]
 
-        if (skill_name in scenario_skills) and (skill_name in prev_active_skills) and (skill_name != prev_active_skills[-1]):
+        if (
+            (skill_name in scenario_skills)
+            and (skill_name in prev_active_skills)
+            and (skill_name != prev_active_skills[-1])
+        ):
             confidence *= 0.9
 
         logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
