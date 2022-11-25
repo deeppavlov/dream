@@ -140,6 +140,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dialogpt")  # generative skill
+                skills_for_uttr.append("dialogpt_persona_based")  # generative skill persona-based
                 skills_for_uttr.append("small_talk_skill")
                 skills_for_uttr.append("knowledge_grounding_skill")
                 skills_for_uttr.append("convert_reddit")
@@ -147,6 +148,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_program_y_wide_skill")
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
+                skills_for_uttr.append("gpt2-generator")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
