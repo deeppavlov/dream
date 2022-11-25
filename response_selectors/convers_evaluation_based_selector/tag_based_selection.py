@@ -39,7 +39,6 @@ from utils import (
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
-    ALMOST_ACTIVE_SKILLS,
     CAN_NOT_BE_DISLIKED_SKILLS,
     NOT_ADD_PROMPT_SKILLS,
 )
@@ -661,7 +660,7 @@ def tag_based_response_selection(
     best_candidate["human_attributes"]["disliked_skills"] = disliked_skills
     logger.info(f"Best candidate: {best_candidate}")
     n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
-    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS
 
     # if `no` to 1st in a row linkto question, and chosen response is not from scripted skill
     _no_to_first_linkto = is_no(dialog["human_utterances"][-1]) and any(
