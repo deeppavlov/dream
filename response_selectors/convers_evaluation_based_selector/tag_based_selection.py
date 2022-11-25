@@ -363,12 +363,7 @@ def tag_based_response_selection(
     _prev_prev_active_skill = dialog["bot_utterances"][-2]["active_skill"] if len(dialog["bot_utterances"]) > 1 else ""
     _no_script_two_times_in_a_row = False
     if _prev_active_skill and _prev_prev_active_skill:
-        if all(
-            [
-                skill not in ACTIVE_SKILLS
-                for skill in [_prev_active_skill, _prev_prev_active_skill]
-            ]
-        ):
+        if all([skill not in ACTIVE_SKILLS for skill in [_prev_active_skill, _prev_prev_active_skill]]):
             _no_script_two_times_in_a_row = True
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
 
