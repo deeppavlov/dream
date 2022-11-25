@@ -30,11 +30,15 @@ ACTIVE_SKILLS = [
     "small_talk_skill",
     "dff_wiki_skill",
     "dff_art_skill",
+    "friendship_skill",
+    "dff_friendship_skill",
 ]
-ALMOST_ACTIVE_SKILLS = ["friendship_skill", "dff_friendship_skill", "dff_generative_skill"]
 UNPREDICTABLE_SKILLS = [
     "convert_reddit",
     "knowledge_grounding_skill",
+    "dff_generative_skill",
+    "dialogpt",
+    "dialogpt_persona_based",
 ]
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
 NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "dff_intent_responder_skill", "misheard_asr", "dff_program_y_dangerous_skill"]

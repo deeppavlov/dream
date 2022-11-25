@@ -38,7 +38,6 @@ from utils import (
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
-    ALMOST_ACTIVE_SKILLS,
     CAN_NOT_BE_DISLIKED_SKILLS,
     NOT_ADD_PROMPT_SKILLS,
 )
@@ -366,7 +365,7 @@ def tag_based_response_selection(
     if _prev_active_skill and _prev_prev_active_skill:
         if all(
             [
-                skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+                skill not in ACTIVE_SKILLS
                 for skill in [_prev_active_skill, _prev_prev_active_skill]
             ]
         ):
@@ -652,7 +651,7 @@ def tag_based_response_selection(
     best_candidate["human_attributes"]["disliked_skills"] = disliked_skills
     logger.info(f"Best candidate: {best_candidate}")
     n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
-    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS
     no_question_by_user = "?" not in dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get(
         "punct_sent", dialog["human_utterances"][-1]["text"]
     )
