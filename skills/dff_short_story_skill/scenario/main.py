@@ -23,6 +23,7 @@ flows = {
                     cnd.neg(loc_cnd.needs_scripted_story),
                     loc_cnd.should_return,
                     loc_cnd.has_five_keywords,
+                    cnd.neg(loc_cnd.prev_is_any_question),
                 ]
             )
             # ("story_flow", "fallback_node"): cnd.all([loc_cnd.needs_scripted_story, loc_cnd.should_return]),
@@ -38,6 +39,7 @@ flows = {
                         cnd.neg(loc_cnd.needs_scripted_story),
                         loc_cnd.should_return,
                         loc_cnd.has_five_keywords,
+                        cnd.neg(loc_cnd.prev_is_any_question),
                     ]
                 ),
                 "gpt_topic": cnd.all(
@@ -88,7 +90,10 @@ flows = {
         #         "start_node": cnd.neg(loc_cnd.needs_scripted_story)
         #     },
         # },
-        "gpt_topic": {RESPONSE: loc_rsp.choose_topic, TRANSITIONS: {"gpt_story_first_part": loc_cnd.prev_is_question}},
+        "gpt_topic": {
+            RESPONSE: loc_rsp.choose_topic,
+            TRANSITIONS: {"gpt_story_first_part": loc_cnd.prev_is_story_topic_question},
+        },
         "gpt_story_first_part": {
             RESPONSE: loc_rsp.generate_first_prompt_part,
             TRANSITIONS: {

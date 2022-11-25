@@ -7,7 +7,7 @@ from df_engine.core import Context, Actor
 
 import common.dff.integration.context as int_ctx
 from common.short_story import STORY_TOPIC_QUESTIONS
-from common.utils import get_intents
+from common.utils import get_intents, is_question, is_special_factoid_question
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -86,7 +86,7 @@ def should_return(ctx: Context, actor: Actor) -> bool:
         return True
 
 
-def prev_is_question(ctx: Context, actor: Actor) -> bool:
+def prev_is_story_topic_question(ctx: Context, actor: Actor) -> bool:
     utt = int_ctx.get_last_bot_utterance(ctx, actor)
     if utt.get("text", ""):
         if prev_question_pattern.search(utt["text"]):
@@ -103,4 +103,12 @@ def has_five_keywords(ctx: Context, actor: Actor):
             nouns.extend(utterances[-2].get("annotations", {}).get("rake_keywords", []))
             if len(nouns) >= 5:
                 return True
+    return False
+
+
+def prev_is_any_question(ctx: Context, actor: Actor) -> bool:
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    text = utt.get("text", "")
+    if is_question(text) or is_special_factoid_question(utt):
+        return True
     return False
