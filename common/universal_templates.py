@@ -659,7 +659,7 @@ DFF_WIKI_TEMPLATES = {
     "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE),
     "anime": re.compile(r"\banime\b|\bpokemon\b", re.IGNORECASE),
     "love": re.compile(
-        r"((fall|fell|fallen|falling) in love|in love|crush on)",
+        r"(\b(fall|fell|fallen|falling) in love\b|m in love\b|\bcrush on\b)",
         re.IGNORECASE,
     ),
     "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
