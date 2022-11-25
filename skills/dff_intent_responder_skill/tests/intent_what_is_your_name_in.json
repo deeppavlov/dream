@@ -166,9 +166,9 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "I was built by the DeepPavlov team. #+#who_made_you",
                                 "who made you?",
-                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "I was built by the DeepPavlov team. #+#who_made_you",
                                 "Where are you from?"
                             ]
                         },
@@ -378,7 +378,7 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "I was built by the DeepPavlov team. #+#who_made_you",
                                 "Where are you from?",
                                 "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from",
                                 "introduce yourself."
@@ -472,7 +472,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "who made you?",
-                                "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                                "I was built by the DeepPavlov team. #+#who_made_you",
                                 "Where are you from?",
                                 "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from"
                             ]
@@ -529,7 +529,7 @@
                     "5": "Where are you from?"
                 },
                 "responses": {
-                    "4": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+                    "4": "I was built by the DeepPavlov team. #+#who_made_you",
                     "5": "As a socialbot, I live in a cloud. If you want to know me better, let's spend more time talking to each other. Where are you from? #+#where_are_you_from"
                 },
                 "validation": false
