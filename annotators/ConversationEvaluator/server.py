@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -26,7 +26,7 @@ def transform(data):
 
 
 try:
-    model = build_model("conveval.json", download=False)
+    model = build_model("conveval.json", download=True)
     test_res = model(["a"])
     logger.info("model loaded, test query processed")
 except Exception as e:
@@ -53,7 +53,7 @@ def batch_respond():
     result = []
     for scores in conv_eval_results:
         result.append({annotation: float(score) for annotation, score in zip(key_annotations, scores)})
-    logger.info(f"convers-evaluator-annotator output: {result} ")
+
     logger.info(f"convers-evaluator-annotator exec time: {round(time.time()-t, 2)} sec")
     return jsonify([{"batch": result}])
 
