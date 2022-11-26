@@ -262,7 +262,7 @@ def add_to_top1_category(cand_id, categorized, _is_require_action_intent):
 
 def does_not_require_prompt(candidates, best_cand_id):
     _is_already_prompt = "prompt" in candidates[best_cand_id].get("response_parts", [])
-    _is_very_long = len(candidates[best_cand_id]["text"]) > 200
+    _is_very_long = len(candidates[best_cand_id]["text"]) > 100
 
     _best_cand_intents = get_intents(candidates[best_cand_id], which="all")
     _is_request = any([intent in _best_cand_intents for intent in REQUIRE_ACTION_INTENTS.keys()])
