@@ -365,9 +365,7 @@ def tag_based_response_selection(
     _prev_active_skills = []
     for i in range(min(MAX_TURNS_WITHOUT_SCRIPTS, n_available_bot_uttr)):
         _prev_active_skills.append(dialog["bot_utterances"][-i - 1]["active_skill"])
-    _no_scripts_n_times_in_a_row = all(
-        [skill not in ACTIVE_SKILLS for skill in _prev_active_skills]
-    )
+    _no_scripts_n_times_in_a_row = all([skill not in ACTIVE_SKILLS for skill in _prev_active_skills])
 
     _prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
     _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
