@@ -668,9 +668,10 @@ def tag_based_response_selection(
     _is_short_or_question_by_not_script = _is_best_not_script and (
         "?" in best_candidate["text"] or len(best_candidate["text"].split()) < 4
     )
-    _no_questions_for_3_steps = not any(
-        [is_any_question_sentence_in_utterance(uttr) for uttr in dialog["bot_utterances"][-3:]]
-    ) and len(dialog["bot_utterances"]) >= 3
+    _no_questions_for_3_steps = (
+        not any([is_any_question_sentence_in_utterance(uttr) for uttr in dialog["bot_utterances"][-3:]])
+        and len(dialog["bot_utterances"]) >= 3
+    )
 
     if PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS:
         if (_no_scripts_n_times_in_a_row and _is_short_or_question_by_not_script and not _is_question_by_user) or (
