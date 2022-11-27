@@ -1027,7 +1027,7 @@
             "convers_evaluator_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://convers-evaluator-annotator:8004/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
