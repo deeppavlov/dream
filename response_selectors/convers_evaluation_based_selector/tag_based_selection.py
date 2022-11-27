@@ -119,7 +119,7 @@ def categorize_candidate(
             - othr_topic_entity_no_db
             - othr_topic_entity_db
     """
-    if (_can_continue == MUST_CONTINUE) or _is_active_skill:
+    if (_can_continue == MUST_CONTINUE) or (_is_active_skill and PRIORITIZE_SCRIPTED_SKILLS):
         # so, scripted skills with CAN_CONTINUE_PROMPT status are not considered as active!
         # this is a chance for other skills to be turned on
         actsuffix = "active"
