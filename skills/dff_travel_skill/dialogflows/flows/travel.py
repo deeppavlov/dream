@@ -895,12 +895,6 @@ def share_fact_about_loc_response(vars):
                     vars, f"used_facts_{location}", len(facts_about_location), renew_seq_if_empty=True
                 )
             ]
-            unrepeatable_index_from_rand = state_utils.get_unrepeatable_index_from_rand_seq(
-                    vars, f"used_facts_{location}", len(facts_about_location), renew_seq_if_empty=True
-                )
-            logger.info(
-            f"Unrepeatable index: {unrepeatable_index_from_rand}"
-            )
             if fact_about_location[-1] != ".":
                 fact_about_location += "."
             return f"{fact_about_location} {opinion_req}"
