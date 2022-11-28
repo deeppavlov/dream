@@ -777,7 +777,6 @@ LOCATION_FACTS_BUFFER = {}
 
 def collect_and_save_facts_about_location(location, vars):
     global LOCATION_FACTS_BUFFER
-
     facts_about_location = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
     facts_about_location = [fact for fact in facts_about_location if "is a city" not in fact.lower()]
 
@@ -788,7 +787,7 @@ def collect_and_save_facts_about_location(location, vars):
             facts_about_location = [get_fact(location, f"fact about {location}")]
             if len(LOCATION_FACTS_BUFFER) == 100:
                 LOCATION_FACTS_BUFFER = {}
-            LOCATION_FACTS_BUFFER[location] = facts_about_location
+            # LOCATION_FACTS_BUFFER[location] = facts_about_location
 
     facts_about_location = [FACTS_EXTRA_WORDS.sub("", fact).strip() for fact in facts_about_location if len(fact)]
     facts_about_location = [fact for fact in facts_about_location if len(fact)]
@@ -896,6 +895,12 @@ def share_fact_about_loc_response(vars):
                     vars, f"used_facts_{location}", len(facts_about_location), renew_seq_if_empty=True
                 )
             ]
+            unrepeatable_index_from_rand = state_utils.get_unrepeatable_index_from_rand_seq(
+                    vars, f"used_facts_{location}", len(facts_about_location), renew_seq_if_empty=True
+                )
+            logger.info(
+            f"Unrepeatable index: {unrepeatable_index_from_rand}"
+            )
             if fact_about_location[-1] != ".":
                 fact_about_location += "."
             return f"{fact_about_location} {opinion_req}"

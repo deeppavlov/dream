@@ -87,7 +87,7 @@ ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC = [
 ]
 
 OFFER_FACT_RESPONSES = [
-    "Great! Would you like to me to share a fact about LOCATION?",
+    "Great! Would you like me to share a fact about LOCATION?",
     "Cool! Do you want to hear a fact about LOCATION?",
     "I know something interesting about it. Do you want me to share a fact about LOCATION?",
 ]
