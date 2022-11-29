@@ -17,6 +17,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8006:8006
+  rake-keywords:
+    volumes:
+      - "./annotators/rake_keywords:/src"
+    ports:
+      - 8007:8007
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -246,11 +251,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8086:8086
-  masked-lm:
-    volumes:
-      - "./services/masked_lm:/src"
-    ports:
-      - 8088:8088
   entity-storer:
     volumes:
       - "./common:/src/common"
@@ -395,6 +395,16 @@ services:
       - "./annotators/midas_predictor:/src"
     ports:
       - 8121:8121
+  storygpt:
+    volumes:
+      - "./services/storygpt:/src"
+    ports:
+      - 8126:8126
+  prompt-storygpt:
+    volumes:
+      - "./services/prompt_storygpt:/src"
+    ports:
+      - 8127:8127
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
@@ -420,13 +430,6 @@ services:
   wiki-parser-kg:
     ports:
       - 9077:9077
-  dff-kg-personality-skill:
-    volumes:
-      - "./skills/dff_kg_personality_skill:/src"
-      - "./common:/src/common"
-      - "./bin:/src/bin"
-    ports:
-      - 8058:8058
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"

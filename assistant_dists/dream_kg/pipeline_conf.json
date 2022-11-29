@@ -169,6 +169,19 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
+            "rake_keywords": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://rake-keywords:8007/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
             "conceptnet": {
                 "connector": {
                     "protocol": "http",
@@ -291,7 +304,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 1,
                     "url": "http://entity-linking:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
@@ -681,7 +694,7 @@
             "dff_short_story_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 3,
                     "url": "http://dff-short-story-skill:8057/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
@@ -1002,19 +1015,6 @@
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
-            },
-            "dff_kg_personality_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-kg-personality-skill:8058/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_kg_personality_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
             }
         },
         "post_skill_selector_annotators": {
@@ -1034,7 +1034,7 @@
             "convers_evaluator_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://convers-evaluator-annotator:8004/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",

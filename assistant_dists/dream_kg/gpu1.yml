@@ -121,10 +121,6 @@ services:
     restart: unless-stopped
   dff-grounding-skill:
     restart: unless-stopped
-  masked-lm:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   dff-friendship-skill:
     restart: unless-stopped
   entity-storer:
@@ -171,6 +167,8 @@ services:
     restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   convers-evaluator-annotator:
     restart: unless-stopped
     environment:
@@ -183,6 +181,14 @@ services:
     restart: unless-stopped
   midas-predictor:
     restart: unless-stopped
+  storygpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  prompt-storygpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
   dialogpt:
     restart: unless-stopped
     environment:
@@ -192,7 +198,5 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=7
   dff-template-skill:
-    restart: unless-stopped
-  dff-kg-personality-skill:
     restart: unless-stopped
 version: '3.7'

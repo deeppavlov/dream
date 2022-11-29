@@ -1,9 +1,9 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+          spacy-nounphrases:8006, rake-keywords:8007, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009,
           personality-catcher:8010, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous-skill:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
@@ -12,16 +12,16 @@ services:
           comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
           spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
-          dff-friendship-skill:8086, masked-lm:8088, entity-storer:8089,
+          dff-friendship-skill:8086, entity-storer:8089,
           dff-book-skill:8032, dff-grounding-skill:8080,
           dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
           midas-classification:8090, fact-random:8119, fact-retrieval:8100,
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120,
-          neo4j:7474, entity-extraction-kg:9103, wiki-parser-kg:9077, dff-kg-personality-skill:8058,
-          property-extraction:8126, user-knowledge-graph:8127"
+          midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, terminusdb:6363, storygpt:8126,
+          prompt-storygpt:8127, entity-extraction-kg:9103, wiki-parser-kg:9077, property-extraction:8126,
+          user-knowledge-graph:8127"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -49,6 +49,21 @@ services:
       context: .
       dockerfile: ./annotators/spacy_nounphrases/Dockerfile
     command: flask run -h 0.0.0.0 -p 8006
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  rake-keywords:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/rake_keywords/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8007
     environment:
       - FLASK_APP=server
     deploy:
@@ -126,9 +141,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   sentrewrite:
     env_file: [.env]
@@ -525,9 +540,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 23G
+          memory: 1.5G
         reservations:
-          memory: 23G
+          memory: 1.5G
 
   wiki-parser:
     env_file: [.env]
@@ -683,24 +698,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  masked-lm:
-    env_file: [.env]
-    build:
-      context: ./services/masked_lm/
-      args:
-        SERVICE_PORT: 8088
-        PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased"
-    command: flask run -h 0.0.0.0 -p 8088
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2.5G
-        reservations:
-          memory: 2.5G
 
   entity-storer:
     env_file: [.env]
@@ -1080,6 +1077,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -1109,6 +1107,7 @@ services:
       args:
         SERVICE_PORT: 8057
         SERVICE_NAME: dff_short_story_skill
+        STORY_TYPE: generated
       context: .
       dockerfile: ./skills/dff_short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload
@@ -1177,6 +1176,7 @@ services:
         SERVICE_NAME: dialogpt
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
+        CONFIG_NAME: dialogpt_en.json
       context: ./services/dialogpt/
     command: flask run -h 0.0.0.0 -p 8125
     environment:
@@ -1206,6 +1206,47 @@ services:
         reservations:
           memory: 2.5G # ?
 
+  storygpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8126
+        SERVICE_NAME: storygpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt2-medium
+        FINETUNED_GPT_URL: http://files.deeppavlov.ai/dream_data/story_skill/filtered_ROCStories_gpt_medium.pt
+      context: ./services/storygpt/
+    command: flask run -h 0.0.0.0 -p 8126
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+        reservations:
+          memory: 10G
+
+  prompt-storygpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8127
+        SERVICE_NAME: prompt_storygpt
+        MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
+        BART_MODEL_NAME: facebook/bart-large
+        FINETUNED_MODEL_NAME: /data/finetuned2
+      context: ./services/prompt_storygpt/
+    command: flask run -h 0.0.0.0 -p 8127
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+        reservations:
+          memory: 10G
+
   dff-template-skill:
     env_file: [.env]
     build:
@@ -1221,21 +1262,11 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  neo4j:
-    image: neo4j:4.2.5
+  
+  terminusdb:
+    image: terminusdb/terminusdb-server:latest
     ports:
-      - 7474:7474
-      - 7687:7687
-      - 7473:7473
-    volumes:
-      - ~/neo4j/data:/data
-    environment:
-      NEO4J_AUTH: none
-      NEO4J_dbms_connector_http_advertised__address: "localhost:7474"
-      NEO4J_dbms_connector_bolt_advertised__address: "localhost:7687"
-      #      NEO4J_dbms_connector_bolt_tls__level: "OPTIONAL"
-      NEO4JLABS_PLUGINS: "[\"apoc\"]"
+      - 6363:6363
 
   entity-extraction-kg:
     build:
@@ -1281,27 +1312,8 @@ services:
         reservations:
           memory: 256M
 
-  dff-kg-personality-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8058
-        SERVICE_NAME: dff_kg_personality_skill
-      context: .
-      dockerfile: ./skills/dff_kg_personality_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8058 --reload
-#    command: sh -c 'bin/wait && gunicorn --workers=1 --log-level=info server:app -b 0.0.0.0:8058 --reload'
-    environment:
-      WAIT_HOSTS: "neo4j:7474"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 512M
   property-extraction:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       args:
         CONFIG: t5_generative_ie_infer.json
@@ -1312,7 +1324,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8126
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=3
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
