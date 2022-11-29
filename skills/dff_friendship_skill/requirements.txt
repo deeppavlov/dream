@@ -1,3 +1,2 @@
-setuptools<=65.5.1
 numpy==1.17.2
 nltk==3.5
