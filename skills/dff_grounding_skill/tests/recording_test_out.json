@@ -95,6 +95,7 @@
                                     {},
                                     {},
                                     {
+                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement"
                                         ]
@@ -115,6 +116,7 @@
                                     },
                                     {},
                                     {
+                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -232,6 +234,7 @@
                                     {},
                                     {},
                                     {
+                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement"
                                         ]
@@ -252,6 +255,7 @@
                                     },
                                     {},
                                     {
+                                        "can_continue": "no",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -298,13 +302,13 @@
         ],
         [
             {
-                "can_continue": "can",
+                "can_continue": "no",
                 "response_parts": [
                     "acknowledgement"
                 ]
             },
             {
-                "can_continue": "can",
+                "can_continue": "no",
                 "response_parts": [
                     "acknowledgement",
                     "body"

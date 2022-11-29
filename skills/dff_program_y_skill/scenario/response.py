@@ -4,9 +4,11 @@ import pathlib
 
 from df_engine.core import Context, Actor
 
-from common.dff.integration.context import set_confidence
+from common.constants import CAN_NOT_CONTINUE
+from common.dff.integration.context import set_confidence, set_can_continue
 from common.programy.model import get_programy_model
 from common.sensitive import psycho_help_spec
+
 
 logger = logging.getLogger(__name__)
 LANGUAGE = os.getenv("LANGUAGE", "EN")
@@ -25,6 +27,7 @@ except Exception as e:
 def programy_reponse(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = model(ctx.requests.values())
     if psycho_help_spec in response:
-        set_confidence(ctx, actor, 1.0)
+        set_confidence(ctx, actor, 0.85)
+        set_can_continue(ctx, actor, continue_flag=CAN_NOT_CONTINUE)
         return response
     return response

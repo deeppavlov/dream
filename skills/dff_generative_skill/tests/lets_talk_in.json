@@ -15,6 +15,85 @@
                 {
                     "text": "тоже хорошо. посоветуй мне фильм посмотреть.",
                     "user": {
+                        "id": "636e5e9d7fd1d167c75f8b2e",
+                        "user_external_id": "dfgkjhdfkgf",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_generative_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                                    "labels": {
+                                        "0": [
+                                            "generation",
+                                            "generative_response_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "привет."
+                                    },
+                                    "responses": {
+                                        "0": [
+                                            [
+                                                "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "generation",
+                                        "generative_response_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
                         "user_type": "human"
                     },
                     "annotations": {}
@@ -32,7 +111,63 @@
         }
     ],
     "dff_generative_skill_state_batch": [
-        {}
+        {
+            "context": {
+                "actor_state": {},
+                "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                "labels": {
+                    "0": [
+                        "generation",
+                        "generative_response_node"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "привет."
+                },
+                "responses": {
+                    "0": [
+                        [
+                            "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                            0.99,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ],
+                        [
+                            "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                            0.99,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ],
+                        [
+                            "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                            0.99,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ]
+                    ]
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "generation",
+                    "generative_response_node"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
     ],
     "dff_shared_state_batch": [
         {
