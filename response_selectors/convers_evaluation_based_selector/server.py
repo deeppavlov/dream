@@ -21,6 +21,7 @@ from common.utils import (
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
 )
+from common.response_selection import ACTIVE_SKILLS
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
@@ -51,27 +52,6 @@ MOST_DUMMY_RESPONSES = [
 ]
 LANGUAGE = getenv("LANGUAGE", "EN")
 GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
-
-scenario_skills = [
-    "dff_art_skill",
-    "dff_movie_skill",
-    "dff_book_skill",
-    "news_api_skill",
-    "dff_food_skill",
-    "dff_animals_skill",
-    "dff_sport_skill",
-    "dff_music_skill",
-    "dff_science_skill",
-    "dff_gossip_skill",
-    "game_cooperative_skill",
-    "dff_weather_skill",
-    "dff_funfact_skill",
-    "dff_travel_skill",
-    "dff_coronavirus_skill",
-    "dff_bot_persona_skill",
-    "dff_gaming_skill",
-    "dff_short_story_skill",
-]
 
 
 @app.route("/respond", methods=["POST"])
@@ -316,7 +296,7 @@ def rule_score_based_selection(
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
         if (
-            (skill_names[i] in scenario_skills)
+            (skill_names[i] in ACTIVE_SKILLS)
             and (skill_names[i] in all_prev_active_skills)
             and (skill_names[i] != all_prev_active_skills[-1])
         ):

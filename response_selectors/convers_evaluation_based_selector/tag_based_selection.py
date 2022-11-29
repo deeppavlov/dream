@@ -43,27 +43,6 @@ from common.response_selection import (
     NOT_ADD_PROMPT_SKILLS,
 )
 
-scenario_skills = [
-    "dff_art_skill",
-    "dff_movie_skill",
-    "dff_book_skill",
-    "news_api_skill",
-    "dff_food_skill",
-    "dff_animals_skill",
-    "dff_sport_skill",
-    "dff_music_skill",
-    "dff_science_skill",
-    "dff_gossip_skill",
-    "game_cooperative_skill",
-    "dff_weather_skill",
-    "dff_funfact_skill",
-    "dff_travel_skill",
-    "dff_coronavirus_skill",
-    "dff_bot_persona_skill",
-    "dff_gaming_skill",
-    "dff_short_story_skill",
-]
-
 sentry_sdk.init(getenv("SENTRY_DSN"))
 PRIORITIZE_WITH_SAME_TOPIC_ENTITY = int(getenv("PRIORITIZE_WITH_SAME_TOPIC_ENTITY", 1))
 PRIORITIZE_NO_DIALOG_BREAKDOWN = int(getenv("PRIORITIZE_NO_DIALOG_BREAKDOWN", 0))
@@ -427,11 +406,11 @@ def tag_based_response_selection(
         score = curr_single_scores[cand_id]
 
         if (
-            (skill_name in scenario_skills)
+            (skill_name in ACTIVE_SKILLS)
             and (skill_name in prev_active_skills)
             and (skill_name != prev_active_skills[-1])
         ):
-            confidence *= 0.9
+            confidences[cand_id] *= 0.9
 
         logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
 
