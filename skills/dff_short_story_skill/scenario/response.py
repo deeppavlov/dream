@@ -108,7 +108,10 @@ def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def tell_punchline(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-    int_ctx.set_confidence(ctx, actor, 0.8) if int_cnd.is_do_not_know_vars(ctx, actor) else None
+    if int_cnd.is_do_not_know_vars(ctx, actor):
+        int_ctx.set_confidence(ctx, actor, 0.8)
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.0)
     story = ctx.misc.get("story", "")
     story_type = ctx.misc.get("story_type", "")
 
@@ -133,7 +136,10 @@ def fallback(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     # if prev_node is tell_punchline_node or fallback_node
     elif prev_node == "tell_punchline_node" or prev_node == "fallback_node":
         int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
-        int_ctx.set_confidence(ctx, actor, 0.5) if int_cnd.is_do_not_know_vars(ctx, actor) else None
+        if int_cnd.is_do_not_know_vars(ctx, actor):
+            int_ctx.set_confidence(ctx, actor, 0.5)
+        else:
+            int_ctx.set_confidence(ctx, actor, 0.0)
         return random.choice(sorted(phrases.get("start_phrases", [])))
 
     # for generated story scenarios
