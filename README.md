@@ -4,61 +4,56 @@
 
 To get architecture documentation, please refer to DeepPavlov Agent [readthedocs documentation](https://deeppavlov-agent.readthedocs.io).
 
+
 # Distributions
 
 We've already included six distributions: four of them are based on lightweight Deepy socialbot,
 one is a full-sized Dream chatbot (based on Alexa Prize Challenge version) in English and a Dream chatbot in Russian.
 
 ### Deepy Base
-
-Base version of Lunar assistant.
+Base version of Lunar assistant. 
 Deepy Base contains Spelling Preprocessing annotator,
 template-based Harvesters Maintenance Skill,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy Advanced
-
-Advanced version of Lunar assistant.
+Advanced version of Lunar assistant. 
 Deepy Advanced contains Spelling Preprocessing, Sentence Segmentation,
 Entity Linking and Intent Catcher annotators, Harvesters Maintenance GoBot Skill for goal-oriented responses,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy FAQ
-
-FAQ version of Lunar assistant.
-Deepy FAQ contains Spelling Preprocessing annotator,
+FAQ version of Lunar assistant. 
+Deepy FAQ contains Spelling Preprocessing annotator, 
 template-based Frequently Asked Questions Skill,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Deepy GoBot
-
 Goal-oriented version of Lunar assistant.
 Deepy GoBot Base contains Spelling Preprocessing annotator,
 Harvesters Maintenance GoBot Skill for goal-oriented responses,
 and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.
 
 ### Dream
-
 Full version of DeepPavlov Dream Socialbot.
-This is almost the same version of the DREAM socialbot as at
+This is almost the same version of the DREAM socialbot as at 
 [the end of Alexa Prize Challenge 4](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf).
 Some API services are replaced with trainable models.
 Some services (e.g., News Annotator, Game Skill, Weather Skill) require private keys for underlying APIs,
 most of them can be obtained for free.
 If you want to use these services in local deployments, add your keys to the environmental variables (e.g., `./.env`).
-This version of Dream Socialbot consumes a lot of resources
-because of its modular architecture and original goals (participation in Alexa Prize Challenge).
+This version of Dream Socialbot consumes a lot of resources 
+because of its modular architecture and original goals (participation in Alexa Prize Challenge). 
 We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai).
 
-### Dream Mini
 
+### Dream Mini
 Mini version of DeepPavlov Dream Socialbot.
 This is a generative-based socialbot that uses [English DialoGPT model](https://huggingface.co/microsoft/DialoGPT-medium) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_mini)
 
 ### Dream Russian
-
-Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
+Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT model](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
 # Quick Start
@@ -69,42 +64,38 @@ Russian version of DeepPavlov Dream Socialbot. This is a generative-based social
 git clone https://github.com/deeppavlov/dream.git
 ```
 
-### Install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/)
+
+### Install [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/) 
 
 If you get a "Permission denied" error running docker-compose, make sure to [configure your docker user](https://docs.docker.com/engine/install/linux-postinstall/) correctly.
+
 
 ### Run one of the Dream distributions
 
 #### **Deepy Base**
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_base/docker-compose.override.yml up --build
 ```
 
 #### **Deepy Advanced**
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_adv/docker-compose.override.yml up --build
 ```
 
 #### **Deepy FAQ**
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_faq/docker-compose.override.yml up --build
 ```
 
 #### **Deepy GoBot**
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/deepy_gobot_base/docker-compose.override.yml up --build
 ```
 
 #### **Dream (via proxy)**
-
-The easiest way to try out Dream is to deploy it via proxy.
+The easiest way to try out Dream is to deploy it via proxy. 
 All the requests will be redirected to DeepPavlov API, so you don't have to use any local resources.
 See [proxy usage](#proxy-usage) for details.
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/proxy.yml up --build
 ```
@@ -113,19 +104,15 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 
 **Please note, that DeepPavlov Dream components require a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml up --build
 ```
-
 We've also included a config with GPU allocations for multi-GPU environments.
 
 ```
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/test.yml up
 ```
-
 When you need to restart particular docker container without re-building (make sure mapping in `assistant_dists/dream/dev.yml` is correct):
-
 ```
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
 ```
@@ -135,7 +122,6 @@ AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/do
 DeepPavlov Agent provides several options for interaction: a command line interface, an HTTP API, and a Telegram bot 
 
 #### CLI
-
 In a separate terminal tab run:
 
 ```
@@ -145,7 +131,6 @@ docker-compose exec agent python -m deeppavlov_agent.run agent.channel=cmd agent
 Enter your username and have a chat with Dream!
 
 #### HTTP API
-
 Once you've started the bot, DeepPavlov's Agent API will run on `http://localhost:4242`.
 You can learn about the API from the [DeepPavlov Agent Docs](https://deeppavlov-agent.readthedocs.io/en/latest/intro/overview.html#http-api-server).
 
@@ -161,12 +146,11 @@ agent:
 **NOTE:** treat your Telegram token as a secret and do not commit it to public repositories!
 
 # Configuration and proxy usage
-
 Dream uses several docker-compose configuration files:
 
 `./docker-compose.yml` is the core config which includes containers for DeepPavlov Agent and mongo database;
 
-`./assistant_dists/*/docker-compose.override.yml` lists all components for the distribution;
+`./assistant_dists/*/docker-compose.override.yml` lists all components for the distribution; 
 
 `./assistant_dists/dream/dev.yml` includes volume bindings for easier Dream debugging;
 
@@ -174,7 +158,6 @@ Dream uses several docker-compose configuration files:
 
 If your deployment resources are limited, you can replace containers with their proxied copies hosted by DeepPavlov.
 To do this, override those container definitions inside `proxy.yml`, e.g.:
-
 ```
 convers-evaluator-annotator:
   command: ["nginx", "-g", "daemon off;"]
@@ -185,7 +168,6 @@ convers-evaluator-annotator:
     - PROXY_PASS=dream.deeppavlov.ai:8004
     - PORT=8004
 ```
-
 and include this config in your deployment command:
 
 ```
@@ -193,6 +175,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 ```
 
 By default, `proxy.yml` contains all available proxy definitions.
+
 
 # Components English Version
 
@@ -222,7 +205,6 @@ Dream Architecture is presented in the following image:
 | News API annotator          | 80 MiB RAM               | extracts the latest news about entities or topics using the GNews API. DeepPavlov Dream deployments utilize our own API key.                                                                                                   |
 | Personality Catcher         | 30 MiB RAM               |                                                                                                                                                                                                                                |
 | Rake keywords               | 40 MiB RAM               | extracts keywords from utterances with the help of RAKE algorithm                                                                                                                                                              |
-| Relative Persona Extractor  | 50 MiB RAM               | Annotator utilizing Sentence Ranker to rank persona sentences and selecting `N_SENTENCES_OT_RETURN` the most relevant sentences                                                                                                |
 | Sentrewrite                 | 200 MiB RAM              | rewrites user's utterances by replacing pronouns with specific names that provide more useful information to downstream components                                                                                             |
 | Sentseg                     | 1 GiB RAM                | allows us to handle long and complex user's utterances by splitting them into sentences and recovering punctuation                                                                                                             |
 | Spacy Nounphrases           | 180 MiB RAM              | extracts nounphrases using Spacy and filters out generic ones                                                                                                                                                                  |
@@ -235,17 +217,16 @@ Dream Architecture is presented in the following image:
 | Wiki Facts                  | 1.7 GiB RAM              |                                                                                                                                                                                                                                |
 
 ## Services
-| Name                   | Requirements              | Description                                                                                                                                                                                              |
-|------------------------|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DialoGPT               | 1.2 GiB RAM, 2.1 GiB GPU  | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU) |
-| DialoGPT Persona-based | 1.2 GiB RAM, 2.1 GiB GPU  | generative service based on Transformers generative model, the model was pre-trained on the PersonaChat dataset to generate a response conditioned on a several sentences of the socialbot's persona     |
-| Image captioning       | 4 GiB RAM, 5.4 GiB GPU    | creates text representation of a received image                                                                                                                                                          |
-| Infilling              | 1  GiB RAM, 1.2 GiB GPU   | (turned off but the code is available) generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens             |
-| Knowledge Grounding    | 2 GiB RAM, 2.1 GiB GPU    | generative service based on BlenderBot architecture providing a response to the context taking into account an additional text paragraph                                                                 |
-| Masked LM              | 1.1 GiB RAM, 1 GiB GPU    | (turned off but the code is available)                                                                                                                                                                   |
-| Sentence Ranker        | 1.2 GiB RAM, 2.1 GiB GPU  | ranking model given as `PRETRAINED_MODEL_NAME_OR_PATH` which for a pair os sentences returns a float score of correspondence                                                                             |
-| StoryGPT               | 2.6 GiB RAM, 2.15 GiB GPU | generative service based on fine-tuned GPT-2, for the given set of keywords returns a short story using the keywords                                                                                     |
-| Prompt StoryGPT        | 3 GiB RAM, 4 GiB GPU      | generative service based on fine-tuned GPT-2, for the given topic represented by one noun returns short story on a given topic                                                                           |
+
+| Name                | Requirements               | Description                                                                                                                                                                                              |
+|---------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DialoGPT            | 1.2 GiB RAM, 2.1 GiB GPU   | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU) |
+| Image captioning    | 4 GiB RAM, 5.4 GiB GPU   | creates text representation of a received image                                                                                                                                                          |
+| Infilling           | 1  GiB RAM, 1.2 GiB GPU    | generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens                                                    |
+| Knowledge Grounding | 2 GiB RAM, 2.1 GiB GPU     | generative service based on BlenderBot architecture providing a response to the context taking into account an additional text paragraph                                                                 |
+| Masked LM           | 1.1 GiB RAM, 1 GiB GPU     |                                                                                                                                                                                                          |
+| StoryGPT            | 2.6 GiB RAM, 2.15 GiB GPU  | generative service based on fine-tuned GPT-2, for the given set of keywords returns a short story using the keywords                                                                                     |
+| Prompt StoryGPT     | 3 GiB RAM, 4 GiB GPU       | generative service based on fine-tuned GPT-2, for the given topic represented by one noun returns short story on a given topic                                                                           |
 
 ## Skills
 | Name                          | Requirements              | Description                                                                                                                                                                                                        |
@@ -294,6 +275,7 @@ Dream Architecture is presented in the following image:
 | DFF Weather skill             | 1.4 GiB RAM               | **[New DFF version]** uses the OpenWeatherMap service to get the forecast for the user's location                                                                                                                  |
 | DFF Wiki skill                | 150 MiB RAM               | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                                                                                                     |
 
+
 # Components Russian Version
 
 Dream Architecture is presented in the following image:
@@ -301,23 +283,23 @@ Dream Architecture is presented in the following image:
 
 ## Annotators
 
-| Name                   | Requirements             | Description                                                                                                                                                                                  |
-|------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Badlisted words        | 50 MiB RAM               | detects obscene Russian words from the badlist                                                                                                                                               |
-| Entity detection       | 3  GiB RAM               | extracts entities and their types from utterances                                                                                                                                            |
-| Entity linking         | 500 MiB RAM, ?? GiB GPU  | finds Wikidata entity ids for the entities detected with Entity Detection                                                                                                                    |
-| Intent catcher         | 900 MiB RAM              | classifies user utterances into a number of predefined intents which are trained on a set of phrases and regexps                                                                             |
-| NER                    | 1.7 GiB RAM, 4.9 Gib GPU | extracts person names, names of locations, organizations from uncased text using ruBert-based (pyTorch) model                                                                                |
-| Sentseg                | 2.4 GiB RAM, 4.9 Gib GPU | recovers punctuation using ruBert-based (pyTorch) model and splits into sentences                                                                                                            |
-| Spacy Annotator        | 250 MiB RAM              | token-wise annotations by Spacy                                                                                                                                                              |
-| Spelling preprocessing | 4.4 GiB RAM              | Russian Levenshtein correction model                                                                                                                                                         |
-| Wiki parser            | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                     |
-| DialogRPT              | 3.8 GiB RAM,  2 GiB GPU  | DialogRPT model which is based on [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) and fine-tuned on Russian Pikabu Comment sequences |
+| Name                   | Requirements             | Description                                                                                                                                                                   |
+|------------------------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Badlisted words        | 50 MiB RAM               | detects obscene Russian words from the badlist                                                                                                                                |
+| Entity detection       | 3  GiB RAM               | extracts entities and their types from utterances                                                                                                                             |
+| Entity linking         | 500 MiB RAM, ?? GiB GPU  | finds Wikidata entity ids for the entities detected with Entity Detection                                                                                                     |
+| Intent catcher         | 900 MiB RAM              | classifies user utterances into a number of predefined intents which are trained on a set of phrases and regexps                                                              |
+| NER                    | 1.7 GiB RAM, 4.9 Gib GPU | extracts person names, names of locations, organizations from uncased text using ruBert-based (pyTorch) model                                                                 |
+| Sentseg                | 2.4 GiB RAM, 4.9 Gib GPU | recovers punctuation using ruBert-based (pyTorch) model and splits into sentences                                                                                             |
+| Spacy Annotator        | 250 MiB RAM              | token-wise annotations by Spacy                                                                                                                                               |
+| Spelling preprocessing | 4.4 GiB RAM              | Russian Levenshtein correction model                                                                                                                                          |
+| Wiki parser            | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                      |
+| DialogRPT              | 3.8 GiB RAM,  2 GiB GPU  | DialogRPT model which is based on Russian DialoGPT (see https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) and fine-tuned on Russian Pikabu Comment sequences |
 
 ## Skills & Services
 | Name                   | Requirements              | Description                                                                                                                         |
 |------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| DialoGPT               | 2.8 GiB RAM, 2 GiB GPU    | [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2)                             |
+| DialoGPT               | 2.8 GiB RAM, 2 GiB GPU    | Russian DialoGPT model https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2                                            |
 | Dummy Skill            | a part of agent container | a fallback skill with multiple non-toxic candidate responses and random Russian questions                                           |
 | Personal Info skill    | 40 MiB RAM                | queries and stores user's name, birthplace, and location                                                                            |
 | DFF Generative skill   | 50 MiB RAM                | **[New DFF version]** generative skill which uses DialoGPT service to generate 3 different hypotheses                               |
@@ -326,47 +308,25 @@ Dream Architecture is presented in the following image:
 | DFF Friendship skill   | 70 MiB RAM                | **[New DFF version]** DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill |
 | DFF Wiki skill         | 150 MiB RAM               | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                      |
 
-
-# Components Multilingual Version
-
-Dream Architecture is presented in the following image:
-![DREAM](multilingualDREAM.png)
-
-## Annotators
-
-| Name                     | Requirements             | Description                                                                                                                                                    |
-|--------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Sentiment Classification | 2 GiB RAM, 2 GiB GPU     | classifies sentiment to positive, negative and neutral classes                                                                                                 |
-| Toxic Classification     | 3  GiB RAM, 2 GiB GPU    | classifies toxicity: identity_attack, insult, obscene, severe_toxicity, sexual_explicit, threat, toxicity                                                      |
-| Sentence Ranker          | 2.5 GiB RAM, 1.8 GiB GPU | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
-
-## Skills & Services
-| Name           | Requirements           | Description                                                                                                                                       |
-|----------------|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| gpt2-generator | 5 GiB RAM, 6.5 GiB GPU | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
-
 # Papers
-
 ### Alexa Prize 3
-
 [Kuratov Y. et al. DREAM technical report for the Alexa Prize 2019 //Alexa Prize Proceedings. – 2020.](https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexaprize/assets/challenge3/proceedings/Moscow-DREAM.pdf)
 
 ### Alexa Prize 4
-
 [Baymurzina D. et al. DREAM Technical Report for the Alexa Prize 4 //Alexa Prize Proceedings. – 2021.](https://d7qzviu3xw2xc.cloudfront.net/alexa/alexaprize/docs/sgc4/MIPT-DREAM.pdf)
+
 
 # License
 
 DeepPavlov Dream is licensed under Apache 2.0.
 
-Program-y (see `dream/skills/dff_program_y_skill`, `dream/skills/dff_program_y_wide_skill`, `dream/skills/dff_program_y_dangerous_skill`)
+Program-y (see `dream/skills/dff_program_y_skill`, `dream/skills/dff_program_y_wide_skill`, `dream/skills/dff_program_y_dangerous_skill`) 
 is licensed under Apache 2.0.
 Eliza (see `dream/skills/eliza`) is licensed under MIT License.
 
+
 ## Report creating
-
 For making certification `xlsx` - file with bot responses, you can use `xlsx_responder.py` script by executing
-
 ```shell
 docker-compose -f docker-compose.yml -f dev.yml exec -T -u $(id -u) agent python3 \
         utils/xlsx_responder.py --url http://0.0.0.0:4242 \
@@ -374,5 +334,4 @@ docker-compose -f docker-compose.yml -f dev.yml exec -T -u $(id -u) agent python
         --output 'tests/dream/output/test_questions_output.xlsx'\
       --cache tests/dream/output/test_questions_output_$(date --iso-8601=seconds).json
 ```
-
 Make sure all services are deployed. `--input` - `xlsx` file with certification questions, `--output` - `xlsx` file with bot responses, `--cache` - `json`, that contains a detailed markup and is used for a cache.

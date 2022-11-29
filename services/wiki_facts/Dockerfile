@@ -1,5 +1,4 @@
-FROM deeppavlov/base-gpu:0.17.2
-RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.17.2
+FROM python:3.7.6
 
 COPY $SRC_DIR /src
 WORKDIR /src
@@ -20,6 +19,7 @@ RUN pip install -r requirements.txt
 COPY services/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
 
+RUN pip install deeppavlov
 RUN python -m deeppavlov install $CONFIG
 
 RUN python -m spacy download en_core_web_sm

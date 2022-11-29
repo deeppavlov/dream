@@ -764,8 +764,10 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         answer_probs, answer_labels = default_probs, default_labels
 
     if probs:
+        logger.info(f"Result in get_topics: {answer_probs}")
         return answer_probs
     else:
+        logger.info(f"Result in get_topics: {answer_labels}")
         return answer_labels
 
 
@@ -860,8 +862,10 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
         answer_probs, answer_labels = default_probs, default_labels
 
     if probs:
+        logger.info(f"Result in get_intents: {answer_probs}")
         return answer_probs
     else:
+        logger.info(f"Result in get_intents: {answer_labels}")
         return answer_labels
 
 
@@ -1067,7 +1071,6 @@ def get_types_from_annotations(annotations, types, tocheck_relation="occupation"
 
 
 ANYTHING_EXCEPT_OF_LETTERS_AND_SPACE_COMPILED = re.compile(r"[^a-zA-Z ]")
-ANYTHING_EXCEPT_OF_LETTERS_SPACE_AND_PUNCT_COMPILED = re.compile(r"[^a-zA-Z\,\.\?\!\- ]")
 MULTI_SPACE_COMPILED = re.compile(r"\s+")
 
 

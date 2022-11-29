@@ -42,7 +42,6 @@ ASK_QUESTION_PROB = 0.7
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
-LANGUAGE = getenv("LANGUAGE", "EN")
 
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
@@ -200,8 +199,11 @@ class DummySkillConnector:
             human_attrs = []
             bot_attrs = []
             attrs = []
-
-            if LANGUAGE == "RU":
+            prev_human_uttr_text = dialog["human_utterances"][-2]["text"] if len(dialog["human_utterances"]) > 1 else ""
+            is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"]) or re.search(
+                r"[а-яА-Я]+", prev_human_uttr_text
+            )
+            if is_russian:
                 cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
             else:
                 cands += [choice(DUMMY_DONTKNOW_RESPONSES["EN"])]
@@ -210,7 +212,7 @@ class DummySkillConnector:
             human_attrs += [{}]
             bot_attrs += [{}]
 
-            if len(dialog["utterances"]) > 14 and not is_sensitive_case and LANGUAGE == "EN":
+            if len(dialog["utterances"]) > 14 and not is_sensitive_case and not is_russian:
                 questions_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for q_id in NP_QUESTIONS.get(nphrase, []):
@@ -225,7 +227,7 @@ class DummySkillConnector:
                     bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
-            if link_to_question and LANGUAGE == "EN":
+            if link_to_question and not is_russian:
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
                 _prev_active_skill = (
@@ -268,14 +270,14 @@ class DummySkillConnector:
                 attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
-            elif LANGUAGE == "RU":
+            elif is_russian:
                 cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
                 confs += [0.8]
                 attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                 human_attrs += [{}]
                 bot_attrs += [{}]
 
-            if LANGUAGE == "EN":
+            if not is_russian:
                 facts_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for fact_id in NP_FACTS.get(nphrase, []):
@@ -287,7 +289,7 @@ class DummySkillConnector:
             else:
                 facts_same_nps = []
 
-            if len(facts_same_nps) > 0 and not is_sensitive_case and LANGUAGE == "EN":
+            if len(facts_same_nps) > 0 and not is_sensitive_case and not is_russian:
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
                 confs += [0.5]

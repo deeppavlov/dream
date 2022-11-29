@@ -49,13 +49,8 @@ services:
   dialogpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  sentence-ranker:
+  infilling:
     environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
-  dialogpt-persona-based:
-    environment:
-      DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
   intent-catcher:
     environment:
