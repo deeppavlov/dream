@@ -227,12 +227,13 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
 }
 
 multilabel_tasks = [
-    "cobot_topics",
-    "cobot_dialogact_topics",
-    "cobot_dialogact_intents",
     "emotion_classification",
     "toxic_classification",
 ]
+
+thresholds= {'deeppavlov_topics':[dp_thresholds.get(class_, 0.9)
+               for class_ in combined_classes["deeppavlov_topics"]]}
+
 
 midas_classes = {
     "semantic_request": {
