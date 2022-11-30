@@ -8,6 +8,7 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -25,7 +26,7 @@ def transform(data):
 
 
 try:
-    model = build_model("conveval.json", download=False)
+    model = build_model("conveval.json", download=True)
     test_res = model(["a"])
     logger.info("model loaded, test query processed")
 except Exception as e:
@@ -51,7 +52,7 @@ def batch_respond():
     result = []
     for scores in conv_eval_results:
         result.append({annotation: float(score) for annotation, score in zip(key_annotations, scores)})
-    logger.info(f"Conv eval exec time {round(time.time()-t, 2)} sec")
+    logger.info(f"convers_evaluator_annotator exec time {round(time.time()-t, 2)} sec")
     return jsonify([{"batch": result}])
 
 

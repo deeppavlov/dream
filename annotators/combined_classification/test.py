@@ -7,27 +7,25 @@ def main_test():
     batch_url = "http://0.0.0.0:8087/batch_model"
     configs = [
         {
-            "sentences": ["do you like porn", "where is montreal"],
+            "sentences": ["do you like porn"],
             "task": "all",
             "possible_answers": {
-                "cobot_topics": ["Politics", "Religion", "Sex_Profanity"],
-                "cobot_dialogact_topics": ["Politics", "Inappropriate_Content"],
-                "cobot_dialogact_intents": ["Opinion_RequestIntent"],
-                "midas_classification": ["open_question_opinion", "open_question_personal", "yes_no_question"],
+                "cobot_topics": ["Sex_Profanity"],
+                "cobot_dialogact_topics": ["Inappropriate_Content"],
             },
         },
         {
-            "sentences": ["let's talk about movies"],
+            "sentences": ["let's talk about movies", "do you like porn"],
             "task": "cobot_dialogact_topics",
-            "answers_bert": [["Entertainment_Movies"]],
+            "answers_bert": [["Entertainment_Movies"], ["Inappropriate_Content"]],
         },
         {
-            "sentences": ["let's talk about games"],
+            "sentences": ["let's talk about games", "do you like watching films"],
             "task": "cobot_topics",
-            "answers_bert": [["Games"]],
+            "answers_bert": [["Games"], ["Movies_TV"]],
         },
         {
-            "sentences_with_history": ["What is the capital of Great Britain" " [SEP] I don't know"],
+            "sentences_with_history": ["What is the capital of Great Britain [SEP] I don't know"],
             "sentences": ["I don't know"],
             "task": "cobot_dialogact_intents",
             "answers_bert": [["Information_DeliveryIntent"]],
@@ -53,11 +51,21 @@ def main_test():
             "task": "midas_classification",
             "answers_bert": [["opinion"]],
         },
-        {"sentences": ["movies"], "task": "deeppavlov_topics", "answers_bert": [["Movies_TV"]]},
         {
-            "sentences": ["you son of the bitch", "yes"],
+            "sentences": [
+                "do you like porn",
+                "have you been to Alaska",
+                "please talk about movies",
+                "please talk about books",
+                "talk about games",
+            ],
+            "task": "deeppavlov_topics",
+            "answers_bert": [["Music"], ["Disasters"], ["Movies_TV"], ["Books&Literature"], ["Videogames"]],
+        },
+        {
+            "sentences": ["you son of the bitch", "yes", "do you like porn"],
             "task": "toxic_classification",
-            "answers_bert": [["toxic"], ["not_toxic"]],
+            "answers_bert": [["toxic"], ["not_toxic"]]
         },
     ]
     t = time()
@@ -74,17 +82,17 @@ def main_test():
         ), batch_error_msg
         if config["task"] == "all":
             for i in range(len(responses)):
-                print(f"Checking {config['sentences'][i]}")
+                print(f"Checking that at least 1 annotator works for {config['sentences'][i]}")
                 predicted_cobot_topics = [
                     class_
-                    for class_ in responses[0]["cobot_topics"]
-                    if responses[0]["cobot_topics"][class_] == max(responses[0]["cobot_topics"].values())
+                    for class_ in responses[i]["cobot_topics"]
+                    if responses[i]["cobot_topics"][class_] == max(responses[0]["cobot_topics"].values())
                 ]
                 predicted_cobot_da_topics = [
                     class_
-                    for class_ in responses[0]["cobot_dialogact_topics"]
-                    if responses[0]["cobot_dialogact_topics"][class_]
-                    == max(responses[0]["cobot_dialogact_topics"].values())
+                    for class_ in responses[i]["cobot_dialogact_topics"]
+                    if responses[i]["cobot_dialogact_topics"][class_]
+                    == max(responses[i]["cobot_dialogact_topics"].values())
                 ]
                 error_msg1 = (
                     f"Predicted cobot topics {predicted_cobot_topics} and da topics {predicted_cobot_da_topics}"
@@ -97,12 +105,6 @@ def main_test():
                         set(predicted_cobot_da_topics) & set(config["possible_answers"]["cobot_dialogact_topics"]),
                     ]
                 ), error_msg1
-                # assert any(
-                #    [
-                #        set(predicted_cobot_da_intents) & set(config["possible_answers"]["cobot_dialogact_intents"]),
-                #        set(predicted_midas_intents) & set(config["possible_answers"]["midas_classification"]),
-                #    ]
-                # ), error_msg2
         else:
             responses = [j[config["task"]] for j in responses]
             for response, answer, sentence in zip(responses, config["answers_bert"], config["sentences"]):

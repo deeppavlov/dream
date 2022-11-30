@@ -12,7 +12,7 @@ import concurrent.futures
 from flask import Flask, request, jsonify
 from os import getenv
 
-from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE, FACTOID_THRESHOLD
+from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
 from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, get_factoid
 
@@ -248,8 +248,7 @@ def respond():
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
         nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-        factoid_conf = get_factoid(uttr)
-        is_factoid_cls = factoid_conf.get("is_factoid", 0.0) > FACTOID_THRESHOLD
+        is_factoid_cls = "is_factoid" in get_factoid(uttr, probs=False)
         is_factoid = is_factoid_cls and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
