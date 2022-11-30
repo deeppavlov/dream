@@ -799,7 +799,7 @@ def collect_and_save_facts_about_location(location, vars):
 def is_fact_about_loc_available_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     location = shared_memory.get("discussed_location", "")
-    used_facts = shared_memory.get(f"used_facts", [])
+    used_facts = shared_memory.get("used_facts", [])
     facts_about_location = collect_and_save_facts_about_location(location, vars)
     unused_facts = list(set(facts_about_location).difference(set(used_facts)))
 
@@ -815,7 +815,7 @@ def offer_fact_about_loc_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
         location = shared_memory.get("discussed_location", "")
         logger.info(f"Bot offers fact about LOC: {location}.")
-        used_facts = shared_memory.get(f"used_facts", [])
+        used_facts = shared_memory.get("used_facts", [])
         facts_about_location = collect_and_save_facts_about_location(location, vars)
         unused_facts = set(facts_about_location).difference(set(used_facts))
 
@@ -830,10 +830,8 @@ def offer_fact_about_loc_response(vars):
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, discussed_locations=discussed_locations + [location])
 
-            if shared_memory.get(f"used_facts", []):
-                gave_fact_before = (
-                    used_facts[-1] in state_utils.get_last_bot_utterance(vars)["text"]
-                )
+            if shared_memory.get("used_facts", []):
+                gave_fact_before = used_facts[-1] in state_utils.get_last_bot_utterance(vars)["text"]
             else:
                 gave_fact_before = False
             if gave_fact_before:
@@ -877,7 +875,7 @@ def share_fact_about_loc_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         location = shared_memory.get("discussed_location", "")
-        used_facts = shared_memory.get(f"used_facts", [])
+        used_facts = shared_memory.get("used_facts", [])
         facts_about_location = collect_and_save_facts_about_location(location, vars)
         unused_facts = list(set(facts_about_location).difference(set(used_facts)))
         used_opinion_requests = shared_memory.get("used_opinion_requests", [])
