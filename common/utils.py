@@ -576,7 +576,6 @@ def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
         answer_labels = [key for key in answer_probs if answer_probs[key] > threshold[key]]
         if max_proba:
             answer_labels = [key for key in answer_labels if answer_probs[key] == max(answer_probs.values())]
-        return answer_labels
     else:
         answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
         if not answer_labels and max_proba:
