@@ -39,7 +39,7 @@ class EmotionSkillScenario:
             "fear": 0.8,
             "joy": 0.8,
             "disgust": 0.8,
-            "sadness": 0.9,
+            "sadness": 0.95,
             "surprise": 0.8,
             "neutral": 0,
         }
