@@ -65,7 +65,7 @@ def main_test():
         {
             "sentences": ["you son of the bitch", "yes", "do you like porn"],
             "task": "toxic_classification",
-            "answers_bert": [["toxic"], ["not_toxic"]]
+            "answers_bert": [["toxic"], ["not_toxic"]],
         },
     ]
     t = time()
