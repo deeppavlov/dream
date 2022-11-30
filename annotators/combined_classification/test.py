@@ -60,7 +60,7 @@ def main_test():
                 "talk about games",
             ],
             "task": "deeppavlov_topics",
-            "answers_bert": [["Music"], ["Disasters"], ["Movies_TV"], ["Books&Literature"], ["Videogames"]],
+            "answers_bert": [["Music"], ["Travel"], ["Movies_TV"], ["Books&Literature"], ["Videogames"]],
         },
         {
             "sentences": ["you son of the bitch", "yes", "do you like porn"],
