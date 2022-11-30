@@ -133,17 +133,17 @@ df_principals = df_principals.loc[:, ["tconst", "nconst", "ordering", "category"
 df_principals.rename(columns={"tconst": "imdb_id"}, inplace=True)
 print(df_principals.head())
 
-ind_drop = df_principals[~df_principals['imdb_id'].isin(all_movies_ids)].index
+ind_drop = df_principals[~df_principals["imdb_id"].isin(all_movies_ids)].index
 df_principals = df_principals.drop(ind_drop)
 print(df_principals.head())
 
-ind_drop = df_principals[~df_principals['ordering'].isin([1, 2, 3, 4, 5, 6])].index
+ind_drop = df_principals[~df_principals["ordering"].isin([1, 2, 3, 4, 5, 6])].index
 df_principals = df_principals.drop(ind_drop)
 print(df_principals.head())
 
 df_principals["category"] = df_principals["category"].apply(lambda x: x if x != "actress" else "actor")
-target_profs = ["director", "producer", "actor", "writer"] 
-ind_drop = df_principals[~df_principals['category'].isin(target_profs)].index
+target_profs = ["director", "producer", "actor", "writer"]
+ind_drop = df_principals[~df_principals["category"].isin(target_profs)].index
 df_principals = df_principals.drop(ind_drop)
 print(df_principals.head())
 
@@ -158,7 +158,8 @@ print(df_principals["characters"])
 
 special_char = df_principals.loc[4, "characters"]
 df_principals["characters"] = df_principals["characters"].apply(
-    lambda x: [] if x == special_char or len(x) == 0 else json.loads(x))
+    lambda x: [] if x == special_char or len(x) == 0 else json.loads(x)
+)
 print(df_principals.head())
 
 print(f"Total time: {time() - t0}")
@@ -166,16 +167,21 @@ print(f"Total time: {time() - t0}")
 # # Collect persons
 t0 = time()
 
+
 def collect_movie_persons(x):
-     return pd.Series({f"{role}s": x.loc[x.sort_values(by=["ordering"])["category"] == prof, name].values.tolist()
-                       for prof, role, name in zip(
-                           ["director", "producer", "actor", "writer", "actor"], 
-                           ["director", "producer", "actor", "writer", "character"], 
-                           ["primaryName", "primaryName", "primaryName", "primaryName", "characters"]
-                       )
-                      })
-    
-df_principals = pd.DataFrame(df_principals.groupby('imdb_id').apply(collect_movie_persons))
+    return pd.Series(
+        {
+            f"{role}s": x.loc[x.sort_values(by=["ordering"])["category"] == prof, name].values.tolist()
+            for prof, role, name in zip(
+                ["director", "producer", "actor", "writer", "actor"],
+                ["director", "producer", "actor", "writer", "character"],
+                ["primaryName", "primaryName", "primaryName", "primaryName", "characters"],
+            )
+        }
+    )
+
+
+df_principals = pd.DataFrame(df_principals.groupby("imdb_id").apply(collect_movie_persons))
 print(df_principals.head())
 df_principals["characters"] = df_principals["characters"].apply(lambda x: sum(x, []) if isinstance(x, list) else [])
 print(df_principals.head())
