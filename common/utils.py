@@ -231,8 +231,14 @@ multilabel_tasks = [
     "toxic_classification",
 ]
 
-thresholds= {'deeppavlov_topics':[dp_thresholds.get(class_, 0.9)
-               for class_ in combined_classes["deeppavlov_topics"]]}
+dp_thresholds={'Food':0, 'Movies_TV':0, 'Leisure':0, 'Beauty':0, 'Clothes':0,
+               'Depression':0, 'Celebrities&Events':0, 'Family&Relationships':0, 
+               'Health&Medicine':0, 'Education':0, 'Sports':0,
+               'Books&Literature':0.3, 'Videogames':0.3,
+               'Politics':0.3, 'ArtificialIntelligence':0.3, 'MassTransit':0.3}
+
+thresholds= {'deeppavlov_topics': {class_: dp_thresholds.get(class_, 0.9)
+               for class_ in combined_classes["deeppavlov_topics"]}
 
 
 midas_classes = {
@@ -552,9 +558,16 @@ def get_all_not_used_templates(used_templates, all_templates):
 
 
 def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
-    answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
-    if not answer_labels and max_proba:
-        answer_labels = [key for key in answer_probs if answer_probs[key] == max(answer_probs.values())]
+    if isinstance(threshold, dict):
+        assert len(threshold) == len(answer_probs), f'{threshold} {answer_probs}'
+        answer_labels = [key for key in answer_probs if answer_probs[key] > threshold[key]]
+        if max_proba:
+            answer_labels = [key for key in answer_labels if answer_probs[key] == max(answer_probs.values())]
+        return answer_labels
+    else:
+        answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
+        if not answer_labels and max_proba:
+            answer_labels = [key for key in answer_probs if answer_probs[key] == max(answer_probs.values())]
     return answer_labels
 
 
@@ -586,6 +599,8 @@ def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
         elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
             answer_labels = ["is_conversational"]
+        elif model_name == "deeppavlov_topics":
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=thresholds["deeppavlov_topics"])            
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
