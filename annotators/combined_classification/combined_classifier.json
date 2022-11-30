@@ -7,7 +7,7 @@
       "MULTI_SENTENCE_LEN": 128
     },
     "download":[{
-        "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/model.pth.tar.gz",
+        "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v1.tar.gz",
         "subdir": "{MODELS_PATH}"
       }]
   },
