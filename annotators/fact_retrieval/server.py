@@ -3,6 +3,7 @@ import logging
 import nltk
 import os
 import pickle
+import random
 import re
 import time
 
@@ -23,6 +24,7 @@ FILTER_FREQ = False
 CONFIG = os.getenv("CONFIG")
 CONFIG_PAGE_EXTRACTOR = os.getenv("CONFIG_WIKI")
 CONFIG_WOW_PAGE_EXTRACTOR = os.getenv("CONFIG_WHOW")
+N_FACTS = int(os.getenv("N_FACTS", 3))
 
 DATA_GOOGLE_10K_ENG_NO_SWEARS = "common/google-10000-english-no-swears.txt"
 DATA_SENTENCES = "data/sentences.pickle"
@@ -156,7 +158,7 @@ def find_facts(entity_substr_batch, entity_ids_batch, entity_pages_batch):
                                         {
                                             "entity_substr": entity_substr,
                                             "entity_type": entity_types_substr,
-                                            "facts": facts,
+                                            "facts": random.choice(facts, N_FACTS),
                                         }
                                     )
         facts_batch.append(facts_list)
