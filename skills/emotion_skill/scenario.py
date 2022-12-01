@@ -35,13 +35,22 @@ for skill in LIST_OF_SCRIPTED_TOPICS:
 class EmotionSkillScenario:
     def __init__(self, steps, jokes, advices, logger):
         self.emotion_precision = {
-            "anger": 0.6,
+            "anger": 0.9,
             "fear": 0.8,
             "joy": 0.8,
             "love": 0.8,
-            "sadness": 0.8,
-            "surprise": 0.7,
+            "sadness": 0.95,
+            "surprise": 0.8,
             "neutral": 0,
+        }
+        self.emotion_thresholds = {
+            "anger": 0.99999,
+            "fear": 0.5,
+            "joy": 0.5,
+            "love": 0.5,
+            "sadness": 0.6,
+            "surprise": 0.5,
+            "neutral": 0.5,
         }
         self.steps = steps
         self.jokes = jokes
@@ -54,13 +63,17 @@ class EmotionSkillScenario:
             self.regexp_sad = True
             logger.info(f"Sadness detected by regexp in {annotated_user_phrase['text']}")
             return "sadness"
-        most_likely_emotion = None
+
+        most_likely_emotion = "neutral"
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
         if discard_emotion in emotion_probs:
             emotion_probs.pop(discard_emotion)
         most_likely_prob = max(emotion_probs.values())
         for emotion in emotion_probs.keys():
-            if emotion_probs.get(emotion, 0) == most_likely_prob:
+            if (
+                emotion_probs.get(emotion, 0) == most_likely_prob
+                and emotion_probs.get(emotion, 0) >= self.emotion_thresholds[emotion]
+            ):
                 most_likely_emotion = emotion
         return most_likely_emotion
 
