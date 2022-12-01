@@ -528,7 +528,7 @@ topic_config = {
             {
                 "utt": [
                     "Music is a good way to relax.",
-                    "Do you listen to music in headphones or on a portable speaker?"
+                    "Do you listen to music in headphones or on a portable speaker?",
                 ],
                 "subtopic": "music",
                 "can_continue": "must",
