@@ -309,7 +309,7 @@ def not_like_travelling_response(vars):
 
 def linkto_personal_info_response(vars):
     # USR_ASK_ABOUT_ORIGIN
-    responses = ["Okay. Where are from?", "Then let's talk about you. Where are you from?"]
+    responses = ["Okay. Where are you from?", "Then let's talk about you. Where are you from?"]
     logger.info("Bot asks user about his/her origin/home town.")
     try:
         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
