@@ -33,11 +33,11 @@ app = Flask(__name__)
 with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
 
-USER_TOPIC_START_CONFIDENCE = 0.98
+USER_TOPIC_START_CONFIDENCE = 0.95
 FOUND_WORD_START_CONFIDENCE = 0.8
-BOT_TOPIC_START_CONFIDENCE = 0.98
-CONTINUE_CONFIDENCE = 0.99
-LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
+BOT_TOPIC_START_CONFIDENCE = 0.9
+CONTINUE_CONFIDENCE = 0.9
+LONG_ANSWER_CONTINUE_CONFIDENCE = 0.95
 YES_CONTINUE_CONFIDENCE = 1.0
 # if let's chat about TOPIC [key-words]
 NOT_SCRIPTED_TOPICS = ["depression", "life", "sex", "star wars", "donald trump", "superheroes"]
