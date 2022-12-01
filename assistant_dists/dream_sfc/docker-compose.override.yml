@@ -220,7 +220,7 @@ services:
       args:
         SERVICE_PORT: 8023
         SERVICE_NAME: dff_movie_skill # has to be the same with skill dir name
-        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v1.json
+        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v2.json
         MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
       context: .
       dockerfile: skills/dff_movie_skill/Dockerfile

@@ -22,6 +22,7 @@ from common.utils import (
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
 )
+from common.response_selection import ACTIVE_SKILLS
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
@@ -169,7 +170,9 @@ def respond():
     )
 
 
-def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxics, bot_utterances):
+def rule_score_based_selection(
+    dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
+):
     curr_single_scores = []
 
     bot_utt_counter = Counter(bot_utterances)
@@ -293,6 +296,13 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             dummy_question = candidates[i]["text"]
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
+        if (
+            (skill_names[i] in ACTIVE_SKILLS)
+            and (skill_names[i] in all_prev_active_skills)
+            and (skill_names[i] != all_prev_active_skills[-1])
+        ):
+            confidences[i] *= 0.9
+
         if curr_score is None:
             score = scores[i]
             confidence = confidences[i]
@@ -358,7 +368,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     else:
         logger.info("Confidence & ConvEvaluationAnnotator Scores based selection")
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
-            dialog, candidates, scores, confidences, is_toxics, bot_utterances
+            dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
         )
 
     logger.info(f"Best candidate: {best_candidate}")

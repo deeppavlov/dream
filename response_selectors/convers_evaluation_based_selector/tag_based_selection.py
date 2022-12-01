@@ -332,6 +332,7 @@ def tag_based_response_selection(
     dialog, candidates, curr_single_scores, confidences, bot_utterances, all_prev_active_skills=None
 ):
     all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
+    prev_active_skills = all_prev_active_skills.copy()
     all_prev_active_skills = Counter(all_prev_active_skills)
     annotated_uttr = dialog["human_utterances"][-1]
     all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
@@ -402,6 +403,14 @@ def tag_based_response_selection(
         skill_name = cand_uttr["skill_name"]
         confidence = confidences[cand_id]
         score = curr_single_scores[cand_id]
+
+        if (
+            (skill_name in ACTIVE_SKILLS)
+            and (skill_name in prev_active_skills)
+            and (skill_name != prev_active_skills[-1])
+        ):
+            confidences[cand_id] *= 0.9
+
         logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
