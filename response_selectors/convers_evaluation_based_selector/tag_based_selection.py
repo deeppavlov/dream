@@ -38,7 +38,6 @@ from utils import (
 )
 from common.response_selection import (
     ACTIVE_SKILLS,
-    ALMOST_ACTIVE_SKILLS,
     CAN_NOT_BE_DISLIKED_SKILLS,
     NOT_ADD_PROMPT_SKILLS,
 )
@@ -330,6 +329,7 @@ def tag_based_response_selection(
     dialog, candidates, curr_single_scores, confidences, bot_utterances, all_prev_active_skills=None
 ):
     all_prev_active_skills = all_prev_active_skills if all_prev_active_skills is not None else []
+    prev_active_skills = all_prev_active_skills.copy()
     all_prev_active_skills = Counter(all_prev_active_skills)
     annotated_uttr = dialog["human_utterances"][-1]
     all_user_intents, all_user_topics, all_user_named_entities, all_user_nounphrases = get_main_info_annotations(
@@ -364,12 +364,7 @@ def tag_based_response_selection(
     _prev_prev_active_skill = dialog["bot_utterances"][-2]["active_skill"] if len(dialog["bot_utterances"]) > 1 else ""
     _no_script_two_times_in_a_row = False
     if _prev_active_skill and _prev_prev_active_skill:
-        if all(
-            [
-                skill not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
-                for skill in [_prev_active_skill, _prev_prev_active_skill]
-            ]
-        ):
+        if all([skill not in ACTIVE_SKILLS for skill in [_prev_active_skill, _prev_prev_active_skill]]):
             _no_script_two_times_in_a_row = True
     disliked_skills = get_updated_disliked_skills(dialog, can_not_be_disliked_skills=CAN_NOT_BE_DISLIKED_SKILLS)
 
@@ -403,6 +398,14 @@ def tag_based_response_selection(
         skill_name = cand_uttr["skill_name"]
         confidence = confidences[cand_id]
         score = curr_single_scores[cand_id]
+
+        if (
+            (skill_name in ACTIVE_SKILLS)
+            and (skill_name in prev_active_skills)
+            and (skill_name != prev_active_skills[-1])
+        ):
+            confidences[cand_id] *= 0.9
+
         logger.info(f"Skill {skill_name} has final score: {score}. Confidence: {confidence}.")
 
         all_cand_intents, all_cand_topics, all_cand_named_entities, all_cand_nounphrases = get_main_info_annotations(
@@ -652,7 +655,7 @@ def tag_based_response_selection(
     best_candidate["human_attributes"]["disliked_skills"] = disliked_skills
     logger.info(f"Best candidate: {best_candidate}")
     n_sents_without_prompt = len(sent_tokenize(best_candidate["text"]))
-    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS + ALMOST_ACTIVE_SKILLS
+    _is_best_not_script = best_candidate["skill_name"] not in ACTIVE_SKILLS
     no_question_by_user = "?" not in dialog["human_utterances"][-1]["annotations"].get("sentseg", {}).get(
         "punct_sent", dialog["human_utterances"][-1]["text"]
     )
