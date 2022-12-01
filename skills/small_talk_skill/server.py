@@ -133,7 +133,7 @@ def respond():
                 attr["small_talk_step"] = 0
                 attr["small_talk_script"] = TOPIC_SCRIPTS.get(topic, [])
             else:
-                logger.info(f"Can not extract or offer NEW topic.")
+                logger.info("Can not extract or offer NEW topic.")
                 response = ""
 
         if len(response) == 0:
