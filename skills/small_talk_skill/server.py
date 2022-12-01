@@ -302,11 +302,11 @@ def pickup_topic_and_start_small_talk(dialog):
         topic = offer_topic(dialog)
         if topic in TOPIC_PATTERNS:
             if topic == "me":
-                response = f"Let's talk about you. " + TOPIC_SCRIPTS.get(topic, [""])[0]
+                response = "Let's talk about you. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             elif topic == "you":
-                response = f"Let's talk about me. " + TOPIC_SCRIPTS.get(topic, [""])[0]
+                response = "Let's talk about me. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             else:
-                response = f"Let's talk about {topic}. " + TOPIC_SCRIPTS.get(topic, [""])[0]
+                response = "Let's talk about {topic}. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             confidence = BOT_TOPIC_START_CONFIDENCE
         else:
             response = ""
