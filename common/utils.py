@@ -572,9 +572,10 @@ def get_all_not_used_templates(used_templates, all_templates):
 
 
 def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
+    if not answer_probs:
+        return []
     if isinstance(threshold, dict):
-        assert len(threshold) == len(answer_probs), f"{threshold} {answer_probs}"
-        answer_labels = [key for key in answer_probs if answer_probs[key] > threshold[key]]
+        answer_labels = [key for key in answer_probs if answer_probs[key] > threshold.get(key, 0)]
         if max_proba:
             answer_labels = [key for key in answer_labels if answer_probs[key] == max(answer_probs.values())]
     else:
