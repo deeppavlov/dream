@@ -1,0 +1,6 @@
+# rebuild the image
+docker-compose -f docker-compose.yml -f assistant_dists/dream_mini_persona_based/docker-compose.override.yml -f assistant_dists/dream_mini_persona_based/dev.yml -f assistant_dists/dream_mini_persona_based/proxy.yml up --build
+# just up
+docker-compose -f docker-compose.yml -f assistant_dists/dream_mini_persona_based/docker-compose.override.yml -f assistant_dists/dream_mini_persona_based/dev.yml -f assistant_dists/dream_mini_persona_based/proxy.yml up
+# run chat in console
+docker-compose exec agent python -m deeppavlov_agent.run agent.channel=cmd agent.pipeline_config=assistant_dists/dream_mini_persona_based/pipeline_conf.json

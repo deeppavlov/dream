@@ -2,14 +2,11 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini_persona_based/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, midas-classification:8090,
-          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, dialogpt-persona-based:8131,
-          relative-persona-extractor:8133"
+      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, midas-classification:8090, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018, spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, dialogpt-persona-based:8131, relative-persona-extractor:8133"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   midas-classification:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: midas_conv_bert.json
@@ -26,7 +23,7 @@ services:
           memory: 3G
 
   sentseg:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
@@ -40,7 +37,7 @@ services:
           memory: 1.5G
 
   convers-evaluation-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -86,7 +83,7 @@ services:
           memory: 128M
 
   intent-catcher:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
@@ -94,7 +91,7 @@ services:
         SERVICE_PORT: 8014
         CONFIG_NAME: intents_model_dp_config.json
         INTENT_PHRASES_PATH: intent_phrases.json
-    command:  python -m flask run -h 0.0.0.0 -p 8014
+    command: python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
@@ -106,7 +103,7 @@ services:
           memory: 3.5G
 
   badlisted-words:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
@@ -120,7 +117,7 @@ services:
           memory: 256M
 
   spelling-preprocessing:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
@@ -178,8 +175,9 @@ services:
       args:
         SERVICE_PORT: 8131
         SERVICE_NAME: dialogpt_persona_based
-        PRETRAINED_MODEL_NAME_OR_PATH: dim/dialogpt-medium-persona-chat
+        PRETRAINED_MODEL_NAME_OR_PATH: dim/bart-base-15or5dmk
         MAX_PERSONA_SENTENCES: 3
+        PAIR_DIALOG_HISTORY_LENGTH: 3
       context: .
       dockerfile: ./services/dialogpt_persona_based/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
@@ -188,10 +186,12 @@ services:
       - FLASK_APP=server
     deploy:
       resources:
-        limits:
-          memory: 2G
         reservations:
-          memory: 2G
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    restart: always
 
   relative-persona-extractor:
     env_file: [ .env ]
