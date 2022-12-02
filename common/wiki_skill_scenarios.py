@@ -526,7 +526,10 @@ topic_config = {
                 ],
             },
             {
-                "utt": ["Music is a good way to relax.", "Do you listen music in headphones or on a portable speaker?"],
+                "utt": [
+                    "Music is a good way to relax.",
+                    "Do you listen to music in headphones or on a portable speaker?",
+                ],
                 "subtopic": "music",
                 "can_continue": "must",
                 "conf": 1.0,
