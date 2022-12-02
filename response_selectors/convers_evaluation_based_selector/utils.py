@@ -28,8 +28,9 @@ logger = logging.getLogger(__name__)
 
 ASK_DUMMY_QUESTION_PROB = 0.5
 ASK_LINK_TO_FOR_RETRIEVE_PROB = 0.5
-CONFIDENCE_STRENGTH = 2
-CONV_EVAL_STRENGTH = 0.4
+CONFIDENCE_STRENGTH = float(getenv("CONFIDENCE_STRENGTH"))
+CONV_EVAL_STRENGTH = float(getenv("CONV_EVAL_STRENGTH"))
+QUESTION_TO_QUESTION_DOWNSCORE_COEF = float(getenv("QUESTION_TO_QUESTION_DOWNSCORE_COEF"))
 how_are_you_spec = "Do you want to know what I can do?"  # this is always at the end of answers to `how are you`
 what_i_can_do_spec = "socialbot running inside"
 misheard_with_spec1 = "I misheard you"
@@ -195,3 +196,10 @@ def get_updated_disliked_skills(dialog, can_not_be_disliked_skills=None):
                 disliked_skills.append(linked_to_skill)
 
     return disliked_skills
+
+
+def downscore_if_question_to_question(scores, is_questions):
+    ids = np.arange(len(scores))[is_questions]
+    scores[ids] *= QUESTION_TO_QUESTION_DOWNSCORE_COEF
+
+    return scores

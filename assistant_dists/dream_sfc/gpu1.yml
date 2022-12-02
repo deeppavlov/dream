@@ -49,7 +49,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spacy-nounphrases:
     restart: unless-stopped
-  dff-program-y:
+  dff-program-y-skill:
     restart: unless-stopped
   personality-catcher:
     restart: unless-stopped
@@ -59,13 +59,15 @@ services:
     restart: unless-stopped
   sentrewrite:
     restart: unless-stopped
-  intent-responder:
+  dff-intent-responder-skill:
     restart: unless-stopped
   intent-catcher:
     restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   badlisted-words:
     restart: unless-stopped
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
     restart: unless-stopped
   dff-movie-skill:
     restart: unless-stopped
@@ -99,7 +101,7 @@ services:
     restart: unless-stopped
   game-cooperative-skill:
     restart: unless-stopped
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     restart: unless-stopped
   news-api-skill:
     restart: unless-stopped
@@ -149,10 +151,6 @@ services:
     restart: unless-stopped
   dff-gossip-skill:
     restart: unless-stopped
-  hypothesis-scorer:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   dff-wiki-skill:
     restart: unless-stopped
   topic-recommendation:
