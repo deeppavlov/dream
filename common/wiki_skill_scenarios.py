@@ -509,8 +509,8 @@ topic_config = {
                         [{"pattern": DFF_WIKI_TEMPLATES["chill"]}, "user", True],
                     ]
                 ],
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             }
         ],
         "pattern": DFF_WIKI_TEMPLATES["chill"],
@@ -531,8 +531,8 @@ topic_config = {
                     "Do you listen to music in headphones or on a portable speaker?",
                 ],
                 "subtopic": "music",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             },
             {"utt": ["I like Peter Helland music, it's very relaxing. What music do you like?"], "subtopic": "music"},
             {
@@ -554,8 +554,8 @@ topic_config = {
                         [{"pattern": DFF_WIKI_TEMPLATES["sleep"]}, "user", True],
                     ]
                 ],
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             }
         ],
         "pattern": DFF_WIKI_TEMPLATES["sleep"],
@@ -597,8 +597,8 @@ topic_config = {
                         [{"pattern": "play with (my )?friends"}, "user", True],
                     ]
                 ],
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             }
         ],
         "pattern": "play with (my )?friends",
@@ -621,8 +621,8 @@ topic_config = {
                         [{"pattern": DFF_WIKI_TEMPLATES["school"]}, "user", True],
                     ]
                 ],
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.9,
             }
         ],
         "pattern": DFF_WIKI_TEMPLATES["school"],
@@ -698,8 +698,8 @@ topic_config = {
                         [{"pattern": DFF_WIKI_TEMPLATES["work"]}, "user", True],
                     ]
                 ],
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             }
         ],
         "pattern": DFF_WIKI_TEMPLATES["work"],
@@ -750,7 +750,7 @@ topic_config = {
         ],
     },
     "harry_potter": {
-        "switch_on": [{"cond": [[{"pattern": "harry potter"}, "user", True]], "can_continue": "must", "conf": 1.0}],
+        "switch_on": [{"cond": [[{"pattern": "harry potter"}, "user", True]], "can_continue": "can", "conf": 0.99}],
         "smalltalk": [
             {
                 "utt": [
@@ -796,8 +796,8 @@ topic_config = {
                 ],
                 "next_ackn": [{"cond": [["any"]], "answer": "You are a very impressive person!"}],
                 "subtopic": "chamber_of_secrets",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             },
             {
                 "utt": [
@@ -805,14 +805,14 @@ topic_config = {
                     "Sirius Black has been wrongly convicted.",
                 ],
                 "subtopic": "prisoner_of_azbakan",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             },
             {
                 "utt": ["My favourite moment in Goblet of Fire is Harry's battle with Voldemort."],
                 "subtopic": "goblet_of_fire",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             },
             {
                 "utt": [
@@ -820,8 +820,8 @@ topic_config = {
                     "What is your favourite moment in the film?",
                 ],
                 "subtopic": "order_phoenix",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             },
             {
                 "utt": [
@@ -830,14 +830,14 @@ topic_config = {
                     "which could make you lucky for a period of time?",
                 ],
                 "subtopic": "half_blood_prince",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
             },
             {
                 "utt": ["In Deathly Hallows Harry finally defeated Voldemort.", "What scene do you like most?"],
                 "subtopic": "deathly_hallows",
-                "can_continue": "must",
-                "conf": 1.0,
+                "can_continue": "can",
+                "conf": 0.99,
                 "next_ackn": [{"cond": [["any"]], "answer": "You are a very impressive person!"}],
             },
             {
