@@ -379,7 +379,7 @@
                 "state_manager_method": "update_attributes",
                 "previous_services": [
                     "annotators.combined_classification",
-                    "annotators.intent_catcher"
+                    "annotators.entity_detection"
                 ]
             },
             "news_api_annotator": {

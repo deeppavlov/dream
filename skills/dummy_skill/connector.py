@@ -30,7 +30,7 @@ from common.universal_templates import (
     if_choose_topic,
     DUMMY_DONTKNOW_RESPONSES,
 )
-from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
+from common.utils import get_topics, get_entities, is_no, get_intents, is_yes, is_question
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -87,6 +87,7 @@ class RandomTopicResponder:
 
     def get_random_text(self, topics):
         available_topics = self.topics.intersection(set(topics))
+        logger.info(f'Topics: {available_topics}')
         if not available_topics:
             return ""
 
@@ -169,6 +170,20 @@ def generate_question_not_from_last_responses(dialog, all_prev_active_skills):
     return result, human_attr
 
 
+def no_initiative(dialog):
+    utts = dialog["human_utterances"]
+    if len(utts) < 2:
+        return False
+    if not is_question(utts[-1].get("text", "")) and \
+            not is_question(utts[-2].get("text", "")):
+        logger.info("No questions detected")
+        return True
+    if is_switch_topic(utts[-1]):
+        logger.info("Switch topic detected")
+        return True
+    return False
+
+
 class DummySkillConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
@@ -225,7 +240,30 @@ class DummySkillConnector:
                     bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
-            if link_to_question and LANGUAGE == "EN":
+
+            if no_initiative(dialog) and LANGUAGE == "EN":
+                last_utt = dialog['utterances'][-1]
+                user = last_utt['user'].get('attributes', {})
+                entities = user.get("entities", {})
+                response = ""
+                if entities:
+                    selected_entity = ""
+                    entity_names = list(entities.keys())
+                    for name in entity_names:
+                        if entities[name]['human_attitude'] == 'like':
+                            selected_entity = name
+                            break
+                    if selected_entity:
+                        response = f"You mentioned {selected_entity}, maybe you want to discuss it?"
+                    confs += [0.5]
+                else:
+                    confs += [0.0]
+
+                cands += [response]
+                attrs += [{}]
+                human_attrs += [{}]
+                bot_attrs += [{}]
+            elif link_to_question and LANGUAGE == "EN":
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
                 _prev_active_skill = (
