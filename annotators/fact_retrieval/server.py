@@ -3,12 +3,12 @@ import logging
 import nltk
 import os
 import pickle
-import random
 import re
 import time
 
-from flask import Flask, request, jsonify
+import numpy as np
 import sentry_sdk
+from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
@@ -158,7 +158,7 @@ def find_facts(entity_substr_batch, entity_ids_batch, entity_pages_batch):
                                         {
                                             "entity_substr": entity_substr,
                                             "entity_type": entity_types_substr,
-                                            "facts": random.choice(facts, N_FACTS),
+                                            "facts": np.random.choice(facts, size=N_FACTS, replace=False),
                                         }
                                     )
         facts_batch.append(facts_list)
