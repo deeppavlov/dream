@@ -26,7 +26,7 @@ flows = {
                     loc_cnd.has_five_keywords,
                     cnd.neg(loc_cnd.prev_is_any_question),
                 ]
-            )
+            ),
         }
     },
     "story_flow": {
