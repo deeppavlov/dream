@@ -11,7 +11,7 @@ def main():
         request_data = [{"sentences": ["я ге видел малако"]}]
 
         gold_results = [["я не видел малакон"]]
-    
+
     else:
         request_data = [{"sentences": ["tge shop is cloed"]}]
 

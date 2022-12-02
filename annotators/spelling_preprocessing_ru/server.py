@@ -110,7 +110,7 @@ def ten_power_3n_repl(match_obj):
     result = 0
     for i in range(start, start + n):
         power = (start + n - i - 1) * 3
-        result += 0 if match_obj.group(i) is None else int(match_obj.group(i)) * 10 ** power
+        result += 0 if match_obj.group(i) is None else int(match_obj.group(i)) * 10**power
     return str(result)
 
 
@@ -136,6 +136,7 @@ def preprocess(text):
     for templ, new_str in templates:
         text = re.sub(templ, new_str, text)
     return text.strip()
+
 
 try:
     spelling_preprocessing_model = build_model(config_name, download=True)
