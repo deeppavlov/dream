@@ -6,8 +6,9 @@ import pickle
 import re
 import time
 
-from flask import Flask, request, jsonify
+import numpy as np
 import sentry_sdk
+from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 
@@ -23,6 +24,7 @@ FILTER_FREQ = False
 CONFIG = os.getenv("CONFIG")
 CONFIG_PAGE_EXTRACTOR = os.getenv("CONFIG_WIKI")
 CONFIG_WOW_PAGE_EXTRACTOR = os.getenv("CONFIG_WHOW")
+N_FACTS = int(os.getenv("N_FACTS", 3))
 
 DATA_GOOGLE_10K_ENG_NO_SWEARS = "common/google-10000-english-no-swears.txt"
 DATA_SENTENCES = "data/sentences.pickle"
@@ -156,10 +158,12 @@ def find_facts(entity_substr_batch, entity_ids_batch, entity_pages_batch):
                                         {
                                             "entity_substr": entity_substr,
                                             "entity_type": entity_types_substr,
-                                            "facts": facts,
+                                            "facts": list(np.random.choice(facts, size=N_FACTS, replace=False)),
                                         }
                                     )
-        facts_batch.append(facts_list)
+        facts_batch.append(
+            list(np.random.choice(facts_list, size=N_FACTS, replace=False)) if len(facts_list) > 0 else facts_list
+        )
     return facts_batch
 
 
@@ -220,7 +224,14 @@ def respond():
                     out_res.append({})
                 else:
                     if cnt_fnd < len(fact_res):
-                        out_res.append({"topic_facts": facts_batch[cnt_fnd], "facts": fact_res[cnt_fnd]})
+                        out_res.append(
+                            {
+                                "topic_facts": facts_batch[cnt_fnd],
+                                "facts": list(np.random.choice(fact_res[cnt_fnd], size=N_FACTS, replace=False))
+                                if len(fact_res[cnt_fnd]) > 0
+                                else fact_res[cnt_fnd],
+                            }
+                        )
                         cnt_fnd += 1
                     else:
                         out_res.append({"facts": [], "topic_facts": []})
