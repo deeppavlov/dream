@@ -158,10 +158,10 @@ def find_facts(entity_substr_batch, entity_ids_batch, entity_pages_batch):
                                         {
                                             "entity_substr": entity_substr,
                                             "entity_type": entity_types_substr,
-                                            "facts": np.random.choice(facts, size=N_FACTS, replace=False),
+                                            "facts": facts,
                                         }
                                     )
-        facts_batch.append(facts_list)
+        facts_batch.append(np.random.choice(facts_list, size=N_FACTS, replace=False))
     return facts_batch
 
 
