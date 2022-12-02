@@ -11,9 +11,7 @@ from deeppavlov import build_model
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
@@ -125,9 +123,7 @@ def ten_power_3n_repl(match_obj):
     result = 0
     for i in range(start, start + n):
         power = (start + n - i - 1) * 3
-        result += (
-            0 if match_obj.group(i) is None else int(match_obj.group(i)) * 10**power
-        )
+        result += 0 if match_obj.group(i) is None else int(match_obj.group(i)) * 10**power
     return str(result)
 
 
@@ -147,9 +143,7 @@ templates += [
 
 templates += [
     (
-        re.compile(
-            r"(?<![0-9] )\b([0-9]{1,2}) ([0-9]{1,2})\b(?! [0-9])", flags=re.IGNORECASE
-        ),
+        re.compile(r"(?<![0-9] )\b([0-9]{1,2}) ([0-9]{1,2})\b(?! [0-9])", flags=re.IGNORECASE),
         r"\1\2",
     )
 ]
