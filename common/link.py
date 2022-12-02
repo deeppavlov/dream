@@ -129,9 +129,10 @@ link_to_skill2i_like_to_talk = {
     "dff_music_skill": [
         "There are so many new songs released every day. I've listened music for all night. So cool! "
         "Liked everything! What music do you listen usually?",
-        "I listen music every day either to calm down or to cheer myself up. "
+        "I listen to music every day either to calm down or to cheer myself up. "
         "What music do you listen to cheer yourself up?",
-        "I listen music every day either to calm down or to cheer myself up. " "What music do you listen to calm down?",
+        "I listen to music every day either to calm down or to cheer myself up. "
+        "What music do you listen to calm down?",
     ],
     "dff_science_skill": [
         "When I start to feel sad, I think about what humanity has achieved and it inspires me. "

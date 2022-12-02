@@ -36,12 +36,21 @@ class EmotionSkillScenario:
     def __init__(self, steps, jokes, advices, logger):
         self.emotion_precision = {
             "anger": 0.9,
-            "fear": 0.894,
-            "joy": 1,
-            "love": 0.778,
-            "sadness": 1,
-            "surprise": 0.745,
+            "fear": 0.8,
+            "joy": 0.8,
+            "love": 0.8,
+            "sadness": 0.95,
+            "surprise": 0.8,
             "neutral": 0,
+        }
+        self.emotion_thresholds = {
+            "anger": 0.99999,
+            "fear": 0.5,
+            "joy": 0.5,
+            "love": 0.5,
+            "sadness": 0.6,
+            "surprise": 0.5,
+            "neutral": 0.5,
         }
         self.steps = steps
         self.jokes = jokes
@@ -54,13 +63,17 @@ class EmotionSkillScenario:
             self.regexp_sad = True
             logger.info(f"Sadness detected by regexp in {annotated_user_phrase['text']}")
             return "sadness"
-        most_likely_emotion = None
+
+        most_likely_emotion = "neutral"
         emotion_probs = get_emotions(annotated_user_phrase, probs=True)
         if discard_emotion in emotion_probs:
             emotion_probs.pop(discard_emotion)
         most_likely_prob = max(emotion_probs.values())
         for emotion in emotion_probs.keys():
-            if emotion_probs.get(emotion, 0) == most_likely_prob:
+            if (
+                emotion_probs.get(emotion, 0) == most_likely_prob
+                and emotion_probs.get(emotion, 0) >= self.emotion_thresholds[emotion]
+            ):
                 most_likely_emotion = emotion
         return most_likely_emotion
 
@@ -128,7 +141,7 @@ class EmotionSkillScenario:
                 state = random.choice(step["next_step"])
         elif state == "sad_and_lonely" and just_asked_about_jokes and is_no:
             reply = "Actually, I love jokes but not now. Dead serious about that."
-            confidence = 1.0
+            confidence = 0.99
             state = ""
         elif state == "offered_advice":
             # we offered an advice
@@ -140,7 +153,7 @@ class EmotionSkillScenario:
                     state = random.choice(step["next_step"])
                 else:
                     state = ""
-                confidence = 0.95
+                confidence = 0.8
             else:
                 # provide advices and offer another one
                 reply = self._random_choice(self.advices[emotion], prev_jokes_advices)
@@ -153,7 +166,7 @@ class EmotionSkillScenario:
                     prev_jokes_advices.append(reply)
                     if len(prev_jokes_advices) == len(self.advices[emotion]):
                         state = "sad_and_lonely_end"
-                confidence = 1.0 if is_yes else 0.95
+                confidence = 1.0 if is_yes else 0.8
         else:
             if emotion in ["sadness", "fear", "anger"] and "joy" in state:
                 state = "sad_and_lonely"
@@ -169,7 +182,7 @@ class EmotionSkillScenario:
                 link = link_to([link], human_attributes=human_attr)
                 link["phrase"] = reply
                 # reply += link['phrase']
-            confidence = 0.95
+            confidence = 0.8
 
         emotion_skill_attributes = {"state": state, "emotion": emotion, "prev_jokes_advices": prev_jokes_advices}
         if "joy" in state:
@@ -242,7 +255,7 @@ class EmotionSkillScenario:
                 if talk_about_emotion(annotated_user_phrase, prev_annotated_bot_phrase):
                     reply = f"OK. {random.choice(skill_trigger_phrases())}"
                     attr["can_continue"] = MUST_CONTINUE
-                    confidence = 1
+                    confidence = 1.0
                 elif emotion != "neutral" or state != "":
                     reply, confidence, link, emotion_skill_attributes = self._get_reply_and_conf(
                         annotated_user_phrase, prev_bot_phrase, emotion, emotion_skill_attributes, human_attributes

@@ -87,7 +87,7 @@ ACKNOWLEDGE_USER_DO_NOT_WANT_TO_VISIT_LOC = [
 ]
 
 OFFER_FACT_RESPONSES = [
-    "Great! Would you like to me to share a fact about LOCATION?",
+    "Great! Would you like me to share a fact about LOCATION?",
     "Cool! Do you want to hear a fact about LOCATION?",
     "I know something interesting about it. Do you want me to share a fact about LOCATION?",
 ]
@@ -112,7 +112,8 @@ QUESTIONS_ABOUT_BOT_LOCATIONS = {
     "Miami": "I've heard that Miami is one of the cleanest, tidiest city in the whole United States. Miami is also "
     "very close to some amazing destinations for high end tourism. By the way, in a study recently made, "
     "Florida ranked first for the quality of the infrastructure. Have you ever been in Miami?",
-    "Amsterdam": "Did you know that Amsterdam is a city to relax in. I'm talking about the cozy atmosphere that you'll find in "
+    "Amsterdam": "Did you know that Amsterdam is a city to relax in. \
+    I'm talking about the cozy atmosphere that you'll find in "
     "this city. The best place to enjoy the passing bikes, unique architecture, and beautiful canals "
     "among the many things to do and delicious things to eat. Have you ever been in Amsterdam?",
     "Venice": "You know, Venice is impossible to ignore as a dream destination. A group of small islands connected "

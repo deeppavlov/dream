@@ -1,6 +1,6 @@
 [
     [
-        "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
+        "I was built by the DeepPavlov team. #+#who_made_you",
         1.0,
         {
             "dff_intent_responder_skill_state": {
@@ -46,8 +46,8 @@
                         "4": "who made you?"
                     },
                     "responses": {
-                        "3": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you",
-                        "4": "I was built by the team of Moscow Institute of Physics and Technology. #+#who_made_you"
+                        "3": "I was built by the DeepPavlov team. #+#who_made_you",
+                        "4": "I was built by the DeepPavlov team. #+#who_made_you"
                     },
                     "misc": {},
                     "validation": false,

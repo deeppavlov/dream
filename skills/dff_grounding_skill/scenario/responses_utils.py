@@ -14,7 +14,7 @@ from .utils import (
 )
 
 SUPER_CONF = 1.0
-ALMOST_SUPER_CONF = 0.99
+ALMOST_SUPER_CONF = 0.9
 UNIVERSAL_RESPONSE_CONF = 0.7
 UNIVERSAL_RESPONSE_LOW_CONF = 0.6
 DONTKNOW_CONF = 0.5
@@ -134,8 +134,8 @@ def generate_acknowledgement(last_human_utterances, curr_intents, curr_considere
         last_human_sent = get_last_human_sent(last_human_utterances)
         curr_reformulated_question = reformulate_question_to_statement(last_human_sent)
         ackn_response = get_midas_intent_acknowledgement(curr_considered_intents[-1], curr_reformulated_question)
-    attr = {"response_parts": ["acknowledgement"]}
-    return ackn_response, attr
+
+    return ackn_response
 
 
 #####################################################################

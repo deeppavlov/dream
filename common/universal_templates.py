@@ -214,7 +214,7 @@ COMPILE_LETS_TALK = re.compile(
 COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(
     join_sentences_in_or_pattern(
         [
-            r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE),
+            r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + join_words_in_or_pattern(TALK_LIKE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(TALK_LIKE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(LIKE_TEMPLATE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(ASK_TEMPLATE),
@@ -232,6 +232,7 @@ COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(
             join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
             join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
             r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s?" + ABOUT_SOMETHING + END,
+            r"why (do not|don't) (we|us|me|you|to) " + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         ]
     ),
     re.IGNORECASE,
@@ -267,6 +268,8 @@ COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(
             join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
             join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
             r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+            r"why (do not|don't) (we|us|me|you|to) " + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
+            r"why (do not|don't) (we|us|me|you|to) " + "discuss" + r"\s" + ANY_WORDS + END,
         ]
     ),
     re.IGNORECASE,
@@ -659,9 +662,7 @@ DFF_WIKI_TEMPLATES = {
     "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE),
     "anime": re.compile(r"\banime\b|\bpokemon\b", re.IGNORECASE),
     "love": re.compile(
-        r"(\blove\b|\blovers?\b|\bbeloved\b|relations?|relationships?|girlfriend"
-        r"|boyfriend|\bgirls\b|\bboys\b|\bdating\b|\bdates\b"
-        r"|\bfiances?\b|\bgrooms?\b|\bbrides?\b|\bbridegrooms?\b)",
+        r"(\b(fall|fell|fallen|falling) in love\b|m in love\b|\bcrush on\b)",
         re.IGNORECASE,
     ),
     "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
