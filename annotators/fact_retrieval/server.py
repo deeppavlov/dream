@@ -158,10 +158,10 @@ def find_facts(entity_substr_batch, entity_ids_batch, entity_pages_batch):
                                         {
                                             "entity_substr": entity_substr,
                                             "entity_type": entity_types_substr,
-                                            "facts": facts,
+                                            "facts": list(np.random.choice(facts, size=N_FACTS, replace=False)),
                                         }
                                     )
-        facts_batch.append(np.random.choice(facts_list, size=N_FACTS, replace=False)
+        facts_batch.append(list(np.random.choice(facts_list, size=N_FACTS, replace=False))
                            if len(facts_list) > 0 else facts_list)
     return facts_batch
 
@@ -225,7 +225,7 @@ def respond():
                     if cnt_fnd < len(fact_res):
                         out_res.append({
                             "topic_facts": facts_batch[cnt_fnd],
-                            "facts": np.random.choice(fact_res[cnt_fnd], size=N_FACTS, replace=False)
+                            "facts": list(np.random.choice(fact_res[cnt_fnd], size=N_FACTS, replace=False))
                                 if len(fact_res[cnt_fnd]) > 0 else fact_res[cnt_fnd]
                         })
                         cnt_fnd += 1
