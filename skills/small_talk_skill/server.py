@@ -306,7 +306,7 @@ def pickup_topic_and_start_small_talk(dialog):
             elif topic == "you":
                 response = "Let's talk about me. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             else:
-                response = "Let's talk about {topic}. " + TOPIC_SCRIPTS.get(topic, [""])[0]
+                response = f"Let's talk about {topic}. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             confidence = BOT_TOPIC_START_CONFIDENCE
         else:
             response = ""
