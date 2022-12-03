@@ -256,11 +256,11 @@ services:
       args:
         CONFIG: levenshtein_corrector_ru.json
         PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_ru
+        SRC_DIR: annotators/spelling_preprocessing_dp
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
         LANGUAGE: RU
       context: ./
-      dockerfile: annotators/spelling_preprocessing_ru/Dockerfile
+      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server

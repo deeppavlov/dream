@@ -22,7 +22,7 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/spelling_preprocessing_ru/requirements.txt /src/requirements.txt
+COPY ./annotators/spelling_preprocessing_dp/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
 RUN pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
