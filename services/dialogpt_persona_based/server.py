@@ -104,6 +104,7 @@ def generate_response(
 
     model_response = model_response.to(device)
     model_response_list = list(model_response[0])
+    bot_response_decode = None
     if vocab_tokens["</sp_2>"] in model_response_list:
         end_speaker_index = model_response_list.index(vocab_tokens["</sp_2>"])
         model_response = model_response[:, : end_speaker_index + 1]
