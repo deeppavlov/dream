@@ -29,7 +29,7 @@ def test_respond():
     gold = []
 
     result = requests.post(url, json=test_data).json()
-
+    print(result)
     assert len(result[0][0]) > 0, print(f"Expected: {gold} but got: {result}")
     print("Success")
 
