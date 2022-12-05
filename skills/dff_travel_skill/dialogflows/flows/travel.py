@@ -309,7 +309,7 @@ def not_like_travelling_response(vars):
 
 def linkto_personal_info_response(vars):
     # USR_ASK_ABOUT_ORIGIN
-    responses = ["Okay. Where are from?", "Then let's talk about you. Where are you from?"]
+    responses = ["Okay. Where are you from?", "Then let's talk about you. Where are you from?"]
     logger.info("Bot asks user about his/her origin/home town.")
     try:
         state_utils.set_can_continue(vars, CAN_NOT_CONTINUE)
@@ -777,7 +777,6 @@ LOCATION_FACTS_BUFFER = {}
 
 def collect_and_save_facts_about_location(location, vars):
     global LOCATION_FACTS_BUFFER
-
     facts_about_location = state_utils.get_fact_for_particular_entity_from_human_utterance(vars, location)
     facts_about_location = [fact for fact in facts_about_location if "is a city" not in fact.lower()]
 
@@ -800,8 +799,11 @@ def collect_and_save_facts_about_location(location, vars):
 def is_fact_about_loc_available_request(ngrams, vars):
     shared_memory = state_utils.get_shared_memory(vars)
     location = shared_memory.get("discussed_location", "")
+    used_facts = shared_memory.get("used_facts", [])
     facts_about_location = collect_and_save_facts_about_location(location, vars)
-    if len(location) and location != "there" and len(facts_about_location) > 0:
+    unused_facts = list(set(facts_about_location).difference(set(used_facts)))
+
+    if len(location) and location != "there" and len(unused_facts) > 0:
         logger.info(f"Bot has available facts about LOC: {location}.")
         return True
     return False
@@ -813,9 +815,11 @@ def offer_fact_about_loc_response(vars):
         shared_memory = state_utils.get_shared_memory(vars)
         location = shared_memory.get("discussed_location", "")
         logger.info(f"Bot offers fact about LOC: {location}.")
+        used_facts = shared_memory.get("used_facts", [])
         facts_about_location = collect_and_save_facts_about_location(location, vars)
+        unused_facts = set(facts_about_location).difference(set(used_facts))
 
-        if len(location) and len(facts_about_location) > 0 and location != "there":
+        if len(location) and len(unused_facts) > 0 and location != "there":
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_confidence(vars, confidence)
             if confidence == SUPER_CONFIDENCE:
@@ -826,11 +830,8 @@ def offer_fact_about_loc_response(vars):
             state_utils.save_to_shared_memory(vars, discussed_location=location)
             state_utils.save_to_shared_memory(vars, discussed_locations=discussed_locations + [location])
 
-            if shared_memory.get(f"used_facts_{location}", []):
-                gave_fact_before = (
-                    shared_memory.get(f"used_facts_{location}", [])[-1]
-                    in state_utils.get_last_bot_utterance(vars)["text"]
-                )
+            if shared_memory.get("used_facts", []):
+                gave_fact_before = used_facts[-1] in state_utils.get_last_bot_utterance(vars)["text"]
             else:
                 gave_fact_before = False
             if gave_fact_before:
@@ -874,11 +875,13 @@ def share_fact_about_loc_response(vars):
     try:
         shared_memory = state_utils.get_shared_memory(vars)
         location = shared_memory.get("discussed_location", "")
+        used_facts = shared_memory.get("used_facts", [])
         facts_about_location = collect_and_save_facts_about_location(location, vars)
+        unused_facts = list(set(facts_about_location).difference(set(used_facts)))
         used_opinion_requests = shared_memory.get("used_opinion_requests", [])
         logger.info(f"Bot shares fact about LOC: {location}.")
 
-        if len(location) and len(facts_about_location) > 0 and location != "there":
+        if len(location) and len(unused_facts) > 0 and location != "there":
             opinion_req = random.choice(OPINION_REQUESTS)
             confidence = choose_conf_decreasing_if_requests_in_human_uttr(vars, SUPER_CONFIDENCE, DEFAULT_CONFIDENCE)
             state_utils.set_confidence(vars, confidence)
@@ -891,11 +894,9 @@ def share_fact_about_loc_response(vars):
             state_utils.save_to_shared_memory(vars, discussed_locations=discussed_locations + [location])
             state_utils.save_to_shared_memory(vars, used_opinion_requests=used_opinion_requests + [opinion_req])
 
-            fact_about_location = facts_about_location[
-                state_utils.get_unrepeatable_index_from_rand_seq(
-                    vars, f"used_facts_{location}", len(facts_about_location), renew_seq_if_empty=True
-                )
-            ]
+            fact_about_location = unused_facts[0]
+            state_utils.save_to_shared_memory(vars, used_facts=used_facts + [fact_about_location])
+
             if fact_about_location[-1] != ".":
                 fact_about_location += "."
             return f"{fact_about_location} {opinion_req}"

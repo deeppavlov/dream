@@ -18,4 +18,4 @@ WORKDIR /src
 
 RUN python -m deeppavlov download $CONFIG
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8021
+CMD gunicorn  --workers=1 --timeout 800 server:app -b 0.0.0.0:8021
