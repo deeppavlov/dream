@@ -56,10 +56,13 @@ def clean_text(text):
 
 def main():
     args = parser.parse_args()
+    human_utterances = []
 
     with open(args.pred_file, "r", newline="") as f:
         reader = csv.reader(f, delimiter=" ")
-        pred_data = [row for row in reader][1:]
+        data = [row for row in reader]
+        human_utterances = [row[1] for row in data]
+        pred_data = data[1:]
         active_skills = [row[1] for row in pred_data]
         pred_data = [row[-4:] for row in pred_data]
 
@@ -76,7 +79,7 @@ def main():
 
     error_reports = []
 
-    for pred_r, true_r, skill in zip(pred_data, true_data, active_skills):
+    for pred_r, true_r, skill, human_uttr in zip(pred_data, true_data, active_skills, human_utterances):
         true_sents = set([sent.lower().replace("\n", " ").replace("  ", " ") for sent in true_r[2:]])
         acceptable_skill_names = true_r[0]
         assert skill != "exception", print("ERROR: {} not in {}".format(pred_r[-1], true_sents))
@@ -125,7 +128,8 @@ def main():
                 continue
             else:
                 error_reports += [
-                    f"\nERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
+                    f"\nERROR!!!\nFor human utterance: `{human_uttr}`\n"
+                    f"Acceptable skill names: `{acceptable_skill_names}`.\n"
                     f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
                     f"True sentences: `{true_sents}`.\n"
                     f"Passed true sentences: `{passed_gold_phrases}`.\n"
