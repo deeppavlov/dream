@@ -21,6 +21,14 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+def in_last_utts(last_utts, entity):
+    for utt in last_utts:
+        if entity in utt:
+            logger.info(f"Entity {entity} occurred in prev Bot Utterances: {utt}")
+            return True
+    return False
+
+
 def handler(requested_data):
     st_time = time.time()
 
@@ -32,11 +40,9 @@ def handler(requested_data):
         try:
             human_attr = dialog.get("human", {}).get("attributes", {})
             bot_utts = dialog.get("bot_utterances", [])
-            last_bot_utt = {}
-            if bot_utts:
-                last_bot_utt = bot_utts[-1]
-            last_bot_utt = last_bot_utt.get("text", "")
-            logger.info(f"Last bot utt: {last_bot_utt}")
+            last_bot_utts = []
+            for i in range(min(len(bot_utts), 5)):
+                last_bot_utts.append(bot_utts[i].get("text", ""))
 
             entities = human_attr.get("entities", {})
             entities = entity_utils.load_raw_entities(entities)
@@ -44,11 +50,11 @@ def handler(requested_data):
             human_attr = {"entities": {k: dict(v) for k, v in entities.items()}}
             keys = list(human_attr['entities'].keys())
             for ent in keys:
-                if ent in last_bot_utt:
-                    human_attr['entities'][ent]["mentioned"] = "True"
+                if in_last_utts(last_bot_utts, ent):
+                    human_attr['entities'][ent]["mentioned"] = True
                 else:
-                    human_attr['entities'][ent]["mentioned"] = "False"
-            logger.info(f"Human attrs: {human_attr}")
+                    human_attr['entities'][ent]["mentioned"] = False
+            logger.info(f"Human attributes: {human_attr}")
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
@@ -59,13 +65,13 @@ def handler(requested_data):
     return responses
 
 
-# try:
-#     test_server.run_test(handler)
-#     logger.info("test query processed")
-# except Exception as exc:
-#     sentry_sdk.capture_exception(exc)
-#     logger.exception(exc)
-#     raise exc
+try:
+    test_server.run_test(handler)
+    logger.info("test query processed")
+except Exception as exc:
+    sentry_sdk.capture_exception(exc)
+    logger.exception(exc)
+    raise exc
 
 
 @app.route("/respond", methods=["POST"])

@@ -248,13 +248,16 @@ class DummySkillConnector:
                 response = ""
                 if entities:
                     selected_entity = ""
-                    entity_names = list(entities.keys())
+                    # reverse so it uses recent entities first
+                    entity_names = list(entities.keys())[::-1]
                     for name in entity_names:
-                        if entities[name]['human_attitude'] == 'like':
+                        if entities[name]['human_attitude'] == 'like' \
+                                and not entities[name]['mentioned']:
                             selected_entity = name
                             break
                     if selected_entity:
                         response = f"You mentioned {selected_entity}, maybe you want to discuss it?"
+                        logger.info(f"Dummy Skill Resp: {response}")
                     confs += [0.5]
                 else:
                     confs += [0.0]
