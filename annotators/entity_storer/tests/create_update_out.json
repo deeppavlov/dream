@@ -20,7 +20,8 @@
                         }
                     ],
                     "human_attitude": null,
-                    "bot_attitude": "like"
+                    "bot_attitude": "like",
+                    "mentioned": "False"
                 }
             }
         }

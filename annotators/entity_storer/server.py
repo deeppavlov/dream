@@ -29,12 +29,26 @@ def handler(requested_data):
     human_utter_indexes = requested_data.get("human_utter_indexes", [0] * len(dialogs))
     responses = []
     for dialog, human_utter_index in zip(dialogs, human_utter_indexes):
-        human_attr = dialog.get("human", {}).get("attributes", {})
         try:
+            human_attr = dialog.get("human", {}).get("attributes", {})
+            bot_utts = dialog.get("bot_utterances", [])
+            last_bot_utt = {}
+            if bot_utts:
+                last_bot_utt = bot_utts[-1]
+            last_bot_utt = last_bot_utt.get("text", "")
+            logger.info(f"Last bot utt: {last_bot_utt}")
+
             entities = human_attr.get("entities", {})
             entities = entity_utils.load_raw_entities(entities)
             entities = entity_utils.update_entities(dialog, human_utter_index, entities)
             human_attr = {"entities": {k: dict(v) for k, v in entities.items()}}
+            keys = list(human_attr['entities'].keys())
+            for ent in keys:
+                if ent in last_bot_utt:
+                    human_attr['entities'][ent]["mentioned"] = "True"
+                else:
+                    human_attr['entities'][ent]["mentioned"] = "False"
+            logger.info(f"Human attrs: {human_attr}")
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
@@ -45,13 +59,13 @@ def handler(requested_data):
     return responses
 
 
-try:
-    test_server.run_test(handler)
-    logger.info("test query processed")
-except Exception as exc:
-    sentry_sdk.capture_exception(exc)
-    logger.exception(exc)
-    raise exc
+# try:
+#     test_server.run_test(handler)
+#     logger.info("test query processed")
+# except Exception as exc:
+#     sentry_sdk.capture_exception(exc)
+#     logger.exception(exc)
+#     raise exc
 
 
 @app.route("/respond", methods=["POST"])
