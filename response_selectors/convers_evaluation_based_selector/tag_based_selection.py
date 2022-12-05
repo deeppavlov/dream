@@ -367,6 +367,7 @@ def tag_based_response_selection(
     for i in range(min(MAX_TURNS_WITHOUT_SCRIPTS, n_available_bot_uttr)):
         _prev_active_skills.append(dialog["bot_utterances"][-i - 1]["active_skill"])
     _no_scripts_n_times_in_a_row = all([skill not in ACTIVE_SKILLS for skill in _prev_active_skills])
+    _no_scripts_n_times_in_a_row = _no_scripts_n_times_in_a_row and len(_prev_active_skills) > MAX_TURNS_WITHOUT_SCRIPTS
 
     _prev_bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
     _prev_active_skill = dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
@@ -686,6 +687,7 @@ def tag_based_response_selection(
         if (_no_scripts_n_times_in_a_row and _is_short_or_question_by_not_script and not _is_question_by_user) or (
             _no_to_first_linkto and _is_best_not_script
         ):
+            logger.info(f"No prompts for {_no_scripts_n_times_in_a_row} times in a row.")
             # if no scripted skills 2 time sin a row before, current chosen best cand is not scripted, contains `?`,
             # and user utterance does not contain "?", replace utterance with dummy!
             best_prompt_id = pickup_best_id(categorized_prompts, candidates, curr_single_scores, bot_utterances)
