@@ -435,7 +435,7 @@ services:
       - "./annotators/property_extraction:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8128:8128
+      - 8130:8130
   user-knowledge-graph:
     volumes:
       - "./annotators/user_knowledge_graph:/src"

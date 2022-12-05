@@ -320,7 +320,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://property-extraction:8128/respond"
+                    "url": "http://property-extraction:8130/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
