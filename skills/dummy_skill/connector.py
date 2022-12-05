@@ -87,7 +87,7 @@ class RandomTopicResponder:
 
     def get_random_text(self, topics):
         available_topics = self.topics.intersection(set(topics))
-        logger.info(f'Topics: {available_topics}')
+        logger.info(f"Topics: {available_topics}")
         if not available_topics:
             return ""
 
@@ -174,8 +174,7 @@ def no_initiative(dialog):
     utts = dialog["human_utterances"]
     if len(utts) < 2:
         return False
-    if not is_question(utts[-1].get("text", "")) and \
-            not is_question(utts[-2].get("text", "")):
+    if not is_question(utts[-1].get("text", "")) and not is_question(utts[-2].get("text", "")):
         logger.info("No questions detected")
         return True
     if is_switch_topic(utts[-1]):
@@ -242,8 +241,8 @@ class DummySkillConnector:
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
 
             if no_initiative(dialog) and LANGUAGE == "EN":
-                last_utt = dialog['utterances'][-1]
-                user = last_utt['user'].get('attributes', {})
+                last_utt = dialog["utterances"][-1]
+                user = last_utt["user"].get("attributes", {})
                 entities = user.get("entities", {})
                 response = ""
                 if entities:
@@ -251,8 +250,7 @@ class DummySkillConnector:
                     # reverse so it uses recent entities first
                     entity_names = list(entities.keys())[::-1]
                     for name in entity_names:
-                        if entities[name]['human_attitude'] == 'like' \
-                                and not entities[name]['mentioned']:
+                        if entities[name]["human_attitude"] == "like" and not entities[name]["mentioned"]:
                             selected_entity = name
                             break
                     if selected_entity:

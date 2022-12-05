@@ -48,12 +48,12 @@ def handler(requested_data):
             entities = entity_utils.load_raw_entities(entities)
             entities = entity_utils.update_entities(dialog, human_utter_index, entities)
             human_attr = {"entities": {k: dict(v) for k, v in entities.items()}}
-            keys = list(human_attr['entities'].keys())
+            keys = list(human_attr["entities"].keys())
             for ent in keys:
                 if in_last_utts(last_bot_utts, ent):
-                    human_attr['entities'][ent]["mentioned"] = True
+                    human_attr["entities"][ent]["mentioned"] = True
                 else:
-                    human_attr['entities'][ent]["mentioned"] = False
+                    human_attr["entities"][ent]["mentioned"] = False
             logger.info(f"Human attributes: {human_attr}")
         except Exception as exc:
             logger.exception(exc)
