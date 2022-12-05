@@ -56,19 +56,18 @@ def clean_text(text):
 
 def main():
     args = parser.parse_args()
-    human_utterances = []
 
     with open(args.pred_file, "r", newline="") as f:
         reader = csv.reader(f, delimiter=" ")
-        data = [row for row in reader]
-        human_utterances = [row[1] for row in data]
-        pred_data = data[1:]
+        pred_data = [row for row in reader][1:]
         active_skills = [row[1] for row in pred_data]
         pred_data = [row[-4:] for row in pred_data]
 
     with open(args.true_file, "r", newline="") as f:
         reader = csv.reader(f, delimiter=" ")
-        true_data = [row for row in reader][1:]
+        data = [row for row in reader]
+        true_data = data[1:]
+        human_utterances = [row[1] for row in data]
     proc_times = [float(r[0]) for r in pred_data]
     mean_proc_time = statistics.mean(proc_times)
 
@@ -129,11 +128,11 @@ def main():
             else:
                 error_reports += [
                     f"\nERROR!!!\nFor human utterance: `{human_uttr}`\n"
+                    f"Skill: {skill}\nSkill output: {pred_r[-1]}\n"
                     f"Acceptable skill names: `{acceptable_skill_names}`.\n"
                     f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
-                    f"True sentences: `{true_sents}`.\n"
-                    f"Passed true sentences: `{passed_gold_phrases}`.\n"
-                    f"Skill: {skill}\nSkill output: {pred_r[-1]}"
+                    f"Acceptable sentences: `{true_sents}`.\n"
+                    f"Passed true sentences: `{passed_gold_phrases}`."
                 ]
     print("\n\nASSERTION RESULTS:\n")
     assert len(error_reports) == 0, print("\n\n".join(error_reports))
