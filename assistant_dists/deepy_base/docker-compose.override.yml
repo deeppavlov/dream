@@ -13,7 +13,7 @@ services:
 
   spelling_preprocessing:
     build:
-      context: annotators/spelling_preprocessing
+      context: annotators/spelling_preprocessing_dp
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3661 --timeout=100
     ports:
       - 3661:3661
