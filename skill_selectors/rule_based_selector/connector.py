@@ -12,7 +12,7 @@ from common.gossip import check_is_celebrity_mentioned
 from common.link import get_linked_to_skills, get_previously_active_skill
 from common.movies import extract_movies_names_from_annotations
 from common.response_selection import UNPREDICTABLE_SKILLS
-from common.sensitive import is_sensitive_topic_and_request
+from common.sensitive import is_sensitive_situation
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, GREETING_QUESTIONS_TEXTS
 from common.utils import (
@@ -91,7 +91,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
-            elif is_sensitive_topic_and_request(user_uttr):
+            elif is_sensitive_situation(user_uttr):
                 # process user utterance with sensitive content, "safe mode"
 
                 # adding open-domain skills without opinion expression
