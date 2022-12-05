@@ -320,7 +320,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://property-extraction:8126/respond"
+                    "url": "http://property-extraction:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -333,7 +333,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://user-knowledge-graph:8127/respond"
+                    "url": "http://user-knowledge-graph:8129/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

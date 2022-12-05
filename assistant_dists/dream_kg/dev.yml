@@ -435,12 +435,12 @@ services:
       - "./annotators/property_extraction:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8126:8126
+      - 8128:8128
   user-knowledge-graph:
     volumes:
       - "./annotators/user_knowledge_graph:/src"
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8127:8127
+      - 8129:8129
 version: "3.7"
