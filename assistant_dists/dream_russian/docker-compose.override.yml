@@ -267,9 +267,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 5G
+          memory: 8G
         reservations:
-          memory: 5G
+          memory: 8G
 
   spacy-annotator:
     env_file: [.env]

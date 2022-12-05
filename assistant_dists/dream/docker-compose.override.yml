@@ -624,9 +624,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 5G
+          memory: 6.5G
         reservations:
-          memory: 5G
+          memory: 6.5G
 
   dff-grounding-skill:
     env_file: [.env]
