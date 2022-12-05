@@ -104,7 +104,7 @@
     },
     "disgust":{
       "answers": [
-         "I see that you are in disgust. I am sorry. Maybe we should talk about movies instead?"
+         "I suppose that you don't enjoy the conversation. Do you want to talk about something else?"
       ],
       "next_step":[""],
       "link": "dff_movie_skill"
