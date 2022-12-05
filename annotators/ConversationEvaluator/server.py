@@ -2,15 +2,15 @@ import logging
 import os
 import time
 
-from flask import Flask, request, jsonify
 import sentry_sdk
-
-from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
+from flask import Flask, request, jsonify
+
+
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
 def transform(data):
@@ -41,6 +41,7 @@ app = Flask(__name__)
 def batch_respond():
     t = time.time()
     data = transform(request.json)
+    logger.info(f"convers-evaluator-annotator data: {data} ")
     conv_eval_results = model(data)
     key_annotations = [
         "isResponseComprehensible",
@@ -52,7 +53,8 @@ def batch_respond():
     result = []
     for scores in conv_eval_results:
         result.append({annotation: float(score) for annotation, score in zip(key_annotations, scores)})
-    logger.info(f"convers_evaluator_annotator exec time {round(time.time()-t, 2)} sec")
+
+    logger.info(f"convers-evaluator-annotator exec time: {round(time.time()-t, 2)} sec")
     return jsonify([{"batch": result}])
 
 
