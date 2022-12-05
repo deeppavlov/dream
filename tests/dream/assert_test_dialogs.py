@@ -1,6 +1,7 @@
 import argparse
 import difflib
 import re
+from copy import deepcopy
 
 import csv
 import statistics
@@ -66,8 +67,8 @@ def main():
     with open(args.true_file, "r", newline="") as f:
         reader = csv.reader(f, delimiter=" ")
         data = [row for row in reader]
+        human_utterances = deepcopy([row[1] for row in data])
         true_data = data[1:]
-        human_utterances = [row[1] for row in data]
     proc_times = [float(r[0]) for r in pred_data]
     mean_proc_time = statistics.mean(proc_times)
 
