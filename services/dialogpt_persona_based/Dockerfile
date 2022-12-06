@@ -42,5 +42,8 @@ RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretra
 RUN python -c "from transformers import AutoModelForSeq2SeqLM; AutoModelForSeq2SeqLM.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
 COPY ./services/dialogpt_persona_based/ /src
+# https://github.com/NVIDIA/nvidia-docker/issues/533
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
+ENV NVIDIA_VISIBLE_DEVICES=all
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
