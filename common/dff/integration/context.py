@@ -324,3 +324,8 @@ def get_last_state(ctx: Context, actor: Actor) -> str:
         history_sorted = sorted(history, key=lambda x: x[0])
         last_state = history_sorted[-1][1]
     return last_state
+
+
+def add_smth_to_response_attributes(ctx: Context, actor: Actor, smth_key=None, smth_value=None):
+    if not ctx.validation and not (smth_key is None or smth_value is None):
+        ctx.misc["agent"][smth_key] = smth_value
