@@ -39,11 +39,10 @@ DEFAULT_CONFIDENCE = 0.9
 
 try:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    logger.info(f"dialogpt_persona_based device: {device}")
     model = AutoModelForSeq2SeqLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model.to(device)
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    
-    
 
     hyperparameters = H2PersonaChatHyperparametersV1(
         model_name="facebook/bart-base",
@@ -91,6 +90,7 @@ def generate_response(
         hyperparameters=hyperparameters,
         history=history,
         persona=max_likelihood_sentences,
+        device=device,
     )
 
     response = persona_bot.next_response()
@@ -104,7 +104,6 @@ def respond():
     start_time = time.time()
     responses = []
     confidences = []
-    logger.info("HELLO WORLD")
 
     last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
