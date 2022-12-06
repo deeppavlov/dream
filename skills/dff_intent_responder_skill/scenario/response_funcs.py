@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 import logging
-import json
 import random
 import re
 from datetime import datetime
 from os import getenv
-import requests
 import json
 
 import common.dff.integration.context as int_ctx
+from common.robot import check_if_valid_robot_command
 from common.utils import get_entities
 from df_engine.core import Actor, Context
 
@@ -136,14 +135,6 @@ def get_respond_funcs():
 
 def get_human_utterances(ctx: Context, actor: Actor) -> list:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
-
-
-def check_if_valid_robot_command(command):
-    ROS_FSM_SERVER = "http://172.17.0.1:5000"
-    ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
-    logger.info(f"Sending to robot:\n{command}")
-
-    requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}))
 
 
 def track_object_respond(ctx: Context, actor: Actor, intention: str):
