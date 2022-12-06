@@ -12,9 +12,7 @@ from common.utils import get_intents
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
@@ -51,9 +49,7 @@ except Exception as e:
     raise e
 
 
-def generate_response(
-    persona: dict = None, model=None, tokenizer=None, utterances_histories=None
-):
+def generate_response(persona: dict = None, model=None, tokenizer=None, utterances_histories=None):
     """generates the next replica of the bot based on a short persona consisting of several sentences.
 
     Args:
@@ -78,10 +74,7 @@ def generate_response(
     history_chat = "".join(
         list(
             reversed(
-                [
-                    f"<sp_{(i)%2+1}>{item}</sp_{(i)%2+1}>"
-                    for i, item in enumerate(reversed(utterances_histories[-1:]))
-                ]
+                [f"<sp_{(i)%2+1}>{item}</sp_{(i)%2+1}>" for i, item in enumerate(reversed(utterances_histories[-1:]))]
             )
         )
     )
@@ -130,9 +123,7 @@ def respond():
     try:
         for utt_pos in range(len(last_annotated_utterances_batch)):
             persona = (
-                last_annotated_utterances_batch[utt_pos]
-                .get("annotations", {})
-                .get("relative_persona_extractor", [])
+                last_annotated_utterances_batch[utt_pos].get("annotations", {}).get("relative_persona_extractor", [])
             )
             response = ""
             try:
@@ -146,9 +137,7 @@ def respond():
                 logger.exception(e)
                 response = ""
 
-            if "open_question_personal" in get_intents(
-                last_annotated_utterances_batch[utt_pos]
-            ):
+            if "open_question_personal" in get_intents(last_annotated_utterances_batch[utt_pos]):
                 logger.info("open_question_personal")
                 responses.append([response])
                 confidences.append([SUPER_CONFIDENCE])
