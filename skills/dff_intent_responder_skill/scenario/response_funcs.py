@@ -14,6 +14,8 @@ from df_engine.core import Actor, Context
 
 INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
 LANGUAGE = getenv("LANGUAGE", "EN")
+ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
+
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FNAME}")
@@ -150,7 +152,7 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = "I did not get tracked object. Please repeat the command."
 
-    if check_if_valid_robot_command(command):
+    if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
         return response
     else:
@@ -185,7 +187,7 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
             else:
                 response = f"Turning around clockwise."
 
-    if check_if_valid_robot_command(command):
+    if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
         return response
     else:
@@ -208,7 +210,7 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = f"Moving forward."
 
-    if check_if_valid_robot_command(command):
+    if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
         return response
     else:
@@ -231,7 +233,7 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = f"Moving backward."
 
-    if check_if_valid_robot_command(command):
+    if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
         return response
     else:
@@ -245,7 +247,7 @@ def open_door_respond(ctx: Context, actor: Actor, intention: str):
     else:
         response = f"Opening the door."
 
-    if check_if_valid_robot_command(command):
+    if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
         return response
     else:
@@ -273,7 +275,7 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = "I did not get target object. Please repeat the command."
 
-    if check_if_valid_robot_command(command):
+    if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
         return response
     else:
