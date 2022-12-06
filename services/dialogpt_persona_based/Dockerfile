@@ -1,6 +1,5 @@
 # syntax=docker/dockerfile:experimental
 
-# FROM nvidia/cuda:11.6.0-devel-ubuntu18.04
 FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
 
 RUN : \
@@ -16,7 +15,7 @@ RUN : \
 
 RUN apt-get update && \
 	apt-get upgrade -y && \
-	apt-get install -y git
+	apt-get install -y git libsqlite3-dev
 
 RUN python3.8 -m venv /venv
 ENV PATH=/venv/bin:$PATH
