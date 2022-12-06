@@ -1,7 +1,9 @@
 services:
   agent:
     volumes:
-      - "./assistant_dists/deepy_base:/dp-agent"
+      # - "./assistant_dists/deepy_base:/dp-agent"
+      - "./assistant_dists/deepy_base/connectors.py:/dp-agent/connectors.py"
+      - "./assistant_dists/deepy_base/dp_formatters.py:/dp-agent/dp_formatters.py"
       - "./skill_selectors/:/dp-agent/skill_selectors/"
       - "./state_formatters/:/dp-agent/state_formatters/"
       - "./skills/:/dp-agent/skills/"
@@ -40,6 +42,8 @@ services:
     command: python -m deeppavlov riseapi emo_bert.json -p 3664
     ports:
       - 3664:3664
+    environment:
+      - CUDA_VISIBLE_DEVICES=''
 
   dff-program-y-skill:
     env_file: [.env]

@@ -3,5 +3,5 @@ RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/D
 
 WORKDIR /app
 COPY . .
-
+RUN python -m deeppavlov install emo_bert.json
 RUN python -m deeppavlov download emo_bert.json

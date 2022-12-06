@@ -1,7 +1,7 @@
 services:
   agent:
     env_file: [.env]
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/deepy_base/pipeline_conf.json'
     build:
       context: ./
       dockerfile: dockerfile_agent

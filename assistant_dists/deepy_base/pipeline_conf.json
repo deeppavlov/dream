@@ -22,6 +22,7 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2,
                     "url": "http://spelling_preprocessing:3661/response"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
@@ -33,6 +34,7 @@
             "harvesters_maintenance_skill": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2,
                     "url": "http://harvesters_maintenance_skill:3662/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
@@ -43,7 +45,6 @@
             "dff_program_y_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
                     "url": "http://dff-program-y-skill:3668/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
@@ -82,7 +83,3 @@
     },
     "connectors": {}
 }
-
-
-
-
