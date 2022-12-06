@@ -186,11 +186,10 @@ services:
       - FLASK_APP=server
     deploy:
       resources:
+        limits:
+          memory: 3G
         reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
+          memory: 3G
     restart: always
 
   relative-persona-extractor:
