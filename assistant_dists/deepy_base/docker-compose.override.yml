@@ -8,6 +8,8 @@ services:
       - "./state_formatters/:/dp-agent/state_formatters/"
       - "./skills/:/dp-agent/skills/"
       - "./common/:/dp-agent/common/"
+    ports:
+      - 4242:4242
     environment:
       WAIT_HOSTS: "spelling_preprocessing:3661, harvesters_maintenance_skill:3662, rule_based_response_selector:3663,
         emotion_classification:3664, dff-program-y-skill:3668"
