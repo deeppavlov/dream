@@ -144,7 +144,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:language_mistakes_tracker_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.human_goals_detector"
+                    "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "update_attributes"
             }

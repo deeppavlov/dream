@@ -2,10 +2,8 @@ import logging
 import json
 
 from df_engine.core import Context, Actor
+import common.dff.integration.context as int_ctx
 
-f = open('data/luggage.json')
-dialog = json.load(f)
-counter = 0
 
 logger = logging.getLogger(__name__)
 # ....
@@ -20,15 +18,25 @@ def example_response(reply: str):
 
 def response_from_data():
     def response_from_data_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-        global counter
-        if counter < len(dialog["utterances"]):
-            reply = dialog["utterances"][counter]["utterance"]
-            counter += 1
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        dialog_step_id = shared_memory.get("dialog_step_id", 0)
+        dialog_script_name = shared_memory.get("dialog_script_name", None)
+        if dialog_script_name is None:
+            dialog_script_name = "luggage"
+
+        f = open(f'data/{dialog_script_name}.json')
+        dialog = json.load(f)
+        if dialog_step_id < len(dialog["utterances"]):
+            reply = dialog["utterances"][dialog_step_id]["utterance"]
+            dialog_step_id += 1
+            int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
         
         else:
-            counter = 0
-            reply = dialog["utterances"][counter]["utterance"]
+            dialog_step_id = 0
+            reply = dialog["utterances"][dialog_step_id]["utterance"]
+            int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
         
+        int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=dialog_step_id)
         return reply
 
     return response_from_data_handler
