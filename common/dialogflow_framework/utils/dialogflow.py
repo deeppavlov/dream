@@ -27,6 +27,7 @@ def load_into_dialogflow(
     age_group,
     disliked_skills,
     clarification_request_flag,
+    language_mistakes
 ):
     cached_functions.clear_cache()
     dialogflow.reset()
@@ -52,6 +53,7 @@ def load_into_dialogflow(
         "age_group": age_group,
         "disliked_skills": disliked_skills,
         "clarification_request_flag": clarification_request_flag,
+        "language_mistakes": language_mistakes
     }
     dialogflow.controller().vars()["agent"] = agent
 
@@ -64,6 +66,7 @@ def get_dialog_state(dialogflow):
     used_links = agent["used_links"]
     age_group = agent["age_group"]
     disliked_skills = agent["disliked_skills"]
+    language_mistakes = agent["language_mistakes"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
     response_parts = agent.get("response_parts", [])
     history[str(human_utter_index)] = dialogflow.controller().vars()["__system_state__"]
@@ -76,7 +79,7 @@ def get_dialog_state(dialogflow):
     del dialogflow.controller().vars()["agent"]
     state["dialogflow_state"] = dialogflow.serialize()
     logger.debug(f"state={state}")
-    return state, dff_shared_state, used_links, age_group, disliked_skills, response_parts
+    return state, dff_shared_state, used_links, age_group, disliked_skills, response_parts, language_mistakes
 
 
 def run_turn(dialogflow, text):

@@ -1,0 +1,57 @@
+services:
+  agent:
+    ports:
+    - 4242:4242
+    volumes:
+    - .:/dp-agent
+  convers-evaluator-annotator:
+    volumes:
+      - "./annotators/ConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
+  badlisted-words:
+    ports:
+    - 8018:8018
+    volumes:
+    - ./annotators/BadlistedWordsDetector:/src
+    - ./common:/src/common
+  convers-evaluation-selector:
+    ports:
+    - 8009:8009
+    volumes:
+    - ./response_selectors/convers_evaluation_based_selector:/src
+    - ./common:/src/common
+  dff-template-skill:
+    ports:
+    - 8120:8120
+    volumes:
+    - ./skills/dff_template_skill:/src
+    - ./common:/src/common
+  dff-language-practice-skill:
+    ports:
+    - 8130:8130
+    volumes:
+    - ./skills/dff_language_practice_skill:/src
+    - ./common:/src/common
+  mongo:
+    ports:
+    - 27017:27017
+  sentseg:
+    ports:
+    - 8011:8011
+    volumes:
+    - ./annotators/SentSeg:/src
+  spelling-preprocessing:
+    ports:
+    - 8074:8074
+    volumes:
+    - ./annotators/spelling_preprocessing_dp:/src
+    - ~/.deeppavlov:/root/.deeppavlov
+  language-mistakes-tracker:
+    ports:
+    - 8129:8129
+    volumes:
+    - ./annotators/language_mistakes_tracker:/src
+    - ./common:/src/common
+version: '3.7'

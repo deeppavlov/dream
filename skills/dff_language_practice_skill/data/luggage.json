@@ -1,0 +1,48 @@
+{
+    "utterances": [
+        {
+            "utterance": "Hello, how can I help?",
+            "info_for_user": "Explain what the problem is."
+        },
+        {
+            "utterance": "What is your flight number?",
+            "info_for_user": "QR948"
+        },
+        {
+            "utterance": "It's a direct flight, isn't it?",
+            "info_for_user": "You changed planes in Doha"
+        },
+        {
+            "utterance": "Do you have any boarding documents you can give me?",
+            "info_for_user": "Say that you have a receipt for 2 pieces of luggage and a permit to board (name these documents)"
+        },
+        {
+            "utterance": "What was in the suitcases and were there any valuables?",
+            "info_for_user": "Answer the question"
+        },
+        {
+            "utterance": "How much money did you have and in what currency?",
+            "info_for_user": "Euro, give an approximate number"
+        },
+        {
+            "utterance": "Where do you plan to stay and for how long?",
+            "info_for_user": "Say the name of the hotel and say that you are leaving on Friday (this week)"
+        },
+        {
+            "utterance": "How can we contact you when the luggage is found?",
+            "info_for_user": "Give a representative you phone number and email address. Ask about average time for finding luggage"
+        },
+        {
+            "utterance": "It takes on average around 2 to 4 days",
+            "info_for_user": "Ask about delivery of your luggage"
+        },
+        {
+            "utterance": "We can deliver your luggage but there will be a delivery fee of about 50 euros",
+            "info_for_user": "Refuse to pay and give reasons for this. Ask for free delivery of your luggage."
+        },
+        {
+            "utterance": "You are right, but it depends on whether the luggage was misplaced by the airport service or delayed by the airline. We will call you as soon as your luggage is found and see what we can do! Anything else I can help with?",
+            "info_for_user": "Thank a representative and leave."
+        }
+    ]
+}
