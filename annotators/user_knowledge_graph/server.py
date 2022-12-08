@@ -6,12 +6,11 @@ from common.utils import get_named_persons
 from common.personal_info import my_name_is_pattern
 
 from flask import Flask, jsonify, request
-from deeppavlov_kg import KnowledgeGraph, mocks
+from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
-
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
@@ -25,23 +24,33 @@ with open("rel_list.txt", "r") as fl:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
 
-graph = KnowledgeGraph(
-    "bolt://neo4j:neo4j@neo4j:7687",
-    ontology_kinds_hierarchy_path="deeppavlov_kg/database/ontology_kinds_hierarchy.pickle",
-    ontology_data_model_path="deeppavlov_kg/database/ontology_data_model.json",
-    db_ids_file_path="deeppavlov_kg/database/db_ids.txt"
-)
+DB = "test"
+TEAM = "yashkens|c77b"
 
-# USE IF YOU WANT TO RESTART DATABASE
+graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB)
+
+logger.info('Graph Loaded!')
+
 # graph.drop_database()
-# mocks.populate(graph, drop=True)
+#
+# graph.ontology.create_entity_kinds(
+#     entity_kinds=["Person", "User", "Habit"],
+#     parents=[None, "Person", None]
+# )
 # for rel in rel_type_dict:
 #     if rel_type_dict[rel] == 'relation':
-#         rel_name = '_'.join(rel.split(' ')).upper()
-#         graph.ontology.create_relationship_kind(rel_name, "User")
+#         continue
+#         # rel_name = '_'.join(rel.split(' ')).upper()
+#         # logger.info(f'adding rel: {rel_name}')
+#         # graph.ontology.create_relationship_kind(rel_name, "User")
 #     else:
-#         graph.ontology.create_entity_kind_properties("User", [rel])
-# graph.ontology.create_entity_kind_properties("User", ["name"])
+#         if rel == "<blank>":
+#             continue
+#         logger.info(f'adding property: {rel}')
+#         graph.ontology.create_property_kinds_of_entity_kinds(["User"], [[rel]])
+# graph.ontology.create_property_kinds_of_entity_kinds(["User"], [["name"]])
+#
+# logger.info('Graph Populated!')
 
 
 def add_name_property(graph, user_id, names):
@@ -58,9 +67,18 @@ def add_any_relationship(graph, entity_kind, entity_name, rel_type, user_id):
     """Creates an entity and a relation between it and the User from property extraction service."""
     entity_kind = entity_kind.replace('_', '').title()
     new_entity_id = str(uuid.uuid4())
-    graph.ontology.create_entity_kind(entity_kind, kind_properties=["name"])
+    new_entity_id = entity_kind + '/' + new_entity_id
+    logger.info(f"Entity type to add: {entity_kind}")
+    graph.ontology.create_entity_kinds(entity_kinds=[entity_kind], parents=[None])
+    graph.ontology.create_property_kinds_of_entity_kinds([entity_kind], [["name"]])
+
+    # logger.info(f"All entity Kinds: {graph.ontology.get_all_entity_kinds()}")
     graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
-    graph.create_relationship(user_id, rel_type, new_entity_id)
+
+    rel_name = rel_type + f"_{entity_kind.lower()}"
+    graph.ontology.create_relationship_kind("User", rel_name, entity_kind)
+
+    graph.create_relationship(user_id, rel_name, new_entity_id)
     message = f'Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}!' \
               f' {entity_name} is connected with User by {rel_type} relationship.'
     logger.info(message)
@@ -68,10 +86,14 @@ def add_any_relationship(graph, entity_kind, entity_name, rel_type, user_id):
 
 def add_any_property(graph, user_id, property_type, property_value):
     """Adds a property from property extraction service."""
+    if property_type == "<blank>":
+        property_type = "other"
+    property_type = '_'.join(property_type.split(' '))
+    graph.ontology.create_property_kinds_of_entity_kinds(["User"], [[property_type]])
     graph.create_or_update_property_of_entity(
-        id_=user_id,
+        entity_id=user_id,
         property_kind=property_type,
-        property_value=property_value,
+        new_property_value=property_value,
     )
     logger.info(f"I added a property {property_type} with value {property_value}!")
 
@@ -144,8 +166,6 @@ def get_result(request):
     utt = uttrs[0]
     annotations = uttrs[0].get('annotations', {})
     logger.info(f"Text: {uttrs[0]['text']}")
-    # logger.info(f"Entity detection: {annotations.get('entity_detection', {})}")
-    # logger.info(f"Entity linking: {annotations.get('entity_linking', [])}")
     logger.info(f"Property Extraction: {annotations.get('property_extraction', [])}")
 
     last_utt = utt["text"]
@@ -154,9 +174,15 @@ def get_result(request):
         return "Empty utterance"
 
     user_id = str(utt.get("user", {}).get("id", ""))
-    # graph.create_entity("User", user_id, ['name'], [])
-    graph.create_entity("User", user_id, [], [])
-    logger.info(f'Created User with id: {user_id}')
+    user_id = "User/" + user_id
+    existing_ids = [entity["@id"] for entity in graph.get_all_entities()]
+    logger.info(f"Existing ids: {existing_ids}")
+    if user_id in existing_ids:
+        logger.info(f'User with id {user_id} already exists!')
+    else:
+        graph.create_entity("User", user_id, [], [])
+        logger.info(f'Created User with id: {user_id}')
+
 
     entity_detection = utt.get("annotations", {}).get("entity_detection", [])
     entities = entity_detection.get('labelled_entities', [])
@@ -180,4 +206,4 @@ def respond():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8129)
+    app.run(debug=False, host="0.0.0.0", port=8127)

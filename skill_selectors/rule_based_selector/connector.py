@@ -241,8 +241,6 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 
-            skills_for_uttr = ["dff_kg_personality_skill"]
-
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time

@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 COPY annotators/user_knowledge_graph/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
-RUN pip install git+https://github.com/deeppavlovteam/custom_kg_svc
+RUN pip install git+https://github.com/deeppavlov/custom_kg_svc
 
 COPY annotators/user_knowledge_graph/ ./
 
