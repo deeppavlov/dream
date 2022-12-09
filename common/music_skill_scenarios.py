@@ -191,7 +191,7 @@ topic_config = {
                 ],
             },
             {
-                "utt": ["Do you listen music in headphones or on a portable speaker?"],
+                "utt": ["Do you listen to music in headphones or on a portable speaker?"],
                 "next_ackn": [
                     {
                         "cond": [[{"pattern": "(head|phones)"}, "user", True]],
@@ -225,7 +225,7 @@ topic_config = {
             },
             {
                 "utt": [
-                    "Do you like to listen music during gaming, while you are playing a game?",
+                    "Do you like to listen to music during gaming, while you are playing a game?",
                     "I can tell you about some music for gaming, should I continue?",
                 ],
                 "expected_subtopic_info": [

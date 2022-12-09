@@ -1,6 +1,12 @@
 import re
 
 
+GREETINGS_BY_HUMAN = re.compile(
+    r"(hi|hello|hi there|good (morning|afternoon|evening|night)|(alexa )?(let's|let us) (chat|talk)|"
+    r"привет|добрый (день|вечер)|доброе утро|доброй ночи|з?даров[ао]|здрав?ствуй(те)?|давай (поболтаем|поговорим)).?",
+    re.IGNORECASE,
+)
+
 greeting_spec = {
     "EN": "this is a Dream Socialbot",
     "RU": "это чат-бот Dream",
