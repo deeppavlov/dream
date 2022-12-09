@@ -101,12 +101,13 @@ def greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     """
     logger.debug("greeting_response")
     bot_utt = int_ctx.get_last_bot_utterance(ctx, actor)["text"].lower()
-    if int_cnd.is_lets_chat_about_topic(ctx, actor):
-        int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
-        int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-    else:
+    if common_greeting.GREETINGS_BY_HUMAN.match(int_ctx.get_last_human_utterance(ctx, actor)["text"]):
         int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+    else:
+        int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
+        int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
     which_start = random.choice(
         [
             # "starter_weekday",
