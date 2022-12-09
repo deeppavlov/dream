@@ -21,11 +21,10 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def in_last_utts(last_utts, entity):
-    for utt in last_utts:
-        if entity in utt:
-            logger.info(f"Entity {entity} occurred in prev Bot Utterances: {utt}")
-            return True
+def is_entity_in_utterance(last_utt_text, entity):
+    if len(entity) > 0 and entity.lower() in last_utt_text.lower():
+        logger.info(f"Entity {entity} occurred in Utterance: {last_utt_text}")
+        return True
     return False
 
 
@@ -38,23 +37,20 @@ def handler(requested_data):
     responses = []
     for dialog, human_utter_index in zip(dialogs, human_utter_indexes):
         try:
-            human_attr = dialog.get("human", {}).get("attributes", {})
             bot_utts = dialog.get("bot_utterances", [])
-            last_bot_utts = []
-            for i in range(min(len(bot_utts), 5)):
-                last_bot_utts.append(bot_utts[i].get("text", ""))
+            last_bot_utt_text = bot_utts[-1].get("text", "") if len(bot_utts) > 0 else ""
 
+            human_attr = dialog.get("human", {}).get("attributes", {})
             entities = human_attr.get("entities", {})
             entities = entity_utils.load_raw_entities(entities)
             entities = entity_utils.update_entities(dialog, human_utter_index, entities)
             human_attr = {"entities": {k: dict(v) for k, v in entities.items()}}
-            keys = list(human_attr["entities"].keys())
-            for ent in keys:
-                if in_last_utts(last_bot_utts, ent):
-                    human_attr["entities"][ent]["mentioned"] = True
+            for ent in human_attr["entities"].keys():
+                if is_entity_in_utterance(last_bot_utt_text, ent):
+                    human_attr["entities"][ent]["mentioned_by_bot"] = True
                 else:
-                    human_attr["entities"][ent]["mentioned"] = False
-            logger.info(f"Human attributes: {human_attr}")
+                    human_attr["entities"][ent]["mentioned_by_bot"] = False
+            logger.info(f"entity_storer entities: {human_attr}")
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)

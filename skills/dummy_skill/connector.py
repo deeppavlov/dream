@@ -254,17 +254,15 @@ class DummySkillConnector:
                             selected_entity = name
                             break
                     if selected_entity:
-                        response = f"You mentioned {selected_entity}, maybe you want to discuss it?"
+                        response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
                         logger.info(f"Dummy Skill Resp: {response}")
+                    cands += [response]
                     confs += [0.5]
-                else:
-                    confs += [0.0]
+                    attrs += [{"type": "entity_recap", "response_parts": ["prompt"]}]
+                    human_attrs += [{}]
+                    bot_attrs += [{}]
 
-                cands += [response]
-                attrs += [{}]
-                human_attrs += [{}]
-                bot_attrs += [{}]
-            elif link_to_question and LANGUAGE == "EN":
+            if link_to_question and LANGUAGE == "EN":
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
                 _prev_active_skill = (
