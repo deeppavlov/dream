@@ -126,7 +126,7 @@ def get_page_title(vars, entity_substr):
         el = annotations.get("entity_linking", [])
         for entity in el:
             if isinstance(entity, dict) and entity["entity_substr"] == entity_substr:
-                found_pages_titles = entity["entity_pages_titles"]
+                found_pages_titles = entity["pages_titles"]
                 if found_pages_titles:
                     found_page = found_pages_titles[0]
     logger.info(f"found_page {found_page}")
