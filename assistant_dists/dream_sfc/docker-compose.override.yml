@@ -44,7 +44,8 @@ services:
   spacy-nounphrases:
     env_file: [.env]
     build:
-      context: annotators/spacy_nounphrases/
+      context: .
+      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
     command: flask run -h 0.0.0.0 -p 8006
     environment:
       - FLASK_APP=server
@@ -55,14 +56,15 @@ services:
         reservations:
           memory: 256M
 
-  dff-program-y:
+  dff-program-y-skill:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8008
-        SERVICE_NAME: dff_program_y
+        SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: EN
       context: .
-      dockerfile: ./skills/dff_program_y/Dockerfile
+      dockerfile: ./skills/dff_program_y_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
     deploy:
       resources:
@@ -100,6 +102,25 @@ services:
   convers-evaluation-selector:
     env_file: [.env]
     build:
+      args:
+        TAG_BASED_SELECTION: 1
+        CALL_BY_NAME_PROBABILITY: 0.5
+        PROMPT_PROBA: 0.1
+        ACKNOWLEDGEMENT_PROBA: 0.3
+        PRIORITIZE_WITH_REQUIRED_ACT: 0
+        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+        IGNORE_DISLIKED_SKILLS: 0
+        GREETING_FIRST: 1
+        RESTRICTION_FOR_SENSITIVE_CASE: 1
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+        MAX_TURNS_WITHOUT_SCRIPTS: 7
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+        PRIORITIZE_SCRIPTED_SKILLS: 0
+        CONFIDENCE_STRENGTH: 0.8
+        CONV_EVAL_STRENGTH: 0.4
+        PRIORITIZE_HUMAN_INITIATIVE: 1
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -108,9 +129,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   sentrewrite:
     env_file: [.env]
@@ -126,14 +147,16 @@ services:
         reservations:
           memory: 512M
 
-  intent-responder:
-    env_file: [.env]
+  dff-intent-responder-skill:
+    env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8012
+        SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
       context: .
-      dockerfile: ./skills/IntentResponder/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8012
-    environment:
-      - FLASK_APP=server
+      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
     deploy:
       resources:
         limits:
@@ -144,10 +167,16 @@ services:
   intent-catcher:
     env_file: [.env]
     build:
-      context: ./annotators/IntentCatcher/
-    command:  python -m flask run -h 0.0.0.0 -p 8014 --without-threads
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+      args:
+        SERVICE_PORT: 8014
+        CONFIG_NAME: intents_model_dp_config.json
+        INTENT_PHRASES_PATH: intent_phrases.json
+    command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -169,14 +198,14 @@ services:
         reservations:
           memory: 256M
 
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8022
-        SERVICE_NAME: dff_program_y_dangerous
+        SERVICE_NAME: dff_program_y_dangerous_skill
       context: .
-      dockerfile: ./skills/dff_program_y_dangerous/Dockerfile
+      dockerfile: ./skills/dff_program_y_dangerous_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8022 --reload
     deploy:
       resources:
@@ -191,7 +220,7 @@ services:
       args:
         SERVICE_PORT: 8023
         SERVICE_NAME: dff_movie_skill # has to be the same with skill dir name
-        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v1.json
+        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v2.json
         MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
       context: .
       dockerfile: skills/dff_movie_skill/Dockerfile
@@ -423,14 +452,14 @@ services:
         reservations:
           memory: 256M
 
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8064
-        SERVICE_NAME: dff_program_y_wide
+        SERVICE_NAME: dff_program_y_wide_skill
       context: .
-      dockerfile: ./skills/dff_program_y_wide/Dockerfile
+      dockerfile: ./skills/dff_program_y_wide_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8064 --reload
     deploy:
       resources:
@@ -489,10 +518,9 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: kbqa_entity_linking_page.json
+        CONFIG: entity_linking_eng.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking
-        COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
     environment:
@@ -555,7 +583,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 83fa40d7f600137910c663bda9a4d81fa425fe12
+        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
@@ -887,30 +915,13 @@ services:
         PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+        N_FACTS: 3
       context: ./
       dockerfile: annotators/fact_retrieval/Dockerfile
     command: flask run -h 0.0.0.0 -p 8100
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-        reservations:
-          memory: 4G
-
-  hypothesis-scorer:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8110
-        SERVICE_NAME: hypothesis_scorer # has to be the same with skill dir name
-      context: ./annotators/hypothesis_scorer
-    command: flask run -h 0.0.0.0 -p 8110
-    environment:
-      - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -1043,16 +1054,19 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: dialog_entity_detection.json
+        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
+        EL_TAG_CONFIG: src/el_tags_infer.json
+        CONFIG: entity_detection_eng.json
+        LOWERCASE: 1
         PORT: 8103
         SRC_DIR: annotators/entity_detection/
-        COMMIT: 5d27dca3dfa0cf481324facd73f2e02f579f66b3
+        FINEGRAINED: 0
       context: ./
-      dockerfile: annotators/entity_detection/Dockerfile_new
+      dockerfile: annotators/entity_detection/Dockerfile
     command: flask run -h 0.0.0.0 -p 8103
     environment:
-      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -1082,6 +1096,7 @@ services:
       args:
         SERVICE_PORT: 8057
         SERVICE_NAME: dff_short_story_skill
+        STORY_TYPE: generated
       context: .
       dockerfile: ./skills/dff_short_story_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload

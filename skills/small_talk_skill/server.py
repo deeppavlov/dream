@@ -33,11 +33,11 @@ app = Flask(__name__)
 with open("small_talk_scripts.json", "r") as f:
     TOPIC_SCRIPTS = json.load(f)
 
-USER_TOPIC_START_CONFIDENCE = 0.98
+USER_TOPIC_START_CONFIDENCE = 0.95
 FOUND_WORD_START_CONFIDENCE = 0.8
-BOT_TOPIC_START_CONFIDENCE = 0.98
-CONTINUE_CONFIDENCE = 0.99
-LONG_ANSWER_CONTINUE_CONFIDENCE = 1.0
+BOT_TOPIC_START_CONFIDENCE = 0.9
+CONTINUE_CONFIDENCE = 0.9
+LONG_ANSWER_CONTINUE_CONFIDENCE = 0.95
 YES_CONTINUE_CONFIDENCE = 1.0
 # if let's chat about TOPIC [key-words]
 NOT_SCRIPTED_TOPICS = ["depression", "life", "sex", "star wars", "donald trump", "superheroes"]
@@ -133,7 +133,7 @@ def respond():
                 attr["small_talk_step"] = 0
                 attr["small_talk_script"] = TOPIC_SCRIPTS.get(topic, [])
             else:
-                logger.info(f"Can not extract or offer NEW topic.")
+                logger.info("Can not extract or offer NEW topic.")
                 response = ""
 
         if len(response) == 0:
@@ -302,9 +302,9 @@ def pickup_topic_and_start_small_talk(dialog):
         topic = offer_topic(dialog)
         if topic in TOPIC_PATTERNS:
             if topic == "me":
-                response = f"Let's talk about you. " + TOPIC_SCRIPTS.get(topic, [""])[0]
+                response = "Let's talk about you. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             elif topic == "you":
-                response = f"Let's talk about me. " + TOPIC_SCRIPTS.get(topic, [""])[0]
+                response = "Let's talk about me. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             else:
                 response = f"Let's talk about {topic}. " + TOPIC_SCRIPTS.get(topic, [""])[0]
             confidence = BOT_TOPIC_START_CONFIDENCE

@@ -120,17 +120,22 @@ services:
       args:
         TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.3
+        PROMPT_PROBA: 0.1
         ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 1
+        PRIORITIZE_WITH_REQUIRED_ACT: 0
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
         IGNORE_DISLIKED_SKILLS: 0
         GREETING_FIRST: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
         PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+        MAX_TURNS_WITHOUT_SCRIPTS: 7
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 1
+        PRIORITIZE_SCRIPTED_SKILLS: 0
+        CONFIDENCE_STRENGTH: 0.8
+        CONV_EVAL_STRENGTH: 0.4
+        PRIORITIZE_HUMAN_INITIATIVE: 1
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -230,7 +235,7 @@ services:
       args:
         SERVICE_PORT: 8023
         SERVICE_NAME: dff_movie_skill # has to be the same with skill dir name
-        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v1.json
+        DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v2.json
         MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
       context: .
       dockerfile: skills/dff_movie_skill/Dockerfile
@@ -925,6 +930,7 @@ services:
         PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+        N_FACTS: 3
       context: ./
       dockerfile: annotators/fact_retrieval/Dockerfile
     command: flask run -h 0.0.0.0 -p 8100
@@ -1175,7 +1181,8 @@ services:
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
         CONFIG_NAME: dialogpt_en.json
-      context: ./services/dialogpt/
+      context: .
+      dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
     environment:
       - CUDA_VISIBLE_DEVICES=0

@@ -14,7 +14,7 @@
 "personal_info_skill" "Ivan" "Nice to meet you, Ivan."
 "dff_intent_responder_skill;RANDOM_SKILLS" "Who built you?" "I was built by one of the university teams participating in the Alexa Prize Challenge. But which one is a secret for now. #+#who_made_you" "I cannot answer questions about my creator for now because they are participating in the Alexa Prize Challenge. #+#who_made_you" "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later which one. #+#who_made_you" "I was built by one of the university teams participating in the Alexa Prize Challenge. I will tell you later, which one. #+#who_made_you"
 "dff_program_y_skill;dff_program_y_dangerous_skill;dff_grounding_skill" "do you like porn"
-"dff_program_y_skill;dff_program_y_dangerous_skill;emotion_skill" "i want to commit a suicide today" "It might not always feel like it, but there are people who can help. Please know that you can call the National Suicide Prevention Lifeline, twenty-four hours a day, seven days a week. Their number is, 1 800 273 82 55. Again, that's 1 800 273 82 55."
+"dff_program_y_skill;dff_program_y_dangerous_skill;emotion_skill" "i want to commit a suicide today" "It might not always feel like it, but there are people who can help. Please know that you can call your local helpline."
 "dff_program_y_skill;RANDOM_SKILLS" "alexa do you have a family"
 "dff_intent_responder_skill;RANDOM_SKILLS" "what else can you do?" "I'm learning day by day. What would you like me to do?" "#+#what_can_you_do"
 "dff_program_y_skill;dummy_skill;meta_script_skill;small_talk_skill;alice;RANDOM_SKILLS" "let's talk about" "I misheard you. what's it that you'd like to chat about?"

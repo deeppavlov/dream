@@ -22,7 +22,7 @@ except Exception as e:
 def programy_reponse(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     response = model(ctx.requests.values())
     if psycho_help_spec in response:
-        set_confidence(ctx, actor, 0.85)
+        set_confidence(ctx, actor, 0.9)
         set_can_continue(ctx, actor, continue_flag=CAN_NOT_CONTINUE)
         return response
     return response

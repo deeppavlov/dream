@@ -2,11 +2,6 @@ services:
   agent:
     volumes:
       - "/cephfs/home/ignatov/artifacts:/output"
-      - "./tests/:/dp-agent/tests/"
-      - "./utils/:/dp-agent/utils/"
-      - "./assistant_dists/:/dp-agent/assistant_dists/"
-      - "./annotators/:/dp-agent/annotators/"
-      - "./services/:/dp-agent/services/"
     ports:
       - ${AGENT_PORT}:4242
   kbqa:
@@ -43,15 +38,19 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   spacy-nounphrases:
-  dff-program-y:
+  dff-program-y-skill:
   personality-catcher:
   sentseg:
   convers-evaluation-selector:
   sentrewrite:
-  intent-responder:
+  dff-intent-responder-skill:
   intent-catcher:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
   badlisted-words:
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
   dff-movie-skill:
   dff-gaming-skill:
   ner:
@@ -71,15 +70,13 @@ services:
   meta-script-skill:
   small-talk-skill:
   game-cooperative-skill:
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
   news-api-skill:
   news-api-annotator:
   factoid-qa:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -103,9 +100,6 @@ services:
   dff-bot-persona-skill:
   dff-funfact-skill:
   dff-gossip-skill:
-  hypothesis-scorer:
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dff-wiki-skill:
   topic-recommendation:
   user-persona-extractor:
