@@ -183,7 +183,7 @@ def respond():
 
     corrected_sentences = spelling_preprocessing_model(sentences)
 
-    logger.info(f"spelling_preprocessing results: {list(zip(sentences, corrected_sentences)):.3f}s")
+    logger.info(f"spelling_preprocessing results: {list(zip(sentences, corrected_sentences))}s")
 
     total_time = time.time() - st_time
     logger.info(f"spelling_preprocessing exec time: {total_time:.3f}s")
