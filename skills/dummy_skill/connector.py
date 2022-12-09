@@ -172,7 +172,7 @@ def generate_question_not_from_last_responses(dialog, all_prev_active_skills):
 
 def no_initiative(dialog):
     utts = dialog["human_utterances"]
-    if len(utts) < 2:
+    if len(utts) <= 2:
         return False
     if not is_question(utts[-1].get("text", "")) and not is_question(utts[-2].get("text", "")):
         logger.info("No questions detected")
@@ -241,17 +241,17 @@ class DummySkillConnector:
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
 
             if no_initiative(dialog) and LANGUAGE == "EN":
-                last_utt = dialog["utterances"][-1]
+                last_utt = dialog["human_utterances"][-1]
                 user = last_utt["user"].get("attributes", {})
                 entities = user.get("entities", {})
                 response = ""
                 if entities:
                     selected_entity = ""
                     # reverse so it uses recent entities first
-                    entity_names = list(entities.keys())[::-1]
-                    for name in entity_names:
-                        if entities[name]["human_attitude"] == "like" and not entities[name]["mentioned"]:
-                            selected_entity = name
+                    sorted_entities = sorted(entities.values(), key=lambda d: d['id'], reverse=True)
+                    for entity_dict in sorted_entities:
+                        if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned"]:
+                            selected_entity = entity_dict["name"]
                             break
                     if selected_entity:
                         response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
