@@ -1,6 +1,6 @@
 import requests
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI
 
 # from num2words import num2words
 
