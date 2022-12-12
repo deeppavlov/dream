@@ -171,9 +171,9 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
                 response = f"Turning around counterclockwise by {degree[0]} degrees."
         else:
             if LANGUAGE == "RU":
-                response = f"Поворачиваюсь против часовой стрелки."
+                response = "Поворачиваюсь против часовой стрелки."
             else:
-                response = f"Turning around counterclockwise."
+                response = "Turning around counterclockwise."
     else:
         command = f"turn_clockwise_{degree[0]}"
         if len(degree) == 1:
@@ -183,9 +183,9 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
                 response = f"Turning around clockwise by {degree[0]} degrees."
         else:
             if LANGUAGE == "RU":
-                response = f"Поворачиваюсь по часовой стрелке."
+                response = "Поворачиваюсь по часовой стрелке."
             else:
-                response = f"Turning around clockwise."
+                response = "Turning around clockwise."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
@@ -206,9 +206,9 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
     else:
         command = "move_forward"
         if LANGUAGE == "RU":
-            response = f"Двигаюсь вперед."
+            response = "Двигаюсь вперед."
         else:
-            response = f"Moving forward."
+            response = "Moving forward."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
@@ -229,9 +229,9 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
     else:
         command = "move_backward"
         if LANGUAGE == "RU":
-            response = f"Двигаюсь назад."
+            response = "Двигаюсь назад."
         else:
-            response = f"Moving backward."
+            response = "Moving backward."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
@@ -243,9 +243,9 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
 def open_door_respond(ctx: Context, actor: Actor, intention: str):
     command = "open_door"
     if LANGUAGE == "RU":
-        response = f"Открываю дверь"
+        response = "Открываю дверь"
     else:
-        response = f"Opening the door."
+        response = "Opening the door."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER):
         int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="robot_command", smth_value=command)
