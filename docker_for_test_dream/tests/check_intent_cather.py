@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import requests
-import json
-from os import getenv
+
 
 tests = [
     {"sentence": "track people please", "intent": "track_object"},

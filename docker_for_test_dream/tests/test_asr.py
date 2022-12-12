@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import requests
-import json
 
 
 def main_test():
@@ -18,7 +17,7 @@ def main_test():
 
     # r = requests.post(url, files={'text': text})
 
-    # print(r)
+    print(r)
 
 
 if __name__ == "__main__":

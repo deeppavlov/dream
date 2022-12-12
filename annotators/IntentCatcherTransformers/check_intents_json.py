@@ -1,7 +1,6 @@
 import json
 import re
 from itertools import chain
-from typing import List
 
 
 def get_regexp(intent_phrases_path):

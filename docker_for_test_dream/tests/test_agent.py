@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import requests
-import json
-from os import getenv
+
 
 request_data = [
     {"user_id": "xyz", "payload": "Hello"},
