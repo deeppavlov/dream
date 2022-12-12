@@ -5,10 +5,11 @@ ENV ROS_FSM_SERVER ${ROS_FSM_SERVER}
 
 RUN mkdir /src
 
-COPY ./requirements.txt /src/requirements.txt
+COPY ./services/robot_command_sender/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-COPY . /src/
+COPY ./services/robot_command_sender /src/
+COPY ./common/ /src/common/
 WORKDIR /src
 
 CMD gunicorn --workers=2 server:app

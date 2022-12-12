@@ -95,6 +95,7 @@ services:
   robot-command-sender:
     volumes:
       - "./services/robot_command_sender:/src"
+      - "./common:/src/common"
     ports:
       - 8135:8135
   dff-template-skill:
