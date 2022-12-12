@@ -131,7 +131,7 @@ def get_respond_funcs():
         "move_forward": move_forward_respond,
         "move_backward": move_backward_respond,
         "open_door": open_door_respond,
-        "move_to_point": move_to_point_respond
+        "move_to_point": move_to_point_respond,
     }
 
 

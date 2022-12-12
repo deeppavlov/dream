@@ -1,9 +1,11 @@
 import re
 
 import requests
+
 # from deeppavlov import build_model
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
+
 # from num2words import num2words
 
 app = FastAPI()
@@ -33,17 +35,12 @@ app = FastAPI()
 
 
 def synthesize(folder_id, api_key, text):
-    url = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
+    url = "https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize"
     headers = {
-        'Authorization': 'Api-Key ' + api_key,
+        "Authorization": "Api-Key " + api_key,
     }
 
-    data = {
-        'text': text,
-        'lang': 'ru-RU',
-        'voice': 'filipp',
-        'folderId': folder_id
-    }
+    data = {"text": text, "lang": "ru-RU", "voice": "filipp", "folderId": folder_id}
 
     with requests.post(url, headers=headers, data=data, stream=True) as resp:
         # print("request posted")
@@ -57,13 +54,13 @@ def synthesize(folder_id, api_key, text):
 
 @app.post("/tts")
 async def infer_tts(text: str):
-    FOLDER_ID = "b1gami13b761380nb5hb" # Идентификатор каталога
-    API_KEY = "AQVN3XofRyHEW5PJOhBYCiObnGaZNYM8IvAQskdp" # API-ключ
-    audiofile_name = 'kill_mankind.ogg'
+    FOLDER_ID = "b1gami13b761380nb5hb"  # Идентификатор каталога
+    API_KEY = "AQVN3XofRyHEW5PJOhBYCiObnGaZNYM8IvAQskdp"  # API-ключ
+    audiofile_name = "kill_mankind.ogg"
 
     with open(audiofile_name, "wb") as f:
         for audio_content in synthesize(FOLDER_ID, API_KEY, text):
-            f.write(audio_content)  
+            f.write(audio_content)
     return f
-    
+
     # return StreamingResponse(audio_response, media_type="audio/x-wav")

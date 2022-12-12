@@ -107,7 +107,7 @@ high_priority_intents = {
         "move_forward",
         "move_backward",
         "open_door",
-        "move_to_point"
+        "move_to_point",
     },
     "dff_grounding_skill": {"what_are_you_talking_about"},
 }

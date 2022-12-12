@@ -37,8 +37,9 @@ def respond():
                 logger.info(f"robot_command_sender: FAILED to send command:\n{e}")
                 results += ["Failed"]
         else:
-            logger.info(f"robot_command_sender was called but NO command found in annotated_bot_utterance: "
-                        f"{ann_uttr}")
+            logger.info(
+                f"robot_command_sender was called but NO command found in annotated_bot_utterance: " f"{ann_uttr}"
+            )
             results += ["Failed"]
 
     total_time = time.time() - st_time
