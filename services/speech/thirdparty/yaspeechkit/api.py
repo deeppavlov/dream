@@ -5,9 +5,6 @@ import urllib.request
 import requests
 from dataclasses import dataclass, asdict, fields
 from typing import Callable, List, Literal, Dict, Union
-import grpc
-
-import sys
 
 
 def classFromArgs(cls: dataclass, args: dict):
@@ -79,7 +76,7 @@ class API:
 
             params = "&".join(
                 [
-                    f"topic=general",
+                    "topic=general",
                     f"folderId={self.api_keys.folder_id}",
                     f"lang={config.lang}",
                     f"specification.audioEncoding={config.format}",
@@ -90,7 +87,7 @@ class API:
             url = urllib.request.Request(
                 f"https://stt.api.cloud.yandex.net/speech/v1/stt:recognize?{params}", data=data
             )
-            url.add_header(f"Authorization", f"Api-Key {self.api_keys.api_key_secret}")
+            url.add_header("Authorization", f"Api-Key {self.api_keys.api_key_secret}")
 
             responseData = urllib.request.urlopen(url).read().decode("UTF-8")
             decoded_data = json.loads(responseData)

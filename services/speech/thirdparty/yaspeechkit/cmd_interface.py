@@ -1,8 +1,6 @@
-from email.mime import audio
-import os
-from argparse import ArgumentParser, Namespace
-import json, yaml
+import yaml
 from api import API, APIKeys, ASRConfig, TTSConfig
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
 

@@ -1,9 +1,10 @@
-import requests, yaml
+import requests
+import yaml
+from api import API, APIKeys, ASRConfig, TTSConfig
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
-from num2words import num2words
-from api import API, APIKeys, ASRConfig, TTSConfig
 from pathlib import Path
+
 
 app = FastAPI()
 config = yaml.safe_load(Path("configuration.yaml").read_text())

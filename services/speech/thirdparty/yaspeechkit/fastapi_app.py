@@ -1,14 +1,11 @@
-import uvicorn
-
-import re
-from base64 import b64encode, b64decode
-import requests, yaml
+import requests
+import yaml
+from api import API, APIKeys, ASRConfig, TTSConfig
+from base64 import b64encode
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import StreamingResponse, JSONResponse, Response
-import json
-from api import API, APIKeys, ASRConfig, TTSConfig
 from pathlib import Path
-import os
+
 
 config = yaml.safe_load(Path("configuration.yaml").read_text())
 
