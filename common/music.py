@@ -1,4 +1,5 @@
 import re
+from common.utils import get_topics, topic_groups
 
 OPINION_REQUESTS_ABOUT_MUSIC = [
     "What kind of music do you like?",
