@@ -9,6 +9,7 @@ import requests
 import sentry_sdk
 from common.inflect import engine
 from requests import RequestException
+from common.utils import get_topics, topic_groups
 
 
 VIDEO_GAME_WORDS_COMPILED_PATTERN = re.compile(
