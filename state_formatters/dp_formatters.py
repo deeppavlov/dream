@@ -192,12 +192,12 @@ def last_utt_dialog(dialog: Dict) -> List[Dict]:
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
+    corrected_utt = dialog["human_utterances"][-1].get("annotations", {}).get("gector", {})
+    print(corrected_utt)
     return [
         {
             "sentences": [
-                dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-                )
+                corrected_utt["corrected_sentences_gector"][0][0]["text"]
             ]
         }
     ]
@@ -1006,7 +1006,7 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
         if i == 0:
             clear_essay_word_offsets.append(0)
             continue
-        if last_human_utt in puncts:
+        if last_human_utt[i] in puncts:
             clear_essay_word_offsets.append(i)
         else:
             if last_human_utt[i-1] == " ":

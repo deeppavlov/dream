@@ -27,13 +27,15 @@ class LanguageMistakes:
     def update_language_mistakes_tracker(self, dialog):
         curr_hum_utt_status = []
         user_utt = dialog["human_utterances"][-1]["text"]
-        corrected_utt = dialog["human_utterances"][-1].get("annotations", {}).get("spelling_preprocessing", "")
+        corrected_utt = dialog["human_utterances"][-1].get("annotations", {}).get("gector", {})
         logger.info(f"language_mistakes update: {corrected_utt}")
-        if corrected_utt != user_utt:
+        corrected_text = corrected_utt["corrected_sentences_gector"][0][0]["text"]
+        
+        if corrected_text != user_utt:
             curr_hum_utt_status.append(
                 {
                     "original_sentence": user_utt,
-                    "corrected_sentence": corrected_utt
+                    "corrected_sentence": corrected_text
                 }
             )
             self.state.append(curr_hum_utt_status)

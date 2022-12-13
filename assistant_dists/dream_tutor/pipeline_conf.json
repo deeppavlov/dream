@@ -103,12 +103,22 @@
             }
         },
         "annotators": {
+            "gector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://gector:2102/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:gector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
+            },
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.gector"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -121,7 +131,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.gector"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -134,19 +144,9 @@
                 "dialog_formatter": "state_formatters.dp_formatters:language_mistakes_tracker_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.gector"
                 ],
                 "state_manager_method": "update_attributes"
-            },
-            "gector": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://gector:2102/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:gector_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
             }
         },
         "skill_selectors": {

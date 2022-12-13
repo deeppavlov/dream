@@ -105,7 +105,7 @@ def handler(instance):
         if len(idx) > 1:
             for _id in idx:
                 corrections[_id]["tag"] = st
-    return {"selections": corrections, "essay_sentences": corrected_sents, "index_map": index_maps}
+    return {"selections": corrections, "corrected_sentences_gector": corrected_sents, "index_map": index_maps}
 
 
 @app.route("/model", methods=["POST"])
