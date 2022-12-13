@@ -227,6 +227,24 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
     ],
 }
 
+topic_groups = {"food": ["Food", "Food_Drink"],
+                "books": ["Entertainment_Books", "Literature", "Books&Literature"],
+                "music": ["Music", "Entertainment_Music"],
+                "news": ["News"],
+                "politics": ["Politics"],
+                "sports": ["Sports"],
+                "religion": ["Religion"],
+                "movies": ["Entertainment_Movies", "Movies_TV", "Movies&Tv"],
+                "fashion": ["Clothes", "Fashion"],
+                "travel": ["Travel", "Travel_Geo"],
+                "celebrities": ["Celebrities", "Celebrities&Events"],
+                "art": ["Art_Event","Art&Hobbies"],
+                "science": ["Science_and_Technology", "SciTech"],
+                "entertainment": ["Entertainment", "Entertainment_General"],
+                "games": ["Games", "Toys&Games", "Videogames"]
+               }
+                
+
 multilabel_tasks = [
     "emotion_classification",
     "toxic_classification",
