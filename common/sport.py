@@ -1,4 +1,6 @@
 import re
+from common.utils import get_topics, topic_groups
+
 
 ##################################################################################################################
 # LINK
@@ -140,3 +142,15 @@ LAST_CHANCE_TEMPLATE = [
     "Oh, this is the first time I hear about this. " "Tell me more about that",
     "This is probably very interesting. Tell me more about that.",
 ]
+
+
+def about_sport(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([topic in found_topics for topic in topic_groups["sport"]]):
+        return True
+    elif re.findall(KIND_OF_SPORTS_TEMPLATE, annotated_utterance["text"]):
+        return True
+    elif re.findall(KIND_OF_COMPETITION_TEMPLATE, annotated_utterance["text"]):
+        return True
+    else:
+        return False

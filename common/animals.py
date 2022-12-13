@@ -1,5 +1,6 @@
 import re
 from common.universal_templates import is_any_question_sentence_in_utterance, NOT_LIKE_PATTERN
+from common.utils import get_topics, topic_groups
 
 LIKE_ANIMALS_REQUESTS = ["Do you like animals?"]
 HAVE_PETS_REQUESTS = ["Do you have pets?"]
@@ -88,7 +89,10 @@ re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 
 def check_about_animals(user_uttr):
-    if re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
+    found_topics = get_topics(user_uttr, probs=False, which="all")
+    if any([animal_topic in found_topics for animal_topic in topic_groups["animals"]]):
+        return True
+    elif re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
         return True
     else:
         return False
