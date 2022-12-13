@@ -176,7 +176,13 @@
     },
     "metadata":{
         "variables":{
-            "MODELS_PATH":"/tmp"
-        }
+            "MODELS_PATH":"/root/.deeppavlov/models/pal_bert_7in1"
+        },
+        "download": [
+            {
+                "url": "http://files.deeppavlov.ai/alexaprize_data/pal_bert_7in1/model.pth.tar",
+                "subdir": "{MODELS_PATH}"
+            }
+        ]
     }
 }
