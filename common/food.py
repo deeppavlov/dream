@@ -1,5 +1,6 @@
 import re
 from common.utils import join_sentences_in_or_pattern
+from common.utils import get_topics, topic_groups
 
 OPINION_REQUESTS_ABOUT_FOOD = [
     "Do you like cooking?",
