@@ -73,7 +73,7 @@ ING_FORMS = {
     "long jump": "long jumping",
 }
 REVERSE_ING_FORMS = {ING_FORMS[key]: key for key in ING_FORMS}
-regexp_ing_forms = rf"|".join([rf"\b{k}" for k in ING_FORMS.values()])
+regexp_ing_forms = r"|".join([rf"\b{k}" for k in ING_FORMS.values()])
 SPORTS = rf"({regexp_ing_forms}|{SPORTS_NO_ING})"
 KIND_OF_SPORTS_TEMPLATE = re.compile(
     SPORTS,
