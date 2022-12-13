@@ -1,0 +1,1256 @@
+{
+    "input_data": [
+        {
+            "annotations": {
+                "basic_reader": {
+                    "extended_markup": {
+                        "clear_essay_sentences": [
+                            [
+                                {
+                                    "text": "Since the very foundation of Korean kingdom people needed means to protect themselves.",
+                                    "words": [
+                                        "Since",
+                                        "the",
+                                        "very",
+                                        "foundation",
+                                        "of",
+                                        "Korean",
+                                        "kingdom",
+                                        "people",
+                                        "needed",
+                                        "means",
+                                        "to",
+                                        "protect",
+                                        "themselves",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "However, there is no doubt that Korean martial arts have become part of their routine.",
+                                    "words": [
+                                        "However",
+                                        ",",
+                                        "there",
+                                        "is",
+                                        "no",
+                                        "doubt",
+                                        "that",
+                                        "Korean",
+                                        "martial",
+                                        "arts",
+                                        "have",
+                                        "become",
+                                        "part",
+                                        "of",
+                                        "their",
+                                        "routine",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "It always has huge interest and many people now involved in Taekwondo.",
+                                    "words": [
+                                        "It",
+                                        "always",
+                                        "has",
+                                        "huge",
+                                        "interest",
+                                        "and",
+                                        "many",
+                                        "people",
+                                        "now",
+                                        "involved",
+                                        "in",
+                                        "Taekwondo",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "But how to do first steps in this sport?",
+                                    "words": [
+                                        "But",
+                                        "how",
+                                        "to",
+                                        "do",
+                                        "first",
+                                        "steps",
+                                        "in",
+                                        "this",
+                                        "sport",
+                                        "?"
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "Giving you tips and tricks in picking up, in order to learn Taekwondo, you have to be patient because it's not as easy as you would imagine.",
+                                    "words": [
+                                        "Giving",
+                                        "you",
+                                        "tips",
+                                        "and",
+                                        "tricks",
+                                        "in",
+                                        "picking",
+                                        "up",
+                                        ",",
+                                        "in",
+                                        "order",
+                                        "to",
+                                        "learn",
+                                        "Taekwondo",
+                                        ",",
+                                        "you",
+                                        "have",
+                                        "to",
+                                        "be",
+                                        "patient",
+                                        "because",
+                                        "it's",
+                                        "not",
+                                        "as",
+                                        "easy",
+                                        "as",
+                                        "you",
+                                        "would",
+                                        "imagine",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "Firstly, try to repeat all of coach's movements which might help you to understand your body.",
+                                    "words": [
+                                        "Firstly",
+                                        ",",
+                                        "try",
+                                        "to",
+                                        "repeat",
+                                        "all",
+                                        "of",
+                                        "coach's",
+                                        "movements",
+                                        "which",
+                                        "might",
+                                        "help",
+                                        "you",
+                                        "to",
+                                        "understand",
+                                        "your",
+                                        "body",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "Secondly, be concentrated, so that you don't get injured.",
+                                    "words": [
+                                        "Secondly",
+                                        ",",
+                                        "be",
+                                        "concentrated",
+                                        ",",
+                                        "so",
+                                        "that",
+                                        "you",
+                                        "don't",
+                                        "get",
+                                        "injured",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "Thirdly, don't forget about seniors they can help you with you beginning.",
+                                    "words": [
+                                        "Thirdly",
+                                        ",",
+                                        "don't",
+                                        "forget",
+                                        "about",
+                                        "seniors",
+                                        "they",
+                                        "can",
+                                        "help",
+                                        "you",
+                                        "with",
+                                        "you",
+                                        "beginning",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "However, be aware of Korean mentality due to them being very polite and delicate.",
+                                    "words": [
+                                        "However",
+                                        ",",
+                                        "be",
+                                        "aware",
+                                        "of",
+                                        "Korean",
+                                        "mentality",
+                                        "due",
+                                        "to",
+                                        "them",
+                                        "being",
+                                        "very",
+                                        "polite",
+                                        "and",
+                                        "delicate",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "Therefore, it may well be tough for you to cope with it.",
+                                    "words": [
+                                        "Therefore",
+                                        ",",
+                                        "it",
+                                        "may",
+                                        "well",
+                                        "be",
+                                        "tough",
+                                        "for",
+                                        "you",
+                                        "to",
+                                        "cope",
+                                        "with",
+                                        "it",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "I think that my advices will help you with this \"adventure\".",
+                                    "words": [
+                                        "I",
+                                        "think",
+                                        "that",
+                                        "my",
+                                        "advices",
+                                        "will",
+                                        "help",
+                                        "you",
+                                        "with",
+                                        "this",
+                                        "\"",
+                                        "adventure",
+                                        "\"",
+                                        "."
+                                    ]
+                                }
+                            ]
+                        ],
+                        "clear_essay_word_offsets": [
+                            [
+                                [
+                                    0,
+                                    6,
+                                    10,
+                                    15,
+                                    26,
+                                    29,
+                                    36,
+                                    44,
+                                    51,
+                                    58,
+                                    64,
+                                    67,
+                                    75,
+                                    85
+                                ]
+                            ],
+                            [
+                                [
+                                    87,
+                                    94,
+                                    96,
+                                    102,
+                                    105,
+                                    108,
+                                    114,
+                                    119,
+                                    126,
+                                    134,
+                                    139,
+                                    144,
+                                    151,
+                                    156,
+                                    159,
+                                    165,
+                                    172
+                                ],
+                                [
+                                    174,
+                                    177,
+                                    184,
+                                    188,
+                                    193,
+                                    202,
+                                    206,
+                                    211,
+                                    218,
+                                    222,
+                                    231,
+                                    234,
+                                    243
+                                ],
+                                [
+                                    245,
+                                    249,
+                                    253,
+                                    256,
+                                    259,
+                                    265,
+                                    271,
+                                    274,
+                                    279,
+                                    284
+                                ]
+                            ],
+                            [
+                                [
+                                    286,
+                                    293,
+                                    297,
+                                    302,
+                                    306,
+                                    313,
+                                    316,
+                                    324,
+                                    326,
+                                    328,
+                                    331,
+                                    337,
+                                    340,
+                                    346,
+                                    355,
+                                    357,
+                                    361,
+                                    366,
+                                    369,
+                                    372,
+                                    380,
+                                    388,
+                                    393,
+                                    397,
+                                    400,
+                                    405,
+                                    408,
+                                    412,
+                                    418,
+                                    425
+                                ]
+                            ],
+                            [
+                                [
+                                    427,
+                                    434,
+                                    436,
+                                    440,
+                                    443,
+                                    450,
+                                    454,
+                                    457,
+                                    465,
+                                    475,
+                                    481,
+                                    487,
+                                    492,
+                                    496,
+                                    499,
+                                    510,
+                                    515,
+                                    519
+                                ]
+                            ],
+                            [
+                                [
+                                    521,
+                                    529,
+                                    531,
+                                    534,
+                                    546,
+                                    548,
+                                    551,
+                                    556,
+                                    560,
+                                    566,
+                                    570,
+                                    577
+                                ]
+                            ],
+                            [
+                                [
+                                    579,
+                                    586,
+                                    588,
+                                    594,
+                                    601,
+                                    607,
+                                    615,
+                                    620,
+                                    624,
+                                    629,
+                                    633,
+                                    638,
+                                    642,
+                                    651
+                                ]
+                            ],
+                            [
+                                [
+                                    653,
+                                    660,
+                                    662,
+                                    665,
+                                    671,
+                                    674,
+                                    681,
+                                    691,
+                                    695,
+                                    698,
+                                    703,
+                                    709,
+                                    714,
+                                    721,
+                                    725,
+                                    733
+                                ],
+                                [
+                                    735,
+                                    744,
+                                    746,
+                                    749,
+                                    753,
+                                    758,
+                                    761,
+                                    767,
+                                    771,
+                                    775,
+                                    778,
+                                    783,
+                                    788,
+                                    790
+                                ]
+                            ],
+                            [
+                                [
+                                    792,
+                                    794,
+                                    800,
+                                    805,
+                                    808,
+                                    816,
+                                    821,
+                                    826,
+                                    830,
+                                    835,
+                                    840,
+                                    841,
+                                    850,
+                                    851
+                                ]
+                            ]
+                        ]
+                    },
+                    "standard_markup": {
+                        "criteria": {
+                            "K1": "0",
+                            "K2": "0",
+                            "K3": "0",
+                            "K4": "0",
+                            "K5": "0"
+                        },
+                        "fileName": "0052491_exp113.json",
+                        "meta": {
+                            "category": "",
+                            "class": "1 курс",
+                            "id": "0052491",
+                            "name": "0052491_en_How_to_do_first_steps_in_Taekwondo__noexp.txt",
+                            "subject": "eng",
+                            "taskText": "",
+                            "test": "эссе тренировка",
+                            "theme": "How to do first steps in Taekwondo",
+                            "uuid": "7f7d847a-5708-49dd-82ba-68c34d2e0223",
+                            "year": 2020
+                        },
+                        "selections": [
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 285,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 978,
+                                "startSelection": 0,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "ПРОБЛЕМА"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 285,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 883,
+                                "startSelection": 245,
+                                "subtype": "ритор",
+                                "tag": "",
+                                "type": "А.СТИЛЬ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 791,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 193,
+                                "startSelection": 653,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "ПРМНЕНИЕ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "people are now involved",
+                                "endSelection": 230,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 238,
+                                "startSelection": 211,
+                                "subtype": "видовр",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "for",
+                                "endSelection": 315,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 957,
+                                "startSelection": 313,
+                                "subtype": "пред",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "patient, because",
+                                "endSelection": 387,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 909,
+                                "startSelection": 372,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "А.ПУНКТ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "movements, which",
+                                "endSelection": 480,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 893,
+                                "startSelection": 465,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "А.ПУНКТ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 565,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 84,
+                                "startSelection": 560,
+                                "subtype": "стяж",
+                                "tag": "",
+                                "type": "А.СТИЛЬ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 593,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 612,
+                                "startSelection": 588,
+                                "subtype": "стяж",
+                                "tag": "",
+                                "type": "А.СТИЛЬ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "seniors: they",
+                                "endSelection": 619,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 516,
+                                "startSelection": 607,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "А.ПУНКТ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 652,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 408,
+                                "startSelection": 286,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "ЛМНЕНИЕ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "your",
+                                "endSelection": 641,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 594,
+                                "startSelection": 638,
+                                "subtype": "мест",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "mentality, due",
+                                "endSelection": 694,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 345,
+                                "startSelection": 681,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "А.ПУНКТ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "it",
+                                "endSelection": 702,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 819,
+                                "startSelection": 698,
+                                "subtype": "пред",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 791,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 666,
+                                "startSelection": 653,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "А.АСПЕКТ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "be",
+                                "endSelection": 708,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 21,
+                                "startSelection": 703,
+                                "subtype": "видовр",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 852,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 273,
+                                "startSelection": 792,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "ВЫВОД"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "advice",
+                                "endSelection": 815,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 122,
+                                "startSelection": 808,
+                                "subtype": "множ",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            }
+                        ],
+                        "text": "Since the very foundation of Korean kingdom people needed means to protect themselves.\nHowever, there is no doubt that Korean martial arts have become part of their routine. It always has huge interest and many people now involved in Taekwondo. But how to do first steps in this sport?\nGiving you tips and tricks in picking up, in order to learn Taekwondo, you have to be patient because it`s not as easy as you would imagine.\nFirstly, try to repeat all of coach`s movements which might help you to understand your body.\nSecondly, be concentrated, so that you don`t get injured.\nThirdly, don`t forget about seniors they can help you with you beginning.\nHowever, be aware of Korean mentality due to them being very polite and delicate. Therefore, it may well be tough for you to cope with it.\nI think that my advices will help you with this «adventure»."
+                    }
+                },
+                "contraction_corrector": {
+                    "essay_sentences": [
+                        [
+                            {
+                                "text": "Since the very foundation of Korean kingdom people needed means to protect themselves.",
+                                "words": [
+                                    "Since",
+                                    "the",
+                                    "very",
+                                    "foundation",
+                                    "of",
+                                    "Korean",
+                                    "kingdom",
+                                    "people",
+                                    "needed",
+                                    "means",
+                                    "to",
+                                    "protect",
+                                    "themselves",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "However, there is no doubt that Korean martial arts have become part of their routine.",
+                                "words": [
+                                    "However",
+                                    ",",
+                                    "there",
+                                    "is",
+                                    "no",
+                                    "doubt",
+                                    "that",
+                                    "Korean",
+                                    "martial",
+                                    "arts",
+                                    "have",
+                                    "become",
+                                    "part",
+                                    "of",
+                                    "their",
+                                    "routine",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "It always has huge interest and many people now involved in Taekwondo.",
+                                "words": [
+                                    "It",
+                                    "always",
+                                    "has",
+                                    "huge",
+                                    "interest",
+                                    "and",
+                                    "many",
+                                    "people",
+                                    "now",
+                                    "involved",
+                                    "in",
+                                    "Taekwondo",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "But how to do first steps in this sport?",
+                                "words": [
+                                    "But",
+                                    "how",
+                                    "to",
+                                    "do",
+                                    "first",
+                                    "steps",
+                                    "in",
+                                    "this",
+                                    "sport",
+                                    "?"
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Giving you tips and tricks in picking up, in order to learn Taekwondo, you have to be patient because it is not as easy as you would imagine.",
+                                "words": [
+                                    "Giving",
+                                    "you",
+                                    "tips",
+                                    "and",
+                                    "tricks",
+                                    "in",
+                                    "picking",
+                                    "up",
+                                    ",",
+                                    "in",
+                                    "order",
+                                    "to",
+                                    "learn",
+                                    "Taekwondo",
+                                    ",",
+                                    "you",
+                                    "have",
+                                    "to",
+                                    "be",
+                                    "patient",
+                                    "because",
+                                    "it",
+                                    "is",
+                                    "not",
+                                    "as",
+                                    "easy",
+                                    "as",
+                                    "you",
+                                    "would",
+                                    "imagine",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Firstly, try to repeat all of coach's movements which might help you to understand your body.",
+                                "words": [
+                                    "Firstly",
+                                    ",",
+                                    "try",
+                                    "to",
+                                    "repeat",
+                                    "all",
+                                    "of",
+                                    "coach's",
+                                    "movements",
+                                    "which",
+                                    "might",
+                                    "help",
+                                    "you",
+                                    "to",
+                                    "understand",
+                                    "your",
+                                    "body",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Secondly, be concentrated, so that you do not get injured.",
+                                "words": [
+                                    "Secondly",
+                                    ",",
+                                    "be",
+                                    "concentrated",
+                                    ",",
+                                    "so",
+                                    "that",
+                                    "you",
+                                    "do",
+                                    "not",
+                                    "get",
+                                    "injured",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Thirdly, do not forget about seniors they can help you with you beginning.",
+                                "words": [
+                                    "Thirdly",
+                                    ",",
+                                    "do",
+                                    "not",
+                                    "forget",
+                                    "about",
+                                    "seniors",
+                                    "they",
+                                    "can",
+                                    "help",
+                                    "you",
+                                    "with",
+                                    "you",
+                                    "beginning",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "However, be aware of Korean mentality due to them being very polite and delicate.",
+                                "words": [
+                                    "However",
+                                    ",",
+                                    "be",
+                                    "aware",
+                                    "of",
+                                    "Korean",
+                                    "mentality",
+                                    "due",
+                                    "to",
+                                    "them",
+                                    "being",
+                                    "very",
+                                    "polite",
+                                    "and",
+                                    "delicate",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "Therefore, it may well be tough for you to cope with it.",
+                                "words": [
+                                    "Therefore",
+                                    ",",
+                                    "it",
+                                    "may",
+                                    "well",
+                                    "be",
+                                    "tough",
+                                    "for",
+                                    "you",
+                                    "to",
+                                    "cope",
+                                    "with",
+                                    "it",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "I think that my advices will help you with this \"adventure\".",
+                                "words": [
+                                    "I",
+                                    "think",
+                                    "that",
+                                    "my",
+                                    "advices",
+                                    "will",
+                                    "help",
+                                    "you",
+                                    "with",
+                                    "this",
+                                    "\"",
+                                    "adventure",
+                                    "\"",
+                                    "."
+                                ]
+                            }
+                        ]
+                    ],
+                    "index_map": [
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25,
+                                26,
+                                27,
+                                28,
+                                29,
+                                30
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14
+                            ]
+                        ]
+                    ],
+                    "selections": [
+                        {
+                            "correction": "it is",
+                            "endSelection": 392,
+                            "startSelection": 388
+                        },
+                        {
+                            "correction": "do not",
+                            "endSelection": 565,
+                            "startSelection": 560
+                        },
+                        {
+                            "correction": "do not",
+                            "endSelection": 593,
+                            "startSelection": 588
+                        }
+                    ]
+                }
+            },
+            "post_annotations": {},
+            "solvers": [
+                {
+                    "contraction_corrector_solver": {
+                        "selections": [
+                            {
+                                "comment": "",
+                                "correction": "it is",
+                                "endSelection": 392,
+                                "explanation": "стяженные формы недопустимы",
+                                "group": "error",
+                                "id": 0,
+                                "startSelection": 388,
+                                "subtype": "стяж",
+                                "tag": "стяж",
+                                "type": "А.СТИЛЬ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "do not",
+                                "endSelection": 565,
+                                "explanation": "стяженные формы недопустимы",
+                                "group": "error",
+                                "id": 1,
+                                "startSelection": 560,
+                                "subtype": "стяж",
+                                "tag": "стяж",
+                                "type": "А.СТИЛЬ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "do not",
+                                "endSelection": 593,
+                                "explanation": "стяженные формы недопустимы",
+                                "group": "error",
+                                "id": 2,
+                                "startSelection": 588,
+                                "subtype": "стяж",
+                                "tag": "стяж",
+                                "type": "А.СТИЛЬ"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "raw_input": "",
+            "instance_info": {
+                "dataset_split": "train",
+                "dataset_name": "prochtenie",
+                "dataset_version": "v4",
+                "subject": "eng",
+                "file_name": "0052491_exp113.json"
+            }
+        }
+    ]
+}

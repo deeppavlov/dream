@@ -147,6 +147,16 @@
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "update_attributes"
+            },
+            "gector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://gector:2102/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:gector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
             }
         },
         "skill_selectors": {

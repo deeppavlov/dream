@@ -40,6 +40,7 @@ services:
     - .env
     environment:
     - FLASK_APP=server
+  
   convers-evaluation-selector:
     build:
       args:
@@ -69,6 +70,7 @@ services:
     - .env
     environment:
     - FLASK_APP=server
+
   dff-template-skill:
     build:
       args:
@@ -85,6 +87,7 @@ services:
           memory: 128M
     env_file:
     - .env
+
   dff-language-practice-skill:
     build:
       args:
@@ -101,6 +104,7 @@ services:
           memory: 128M
     env_file:
     - .env
+
   sentseg:
     build:
       context: annotators/SentSeg
@@ -115,6 +119,7 @@ services:
     - .env
     environment:
     - FLASK_APP=server
+
   spelling-preprocessing:
     build:
       args:
@@ -136,6 +141,7 @@ services:
     - .env
     environment:
     - FLASK_APP=server
+    
   language-mistakes-tracker:
     env_file: [ .env ]
     build:
@@ -154,4 +160,24 @@ services:
           memory: 128M 
         reservations:
           memory: 128M
+
+  gector: # GPU is required
+    build:
+      args:
+        SERVICE_NAME: gector
+        SERVICE_PORT: 2102
+      context: annotators/gector
+      dockerfile: Dockerfile
+    environment:
+      # - FLASK_APP=server
+      - STORE_DATA_ENABLE=true
+      - CUDA_VISIBLE_DEVICES=4,5
+    # command: flask run -h 0.0.0.0 -p 2102
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 5G 
+        reservations:
+          memory: 5G
 version: '3.7'

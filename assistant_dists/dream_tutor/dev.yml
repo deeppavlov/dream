@@ -54,4 +54,11 @@ services:
     volumes:
     - ./annotators/language_mistakes_tracker:/src
     - ./common:/src/common
+  gector:
+    volumes:
+      - ./annotators/gector:/src
+      - ./data:/data
+      - ./common_packages:/common_packages
+    ports:
+      - 2102:2102
 version: '3.7'

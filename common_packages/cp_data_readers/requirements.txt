@@ -1,0 +1,2 @@
+rusenttokenize==0.0.5
+nltk==3.4.5

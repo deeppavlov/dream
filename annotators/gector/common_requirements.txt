@@ -1,0 +1,4 @@
+-e /common_packages/cp_data_store
+-e /common_packages/cp_data_readers
+-e /common_packages/cp_tests
+-e /common_packages/cp_index_map

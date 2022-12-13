@@ -995,3 +995,73 @@ def language_mistakes_tracker_formatter(dialog: Dict):
     with open("sample.json", "w") as outfile:
         outfile.write(json_object)
     return [{"dialog": dialog}]
+
+
+def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
+    last_human_utt = dialog["human_utterances"][-1]["text"]
+    # print(f"base_formatter_in = {annotations.keys()}", flush=True)
+    clear_essay_word_offsets = []
+    puncts = [".", "?", "!"]
+    for i in range(len(last_human_utt)): 
+        if i == 0:
+            clear_essay_word_offsets.append(0)
+            continue
+        if last_human_utt in puncts:
+            clear_essay_word_offsets.append(i)
+        else:
+            if last_human_utt[i-1] == " ":
+                clear_essay_word_offsets.append(i)
+
+    splitted_utt = last_human_utt.split(' ')
+    words = []
+    for word in splitted_utt:
+        if word[-1] in puncts:
+            words.append(word[:-1])
+            words.append(word[-1])
+        else:
+            words.append(word)
+
+    index_map = [x for x in range(len(clear_essay_word_offsets) + 1)]
+    data = {
+        "annotations": {
+            "basic_reader": {
+                "standard_markup": {
+                    "text": last_human_utt
+                        },
+                "extended_markup": {
+                    "clear_essay_sentences": [
+                        [
+                            {
+                                "text": last_human_utt,
+                                "words": words
+                            }
+                        ]
+                    ],
+                    "clear_essay_word_offsets": [
+                        [
+                            clear_essay_word_offsets
+                        ]
+                    ]
+                }
+            },
+            "contraction_corrector": {
+                "essay_sentences": [
+                    [
+                        {
+                            "text": last_human_utt,
+                            "words": words
+                        }
+                    ]
+                ],
+                "index_map": [
+                    [
+                        index_map
+                    ]
+                ]
+            }
+        },
+        "instance_info": {
+            "subject": "eng"
+        }
+    }
+    return [{"input_data": [data]}]

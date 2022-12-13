@@ -1,0 +1,1148 @@
+{
+    "input_data": [
+        {
+            "annotations": {
+                "basic_reader": {
+                    "extended_markup": {
+                        "clear_essay_sentences": [
+                            [
+                                {
+                                    "text": "Humanity always had a lot of different epidemics; plaque in eighteenth century, flu in twentieth century.",
+                                    "words": [
+                                        "Humanity",
+                                        "always",
+                                        "had",
+                                        "a",
+                                        "lot",
+                                        "of",
+                                        "different",
+                                        "epidemics",
+                                        ";",
+                                        "plaque",
+                                        "in",
+                                        "eighteenth",
+                                        "century",
+                                        ",",
+                                        "flu",
+                                        "in",
+                                        "twentieth",
+                                        "century",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "Nowadays we have another problem - coronavirus.",
+                                    "words": [
+                                        "Nowadays",
+                                        "we",
+                                        "have",
+                                        "another",
+                                        "problem",
+                                        "-",
+                                        "coronavirus",
+                                        "."
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "Coronavirus is a new pandemic which had started at the beginning of 2020.",
+                                    "words": [
+                                        "Coronavirus",
+                                        "is",
+                                        "a",
+                                        "new",
+                                        "pandemic",
+                                        "which",
+                                        "had",
+                                        "started",
+                                        "at",
+                                        "the",
+                                        "beginning",
+                                        "of",
+                                        "2020",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "There are over six millions cases as for May 31, 2020.",
+                                    "words": [
+                                        "There",
+                                        "are",
+                                        "over",
+                                        "six",
+                                        "millions",
+                                        "cases",
+                                        "as",
+                                        "for",
+                                        "May",
+                                        "31",
+                                        ",",
+                                        "2020",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "The main factor is asymptomatic period which can reach two weeks .",
+                                    "words": [
+                                        "The",
+                                        "main",
+                                        "factor",
+                                        "is",
+                                        "asymptomatic",
+                                        "period",
+                                        "which",
+                                        "can",
+                                        "reach",
+                                        "two",
+                                        "weeks",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "I think we could prevent this epidemic if people were not obsessed with economics.",
+                                    "words": [
+                                        "I",
+                                        "think",
+                                        "we",
+                                        "could",
+                                        "prevent",
+                                        "this",
+                                        "epidemic",
+                                        "if",
+                                        "people",
+                                        "were",
+                                        "not",
+                                        "obsessed",
+                                        "with",
+                                        "economics",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "Government should close every kind of transport and declare total lockdown of every country.",
+                                    "words": [
+                                        "Government",
+                                        "should",
+                                        "close",
+                                        "every",
+                                        "kind",
+                                        "of",
+                                        "transport",
+                                        "and",
+                                        "declare",
+                                        "total",
+                                        "lockdown",
+                                        "of",
+                                        "every",
+                                        "country",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "But the majority believes that this will not affect them.",
+                                    "words": [
+                                        "But",
+                                        "the",
+                                        "majority",
+                                        "believes",
+                                        "that",
+                                        "this",
+                                        "will",
+                                        "not",
+                                        "affect",
+                                        "them",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "I think people should concern of it more seriously.",
+                                    "words": [
+                                        "I",
+                                        "think",
+                                        "people",
+                                        "should",
+                                        "concern",
+                                        "of",
+                                        "it",
+                                        "more",
+                                        "seriously",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "All of us should understand that if we would stay home for couple of weeks or maybe month, this pandemic will not become pandemic",
+                                    "words": [
+                                        "All",
+                                        "of",
+                                        "us",
+                                        "should",
+                                        "understand",
+                                        "that",
+                                        "if",
+                                        "we",
+                                        "would",
+                                        "stay",
+                                        "home",
+                                        "for",
+                                        "couple",
+                                        "of",
+                                        "weeks",
+                                        "or",
+                                        "maybe",
+                                        "month",
+                                        ",",
+                                        "this",
+                                        "pandemic",
+                                        "will",
+                                        "not",
+                                        "become",
+                                        "pandemic"
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "text": "In the end of essay I want to say that people should draw conclusions and not repeat the same mistakes in the future.",
+                                    "words": [
+                                        "In",
+                                        "the",
+                                        "end",
+                                        "of",
+                                        "essay",
+                                        "I",
+                                        "want",
+                                        "to",
+                                        "say",
+                                        "that",
+                                        "people",
+                                        "should",
+                                        "draw",
+                                        "conclusions",
+                                        "and",
+                                        "not",
+                                        "repeat",
+                                        "the",
+                                        "same",
+                                        "mistakes",
+                                        "in",
+                                        "the",
+                                        "future",
+                                        "."
+                                    ]
+                                },
+                                {
+                                    "text": "Stay safe.",
+                                    "words": [
+                                        "Stay",
+                                        "safe",
+                                        "."
+                                    ]
+                                }
+                            ]
+                        ],
+                        "clear_essay_word_offsets": [
+                            [
+                                [
+                                    0,
+                                    9,
+                                    16,
+                                    20,
+                                    22,
+                                    26,
+                                    29,
+                                    39,
+                                    48,
+                                    50,
+                                    57,
+                                    60,
+                                    71,
+                                    78,
+                                    80,
+                                    84,
+                                    87,
+                                    97,
+                                    104
+                                ],
+                                [
+                                    106,
+                                    115,
+                                    118,
+                                    123,
+                                    131,
+                                    139,
+                                    141,
+                                    152
+                                ]
+                            ],
+                            [
+                                [
+                                    154,
+                                    166,
+                                    169,
+                                    171,
+                                    175,
+                                    184,
+                                    190,
+                                    194,
+                                    202,
+                                    205,
+                                    209,
+                                    219,
+                                    222,
+                                    226
+                                ],
+                                [
+                                    228,
+                                    234,
+                                    238,
+                                    243,
+                                    247,
+                                    256,
+                                    262,
+                                    265,
+                                    269,
+                                    273,
+                                    275,
+                                    277,
+                                    281
+                                ],
+                                [
+                                    283,
+                                    287,
+                                    292,
+                                    299,
+                                    302,
+                                    315,
+                                    322,
+                                    328,
+                                    332,
+                                    338,
+                                    342,
+                                    348
+                                ],
+                                [
+                                    349,
+                                    351,
+                                    357,
+                                    360,
+                                    366,
+                                    374,
+                                    379,
+                                    388,
+                                    391,
+                                    398,
+                                    403,
+                                    407,
+                                    416,
+                                    421,
+                                    430
+                                ],
+                                [
+                                    432,
+                                    443,
+                                    450,
+                                    456,
+                                    462,
+                                    467,
+                                    470,
+                                    480,
+                                    484,
+                                    492,
+                                    498,
+                                    507,
+                                    510,
+                                    516,
+                                    523
+                                ],
+                                [
+                                    525,
+                                    529,
+                                    533,
+                                    542,
+                                    551,
+                                    556,
+                                    561,
+                                    566,
+                                    570,
+                                    577,
+                                    581
+                                ],
+                                [
+                                    583,
+                                    585,
+                                    591,
+                                    598,
+                                    605,
+                                    613,
+                                    616,
+                                    619,
+                                    624,
+                                    633
+                                ],
+                                [
+                                    635,
+                                    639,
+                                    642,
+                                    645,
+                                    652,
+                                    663,
+                                    668,
+                                    671,
+                                    674,
+                                    680,
+                                    685,
+                                    690,
+                                    694,
+                                    701,
+                                    704,
+                                    710,
+                                    713,
+                                    719,
+                                    724,
+                                    726,
+                                    731,
+                                    740,
+                                    745,
+                                    749,
+                                    756
+                                ]
+                            ],
+                            [
+                                [
+                                    765,
+                                    768,
+                                    772,
+                                    776,
+                                    779,
+                                    785,
+                                    787,
+                                    792,
+                                    795,
+                                    799,
+                                    804,
+                                    811,
+                                    818,
+                                    823,
+                                    835,
+                                    839,
+                                    843,
+                                    850,
+                                    854,
+                                    859,
+                                    868,
+                                    871,
+                                    875,
+                                    881
+                                ],
+                                [
+                                    883,
+                                    888,
+                                    892
+                                ]
+                            ]
+                        ]
+                    },
+                    "standard_markup": {
+                        "criteria": {
+                            "K1": "0",
+                            "K2": "0",
+                            "K3": "0",
+                            "K4": "0",
+                            "K5": "0"
+                        },
+                        "fileName": "0052563_exp107.json",
+                        "meta": {
+                            "category": "",
+                            "class": "1 курс",
+                            "id": "0052563",
+                            "name": "0052563_en_epidemic_of_coronavirus_noexp.txt",
+                            "subject": "eng",
+                            "taskText": "",
+                            "test": "эссе тренировка",
+                            "theme": "epidemic of coronavirus",
+                            "uuid": "0d50be4e-5ecf-4508-9082-92c977e8b31f",
+                            "year": 2020
+                        },
+                        "selections": [
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 153,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 125,
+                                "startSelection": 0,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "ПРОБЛЕМА"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 764,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 990,
+                                "startSelection": 154,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "АРГУМЕНТ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 893,
+                                "explanation": "",
+                                "group": "meaning",
+                                "id": 255,
+                                "startSelection": 765,
+                                "subtype": "",
+                                "tag": "",
+                                "type": "ВЫВОД"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "the eighteenth",
+                                "endSelection": 70,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 272,
+                                "startSelection": 60,
+                                "subtype": "арт",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "the twentieth",
+                                "endSelection": 96,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 211,
+                                "startSelection": 87,
+                                "subtype": "арт",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "started",
+                                "endSelection": 201,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 20,
+                                "startSelection": 190,
+                                "subtype": "видовр",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "economy",
+                                "endSelection": 430,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 114,
+                                "startSelection": 421,
+                                "subtype": "конт",
+                                "tag": "",
+                                "type": "А.ЛЕКС"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "The goverment",
+                                "endSelection": 442,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 962,
+                                "startSelection": 432,
+                                "subtype": "арт",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 479,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 160,
+                                "startSelection": 443,
+                                "subtype": "арг",
+                                "tag": "",
+                                "type": "А.ЛОГИКА"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 550,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 605,
+                                "startSelection": 533,
+                                "subtype": "проп",
+                                "tag": "",
+                                "type": "А.ЛЕКС"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "a month",
+                                "endSelection": 724,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 357,
+                                "startSelection": 719,
+                                "subtype": "арт",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "at home",
+                                "endSelection": 689,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 784,
+                                "startSelection": 685,
+                                "subtype": "пред",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "a couple",
+                                "endSelection": 700,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 760,
+                                "startSelection": 694,
+                                "subtype": "арт",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "had stayed",
+                                "endSelection": 684,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 442,
+                                "startSelection": 674,
+                                "subtype": "видовр",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "would not become",
+                                "endSelection": 755,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 520,
+                                "startSelection": 740,
+                                "subtype": "видовр",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "",
+                                "endSelection": 764,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 638,
+                                "startSelection": 756,
+                                "subtype": "повтор",
+                                "tag": "",
+                                "type": "А.ЗАПАС"
+                            },
+                            {
+                                "comment": "",
+                                "correction": "the essay",
+                                "endSelection": 784,
+                                "explanation": "",
+                                "group": "error",
+                                "id": 695,
+                                "startSelection": 779,
+                                "subtype": "арт",
+                                "tag": "",
+                                "type": "А.ГРАММ"
+                            }
+                        ],
+                        "text": "Humanity always had a lot of different epidemics; plaque in eighteenth century, flu in twentieth century. Nowadays we have another problem – coronavirus.\nCoronavirus is a new pandemic which had started at the beginning of 2020. There are over six millions cases as for May 31, 2020. The main factor is asymptomatic period which can reach two weeks .I think we could prevent this epidemic if people were not obsessed with economics. Government should close every kind of transport and declare total lockdown of every country. But the majority believes that this will not affect them. I think people should concern of it more seriously. All of us should understand that if we would stay home for couple of weeks or maybe month, this pandemic will not become pandemic\nIn the end of essay I want to say that people should draw conclusions and not repeat the same mistakes in the future. Stay safe."
+                    }
+                },
+                "contraction_corrector": {
+                    "essay_sentences": [
+                        [
+                            {
+                                "text": "Humanity always had a lot of different epidemics; plaque in eighteenth century, flu in twentieth century.",
+                                "words": [
+                                    "Humanity",
+                                    "always",
+                                    "had",
+                                    "a",
+                                    "lot",
+                                    "of",
+                                    "different",
+                                    "epidemics",
+                                    ";",
+                                    "plaque",
+                                    "in",
+                                    "eighteenth",
+                                    "century",
+                                    ",",
+                                    "flu",
+                                    "in",
+                                    "twentieth",
+                                    "century",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "Nowadays we have another problem - coronavirus.",
+                                "words": [
+                                    "Nowadays",
+                                    "we",
+                                    "have",
+                                    "another",
+                                    "problem",
+                                    "-",
+                                    "coronavirus",
+                                    "."
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Coronavirus is a new pandemic which had started at the beginning of 2020.",
+                                "words": [
+                                    "Coronavirus",
+                                    "is",
+                                    "a",
+                                    "new",
+                                    "pandemic",
+                                    "which",
+                                    "had",
+                                    "started",
+                                    "at",
+                                    "the",
+                                    "beginning",
+                                    "of",
+                                    "2020",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "There are over six millions cases as for May 31, 2020.",
+                                "words": [
+                                    "There",
+                                    "are",
+                                    "over",
+                                    "six",
+                                    "millions",
+                                    "cases",
+                                    "as",
+                                    "for",
+                                    "May",
+                                    "31",
+                                    ",",
+                                    "2020",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "The main factor is asymptomatic period which can reach two weeks .",
+                                "words": [
+                                    "The",
+                                    "main",
+                                    "factor",
+                                    "is",
+                                    "asymptomatic",
+                                    "period",
+                                    "which",
+                                    "can",
+                                    "reach",
+                                    "two",
+                                    "weeks",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "I think we could prevent this epidemic if people were not obsessed with economics.",
+                                "words": [
+                                    "I",
+                                    "think",
+                                    "we",
+                                    "could",
+                                    "prevent",
+                                    "this",
+                                    "epidemic",
+                                    "if",
+                                    "people",
+                                    "were",
+                                    "not",
+                                    "obsessed",
+                                    "with",
+                                    "economics",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "Government should close every kind of transport and declare total lockdown of every country.",
+                                "words": [
+                                    "Government",
+                                    "should",
+                                    "close",
+                                    "every",
+                                    "kind",
+                                    "of",
+                                    "transport",
+                                    "and",
+                                    "declare",
+                                    "total",
+                                    "lockdown",
+                                    "of",
+                                    "every",
+                                    "country",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "But the majority believes that this will not affect them.",
+                                "words": [
+                                    "But",
+                                    "the",
+                                    "majority",
+                                    "believes",
+                                    "that",
+                                    "this",
+                                    "will",
+                                    "not",
+                                    "affect",
+                                    "them",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "I think people should concern of it more seriously.",
+                                "words": [
+                                    "I",
+                                    "think",
+                                    "people",
+                                    "should",
+                                    "concern",
+                                    "of",
+                                    "it",
+                                    "more",
+                                    "seriously",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "All of us should understand that if we would stay home for couple of weeks or maybe month, this pandemic will not become pandemic",
+                                "words": [
+                                    "All",
+                                    "of",
+                                    "us",
+                                    "should",
+                                    "understand",
+                                    "that",
+                                    "if",
+                                    "we",
+                                    "would",
+                                    "stay",
+                                    "home",
+                                    "for",
+                                    "couple",
+                                    "of",
+                                    "weeks",
+                                    "or",
+                                    "maybe",
+                                    "month",
+                                    ",",
+                                    "this",
+                                    "pandemic",
+                                    "will",
+                                    "not",
+                                    "become",
+                                    "pandemic"
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                "text": "In the end of essay I want to say that people should draw conclusions and not repeat the same mistakes in the future.",
+                                "words": [
+                                    "In",
+                                    "the",
+                                    "end",
+                                    "of",
+                                    "essay",
+                                    "I",
+                                    "want",
+                                    "to",
+                                    "say",
+                                    "that",
+                                    "people",
+                                    "should",
+                                    "draw",
+                                    "conclusions",
+                                    "and",
+                                    "not",
+                                    "repeat",
+                                    "the",
+                                    "same",
+                                    "mistakes",
+                                    "in",
+                                    "the",
+                                    "future",
+                                    "."
+                                ]
+                            },
+                            {
+                                "text": "Stay safe.",
+                                "words": [
+                                    "Stay",
+                                    "safe",
+                                    "."
+                                ]
+                            }
+                        ]
+                    ],
+                    "index_map": [
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25
+                            ]
+                        ],
+                        [
+                            [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24
+                            ],
+                            [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        ]
+                    ],
+                    "selections": []
+                }
+            },
+            "post_annotations": {},
+            "solvers": [
+                {
+                    "contraction_corrector_solver": {
+                        "selections": []
+                    }
+                }
+            ],
+            "raw_input": "",
+            "instance_info": {
+                "dataset_split": "train",
+                "dataset_name": "prochtenie",
+                "dataset_version": "v4",
+                "subject": "eng",
+                "file_name": "0052563_exp107.json"
+            }
+        }
+    ]
+}
