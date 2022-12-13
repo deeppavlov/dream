@@ -21,13 +21,13 @@ logger = logging.getLogger(__name__)
 LANGUAGE = getenv("LANGUAGE", "EN")
 
 REPLY_TYPE = Tuple[str, float, dict, dict, dict]
-DIALOG_BEGINNING_START_CONFIDENCE = 0.98
+DIALOG_BEGINNING_START_CONFIDENCE = 0.9
 DIALOG_BEGINNING_CONTINUE_CONFIDENCE = 0.9
 DIALOG_BEGINNING_SHORT_ANSWER_CONFIDENCE = 0.98
 MIDDLE_DIALOG_START_CONFIDENCE = 0.7
 SUPER_CONFIDENCE = 1.0
-HIGH_CONFIDENCE = 0.98
-MIDDLE_CONFIDENCE = 0.95
+HIGH_CONFIDENCE = 0.9
+MIDDLE_CONFIDENCE = 0.85
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
 
 link_to_skill2key_words = {
@@ -101,12 +101,13 @@ def greeting_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     """
     logger.debug("greeting_response")
     bot_utt = int_ctx.get_last_bot_utterance(ctx, actor)["text"].lower()
-    if int_cnd.is_lets_chat_about_topic(ctx, actor):
-        int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
-        int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
-    else:
+    if common_greeting.GREETINGS_BY_HUMAN.match(int_ctx.get_last_human_utterance(ctx, actor)["text"]):
         int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
         int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)
+    else:
+        int_ctx.set_confidence(ctx, actor, HIGH_CONFIDENCE)
+        int_ctx.set_can_continue(ctx, actor, CAN_CONTINUE_SCENARIO)
+
     which_start = random.choice(
         [
             # "starter_weekday",

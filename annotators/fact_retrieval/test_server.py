@@ -25,7 +25,9 @@ def run_test(handler) -> None:
             cur_real_out_data = handler(cur_in_data, RANDOM_SEED)
             cur_real_out_data = cur_real_out_data[0]["facts"]
 
-            assert cur_real_out_data == cur_out_data, f"expect out: {cur_out_data}\n real out: {cur_real_out_data}"
+            assert all(
+                [fact in cur_out_data for fact in cur_real_out_data]
+            ), f"expect out: {cur_out_data}\n real out: {cur_real_out_data}"
 
     print("Success")
 

@@ -9,16 +9,18 @@ ARG COMMIT=0.13.0
 ARG PORT
 ARG SRC_DIR
 ARG SED_ARG=" | "
+ARG N_FACTS
 
 ENV CONFIG=$CONFIG
 ENV CONFIG_WIKI=$CONFIG_WIKI
 ENV CONFIG_WHOW=$CONFIG_WHOW
 ENV PORT=$PORT
+ENV N_FACTS=$N_FACTS
 
 COPY ./annotators/fact_retrieval/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
+RUN pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
 
 COPY $SRC_DIR /src
 
