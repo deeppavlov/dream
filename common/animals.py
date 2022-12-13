@@ -90,7 +90,7 @@ re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 def check_about_animals(user_uttr):
     found_topics = get_topics(user_uttr, probs=False, which="all")
-    if any([animal_topic in found_topics for animal_topic in topic_groups["animals"]):
+    if any([animal_topic in found_topics for animal_topic in topic_groups["animals"]]):
         return True
     elif re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
         return True

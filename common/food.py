@@ -110,7 +110,7 @@ def food_skill_was_proposed(prev_bot_utt):
 
 def about_food(annotated_utterance):
     found_topics = get_topics(annotated_utterance, probs=False, which="all")
-    if any([food_topic in found_topics for food_topic in topic_groups["food"]):
+    if any([food_topic in found_topics for food_topic in topic_groups["food"]]):
         return True
     elif re.findall(FOOD_COMPILED_PATTERN, annotated_utterance["text"]):
         return True

@@ -41,7 +41,7 @@ BOOK_PATTERN = re.compile(
 
 def about_book(annotated_utterance):
     found_topics = get_topics(annotated_utterance, probs=False, which="all")
-    if any([book_topic in found_topics for book_topic in topic_groups["books"]):
+    if any([book_topic in found_topics for book_topic in topic_groups["books"]]):
         return True
     elif re.findall(BOOK_PATTERN, annotated_utterance["text"]):
         return True

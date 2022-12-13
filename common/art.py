@@ -10,9 +10,10 @@ ZERO_CONFIDENCE = 0.0
 
 ART_PATTERN = re.compile(r"\b(art|artist|drawing|painting|painter|gallery)(\.|\?|\b)", re.IGNORECASE)
 
+
 def check_about_art(user_uttr):
     found_topics = get_topics(user_uttr, probs=False, which="all")
-    if any([art_topic in found_topics for art_topic in topic_groups["art"]):
+    if any([art_topic in found_topics for art_topic in topic_groups["art"]]):
         return True
     elif re.findall(ART_PATTERN, user_uttr["text"]):
         return True

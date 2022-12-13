@@ -146,7 +146,7 @@ LAST_CHANCE_TEMPLATE = [
 
 def about_sport(annotated_utterance):
     found_topics = get_topics(annotated_utterance, probs=False, which="all")
-    if any([topic in found_topics for topic in topic_groups["sport"]):
+    if any([topic in found_topics for topic in topic_groups["sport"]]):
         return True
     elif re.findall(KIND_OF_SPORTS_TEMPLATE, annotated_utterance["text"]):
         return True

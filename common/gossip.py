@@ -335,7 +335,7 @@ def check_is_celebrity_mentioned(human_utterance):
 
 def about_celebrities(annotated_utterance):
     found_topics = get_topics(annotated_utterance, probs=False, which="all")
-    if any([topic in found_topics for topic in topic_groups["celebrities"]):
+    if any([topic in found_topics for topic in topic_groups["celebrities"]]):
         return True
     elif re.findall(GOSSIP_COMPILED_PATTERN, annotated_utterance["text"]):
         return True
