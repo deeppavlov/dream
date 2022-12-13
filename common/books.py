@@ -1,6 +1,5 @@
 import re
-
-from common.utils import get_topics
+from common.utils import get_topics, topic_groups
 
 BOOK_SKILL_CHECK_PHRASE = "the last book"
 BOOK_SKILL_CHECK_PHRASE2 = "your favourite book"
