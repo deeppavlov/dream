@@ -241,7 +241,8 @@ topic_groups = {"food": ["Food", "Food_Drink"],
                 "art": ["Art_Event","Art&Hobbies"],
                 "science": ["Science_and_Technology", "SciTech"],
                 "entertainment": ["Entertainment", "Entertainment_General"],
-                "games": ["Games", "Toys&Games", "Videogames"]
+                "games": ["Games", "Toys&Games", "Videogames"],
+                "animals": ["Pets_Animals", "Animals&Pets"]
                }
                 
 
