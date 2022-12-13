@@ -42,12 +42,6 @@ services:
     - 8011:8011
     volumes:
     - ./annotators/SentSeg:/src
-  spelling-preprocessing:
-    ports:
-    - 8074:8074
-    volumes:
-    - ./annotators/spelling_preprocessing_dp:/src
-    - ~/.deeppavlov:/root/.deeppavlov
   language-mistakes-tracker:
     ports:
     - 8129:8129

@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_tutor/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, sentseg:8011, convers-evaluation-selector:8009,
-          badlisted-words:8018, spelling-preprocessing:8074, language-mistakes-tracker:8129, 
+          badlisted-words:8018, language-mistakes-tracker:8129, gector:2102,
           dff-language-practice-skill:8130, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
@@ -115,28 +115,6 @@ services:
           memory: 1.5G
         reservations:
           memory: 1.5G
-    env_file:
-    - .env
-    environment:
-    - FLASK_APP=server
-
-  spelling-preprocessing:
-    build:
-      args:
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        CONFIG: brillmoore_wikitypos_en.json
-        LANGUAGE: EN
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-      context: .
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8074
-    deploy:
-      resources:
-        limits:
-          memory: 5G
-        reservations:
-          memory: 5G
     env_file:
     - .env
     environment:
