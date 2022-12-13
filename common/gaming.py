@@ -30,6 +30,16 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 inflect_engine = engine()
 
 
+def about_games(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([game_topic in found_topics for game_topic in topic_groups["games"]):
+        return True
+    elif re.findall(VIDEO_GAME_WORDS_PATTERN, annotated_utterance["text"]):
+        return True
+    else:
+        return False
+
+
 INT_TO_ROMAN = {
     1000: "M",
     900: "CM",
