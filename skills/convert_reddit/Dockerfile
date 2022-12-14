@@ -11,7 +11,6 @@ ENV PYTHONPATH /usr/local/bin/python
 ENV DEVICE cpu
 
 WORKDIR /app
-RUN mkdir /root/
 RUN mkdir /root/convert_data/
 
 COPY requirements.txt .

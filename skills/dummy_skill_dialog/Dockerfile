@@ -11,7 +11,6 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-RUN mkdir /root/
 RUN mkdir /root/model/
 
 RUN wget $DATA_URL -q -P /root/model/
