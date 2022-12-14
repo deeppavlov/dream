@@ -111,6 +111,19 @@
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
+            "property_extraction": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://property-extraction:8129/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_last_bot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
+            },
             "sentrewrite": {
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog",

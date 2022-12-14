@@ -225,6 +225,14 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
     ]
 
 
+def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "utterances": [dialog["bot_utterances"][-1]["text"]],
+        }
+    ]
+
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
