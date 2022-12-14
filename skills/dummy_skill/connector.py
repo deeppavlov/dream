@@ -29,8 +29,9 @@ from common.universal_templates import (
     is_switch_topic,
     if_choose_topic,
     DUMMY_DONTKNOW_RESPONSES,
+    is_any_question_sentence_in_utterance,
 )
-from common.utils import get_topics, get_entities, is_no, get_intents, is_yes, is_question
+from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -174,11 +175,11 @@ def no_initiative(dialog):
     utts = dialog["human_utterances"]
     if len(utts) <= 2:
         return False
-    if not is_question(utts[-1].get("text", "")) and not is_question(utts[-2].get("text", "")):
-        logger.info("No questions detected")
+    if not (is_any_question_sentence_in_utterance(utts[-1]) or is_any_question_sentence_in_utterance(utts[-2])):
+        logger.info("dummy_skill: No questions 2 times in a row detected")
         return True
     if is_switch_topic(utts[-1]):
-        logger.info("Switch topic detected")
+        logger.info("dummy_skill: Switch topic detected")
         return True
     return False
 
@@ -255,7 +256,7 @@ class DummySkillConnector:
                             break
                     if selected_entity:
                         response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
-                        logger.info(f"Dummy Skill Resp: {response}")
+                        logger.info(f"dummy_skill hypothesis no_initiative: {response}")
                     cands += [response]
                     confs += [0.5]
                     attrs += [{"type": "entity_recap", "response_parts": ["prompt"]}]
