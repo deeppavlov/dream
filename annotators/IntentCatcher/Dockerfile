@@ -4,6 +4,7 @@ EXPOSE 8014:8014
 
 WORKDIR /src
 RUN mkdir /data
+RUN mkdir /data/models
 
 RUN  apt-get update \
   && apt-get install -y wget \
