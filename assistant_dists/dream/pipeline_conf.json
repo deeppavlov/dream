@@ -122,7 +122,7 @@
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
-            "spacy_nounphrases": {
+            "spacy-nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -137,7 +137,7 @@
             }
         },
         "annotators": {
-            "spelling_preprocessing": {
+            "spelling-preprocessing": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -152,11 +152,11 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "spacy_nounphrases": {
+            "spacy-nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -165,11 +165,11 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "rake_keywords": {
+            "rake-keywords": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -178,11 +178,11 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "conceptnet": {
+            "comet-conceptnet": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -191,13 +191,13 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.entity_detection",
+                    "annotators.spelling-preprocessing",
+                    "annotators.entity-detection",
                     "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "badlisted_words": {
+            "badlisted-words": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -206,7 +206,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
             },
@@ -220,7 +220,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             },
-            "intent_catcher": {
+            "intent-catcher": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -230,11 +230,11 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg"
                 ]
             },
-            "fact_random": {
+            "fact-random": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -244,12 +244,12 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.entity_linking",
-                    "annotators.spacy_nounphrases",
-                    "annotators.entity_detection"
+                    "annotators.entity-linking",
+                    "annotators.spacy-nounphrases",
+                    "annotators.entity-detection"
                 ]
             },
-            "fact_retrieval": {
+            "fact-retrieval": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -259,9 +259,9 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg",
-                    "annotators.entity_linking"
+                    "annotators.entity-linking"
                 ]
             },
             "ner": {
@@ -270,11 +270,11 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg"
                 ]
             },
-            "entity_detection": {
+            "entity-detection": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -284,7 +284,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg"
                 ]
             },
@@ -298,10 +298,10 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": [
-                    "annotators.entity_linking"
+                    "annotators.entity-linking"
                 ]
             },
-            "entity_linking": {
+            "entity-linking": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -312,11 +312,11 @@
                 "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.ner",
-                    "annotators.entity_detection",
+                    "annotators.entity-detection",
                     "annotators.spacy_nounphrases"
                 ]
             },
-            "wiki_parser": {
+            "wiki-parser": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -326,7 +326,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "required_previous_services": [
-                    "annotators.entity_linking"
+                    "annotators.entity-linking"
                 ]
             },
             "sentrewrite": {
@@ -335,13 +335,13 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg",
                     "annotators.ner",
                     "post_annotators.ner"
                 ]
             },
-            "midas_classification": {
+            "midas-classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -350,12 +350,12 @@
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "combined_classification": {
+            "combined-classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 3,
@@ -364,11 +364,11 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "entity_storer": {
+            "entity-storer": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -378,11 +378,11 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "update_attributes",
                 "previous_services": [
-                    "annotators.combined_classification",
-                    "annotators.intent_catcher"
+                    "annotators.combined-classification",
+                    "annotators.intent-catcher"
                 ]
             },
-            "news_api_annotator": {
+            "news-api-annotator": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -391,15 +391,15 @@
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg",
                     "annotators.ner",
-                    "annotators.entity_detection",
-                    "annotators.spacy_nounphrases"
+                    "annotators.entity-detection",
+                    "annotators.spacy-nounphrases"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "topic_recommendation": {
+            "topic-recommendation": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -408,13 +408,13 @@
                 "dialog_formatter": "state_formatters.dp_formatters:topic_recommendation_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
+                    "annotators.spelling-preprocessing",
                     "annotators.sentseg",
-                    "annotators.combined_classification"
+                    "annotators.combined-classification"
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "user_persona_extractor": {
+            "user-persona-extractor": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -424,10 +424,10 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "update_attributes",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ]
             },
-            "midas_predictor": {
+            "midas-predictor": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -437,11 +437,11 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.midas_classification",
-                    "annotators.combined_classification"
+                    "annotators.midas-classification",
+                    "annotators.combined-classification"
                 ]
             },
-            "relative_persona_extractor": {
+            "relative-persona-extractor": {
                 "connector": {
                 "protocol": "http",
                 "timeout": 2,
@@ -451,7 +451,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "annotators.spelling-preprocessing"
                 ]
           }
         },
@@ -472,7 +472,7 @@
             }
         },
         "skills": {
-            "dff_sport_skill": {
+            "dff-sport-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -498,7 +498,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_program_y_skill": {
+            "dff-program-y-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -511,7 +511,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "personality_catcher": {
+            "personality-catcher": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -524,7 +524,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_intent_responder_skill": {
+            "dff-intent-responder-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -537,7 +537,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dummy_skill": {
+            "dummy-skill": {
                 "connector": {
                     "protocol": "python",
                     "class_name": "skills.dummy_skill.connector:DummySkillConnector"
@@ -549,7 +549,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "alexa_handler": {
+            "alexa-handler": {
                 "connector": {
                     "protocol": "python",
                     "class_name": "skills.alexa_handler.connector:AlexaHandlerConnector"
@@ -561,7 +561,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dummy_skill_dialog": {
+            "dummy-skill-dialog": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -574,7 +574,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "misheard_asr": {
+            "misheard-asr": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -587,7 +587,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_program_y_dangerous_skill": {
+            "dff-program-y-dangerous-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -600,7 +600,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_movie_skill": {
+            "dff-movie-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -613,7 +613,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "emotion_skill": {
+            "emotion-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -626,7 +626,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "convert_reddit": {
+            "convert-reddit": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -639,7 +639,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "personal_info_skill": {
+            "personal-info-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -652,7 +652,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_coronavirus_skill": {
+            "dff-coronavirus-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -665,7 +665,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_weather_skill": {
+            "dff-weather-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -678,7 +678,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_short_story_skill": {
+            "dff-short-story-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 3,
@@ -691,7 +691,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "meta_script_skill": {
+            "meta-script-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -704,7 +704,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "small_talk_skill": {
+            "small-talk-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -717,7 +717,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "game_cooperative_skill": {
+            "game-cooperative-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -730,7 +730,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_program_y_wide_skill": {
+            "dff-program-y-wide-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -743,7 +743,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "news_api_skill": {
+            "news-api-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -756,7 +756,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "comet_dialog_skill": {
+            "comet-dialog-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -769,7 +769,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_grounding_skill": {
+            "dff-grounding-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -782,7 +782,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "factoid_qa": {
+            "factoid-qa": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -795,7 +795,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_animals_skill": {
+            "dff-animals-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -808,7 +808,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_gaming_skill": {
+            "dff-gaming-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -821,7 +821,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_friendship_skill": {
+            "dff-friendship-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -834,7 +834,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "knowledge_grounding_skill": {
+            "knowledge-grounding-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -847,7 +847,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_travel_skill": {
+            "dff-travel-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -860,7 +860,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_food_skill": {
+            "dff-food-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -873,7 +873,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_science_skill": {
+            "dff-science-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -884,7 +884,7 @@
                 "previous_services": ["skill_selectors"],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_music_skill": {
+            "dff-music-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -897,7 +897,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_funfact_skill": {
+            "dff-funfact-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -910,7 +910,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_gossip_skill": {
+            "dff-gossip-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -920,12 +920,12 @@
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors",
-                    "annotators.entity_linking",
+                    "annotators.entity-linking",
                     "annotators.wiki_parser"
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_bot_persona_skill": {
+            "dff-bot-persona-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -938,7 +938,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_wiki_skill": {
+            "dff-wiki-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -951,7 +951,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_book_skill": {
+            "dff-book-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -964,7 +964,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_art_skill": {
+            "dff-art-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -990,7 +990,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dialogpt_persona_based": {
+            "dialogpt-persona-based": {
                 "connector": {
                 "protocol": "http",
                 "timeout": 3,
@@ -1003,7 +1003,7 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_template_skill": {
+            "dff-template-skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -1018,7 +1018,7 @@
             }
         },
         "post_skill_selector_annotators": {
-            "badlisted_words": {
+            "badlisted-words": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -1031,7 +1031,7 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "convers_evaluator_annotator": {
+            "convers-evaluator-annotator": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -1044,7 +1044,7 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "spacy_nounphrases": {
+            "spacy-nounphrases": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -1057,7 +1057,7 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "entity_detection": {
+            "entity-detection": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -1070,7 +1070,7 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "midas_classification": {
+            "midas-classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -1083,7 +1083,7 @@
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
-            "combined_classification": {
+            "combined-classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
@@ -1098,7 +1098,7 @@
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "convers-evaluation-selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -1112,5 +1112,14 @@
                 "state_manager_method": "add_bot_utterance"
             }
         }
+    },
+    "metadata": {
+        "author": "DeepPavlov",
+        "description": "Full Dream chatbot",
+        "version": "0.1.0",
+        "date_created": "2022-12-12T12:12:00",
+        "ram_usage": 50000000000,
+        "gpu_usage": 50000000000,
+        "disk_usage": 50000000000
     }
 }
