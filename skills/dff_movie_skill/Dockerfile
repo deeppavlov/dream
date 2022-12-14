@@ -15,6 +15,7 @@ RUN bash /scripts/programy_logger_off.sh
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
+RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}

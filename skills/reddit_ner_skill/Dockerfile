@@ -1,5 +1,7 @@
 FROM python:3.6
 
+RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /src
 RUN mkdir /data
 RUN mkdir /src/common

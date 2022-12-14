@@ -1,5 +1,7 @@
 FROM tensorflow/tensorflow:1.14.0-py3
 
+RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
+
 ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/convert_reddit_v2.3.punct.tar.gz
 
 ENV LC_ALL C.UTF-8
