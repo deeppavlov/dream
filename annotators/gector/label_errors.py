@@ -233,23 +233,23 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
             normalized_correction = item[4][0].lower().translate(str.maketrans("", "", punct))
             if normalized_error in ENG_PRONOUNS and normalized_correction in ENG_PRONOUNS:
                 if normalized_error == normalized_correction:
-                    correction["type"] = "А.орф"
-                    correction["explanation"] = "Орфографическая ошибка."
+                    correction["type"] = "spell"
+                    correction["explanation"] = "Spelling mistake."
                 else:
-                    correction["type"] = "А.грамм"
-                    correction["subtype"] = "мест"
-                    correction["explanation"] = "Местоимение"
+                    correction["type"] = "gram"
+                    correction["subtype"] = "pron"
+                    correction["explanation"] = "Pronoun"
             elif all(not re.search("\w*[.,?!]\s*\w+", x) for x in item[3]) and all(
                 not re.search("\w+[.,?!]", x) for x in item[3]
             ):
                 if len(item[3]) == len(item[4]):
                     if "'s" in item[3][0] or "'s" in item[4][0]:
-                        correction["type"] = "А.грамм"
-                        correction["subtype"] = "прит"
-                        correction["explanation"] = "Форма притяжательного падежа существительного"
+                        correction["type"] = "gram"
+                        correction["subtype"] = "poss"
+                        correction["explanation"] = "The form of the possessive case of a noun"
                     elif normalized_error == normalized_correction or normalized_error not in words:
-                        correction["type"] = "А.орф"
-                        correction["explanation"] = "Орфографическая ошибка."
+                        correction["type"] = "spell"
+                        correction["explanation"] = "Spelling mistake."
                     else:
                         before_pos = before_parsed[item[1][0]].pos_
                         after_pos = after_parsed[item[2][0]].pos_
@@ -261,23 +261,23 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             if after_parsed[item[2][0]].lemma_ in FP_LEX_WORDS:
                                 continue
                             elif after_parsed[item[2][0]].lemma_ in FP_LEX_VERBS_TO_GRAM:
-                                correction["type"] = "А.грамм"
-                                correction["subtype"] = "видовр"
-                                correction["explanation"] = "Видовременная форма глагола"
+                                correction["type"] = "gram"
+                                correction["subtype"] = "tense"
+                                correction["explanation"] = "Tense form of the verb"
                             else:
-                                correction["type"] = "А.лекс"
-                                correction["subtype"] = "конт"
+                                correction["type"] = "lex"
+                                correction["subtype"] = "context"
                                 correction[
                                     "explanation"
-                                ] = "Лексическая ошибка. Неправильное употребление слова в контексте"
+                                ] = "Lexical mistake. Incorrect use of the word in context"
                         elif before_pos == after_pos == "ADP":
-                            correction["type"] = "А.грамм"
-                            correction["subtype"] = "пред"
-                            correction["explanation"] = "Предлог"
+                            correction["type"] = "gram"
+                            correction["subtype"] = "prep"
+                            correction["explanation"] = "Preposition"
                         elif after[item[2][0]] in ENG_MODAL_VERBS:
-                            correction["type"] = "А.грамм"
-                            correction["subtype"] = "мод"
-                            correction["explanation"] = "Модальный глагол"
+                            correction["type"] = "gram"
+                            correction["subtype"] = "mod"
+                            correction["explanation"] = "Modal verb"
                         elif any(x in punct for x in item[4][0]):
                             continue
                         elif (before_parsed[item[1][0]].tag_ == "NN" and after_parsed[item[2][0]].tag_ == "NNS") or (
@@ -285,100 +285,100 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         ):
                             if item[4][0] in FP_PLURAL_NOUNS:
                                 continue
-                            correction["type"] = "А.грамм"
-                            correction["subtype"] = "множ"
-                            correction["explanation"] = "Форма множественного числа"
+                            correction["type"] = "gram"
+                            correction["subtype"] = "plur"
+                            correction["explanation"] = "Plural form"
                         else:
-                            correction["type"] = "А.грамм"
-                            correction["subtype"] = "видовр"
-                            correction["explanation"] = "Видовременная форма глагола"
+                            correction["type"] = "gram"
+                            correction["subtype"] = "tense"
+                            correction["explanation"] = "Tense form of the verb"
                 elif len(item[3]) < len(item[4]):
                     if normalized_correction in ENG_ARTICLES:
-                        correction["type"] = "А.грамм"
-                        correction["subtype"] = "арт"
-                        correction["explanation"] = "Артикль"
+                        correction["type"] = "gram"
+                        correction["subtype"] = "art"
+                        correction["explanation"] = "Article"
                     else:
-                        correction["type"] = "А.грамм"
-                        correction["subtype"] = "видовр"
-                        correction["explanation"] = "Видовременная форма глагола"
+                        correction["type"] = "gram"
+                        correction["subtype"] = "tense"
+                        correction["explanation"] = "Tense form of the verb"
                 else:
                     if normalized_error in ENG_ARTICLES:
-                        correction["type"] = "А.грамм"
-                        correction["subtype"] = "арт"
-                        correction["explanation"] = "Артикль"
+                        correction["type"] = "gram"
+                        correction["subtype"] = "art"
+                        correction["explanation"] = "Article"
                     else:
-                        correction["type"] = "А.грамм"
-                        correction["subtype"] = "видовр"
-                        correction["explanation"] = "Видовременная форма глагола"
+                        correction["type"] = "gram"
+                        correction["subtype"] = "tense"
+                        correction["explanation"] = "Tense form of the verb"
         elif "delete" == item[0]:
             if not item[3] and not item[4]:
                 continue
-            correction["type"] = "А.грамм"
+            correction["type"] = "gram"
             normalized_error = item[3][0].lower().translate(str.maketrans("", "", punct))
             if len(item[3]) == 1:
                 if normalized_error in ENG_ARTICLES:
                     item[4].append(before[end])
                     end += 1
                     if item[4][-1] in ENG_ADJ_COMP or item[4][-1].endswith("est"):
-                        correction["subtype"] = "сравн"
+                        correction["subtype"] = "comparative"
                     else:
-                        correction["subtype"] = "арт"
-                        correction["explanation"] = "Артикль"
+                        correction["subtype"] = "art"
+                        correction["explanation"] = "Article"
                 elif item[3][0] in punct:
                     start -= 1
                     item[4].insert(0, before[start])
-                    correction["type"] = "А.пункт"
+                    correction["type"] = "punct"
                     continue  # выключили пунктуацию
                 elif spacy_model(item[3][0])[0].pos_ == "ADP":
-                    correction["subtype"] = "пред"
-                    correction["explanation"] = "Предлог"
+                    correction["subtype"] = "prep"
+                    correction["explanation"] = "Preposition"
                 else:
-                    correction["subtype"] = "видовр"
-                    correction["explanation"] = "Видовременная форма глагола"
+                    correction["subtype"] = "tense"
+                    correction["explanation"] = "Tense form of the verb"
             else:
                 if spacy_model(item[3][0])[0].pos_ == "ADP":
-                    correction["subtype"] = "пред"
-                    correction["explanation"] = "Предлог"
+                    correction["subtype"] = "prep"
+                    correction["explanation"] = "Preposition"
                 else:
-                    correction["subtype"] = "видовр"
-                    correction["explanation"] = "Видовременная форма глагола"
+                    correction["subtype"] = "tense"
+                    correction["explanation"] = "Tense form of the verb"
             correction["startSelection"] = word_offsets[start][0]
             correction["endSelection"] = word_offsets[end - 1][1]
             correction["correction"] = md.detokenize(item[4])
         elif "insert" == item[0]:
             normalized_correction = item[4][0].lower().translate(str.maketrans("", "", punct))
-            correction["type"] = "А.грамм"
+            correction["type"] = "gram"
             after_pos = "".join([token.pos_ for token in spacy_model(normalized_correction)])
             if item[4][0] in punct and item[2][0] != len(before):
                 start -= 1
                 if before[start].lower() in FP_PUNCT_WORDS:
                     continue
                 item[4].insert(0, before[start])
-                correction["type"] = "А.пункт"
+                correction["type"] = "punct"
                 continue  # выключили пунктуацию
             elif normalized_correction in ENG_ARTICLES:
                 item[4].append(before[end])
                 end += 1
                 if item[4][-1] in ENG_ADJ_COMP or item[4][-1].endswith("est"):
-                    correction["subtype"] = "сравн"
-                    correction["explanation"] = "Форма степени сравнения прилагательного или наречия"
+                    correction["subtype"] = "compar"
+                    correction["explanation"] = "The form of the degree of comparison of an adjective or adverb"
                 else:
-                    correction["subtype"] = "арт"
-                    correction["explanation"] = f"Пропущен артикль {normalized_correction}"
+                    correction["subtype"] = "art"
+                    correction["explanation"] = f"Skipped article {normalized_correction}"
             elif after_pos == "ADP":
                 start -= 1
                 item[4].insert(0, before[start])
-                correction["subtype"] = "пред"
-                correction["explanation"] = f"Пропущен предлог {normalized_correction}"
+                correction["subtype"] = "prep"
+                correction["explanation"] = f"Skipped preposition {normalized_correction}"
             else:
-                correction["type"] = "А.грамм"
+                correction["type"] = "gram"
                 if i + 1 < len(opcodes) and item[3:][::-1] == opcodes[i + 1][3:]:
                     skip = True
                     _start, _end = opcodes[i + 1][1]
                     item[4].extend(before[end:_start])
                     end = _end
-                    correction["subtype"] = "поряд"
-                    correction["explanation"] = "Порядок слов в предложении"
+                    correction["subtype"] = "svo"
+                    correction["explanation"] = "Word order"
                 elif ("ROOT" in [x.dep_ for x in after_parsed[item[2][0] : item[2][1] + 1]]) or (
                     "nsubj" in [x.dep_ for x in after_parsed[item[2][0] : item[2][1] + 1]]
                 ):
@@ -386,15 +386,15 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         continue
                     item[4].append(before[end])
                     end += 1
-                    correction["subtype"] = "проп"
+                    correction["subtype"] = "omis"
                     correction[
                         "explanation"
-                    ] = "Пропуск слова (подлежащего или сказуемого), влияющий на грамматическую структуру предложения"
+                    ] = "Omission of a word (subject or predicate) that affects the grammatical structure of a sentence"
                 else:
                     start -= 1
                     item[4].insert(0, before[start])
-                    correction["subtype"] = "видовр"
-                    correction["explanation"] = "Видовременная форма глагола"
+                    correction["subtype"] = "tense"
+                    correction["explanation"] = "Tense form of the verb"
             correction["startSelection"] = word_offsets[start][0]
             if end > start:
                 correction["endSelection"] = word_offsets[end - 1][1]

@@ -35,7 +35,8 @@ class LanguageMistakes:
             curr_hum_utt_status.append(
                 {
                     "original_sentence": user_utt,
-                    "corrected_sentence": corrected_text
+                    "corrected_sentence": corrected_text,
+                    "selections": corrected_utt["selections"]
                 }
             )
             self.state.append(curr_hum_utt_status)
