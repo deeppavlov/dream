@@ -19,9 +19,9 @@ ENV TFHUB_CACHE_DIR='/root/tfhub_cache'
 ENV USE_MODEL_PATH='https://tfhub.dev/google/universal-sentence-encoder/1'
 ENV INTENT_DATA_PATH='/data/intent_data_h3.json'
 ENV INTENT_PHRASES_PATH='/data/intent_phrases.json'
+ENV INTENT_MODEL_PATH='/data/models/linear_classifier_h3.h5'
 
 RUN wget http://lnsigo.mipt.ru/export/alexaprize_data/linear_classifier_h3.h5 -q -P /data/models
-ENV INTENT_MODEL_PATH='/data/models/linear_classifier_h3.h5'
 
 RUN python -c "import tensorflow_hub as hub; model=hub.Module('$USE_MODEL_PATH')"
 

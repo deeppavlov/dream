@@ -29,7 +29,7 @@ ARG MOVIE_PLOTS_URL
 
 WORKDIR /data
 RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
-ADD $MOVIE_PLOTS_URL /data/
+RUN wget  $MOVIE_PLOTS_URL -q -P /data/
 RUN tar -xvzf /data/*.tar.gz -C /data/
 WORKDIR /src
 

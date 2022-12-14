@@ -10,9 +10,9 @@ RUN pip install -r /src/requirements.txt
 COPY ./skills/reddit_ner_skill/ /src/
 COPY ./common/ /src/common/
 
-ADD http://files.deeppavlov.ai/alexaprize_data/reddit_ner_skill/entity_database.json /data/entity_database.json
-ADD http://files.deeppavlov.ai/alexaprize_data/reddit_ner_skill/posts.json /data/posts.json
-ADD http://files.deeppavlov.ai/alexaprize_data/reddit_ner_skill/phrases.json /data/phrases.json
+RUN wget http://files.deeppavlov.ai/alexaprize_data/reddit_ner_skill/entity_database.json -q -O /data/entity_database.json
+RUN wget http://files.deeppavlov.ai/alexaprize_data/reddit_ner_skill/posts.json -q -O /data/posts.json
+RUN wget http://files.deeppavlov.ai/alexaprize_data/reddit_ner_skill/phrases.json -q -O /data/phrases.json
 
 WORKDIR /src
 

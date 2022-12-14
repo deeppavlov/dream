@@ -13,11 +13,11 @@ RUN apt update && \
     apt install unzip \
                 wget
 
+RUN apt install -y libsndfile-dev
+
 RUN wget http://files.deeppavlov.ai/deeppavlov_data/nemo/voice_cloning/pretrained.zip && \
     unzip pretrained.zip && \
     rm pretrained.zip
-
-RUN apt install -y libsndfile-dev
 
 RUN wget http://files.deeppavlov.ai/deeppavlov_data/nemo/voice_cloning/gerty_sample.wav
 
