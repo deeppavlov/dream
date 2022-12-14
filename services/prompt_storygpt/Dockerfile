@@ -35,12 +35,12 @@ RUN python -c "import nltk; nltk.download('punkt')"
 RUN python -c "import nltk; nltk.download('stopwords')"
 RUN python -c "from transformers import BartForConditionalGeneration; BartForConditionalGeneration.from_pretrained('${BART_MODEL_NAME}', forced_bos_token_id=0)"
 RUN python -c "from transformers import BartTokenizer; BartTokenizer.from_pretrained('${BART_MODEL_NAME}')"
-RUN python -c "from transformers import GPT2Tokenizer; GPT2Tokenizer.from_pretrained('${FINETUNED_MODEL_NAME}')"
-RUN python -c "from transformers import GPT2LMHeadModel; model = GPT2LMHeadModel.from_pretrained('${FINETUNED_MODEL_NAME}')"
 
 WORKDIR /data
 RUN wget ${MODELS_URL} -O ./finetuned2.tar.gz && \
     tar zxfv ./finetuned2.tar.gz
+RUN python -c "from transformers import GPT2Tokenizer; GPT2Tokenizer.from_pretrained('${FINETUNED_MODEL_NAME}')"
+RUN python -c "from transformers import GPT2LMHeadModel; model = GPT2LMHeadModel.from_pretrained('${FINETUNED_MODEL_NAME}')"
 
 WORKDIR /src
 COPY . /src
