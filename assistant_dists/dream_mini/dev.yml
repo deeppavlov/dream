@@ -52,6 +52,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8125:8125
+  gptj:
+    volumes:
+      - "./services/gptj:/src"
+      - "./common:/src/common"
+    ports:
+      - 8126:8126
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"

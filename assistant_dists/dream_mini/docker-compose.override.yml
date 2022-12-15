@@ -160,6 +160,27 @@ services:
         reservations:
           memory: 2G
 
+  gptj:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8126
+        SERVICE_NAME: gptj
+        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        N_HYPOTHESES_TO_GENERATE: 1
+        CONFIG_NAME: gptj.json
+      context: ./services/gptj/
+    command: flask run -h 0.0.0.0 -p 8126
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 26G
+        reservations:
+          memory: 26G
+
   sentence-ranker:
     env_file: [ .env ]
     build:
