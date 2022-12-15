@@ -50,11 +50,13 @@ services:
     volumes:
       - "./services/dialogpt:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
   image-captioning:

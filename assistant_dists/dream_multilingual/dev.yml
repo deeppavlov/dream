@@ -14,21 +14,25 @@ services:
   gpt2-generator:
     volumes:
       - "./services/gpt2_generator:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8132:8132
   toxic-classification:
     volumes:
       - "./annotators/MultilingualToxicClassification:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8013:8013
   sentiment-classification:
     volumes:
       - "./annotators/MultilingualSentimentClassification:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8024:8024
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
 version: "3.7"

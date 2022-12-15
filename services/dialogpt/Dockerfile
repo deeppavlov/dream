@@ -19,4 +19,4 @@ RUN pip install -r /src/requirements.txt
 COPY ./services/dialogpt/ /src/
 COPY ./common/ ./common/
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
