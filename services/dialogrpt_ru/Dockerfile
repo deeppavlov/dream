@@ -19,8 +19,6 @@ COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN wget -c -q http://files.deeppavlov.ai/deeppavlov_data/${PRETRAINED_MODEL_FNAME} -P /data/
-RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${TOKENIZER_NAME_OR_PATH}');"
-RUN python -c "from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained('${TOKENIZER_NAME_OR_PATH}');"
 
 COPY . /src
 
