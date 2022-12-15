@@ -114,6 +114,7 @@
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1,
                     "url": "http://property-extraction:8129/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_last_bot_dialog",
