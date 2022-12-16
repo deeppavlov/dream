@@ -82,7 +82,7 @@
     },
     "connectors": {},
     "metadata": {
-        "display_name": "Deepy Base",
+        "display_name": "Deepy GoBot Base",
         "author": "DeepPavlov",
         "description": "Goal-oriented version of Lunar assistant. Deepy GoBot Base contains Spelling Preprocessing annotator, Harvesters Maintenance GoBot Skill for goal-oriented responses, and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.",
         "version": "0.1.0",

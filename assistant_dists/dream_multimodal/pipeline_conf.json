@@ -241,7 +241,7 @@
         }
     },
     "metadata": {
-        "display_name": "DREAM Multimodal",
+        "display_name": "Dream Multimodal",
         "author": "DeepPavlov",
         "description": "Multimodal version of DeepPavlov Dream Socialbot.",
         "version": "0.1.0",

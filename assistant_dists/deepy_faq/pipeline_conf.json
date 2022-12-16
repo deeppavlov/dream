@@ -82,7 +82,7 @@
     },
     "connectors": {},
     "metadata": {
-        "display_name": "Deepy Base",
+        "display_name": "Deepy FAQ",
         "author": "DeepPavlov",
         "description": "FAQ version of Lunar assistant. Deepy FAQ contains Spelling Preprocessing annotator, template-based Frequently Asked Questions Skill, and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.",
         "version": "0.1.0",

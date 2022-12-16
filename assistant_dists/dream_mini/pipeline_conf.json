@@ -231,7 +231,7 @@
         }
     },
     "metadata": {
-        "display_name": "DREAM Mini",
+        "display_name": "Dream Mini",
         "author": "DeepPavlov",
         "description": "Mini version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses English DialoGPT model to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.",
         "version": "0.1.0",
