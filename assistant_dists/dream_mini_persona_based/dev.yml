@@ -50,17 +50,20 @@ services:
     volumes:
       - "./services/dialogpt:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
   dialogpt-persona-based:
     volumes:
       - "./services/dialogpt_persona_based:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8131:8131
   relative-persona-extractor:
