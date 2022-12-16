@@ -17,8 +17,6 @@ COPY annotators/speech_function_classifier/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 RUN python -c "import nltk; nltk.download('punkt')"
-RUN python -c "model = 'DeepPavlov/bert-base-cased-conversational';\
-import transformers as tfmr;tfmr.AutoTokenizer.from_pretrained(model);tfmr.AutoModel.from_pretrained(model)"
 
 COPY . ./
 

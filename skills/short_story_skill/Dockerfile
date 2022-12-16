@@ -17,4 +17,4 @@ WORKDIR /src
 
 EXPOSE 8057:8057
 
-CMD gunicorn --workers=1 --name=short_story_skill --bind 0.0.0.0:8057 --timeout=500 server:app
+CMD gunicorn --workers=1 --name=short_story_skill --bind 0.0.0.0:8057 --timeout=1200 server:app
