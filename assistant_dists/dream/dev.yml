@@ -416,9 +416,9 @@ services:
       - "./services/sentence_ranker:/src"
     ports:
       - 8128:8128
-  dialogpt-persona-based:
+  bart-persona-based:
     volumes:
-      - "./services/dialogpt_persona_based:/src"
+      - "./services/bart_persona_based:/src"
       - "./common:/src/common"
     ports:
       - 8131:8131

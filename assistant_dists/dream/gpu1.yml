@@ -193,7 +193,7 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  dialogpt-persona-based:
+  bart-persona-based:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=7

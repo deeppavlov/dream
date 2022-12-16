@@ -57,12 +57,13 @@ services:
       - "./services/sentence_ranker:/src"
     ports:
       - 8128:8128
-  dialogpt-persona-based:
+  bart-persona-based:
     volumes:
-      - "./services/dialogpt_persona_based:/src"
+      - "./services/bart_persona_based:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8131:8131
+      - 1337:1337
   relative-persona-extractor:
     volumes:
       - "./annotators/relative_persona_extractor:/src"

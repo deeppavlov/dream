@@ -53,7 +53,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  dialogpt-persona-based:
+  bart-persona-based:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

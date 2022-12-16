@@ -35,8 +35,6 @@ COPY ./common/ /src/common/
 
 RUN pip install -r /src/requirements.txt --ignore-installed PyYAML
 
-RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
-RUN python -c "from transformers import AutoModelForSeq2SeqLM; AutoModelForSeq2SeqLM.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
 COPY /services/bart_persona_based/ /src
 
