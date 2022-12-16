@@ -29,20 +29,16 @@ ENV BART_MODEL_NAME ${BART_MODEL_NAME}
 ARG FINETUNED_MODEL_NAME
 ENV FINETUNED_MODEL_NAME ${FINETUNED_MODEL_NAME}
 
-WORKDIR /data
-RUN wget ${MODELS_URL} -O ./finetuned2.tar.gz && \
-    tar zxfv ./finetuned2.tar.gz
-WORKDIR /src
-
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 RUN python -c "import nltk; nltk.download('punkt')"
 RUN python -c "import nltk; nltk.download('stopwords')"
-RUN python -c "from transformers import BartForConditionalGeneration; BartForConditionalGeneration.from_pretrained('${BART_MODEL_NAME}', forced_bos_token_id=0)"
-RUN python -c "from transformers import BartTokenizer; BartTokenizer.from_pretrained('${BART_MODEL_NAME}')"
-RUN python -c "from transformers import GPT2Tokenizer; GPT2Tokenizer.from_pretrained('${FINETUNED_MODEL_NAME}')"
-RUN python -c "from transformers import GPT2LMHeadModel; model = GPT2LMHeadModel.from_pretrained('${FINETUNED_MODEL_NAME}')"
 
+WORKDIR /data
+RUN wget ${MODELS_URL} -O ./finetuned2.tar.gz && \
+    tar zxfv ./finetuned2.tar.gz
+
+WORKDIR /src
 COPY . /src
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=3
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

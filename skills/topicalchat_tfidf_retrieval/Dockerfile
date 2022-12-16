@@ -31,6 +31,4 @@ ENV TEST_MODE ${TEST_MODE}
 COPY . /src/
 WORKDIR /src
 
-
-
 CMD gunicorn --workers=2 server:app

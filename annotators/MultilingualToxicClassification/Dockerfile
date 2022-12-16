@@ -10,9 +10,6 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-#RUN python -c "import torch; torch.hub.load_state_dict_from_url('${PRETRAINED_MODEL_NAME_OR_PATH}')"
-#RUN python -c "from transformers import AutoModelForSequenceClassification; AutoModelForSequenceClassification.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
-
 COPY . /src
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

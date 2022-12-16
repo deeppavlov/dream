@@ -15,6 +15,7 @@ RUN bash /scripts/programy_logger_off.sh
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
+RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
@@ -29,7 +30,7 @@ ARG MOVIE_PLOTS_URL
 
 WORKDIR /data
 RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
-ADD $MOVIE_PLOTS_URL /data/
+RUN wget  $MOVIE_PLOTS_URL -q -P /data/
 RUN tar -xvzf /data/*.tar.gz -C /data/
 WORKDIR /src
 
