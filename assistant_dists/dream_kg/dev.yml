@@ -421,15 +421,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
-  entity-extraction-kg:
+  custom-entity-linking:
     volumes:
-      - "./annotators/entity_extraction_kg:/src"
+      - "./annotators/custom_entity_linking:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 9103:9103
-  wiki-parser-kg:
+      - 8131:8131
+  custom-wiki-parser:
+    volumes:
+      - "./annotators/custom_wiki_parser:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 9077:9077
+      - 8132:8132
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"

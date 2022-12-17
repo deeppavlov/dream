@@ -1,0 +1,34 @@
+{
+  "chainer": {
+    "in": ["entity_substr", "entity_tags", "sentences"],
+    "pipe": [
+      {
+        "class_name": "src.entity_linking:EntityLinker",
+        "in": ["entity_substr", "entity_tags", "sentences"],
+        "out": ["entity_ids", "entity_conf", "entity_id_tags"],
+        "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/custom_el_eng_dream",
+        "rank_in_runtime": true,
+        "num_entities_for_bert_ranking": 20,
+        "use_gpu": false,
+        "include_mention": false,
+        "num_entities_to_return": 5,
+        "lemmatize": true,
+        "use_tags": true,
+        "use_descriptions": true,
+        "full_paragraph": true,
+        "return_confidences": true,
+        "lang": "en"
+      }
+    ],
+    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_id_tags"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/bert_small",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    }
+  }
+}

@@ -2,15 +2,18 @@ import logging
 import uuid
 import re
 
-from common.utils import get_named_persons
-from common.personal_info import my_name_is_pattern
-
+import requests
 from flask import Flask, jsonify, request
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+
+from common.utils import get_named_persons
+from common.personal_info import my_name_is_pattern
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
+
+CUSTOM_EL_ADD = os.getenv("CUSTOM_EL_ADD")
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
@@ -100,7 +103,7 @@ def add_any_property(graph, user_id, property_type, property_value):
 
 def get_entity_type(attributes):
     """Extracts DBPedia type from property extraction annotator."""
-    entity_info = attributes['entity_info']
+    entity_info = attributes.get('entity_info', [])
     if not entity_info:
         return 'Misc'
     exact_entity_info = entity_info[list(entity_info.keys())[0]]
@@ -118,20 +121,23 @@ def add_relations_or_properties(utt, user_id):
     attributes = utt.get("annotations", {}).get("property_extraction", {})
     logger.info(f'Attributes: {attributes}')
 
-    if attributes and attributes['triplet']:
-        triplet = attributes['triplet']
-        if triplet['subject'] != 'user':
-            logger.info(no_rel_message)
-            return {}
-        if 'relation' in triplet:
-            entity_kind = get_entity_type(attributes)
-            entity_name = triplet['object']
-            relation = '_'.join(triplet['relation'].split(' ')).upper()
-            add_any_relationship(graph, entity_kind, entity_name, relation, user_id)
-            return triplet
-        else:
-            add_any_property(graph, user_id, triplet['property'], triplet['object'])
-            return triplet
+    if isinstance(attributes, dict):
+        attributes = [attributes]
+    for attribute in attributes:
+        if attribute and attribute['triplet']:
+            triplet = attribute['triplet']
+            if triplet['subject'] != 'user':
+                logger.info(no_rel_message)
+                return {}
+            if 'relation' in triplet:
+                entity_kind = get_entity_type(attribute)
+                entity_name = triplet['object']
+                relation = '_'.join(triplet['relation'].split(' ')).upper()
+                add_any_relationship(graph, entity_kind, entity_name, relation, user_id)
+                return triplet
+            else:
+                add_any_property(graph, user_id, triplet['property'], triplet['object'])
+                return triplet
     logger.info(no_rel_message)
     return {}
 
@@ -175,7 +181,8 @@ def get_result(request):
 
     user_id = str(utt.get("user", {}).get("id", ""))
     user_id = "User/" + user_id
-    existing_ids = [entity["@id"] for entity in graph.get_all_entities()]
+    all_entities = graph.get_all_entities()
+    existing_ids = [entity["@id"] for entity in all_entities]
     logger.info(f"Existing ids: {existing_ids}")
     if user_id in existing_ids:
         logger.info(f'User with id {user_id} already exists!')
@@ -183,8 +190,7 @@ def get_result(request):
         graph.create_entity("User", user_id, [], [])
         logger.info(f'Created User with id: {user_id}')
 
-
-    entity_detection = utt.get("annotations", {}).get("entity_detection", [])
+    entity_detection = utt.get("annotations", {}).get("entity_detection", {})
     entities = entity_detection.get('labelled_entities', [])
     entities = [entity.get('text', 'no entity name') for entity in entities]
     added = []
@@ -196,6 +202,21 @@ def get_result(request):
         added.append(name_result)
     if property_result:
         added.append(property_result)
+
+    all_entities_new = graph.get_all_entities()
+    all_entities_new = [entity for entity in all_entities_new
+                        if (entity["@id"] not in existing_ids and not entity["@id"].startswith("User/"))]
+
+    substr_list, ids_list, tags_list = [], [], []
+    for entity in all_entities_new:
+        if "name" in entity:
+            substr_list.append(entity["name"])
+            ids_list.append(entity["@id"])
+            tags_list.append(entity["@type"])
+    if substr_list:
+        requests.post(CUSTOM_EL_ADD, json={"entity_info": {"entity_substr": substr_list,
+                                                           "entity_ids": ids_list, "tags": tags_list}})
+
     return [{'added_to_graph': added}]
 
 
