@@ -26,7 +26,7 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/entity_linking/requirements.txt /src/requirements.txt
+COPY ./annotators/custom_entity_linking/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 COPY $SRC_DIR /src
@@ -36,4 +36,4 @@ RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8075
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8131

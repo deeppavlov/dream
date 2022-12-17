@@ -31,6 +31,7 @@ def add_entities():
     tags_list = entity_info.get("tags", [])
     el[0].add_custom_entities(entity_substr_list, entity_ids_list, tags_list)
     logger.info(f"added entities {entity_info}")
+    return {}
 
 
 @app.route("/model", methods=["POST"])

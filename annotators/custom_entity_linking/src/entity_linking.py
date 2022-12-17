@@ -41,10 +41,7 @@ class EntityLinker(Component, Serializable):
     def __init__(
         self,
         load_path: str,
-        num_entities_for_bert_ranking: int = 50,
         num_entities_to_return: int = 10,
-        max_text_len: int = 300,
-        max_paragraph_len: int = 150,
         lang: str = "ru",
         use_descriptions: bool = True,
         use_tags: bool = False,
@@ -67,15 +64,7 @@ class EntityLinker(Component, Serializable):
         """
         super().__init__(save_path=None, load_path=load_path)
         self.lemmatize = lemmatize
-        self.tags_filename = tags_filename
-        self.add_info_filename = add_info_filename
-        self.words_dict_filename = words_dict_filename
-        self.ngrams_matrix_filename = ngrams_matrix_filename
-        self.num_entities_for_bert_ranking = num_entities_for_bert_ranking
-        self.entity_ranker = entity_ranker
         self.num_entities_to_return = num_entities_to_return
-        self.max_text_len = max_text_len
-        self.max_paragraph_len = max_paragraph_len
         self.lang = f"@{lang}"
         if self.lang == "@en":
             self.stopwords = set(stopwords.words("english"))
@@ -99,15 +88,19 @@ class EntityLinker(Component, Serializable):
         if self.conn is None:
             if not os.path.exists(self.load_path):
                 os.makedirs(self.load_path)
-            self.conn = sqlite3.connect(str(self.load_path / f"custom_database{i}.db"), check_same_thread=False)
+            self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
             self.cur = self.conn.cursor()
             self.cur.execute("CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
                              "UNINDEXED, tag, tokenize = 'porter ascii');")
         
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
-            self.cur.execute("INSERT INTO inverted_index "
-                             "VALUES (?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag))
-        self.conn.commit()
+            query_str = f"title:{entity_substr} AND entity_id:{entity_id} AND tag:{tag}"
+            query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
+            res = self.cur.execute(query, (query_str,)).fetchall()
+            if not res:
+                self.cur.execute("INSERT INTO inverted_index "
+                                 "VALUES (?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag))
+                self.conn.commit()
 
     def __call__(
         self,
