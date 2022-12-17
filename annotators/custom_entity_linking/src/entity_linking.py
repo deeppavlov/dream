@@ -94,6 +94,7 @@ class EntityLinker(Component, Serializable):
                              "UNINDEXED, tag, tokenize = 'porter ascii');")
         
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
+            entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
             query_str = f"title:{entity_substr} AND entity_id:{entity_id} AND tag:{tag}"
             query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
             res = self.cur.execute(query, (query_str,)).fetchall()
@@ -233,6 +234,7 @@ class EntityLinker(Component, Serializable):
                 entities_scores_list.append(
                     {entity_id: entity_scores for entity_id, entity_scores in zip(entity_ids, scores)}
                 )
+                entity_ids = [entity_id.replace("slash", "/").replace("hyphen", "-") for entity_id in entity_ids]
                 entity_ids_list.append(entity_ids)
                 entity_id_tags_list.append(entity_id_tags)
 

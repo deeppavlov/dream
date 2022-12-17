@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 CUSTOM_EL_ADD = os.getenv("CUSTOM_EL_ADD")
+logger.info(f"URL of custom EL: {CUSTOM_EL_ADD}")
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
@@ -67,24 +68,31 @@ def add_name_property(graph, user_id, names):
     logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
 
 
-def add_any_relationship(graph, entity_kind, entity_name, rel_type, user_id):
+def add_any_relationship(graph, entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets):
     """Creates an entity and a relation between it and the User from property extraction service."""
     entity_kind = entity_kind.replace('_', '').title()
-    new_entity_id = str(uuid.uuid4())
-    new_entity_id = entity_kind + '/' + new_entity_id
-    logger.info(f"Entity type to add: {entity_kind}")
-    graph.ontology.create_entity_kinds(entity_kinds=[entity_kind], parents=[None])
     graph.ontology.create_property_kinds_of_entity_kinds([entity_kind], [["name"]])
 
+    message = ""
     # logger.info(f"All entity Kinds: {graph.ontology.get_all_entity_kinds()}")
-    graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
+    if (entity_name, entity_kind) in entities_with_types:
+        new_entity_id = entities_with_types[(entity_name, entity_kind)]
+        message += f"entity exists: {new_entity_id} --- "
+    else:
+        new_entity_id = str(uuid.uuid4())
+        new_entity_id = entity_kind + '/' + new_entity_id
+        logger.info(f"Entity type to add: {entity_kind}")
+        graph.ontology.create_entity_kinds(entity_kinds=[entity_kind], parents=[None])
+        graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
+        message += f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! "
 
     rel_name = rel_type + f"_{entity_kind.lower()}"
-    graph.ontology.create_relationship_kind("User", rel_name, entity_kind)
-
-    graph.create_relationship(user_id, rel_name, new_entity_id)
-    message = f'Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}!' \
-              f' {entity_name} is connected with User by {rel_type} relationship.'
+    if (user_id, rel_name, new_entity_id) in ex_triplets:
+        message += f"triplet exists: {(rel_name, new_entity_id)}"
+    else:
+        graph.ontology.create_relationship_kind("User", rel_name, entity_kind)
+        graph.create_relationship(user_id, rel_name, new_entity_id)
+        message += f"{entity_name} is connected with User by {rel_type} relationship."
     logger.info(message)
 
 
@@ -116,7 +124,7 @@ def get_entity_type(attributes):
     return 'Misc'
 
 
-def add_relations_or_properties(utt, user_id):
+def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets):
     """Chooses what to add: property, relationship or nothing."""
     no_rel_message = "No relations were found!"
     attributes = utt.get("annotations", {}).get("property_extraction", {})
@@ -134,7 +142,7 @@ def add_relations_or_properties(utt, user_id):
                 entity_kind = get_entity_type(attribute)
                 entity_name = triplet['object']
                 relation = '_'.join(triplet['relation'].split(' ')).upper()
-                add_any_relationship(graph, entity_kind, entity_name, relation, user_id)
+                add_any_relationship(graph, entity_kind, entity_name, relation, user_id, entities_with_types, ex_triplets)
                 return triplet
             else:
                 add_any_property(graph, user_id, triplet['property'], triplet['object'])
@@ -172,6 +180,13 @@ def get_result(request):
     uttrs = request.json.get("utterances", [])
     utt = uttrs[0]
     annotations = uttrs[0].get('annotations', {})
+    custom_el_annotations = annotations.get("custom_entity_linking", [])
+    entities_with_types = {}
+    for entity_info in custom_el_annotations:
+        if entity_info.get("entity_id_tags", []):
+            entities_with_types[(entity_indo["entity_substr"], entity_info["entity_id_tags"][0])] = \
+                entity_info["entity_ids"][0]
+
     logger.info(f"Text: {uttrs[0]['text']}")
     logger.info(f"Property Extraction: {annotations.get('property_extraction', [])}")
 
@@ -185,7 +200,13 @@ def get_result(request):
     all_entities = graph.get_all_entities()
     existing_ids = [entity["@id"] for entity in all_entities]
     logger.info(f"Existing ids: {existing_ids}")
+
+    ex_triplets = []
     if user_id in existing_ids:
+        entity_rel_info = graph.get_relationships_of_entities([user_id])
+        for rel, objects in entity_rel_info:
+            for obj in objects:
+                ex_triplets.append((user_id, rel, obj))
         logger.info(f'User with id {user_id} already exists!')
     else:
         graph.create_entity("User", user_id, [], [])
@@ -198,7 +219,7 @@ def get_result(request):
     name_result = {}
     if entities:
         name_result = name_scenario(utt, user_id)
-    property_result = add_relations_or_properties(utt, user_id)
+    property_result = add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets)
     if name_result:
         added.append(name_result)
     if property_result:

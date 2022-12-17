@@ -316,6 +316,21 @@
                     "annotators.spacy_nounphrases"
                 ]
             },
+            "custom_entity_linking": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://custom-entity-linking:8131/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.ner",
+                    "annotators.entity_detection",
+                    "annotators.spacy_nounphrases"
+                ]
+            },
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
