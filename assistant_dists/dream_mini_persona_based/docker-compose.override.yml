@@ -203,9 +203,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 1.5G
         reservations:
-          memory: 1G
+          memory: 1.5G
 
   relative-persona-extractor:
     env_file: [ .env ]

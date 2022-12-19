@@ -29,12 +29,12 @@ ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
 
-RUN python --version
+RUN python3.10 --version
 
 COPY ./services/bart_persona_based/requirements.txt /src/requirements.txt
 COPY ./common/ /src/common/
 
-RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt --ignore-installed PyYAML
+RUN pip3.10 install -r /src/requirements.txt --ignore-installed PyYAML
 
 
 COPY /services/bart_persona_based/ /src
