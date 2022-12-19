@@ -62,10 +62,8 @@ def generate_response(persona: dict = None, model=None, tokenizer=None, utteranc
         str: next utterance
     """
     vocab_tokens = tokenizer.get_added_vocab()
-    threshhold = 0.2
 
     max_likelihood_sentences = persona["persona"]
-    max_sentence_similarity = persona["max_similarity"]
     max_likelihood_sentences = max_likelihood_sentences[:MAX_PERSONA_SENTENCES]
     max_likelihood_sentences = " ".join(max_likelihood_sentences)
     max_likelihood_sentences = f"{SPECIAL_TOKENS['<persona>']}{max_likelihood_sentences}{SPECIAL_TOKENS['</persona>']}"
@@ -86,36 +84,30 @@ def generate_response(persona: dict = None, model=None, tokenizer=None, utteranc
     history_ids = history_ids.to(device)
 
     bot_input_ids = torch.cat([persona_ids, history_ids], dim=-1)
-    if max_sentence_similarity > threshhold:
-        model_response = model.generate(
-            bot_input_ids,
-            max_length=150,
-            pad_token_id=tokenizer.eos_token_id,
-            do_sample=True,
-            num_beams=2,
-            temperature=0.95,
-            top_k=50,
-            top_p=0.95,
-        )
-    else:
-        model_response = model.generate(
-            bot_input_ids,
-            max_length=150,
-            pad_token_id=tokenizer.eos_token_id,
-            do_sample=True,
-            temperature=0.95,
-            top_k=50,
-            top_p=0.95,
-        )
+
+    model_response = model.generate(
+        bot_input_ids,
+        max_length=150,
+        pad_token_id=tokenizer.eos_token_id,
+        do_sample=True,
+        temperature=0.95,
+        top_k=50,
+        top_p=0.95,
+    )
 
     model_response = model_response.to(device)
     model_response_list = list(model_response[0])
+    bot_response_decode = None
+    if vocab_tokens["</sp_2>"] in model_response_list:
+        end_speaker_index = model_response_list.index(vocab_tokens["</sp_2>"])
+        model_response = model_response[:, : end_speaker_index + 1]
 
-    end_speaker_index = model_response_list.index(vocab_tokens["</sp_2>"])
-    model_response = model_response[:, : end_speaker_index + 1]
-
-    chat_history_ids = model_response
-    bot_response_decode = tokenizer.decode(chat_history_ids[0][len(bot_input_ids[0]) - 1 :], skip_special_tokens=True)
+        chat_history_ids = model_response
+        bot_response_decode = tokenizer.decode(
+            chat_history_ids[0][len(bot_input_ids[0]) - 1 :], skip_special_tokens=True
+        )
+    else:
+        bot_response_decode = ""
 
     return bot_response_decode
 
@@ -133,10 +125,17 @@ def respond():
             persona = (
                 last_annotated_utterances_batch[utt_pos].get("annotations", {}).get("relative_persona_extractor", [])
             )
-
-            response = generate_response(
-                model=model, tokenizer=tokenizer, persona=persona, utterances_histories=utterances_histories
-            )
+            response = ""
+            try:
+                response = generate_response(
+                    model=model,
+                    tokenizer=tokenizer,
+                    persona=persona,
+                    utterances_histories=utterances_histories,
+                )
+            except Exception as e:
+                logger.exception(e)
+                response = ""
 
             if "open_question_personal" in get_intents(last_annotated_utterances_batch[utt_pos]):
                 logger.info("open_question_personal")

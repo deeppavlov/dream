@@ -8,11 +8,12 @@ WORKDIR /src
 
 ARG MODEL_URL
 ENV MODEL_URL ${MODEL_URL}
-RUN mkdir /data
-RUN wget ${MODEL_URL} -q -O /data/model.pth
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+
+RUN mkdir /data
+RUN wget ${MODEL_URL} -q -O /data/model.pth
 
 COPY . /src
 

@@ -7,11 +7,11 @@ ENV N_SENTENCES_OT_RETURN ${N_SENTENCES_OT_RETURN}
 
 RUN mkdir /src
 
-COPY ./annotators/relative_persona_extractor/ /src/
-COPY ./common/ /src/common/
-
 COPY annotators/relative_persona_extractor/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+
+COPY ./annotators/relative_persona_extractor/ /src/
+COPY ./common/ /src/common/
 
 WORKDIR /src
 
