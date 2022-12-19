@@ -39,7 +39,11 @@ DEFAULT_CONFIDENCE = 0.9
 try:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"bart_persona_based device: {device}")
-    model = AutoModelForSeq2SeqLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModelForSeq2SeqLM.from_pretrained(
+        PRETRAINED_MODEL_NAME_OR_PATH,
+        device_map="auto",
+        load_in_8bit=True,
+    )
     model.to(device)
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
 

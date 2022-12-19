@@ -7,4 +7,6 @@ healthcheck==1.3.3
 jinja2<=3.0.3
 Werkzeug<=2.0.3
 transformers==4.25.1
-git+https://github.com/dmitrymailk/persona_bot@77f47700bd76f99d0c1a5d6b83c47f72ad08f5bb#dimweb-persona-bot
+bitsandbytes==0.35.4
+accelerate==0.15.0
+git+https://github.com/dmitrymailk/persona_bot@af2d19685c8810969820556e6fac08a31e694b68#dimweb-persona-bot

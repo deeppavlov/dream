@@ -8,7 +8,7 @@ RUN : \
 	software-properties-common \
 	&& add-apt-repository -y ppa:deadsnakes \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-	python3.8-venv \
+	python3.10 \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& :
@@ -17,9 +17,10 @@ RUN apt-get update && \
 	apt-get upgrade -y && \
 	apt-get install -y git libsqlite3-dev
 
-RUN python3.8 -m venv /venv
+RUN apt-get install python3.10-venv -y
+RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
-
+RUN python3.10 --version
 WORKDIR /src
 
 ARG PRETRAINED_MODEL_NAME_OR_PATH
@@ -33,7 +34,7 @@ RUN python --version
 COPY ./services/bart_persona_based/requirements.txt /src/requirements.txt
 COPY ./common/ /src/common/
 
-RUN pip install -r /src/requirements.txt --ignore-installed PyYAML
+RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt --ignore-installed PyYAML
 
 
 COPY /services/bart_persona_based/ /src
