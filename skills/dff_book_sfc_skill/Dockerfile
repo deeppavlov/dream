@@ -7,23 +7,23 @@ COPY common/dff/requirements.txt .
 RUN pip install -r requirements.txt
 
 # ###################### CUSTOM SECTION ######################################
-# Here you can make changes 
-RUN mkdir /global_data
-ARG QUERY_DICT
-RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
-
+# Here you can make changes
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
+ARG SERVICE_PORT
+ENV SERVICE_PORT ${SERVICE_PORT}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
 
+RUN mkdir /global_data
+ARG QUERY_DICT
+RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
+
+
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
-
-ARG SERVICE_PORT
-ENV SERVICE_PORT ${SERVICE_PORT}
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1

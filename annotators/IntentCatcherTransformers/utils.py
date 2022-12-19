@@ -22,15 +22,17 @@ def get_regexp(intent_phrases_path):
     return regexp
 
 
-def unite_responses(responses_a: List[dict], responses_b: List[dict]):
+def unite_responses(responses_a: List[dict], responses_b: List[dict], all_intents_to_consider):
     assert len(responses_a) == len(responses_b)
     result = []
     for a, b in zip(responses_a, responses_b):
         resp = {}
-        for intent in a:
+        for intent in all_intents_to_consider:
+            a_intent = a.get(intent, {"detected": 0, "confidence": 0.0})
+            b_intent = b.get(intent, {"detected": 0, "confidence": 0.0})
             resp[intent] = {
-                "detected": max(a[intent]["detected"], b[intent]["detected"]),
-                "confidence": max(a[intent]["confidence"], b[intent]["confidence"]),
+                "detected": max(a_intent["detected"], b_intent["detected"]),
+                "confidence": max(a_intent["confidence"], b_intent["confidence"]),
             }
         result.append(resp)
     return result
