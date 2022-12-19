@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
+          spelling-preprocessing:8074, dialogpt:8125, gptj:8125, sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   dff-program-y-skill:
@@ -177,9 +177,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 26G
+          memory: 40G
         reservations:
-          memory: 26G
+          memory: 40G
 
   sentence-ranker:
     env_file: [ .env ]

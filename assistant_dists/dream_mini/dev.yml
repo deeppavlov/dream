@@ -56,6 +56,7 @@ services:
     volumes:
       - "./services/gptj:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8126:8126
   sentence-ranker:
