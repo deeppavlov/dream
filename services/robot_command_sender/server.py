@@ -6,7 +6,7 @@ from os import getenv
 import requests
 import sentry_sdk
 
-# from common.robot import send_robot_command_to_perform
+from common.robot import send_robot_command_to_perform
 from flask import Flask, request, jsonify
 
 
@@ -18,8 +18,6 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
-ROS_FSM_STATUS_ENDPOINT = f"{ROS_FSM_SERVER}/robot_status"
-ROS_FSM_INTENT_ENDPOINT = f"{ROS_FSM_SERVER}/upload_response"
 
 
 @app.route("/send", methods=["POST"])
@@ -27,19 +25,25 @@ def respond():
     st_time = time.time()
     results = []
     annotated_bot_utterances = request.json.get("annotated_bot_utterances", [])
-    for ann_uttr in annotated_bot_utterances:
+    dialog_ids = request.json.get("dialog_ids", [])
+
+    for ann_uttr, dialog_id in zip(annotated_bot_utterances, dialog_ids):
         command = ann_uttr.get("attributes", {}).get("robot_command")
         if command:
             logger.info(f"robot_command_sender: sending to robot:\n{command}")
             try:
-                requests.post(ROS_FSM_INTENT_ENDPOINT, data=json.dumps({"text": command}), timeout=1.0)
-                results += ["Sent"]
+                result = send_robot_command_to_perform(command, ROS_FSM_SERVER, dialog_id)
+                result = "Sent" if result else "Failed"
             except Exception as e:
-                logger.info(f"robot_command_sender: FAILED to send command:\n{e}")
-                results += ["Failed"]
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                result = "Failed"
+
+            results += [result]
+            logger.info(f"robot_command_sender: status of sending:\n{result}")
         else:
             logger.info(
-                f"robot_command_sender was called but NO command found in annotated_bot_utterance: " f"{ann_uttr}"
+                f"robot_command_sender: NO command found in annotated_bot_utterance: " f"{ann_uttr}"
             )
             results += ["Failed"]
 
