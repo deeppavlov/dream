@@ -186,7 +186,6 @@ def respond():
         text if "/alexa" not in orig_text else orig_text for text, orig_text in zip(corrected_sentences, sentences)
     ]
 
-
     logger.info(f"spelling_preprocessing results: {list(zip(sentences, corrected_sentences))}")
 
     total_time = time.time() - st_time
