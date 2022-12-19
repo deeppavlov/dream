@@ -255,7 +255,7 @@ class DummySkillConnector:
                         reverse=True,
                     )
                     for entity_dict in sorted_entities:
-                        if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned"]:
+                        if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned_by_bot"]:
                             selected_entity = entity_dict["name"]
                             break
                     if selected_entity:
