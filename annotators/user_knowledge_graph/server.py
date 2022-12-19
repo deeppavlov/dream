@@ -179,13 +179,15 @@ def get_result(request):
     """Collects all relation & property information from one utterance and adds to graph."""
     uttrs = request.json.get("utterances", [])
     utt = uttrs[0]
-    annotations = uttrs[0].get('annotations', {})
+    annotations = uttrs[0].get("annotations", {})
     custom_el_annotations = annotations.get("custom_entity_linking", [])
     entities_with_types = {}
+    found_kg_ids = []
     for entity_info in custom_el_annotations:
         if entity_info.get("entity_id_tags", []):
             entities_with_types[(entity_indo["entity_substr"], entity_info["entity_id_tags"][0])] = \
                 entity_info["entity_ids"][0]
+            found_kg_ids.append(entity_info["entity_ids"][0])
 
     logger.info(f"Text: {uttrs[0]['text']}")
     logger.info(f"Property Extraction: {annotations.get('property_extraction', [])}")
@@ -201,20 +203,23 @@ def get_result(request):
     existing_ids = [entity["@id"] for entity in all_entities]
     logger.info(f"Existing ids: {existing_ids}")
 
+    kg_parser_annotations = []
     ex_triplets = []
     if user_id in existing_ids:
         entity_rel_info = graph.get_relationships_of_entities([user_id])
         for rel, objects in entity_rel_info:
             for obj in objects:
                 ex_triplets.append((user_id, rel, obj))
-        logger.info(f'User with id {user_id} already exists!')
+                if obj in found_kg_ids:
+                    kg_parser_annotations.append([user_id, rel, obj])
+        logger.info(f"User with id {user_id} already exists!")
     else:
         graph.create_entity("User", user_id, [], [])
-        logger.info(f'Created User with id: {user_id}')
+        logger.info(f"Created User with id: {user_id}")
 
     entity_detection = utt.get("annotations", {}).get("entity_detection", {})
-    entities = entity_detection.get('labelled_entities', [])
-    entities = [entity.get('text', 'no entity name') for entity in entities]
+    entities = entity_detection.get("labelled_entities", [])
+    entities = [entity.get("text", "no entity name") for entity in entities]
     added = []
     name_result = {}
     if entities:
@@ -238,8 +243,9 @@ def get_result(request):
     if substr_list:
         requests.post(CUSTOM_EL_ADD, json={"entity_info": {"entity_substr": substr_list,
                                                            "entity_ids": ids_list, "tags": tags_list}})
+    logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
 
-    return [{'added_to_graph': added}]
+    return [{'added_to_graph': added, "triplets": kg_parser_annotations}]
 
 
 @app.route("/respond", methods=["POST"])

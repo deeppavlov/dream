@@ -347,7 +347,7 @@
             "user_knowledge_graph": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://user-knowledge-graph:8129/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
