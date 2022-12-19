@@ -5,6 +5,11 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
+  files:
+    ports:
+      - 3000:3000
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -49,19 +54,24 @@ services:
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
   image-captioning:
     volumes:
       - "./services/image_captioning:/src"
+      - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8123:8123
+  dff-image-skill:
+    volumes:
+      - "./skills/dff_image_skill:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/file_server:/tmp"
+    ports:
+      - 8188:8188
 version: "3.7"

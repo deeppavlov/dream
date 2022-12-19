@@ -6,6 +6,7 @@ ARG PRETRAINED_MODEL_NAME_OR_PATH
 ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
+ENV FILE_SERVER_URL ${FILE_SERVER_URL}
 
 RUN python -m pip install --upgrade pip
 
@@ -32,10 +33,10 @@ RUN apt-get install wget -y
 
 RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
 
-RUN gdown 1WBQl0WlzvdctslJyLNgedYpRrWAZC69X -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
+RUN wget http://files.deeppavlov.ai/dream_data/image_captioning/caption.pt -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
 
 COPY . /ofa
 
 HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300

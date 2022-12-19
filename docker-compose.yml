@@ -1,7 +1,7 @@
 services:
   agent:
     env_file: [.env]
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
     build:
       context: ./
       dockerfile: dockerfile_agent
@@ -15,4 +15,6 @@ services:
   mongo:
     command: mongod
     image: mongo:4.0.0
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
 version: '3.7'

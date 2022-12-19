@@ -1,0 +1,98 @@
+[
+    [
+        "I would like to have an animal like that. I wonder if it eats a lot.",
+        1,
+        {
+            "dff_image_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 67,
+                "history": {
+                    "25": [
+                        "caption_response",
+                        "animals_node"
+                    ],
+                    "27": [
+                        "caption_response",
+                        "people_node"
+                    ],
+                    "49": [
+                        "caption_response",
+                        "animals_node"
+                    ],
+                    "55": [
+                        "caption_response",
+                        "people_node"
+                    ],
+                    "60": [
+                        "caption_response",
+                        "food_node"
+                    ],
+                    "61": [
+                        "caption_response",
+                        "general_node"
+                    ],
+                    "62": [
+                        "caption_response",
+                        "general_node"
+                    ],
+                    "63": [
+                        "caption_response",
+                        "people_node"
+                    ],
+                    "64": [
+                        "caption_response",
+                        "general_node"
+                    ],
+                    "65": [
+                        "caption_response",
+                        "people_node"
+                    ],
+                    "66": [
+                        "caption_response",
+                        "animals_node"
+                    ],
+                    "67": [
+                        "caption_response",
+                        "animals_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "33bd876f-c168-43bf-913d-c8e3da30e5a8",
+                    "labels": {
+                        "10": [
+                            "caption_response",
+                            "animals_node"
+                        ],
+                        "11": [
+                            "caption_response",
+                            "animals_node"
+                        ]
+                    },
+                    "requests": {
+                        "10": "",
+                        "11": ""
+                    },
+                    "responses": {
+                        "10": "I would like to have an animal like that. I wonder if it eats a lot.",
+                        "11": "I would like to have an animal like that. I wonder if it eats a lot."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]
