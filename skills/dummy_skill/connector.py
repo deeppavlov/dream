@@ -249,7 +249,9 @@ class DummySkillConnector:
                 if entities:
                     selected_entity = ""
                     # reverse so it uses recent entities first
-                    sorted_entities = sorted(entities.values(), key=lambda d: d["human_utterance_index"], reverse=True)
+                    sorted_entities = sorted(entities.values(),
+                                             key=lambda d: d["human_encounters"][-1]["human_utterance_index"],
+                                             reverse=True)
                     for entity_dict in sorted_entities:
                         if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned"]:
                             selected_entity = entity_dict["name"]
