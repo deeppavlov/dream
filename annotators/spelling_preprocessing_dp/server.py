@@ -179,7 +179,7 @@ def respond():
     sentences = request.json["sentences"]
     sentences = [text.lower() for text in sentences]
     if config_name == "brillmoore_wikitypos_en.json":
-        sentences = [preprocess(text) for text in sentences if "/alexa" not in text else text]
+        sentences = [preprocess(text) if "/alexa" not in text else text for text in sentences]
 
     corrected_sentences = spelling_preprocessing_model(sentences)
 
