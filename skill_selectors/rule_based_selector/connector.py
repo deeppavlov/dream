@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 HIGH_PRIORITY_INTENTS = int(getenv("HIGH_PRIORITY_INTENTS", 1))
 RESTRICTION_FOR_SENSITIVE_CASE = int(getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1))
 ALWAYS_TURN_ON_ALL_SKILLS = int(getenv("ALWAYS_TURN_ON_ALL_SKILLS", 0))
-ALWAYS_TURN_ON_GIVEN_SKILL = int(getenv("ALWAYS_TURN_ON_GIVEN_SKILL", 0))
 
 
 class RuleBasedSkillSelectorConnector:
@@ -46,14 +45,14 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr = []
             user_uttr = dialog["human_utterances"][-1]
 
-            if ALWAYS_TURN_ON_ALL_SKILLS:
+            if ALWAYS_TURN_ON_ALL_SKILLS or user_uttr.get("selected_skill", "") == "all":
                 logger.info("Selected skills: ALL")
                 total_time = time.time() - st_time
                 logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
                 # returning empty list of skills means trigger ALL skills for deeppavlov agent
                 asyncio.create_task(callback(task_id=payload["task_id"], response=[]))
                 return
-            elif ALWAYS_TURN_ON_GIVEN_SKILL and user_uttr.get("selected_skill", "") != "":
+            elif user_uttr.get("selected_skill", "") != "":
                 skills_for_uttr = [user_uttr.get("selected_skill", "")]
                 logger.info(f"Selected skills: {skills_for_uttr}")
                 total_time = time.time() - st_time

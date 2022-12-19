@@ -14,7 +14,6 @@ services:
         HIGH_PRIORITY_INTENTS: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
         ALWAYS_TURN_ON_ALL_SKILLS: 0
-        ALWAYS_TURN_ON_GIVEN_SKILL: 0
         LANGUAGE: RU
 
   dff-program-y-skill:
