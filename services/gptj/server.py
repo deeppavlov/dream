@@ -56,11 +56,11 @@ def generate_responses(context, model, tokenizer, continue_last_uttr=False):
     # bot_input_ids = torch.cat(encoded_context, dim=-1)
     logger.info(f"context_1 inside generate_responses seen as: {context}")
     bot_input_ids = tokenizer(context, return_tensors="pt").input_ids
-    #with torch.no_grad():
-    if torch.cuda.is_available():
-        bot_input_ids = bot_input_ids.to("cuda")
-    #generation_params["max_length"] = len(bot_input_ids) + generation_params["max_length"]
-    chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(context)['input_ids'])+40, min_length=8, top_p=0.9, temperature=0.9,do_sample=True, pad_token_id=tokenizer.eos_token_id)
+    with torch.no_grad():
+        if torch.cuda.is_available():
+            bot_input_ids = bot_input_ids.to("cuda")
+        #generation_params["max_length"] = len(bot_input_ids) + generation_params["max_length"]
+        chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(context)['input_ids'])+40, min_length=8, top_p=0.9, temperature=0.9, do_sample=True, pad_token_id=tokenizer.eos_token_id)
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
 
