@@ -427,12 +427,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8131:8131
-  custom-wiki-parser:
-    volumes:
-      - "./annotators/custom_wiki_parser:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8132:8132
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
