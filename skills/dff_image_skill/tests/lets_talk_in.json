@@ -1,6 +1,6 @@
 {
     "human_utter_index_batch": [
-        67
+        71
     ],
     "dialog_batch": [
         {
@@ -9,14 +9,14 @@
                     "text": "",
                     "annotations": {
                         "spelling_preprocessing": "",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
                         "sentseg": {
                             "punct_sent": "",
                             "segments": [
                                 ""
                             ]
-                        },
-                        "badlisted_words": {
-                            "bad_words": false
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -135,23 +135,23 @@
                                     "actor_state": {},
                                     "id": "33bd876f-c168-43bf-913d-c8e3da30e5a8",
                                     "labels": {
-                                        "10": [
+                                        "13": [
+                                            "caption_response",
+                                            "general_node"
+                                        ],
+                                        "14": [
                                             "caption_response",
                                             "animals_node"
-                                        ],
-                                        "9": [
-                                            "caption_response",
-                                            "people_node"
                                         ]
                                     },
                                     "misc": {},
                                     "requests": {
-                                        "10": "",
-                                        "9": ""
+                                        "13": "",
+                                        "14": ""
                                     },
                                     "responses": {
-                                        "10": "I would like to have an animal like that. I wonder if it eats a lot.",
-                                        "9": "Do you enjoy standing with other people?"
+                                        "13": "Cool! Why did you send me {}?",
+                                        "14": "I would like to have an animal like that. I wonder if it eats a lot."
                                     },
                                     "validation": false
                                 },
@@ -200,9 +200,25 @@
                                     "66": [
                                         "caption_response",
                                         "animals_node"
+                                    ],
+                                    "67": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "68": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "69": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "70": [
+                                        "caption_response",
+                                        "animals_node"
                                     ]
                                 },
-                                "previous_human_utter_index": 66,
+                                "previous_human_utter_index": 70,
                                 "shared_memory": {}
                             },
                             "dff_shared_state": {
@@ -318,7 +334,7 @@
                             }
                         },
                         "image_captioning": {
-                            "caption": "a cat standing on a rock next to a body of water",
+                            "caption": "a group of women dancing at a party",
                             "image_id": "42"
                         }
                     },
@@ -344,23 +360,23 @@
                                     "actor_state": {},
                                     "id": "33bd876f-c168-43bf-913d-c8e3da30e5a8",
                                     "labels": {
-                                        "10": [
+                                        "13": [
+                                            "caption_response",
+                                            "general_node"
+                                        ],
+                                        "14": [
                                             "caption_response",
                                             "animals_node"
-                                        ],
-                                        "9": [
-                                            "caption_response",
-                                            "people_node"
                                         ]
                                     },
                                     "misc": {},
                                     "requests": {
-                                        "10": "",
-                                        "9": ""
+                                        "13": "",
+                                        "14": ""
                                     },
                                     "responses": {
-                                        "10": "I would like to have an animal like that. I wonder if it eats a lot.",
-                                        "9": "Do you enjoy standing with other people?"
+                                        "13": "Cool! Why did you send me {}?",
+                                        "14": "I would like to have an animal like that. I wonder if it eats a lot."
                                     },
                                     "validation": false
                                 },
@@ -409,9 +425,25 @@
                                     "66": [
                                         "caption_response",
                                         "animals_node"
+                                    ],
+                                    "67": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "68": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "69": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "70": [
+                                        "caption_response",
+                                        "animals_node"
                                     ]
                                 },
-                                "previous_human_utter_index": 66,
+                                "previous_human_utter_index": 70,
                                 "shared_memory": {}
                             },
                             "dff_shared_state": {
@@ -453,23 +485,23 @@
                 "actor_state": {},
                 "id": "33bd876f-c168-43bf-913d-c8e3da30e5a8",
                 "labels": {
-                    "10": [
+                    "13": [
+                        "caption_response",
+                        "general_node"
+                    ],
+                    "14": [
                         "caption_response",
                         "animals_node"
-                    ],
-                    "9": [
-                        "caption_response",
-                        "people_node"
                     ]
                 },
                 "misc": {},
                 "requests": {
-                    "10": "",
-                    "9": ""
+                    "13": "",
+                    "14": ""
                 },
                 "responses": {
-                    "10": "I would like to have an animal like that. I wonder if it eats a lot.",
-                    "9": "Do you enjoy standing with other people?"
+                    "13": "Cool! Why did you send me {}?",
+                    "14": "I would like to have an animal like that. I wonder if it eats a lot."
                 },
                 "validation": false
             },
@@ -518,9 +550,25 @@
                 "66": [
                     "caption_response",
                     "animals_node"
+                ],
+                "67": [
+                    "caption_response",
+                    "animals_node"
+                ],
+                "68": [
+                    "caption_response",
+                    "general_node"
+                ],
+                "69": [
+                    "caption_response",
+                    "general_node"
+                ],
+                "70": [
+                    "caption_response",
+                    "animals_node"
                 ]
             },
-            "previous_human_utter_index": 66,
+            "previous_human_utter_index": 70,
             "shared_memory": {}
         }
     ],

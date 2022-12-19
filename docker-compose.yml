@@ -1,7 +1,7 @@
 services:
   agent:
     env_file: [.env]
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run -ch http_client --cors'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=1223251509:AAEW-yDBWEJ1kaEdSkXOGjmNdkfFnMkfyYs  agent.pipeline_config=assistant_dists/dream_mini/pipeline_conf.json''
     build:
       context: ./
       dockerfile: dockerfile_agent
