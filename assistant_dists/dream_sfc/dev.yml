@@ -395,12 +395,14 @@ services:
     volumes:
       - "./annotators/speech_function_classifier:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8108:8108
   speech-function-predictor:
     volumes:
       - "./annotators/speech_function_predictor:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8107:8107
 version: "3.7"

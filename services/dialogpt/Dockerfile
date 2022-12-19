@@ -13,14 +13,10 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 ARG N_HYPOTHESES_TO_GENERATE
 ENV N_HYPOTHESES_TO_GENERATE ${N_HYPOTHESES_TO_GENERATE}
 
-
 COPY ./services/dialogpt/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
-
-RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
-RUN python -c "from transformers import AutoModelForCausalLM; AutoModelForCausalLM.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"
 
 COPY ./services/dialogpt/ /src/
 COPY ./common/ ./common/
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

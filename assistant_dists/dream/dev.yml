@@ -60,6 +60,7 @@ services:
       - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8014:8014
   badlisted-words:
@@ -190,12 +191,14 @@ services:
     volumes:
       - "./annotators/kbqa:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8072:8072
   entity-linking:
     volumes:
       - "./annotators/entity_linking:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8075:8075
   wiki-parser:
@@ -225,6 +228,7 @@ services:
     volumes:
       - "./services/text_qa:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8078:8078
   knowledge-grounding:
@@ -267,6 +271,7 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
   midas-classification:
@@ -322,6 +327,7 @@ services:
       - "./annotators/fact_retrieval:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8100:8100
   dff-funfact-skill:
@@ -370,6 +376,7 @@ services:
     volumes:
       - "./annotators/entity_detection:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8103:8103
   dff-coronavirus-skill:
@@ -398,28 +405,33 @@ services:
   storygpt:
     volumes:
       - "./services/storygpt:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8126:8126
   prompt-storygpt:
     volumes:
       - "./services/prompt_storygpt:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8127:8127
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
   dialogpt-persona-based:
     volumes:
       - "./services/dialogpt_persona_based:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8131:8131
   relative-persona-extractor:
