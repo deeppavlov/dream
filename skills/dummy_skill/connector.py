@@ -245,6 +245,7 @@ class DummySkillConnector:
                 last_utt = dialog["human_utterances"][-1]
                 user = last_utt["user"].get("attributes", {})
                 entities = user.get("entities", {})
+                entities = {ent: val for ent, val in entities.items() if len(val["human_encounters"])}
                 response = ""
                 if entities:
                     selected_entity = ""
