@@ -45,16 +45,16 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr = []
             user_uttr = dialog["human_utterances"][-1]
 
-            if ALWAYS_TURN_ON_ALL_SKILLS or user_uttr["attributes"].get("selected_skill", "") == "all":
+            if ALWAYS_TURN_ON_ALL_SKILLS or user_uttr["attributes"].get("selected_skills", None) in ["all", []]:
                 logger.info("Selected skills: ALL")
                 total_time = time.time() - st_time
                 logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
                 # returning empty list of skills means trigger ALL skills for deeppavlov agent
                 asyncio.create_task(callback(task_id=payload["task_id"], response=[]))
                 return
-            elif user_uttr["attributes"].get("selected_skill", "") != "":
+            elif len(user_uttr["attributes"].get("selected_skills", [])) > 0:
                 # can consider list os skill names or single skill name
-                skills_for_uttr = user_uttr["attributes"].get("selected_skill", "")
+                skills_for_uttr = user_uttr["attributes"].get("selected_skills", [])
                 if isinstance(skills_for_uttr, str):
                     skills_for_uttr = [skills_for_uttr]
                 logger.info(f"Selected skills: {skills_for_uttr}")
