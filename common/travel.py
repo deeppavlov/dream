@@ -1,5 +1,5 @@
 import re
-from common.utils import get_topics, topic_groups
+from common.utils import get_topics, TOPIC_GROUPS
 
 
 OPINION_REQUESTS_ABOUT_TRAVELLING = [
@@ -161,7 +161,7 @@ OKAY_ACKNOWLEDGEMENT_PHRASES = [
 
 def about_travel(annotated_utterance):
     found_topics = get_topics(annotated_utterance, probs=False, which="all")
-    if any([topic in found_topics for topic in topic_groups["travel"]]):
+    if any([topic in found_topics for topic in TOPIC_GROUPS["travel"]]):
         return True
     elif re.findall(TRAVELLING_TEMPLATE, annotated_utterance["text"]):
         return True

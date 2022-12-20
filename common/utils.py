@@ -227,7 +227,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
     ],
 }
 
-topic_groups = {
+TOPIC_GROUPS = {
     "food": ["Food", "Food_Drink"],
     "books": ["Entertainment_Books", "Literature", "Books&Literature"],
     "music": ["Music", "Entertainment_Music"],
@@ -247,12 +247,12 @@ topic_groups = {
 }
 
 
-multilabel_tasks = [
+MULTILABEL_TASKS = [
     "emotion_classification",
     "toxic_classification",
 ]
 
-dp_thresholds = {
+DP_THRESHOLDS = {
     "Food": 0,
     "Movies_TV": 0,
     "Leisure": 0,
@@ -271,8 +271,8 @@ dp_thresholds = {
     "MassTransit": 0.3,
 }
 
-thresholds = {
-    "deeppavlov_topics": {class_: dp_thresholds.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]}
+THRESHOLDS = {
+    "deeppavlov_topics": {class_: DP_THRESHOLDS.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]}
 }
 
 midas_classes = {
@@ -629,12 +629,12 @@ def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
         old_style_toxic = all(
             [model_name == "toxic_classification", "factoid_classification" not in combined_annotations]
         )
-        if model_name in multilabel_tasks or old_style_toxic:
+        if model_name in MULTILABEL_TASKS or old_style_toxic:
             answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
         elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
             answer_labels = ["is_conversational"]
         elif model_name == "deeppavlov_topics":
-            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=thresholds["deeppavlov_topics"])
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=THRESHOLDS["deeppavlov_topics"])
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
