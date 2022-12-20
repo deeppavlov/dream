@@ -1,3 +1,5 @@
 fastapi==0.61.1
 python-multipart==0.0.5
 num2words==0.5.10
+resampy==0.3.1
+urllib3==1.25.4

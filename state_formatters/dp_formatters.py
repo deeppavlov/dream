@@ -718,8 +718,8 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     human_utter_index = len(dialog["human_utterances"]) - 1
     attributes = {"entities": dialog.get("human", {}).get("attributes", {}).get("entities", {})}
 
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=2)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="clean_sent")
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=5, human_last_turns=2)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
 
     # rm all execpt human_utterances, bot_utterances
     # we need only: text, annotations, active_skill

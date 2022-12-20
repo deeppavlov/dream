@@ -1,0 +1,186 @@
+services:
+  agent:
+    restart: unless-stopped
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+      - ".:/dp-agent"
+    ports:
+      - ${AGENT_PORT}:4242
+  kbqa:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  text-qa:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-atomic:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-conceptnet:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  knowledge-grounding:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  midas-classification:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  combined-classification:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  mongo:
+    restart: unless-stopped
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spacy-nounphrases:
+    restart: unless-stopped
+  dff-program-y-skill:
+    restart: unless-stopped
+  personality-catcher:
+    restart: unless-stopped
+  sentseg:
+    restart: unless-stopped
+  convers-evaluation-selector:
+    restart: unless-stopped
+  sentrewrite:
+    restart: unless-stopped
+  dff-intent-responder-skill:
+    restart: unless-stopped
+  intent-catcher:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  badlisted-words:
+    restart: unless-stopped
+  dff-program-y-dangerous-skill:
+    restart: unless-stopped
+  dff-movie-skill:
+    restart: unless-stopped
+  dff-gaming-skill:
+    restart: unless-stopped
+  ner:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  eliza:
+    restart: unless-stopped
+  convert-reddit:
+    restart: unless-stopped
+  personal-info-skill:
+    restart: unless-stopped
+  asr:
+    restart: unless-stopped
+  misheard-asr:
+    restart: unless-stopped
+  dff-book-skill:
+    restart: unless-stopped
+  emotion-skill:
+    restart: unless-stopped
+  dummy-skill-dialog:
+    restart: unless-stopped
+  meta-script-skill:
+    restart: unless-stopped
+  small-talk-skill:
+    restart: unless-stopped
+  game-cooperative-skill:
+    restart: unless-stopped
+  dff-program-y-wide-skill:
+    restart: unless-stopped
+  news-api-skill:
+    restart: unless-stopped
+  news-api-annotator:
+    restart: unless-stopped
+  factoid-qa:
+    restart: unless-stopped
+  entity-linking:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  wiki-parser:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  spelling-preprocessing:
+    restart: unless-stopped
+  dff-grounding-skill:
+    restart: unless-stopped
+  dff-friendship-skill:
+    restart: unless-stopped
+  entity-storer:
+    restart: unless-stopped
+  knowledge-grounding-skill:
+    restart: unless-stopped
+  dff-animals-skill:
+    restart: unless-stopped
+  dff-travel-skill:
+    restart: unless-stopped
+  dff-sport-skill:
+    restart: unless-stopped
+  dff-food-skill:
+    restart: unless-stopped
+  dff-science-skill:
+    restart: unless-stopped
+  dff-music-skill:
+    restart: unless-stopped
+  fact-retrieval:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-bot-persona-skill:
+    restart: unless-stopped
+  dff-funfact-skill:
+    restart: unless-stopped
+  dff-gossip-skill:
+    restart: unless-stopped
+  dff-wiki-skill:
+    restart: unless-stopped
+  topic-recommendation:
+    restart: unless-stopped
+  user-persona-extractor:
+    restart: unless-stopped
+  wiki-facts:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  dff-art-skill:
+    restart: unless-stopped
+  entity-detection:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  convers-evaluator-annotator:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  dff-coronavirus-skill:
+    restart: unless-stopped
+  dff-weather-skill:
+    restart: unless-stopped
+  dialogpt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  dff-template-skill:
+    restart: unless-stopped
+version: '3.7'

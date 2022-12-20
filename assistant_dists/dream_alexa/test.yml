@@ -1,0 +1,122 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  kbqa:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  text-qa:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-atomic:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  comet-conceptnet:
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  knowledge-grounding:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  midas-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  combined-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spacy-nounphrases:
+  dff-program-y-skill:
+  personality-catcher:
+  sentseg:
+  convers-evaluation-selector:
+  sentrewrite:
+  dff-intent-responder-skill:
+  intent-catcher:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  badlisted-words:
+  dff-program-y-dangerous-skill:
+  dff-movie-skill:
+  dff-gaming-skill:
+  ner:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  convert-reddit:
+  personal-info-skill:
+  dff-book-skill:
+  dff-weather-skill:
+  emotion-skill:
+  dummy-skill-dialog:
+  meta-script-skill:
+  small-talk-skill:
+  game-cooperative-skill:
+  dff-program-y-wide-skill:
+  news-api-skill:
+  news-api-annotator:
+  factoid-qa:
+  entity-linking:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  wiki-parser:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  spelling-preprocessing:
+  dff-grounding-skill:
+  dff-friendship-skill:
+  entity-storer:
+  knowledge-grounding-skill:
+  dff-animals-skill:
+  dff-travel-skill:
+  dff-sport-skill:
+  dff-food-skill:
+  dff-science-skill:
+  dff-music-skill:
+  fact-random:
+  fact-retrieval:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  dff-bot-persona-skill:
+  dff-funfact-skill:
+  dff-gossip-skill:
+  dff-wiki-skill:
+  topic-recommendation:
+  user-persona-extractor:
+  wiki-facts:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  dff-art-skill:
+  entity-detection:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  convers-evaluator-annotator:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-coronavirus-skill:
+  dialogpt:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  dff-template-skill:
+version: '3.7'

@@ -17,11 +17,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8006:8006
-  rake-keywords:
-    volumes:
-      - "./annotators/rake_keywords:/src"
-    ports:
-      - 8007:8007
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -215,8 +210,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -272,7 +266,6 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
@@ -387,35 +380,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8061:8061
-  dff-short-story-skill:
-    volumes:
-      - "./skills/dff_short_story_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8057:8057
   dff-weather-skill:
     volumes:
       - "./skills/dff_weather_skill:/src"
       - "./common:/src/common"
     ports:
       - 8037:8037
-  midas-predictor:
-    volumes:
-      - "./annotators/midas_predictor:/src"
-    ports:
-      - 8121:8121
-  storygpt:
-    volumes:
-      - "./services/storygpt:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8126:8126
-  prompt-storygpt:
-    volumes:
-      - "./services/prompt_storygpt:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8127:8127
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
@@ -423,25 +393,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
-  sentence-ranker:
-    volumes:
-      - "./services/sentence_ranker:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8128:8128
-  dialogpt-persona-based:
-    volumes:
-      - "./services/dialogpt_persona_based:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8131:8131
-  relative-persona-extractor:
-    volumes:
-      - "./annotators/relative_persona_extractor:/src"
-      - "./common:/src/common"
-    ports:
-      - 8133:8133
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

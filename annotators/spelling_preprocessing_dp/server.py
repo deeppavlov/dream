@@ -182,9 +182,14 @@ def respond():
         sentences = [preprocess(text) for text in sentences]
 
     corrected_sentences = spelling_preprocessing_model(sentences)
+    corrected_sentences = [
+        text if "/alexa" not in orig_text else orig_text for text, orig_text in zip(corrected_sentences, sentences)
+    ]
+
+    logger.info(f"spelling_preprocessing results: {list(zip(sentences, corrected_sentences))}")
 
     total_time = time.time() - st_time
-    logger.info(f"spelling_preprocessing exec time: {total_time:.3f}s")
+    logger.info(f"spelling_preprocessing exec time: {total_time:.3f}")
     return jsonify(corrected_sentences)
 
 
