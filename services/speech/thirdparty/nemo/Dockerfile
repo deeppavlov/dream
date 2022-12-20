@@ -2,7 +2,8 @@ FROM pytorch/pytorch:1.4-cuda10.1-cudnn7-devel
 
 WORKDIR /app
 
-RUN apt update && apt install -y libsndfile-dev
+RUN rm -r /etc/apt/sources.list.d && \
+    apt update && apt install -y libsndfile-dev
 
 COPY . .
 

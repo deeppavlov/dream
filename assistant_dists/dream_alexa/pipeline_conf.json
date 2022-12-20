@@ -83,8 +83,7 @@
                     "sentseg",
                     "ner",
                     "sentrewrite",
-                    "spacy_nounphrases",
-                    "speech_function_classifier"
+                    "spacy_nounphrases"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -135,17 +134,6 @@
                     "skills"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
-            },
-            "speech_function_classifier": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://speech-function-classifier:8108/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:speech_function_bot_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["bot_annotator_selector", "post_annotators.sentseg"],
-                "state_manager_method": "add_annotation_prev_bot_utt"
             }
         },
         "annotators": {
@@ -153,7 +141,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://spelling-preprocessing:8074/respond"
+                    "url": "http://spelling-preprocessing:8074/response"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -378,7 +366,7 @@
                 "state_manager_method": "update_attributes",
                 "previous_services": [
                     "annotators.combined_classification",
-                    "annotators.intent_catcher"
+                    "annotators.entity_detection"
                 ]
             },
             "news_api_annotator": {
@@ -425,31 +413,6 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ]
-            },
-            "speech_function_classifier": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://speech-function-classifier:8108/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "previous_services": [
-                    "annotators.sentseg",
-                    "post_annotators.speech_function_classifier"
-                ]
-            },
-            "speech_function_predictor": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://speech-function-predictor:8107/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:speech_function_predictor_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["annotators.speech_function_classifier"],
-                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {
@@ -669,19 +632,6 @@
                     "url": "http://dff-weather-skill:8037/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_weather_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dff_short_story_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 3,
-                    "url": "http://dff-short-story-skill:8057/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -952,9 +902,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-book-sfc-skill:8034/respond"
+                    "url": "http://dff-book-skill:8032/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_book_sfc_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_book_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -968,6 +918,19 @@
                     "url": "http://dff-art-skill:8117/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_art_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dialogpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dialogpt:8125/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -989,28 +952,6 @@
             }
         },
         "post_skill_selector_annotators": {
-            "speech_function_classifier": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://speech-function-classifier:8108/annotation"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:speech_function_annotation",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "speech_function_predictor": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://speech-function-predictor:8107/annotation"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:speech_function_hypotheses_predictor_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["post_skill_selector_annotators.speech_function_classifier"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
             "badlisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -1032,7 +973,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
+                "previous_services": [
+                    "skills"
+                ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
             "spacy_nounphrases": {
@@ -1051,7 +994,7 @@
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://entity-detection:8103/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
@@ -1064,7 +1007,7 @@
             "midas_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://midas-classification:8090/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list_last_uttr",
@@ -1077,7 +1020,7 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
@@ -1105,9 +1048,9 @@
         }
     },
     "metadata": {
-        "display_name": "Dream Speech-Function-based",
+        "display_name": "Dream Alexa",
         "author": "DeepPavlov",
-        "description": "SFC version of DeepPavlov Dream Socialbot.",
+        "description": "Almost the same version of DeepPavlov Dream Socialbot participated in Alexa Prize",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "50 GB",
