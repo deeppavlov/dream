@@ -7,17 +7,31 @@ services:
       - "./skills/:/dp-agent/skills/"
       - "./common/:/dp-agent/common/"
     environment:
-      WAIT_HOSTS: "spelling_preprocessing:3551, harvesters_maintenance_gobot_skill:3552,
+      WAIT_HOSTS: "spelling_preprocessing:8074, harvesters_maintenance_gobot_skill:3552,
         rule_based_response_selector:3553, emotion_classification:3554, dff-program-y-skill:3555, entity_linking:3556,
         intent-catcher:3557, sentseg:3558"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
-  spelling_preprocessing:
+  spelling-preprocessing:
+    env_file: [.env]
     build:
-      context: annotators/spelling_preprocessing
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3551 --timeout=100
-    ports:
-      - 3551:3551
+      args:
+        CONFIG: brillmoore_wikitypos_en.json
+        PORT: 8074
+        SRC_DIR: annotators/spelling_preprocessing_dp
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: EN
+      context: ./
+      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8074
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 6.5G
+        reservations:
+          memory: 6.5G
 
   harvesters_maintenance_gobot_skill:
     build:

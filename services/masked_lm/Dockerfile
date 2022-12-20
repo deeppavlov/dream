@@ -12,12 +12,9 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN python -c 'from transformers import BertTokenizer; BertTokenizer.from_pretrained("bert-base-uncased");'
-RUN python -c 'from transformers import BertForMaskedLM; BertForMaskedLM.from_pretrained("bert-base-uncased");'
-
 COPY . /src
 
 HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
