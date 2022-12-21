@@ -328,7 +328,7 @@ def get_last_state(ctx: Context, actor: Actor) -> str:
 
 def add_smth_to_response_attributes(ctx: Context, actor: Actor, smth_key=None, smth_value=None):
     if not ctx.validation and not (smth_key is None or smth_value is None):
-        ctx.misc["agent"][smth_key] = smth_value
+        ctx.misc["agent"]["response"].update({smth_key: smth_value})
 
 
 def get_dialog_id(ctx: Context, actor: Actor) -> dict:
