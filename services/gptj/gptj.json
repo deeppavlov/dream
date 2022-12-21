@@ -1,5 +1,5 @@
 {
-  "max_length":40,
+  "max_length":60,
   "min_length":8,
   "top_p":0.9,
   "temperature":0.9,

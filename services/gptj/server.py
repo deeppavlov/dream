@@ -32,7 +32,6 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("gptj is set to run on cuda")
-        logger.info(f"{PRETRAINED_MODEL_NAME_OR_PATH} is model name")
 
     logger.info("gptj is ready")
 except Exception as e:
@@ -52,7 +51,7 @@ def generate_responses(instruction, context, model, tokenizer, continue_last_utt
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
-        chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(dialog_context)['input_ids'])+40, min_length=8, top_p=0.9, temperature=0.9, do_sample=True, pad_token_id=tokenizer.eos_token_id, num_return_sequences=3)
+        chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(dialog_context)['input_ids'])+generation_params["max_length"], min_length=8, top_p=0.9, temperature=0.9, do_sample=True, pad_token_id=tokenizer.eos_token_id, num_return_sequences=3)
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
@@ -65,8 +64,7 @@ def generate_responses(instruction, context, model, tokenizer, continue_last_utt
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    contexts = request.json.get("utterances_histories", [])
-    logger.info(f"contexts seen as: {contexts}")
+    contexts = request.json.get("dialog_context", [])
     try:
         responses = []
         confidences = []
