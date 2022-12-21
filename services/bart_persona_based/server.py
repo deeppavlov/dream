@@ -16,9 +16,7 @@ from common.utils import get_intents
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
@@ -107,9 +105,7 @@ def respond():
     try:
         for utt_pos in range(len(last_annotated_utterances_batch)):
             persona = (
-                last_annotated_utterances_batch[utt_pos]
-                .get("annotations", {})
-                .get("relative_persona_extractor", [])
+                last_annotated_utterances_batch[utt_pos].get("annotations", {}).get("relative_persona_extractor", [])
             )
 
             response = generate_response(
@@ -119,9 +115,7 @@ def respond():
                 utterances_histories=utterances_histories,
             )
 
-            if "open_question_personal" in get_intents(
-                last_annotated_utterances_batch[utt_pos]
-            ):
+            if "open_question_personal" in get_intents(last_annotated_utterances_batch[utt_pos]):
                 logger.info("open_question_personal")
                 responses.append([response])
                 confidences.append([SUPER_CONFIDENCE])
