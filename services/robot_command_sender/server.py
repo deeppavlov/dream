@@ -24,7 +24,7 @@ ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
 def respond():
     st_time = time.time()
     results = []
-    annotated_bot_utterances = request.json.get("annotated_bot_utterances", [])
+    annotated_bot_utterances = request.json.get("bot_utterances", [])
     dialog_ids = request.json.get("dialog_ids", [])
 
     for ann_uttr, dialog_id in zip(annotated_bot_utterances, dialog_ids):

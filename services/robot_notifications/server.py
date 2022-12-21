@@ -24,16 +24,15 @@ def respond():
     st_time = time.time()
     results = []
     dialogs = request.json.get("dialogs", [])
-    dialog_ids = request.json.get("dialog_ids", [])
 
-    for dialog, dialog_id in zip(dialogs, dialog_ids):
+    for dialog in dialogs:
         command = dialog["human"]["attributes"].get("performing_command")
 
         if command:
             logger.info(f"robot_notifications: found command `{command}` sent to robot")
             result = False
             try:
-                result = check_if_command_performed(command, ROS_FSM_SERVER, dialog_id)
+                result = check_if_command_performed(command, ROS_FSM_SERVER, dialog.get("dialog_id", "unknown"))
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
