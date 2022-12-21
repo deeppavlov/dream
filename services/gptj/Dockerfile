@@ -14,7 +14,7 @@ ARG N_HYPOTHESES_TO_GENERATE
 ENV N_HYPOTHESES_TO_GENERATE ${N_HYPOTHESES_TO_GENERATE}
 
 
-COPY ./requirements.txt /src/requirements.txt
+COPY ./services/gptj/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 # RUN python -c "from transformers import AutoTokenizer; AutoTokenizer.from_pretrained('${PRETRAINED_MODEL_NAME_OR_PATH}');"

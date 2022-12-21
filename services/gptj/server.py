@@ -25,7 +25,6 @@ MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
-generation_params["num_return_sequences"] = 3
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -45,27 +44,22 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer, continue_last_uttr=False):
-    # encoded_context = []
-    # for uttr in context[-MAX_HISTORY_DEPTH:-1]:
-    #     encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
-    # if continue_last_uttr:
-    #     encoded_context += [tokenizer.encode(context[-1] + " ", return_tensors="pt")]
-    # else:
-    #     encoded_context += [tokenizer.encode(context[-1] + " " + tokenizer.eos_token, return_tensors="pt")]
-    # bot_input_ids = torch.cat(encoded_context, dim=-1)
-    logger.info(f"context_1 inside generate_responses seen as: {context}")
-    bot_input_ids = tokenizer(context, return_tensors="pt").input_ids
+def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
+    outputs = []
+    dialog_context = instruction + '\n' + '\n'.join(context) + '\n' + 'AI:'
+    logger.info(f"context_1 inside generate_responses seen as: {[dialog_context]}")
+    bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
-        #generation_params["max_length"] = len(bot_input_ids) + generation_params["max_length"]
-        chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(context)['input_ids'])+40, min_length=8, top_p=0.9, temperature=0.9, do_sample=True, pad_token_id=tokenizer.eos_token_id)
+        chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(dialog_context)['input_ids'])+40, min_length=8, top_p=0.9, temperature=0.9, do_sample=True, pad_token_id=tokenizer.eos_token_id, num_return_sequences=3)
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
-
-    output = tokenizer.decode(chat_history_ids[0], skip_special_tokens=True)
-    return output
+    for result in chat_history_ids:
+        output = tokenizer.decode(result, skip_special_tokens=True)
+        result_cut = output.replace(dialog_context + ' ', '').split('\n')[0]
+        outputs.append(result_cut)
+    return outputs
 
 
 @app.route("/respond", methods=["POST"])
@@ -77,25 +71,17 @@ def respond():
         responses = []
         confidences = []
         for context in contexts:
-            curr_responses = []
-            curr_confidences = []
             logger.info(f"context_1 seen as: {context}")
-            outputs = generate_responses(context, model, tokenizer)
-            # for response in outputs:
-            #     if len(response) > 3:
-            #         # drop too short responses
-            #         curr_responses += [response]
-            #         curr_confidences += [DEFAULT_CONFIDENCE]
-            #     else:
-            #         curr_responses += [""]
-            #         curr_confidences += [ZERO_CONFIDENCE]
-            if len(outputs) > 3:
-                # drop too short responses
-                responses += [outputs]
-                confidences += [DEFAULT_CONFIDENCE]
-            else:
-                responses += [""]
-                confidences += [ZERO_CONFIDENCE]
+            outputs = generate_responses("""""", context, model, tokenizer)
+            logger.info(f"outputs: {outputs}")
+            for response in outputs:
+                if len(response) > 3:
+                    # drop too short responses
+                    responses += [response]
+                    confidences += [DEFAULT_CONFIDENCE]
+                else:
+                    responses += [""]
+                    confidences += [ZERO_CONFIDENCE]
 
     except Exception as exc:
         logger.exception(exc)
@@ -104,34 +90,5 @@ def respond():
         confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"dialogpt exec time: {total_time:.3f}s")
+    logger.info(f"gptj exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))
-
-
-@app.route("/continue", methods=["POST"])
-def continue_last_uttr():
-    st_time = time.time()
-    contexts = request.json.get("utterances_histories", [])
-
-    try:
-        responses = []
-        for context in contexts:
-            curr_responses = []
-            outputs = generate_responses(context, model, tokenizer, continue_last_uttr=True)
-            for response in outputs:
-                if len(response) > 3:
-                    # drop too short responses
-                    curr_responses += [response]
-                else:
-                    curr_responses += [""]
-
-            responses += [curr_responses]
-
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
-        responses = [[""]] * len(contexts)
-
-    total_time = time.time() - st_time
-    logger.info(f"gptj continue exec time: {total_time:.3f}s")
-    return jsonify(responses)

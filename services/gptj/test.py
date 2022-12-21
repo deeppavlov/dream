@@ -9,25 +9,18 @@ def test_respond():
     print('1')
     url = "http://0.0.0.0:8126/respond"
     print('2')
-    # contexts = [["hi", "hi. how are you?"], ["let's chat about movies", "cool. what movies do you like?"]]
-    # gold_result = [["I'm good, how are you?", 0.9], ["I like the new one.", 0.9]]
-    result = requests.post(url, json={"utterances_histories": ['Instruction: you are a chatbot. Chat with a human. ']}).json()
-    # assert [
-    #     len(sample[0]) > 0 and all([len(text) > 0 for text in sample[0]]) and all([conf > 0.0 for conf in sample[1]])
-    #     for sample in result
-    # ], f"Got\n{result}\n, but expected:\n{gold_result}"
+    instruction = '''Instruction: You are a travel guide bot. You are informative, creative, and know a lot about landmarks.
+Give an answer to the human's question.'''
+    contexts = [["Hello, who are you?", "I am Marcus, your travel guide. How can I help you today?",
+    "Where can I spend an evening in Beirut?", "You can catch a play at Baalbeck International Festival, or go for a sailing trip on the Mediterranean Sea.", 
+    "Where can I have some fun in Goa?", "Goa has peaceful beaches and fun-filled pubs/clubs.",
+    "Where should I go in Goa if I want to drink some cocktails?"]]
+    result = requests.post(url, json={"utterances_histories": contexts}).json()
+    assert [
+        all(len(sample[0]) > 0 for sample in result)
+    ], f"Got\n{result}\n, something is wrong"
     print('Success')
     print(result)
-
-    # url = "http://0.0.0.0:8126/continue"
-
-    # contexts = [["hi", "hi. how are"], ["let's chat about movies", "cool. what movies do you"]]
-    # gold_result = [["I'm good, how are you?", 0.9], ["I like the new one.", 0.9]]
-    # result = requests.post(url, json={"utterances_histories": contexts}).json()
-    # assert [
-    #     all([len(text) > 0 for text in sample]) for sample in result
-    # ], f"Got\n{result}\n, but expected:\n{gold_result}"
-    # print("Success")
 
 
 if __name__ == "__main__":
