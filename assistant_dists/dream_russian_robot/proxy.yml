@@ -54,15 +54,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:9203
       - PORT=8103
 
-  convers-evaluation-selector:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:9009
-      - PORT=8009
-
   dialogpt:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
