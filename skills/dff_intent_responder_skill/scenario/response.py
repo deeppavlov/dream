@@ -22,7 +22,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         dialog["seen"] = dialog["called_intents"][intention]
         funcs = response_funcs.get_respond_funcs()[intention]
         response = funcs(ctx, actor, intention)
-        if isinstance(response, list):
+        if not isinstance(response, str):
             conf = deepcopy(response[1])
             human_attr = deepcopy(response[2])
             bot_attr = deepcopy(response[3])
