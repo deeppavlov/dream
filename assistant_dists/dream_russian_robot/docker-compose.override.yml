@@ -289,7 +289,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8135
-        ROS_FSM_SERVER: http://0.0.0.0:8137
+        ROS_FSM_SERVER: http://robot-fake-server:8137
       context: .
       dockerfile: ./services/robot_command_sender/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -307,7 +307,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8136
-        ROS_FSM_SERVER: http://0.0.0.0:8137
+        ROS_FSM_SERVER: http://robot-fake-server:8137
       context: .
       dockerfile: ./services/robot_notifications/Dockerfile
     command: flask run -h 0.0.0.0 -p 8136
