@@ -1,5 +1,8 @@
 FROM python:3.9
 
+ARG SERVICE_PORT
+ENV SERVICE_PORT ${SERVICE_PORT}
+
 RUN mkdir /src
 
 COPY ./services/robot_fake_server/requirements.txt /src/requirements.txt
