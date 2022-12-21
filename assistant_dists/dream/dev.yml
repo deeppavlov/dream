@@ -421,7 +421,7 @@ services:
       - "./services/bart_persona_based:/src"
       - "./common:/src/common"
     ports:
-      - 8131:8131
+      - 8140:8140
   relative-persona-extractor:
     volumes:
       - "./annotators/relative_persona_extractor:/src"
