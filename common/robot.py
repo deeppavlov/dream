@@ -16,7 +16,7 @@ def check_if_valid_robot_command(command, service_url, dialog_id, timeout=1.0):
 
 def send_robot_command_to_perform(command, service_url, dialog_id, timeout=1.0):
     result = requests.post(
-        f"{service_url}/upload_response",
+        f"{service_url}/perform_command",
         data=json.dumps({"command": command, "dialog_id": dialog_id}),
         timeout=timeout
     )

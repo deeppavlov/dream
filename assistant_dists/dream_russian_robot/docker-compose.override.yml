@@ -64,7 +64,7 @@ services:
         SERVICE_NAME: dff_intent_responder_skill
         INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_robot_RU.json
         LANGUAGE: RU
-        ROS_FSM_SERVER: http://172.17.0.1:5000
+        ROS_FSM_SERVER: http://0.0.0.0:8137
       context: .
       dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
@@ -289,7 +289,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8135
-        ROS_FSM_SERVER: http://172.17.0.1:5000
+        ROS_FSM_SERVER: http://0.0.0.0:8137
       context: .
       dockerfile: ./services/robot_command_sender/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -307,10 +307,27 @@ services:
     build:
       args:
         SERVICE_PORT: 8136
-        ROS_FSM_SERVER: http://172.17.0.1:5000
+        ROS_FSM_SERVER: http://0.0.0.0:8137
       context: .
       dockerfile: ./services/robot_notifications/Dockerfile
     command: flask run -h 0.0.0.0 -p 8136
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 50M
+
+  robot-fake-server:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8137
+      context: .
+      dockerfile: ./services/robot_fake_server/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8137
     environment:
       - FLASK_APP=server
     deploy:
