@@ -248,10 +248,10 @@ class RuleBasedSkillSelectorConnector:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             # asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_language_practice_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_language_practice_skill", "dff_mistakes_review_skill"]))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_language_practice_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_language_practice_skill", "dff_mistakes_review_skill"]))

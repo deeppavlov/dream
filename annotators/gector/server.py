@@ -91,6 +91,7 @@ def handler(instance):
                     change_end += 1
                 elem[2], elem[4] = (change_start, change_end), corr_words[change_start:change_end]
             # сохраняем ответы
+            logger.info(f"word_bounds: {word_bounds}")
             corrections.extend(classify_changes(new_opcodes, orig_sent["text"], corr_sent, word_bounds, orig_essay))
             corrected_paragraph_sents.append({"text": corr_sent, "words": corr_words})
             paragraph_index_maps.append(orig_corr_index_map)

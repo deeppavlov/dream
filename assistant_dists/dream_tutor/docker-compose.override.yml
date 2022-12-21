@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, sentseg:8011, convers-evaluation-selector:8009,
           badlisted-words:8018, language-mistakes-tracker:8129, gector:2102,
-          dff-language-practice-skill:8130, dff-template-skill:8120"
+          dff-language-practice-skill:8130, dff-mistakes-review-skill:8131, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -96,6 +96,23 @@ services:
       context: .
       dockerfile: skills/dff_language_practice_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8130 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+    env_file:
+    - .env
+
+  dff-mistakes-review-skill:
+    build:
+      args:
+        SERVICE_NAME: dff_mistakes_review_skill
+        SERVICE_PORT: 8131
+      context: .
+      dockerfile: skills/dff_mistakes_review_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8131 --reload
     deploy:
       resources:
         limits:
