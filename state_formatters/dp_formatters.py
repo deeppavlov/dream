@@ -799,6 +799,10 @@ def dff_language_practice_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_language_practice_skill")
 
 
+def dff_mistakes_review_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_mistakes_review_skill")
+
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
@@ -1064,4 +1068,9 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
             "subject": "eng"
         }
     }
+    response = [{"input_data": [data]}]
+    import json
+    json_object = json.dumps(response, indent=4)
+    with open("sample_gector.json", "w") as outfile:
+        outfile.write(json_object)
     return [{"input_data": [data]}]

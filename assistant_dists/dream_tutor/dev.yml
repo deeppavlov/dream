@@ -34,6 +34,12 @@ services:
     volumes:
     - ./skills/dff_language_practice_skill:/src
     - ./common:/src/common
+  dff-mistakes-review-skill:
+    ports:
+    - 8131:8131
+    volumes:
+    - ./skills/dff_mistakes_review_skill:/src
+    - ./common:/src/common
   mongo:
     ports:
     - 27017:27017

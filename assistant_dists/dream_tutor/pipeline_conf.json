@@ -203,6 +203,19 @@
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
+            },
+            "dff_mistakes_review_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-mistakes-review-skill:8131/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_mistakes_review_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
             }
         },
         "post_skill_selector_annotators": {

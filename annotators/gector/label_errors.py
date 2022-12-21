@@ -2,11 +2,15 @@ import difflib
 import os
 import re
 from string import punctuation
+import logging
 
 import spacy
 from cp_data_readers.utils import _word_tokenize
 from gector.gec_model import GecBERTModel
 from sacremoses import MosesDetokenizer
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # для этого есть функция is_punctuation в utils ридера, замените
 punct = punctuation + "«»—…“”*№–"
@@ -218,6 +222,8 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
     corrections = []
     skip = False
     for i, item in enumerate(opcodes):
+        logger.info(f"item: {item}")
+        logger.info(f"word_offsets: {word_offsets}")
         if skip:
             skip = False
             continue
@@ -234,11 +240,11 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
             if normalized_error in ENG_PRONOUNS and normalized_correction in ENG_PRONOUNS:
                 if normalized_error == normalized_correction:
                     correction["type"] = "spell"
-                    correction["explanation"] = "Spelling mistake."
+                    correction["explanation"] = "spelling"
                 else:
                     correction["type"] = "gram"
                     correction["subtype"] = "pron"
-                    correction["explanation"] = "Pronoun"
+                    correction["explanation"] = "pronoun"
             elif all(not re.search("\w*[.,?!]\s*\w+", x) for x in item[3]) and all(
                 not re.search("\w+[.,?!]", x) for x in item[3]
             ):
@@ -246,10 +252,10 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     if "'s" in item[3][0] or "'s" in item[4][0]:
                         correction["type"] = "gram"
                         correction["subtype"] = "poss"
-                        correction["explanation"] = "The form of the possessive case of a noun"
+                        correction["explanation"] = "form of the possessive case of a noun"
                     elif normalized_error == normalized_correction or normalized_error not in words:
                         correction["type"] = "spell"
-                        correction["explanation"] = "Spelling mistake."
+                        correction["explanation"] = "spelling"
                     else:
                         before_pos = before_parsed[item[1][0]].pos_
                         after_pos = after_parsed[item[2][0]].pos_
@@ -263,21 +269,21 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             elif after_parsed[item[2][0]].lemma_ in FP_LEX_VERBS_TO_GRAM:
                                 correction["type"] = "gram"
                                 correction["subtype"] = "tense"
-                                correction["explanation"] = "Tense form of the verb"
+                                correction["explanation"] = "verb tense"
                             else:
                                 correction["type"] = "lex"
                                 correction["subtype"] = "context"
                                 correction[
                                     "explanation"
-                                ] = "Lexical mistake. Incorrect use of the word in context"
+                                ] = "You used the word which was not quite suitable in this context."
                         elif before_pos == after_pos == "ADP":
                             correction["type"] = "gram"
                             correction["subtype"] = "prep"
-                            correction["explanation"] = "Preposition"
+                            correction["explanation"] = "preposition"
                         elif after[item[2][0]] in ENG_MODAL_VERBS:
                             correction["type"] = "gram"
                             correction["subtype"] = "mod"
-                            correction["explanation"] = "Modal verb"
+                            correction["explanation"] = "modal verb"
                         elif any(x in punct for x in item[4][0]):
                             continue
                         elif (before_parsed[item[1][0]].tag_ == "NN" and after_parsed[item[2][0]].tag_ == "NNS") or (
@@ -287,29 +293,29 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                                 continue
                             correction["type"] = "gram"
                             correction["subtype"] = "plur"
-                            correction["explanation"] = "Plural form"
+                            correction["explanation"] = "plural form"
                         else:
                             correction["type"] = "gram"
                             correction["subtype"] = "tense"
-                            correction["explanation"] = "Tense form of the verb"
+                            correction["explanation"] = "verb tense"
                 elif len(item[3]) < len(item[4]):
                     if normalized_correction in ENG_ARTICLES:
                         correction["type"] = "gram"
                         correction["subtype"] = "art"
-                        correction["explanation"] = "Article"
+                        correction["explanation"] = "article"
                     else:
                         correction["type"] = "gram"
                         correction["subtype"] = "tense"
-                        correction["explanation"] = "Tense form of the verb"
+                        correction["explanation"] = "verb tense"
                 else:
                     if normalized_error in ENG_ARTICLES:
                         correction["type"] = "gram"
                         correction["subtype"] = "art"
-                        correction["explanation"] = "Article"
+                        correction["explanation"] = "article"
                     else:
                         correction["type"] = "gram"
                         correction["subtype"] = "tense"
-                        correction["explanation"] = "Tense form of the verb"
+                        correction["explanation"] = "verb tense"
         elif "delete" == item[0]:
             if not item[3] and not item[4]:
                 continue
@@ -322,26 +328,26 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     if item[4][-1] in ENG_ADJ_COMP or item[4][-1].endswith("est"):
                         correction["subtype"] = "comparative"
                     else:
-                        correction["subtype"] = "art"
-                        correction["explanation"] = "Article"
+                        correction["subtype"] = "extra art"
+                        correction["explanation"] = "You used an extra article"
                 elif item[3][0] in punct:
                     start -= 1
                     item[4].insert(0, before[start])
                     correction["type"] = "punct"
                     continue  # выключили пунктуацию
                 elif spacy_model(item[3][0])[0].pos_ == "ADP":
-                    correction["subtype"] = "prep"
-                    correction["explanation"] = "Preposition"
+                    correction["subtype"] = "extra prep"
+                    correction["explanation"] = "You used an extra preposition."
                 else:
                     correction["subtype"] = "tense"
-                    correction["explanation"] = "Tense form of the verb"
+                    correction["explanation"] = "verb tense"
             else:
                 if spacy_model(item[3][0])[0].pos_ == "ADP":
-                    correction["subtype"] = "prep"
-                    correction["explanation"] = "Preposition"
+                    correction["subtype"] = "extra prep"
+                    correction["explanation"] = "You used an extra preposition."
                 else:
                     correction["subtype"] = "tense"
-                    correction["explanation"] = "Tense form of the verb"
+                    correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
             correction["endSelection"] = word_offsets[end - 1][1]
             correction["correction"] = md.detokenize(item[4])
@@ -361,15 +367,15 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                 end += 1
                 if item[4][-1] in ENG_ADJ_COMP or item[4][-1].endswith("est"):
                     correction["subtype"] = "compar"
-                    correction["explanation"] = "The form of the degree of comparison of an adjective or adverb"
+                    correction["explanation"] = "form of the degree of comparison"
                 else:
-                    correction["subtype"] = "art"
-                    correction["explanation"] = f"Skipped article {normalized_correction}"
+                    correction["subtype"] = "skip art"
+                    correction["explanation"] = f"You skipped the article '{normalized_correction}'"
             elif after_pos == "ADP":
                 start -= 1
                 item[4].insert(0, before[start])
-                correction["subtype"] = "prep"
-                correction["explanation"] = f"Skipped preposition {normalized_correction}"
+                correction["subtype"] = "skip prep"
+                correction["explanation"] = f"You skipped the preposition '{normalized_correction}'"
             else:
                 correction["type"] = "gram"
                 if i + 1 < len(opcodes) and item[3:][::-1] == opcodes[i + 1][3:]:
@@ -378,7 +384,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     item[4].extend(before[end:_start])
                     end = _end
                     correction["subtype"] = "svo"
-                    correction["explanation"] = "Word order"
+                    correction["explanation"] = "word order"
                 elif ("ROOT" in [x.dep_ for x in after_parsed[item[2][0] : item[2][1] + 1]]) or (
                     "nsubj" in [x.dep_ for x in after_parsed[item[2][0] : item[2][1] + 1]]
                 ):
@@ -389,12 +395,12 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["subtype"] = "omis"
                     correction[
                         "explanation"
-                    ] = "Omission of a word (subject or predicate) that affects the grammatical structure of a sentence"
+                    ] = f"You missed the word '{normalized_correction}'"
                 else:
                     start -= 1
                     item[4].insert(0, before[start])
                     correction["subtype"] = "tense"
-                    correction["explanation"] = "Tense form of the verb"
+                    correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
             if end > start:
                 correction["endSelection"] = word_offsets[end - 1][1]
