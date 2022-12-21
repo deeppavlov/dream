@@ -1,12 +1,9 @@
-import json
 import logging
 import time
 from os import getenv
 
-import requests
 import sentry_sdk
 
-from common.robot import send_robot_command_to_perform
 from flask import Flask, request, jsonify
 
 
@@ -27,6 +24,7 @@ def respond_is_command_valid():
         results = {"result": False}
     else:
         results = {"result": True}
+    logger.info(f"fake-robot-server `is_command_valid` results: {results}")
 
     total_time = time.time() - st_time
     logger.info(f"fake-robot-server `is_command_valid` exec time: {total_time:.3f}s")
@@ -42,6 +40,7 @@ def respond_perform_command():
         results = {"result": False}
     else:
         results = {"result": True}
+    logger.info(f"fake-robot-server `perform_command` results: {results}")
 
     total_time = time.time() - st_time
     logger.info(f"fake-robot-server `perform_command` exec time: {total_time:.3f}s")
@@ -57,6 +56,7 @@ def respond_is_command_performed():
         results = {"result": False}
     else:
         results = {"result": True}
+    logger.info(f"fake-robot-server `is_command_performed` results: {results}")
 
     total_time = time.time() - st_time
     logger.info(f"fake-robot-server `is_command_performed` exec time: {total_time:.3f}s")

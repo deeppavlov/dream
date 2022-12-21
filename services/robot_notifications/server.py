@@ -40,12 +40,12 @@ def respond():
                 # command was completed, so remove it from human attributes
                 results += [{"human_attributes": {"performing_command": None}}]
             else:
-                # command is not completed, so keep it in human attributes
-                results += [{"human_attributes": {"performing_command": command}}]
+                # command is not completed, so do not update human attributes
+                results += [{"human_attributes": {}}]
             logger.info(f"robot_notifications: status of command `{command}` performance: `{result}`")
         else:
             logger.info("robot_notifications: NO command found in human attributes")
-            results += [{}]
+            results += [{"human_attributes": {}}]
 
     total_time = time.time() - st_time
     logger.info(f"robot_notifications exec time: {total_time:.3f}s")
