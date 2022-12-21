@@ -49,6 +49,7 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: RU
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
