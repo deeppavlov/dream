@@ -104,6 +104,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8136:8136
+  robot-fake-server:
+    volumes:
+      - "./services/robot_fake_server:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
