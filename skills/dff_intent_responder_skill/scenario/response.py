@@ -47,7 +47,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
     elif conf == 0.0:
         return response
-    return response, conf, human_attr, bot_attr, attr
+    return [[response, conf, human_attr, bot_attr, attr]]
 
 
 def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
