@@ -5,10 +5,10 @@ ENV ROS_FSM_SERVER ${ROS_FSM_SERVER}
 
 RUN mkdir /src
 
-COPY ./services/robot_command_sender/requirements.txt /src/requirements.txt
+COPY ./services/robot_notifications/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-COPY ./services/robot_command_sender /src/
+COPY ./services/robot_notifications /src/
 COPY ./common/ /src/common/
 WORKDIR /src
 
