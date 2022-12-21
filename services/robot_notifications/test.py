@@ -7,9 +7,18 @@ def main():
     request_data = {
         "dialogs": [
             {
+                "dialog_ids": "test_dialog_id",
                 "human": {
                     "attributes": {
                         "performing_command": "move_forward_10"
+                    }
+                }
+            },
+            {
+                "dialog_ids": "test_dialog_id",
+                "human": {
+                    "attributes": {
+                        "performing_command": "move_backward_10"
                     }
                 }
             }
@@ -18,7 +27,7 @@ def main():
 
     result = requests.post(url, json=request_data).json()
     print(result)
-    gold_result = [{"human_attributes": {}}]
+    gold_result = [{"human_attributes": {}}, {"human_attributes": {}}]
 
     assert result == gold_result, f"Got\n{result}\n, but expected:\n{gold_result}"
     print("Success")
