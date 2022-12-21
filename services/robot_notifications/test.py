@@ -2,21 +2,23 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8136/check_notifications"
+    url = "http://0.0.0.0:8136/check"
 
     request_data = {
-        "annotated_bot_utterances": [
+        "dialogs": [
             {
-                "text": "Moving forward for 10 meters",
-                "confidence": 1.0,
-                "attributes": {"robot_command": "move_forward_10"},
+                "human": {
+                    "attributes": {
+                        "performing_command": "move_forward_10"
+                    }
+                }
             }
         ]
     }
 
     result = requests.post(url, json=request_data).json()
     print(result)
-    gold_result = ["Failed"]
+    gold_result = [{"human_attributes": {}}]
 
     assert result == gold_result, f"Got\n{result}\n, but expected:\n{gold_result}"
     print("Success")
