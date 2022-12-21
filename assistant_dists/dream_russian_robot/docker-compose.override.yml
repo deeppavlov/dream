@@ -64,7 +64,7 @@ services:
         SERVICE_NAME: dff_intent_responder_skill
         INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_robot_RU.json
         LANGUAGE: RU
-        ROS_FSM_SERVER: http://0.0.0.0:8137
+        ROS_FSM_SERVER: http://robot-fake-server:8137
       context: .
       dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
