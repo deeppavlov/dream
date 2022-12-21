@@ -558,7 +558,7 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
             segments = [dialog["bot_utterances"][-1]["text"]]
             return [{"last_utterances": [segments]}]
     else:
-        return [{"last_utterances": [[]]}]
+        return [{"last_utterances": [[""]]}]
 
 
 def wp_formatter_dialog(dialog: Dict):
