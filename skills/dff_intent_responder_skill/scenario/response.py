@@ -1,6 +1,7 @@
 import logging
 import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
+from copy import deepcopy
 
 from df_engine.core import Actor, Context
 from common.utils import high_priority_intents
@@ -14,13 +15,19 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     intention, confidence = get_detected_intents(annotated_utterance)
     logger.info(f"Detected intents: {intention}")
 
-    response = ""
+    response, conf, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
     if intention is not None and confidence > 0 and intention in response_funcs.get_respond_funcs():
         logger.debug(f"Intent is defined as {intention}")
         dialog = int_ctx.get_dialog(ctx, actor)
         dialog["seen"] = dialog["called_intents"][intention]
         funcs = response_funcs.get_respond_funcs()[intention]
         response = funcs(ctx, actor, intention)
+        if isinstance(response, list):
+            conf = deepcopy(response[1])
+            human_attr = deepcopy(response[2])
+            bot_attr = deepcopy(response[3])
+            attr = deepcopy(response[3])
+            response = deepcopy(response[0])
         # Special formatter which used in AWS Lambda to identify what was the intent
         while "#+#" in response:
             response = response[: response.rfind(" #+#")]
@@ -38,8 +45,9 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
     if response == "":
         logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
-
-    return response
+    elif conf == 0.0:
+        return response
+    return response, conf, human_attr, bot_attr, attr
 
 
 def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:

@@ -152,8 +152,7 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
             response = "I did not get tracked object. Please repeat the command."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="command_to_perform", smth_value=command)
-        return response
+        return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
 
@@ -187,8 +186,7 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
                 response = "Turning around clockwise."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="command_to_perform", smth_value=command)
-        return response
+        return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
 
@@ -210,8 +208,7 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
             response = "Moving forward."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="command_to_perform", smth_value=command)
-        return response
+        return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
 
@@ -233,8 +230,7 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
             response = "Moving backward."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="command_to_perform", smth_value=command)
-        return response
+        return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
 
@@ -247,8 +243,7 @@ def open_door_respond(ctx: Context, actor: Actor, intention: str):
         response = "Opening the door."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="command_to_perform", smth_value=command)
-        return response
+        return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
 
@@ -275,7 +270,6 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
             response = "I did not get target object. Please repeat the command."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        int_ctx.add_smth_to_response_attributes(ctx, actor, smth_key="command_to_perform", smth_value=command)
-        return response
+        return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
