@@ -9,12 +9,12 @@ def main():
             {
                 "text": "Moving forward for 10 meters",
                 "confidence": 1.0,
-                "attributes": {"robot_command": "move_forward_10"},
+                "attributes": {"command_to_perform": "move_forward_10"},
             },
             {
                 "text": "Moving backward for 10 meters",
                 "confidence": 1.0,
-                "attributes": {"robot_command": "move_backward_10"},
+                "attributes": {"command_to_perform": "move_backward_10"},
             },
         ],
         "dialog_ids": ["test_dialog_id", "test_dialog_id"],

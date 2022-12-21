@@ -25,7 +25,7 @@ def respond():
     dialog_ids = request.json.get("dialog_ids", [])
 
     for ann_uttr, dialog_id in zip(annotated_bot_utterances, dialog_ids):
-        command = ann_uttr.get("attributes", {}).get("robot_command")
+        command = ann_uttr.get("attributes", {}).get("command_to_perform")
         if command:
             logger.info(f"robot_command_sender: command `{command}` is being sent to robot")
             result = False
