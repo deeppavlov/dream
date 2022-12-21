@@ -19,7 +19,5 @@ RUN pip install -r requirements.txt
 COPY annotators/combined_classification/ ./
 COPY common/ common/
 
-RUN pip install -r requirements.txt
-
 CMD gunicorn --workers=1 --bind 0.0.0.0:8087 --timeout=1200 server:app
 
