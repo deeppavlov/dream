@@ -332,4 +332,4 @@ def add_smth_to_response_attributes(ctx: Context, actor: Actor, smth_key=None, s
 
 
 def get_dialog_id(ctx: Context, actor: Actor) -> dict:
-    return "unknown" if ctx.validation else ctx.misc["agent"]["get_dialog_id"]
+    return "unknown" if ctx.validation else ctx.misc["agent"]["dialog_id"]
