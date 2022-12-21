@@ -18,10 +18,6 @@ def main():
         for request_data in request_datas:
             result = requests.post(f"{url}/{endpoint}", json=request_data).json()
             print(result)
-            gold_result = [{"human_attributes": {}}]
-            assert result == gold_result, f"Got\n{result}\n, but expected:\n{gold_result}"
-    print("Success")
-
 
 if __name__ == "__main__":
     main()
