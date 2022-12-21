@@ -64,6 +64,16 @@
             }
         },
         "annotators": {
+            "robot_notifications": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://robot-notifications:8136/check"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "update_attributes"
+            },
             "spacy_annotator": {
                 "connector": {
                     "protocol": "http",
@@ -321,7 +331,7 @@
                 "previous_services": [
                     "response_selectors"
                 ],
-                "state_manager_method": "add_annotation_prev_bot_utt"
+                "state_manager_method": "update_attributes"
             }
         }
     }

@@ -98,6 +98,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
+  robot-notifications:
+    volumes:
+      - "./services/robot_notifications:/src"
+      - "./common:/src/common"
+    ports:
+      - 8136:8136
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
