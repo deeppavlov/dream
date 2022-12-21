@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:1337/respond"
+    url = "http://0.0.0.0:8140/respond"
 
     test_data = {
         "last_annotated_utterances": [
