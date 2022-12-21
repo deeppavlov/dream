@@ -1,0 +1,54 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  convers-evaluation-selector:
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  intent-catcher:
+    volumes:
+      - "./annotators/IntentCatcherTransformers:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8014:8014
+  badlisted-words:
+    volumes:
+      - "./annotators/BadlistedWordsDetector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+  spelling-preprocessing:
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
+  gptj:
+    volumes:
+      - "./services/gptj:/src"
+      - "./common:/src/common"
+    ports:
+      - 8126:8126
+  dff-gptj-skill:
+    volumes:
+      - "./skills/dff_gptj_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8134:8134
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+    ports:
+      - 8128:8128
+version: "3.7"

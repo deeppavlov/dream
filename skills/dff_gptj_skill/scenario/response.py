@@ -45,26 +45,21 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_human_attrs += [human_attr]
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
-            logger.info(f"dff-gptj-skill: {reply}")
 
     request_data = compose_data_for_dialogpt(ctx, actor)
-    logger.info(f"request_data seen as: {request_data}")
     if len(request_data) > 0:
-        response = requests.post(GPTJ_SERVICE_URL, json={"utterances_histories": [request_data]}, timeout=10)
+        response = requests.post(GPTJ_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=10)
         hypotheses = response.json()
     else:
         hypotheses = []
 
     for hyp in hypotheses:
-        logger.info(f"dff-gptj-skill hyp: {hyp}")
         if hyp[0][-1] not in [".", "?", "!"]:
             hyp += "."
-        logger.info(f"dff-gptj-skill hyp: {hyp[0]}")
         gathering_responses(hyp[0], 0.99, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""
-    logger.info(f"curr_responses: {curr_responses}")
     return int_rsp.multi_response(
         replies=curr_responses,
         confidences=curr_confidences,

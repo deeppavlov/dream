@@ -242,14 +242,14 @@ class RuleBasedSkillSelectorConnector:
                 if prev_active_skill != "dff_short_story_skill":
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
-
+            skills_for_uttr.append("dff_gptj_skill")
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_gptj_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_gptj_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
