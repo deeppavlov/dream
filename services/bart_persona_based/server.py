@@ -8,15 +8,10 @@ from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from dimweb_persona_bot.dataloaders.seq2seq_samplers.seq2seq_samplers_hypothesis_2 import (
-    H2Seq2SeqInferencePersonaSampleV1,
-)
 from dimweb_persona_bot.hyperparameters.causal_modeling_hyperparameters import (
     H2PersonaChatHyperparametersV1,
 )
 from dimweb_persona_bot.inference.seq2seq_bots import DialogBotV2
-import torch
-
 from common.utils import get_intents
 
 
