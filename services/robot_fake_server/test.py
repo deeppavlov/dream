@@ -5,22 +5,16 @@ def main():
     url = "http://0.0.0.0:8137"
 
     request_datas = [
-        {
-            "command": "move_backward_10",
-            "dialog_ids": "test_dialog_id"
-        },
-        {
-            "command": "move_forward_10",
-            "dialog_ids": "test_dialog_id"
-        }
+        {"command": "move_backward_10", "dialog_ids": "test_dialog_id"},
+        {"command": "move_forward_10", "dialog_ids": "test_dialog_id"},
     ]
     gold_results = [
-        {'result': True},
-        {'result': False},
-        {'result': True},
-        {'result': False},
-        {'result': True},
-        {'result': False}
+        {"result": True},
+        {"result": False},
+        {"result": True},
+        {"result": False},
+        {"result": True},
+        {"result": False},
     ]
     i = 0
     for endpoint in ["is_command_valid", "perform_command", "is_command_performed"]:

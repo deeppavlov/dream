@@ -4,9 +4,7 @@ import requests
 
 def check_if_valid_robot_command(command, service_url, dialog_id, timeout=1.0):
     result = requests.post(
-        f"{service_url}/is_command_valid",
-        json={"command": command, "dialog_id": dialog_id},
-        timeout=timeout
+        f"{service_url}/is_command_valid", json={"command": command, "dialog_id": dialog_id}, timeout=timeout
     )
     if result.status_code == 200:
         if result.json().get("result", False):
@@ -16,9 +14,7 @@ def check_if_valid_robot_command(command, service_url, dialog_id, timeout=1.0):
 
 def send_robot_command_to_perform(command, service_url, dialog_id, timeout=1.0):
     result = requests.post(
-        f"{service_url}/perform_command",
-        json={"command": command, "dialog_id": dialog_id},
-        timeout=timeout
+        f"{service_url}/perform_command", json={"command": command, "dialog_id": dialog_id}, timeout=timeout
     )
     if result.status_code == 200:
         if result.json().get("result", False):
@@ -28,9 +24,7 @@ def send_robot_command_to_perform(command, service_url, dialog_id, timeout=1.0):
 
 def check_if_command_performed(command, service_url, dialog_id, timeout=1.0):
     result = requests.post(
-        f"{service_url}/is_command_performed",
-        json={"command": command, "dialog_id": dialog_id},
-        timeout=timeout
+        f"{service_url}/is_command_performed", json={"command": command, "dialog_id": dialog_id}, timeout=timeout
     )
     if result.status_code == 200:
         if result.json().get("result", False):
