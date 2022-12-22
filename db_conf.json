@@ -1,47 +1,6 @@
 {
-  'skill_name': 'dff_intent_responder_skill',
-  'annotations': {
-    'entity_detection': {},
-    'toxic_classification': {
-      'toxic': 0.020731521770358086
-    },
-    'spacy_annotator': [
-      {
-        'text': '????????'
-      },
-      {
-        'text': '?????'
-      },
-      {
-        'text': '??'
-      },
-      {
-        'text': '5'
-      },
-      {
-        'text': '??????'
-      },
-      {
-        'text': '.'
-      },
-      {
-        'text': '#'
-      },
-      {
-        'text': '+'
-      },
-      {
-        'text': '#'
-      },
-      {
-        'text': 'move_backward'
-      }
-    ],
-    'badlisted_words': {
-      'bad_words': False
-    },
-    'dialogrpt': 0.4714531898498535
-  },
-  'can_continue': 'must',
-  'command_to_perform': 'move_backward_5'
+    "host": "DB_HOST",
+    "port": "DB_PORT",
+    "name": "DB_NAME",
+    "env": true
 }
